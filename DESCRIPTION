@@ -1,0 +1,21 @@
+Package: cluslong
+Type: Package
+Title: Clustering longitudinal datasets
+Version: 0.1.0
+Author: Niek Den Teuling
+Maintainer: Niek Den Teuling <n.g.p.den.teuling@tue.nl>
+Description: Common methods for longitudinal clustering
+License: TBD
+Encoding: UTF-8
+LazyData: true
+Depends:
+    R (>= 3.4.0)
+Imports:
+    data.table (>= 1.10.4),
+    kml (>= 2.4.1),
+    longitudinalData,
+    lcmm (>= 1.7.8),
+    ggplot2,
+    assertthat (>= 0.2.0),
+    magrittr
+RoxygenNote: 6.0.1
