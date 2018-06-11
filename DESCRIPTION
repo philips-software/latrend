@@ -19,3 +19,5 @@ Imports:
     assertthat (>= 0.2.0),
     magrittr (>= 1.5)
 RoxygenNote: 6.0.1
+Suggests: 
+    testthat
