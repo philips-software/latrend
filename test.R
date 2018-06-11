@@ -6,6 +6,8 @@ cluslong_kml(clr)
 clr2 = cluslongRecord(data)
 cluslong(clr2, method='kml')
 
+cluslong_gckm(clr)
+
 x = function(data) {
     cluslong(data, method='kml')
     return(data)

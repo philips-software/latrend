@@ -11,12 +11,13 @@ setClass('CluslongResult', slots=c(numClus='integer',
                                    converged='logical'),
          validity=check_cluslongResult)
 
-cluslongResult = function(clr, clusters, trends, start, runTime, criteria, converged) {
+cluslongResult = function(clr, clusters, trends, start, runTime, criteria, converged, model=NULL) {
     timeCol = clr@timeCol
     valueCol = clr@valueCol
     assert_that(is(clr, 'CluslongRecord'))
     assert_that(is.numeric(clusters) || is.factor(clusters) || is.character(clusters))
-    assert_that(!anyNA(clusters), msg='cluster assignment contains NAs')
+    assert_that(length(clusters) == length(getIds(clr)), msg='cluster assignment vector length does not match the number of ids')
+    assert_that(noNA(clusters), msg='cluster assignment contains NAs')
     assert_that(is.data.table(trends) && all(c('Cluster', timeCol, valueCol) %in% names(trends)))
     assert_that(is(start, 'POSIXct'))
     assert_that(is.numeric(runTime) && runTime >= 0)
@@ -26,7 +27,7 @@ cluslongResult = function(clr, clusters, trends, start, runTime, criteria, conve
     setkeyv(trends, c('Cluster', timeCol))
 
     if(!is.factor(clusters)) {
-        clusters = factor(clusters)
+        clusters = factor(clusters) #TODO use numclus
     }
 
     new('CluslongResult', numClus=nlevels(clusters), clusters=clusters, trends=trends, criteria=criteria, start=start, runTime=runTime, converged=converged)

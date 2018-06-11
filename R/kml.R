@@ -2,21 +2,11 @@
 #' @import kml
 #' @import longitudinalData
 #' @title Longitudinal k-means
-#' @param data Longitudinal data.frame or data.table
-#' @param id Id column name
-#' @param time Time column name
-#' @param numClus Number of clusters
-#' @param numRuns Number of runs
-#' @param maxIter Maximum number of iterations in case convergence is not reached
+#' @inheritParams cluslong
 #' @param start Method for initializing the model
 #' @param distance Name of the distance function, or a function of d(A, B)
 #' @param center Function specifying the computation of the cluster center
-#' @param keep
-#' @param verbose
 cluslong_kml = function(data,
-                        idCol,
-                        timeCol,
-                        valueCol,
                         numClus=1:6,
                         numRuns=10,
                         maxIter=200,
@@ -24,6 +14,9 @@ cluslong_kml = function(data,
                         imputation='copyMean',
                         distance='euclidean',
                         center=meanNA,
+                        idCol,
+                        timeCol,
+                        valueCol,
                         keep=getOption('cluslong.keep', 'all'),
                         verbose=TRUE) {
     do.call(cluslong, c(method='kml', mget(names(formals()), sys.frame(sys.nframe()))))
@@ -85,9 +78,9 @@ kml_result = function(clr, cld, g, keep, start, runTime, center) {
     model = slot(cld, paste0('c', g))[[1]]
     xmodel = kml_model(model, keep)
 
-    rowAssignments = rep(clusters, clr@data[, .N, by=c(clr@idCol)]$N)
+    rowClusters = rep(clusters, clr@data[, .N, by=c(clr@idCol)]$N)
     rowTimes = clr@data[[clr@timeCol]]
-    dt_trends = clr@data[, .(Value=center(get(valueCol))), keyby=.(Cluster=rowAssignments, Time=rowTimes)]
+    dt_trends = clr@data[, .(Value=center(get(valueCol))), keyby=.(Cluster=rowClusters, Time=rowTimes)]
     postProbs = model@postProba
     colnames(postProbs) = levels(clusters)
 

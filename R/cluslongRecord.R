@@ -75,6 +75,7 @@ getTimes = function(clr) {
 #' @title Get the results for the given number of clusters
 #' @param numClus Vector of number of clusters. If missing, returns all results
 #' @param drop Whether to drop the list in case 1 result is returned
+#' @return A list of CluslongResult objects
 getResults = function(clr, numClus, drop=TRUE) {
     assert_that(is.logical(drop) && length(drop) == 1 && is.finite(drop))
     if(missing(numClus)) {

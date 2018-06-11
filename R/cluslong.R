@@ -8,6 +8,9 @@
 #' @param idCol Id column name for the longitudinal data
 #' @param timeCol Time column name for the longitudinal data
 #' @param valueCol Value column name for the longitudinal data
+#' @param numClus Number of clusters; multiple values can be specified
+#' @param numRuns Number of runs for methods that use repeated starts or evaluations
+#' @param maxIter Maximum number of iterations in case convergence is not reached
 #' @param ... Method-specific arguments
 #' @param resultFun Function for computing additional results on each CluslongResult object (e.g. criteria)
 #' @param keep The level of model output to preserve (all, minimal, none)
@@ -16,10 +19,13 @@
 #' @return If data was a data.frame/table, a new CluslongRecord object is returned. Otherwise, nothing is returned, but the original data input variable is updated.
 cluslong = function(data,
                     method,
+                    numClus=2:5,
+                    numRuns,
+                    maxIter,
+                    ...,
                     idCol,
                     timeCol,
                     valueCol,
-                    ...,
                     resultFun=function(clr, cluslongResult) cluslongResult,
                     keep=getOption('cluslong.keep', 'all'),
                     verbose=TRUE,
@@ -59,6 +65,7 @@ cluslong = function(data,
 
     funpair = switch(method,
                      kml=c(cluslong_kml, cl_kml),
+                     gckm=c(cluslong_gckm, cl_gckm),
                      stop('unknown method'))
 
     updateFun = create_result_update_function(clrName=clrName, envir=parentEnv, resultFun=resultFun, verbose=verbose)
