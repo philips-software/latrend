@@ -1,9 +1,8 @@
 library(cluslong)
 data("testLongData")
-data = testLongData
-clr = cluslongRecord(data)
+clr = cluslongRecord(testLongData)
 cluslong_kml(clr)
-clr2 = cluslongRecord(data)
+clr2 = cluslongRecord(testLongData)
 cluslong(clr2, method='kml')
 
 cluslong_gckm(clr)

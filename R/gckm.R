@@ -11,17 +11,16 @@
 cluslong_gckm = function(data,
                          numClus=1:4,
                          numRuns=10,
-                         maxIter=500,
+                         maxIter=200,
                          gcmFixed=Value ~ Time,
                          gcmRandom=Value ~ Time,
                          gcmDiagCov=TRUE,
-                         gcmMaxIter=maxIter,
+                         gcmMaxIter=500,
                          standardize=scale,
                          kmStart='kmeans++',
                          kmImputation='copyMean',
                          kmDistance='euclidean',
                          kmCenter=meanNA,
-                         kmMaxIter=maxIter,
                          idCol,
                          timeCol,
                          valueCol,
@@ -35,7 +34,7 @@ cluslong_gckm = function(data,
 cl_gckm = function(clr, updateFun, numClus, numRuns, maxIter,
                    gcmFixed, gcmRandom, gcmDiagCov, gcmMaxIter,
                    standardize,
-                   kmStart, kmImputation, kmDistance, kmCenter, kmMaxIter,
+                   kmStart, kmImputation, kmDistance, kmCenter,
                    keep, verbose) {
 
     representFun = function(clr) {
@@ -50,9 +49,9 @@ cl_gckm = function(clr, updateFun, numClus, numRuns, maxIter,
 
     clusterFun = function(X, g) {
         cld = clusterLongData(traj=X, idAll=rownames(X), time=seq_len(ncol(X)), varNames='Value')
-        par = parALGO(saveFreq=1e99, scale=FALSE, maxIt=kmMaxIter,
+        par = parALGO(saveFreq=1e99, scale=FALSE, maxIt=maxIter,
                       startingCond=kmStart, imputationMethod=kmImputation, distanceName=kmDistance, centerMethod=kmCenter)
-        kml(cld, nbClusters=g, nbRedrawing=numRuns, toPlot='none', parAlgo=par)
+        capture.output(kml(cld, nbClusters=g, nbRedrawing=numRuns, toPlot='none', parAlgo=par))
 
         model = slot(cld, paste0('c', g))[[1]]
         criteria = model@criterionValues

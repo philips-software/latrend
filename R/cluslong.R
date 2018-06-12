@@ -72,9 +72,12 @@ cluslong = function(data,
 
     expectedArgNames = formalArgs(funpair[[2]])
     # get default arguments of the method
-    defArgs = formals(funpair[[1]])[expectedArgNames] %>% as.list
+    defArgs = formals(funpair[[1]]) %>% subset_list(expectedArgNames) %>% as.list
     # overwrite with defaults of this function
-    args = modifyList(defArgs, formals()[expectedArgNames])
+    thisArgs = formals() %>% subset_list(expectedArgNames) %>% as.list
+    missingArgNames = c('numClus', 'numRuns', 'maxIter')[c(missing(numClus), missing(numRuns), missing(maxIter))]
+
+    args = modifyList(defArgs, thisArgs[setdiff(names(thisArgs), missingArgNames)])
     # overwrite with user's input
     finalArgs = c(clr=clr, updateFun=updateFun, modifyList(args, as.list(match.call())[expectedArgNames]))
     assert_that(all(expectedArgNames %in% names(finalArgs)),

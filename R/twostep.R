@@ -37,7 +37,9 @@ cl_twostep = function(clr, updateFun, numClus, numRuns, maxIter,
 
     startTime = Sys.time()
     ## Representation step
-    message('(1) Representation step')
+    if(verbose) {
+        message('(1) Representation step')
+    }
     step1out = representStep(clr)
     if(is.list(step1out)) {
         assert_that(all(c('coefs', 'preds') %in% names(step1out)))
@@ -61,7 +63,9 @@ cl_twostep = function(clr, updateFun, numClus, numRuns, maxIter,
     }
 
     ## Cluster step
-    message('(2) Cluster step')
+    if(verbose) {
+        message('(2) Cluster step')
+    }
     for(g in numClus) {
         if(verbose) {
             message(sprintf('For %d clusters...', g))

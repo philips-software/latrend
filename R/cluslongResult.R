@@ -8,7 +8,8 @@ setClass('CluslongResult', slots=c(numClus='integer',
                                    criteria='numeric',
                                    start='POSIXct',
                                    runTime='numeric',
-                                   converged='logical'),
+                                   converged='logical',
+                                   model='ANY'),
          validity=check_cluslongResult)
 
 cluslongResult = function(clr, clusters, trends, start, runTime, criteria, converged, model=NULL) {
@@ -30,7 +31,7 @@ cluslongResult = function(clr, clusters, trends, start, runTime, criteria, conve
         clusters = factor(clusters) #TODO use numclus
     }
 
-    new('CluslongResult', numClus=nlevels(clusters), clusters=clusters, trends=trends, criteria=criteria, start=start, runTime=runTime, converged=converged)
+    new('CluslongResult', numClus=nlevels(clusters), clusters=clusters, trends=trends, criteria=criteria, start=start, runTime=runTime, converged=converged, model=model)
 }
 
 #' @export
@@ -75,10 +76,11 @@ plotTrends.CluslongResult = function(object, clusFormat='%s (%d%%)', lineSize=1.
     clusNames = getClusterNames(object)
     clusProps = round(getClusterProps(object) * 100)
     xtrends = copy(object@trends)
-    xtrends[, Cluster := factor(Cluster, levels=levels(Cluster), labels=sprintf(clusFormat, clusNames, clusProps))]
+    xtrends[, Cluster := factor(Cluster, levels=levels(Cluster), labels=sprintf(clusFormat, clusNames, clusProps))] %>%
+        setnames(c('Cluster', 'Time', 'Value'))
     p = ggplot() +
         geom_line(data=xtrends, aes(x=Time, y=Value, color=Cluster), size=lineSize) +
-        labs(x=get_trend_time(xtrends), y=get_trend_value(xtrends), title='Trends')
+        labs(x=get_trend_time(object@trends), y=get_trend_value(object@trends), title='Trends')
 
     return(p)
 }

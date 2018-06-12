@@ -40,12 +40,12 @@ cl_kml = function(clr, updateFun, numClus, numRuns, maxIter, start, imputation, 
     assert_that(uniqueN(clr@data[, .N, by=c(clr@idCol)]$N) == 1, msg='not all time series are of equal length')
 
     ## Transform data
-    wideData = dcast(clr@data, get(clr@idCol) ~ get(clr@timeCol), value.var='Value')
+    wideData = dcast(clr@data, get(clr@idCol) ~ get(clr@timeCol), value.var=valueCol)
     datamat = as.matrix(wideData[,-'clr'])
     rownames(datamat) = wideData$clr
 
     ## Method
-    par = parALGO(saveFreq=1e99, scale=FALSE, maxIt=maxIter, startingCond=start, imputationMethod=imputation, distanceName=distance, centerMethod=center)
+    par = parALGO(saveFreq=1e99, scale=FALSE, maxIt=maxIter, startingCond=start, imputationMethod=imputation, distanceName=distance, distance=distance, centerMethod=center)
     cld = clusterLongData(traj=datamat, idAll=rownames(datamat), time=getTimes(clr))
 
     startTime = Sys.time()
@@ -76,11 +76,12 @@ kml_result = function(clr, cld, g, keep, start, runTime, center) {
     clusters = getClusters(cld, g)
 
     model = slot(cld, paste0('c', g))[[1]]
-    xmodel = kml_model(model, keep)
+    xmodel = switch(keep, all=model, minimal=NULL, none=NULL)
 
     rowClusters = rep(clusters, clr@data[, .N, by=c(clr@idCol)]$N)
     rowTimes = clr@data[[clr@timeCol]]
-    dt_trends = clr@data[, .(Value=center(get(valueCol))), keyby=.(Cluster=rowClusters, Time=rowTimes)]
+    dt_trends = clr@data[, .(Value=center(get(valueCol))), keyby=.(Cluster=rowClusters, Time=rowTimes)] %>%
+        setnames(c('Cluster', clr@timeCol, clr@valueCol))
     postProbs = model@postProba
     colnames(postProbs) = levels(clusters)
 
@@ -93,12 +94,8 @@ kml_result = function(clr, cld, g, keep, start, runTime, center) {
                               start=start,
                               runTime=runTime,
                               criteria=criteria,
-                              converged=TRUE)
+                              converged=TRUE,
+                              model=xmodel)
 
     return(clResult)
-}
-
-
-kml_model = function(model, keep) {
-
 }

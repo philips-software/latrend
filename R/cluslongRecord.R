@@ -97,6 +97,14 @@ getResults = function(clr, numClus, drop=TRUE) {
 }
 
 #' @export
+#' @title Remove the results from a CluslongRecord
+clearResults = function(clr) {
+    clrName = deparse(substitute(clr))
+    clr@results = list()
+    assign(clrName, clr, envir=parent.frame())
+}
+
+#' @export
 #' @title Get one or more criteria across the computed results
 #' @param criterion Name(s) of criteria to look up. If missing or NULL, all criteria are returned.
 #' @return A data.frame with a column per criterion, and the first column indicating the number of clusters
@@ -150,7 +158,7 @@ plotCriterion = function(x, criterion=c(), normalize=FALSE, lineSize=1, dotSize=
 plotTrajectories = function(clr, sample=Inf, tsColor='black', tsSize=.1, tsAlpha=1) {
     assert_that(sample > 0)
 
-    xdata = copy(data) %>%
+    xdata = copy(clr@data) %>%
         setnames(c(clr@idCol, clr@timeCol, clr@valueCol), c('Id', 'Time', 'Value'))
 
     if(sample < Inf) {
@@ -205,8 +213,9 @@ plotTrends.CluslongRecord = function(object, numClus,
     newClusters = factor(clResult@clusters, levels=clusNames, labels=newClusNames)
 
     xtrends = copy(clResult@trends)
-    xtrends[, Cluster := factor(Cluster, levels=levels(Cluster), labels=newClusNames)]
-    xdata = copy(data) %>%
+    xtrends[, Cluster := factor(Cluster, levels=levels(Cluster), labels=newClusNames)] %>%
+        setnames(c('Cluster', 'Time', 'Value'))
+    xdata = copy(object@data) %>%
         setnames(c(object@idCol, object@timeCol, object@valueCol), c('Id', 'Time', 'Value'))
     xdata[, Cluster := newClusters[.GRP], by=Id]
 
@@ -219,8 +228,8 @@ plotTrends.CluslongRecord = function(object, numClus,
     p + geom_line(data=xtrends, aes(x=Time, y=Value), color=trendColor, size=trendSize) +
         facet_wrap(~ Cluster, ncol=ncol, nrow=nrow) +
         labs(title='Trends',
-             x=get_trend_time(xtrends),
-             y=get_trend_value(xtrends))
+             x=get_trend_time(clResult@trends),
+             y=get_trend_value(clResult@trends))
 }
 setMethod('plotTrends', signature=c('CluslongRecord'), plotTrends.CluslongRecord)
 
