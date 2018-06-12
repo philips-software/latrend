@@ -9,7 +9,7 @@
 #' @param gcmDiagCov Whether a diagonal variance-covariance matrix should be used (see idiag in lcmm::hlme)
 #' @param gcmMaxIter Number of maximum iterations for the mixed model
 cluslong_gckm = function(data,
-                         numClus=1:4,
+                         numClus=2:3,
                          numRuns=10,
                          maxIter=200,
                          gcmFixed=Value ~ Time,
@@ -24,9 +24,11 @@ cluslong_gckm = function(data,
                          idCol,
                          timeCol,
                          valueCol,
+                         resultFun=function(clr, cluslongResult) cluslongResult,
                          keep=getOption('cluslong.keep', 'all'),
-                         verbose=TRUE) {
-    do.call(cluslong, c(method='gckm', mget(names(formals()), sys.frame(sys.nframe()))))
+                         verbose=TRUE,
+                         seed=NULL) {
+    do.call(cluster_longitudinal, c(clusterFun=cl_gckm, mget(names(formals()), sys.frame(sys.nframe()))))
 }
 
 

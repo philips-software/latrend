@@ -26,30 +26,42 @@ cluslong = function(data,
                     idCol,
                     timeCol,
                     valueCol,
-                    resultFun=function(clr, cluslongResult) cluslongResult,
-                    keep=getOption('cluslong.keep', 'all'),
-                    verbose=TRUE,
+                    resultFun,
+                    keep,
+                    verbose,
                     seed=NULL
                     ) {
 
+    clusterMethod = ls('package:cluslong', pattern=paste0('cluslong_', method))[1]
+
+    defaultArgs = formals() %>% as.list
+    userArgs = as.list(match.call()[-1])
+    allArgs = modifyList(defaultArgs, userArgs)
+    argNames = setdiff(names(allArgs), c('method', '...'))
+    do.call(clusterMethod, allArgs[argNames], envir=parent.frame())
+}
+
+cluster_longitudinal = function(data,
+                                numClus,
+                                numRuns,
+                                maxIter,
+                                clusterFun,
+                                ...,
+                                idCol,
+                                timeCol,
+                                valueCol,
+                                resultFun,
+                                keep,
+                                verbose,
+                                seed) {
+
     if(is.CluslongRecord(data)) {
         clr = data
-        if(sys.nframe() > 2) {
-            # check if this is a call from another cluslong method
-            caller = as.character(sys.calls()[[sys.nframe() - 2]][[1]])
-            if(caller %in% ls('package:cluslong', pattern='cluslong_')) {
-                parentEnv = parent.frame(2)
-                clrName = deparse(substitute(data, env=parent.frame()))
-            } else {
-                parentEnv = parent.frame()
-                clrName = deparse(substitute(data))
-            }
-        } else {
-            parentEnv = parent.frame()
-            clrName = deparse(substitute(data))
-        }
+        clrEnv = parent.frame(2)
+        clrName = deparse(substitute(data, env=parent.frame()))
 
-        if(!exists(clrName, envir=parentEnv)) {
+        if(!exists(clrName, envir=clrEnv)) {
+            warning(sprintf('unable to find target clusterLongRecord variable "%s" in the parent environment. Result will be returned instead.', clrName))
             clrName = NULL
         }
     } else {
@@ -57,33 +69,18 @@ cluslong = function(data,
         clrName = NULL
     }
 
-    assert_that(is.character(method))
     assert_that(uniqueN(getIds(clr)) > 1, msg='data contains only 1 time series')
     assert_that(uniqueN(getTimes(clr)) > 1, msg='data is not longitudinal; contains only 1 assessment time')
     assert_that(is.numeric(clr@data[[clr@valueCol]]), msg='longitudinal values are not numeric')
     assert_that(!any(is.infinite(clr@data[[clr@valueCol]])), msg='data contains infinite values')
 
-    funpair = switch(method,
-                     kml=c(cluslong_kml, cl_kml),
-                     gckm=c(cluslong_gckm, cl_gckm),
-                     stop('unknown method'))
+    updateFun = create_result_update_function(clrName=clrName, envir=clrEnv, resultFun=resultFun, verbose=verbose)
 
-    updateFun = create_result_update_function(clrName=clrName, envir=parentEnv, resultFun=resultFun, verbose=verbose)
+    clusArgNames = formalArgs(clusterFun)
+    clusArgs = c(clr=clr, updateFun=updateFun, as.list(match.call()))[clusArgNames]
 
-    expectedArgNames = formalArgs(funpair[[2]])
-    # get default arguments of the method
-    defArgs = formals(funpair[[1]]) %>% subset_list(expectedArgNames) %>% as.list
-    # overwrite with defaults of this function
-    thisArgs = formals() %>% subset_list(expectedArgNames) %>% as.list
-    missingArgNames = c('numClus', 'numRuns', 'maxIter')[c(missing(numClus), missing(numRuns), missing(maxIter))]
-
-    args = modifyList(defArgs, thisArgs[setdiff(names(thisArgs), missingArgNames)])
-    # overwrite with user's input
-    finalArgs = c(clr=clr, updateFun=updateFun, modifyList(args, as.list(match.call())[expectedArgNames]))
-    assert_that(all(expectedArgNames %in% names(finalArgs)),
-                msg=paste0('missing argument(s): ', paste(setdiff(expectedArgNames, names(finalArgs)), collapse=', ')))
-
-    cluslongCall = quote(do.call(funpair[[2]], finalArgs))
+    assert_that(all(clusArgNames %in% names(clusArgs)),
+                msg=paste0('missing argument(s): ', paste(setdiff(clusArgNames, names(clusArgs)), collapse=', ')))
 
     ## Preparation
     if(verbose) {
@@ -92,12 +89,15 @@ cluslong = function(data,
     set.seed(seed)
 
     ## Computation
-    clr = eval(cluslongCall)
+    clr = do.call(clusterFun, clusArgs)
 
     if(is.null(clrName)) {
         return(clr)
     }
 }
+
+
+
 
 create_result_update_function = function(clrName, envir, resultFun, verbose) {
     return(function(clr, clResults) {

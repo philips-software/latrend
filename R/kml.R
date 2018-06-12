@@ -7,7 +7,7 @@
 #' @param distance Name of the distance function, or a function of d(A, B)
 #' @param center Function specifying the computation of the cluster center
 cluslong_kml = function(data,
-                        numClus=1:6,
+                        numClus=2:3,
                         numRuns=10,
                         maxIter=200,
                         start='kmeans++',
@@ -17,9 +17,12 @@ cluslong_kml = function(data,
                         idCol,
                         timeCol,
                         valueCol,
+                        resultFun=function(clr, cluslongResult) cluslongResult,
                         keep=getOption('cluslong.keep', 'all'),
-                        verbose=TRUE) {
-    do.call(cluslong, c(method='kml', mget(names(formals()), sys.frame(sys.nframe()))))
+                        verbose=TRUE,
+                        seed=NULL) {
+    args = mget(names(formals()), sys.frame(sys.nframe()))
+    do.call(cluster_longitudinal, c(clusterFun=cl_kml, args))
 }
 
 cl_kml = function(clr, updateFun, numClus, numRuns, maxIter, start, imputation, distance, center, keep, verbose) {

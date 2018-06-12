@@ -75,6 +75,7 @@ cl_twostep = function(clr, updateFun, numClus, numRuns, maxIter,
         runTime = as.numeric(Sys.time() - tRunStart)
 
         if(verbose) {
+            message(sprintf('\tTook %g seconds.', round(runTime, 2)))
             message('Computing results..', appendLF=FALSE)
         }
         results = list(clusters=NULL, criteria=c(), converged=NA, model=NULL)

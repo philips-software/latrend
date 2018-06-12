@@ -35,7 +35,7 @@ test_that('data with custom names', {
 
 test_that('clearing results', {
     clrA = cluslongRecord(testLongData)
-    cluslong(clrA, numClus=2:3, method='kml', verbose=FALSE)
+    cluslong_kml(data=clrA, numClus=2:3, verbose=FALSE)
     expect_length(clrA@results, 2)
     clearResults(clrA)
     expect_length(clrA@results, 0)

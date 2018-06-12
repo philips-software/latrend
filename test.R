@@ -1,18 +1,18 @@
 library(cluslong)
 data("testLongData")
-clr = cluslongRecord(testLongData)
-cluslong_kml(clr)
+clr1 = cluslongRecord(testLongData)
+cluslong_kml(clr1)
 clr2 = cluslongRecord(testLongData)
-cluslong(clr2, method='kml')
+cluslong(clr2, numClus=2:3, method='kml')
 
-cluslong_gckm(clr)
+cluslong_gckm(clr1)
 
 x = function(data) {
     cluslong(data, method='kml')
     return(data)
 }
-invisible(x(clr1))
-invisible(do.call(x, list(clr1)))
+clrx = x(clr1)
+clrx = do.call(x, list(clr1))
 
 plotTrends(clr@results$c2)
 plotTrends(clr, numClus=2)
