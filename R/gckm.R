@@ -12,8 +12,8 @@ cluslong_gckm = function(data,
                          numClus=2:3,
                          numRuns=10,
                          maxIter=200,
-                         gcmFixed=Value ~ Time,
-                         gcmRandom=Value ~ Time,
+                         gcmFixed,
+                         gcmRandom,
                          gcmDiagCov=TRUE,
                          gcmMaxIter=500,
                          standardize=scale,
@@ -71,7 +71,7 @@ cl_gckm = function(clr, updateFun, numClus, numRuns, maxIter,
         rowClusters = rep(clusters, clr@data[, .N, by=c(clr@idCol)]$N)
         pred_traj[, Cluster := rowClusters]
         dt_trends = pred_traj[, .(Value=mean(Pred, na.rm=TRUE)), by=.(Cluster, Time)] %>%
-            setnames('Time', clr@timeCol)
+            setnames(c('Time', 'Value'), c(clr@timeCol, clr@valueCol))
         return(dt_trends)
     }
 
