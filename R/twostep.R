@@ -16,10 +16,14 @@ cluslong_twostep = function(data,
                             idCol,
                             timeCol,
                             valueCol,
+                            resultFun=function(clr, cluslongResult) cluslongResult,
                             keep=getOption('cluslong.keep', 'all'),
-                            verbose=TRUE) {
-
+                            verbose=TRUE,
+                            seed=NULL) {
+    do.call(cluster_longitudinal, c(clusterFun=cl_twostep, mget(names(formals()), sys.frame(sys.nframe()))))
 }
+
+
 
 cl_twostep = function(clr, updateFun, numClus, numRuns, maxIter,
                       representStep, standardize, clusterStep, trendEstimator,
