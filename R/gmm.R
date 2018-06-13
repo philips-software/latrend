@@ -19,7 +19,7 @@ cluslong_gmm = function(data,
                         diagCov=TRUE,
                         classCov=FALSE,
                         start=c('gridsearch', 'gckm'),
-                        startMaxIter=ifelse(start[1] == 'gridsearch', 10, 0),
+                        startMaxIter=ifelse(start[1] == 'gridsearch', 20, 0),
                         idCol,
                         timeCol,
                         valueCol,
@@ -58,7 +58,7 @@ cl_gmm = function(clr, updateFun, numClus, numRuns, maxIter, fixed, random, mixt
             message(sprintf('Initializing model using %s approach...', start[1]))
         }
         tInit = Sys.time()
-        modelArgs = initGmm(gmmArgs, numRuns=numRuns, maxIter=maxIter, verbose=verbose)
+        modelArgs = initGmm(gmmArgs, numRuns=numRuns, maxIter=startMaxIter, verbose=verbose)
         modelArgs$maxiter = maxIter
         modelArgs$verbose = verbose
         initTime = as.numeric(Sys.time() - tInit)
@@ -96,6 +96,9 @@ initGmm_gridsearch = function(gmmArgs, numRuns, maxIter, verbose) {
     gcmArgs$ng = 1
     gcmArgs$mixture = NULL
     gcmArgs$verbose = verbose
+    if(verbose) {
+        cat('GCM fit: ')
+    }
     gcm = do.call('hlme', gcmArgs)
 
     e = environment()
@@ -143,9 +146,10 @@ gmm_result = function(clr, model, keep, start, runTime, initTime) {
     # Compute trends
     assert_that(all(model$pred$Id == as.numeric(clr@data[[idCol]])))
     dt_trajmarg = data.table(model$pred[grep('Id|pred_m\\d', names(model$pred))], Time=clr@data[[timeCol]]) %>%
-        melt(id=c(idCol, timeCol), variable.name='Cluster', value.name=valueCol)
-    dt_trends = unique(dt_trajmarg[, -idCol, with=FALSE], by=c(timeCol, 'Cluster')) %>%
+        melt(id=c(idCol, 'Time'), variable.name='Cluster', value.name=valueCol)
+    dt_trends = unique(dt_trajmarg[, -idCol, with=FALSE], by=c('Time', 'Cluster')) %>%
         .[, Cluster := factor(as.integer(Cluster), levels=1:numClus, labels=clusNames)] %>%
+        setnames('Time', timeCol) %>%
         setcolorder(c('Cluster', timeCol, valueCol))
 
     criteria = numeric()
