@@ -9,10 +9,11 @@ setClass('CluslongResult', slots=c(numClus='integer',
                                    start='POSIXct',
                                    runTime='numeric',
                                    converged='logical',
-                                   model='ANY'),
+                                   model='ANY',
+                                   details='list'),
          validity=check_cluslongResult)
 
-cluslongResult = function(clr, clusters, trends, start, runTime, criteria, converged, model=NULL) {
+cluslongResult = function(clr, clusters, trends, start, runTime, criteria, converged, model=NULL, details=list()) {
     timeCol = clr@timeCol
     valueCol = clr@valueCol
     assert_that(is(clr, 'CluslongRecord'))
@@ -31,7 +32,12 @@ cluslongResult = function(clr, clusters, trends, start, runTime, criteria, conve
         clusters = factor(clusters) #TODO use numclus
     }
 
-    new('CluslongResult', numClus=nlevels(clusters), clusters=clusters, trends=trends, criteria=criteria, start=start, runTime=runTime, converged=converged, model=model)
+    new('CluslongResult', numClus=nlevels(clusters), clusters=clusters, trends=trends,
+        criteria=criteria,
+        start=start, runTime=runTime,
+        converged=converged,
+        model=model,
+        details=details)
 }
 
 #' @export
