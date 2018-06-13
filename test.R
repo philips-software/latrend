@@ -10,6 +10,8 @@ cluslong_gmm(clr1, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~
 
 cluslong_gbtm(clr1, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), startMaxIter=20, numRuns=5, numClus=2:3)
 
+cluslong_mixtvem(clr1, numRuns=5)
+
 x = function(data) {
     cluslong(data, method='kml')
     return(data)
