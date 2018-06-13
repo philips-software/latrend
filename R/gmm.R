@@ -35,15 +35,20 @@ cluslong_gmm = function(data,
 cl_gmm = function(clr, updateFun, numClus, numRuns, maxIter, fixed, random, mixture, diagCov, classCov, start, startMaxIter, keep, verbose) {
     valueCol = clr@valueCol
 
+    assert_that(is.formula(fixed), is.formula(random), is.formula(mixture))
     assert_that(is.character(start))
-    assert_that(is.flag(diagCov), is.flag(classCov), is.flag(verbose))
+    assert_that(is.scalar(startMaxIter), is.numeric(startMaxIter))
+    assert_that(is.flag(diagCov), is.flag(classCov))
 
     if(verbose) {
-        message('-- GMM analysis --')
+        if(random == ~-1) {
+            message('-- GBTM analysis --')
+        } else {
+            message('-- GMM analysis --')
+        }
     }
 
     tStart = Sys.time()
-
     for(g in numClus) {
         if(verbose) {
             message(sprintf('For nclus=%d --', g))
@@ -119,6 +124,12 @@ initGmm_gridsearch = function(gmmArgs, numRuns, maxIter, verbose) {
 
 
 initGmm_gckm = function(gmmArgs, numRuns, maxIter, verbose) {
+
+}
+
+
+
+initGmm_kml = function(gmmArgs, numRuns, maxIter, verbose) {
 
 }
 
