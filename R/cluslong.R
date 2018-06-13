@@ -3,6 +3,7 @@
 #' @import assertthat
 #' @import magrittr
 #' @title Cluster a longitudinal dataset
+#' @seealso \link{cluslong_kml}, \link{cluslong_gckm}, \link{cluslong_gbtm}, \link{cluslong_gmm}, \link{cluslong_twostep}
 #' @param data longitudinal data.frame or data.table, or a CluslongRecord object
 #' @param method The longitudinal method to apply (kml, gckm, gbtm, gmm, mixtvem)
 #' @param idCol Id column name for the longitudinal data
