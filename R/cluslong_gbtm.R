@@ -1,7 +1,7 @@
 #' @export
 #' @import lcmm
 #' @title Group-based trajectory modeling
-#' @seealso cluslong_gmm
+#' @seealso \link{cluslong_gmm}
 #' @inheritParams cluslong
 #' @inheritParams cluslong_gmm
 #' @param start Model initialization method. Either gridsearch or kml
