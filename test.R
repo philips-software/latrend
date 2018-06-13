@@ -6,7 +6,9 @@ clr2 = cluslongRecord(testLongData)
 cluslong(clr2, numClus=2:3, method='kml')
 
 cluslong_gckm(clr1)
-cluslong_gmm(clr1, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~Time, numRuns=5, numClus=2:3)
+cluslong_gmm(clr1, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~Time, startMaxIter=20, numRuns=5, numClus=2:3)
+
+cluslong_gbtm(clr1, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), startMaxIter=20, numRuns=5, numClus=2:3)
 
 x = function(data) {
     cluslong(data, method='kml')
