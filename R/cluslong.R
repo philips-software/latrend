@@ -54,6 +54,11 @@ cluster_longitudinal = function(data,
                                 keep,
                                 verbose,
                                 seed) {
+    assert_that(is.numeric(numClus))
+    assert_that(is.null(maxIter) || (is.scalar(maxIter) && is.numeric(maxIter) && maxIter >= 0))
+    assert_that(is.function(resultFun))
+    assert_that(is.scalar(keep), keep %in% c('all', 'minimal', 'none'))
+    assert_that(is.flag(verbose))
 
     if(is.CluslongRecord(data)) {
         clr = data
