@@ -13,10 +13,16 @@ setClass('CluslongResult', slots=c(numClus='integer',
                                    details='list'),
          validity=check_cluslongResult)
 
-cluslongResult = function(clr, clusters, trends, start, runTime, criteria, converged, model=NULL, details=list()) {
+#' @export
+is.CluslongResult = function(object) {
+    inherits(object, 'CluslongResult')
+}
+
+cluslongResult = function(clr, numClus, clusters, trends, start, runTime, criteria, converged, model=NULL, details=list()) {
     timeCol = clr@timeCol
     valueCol = clr@valueCol
     assert_that(is(clr, 'CluslongRecord'))
+    assert_that(is.count(numClus))
     assert_that(is.numeric(clusters) || is.factor(clusters) || is.character(clusters))
     assert_that(length(clusters) == length(getIds(clr)), msg='cluster assignment vector length does not match the number of ids')
     assert_that(noNA(clusters), msg='cluster assignment contains NAs')
@@ -28,11 +34,11 @@ cluslongResult = function(clr, clusters, trends, start, runTime, criteria, conve
     setcolorder(trends, c('Cluster', timeCol, valueCol))
     setkeyv(trends, c('Cluster', timeCol))
 
-    if(!is.factor(clusters)) {
-        clusters = factor(clusters) #TODO use numclus
+    if(!is.factor(clusters) || nlevels(clusters) < numClus) {
+        clusters = factor(clusters, levels=1:numClus)
     }
 
-    new('CluslongResult', numClus=nlevels(clusters), clusters=clusters, trends=trends,
+    new('CluslongResult', numClus=as.integer(numClus), clusters=clusters, trends=trends,
         criteria=criteria,
         start=start, runTime=runTime,
         converged=converged,

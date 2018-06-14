@@ -1,3 +1,5 @@
+options(deparse.max.lines=5)
+
 data('testLongData')
 
 testLongDataNamed = data.table::copy(testLongData)

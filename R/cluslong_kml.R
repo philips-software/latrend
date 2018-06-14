@@ -17,23 +17,23 @@ cluslong_kml = function(data,
                         idCol,
                         timeCol,
                         valueCol,
-                        resultFun=function(clr, cluslongResult) cluslongResult,
+                        resultFun=NULL,
                         keep=getOption('cluslong.keep', 'all'),
                         verbose=TRUE,
                         seed=NULL) {
     args = mget(names(formals()), sys.frame(sys.nframe()))
-    do.call(cluster_longitudinal, c(clusterFun=cl_kml, args))
+    do.call(cluster_longitudinal, c(prepFun=prep_kml, clusterFun=cluster_kml, args))
 }
 
-cl_kml = function(clr, updateFun, numClus, numRuns, maxIter, start, imputation, distance, center, keep, verbose) {
-    valueCol = clr@valueCol
 
+
+prep_kml = function(clr, maxIter, start, imputation, distance, center, verbose) {
     if(verbose) {
-        message('-- KML analysis --')
-        suppress = function(x) x
+        message('=== KML analysis ===')
+        suppressFun = function(x) x
     }
     else {
-        suppress = capture.output
+        suppressFun = capture.output
     }
 
     ## Input checks
@@ -43,7 +43,7 @@ cl_kml = function(clr, updateFun, numClus, numRuns, maxIter, start, imputation, 
     assert_that(uniqueN(clr@data[, .N, by=c(clr@idCol)]$N) == 1, msg='not all time series are of equal length')
 
     ## Transform data
-    wideData = dcast(clr@data, get(clr@idCol) ~ get(clr@timeCol), value.var=valueCol)
+    wideData = dcast(clr@data, get(clr@idCol) ~ get(clr@timeCol), value.var=clr@valueCol)
     datamat = as.matrix(wideData[,-'clr'])
     rownames(datamat) = wideData$clr
 
@@ -51,40 +51,40 @@ cl_kml = function(clr, updateFun, numClus, numRuns, maxIter, start, imputation, 
     par = parALGO(saveFreq=1e99, scale=FALSE, maxIt=maxIter, startingCond=start, imputationMethod=imputation, distanceName=distance, distance=distance, centerMethod=center)
     cld = clusterLongData(traj=datamat, idAll=rownames(datamat), time=getTimes(clr))
 
-    startTime = Sys.time()
-    for(g in numClus) {
-        if(verbose) {
-            cat(sprintf('nclus=%d:\t', g))
-        }
-        tRunStart = Sys.time()
-        suppress(kml(cld, nbClusters=g, nbRedrawing=numRuns, toPlot='none', parAlgo=par))
-        runTime = as.numeric(Sys.time() - tRunStart)
-
-        if(verbose) {
-            message('Computing results..', appendLF=FALSE)
-        }
-        clResult = kml_result(clr, cld, g=g, keep=keep, start=startTime, runTime=runTime, center=center)
-        if(verbose) {
-            message('.')
-        }
-        clr = updateFun(clr, list(clResult))
-    }
-
-    return(clr)
+    return(list(cld=cld, par=par, suppressFun=suppressFun))
 }
 
 
-kml_result = function(clr, cld, g, keep, start, runTime, center) {
-    valueCol = clr@valueCol
-    clusters = getClusters(cld, g)
 
-    model = slot(cld, paste0('c', g))[[1]]
+cluster_kml = function(clr, prepVars, nc, startTime, numRuns, maxIter, center, keep, verbose) {
+    cld = prepVars$cld
+    tRunStart = Sys.time()
+    prepVars$suppressFun(
+        kml(cld, nbClusters=nc, nbRedrawing=numRuns, toPlot='none', parAlgo=prepVars$par)
+    )
+    runTime = as.numeric(Sys.time() - tRunStart)
+
+    if(verbose) {
+        message(': Computing results...')
+    }
+    kml_result(clr, cld, nc=nc, keep=keep, startTime=startTime, runTime=runTime, center=center)
+}
+
+
+
+kml_result = function(clr, cld, nc, keep, startTime, runTime, center) {
+    idCol = clr@idCol
+    timeCol = clr@timeCol
+    valueCol = clr@valueCol
+    clusters = getClusters(cld, nc)
+
+    model = slot(cld, paste0('c', nc))[[1]]
     xmodel = switch(keep, all=model, minimal=NULL, none=NULL)
 
-    rowClusters = rep(clusters, clr@data[, .N, by=c(clr@idCol)]$N)
-    rowTimes = clr@data[[clr@timeCol]]
+    rowClusters = rep(clusters, clr@data[, .N, by=c(idCol)]$N)
+    rowTimes = clr@data[[timeCol]]
     dt_trends = clr@data[, .(Value=center(get(valueCol))), keyby=.(Cluster=rowClusters, Time=rowTimes)] %>%
-        setnames(c('Cluster', clr@timeCol, clr@valueCol))
+        setnames(c('Cluster', timeCol, valueCol))
     postProbs = model@postProba
     colnames(postProbs) = levels(clusters)
 
@@ -92,9 +92,10 @@ kml_result = function(clr, cld, g, keep, start, runTime, center) {
     criteria['BIC'] = -criteria['BIC']
     criteria['AIC'] = -criteria['AIC']
 
-    clResult = cluslongResult(clr, clusters=clusters,
+    clResult = cluslongResult(clr, numClus=nc,
+                              clusters=clusters,
                               trends=dt_trends,
-                              start=start,
+                              start=startTime,
                               runTime=runTime,
                               criteria=criteria,
                               converged=TRUE,

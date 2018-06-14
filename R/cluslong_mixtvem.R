@@ -23,74 +23,69 @@ cluslong_mixtvem = function(data,
                         idCol,
                         timeCol,
                         valueCol,
-                        resultFun=function(clr, cluslongResult) cluslongResult,
+                        resultFun=NULL,
                         keep=getOption('cluslong.keep', 'all'),
                         verbose=TRUE,
                         seed=NULL) {
-    do.call(cluster_longitudinal, c(clusterFun=cl_mixtvem, mget(names(formals()), sys.frame(sys.nframe()))))
+    do.call(cluster_longitudinal, c(prepFun=prep_mixtvem, clusterFun=cluster_mixtvem, mget(names(formals()), sys.frame(sys.nframe()))))
 }
 
 
-cl_mixtvem = function(clr, updateFun, numClus, numRuns, maxIter, numKnots, degree, assumeIndependence, maxVarianceRatio, scovCol, xcovCol, keep, verbose) {
+
+prep_mixtvem = function(clr, maxIter, numKnots, degree, maxVarianceRatio, assumeIndependence, verbose) {
+    if(verbose) {
+        message('=== MixTVEM analysis ===')
+        suppressFun = function(x) x
+    } else {
+        suppressFun = capture.output
+    }
+
     assert_that(is.scalar(maxIter), is.numeric(maxIter), maxIter >= 0)
     assert_that(is.scalar(numKnots), is.numeric(numKnots), numKnots >= 1)
     assert_that(is.scalar(degree), is.numeric(degree), degree >= 1)
     assert_that(is.scalar(maxVarianceRatio), is.numeric(maxVarianceRatio))
     assert_that(is.flag(assumeIndependence), is.flag(assumeIndependence))
 
-    idCol = clr@idCol
-    timeCol = clr@timeCol
-    valueCol = clr@valueCol
-
-    if(verbose) {
-        message('-- MixTVEM analysis --')
-    }
-
     xdata = copy(clr@data)
     xdata[, MixTvemIntercept := 1]
 
-    tStart = Sys.time()
-    for(g in numClus) {
-        if(verbose) {
-            message(sprintf('For nclus=%d --', g))
-        }
+    return(list(xdata=xdata, suppressFun=suppressFun))
+}
 
-        tRun = Sys.time()
-        model = tryCatch({
-            models = TVEMMixNormal(
-                dep=xdata[[valueCol]],
-                id=xdata[[idCol]],
-                time=xdata[[timeCol]],
-                tcov=xdata$MixTvemIntercept,
-                maxIterations=maxIter,
-                numClasses=g,
-                numStarts=numRuns,
-                numInteriorKnots=numKnots,
-                deg=degree,
-                assumeIndependence=assumeIndependence,
-                maxVarianceRatio=maxVarianceRatio,
-                getSEs=FALSE,
-                doPlot=FALSE)
-            models$bestFit
-        }, error=function(e) {
-            print(e)
-            #TODO
-            model = list(converged=FALSE, bic=NA, aic=NA, logLik=NA, weightedRSS=NA, weightedGCV=NA,
-                         fittedY=matrix(0, nrow=nrow(clr@data), ncol=g))
-        })
-        runTime = as.numeric(Sys.time() - tRun)
 
-        ## Results
-        if(verbose) {
-            message('Computing results...')
-        }
 
-        clResult = mixtvem_result(clr, numClus=g, model=model, keep=keep, start=tStart, runTime=runTime)
+cluster_mixtvem = function(clr, prepVars, nc, startTime, numRuns, maxIter, numKnots, degree, assumeIndependence, maxVarianceRatio, scovCol, xcovCol, keep, verbose) {
+    idCol = clr@idCol
+    timeCol = clr@timeCol
+    valueCol = clr@valueCol
+    xdata = prepVars$xdata
 
-        clr = updateFun(clr, list(clResult))
+    ## Model
+    tRun = Sys.time()
+    prepVars$suppressFun({
+        models = TVEMMixNormal(
+                    dep=xdata[[valueCol]],
+                    id=xdata[[idCol]],
+                    time=xdata[[timeCol]],
+                    tcov=xdata$MixTvemIntercept,
+                    maxIterations=maxIter,
+                    numClasses=nc,
+                    numStarts=numRuns,
+                    numInteriorKnots=numKnots,
+                    deg=degree,
+                    assumeIndependence=assumeIndependence,
+                    maxVarianceRatio=maxVarianceRatio,
+                    getSEs=FALSE,
+                    doPlot=FALSE)
+    })
+    model = models$bestFit
+    runTime = as.numeric(Sys.time() - tRun)
+
+    ## Results
+    if(verbose) {
+        message(': Computing results...')
     }
-
-    return(clr)
+    mixtvem_result(clr, numClus=nc, model=model, keep=keep, start=startTime, runTime=runTime)
 }
 
 mixtvem_result = function(clr, numClus, model, keep, start, runTime) {
@@ -125,9 +120,11 @@ mixtvem_result = function(clr, numClus, model, keep, start, runTime) {
 
     details = list()
     details$proportionNugget = model$proportionNugget
+    details$rho = model$rho
     details$nIter = model$iteration
 
-    clResult = cluslongResult(clr, clusters=clusters,
+    clResult = cluslongResult(clr, numClus=numClus,
+                              clusters=clusters,
                               trends=dt_trends,
                               start=start,
                               runTime=runTime,

@@ -1,11 +1,14 @@
 library(cluslong)
+options(deparse.max.lines=5)
 data("testLongData")
+
 clr1 = cluslongRecord(testLongData)
 cluslong_kml(clr1)
 clr2 = cluslongRecord(testLongData)
 cluslong(clr2, numClus=2:3, method='kml')
 
-cluslong_gckm(clr1)
+cluslong_gckm(clr1, gcmFixed=Value ~ poly(Time, 2), gcmRandom=Value ~ poly(Time, 2))
+
 cluslong_gmm(clr1, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~Time, startMaxIter=20, numRuns=5, numClus=2:3)
 
 cluslong_gbtm(clr1, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), startMaxIter=20, numRuns=5, numClus=2:3)

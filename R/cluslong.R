@@ -3,7 +3,7 @@
 #' @import assertthat
 #' @import magrittr
 #' @title Cluster a longitudinal dataset
-#' @seealso \link{cluslong_kml}, \link{cluslong_gckm}, \link{cluslong_gbtm}, \link{cluslong_gmm}, \link{cluslong_twostep}
+#' @seealso \link{cluslong_kml}, \link{cluslong_gckm}, \link{cluslong_gbtm}, \link{cluslong_gmm}, \link{cluslong_mixtvem}, \link{cluslong_twostep}
 #' @param data longitudinal data.frame or data.table, or a CluslongRecord object
 #' @param method The longitudinal method to apply (kml, gckm, gbtm, gmm, mixtvem)
 #' @param idCol Id column name for the longitudinal data
@@ -46,18 +46,19 @@ cluster_longitudinal = function(data,
                                 numClus,
                                 numRuns,
                                 maxIter,
+                                prepFun=NULL,
                                 clusterFun,
                                 ...,
                                 idCol,
                                 timeCol,
                                 valueCol,
-                                resultFun,
+                                resultFun=NULL,
                                 keep,
                                 verbose,
                                 seed) {
     assert_that(is.numeric(numClus))
     assert_that(is.null(maxIter) || (is.scalar(maxIter) && is.numeric(maxIter) && maxIter >= 0))
-    assert_that(is.function(resultFun))
+    assert_that(is.null(resultFun) || is.function(resultFun))
     assert_that(is.scalar(keep), keep %in% c('all', 'minimal', 'none'))
     assert_that(is.flag(verbose))
 
@@ -80,29 +81,74 @@ cluster_longitudinal = function(data,
     assert_that(is.numeric(clr@data[[clr@valueCol]]), msg='longitudinal values are not numeric')
     assert_that(!any(is.infinite(clr@data[[clr@valueCol]])), msg='data contains infinite values')
 
-    updateFun = create_result_update_function(clrName=clrName, envir=clrEnv, resultFun=resultFun, verbose=verbose)
+    ## Preparation
+    startTime = Sys.time()
 
-    clusArgNames = formalArgs(clusterFun)
-    clusArgs = c(clr=clr, updateFun=updateFun, as.list(match.call()))[clusArgNames]
+    if(is.null(prepFun)) {
+        prepVars = list()
+    } else {
+        userArgs = as.list(match.call()[-1])
+        expectedArgNames = formalArgs(prepFun)
+        prepVars = do.call(prepFun, subset_list(c(clr=clr, userArgs), expectedArgNames))
+    }
+
+    clusArgNames = formalArgs(clusterFun) %>% setdiff(c('clr', 'prepVars', 'startTime', 'nc'))
+    clusArgs = as.list(match.call())[clusArgNames]
 
     assert_that(all(clusArgNames %in% names(clusArgs)),
                 msg=paste0('missing argument(s): ', paste(setdiff(clusArgNames, names(clusArgs)), collapse=', ')))
 
-    ## Preparation
-    if(verbose) {
-        message(sprintf('Setting RNG seed to %d', seed))
-    }
-    set.seed(seed)
+    ## Clustering
+    for(nc in numClus) {
+        if(verbose) {
+            message(sprintf('Analyzing for clusters = %d', nc))
+        }
+        set.seed(seed)
+        clResult = tryCatch({
+            do.call(clusterFun, c(list(clr=clr, prepVars=prepVars, nc=nc, startTime=startTime), clusArgs))
+        }, error=function(e) {
+            lastError <<- e
+            print(e)
+            #TODO
+        })
 
-    ## Computation
-    clr = do.call(clusterFun, clusArgs)
+        if(!is.null(resultFun)) {
+            clResult = tryCatch({
+                resultFun(clr, clResult)
+            }, error=function(e) {
+                lastError <<- e
+                print(e)
+                clResult
+            })
+        }
+
+        clr = update_clr(clr, clResult, clrName, clrEnv, verbose)
+    }
+
 
     if(is.null(clrName)) {
         return(clr)
     }
 }
 
+update_clr = function(clr, clResult, clrName, envir, verbose) {
+    assert_that(is.CluslongResult(clResult))
+    clr@results[[paste0('c', clResult@numClus)]] = clResult
 
+    # ensure order
+    ncs = sapply(clr@results, 'slot', 'numClus')
+    if(is.unsorted(ncs)) {
+        clr@results = clr@results[order(ncs)]
+    }
+
+    if(!is.null(clrName)) {
+        assign(clrName, clr, envir=envir)
+        if(verbose) {
+            message(sprintf(': Updated cluslong record with results (in var "%s")', as.character(clrName)))
+        }
+    }
+    return(clr)
+}
 
 
 create_result_update_function = function(clrName, envir, resultFun, verbose) {

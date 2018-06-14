@@ -23,18 +23,16 @@ cluslong_gmm = function(data,
                         idCol,
                         timeCol,
                         valueCol,
-                        resultFun=function(clr, cluslongResult) cluslongResult,
+                        resultFun=NULL,
                         keep=getOption('cluslong.keep', 'all'),
                         verbose=TRUE,
                         seed=NULL) {
-    do.call(cluster_longitudinal, c(clusterFun=cl_gmm, mget(names(formals()), sys.frame(sys.nframe()))))
+    do.call(cluster_longitudinal, c(prepFun=prep_gmm, clusterFun=cluster_gmm, mget(names(formals()), sys.frame(sys.nframe()))))
 }
 
 
 
-cl_gmm = function(clr, updateFun, numClus, numRuns, maxIter, fixed, random, mixture, diagCov, classCov, start, startMaxIter, keep, verbose) {
-    valueCol = clr@valueCol
-
+prep_gmm = function(clr, fixed, random, mixture, start, startMaxIter, diagCov, classCov, verbose) {
     assert_that(is.formula(fixed), is.formula(random), is.formula(mixture))
     assert_that(is.character(start))
     assert_that(is.scalar(startMaxIter), is.numeric(startMaxIter))
@@ -42,53 +40,48 @@ cl_gmm = function(clr, updateFun, numClus, numRuns, maxIter, fixed, random, mixt
 
     if(verbose) {
         if(random == ~-1) {
-            message('-- GBTM analysis --')
+            message('=== GBTM analysis ===')
         } else {
-            message('-- GMM analysis --')
+            message('=== GMM analysis ===')
         }
     }
+}
 
-    tStart = Sys.time()
-    for(g in numClus) {
-        if(verbose) {
-            message(sprintf('For nclus=%d --', g))
-        }
+cluster_gmm = function(clr, prepVars, nc, startTime, numRuns, maxIter, fixed, random, mixture,
+                       diagCov, classCov, start, startMaxIter, keep, verbose) {
+    valueCol = clr@valueCol
 
-        ## Model initialization
-        gmmArgs = list(fixed=fixed, random=random, mixture=mixture, subject=clr@idCol,
-                                  ng=g, idiag=diagCov, nwg=classCov, data=clr@data)
-        initGmm = switch(start[1], gridsearch=initGmm_gridsearch, gckm=initGmm_gckm, stop('unknown start method'))
+    ## Model initialization
+    gmmArgs = list(fixed=fixed, random=random, mixture=mixture, subject=clr@idCol,
+                              ng=nc, idiag=diagCov, nwg=classCov, data=clr@data)
+    initGmm = switch(start[1], gridsearch=initGmm_gridsearch, gckm=initGmm_gckm, stop('unknown start method'))
 
-        if(verbose) {
-            message(sprintf('Initializing model using %s approach...', start[1]))
-        }
-        tInit = Sys.time()
-        modelArgs = initGmm(gmmArgs, numRuns=numRuns, maxIter=startMaxIter, verbose=verbose)
-        modelArgs$maxiter = maxIter
-        modelArgs$verbose = verbose
-        initTime = as.numeric(Sys.time() - tInit)
+    if(verbose) {
+        message(sprintf(': Initializing model using %s approach...', start[1]))
+    }
+    tInit = Sys.time()
+    modelArgs = initGmm(gmmArgs, numRuns=numRuns, maxIter=startMaxIter, verbose=verbose)
+    modelArgs$maxiter = maxIter
+    modelArgs$verbose = verbose
+    initTime = as.numeric(Sys.time() - tInit)
 
-        if(verbose) {
-            message(sprintf('\tTook %g seconds', round(initTime, 2)))
-        }
-
-        ## Final model optimization
-        if(verbose) {
-            message('Optimizing final model...')
-        }
-        tRun = Sys.time()
-        model = do.call('hlme', modelArgs)
-        runTime = as.numeric(Sys.time() - tRun)
-
-        ## Results
-        if(verbose) {
-            message('Computing results...')
-        }
-        clResult = gmm_result(clr, model, keep=keep, start=tStart, runTime=runTime, initTime=initTime)
-        clr = updateFun(clr, list(clResult))
+    if(verbose) {
+        message(sprintf('\tTook %g seconds', round(initTime, 2)))
     }
 
-    return(clr)
+    ## Final model optimization
+    if(verbose) {
+        message(': Optimizing final model...')
+    }
+    tRun = Sys.time()
+    model = do.call('hlme', modelArgs)
+    runTime = as.numeric(Sys.time() - tRun)
+
+    ## Results
+    if(verbose) {
+        message(': Computing results...')
+    }
+    gmm_result(clr, model, keep=keep, start=startTime, runTime=runTime, initTime=initTime)
 }
 
 
@@ -172,7 +165,8 @@ gmm_result = function(clr, model, keep, start, runTime, initTime) {
     details$initTime = initTime
     details$nIter = model$niter
 
-    clResult = cluslongResult(clr, clusters=clusters,
+    clResult = cluslongResult(clr, numClus=numClus,
+                              clusters=clusters,
                               trends=dt_trends,
                               start=start,
                               runTime=runTime,

@@ -6,5 +6,5 @@ test_that('KML', {
     expect_length(clrA@results, 2)
 
     expect_equivalent(sort(getClusterProps(getResults(clrA, 3))), c(.242, .340, .418))
-    expect_equivalent(sort(getClusterProps(getResults(clrA, 4))), c(.186, .232, .242, .340))
+    expect_equivalent(sort(getClusterProps(getResults(clrA, 4))), c(.204, .214, .242, .340))
 })

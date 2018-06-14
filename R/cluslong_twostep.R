@@ -16,35 +16,28 @@ cluslong_twostep = function(data,
                             idCol,
                             timeCol,
                             valueCol,
-                            resultFun=function(clr, cluslongResult) cluslongResult,
+                            resultFun=NULL,
                             keep=getOption('cluslong.keep', 'all'),
                             verbose=TRUE,
                             seed=NULL) {
-    do.call(cluster_longitudinal, c(clusterFun=cl_twostep, mget(names(formals()), sys.frame(sys.nframe()))))
-}
 
-
-
-cl_twostep = function(clr, updateFun, numClus, numRuns, maxIter,
-                      representStep, standardize, clusterStep, trendEstimator,
-                      verbose) {
-    valueCol = clr@valueCol
-    ids = getIds(clr)
-
-    assert_that(is.function(representStep), is.function(clusterStep))
-    assert_that(is.function(trendEstimator))
+    assert_that(is.function(representStep), is.function(clusterStep), is.function(trendEstimator))
     assert_that(is.function(standardize) || isFALSE(standardize))
 
     if(verbose) {
-        message('-- Two-step analysis --')
+        message('=== Two-step analysis ===')
     }
 
-    startTime = Sys.time()
-    ## Representation step
+    do.call(cluster_longitudinal, c(prepFun=prep_twostep, clusterFun=cl_twostep, mget(names(formals()), sys.frame(sys.nframe()))))
+}
+
+prep_twostep = function(clr, representStep, standardize, verbose) {
     if(verbose) {
-        message('(1) Representation step')
+        message(': 1. Representation step')
     }
     step1out = representStep(clr)
+    ids = getIds(clr)
+
     if(is.list(step1out)) {
         assert_that(all(c('coefs', 'preds') %in% names(step1out)))
         idCoefs = as.matrix(step1out$coefs)
@@ -66,44 +59,39 @@ cl_twostep = function(clr, updateFun, numClus, numRuns, maxIter,
         X = idCoefs
     }
 
-    ## Cluster step
     if(verbose) {
-        message('(2) Cluster step')
-    }
-    for(g in numClus) {
-        if(verbose) {
-            message(sprintf('For %d clusters...', g))
-        }
-        tRunStart = Sys.time()
-        step2out = clusterStep(X, g)
-        runTime = as.numeric(Sys.time() - tRunStart)
-
-        if(verbose) {
-            message(sprintf('\tTook %g seconds.', round(runTime, 2)))
-            message('Computing results..', appendLF=FALSE)
-        }
-        results = list(clusters=NULL, criteria=c(), converged=NA, model=NULL)
-        if(is.list(step2out)) {
-            results = modifyList(results, step2out)
-        } else {
-            assert_that(is.numeric(step2out) || is.factor(step2out), msg='expecting cluster assignment output from the cluster step (numeric or factor)')
-            results$clusters = step2out
-        }
-
-        assert_that(noNA(results$clusters))
-        assert_that(length(results$clusters) == length(ids))
-
-        # Compute trends
-        trends = trendEstimator(clr, clusters=results$clusters, coefs=idCoefs, preds=idPreds, model=results$model)
-
-        clResult = do.call(cluslongResult, c(list(clr=clr, trends=trends, start=startTime, runTime=runTime), results))
-
-        if(verbose) {
-            message('.')
-        }
-        clr = updateFun(clr, list(clResult))
+        message(': 2. Cluster step')
     }
 
+    return(list(idCoefs=idCoefs, idPreds=idPreds, X=X))
+}
 
-    return(clr)
+cluster_twostep = function(clr, prepVars, nc, startTime, numRuns, maxIter,
+                      representStep, standardize, clusterStep, trendEstimator,
+                      verbose) {
+    valueCol = clr@valueCol
+
+    tRunStart = Sys.time()
+    step2out = clusterStep(prepVars$X, nc)
+    runTime = as.numeric(Sys.time() - tRunStart)
+
+    if(verbose) {
+        message(sprintf('\tTook %g seconds.', round(runTime, 2)))
+        message(': Computing results..', appendLF=FALSE)
+    }
+    results = list(clusters=NULL, criteria=c(), converged=NA, model=NULL)
+    if(is.list(step2out)) {
+        results = modifyList(results, step2out)
+    } else {
+        assert_that(is.numeric(step2out) || is.factor(step2out), msg='expecting cluster assignment output from the cluster step (numeric or factor)')
+        results$clusters = step2out
+    }
+
+    assert_that(noNA(results$clusters))
+    assert_that(length(results$clusters) == length(getIds(clr)))
+
+    # Compute trends
+    trends = trendEstimator(clr, clusters=results$clusters, coefs=prepVars$idCoefs, preds=prepVars$idPreds, model=results$model)
+
+    do.call(cluslongResult, c(list(clr=clr, numClus=nc, trends=trends, start=startTime, runTime=runTime), results))
 }

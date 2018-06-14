@@ -24,11 +24,62 @@ cluslong_gckm = function(data,
                          idCol,
                          timeCol,
                          valueCol,
-                         resultFun=function(clr, cluslongResult) cluslongResult,
+                         resultFun=NULL,
                          keep=getOption('cluslong.keep', 'all'),
                          verbose=TRUE,
                          seed=NULL) {
-    do.call(cluster_longitudinal, c(clusterFun=cl_gckm, mget(names(formals()), sys.frame(sys.nframe()))))
+
+    assert_that(is.formula(gcmFixed), is.formula(gcmRandom))
+    assert_that(is.flag(gcmDiagCov))
+    assert_that(is.null(gcmMaxIter) || (is.count(gcmMaxIter) && gcmMaxIter >= 0))
+    assert_that(is.function(standardize) || isFALSE(standardize))
+
+    if(verbose) {
+        message('=== GCKM analysis ===')
+    }
+
+    representFun = function(clr) {
+        gcm = eval(substitute(hlme(fixed=gcmFixed, random=gcmRandom, subject=clr@idCol, ng=1,
+                                   idiag=gcmDiagCov, maxiter=gcmMaxIter, data=clr@data, verbose=verbose)))
+        R = ranef(gcm)
+        return(list(coefs=R,
+                    preds=gcm$pred$pred_ss,
+                    converged=gcm$conv == 1,
+                    model=gcm))
+    }
+
+    clusterFun = function(X, nc) {
+        cld = clusterLongData(traj=X, idAll=rownames(X), time=seq_len(ncol(X)), varNames='Value')
+        par = parALGO(saveFreq=1e99, scale=FALSE, maxIt=maxIter,
+                      startingCond=kmStart, imputationMethod=kmImputation, distanceName=kmDistance, centerMethod=kmCenter)
+        capture.output(kml(cld, nbClusters=nc, nbRedrawing=numRuns, toPlot='none', parAlgo=par))
+
+        model = slot(cld, paste0('c', nc))[[1]]
+        criteria = model@criterionValues
+        criteria['BIC'] = -criteria['BIC']
+        criteria['AIC'] = -criteria['AIC']
+
+        return(list(clusters=getClusters(cld, nc),
+                    criteria=criteria,
+                    converged=TRUE,
+                    model=model))
+    }
+
+    trendFun = function(clr, clusters, preds, ...) {
+        pred_traj = data.table(clr@data[, .(Id=get(clr@idCol), Time=get(clr@timeCol))], Pred=preds)
+        rowClusters = rep(clusters, clr@data[, .N, by=c(clr@idCol)]$N)
+        pred_traj[, Cluster := rowClusters]
+        dt_trends = pred_traj[, .(Value=mean(Pred, na.rm=TRUE)), by=.(Cluster, Time)] %>%
+            setnames(c('Time', 'Value'), c(clr@timeCol, clr@valueCol))
+        return(dt_trends)
+    }
+
+    do.call(cluster_longitudinal, c(mget(names(formals()), sys.frame(sys.nframe())),
+                                    prepFun=prep_twostep,
+                                    clusterFun=cluster_twostep,
+                                    representStep=representFun,
+                                    clusterStep=clusterFun,
+                                    trendEstimator=trendFun))
 }
 
 
