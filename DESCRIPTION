@@ -1,7 +1,7 @@
 Package: cluslong
 Type: Package
 Title: Clustering longitudinal datasets
-Version: 0.2.0
+Version: 0.3.0
 Author: Niek Den Teuling
 Maintainer: Niek Den Teuling <n.g.p.den.teuling@tue.nl>
 Description: Common methods for lclustering longitudinal datasets
@@ -13,11 +13,12 @@ Depends:
 Imports:
     data.table (>= 1.10.4),
     kml (>= 2.4.1),
-    longitudinalData,
+    longitudinalData (>= 2.4.1),
     lcmm (>= 1.7.8),
     ggplot2 (>= 2.2.1),
     assertthat (>= 0.2.0),
-    magrittr (>= 1.5)
+    magrittr (>= 1.5),
+    splines (>= 3.4.0)
 RoxygenNote: 6.0.1
 Suggests: 
     testthat
