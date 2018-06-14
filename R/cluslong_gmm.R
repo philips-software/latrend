@@ -62,9 +62,9 @@ cluster_gmm = function(clr, prepVars, nc, startTime, numRuns, maxIter, fixed, ra
 
     if(verbose) {
         if(is.character(start)) {
-            message(sprintf(': Initializing model using %s approach...', start))
+            message(sprintf('- Initializing model using %s approach...', start))
         } else {
-            message(sprintf(': Initializing model using custom approach...'))
+            message(sprintf('- Initializing model using custom approach...'))
         }
     }
     tInit = Sys.time()
@@ -74,12 +74,12 @@ cluster_gmm = function(clr, prepVars, nc, startTime, numRuns, maxIter, fixed, ra
     initTime = as.numeric(Sys.time() - tInit)
 
     if(verbose) {
-        message(sprintf('\tTook %g seconds', round(initTime, 2)))
+        message(sprintf('  Took %g seconds', round(initTime, 2)))
     }
 
     ## Final model optimization
     if(verbose) {
-        message(': Optimizing final model...')
+        message('- Optimizing final model...')
     }
     tRun = Sys.time()
     model = do.call('hlme', modelArgs)
@@ -87,7 +87,7 @@ cluster_gmm = function(clr, prepVars, nc, startTime, numRuns, maxIter, fixed, ra
 
     ## Results
     if(verbose) {
-        message(': Computing results...')
+        message('- Computing results...')
     }
     gmm_result(clr, model, keep=keep, start=startTime, runTime=runTime, initTime=initTime)
 }

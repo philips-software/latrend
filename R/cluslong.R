@@ -101,7 +101,7 @@ cluster_longitudinal = function(data,
     ## Clustering
     for(nc in numClus) {
         if(verbose) {
-            message(sprintf('Analyzing for clusters = %d', nc))
+            message(sprintf('- Analyzing for clusters = %d', nc))
         }
         set.seed(seed)
         clResult = tryCatch({
@@ -126,7 +126,7 @@ cluster_longitudinal = function(data,
     }
 
     if(verbose) {
-        message(sprintf(': Total time: %g seconds', round(as.numeric(Sys.time() - startTime), 2)))
+        message(sprintf('  Total time: %g seconds', round(as.numeric(Sys.time() - startTime), 2)))
     }
 
 

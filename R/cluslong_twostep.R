@@ -33,7 +33,7 @@ cluslong_twostep = function(data,
 
 prep_twostep = function(clr, representStep, standardize, verbose) {
     if(verbose) {
-        message(': 1. Representation step')
+        message('- [1.] Representation step')
     }
     step1out = representStep(clr)
     ids = getIds(clr)
@@ -60,7 +60,7 @@ prep_twostep = function(clr, representStep, standardize, verbose) {
     }
 
     if(verbose) {
-        message(': 2. Cluster step')
+        message('- [2.] Cluster step')
     }
 
     return(list(idCoefs=idCoefs, idPreds=idPreds, X=X))
@@ -76,8 +76,8 @@ cluster_twostep = function(clr, prepVars, nc, startTime, numRuns, maxIter,
     runTime = as.numeric(Sys.time() - tRunStart)
 
     if(verbose) {
-        message(sprintf('\tTook %g seconds.', round(runTime, 2)))
-        message(': Computing results..', appendLF=FALSE)
+        message(sprintf('  Took %g seconds.', round(runTime, 2)))
+        message('- Computing results..', appendLF=FALSE)
     }
     results = list(clusters=NULL, criteria=c(), converged=NA, model=NULL)
     if(is.list(step2out)) {

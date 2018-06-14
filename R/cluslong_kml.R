@@ -65,7 +65,7 @@ cluster_kml = function(clr, prepVars, nc, startTime, numRuns, maxIter, center, k
     runTime = as.numeric(Sys.time() - tRunStart)
 
     if(verbose) {
-        message(': Computing results...')
+        message('- Computing results...')
     }
     kml_result(clr, cld, nc=nc, keep=keep, startTime=startTime, runTime=runTime, center=center)
 }

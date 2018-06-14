@@ -83,7 +83,7 @@ cluster_mixtvem = function(clr, prepVars, nc, startTime, numRuns, maxIter, numKn
 
     ## Results
     if(verbose) {
-        message(': Computing results...')
+        message('- Computing results...')
     }
     mixtvem_result(clr, numClus=nc, model=model, keep=keep, start=startTime, runTime=runTime)
 }
