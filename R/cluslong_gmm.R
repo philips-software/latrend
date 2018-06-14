@@ -181,6 +181,7 @@ gmmCoefs_from_clusters = function(clr, gmmArgs, clusters, priors) {
 
     if(gmmArgs$random == ~ -1) {
         varCovs = NULL
+        propVarCovs = NULL
     } else {
         if(gmmArgs$nwg) {
             classVarCovs = do.call(cbind, lapply(gcmList, function(m) {
