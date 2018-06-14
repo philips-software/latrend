@@ -34,20 +34,17 @@ cluslongRecord = function(data, idCol, timeCol, valueCol, name='clusLongRecord')
     if(missing(idCol)) {
         idCol = get_id(data)
     } else {
-        assert_that(length(idCol == 1))
-        assert_that(idCol %in% names(data))
+        assert_that(is.scalar(idCol), has_name(data, idCol))
     }
     if(missing(timeCol)) {
         timeCol = get_time(data)
     } else {
-        assert_that(length(timeCol == 1))
-        assert_that(timeCol %in% names(data))
+        assert_that(is.scalar(timeCol), has_name(data, timeCol))
     }
     if(missing(valueCol)) {
         valueCol = get_value(data)
     } else {
-        assert_that(length(valueCol == 1))
-        assert_that(valueCol %in% names(data))
+        assert_that(is.scalar(valueCol), has_name(data, valueCol))
     }
 
     if(!is.data.table(data)) {
@@ -82,7 +79,7 @@ getTimes = function(clr) {
 #' @param drop Whether to drop the list in case 1 result is returned
 #' @return A list of CluslongResult objects
 getResults = function(clr, numClus, drop=TRUE) {
-    assert_that(is.logical(drop) && length(drop) == 1 && is.finite(drop))
+    assert_that(is.flag(drop))
     if(missing(numClus)) {
         resultNames = names(clr@results)
     } else {
@@ -114,7 +111,7 @@ clearResults = function(clr) {
 #' @param criterion Name(s) of criteria to look up. If missing or NULL, all criteria are returned.
 #' @return A data.frame with a column per criterion, and the first column indicating the number of clusters
 getCriterion.CluslongRecord = function(object, criterion=c()) {
-    assert_that(length(object@results) > 0, msg='no results')
+    assert_that(not_empty(object@results), msg='no results')
     if(missing(criterion) || is.null(criterion)) {
         criterion = names(object@results[[1]]@criteria)
     } else {
@@ -161,7 +158,7 @@ plotCriterion = function(x, criterion=c(), normalize=FALSE, lineSize=1, dotSize=
 #' @title Plot trajectories of a CluslongRecord
 #' @param sample Number of time series to sample per cluster for plotting
 plotTrajectories = function(clr, sample=Inf, tsColor='black', tsSize=.1, tsAlpha=1) {
-    assert_that(sample > 0)
+    assert_that(is.scalar(sample), sample > 0)
 
     xdata = copy(clr@data) %>%
         setnames(c(clr@idCol, clr@timeCol, clr@valueCol), c('Id', 'Time', 'Value'))
@@ -206,9 +203,9 @@ plotTrends.CluslongRecord = function(object, numClus,
                                      nrow=NULL,
                                      ncol=NULL,
                                      clusFormat='%s (%d%%)') {
-    assert_that(length(numClus) == 1)
-    assert_that(sample > 0)
-    assert_that(length(ribbonQ) == 2)
+    assert_that(is.count(numClus))
+    assert_that(is.number(sample), sample > 0)
+    assert_that(is.numeric(ribbonQ), length(ribbonQ) == 2)
     clResult = getResults(object, numClus)
 
     # Prepare data
