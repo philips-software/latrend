@@ -4,20 +4,20 @@
 #' @import magrittr
 #' @title Cluster a longitudinal dataset
 #' @seealso \link{cluslong_kml}, \link{cluslong_gckm}, \link{cluslong_gbtm}, \link{cluslong_gmm}, \link{cluslong_mixtvem}, \link{cluslong_twostep}
-#' @param data longitudinal data.frame or data.table, or a CluslongRecord object
-#' @param method The longitudinal method to apply (kml, gckm, gbtm, gmm, mixtvem)
-#' @param idCol Id column name for the longitudinal data
-#' @param timeCol Time column name for the longitudinal data
-#' @param valueCol Value column name for the longitudinal data
-#' @param numClus Number of clusters; multiple values can be specified
-#' @param numRuns Number of runs for methods that use repeated starts or evaluations
-#' @param maxIter Maximum number of iterations in case convergence is not reached
+#' @param data Longitudinal \code{data.frame}, \code{data.table}, or a \link[=cluslongRecord]{CluslongRecord} object.
+#' @param method The longitudinal cluster method to apply (kml, gckm, gbtm, gmm, mixtvem)
+#' @param idCol Name of the column indicating the trajectory to which the observation belongs. Ignored when \code{data} is a CluslongRecord.
+#' @param timeCol Name of the column containing the observation times. Ignored when \code{data} is a CluslongRecord.
+#' @param valueCol Name of the column containing the observed values. Ignored when \code{data} is a CluslongRecord.
+#' @param numClus The series of number of clusters to analyze.
+#' @param numRuns Number of runs of the method. The effect is dependent on the method; being either the number of repeated starts or complete evaluations.
+#' @param maxIter The maximum number of iterations in case convergence is not reached.
 #' @param ... Method-specific arguments
 #' @param resultFun Function for computing additional results on each CluslongResult object (e.g. criteria)
-#' @param keep The level of model output to preserve (all, minimal, none)
+#' @param keep The level of model output to preserve (all, minimal, none). This reduces the size of the output.
 #' @param verbose Whether to enable verbose console output
 #' @param seed Set the seed for RNG
-#' @return If data was a data.frame/table, a new CluslongRecord object is returned. Otherwise, nothing is returned, but the original data input variable is updated.
+#' @return If the \code{data} parameter was a \code{data.frame} or \code{data.table}, a new \code{CluslongRecord} object is returned. Otherwise, nothing is returned, but the \code{data} variable is updated with the results.
 cluslong = function(data,
                     method,
                     numClus=2:5,

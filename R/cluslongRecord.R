@@ -22,6 +22,11 @@ is.CluslongRecord = function(object) {
 
 #' @export
 #' @title Create data object for clustering longitudinally
+#' @param data A \code{data.frame} or \code{data.table} containing the longitudinal data in long format, with an observation per row.
+#' @param idCol Name of the column indicating the trajectory to which the observation belongs. If missing, and \code{data} is keyed, the first key is taken as the ID column. If not keyed, the first column is used.
+#' @param timeCol Name of the column containing the observation times. If missing, and \code{data} is keyed, the second key is used. If not keyed, the second column is used.
+#' @param valueCol Name of the column containing the observed values. If missing, and \code{data} is keyed, the first non-key column is used. If not keyed, the third column is used.
+#' @param name Description of the object, primarily used for saving to a file.
 cluslongRecord = function(data, idCol, timeCol, valueCol, name='clusLongRecord') {
     assert_that(is.data.frame(data), msg='data should be a data.frame or data.table')
     assert_that(length(data) >= 3, msg='data should contain 3 columns (id, time, value)')
