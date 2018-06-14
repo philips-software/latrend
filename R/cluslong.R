@@ -125,6 +125,10 @@ cluster_longitudinal = function(data,
         clr = update_clr(clr, clResult, clrName, clrEnv, verbose)
     }
 
+    if(verbose) {
+        message(sprintf(': Total time: %g seconds', round(as.numeric(Sys.time() - startTime), 2)))
+    }
+
 
     if(is.null(clrName)) {
         return(clr)

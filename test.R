@@ -9,9 +9,16 @@ cluslong(clr2, numClus=2:3, method='kml')
 
 cluslong_gckm(clr1, gcmFixed=Value ~ poly(Time, 2), gcmRandom=Value ~ poly(Time, 2))
 
-cluslong_gmm(clr1, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~Time, startMaxIter=20, numRuns=5, numClus=2:3)
+# gmm
+clrGmm = cluslong_gmm(testLongData, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~1, startMaxIter=20, numRuns=5, numClus=3)
+gmmRes = getResults(clrGmm, 3)
+gmmRes@model$best
 
-cluslong_gbtm(clr1, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), startMaxIter=20, numRuns=5, numClus=2:3)
+clrGmmTest = cluslong_gmm(testLongData, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~1, startMaxIter=20, numRuns=5, numClus=3, start='gckm')
+
+clrGbtm = cluslong_gbtm(testLongData, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), startMaxIter=20, numRuns=5, numClus=3)
+getResults(clrGbtm, 3)@model$best
+clrGbtmTest = cluslong_gbtm(testLongData, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), startMaxIter=20, numRuns=5, numClus=3, start='kml')
 
 cluslong_mixtvem(clr1, numRuns=5)
 

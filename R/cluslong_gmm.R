@@ -7,8 +7,8 @@
 #' @param mixture Class-specific effects
 #' @param diagCov Whether to use a diagonal variance-covariance matrix
 #' @param classCov Whether to use a class-specific variance-covariance matrix
-#' @param start Model initialization method. Either gridsearch or gckm
-#' @param startMaxIter Number of model optimization iterations for the initialization method
+#' @param start Model initialization method name; gridsearch, gckm, or kml. Alternatively, a custom \code{function(clr, nc, gmmArgs, numRuns, maxIter, verbose)} can be provided, returning the arguments to the \code{lcmm::hlme} call.
+#' @param startMaxIter Number of model optimization iterations for the initialization method (passed to the \code{start} function as \code{maxIter})
 cluslong_gmm = function(data,
                         numClus=2:3,
                         maxIter=NULL,
@@ -18,7 +18,7 @@ cluslong_gmm = function(data,
                         mixture,
                         diagCov=TRUE,
                         classCov=FALSE,
-                        start=c('gridsearch', 'gckm'),
+                        start='gridsearch',
                         startMaxIter=ifelse(start[1] == 'gridsearch', 20, 0),
                         idCol,
                         timeCol,
@@ -34,7 +34,7 @@ cluslong_gmm = function(data,
 
 prep_gmm = function(clr, fixed, random, mixture, start, startMaxIter, diagCov, classCov, verbose) {
     assert_that(is.formula(fixed), is.formula(random), is.formula(mixture))
-    assert_that(is.character(start))
+    assert_that(is.scalar(start), is.character(start) || is.function(start))
     assert_that(is.scalar(startMaxIter), is.numeric(startMaxIter))
     assert_that(is.flag(diagCov), is.flag(classCov))
 
@@ -54,13 +54,21 @@ cluster_gmm = function(clr, prepVars, nc, startTime, numRuns, maxIter, fixed, ra
     ## Model initialization
     gmmArgs = list(fixed=fixed, random=random, mixture=mixture, subject=clr@idCol,
                               ng=nc, idiag=diagCov, nwg=classCov, data=clr@data)
-    initGmm = switch(start[1], gridsearch=initGmm_gridsearch, gckm=initGmm_gckm, stop('unknown start method'))
+    initGmm = switch(tolower(start),
+                     gridsearch = initGmm_gridsearch,
+                     gckm = initGmm_gckm,
+                     kml = initGmm_kml,
+                     stop('unknown start method'))
 
     if(verbose) {
-        message(sprintf(': Initializing model using %s approach...', start[1]))
+        if(is.character(start)) {
+            message(sprintf(': Initializing model using %s approach...', start))
+        } else {
+            message(sprintf(': Initializing model using custom approach...'))
+        }
     }
     tInit = Sys.time()
-    modelArgs = initGmm(gmmArgs, numRuns=numRuns, maxIter=startMaxIter, verbose=verbose)
+    modelArgs = initGmm(clr, nc, gmmArgs, numRuns=numRuns, maxIter=startMaxIter, verbose=verbose)
     modelArgs$maxiter = maxIter
     modelArgs$verbose = verbose
     initTime = as.numeric(Sys.time() - tInit)
@@ -86,7 +94,7 @@ cluster_gmm = function(clr, prepVars, nc, startTime, numRuns, maxIter, fixed, ra
 
 
 
-initGmm_gridsearch = function(gmmArgs, numRuns, maxIter, verbose) {
+initGmm_gridsearch = function(clr, nc, gmmArgs, numRuns, maxIter, verbose) {
     gmmArgs$maxiter = maxIter
     gmmArgs$verbose = verbose
 
@@ -116,16 +124,66 @@ initGmm_gridsearch = function(gmmArgs, numRuns, maxIter, verbose) {
 
 
 
-initGmm_gckm = function(gmmArgs, numRuns, maxIter, verbose) {
-
+initGmm_gckm = function(clr, nc, gmmArgs, numRuns, maxIter, verbose) {
+    clrGckm = cluslong_gckm(clr@data, idCol=clr@idCol, timeCol=clr@timeCol, valueCol=clr@valueCol,
+                            numClus=nc, numRuns=numRuns, maxIter=maxIter,
+                            gcmFixed=gmmArgs$fixed,
+                            gcmRandom=gmmArgs$mixture,
+                            keep='all',
+                            verbose=FALSE)
+    clResult = getResults(clrGckm, nc)
+    gmmCoefs_from_clusters(clr, gmmArgs, clusters=clResult@clusters, priors=getClusterProps(clResult))
 }
 
 
 
-initGmm_kml = function(gmmArgs, numRuns, maxIter, verbose) {
-
+initGmm_kml = function(clr, nc, gmmArgs, numRuns, maxIter, verbose) {
+    clrKml = cluslong_kml(clr@data, idCol=clr@idCol, timeCol=clr@timeCol, valueCol=clr@valueCol,
+                            numClus=nc, numRuns=numRuns, maxIter=maxIter,
+                            keep='all',
+                            verbose=FALSE)
+    clResult = getResults(clrKml, nc)
+    gmmCoefs_from_clusters(clr, gmmArgs, clusters=clResult@clusters, priors=getClusterProps(clResult))
 }
 
+
+
+# Fit a GCM per cluster
+gmmCoefs_from_clusters = function(clr, gmmArgs, clusters, priors) {
+    assert_that(formula(delete.response(terms(gmmArgs$fixed))) == gmmArgs$mixture, msg='Not supported. fixed and mixture effects should be the same')
+    rowClusters = rep(clusters, clr@data[, .N, by=c(clr@idCol)]$N)
+    gcmList = lapply(levels(clusters), function(clus) {
+        gcmArgs = gmmArgs
+        gcmArgs$data = clr@data[rowClusters == clus]
+        gcmArgs$ng = 1
+        gcmArgs$mixture = NULL
+        gcmArgs$verbose = FALSE
+        do.call('hlme', gcmArgs)
+    })
+
+    prefClusIndex = which.max(priors)
+
+    # construct the B vector
+    classMbs = log(priors / last(priors))
+    covariates = sapply(gcmList, function(m) fixef(m)[[2]])
+
+    if(gmmArgs$random == ~ -1) {
+        varCovs = NULL
+    } else {
+        if(gmmArgs$nwg) {
+            varCovs = sapply(gcmList, function(m) {
+                capture.output(varCov <- as.matrix(VarCovRE(m))[,1])
+                return(varCov)
+            })
+        } else {
+            capture.output(varCovs <- as.matrix(VarCovRE(gcmList[[prefClusIndex]]))[,1])
+        }
+    }
+    res = abs(coef(gcmList[[prefClusIndex]])['stderr'])
+
+    gmmArgs$B = c(head(classMbs, -1), t(covariates), varCovs, res)
+    return(gmmArgs)
+}
 
 
 gmm_result = function(clr, model, keep, start, runTime, initTime) {
