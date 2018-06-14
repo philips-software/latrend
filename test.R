@@ -9,12 +9,40 @@ cluslong(clr2, numClus=2:3, method='kml')
 
 cluslong_gckm(clr1, gcmFixed=Value ~ poly(Time, 2), gcmRandom=Value ~ poly(Time, 2))
 
-# gmm
-clrGmm = cluslong_gmm(testLongData, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~1, startMaxIter=20, numRuns=5, numClus=3)
-gmmRes = getResults(clrGmm, 3)
-gmmRes@model$best
+# GMM with gridsearch
+clrGmm = cluslong_gmm(testLongData, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~Time, startMaxIter=20, numRuns=5, numClus=3)
+getResults(clrGmm, 3)@model$best
 
-clrGmmTest = cluslong_gmm(testLongData, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~1, startMaxIter=20, numRuns=5, numClus=3, start='gckm')
+# classCov
+clrGmmC = cluslong_gmm(testLongData, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~1, numRuns=5, numClus=3, classCov=TRUE)
+getResults(clrGmmC, 3)@model$best
+
+# unstrucCov
+clrGmmUS = cluslong_gmm(testLongData, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~Time, numRuns=5, numClus=3, diagCov=FALSE)
+getResults(clrGmmUS, 3)@model$best
+
+# classCov+unstrucCov
+clrGmmCUS = cluslong_gmm(testLongData, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~Time, numRuns=5, numClus=3, classCov=TRUE, diagCov=FALSE)
+getResults(clrGmmCUS, 3)@model$best
+
+
+## GCKM + GMM
+clrGmmTest = cluslong_gmm(testLongData, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~Time, numClus=3, start='gckm')
+getResults(clrGmmTest, 3)@model$best
+
+# classCov
+clrGmmTestC = cluslong_gmm(testLongData, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~1, numClus=3, start='gckm', classCov=TRUE)
+getResults(clrGmmTestC, 3)@model$best
+
+# unstrucCov
+clrGmmTestUS = cluslong_gmm(testLongData, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~Time, numClus=3, start='gckm', diagCov=FALSE)
+getResults(clrGmmTestUS, 3)@model$best
+
+# classCov + unstrucCov
+clrGmmTestCUS = cluslong_gmm(testLongData, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~Time, numClus=3, start='gckm', classCov=TRUE, diagCov=FALSE)
+getResults(clrGmmTestCUS, 3)@model$best
+plotTrends(clrGmmTestCUS, 3)
+
 
 clrGbtm = cluslong_gbtm(testLongData, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), startMaxIter=20, numRuns=5, numClus=3)
 getResults(clrGbtm, 3)@model$best

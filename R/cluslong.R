@@ -107,8 +107,7 @@ cluster_longitudinal = function(data,
         clResult = tryCatch({
             do.call(clusterFun, c(list(clr=clr, prepVars=prepVars, nc=nc, startTime=startTime), clusArgs))
         }, error=function(e) {
-            lastError <<- e
-            print(e)
+            warning(paste0('Error occurred while clustering: ', e$message))
             #TODO
         })
 
@@ -116,8 +115,7 @@ cluster_longitudinal = function(data,
             clResult = tryCatch({
                 resultFun(clr, clResult)
             }, error=function(e) {
-                lastError <<- e
-                print(e)
+                warning(paste0('Error occurred while evaluating resultFun(): ', e$message))
                 clResult
             })
         }

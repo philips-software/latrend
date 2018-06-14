@@ -19,7 +19,7 @@ cluslong_gmm = function(data,
                         diagCov=TRUE,
                         classCov=FALSE,
                         start='gridsearch',
-                        startMaxIter=ifelse(start[1] == 'gridsearch', 20, 0),
+                        startMaxIter=ifelse(start == 'gridsearch', 20, 0),
                         idCol,
                         timeCol,
                         valueCol,
@@ -50,6 +50,10 @@ prep_gmm = function(clr, fixed, random, mixture, start, startMaxIter, diagCov, c
 cluster_gmm = function(clr, prepVars, nc, startTime, numRuns, maxIter, fixed, random, mixture,
                        diagCov, classCov, start, startMaxIter, keep, verbose) {
     valueCol = clr@valueCol
+
+    if(classCov && nc == 1) {
+        classCov = FALSE
+    }
 
     ## Model initialization
     gmmArgs = list(fixed=fixed, random=random, mixture=mixture, subject=clr@idCol,
@@ -100,12 +104,16 @@ initGmm_gridsearch = function(clr, nc, gmmArgs, numRuns, maxIter, verbose) {
 
     gcmArgs = gmmArgs
     gcmArgs$ng = 1
+    gcmArgs$nwg = FALSE
     gcmArgs$mixture = NULL
     gcmArgs$verbose = verbose
     if(verbose) {
         cat('GCM fit: ')
     }
     gcm = do.call('hlme', gcmArgs)
+    if(verbose) {
+        cat('---\n')
+    }
 
     e = environment()
     models = lapply(1:numRuns, function(i) {
@@ -156,32 +164,43 @@ gmmCoefs_from_clusters = function(clr, gmmArgs, clusters, priors) {
         gcmArgs = gmmArgs
         gcmArgs$data = clr@data[rowClusters == clus]
         gcmArgs$ng = 1
+        gcmArgs$nwg = FALSE
         gcmArgs$mixture = NULL
         gcmArgs$verbose = FALSE
         do.call('hlme', gcmArgs)
     })
+    nc = gmmArgs$ng
 
     prefClusIndex = which.max(priors)
 
     # construct the B vector
     classMbs = log(priors / last(priors))
+    names(classMbs) = paste0('intercept.MB-c', 1:nc)
     covariates = sapply(gcmList, function(m) fixef(m)[[2]])
+    rownames(covariates) = names(coef(gcmList[[1]])[1:nrow(covariates)])
 
     if(gmmArgs$random == ~ -1) {
         varCovs = NULL
     } else {
         if(gmmArgs$nwg) {
-            varCovs = sapply(gcmList, function(m) {
+            classVarCovs = do.call(cbind, lapply(gcmList, function(m) {
                 capture.output(varCov <- as.matrix(VarCovRE(m))[,1])
                 return(varCov)
-            })
+            }))
+            varCovs = classVarCovs[ , nc]
+            propVarCovs = colMeans(classVarCovs[ , -nc] / varCovs)
+            names(propVarCovs) = paste0('varprop-c', 1:(nc-1))
         } else {
             capture.output(varCovs <- as.matrix(VarCovRE(gcmList[[prefClusIndex]]))[,1])
+            propVarCovs = NULL
         }
     }
     res = abs(coef(gcmList[[prefClusIndex]])['stderr'])
+    names(res) = 'stderr'
 
-    gmmArgs$B = c(head(classMbs, -1), t(covariates), varCovs, res)
+    gmmArgs$B = c(head(classMbs, -1),
+                  setNames(t(covariates), paste0(rep(rownames(covariates), each=nc), '-c', rep(1:nc, nc))),
+                  varCovs, propVarCovs, res)
     return(gmmArgs)
 }
 
