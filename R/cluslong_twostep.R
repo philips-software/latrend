@@ -19,7 +19,8 @@ cluslong_twostep = function(data,
                             resultFun=NULL,
                             keep=getOption('cluslong.keep', 'all'),
                             verbose=TRUE,
-                            seed=NULL) {
+                            seed=NULL,
+                            catchError=FALSE) {
 
     assert_that(is.function(representStep), is.function(clusterStep), is.function(trendEstimator))
     assert_that(is.function(standardize) || isFALSE(standardize))
@@ -77,7 +78,7 @@ cluster_twostep = function(clr, prepVars, nc, startTime, numRuns, maxIter,
 
     if(verbose) {
         message(sprintf('  Took %g seconds.', round(runTime, 2)))
-        message('- Computing results..', appendLF=FALSE)
+        message('- Computing results...')
     }
     results = list(clusters=NULL, criteria=c(), converged=NA, model=NULL)
     if(is.list(step2out)) {

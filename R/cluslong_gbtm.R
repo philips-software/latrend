@@ -20,7 +20,8 @@ cluslong_gbtm = function(data,
                         resultFun=NULL,
                         keep=getOption('cluslong.keep', 'all'),
                         verbose=TRUE,
-                        seed=NULL) {
+                        seed=NULL,
+                        catchError=FALSE) {
     do.call(cluster_longitudinal, c(mget(names(formals()), sys.frame(sys.nframe())),
                                     prepFun=prep_gmm,
                                     clusterFun=cluster_gmm,

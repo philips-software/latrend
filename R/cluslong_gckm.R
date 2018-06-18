@@ -27,7 +27,8 @@ cluslong_gckm = function(data,
                          resultFun=NULL,
                          keep=getOption('cluslong.keep', 'all'),
                          verbose=TRUE,
-                         seed=NULL) {
+                         seed=NULL,
+                         catchError=FALSE) {
 
     assert_that(is.formula(gcmFixed), is.formula(gcmRandom))
     assert_that(is.flag(gcmDiagCov))
@@ -46,6 +47,7 @@ cluslong_gckm = function(data,
         gcm = eval(substitute(hlme(fixed=gcmFixed, random=gcmRandom, subject=clr@idCol, ng=1,
                                    idiag=gcmDiagCov, maxiter=gcmMaxIter, data=clr@data, verbose=verbose)))
         R = ranef(gcm)
+        assert_that(!all(R == 0), msg='All random coefs are zero. Consider increasing maxIter')
         return(list(coefs=R,
                     preds=gcm$pred$pred_ss,
                     converged=gcm$conv == 1,

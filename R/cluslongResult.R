@@ -28,7 +28,7 @@ cluslongResult = function(clr, numClus, clusters, trends, start, runTime, criter
     assert_that(noNA(clusters), msg='cluster assignment contains NAs')
     assert_that(is.data.table(trends) && all(c('Cluster', timeCol, valueCol) %in% names(trends)))
     assert_that(is(start, 'POSIXct'))
-    assert_that(is.numeric(runTime) && runTime >= 0)
+    assert_that(is.numeric(runTime), is.na(runTime) || runTime >= 0)
     assert_that(is.numeric(criteria))
 
     setcolorder(trends, c('Cluster', timeCol, valueCol))

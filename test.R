@@ -9,6 +9,8 @@ cluslong(clr2, numClus=2:3, method='kml')
 
 cluslong_gckm(clr1, gcmFixed=Value ~ poly(Time, 2), gcmRandom=Value ~ poly(Time, 2))
 
+clrGmm = cluslong_gmm(testLongData, fixed= ~ poly(Time, 2), mixture=~poly(Time, 2), random=~Time, startMaxIter=20, numRuns=5, numClus=3, catchError=TRUE)
+
 # GMM with gridsearch
 clrGmm = cluslong_gmm(testLongData, fixed=Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~Time, startMaxIter=20, numRuns=5, numClus=3)
 getResults(clrGmm, 3)@model$best

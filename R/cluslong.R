@@ -17,6 +17,7 @@
 #' @param keep The level of model output to preserve (all, minimal, none). This reduces the size of the output.
 #' @param verbose Whether to enable verbose console output
 #' @param seed Set the seed for RNG
+#' @param catchError Whether to catch errors during the clustering, outputting an empty result. Prints the error as a warning.
 #' @return If the \code{data} parameter was a \code{data.frame} or \code{data.table}, a new \code{CluslongRecord} object is returned. Otherwise, nothing is returned, but the \code{data} variable is updated with the results.
 cluslong = function(data,
                     method,
@@ -30,7 +31,8 @@ cluslong = function(data,
                     resultFun,
                     keep,
                     verbose,
-                    seed=NULL
+                    seed=NULL,
+                    catchError=FALSE
                     ) {
 
     clusterMethod = ls('package:cluslong', pattern=paste0('cluslong_', method))[1]
@@ -55,12 +57,14 @@ cluster_longitudinal = function(data,
                                 resultFun=NULL,
                                 keep,
                                 verbose,
-                                seed) {
+                                seed,
+                                catchError) {
     assert_that(is.numeric(numClus), noNA(numClus), all(numClus >= 1), all(numClus %% 1 == 0))
     assert_that(is.count(maxIter+1), maxIter >= 0)
     assert_that(is.null(resultFun) || is.function(resultFun))
     assert_that(is.scalar(keep), keep %in% c('all', 'minimal', 'none'))
     assert_that(is.flag(verbose))
+    assert_that(is.flag(catchError))
 
     if(is.CluslongRecord(data)) {
         clr = data
@@ -104,20 +108,32 @@ cluster_longitudinal = function(data,
             message(sprintf('- Analyzing for clusters = %d', nc))
         }
         set.seed(seed)
-        clResult = tryCatch({
-            do.call(clusterFun, c(list(clr=clr, prepVars=prepVars, nc=nc, startTime=startTime), clusArgs))
-        }, error=function(e) {
-            warning(paste0('Error occurred while clustering: ', e$message))
-            #TODO
-        })
+        clResult = condTryCatch(
+            cond=catchError,
+            expr=do.call(clusterFun, c(list(clr=clr, prepVars=prepVars, nc=nc, startTime=startTime), clusArgs)),
+            error=function(e) {
+                warning(sprintf('Error occurred while clustering with numClus=%d: "%s"', nc, e$message), immmediate.=TRUE)
+                cluslongResult(clr, nc,
+                               clusters=rep('A', length(getIds(clr))),
+                               trends=data.table(Cluster='A', Time=getTimes(clr), Value=0) %>%
+                                   setnames(c('Time', 'Value'), c(clr@timeCol, clr@valueCol)),
+                               start=startTime,
+                               runTime=NA+0,
+                               criteria=numeric(0),
+                               converged=NA,
+                               model=NULL)
+            }
+        )
 
         if(!is.null(resultFun)) {
-            clResult = tryCatch({
-                resultFun(clr, clResult)
-            }, error=function(e) {
-                warning(paste0('Error occurred while evaluating resultFun(): ', e$message))
-                clResult
-            })
+            clResult = condTryCatch(
+                cond=catchError,
+                expr=resultFun(clr, clResult),
+                error=function(e) {
+                    warning(sprintf('Error occurred while evaluating resultFun() for numClus=%d: "%s"', nc, e$message), immmediate.=TRUE)
+                    clResult
+                }
+            )
         }
 
         clr = update_clr(clr, clResult, clrName, clrEnv, verbose)
@@ -125,8 +141,8 @@ cluster_longitudinal = function(data,
 
     if(verbose) {
         message(sprintf('  Total time: %g seconds', round(as.numeric(Sys.time() - startTime), 2)))
+        message('- Completed.')
     }
-
 
     if(is.null(clrName)) {
         return(clr)
