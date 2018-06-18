@@ -31,11 +31,15 @@ cluslong_gckm = function(data,
 
     assert_that(is.formula(gcmFixed), is.formula(gcmRandom))
     assert_that(is.flag(gcmDiagCov))
-    assert_that(is.null(gcmMaxIter) || (is.count(gcmMaxIter) && gcmMaxIter >= 0))
+    assert_that(is.count(gcmMaxIter+1), gcmMaxIter >= 0)
     assert_that(is.function(standardize) || isFALSE(standardize))
 
     if(verbose) {
         message('=== GCKM analysis ===')
+    }
+
+    if(gcmMaxIter == 0) {
+        gcmMaxIter = NULL
     }
 
     representFun = function(clr) {

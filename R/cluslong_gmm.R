@@ -11,7 +11,7 @@
 #' @param startMaxIter Number of model optimization iterations for the initialization method (passed to the \code{start} function as \code{maxIter})
 cluslong_gmm = function(data,
                         numClus=2:3,
-                        maxIter=NULL,
+                        maxIter=0,
                         numRuns=25,
                         fixed,
                         random,
@@ -32,10 +32,10 @@ cluslong_gmm = function(data,
 
 
 
-prep_gmm = function(clr, fixed, random, mixture, start, startMaxIter, diagCov, classCov, verbose) {
+prep_gmm = function(clr, fixed, random, mixture, start, startMaxIter, maxIter, diagCov, classCov, verbose) {
     assert_that(is.formula(fixed), is.formula(random), is.formula(mixture))
     assert_that(is.scalar(start), is.character(start) || is.function(start))
-    assert_that(is.scalar(startMaxIter), is.numeric(startMaxIter))
+    assert_that(is.count(startMaxIter+1), startMaxIter >= 0)
     assert_that(is.flag(diagCov), is.flag(classCov))
 
     if(verbose) {
@@ -53,6 +53,10 @@ cluster_gmm = function(clr, prepVars, nc, startTime, numRuns, maxIter, fixed, ra
 
     if(classCov && nc == 1) {
         classCov = FALSE
+    }
+
+    if(maxIter == 0) {
+        maxIter = NULL
     }
 
     ## Model initialization
@@ -99,7 +103,11 @@ cluster_gmm = function(clr, prepVars, nc, startTime, numRuns, maxIter, fixed, ra
 
 
 initGmm_gridsearch = function(clr, nc, gmmArgs, numRuns, maxIter, verbose) {
-    gmmArgs$maxiter = maxIter
+    if(maxIter == 0) {
+        gmmArgs$maxiter = NULL
+    } else {
+        gmmArgs$maxiter = maxIter
+    }
     gmmArgs$verbose = verbose
 
     gcmArgs = gmmArgs

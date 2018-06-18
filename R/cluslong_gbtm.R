@@ -8,7 +8,7 @@
 #' @param startMaxIter Number of model optimization iterations for the initialization method
 cluslong_gbtm = function(data,
                         numClus=2:3,
-                        maxIter=NULL,
+                        maxIter=0,
                         numRuns=25,
                         fixed,
                         mixture,

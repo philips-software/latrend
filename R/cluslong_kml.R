@@ -28,6 +28,7 @@ cluslong_kml = function(data,
 
 
 prep_kml = function(clr, maxIter, start, imputation, distance, center, verbose) {
+
     if(verbose) {
         message('=== KML analysis ===')
         suppressFun = function(x) x
