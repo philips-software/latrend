@@ -4,7 +4,7 @@ Title: Clustering longitudinal datasets
 Version: 0.4.0
 Author: Niek Den Teuling
 Maintainer: Niek Den Teuling <n.g.p.den.teuling@tue.nl>
-Description: Common methods for lclustering longitudinal datasets
+Description: Common methods for clustering longitudinal datasets
 License: TBD
 Encoding: UTF-8
 LazyData: true
