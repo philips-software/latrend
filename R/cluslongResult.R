@@ -77,6 +77,7 @@ getCriterion.CluslongResult = function(object, criterion=c()) {
 setMethod('getCriterion', signature=c('CluslongResult'), getCriterion.CluslongResult)
 
 #' @export
+#' @importFrom stats BIC
 BIC.CluslongResult = function(x, ...) {
     getCriterion.CluslongResult(x, 'BIC')
 }

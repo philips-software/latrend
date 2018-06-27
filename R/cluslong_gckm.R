@@ -24,11 +24,11 @@ cluslong_gckm = function(data,
                          idCol,
                          timeCol,
                          valueCol,
-                         resultFun=NULL,
-                         keep=getOption('cluslong.keep', 'all'),
                          verbose=TRUE,
                          seed=NULL,
-                         catchError=FALSE) {
+                         result=getOption('cluslong.result'),
+                         keep=getOption('cluslong.keep', 'all'),
+                         catchError=getOption('cluslong.catchError', FALSE)) {
 
     assert_that(is.formula(gcmFixed), is.formula(gcmRandom))
     assert_that(is.flag(gcmDiagCov))
@@ -36,7 +36,7 @@ cluslong_gckm = function(data,
     assert_that(is.function(standardize) || isFALSE(standardize))
 
     if(verbose) {
-        message('=== GCKM analysis ===')
+        printf('=== GCKM analysis ===\n')
     }
 
     if(gcmMaxIter == 0) {

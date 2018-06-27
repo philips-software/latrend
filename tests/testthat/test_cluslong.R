@@ -58,3 +58,21 @@ test_that('method parameter passing', {
     expect_length(clrA@results, 1)
     expect_equivalent(clrA@results$c2@model['algorithm'], 'kmeans, slow (R)') # using median as the center results in kml using the R implementation
 })
+
+test_that('resultfun', {
+    clrA = cluslongRecord(testLongData)
+    cluslong(clrA, numClus=2, method='kml', verbose=FALSE, result=function(clr, clResult) {
+        stopifnot(is.CluslongRecord(clr))
+        stopifnot(is.CluslongResult(clResult))
+        clResult@details['test'] = 25
+        return(clResult)
+    })
+    expect_equal(getResults(clrA, 2)@details$test, 25)
+
+    # result via options()
+    clrB = cluslongRecord(testLongData)
+    options(cluslong.result=function(clr, clResult) { clResult@details['test2'] = 15; return(clResult)})
+    cluslong(clrB, numClus=2, method='kml', verbose=FALSE)
+    options(cluslong.result=NULL)
+    expect_equal(getResults(clrB, 2)@details$test2, 15)
+})

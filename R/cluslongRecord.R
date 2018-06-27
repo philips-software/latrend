@@ -187,7 +187,7 @@ setMethod('plot', signature=c('CluslongRecord'), function(x, ...) {
 #' @title Plot trends of a CluslongResult with the trajectories from the CluslongRecord
 #' @param numClus Number of clusters
 #' @param ribbon Whether to show the within-group variability using a ribbon, instead of plotting individual time series
-#' @param ribbonQ Quantile range of the ribbon (90% interval by default)
+#' @param ribbonQ Quantile range of the ribbon (90pct interval by default)
 #' @param sample Number of time series to sample per cluster for plotting. Only applicable when ribbon=FALSE.
 #' @param nrow Number of rows for the facet
 #' @param ncol Number of columns for the facet

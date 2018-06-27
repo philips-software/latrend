@@ -3,7 +3,7 @@ options(deparse.max.lines=5)
 data("testLongData")
 
 clr1 = cluslongRecord(testLongData)
-cluslong_kml(clr1, maxIter=NULL)
+cluslong_kml(clr1, maxIter=0)
 clr2 = cluslongRecord(testLongData)
 cluslong(clr2, numClus=2:3, method='kml')
 

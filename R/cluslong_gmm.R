@@ -23,11 +23,11 @@ cluslong_gmm = function(data,
                         idCol,
                         timeCol,
                         valueCol,
-                        resultFun=NULL,
-                        keep=getOption('cluslong.keep', 'all'),
                         verbose=TRUE,
                         seed=NULL,
-                        catchError=FALSE) {
+                        result=getOption('cluslong.result'),
+                        keep=getOption('cluslong.keep', 'all'),
+                        catchError=getOption('cluslong.catchError', FALSE)) {
     do.call(cluster_longitudinal, c(prepFun=prep_gmm, clusterFun=cluster_gmm, mget(names(formals()), sys.frame(sys.nframe()))))
 }
 
@@ -41,9 +41,9 @@ prep_gmm = function(clr, fixed, random, mixture, start, startMaxIter, maxIter, d
 
     if(verbose) {
         if(random == ~-1) {
-            message('=== GBTM analysis ===')
+            printf('=== GBTM analysis ===\n')
         } else {
-            message('=== GMM analysis ===')
+            printf('=== GMM analysis ===\n')
         }
     }
 }
@@ -71,9 +71,9 @@ cluster_gmm = function(clr, prepVars, nc, startTime, numRuns, maxIter, fixed, ra
 
     if(verbose) {
         if(is.character(start)) {
-            message(sprintf('- Initializing model using %s approach...', start))
+            printf('- Initializing model using %s approach...\n', start)
         } else {
-            message(sprintf('- Initializing model using custom approach...'))
+            printf('- Initializing model using custom approach...\n')
         }
     }
     tInit = Sys.time()
@@ -83,12 +83,12 @@ cluster_gmm = function(clr, prepVars, nc, startTime, numRuns, maxIter, fixed, ra
     initTime = as.numeric(Sys.time() - tInit)
 
     if(verbose) {
-        message(sprintf('  Took %g seconds', round(initTime, 2)))
+        printf('  Took %g seconds\n', round(initTime, 2))
     }
 
     ## Final model optimization
     if(verbose) {
-        message('- Optimizing final model...')
+        printf('- Optimizing final model...\n')
     }
     tRun = Sys.time()
     model = do.call('hlme', modelArgs)
@@ -96,7 +96,7 @@ cluster_gmm = function(clr, prepVars, nc, startTime, numRuns, maxIter, fixed, ra
 
     ## Results
     if(verbose) {
-        message('- Computing results...')
+        printf('- Computing results...\n')
     }
     gmm_result(clr, model, keep=keep, start=startTime, runTime=runTime, initTime=initTime)
 }

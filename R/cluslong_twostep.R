@@ -26,7 +26,7 @@ cluslong_twostep = function(data,
     assert_that(is.function(standardize) || isFALSE(standardize))
 
     if(verbose) {
-        message('=== Two-step analysis ===')
+        printf('=== Two-step analysis ===\n')
     }
 
     do.call(cluster_longitudinal, c(prepFun=prep_twostep, clusterFun=cl_twostep, mget(names(formals()), sys.frame(sys.nframe()))))
@@ -34,7 +34,7 @@ cluslong_twostep = function(data,
 
 prep_twostep = function(clr, representStep, standardize, verbose) {
     if(verbose) {
-        message('- [1.] Representation step')
+        printf('- [1.] Representation step\n')
     }
     step1out = representStep(clr)
     ids = getIds(clr)
@@ -61,7 +61,7 @@ prep_twostep = function(clr, representStep, standardize, verbose) {
     }
 
     if(verbose) {
-        message('- [2.] Cluster step')
+        printf('- [2.] Cluster step\n')
     }
 
     return(list(idCoefs=idCoefs, idPreds=idPreds, X=X))
@@ -77,8 +77,8 @@ cluster_twostep = function(clr, prepVars, nc, startTime, numRuns, maxIter,
     runTime = as.numeric(Sys.time() - tRunStart)
 
     if(verbose) {
-        message(sprintf('  Took %g seconds.', round(runTime, 2)))
-        message('- Computing results...')
+        printf('  Took %g seconds.\n', round(runTime, 2))
+        printf('- Computing results...\n')
     }
     results = list(clusters=NULL, criteria=c(), converged=NA, model=NULL)
     if(is.list(step2out)) {

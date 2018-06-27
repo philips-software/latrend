@@ -1,4 +1,5 @@
 library(testthat)
+library(cluslong)
 options(deparse.max.lines=5)
 
 data('testLongData')

@@ -17,11 +17,11 @@ cluslong_kml = function(data,
                         idCol,
                         timeCol,
                         valueCol,
-                        resultFun=NULL,
-                        keep=getOption('cluslong.keep', 'all'),
                         verbose=TRUE,
                         seed=NULL,
-                        catchError=FALSE) {
+                        result=getOption('cluslong.result'),
+                        keep=getOption('cluslong.keep', 'all'),
+                        catchError=getOption('cluslong.catchError', FALSE)) {
     args = mget(names(formals()), sys.frame(sys.nframe()))
     do.call(cluster_longitudinal, c(prepFun=prep_kml, clusterFun=cluster_kml, args))
 }
@@ -31,7 +31,7 @@ cluslong_kml = function(data,
 prep_kml = function(clr, maxIter, start, imputation, distance, center, verbose) {
 
     if(verbose) {
-        message('=== KML analysis ===')
+        printf('=== KML analysis ===\n')
         suppressFun = function(x) x
     }
     else {
@@ -67,7 +67,7 @@ cluster_kml = function(clr, prepVars, nc, startTime, numRuns, maxIter, center, k
     runTime = as.numeric(Sys.time() - tRunStart)
 
     if(verbose) {
-        message('- Computing results...')
+        printf('- Computing results...\n')
     }
     kml_result(clr, cld, nc=nc, keep=keep, startTime=startTime, runTime=runTime, center=center)
 }

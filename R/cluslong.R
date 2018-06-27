@@ -2,6 +2,7 @@
 #' @import data.table
 #' @import assertthat
 #' @import magrittr
+#' @importFrom R.utils printf
 #' @title Cluster a longitudinal dataset
 #' @seealso \link{cluslong_kml}, \link{cluslong_gckm}, \link{cluslong_gbtm}, \link{cluslong_gmm}, \link{cluslong_mixtvem}, \link{cluslong_twostep}
 #' @param data Longitudinal \code{data.frame}, \code{data.table}, or a \link[=cluslongRecord]{CluslongRecord} object.
@@ -13,7 +14,7 @@
 #' @param numRuns Number of runs of the method. The effect is dependent on the method; being either the number of repeated starts or complete evaluations.
 #' @param maxIter The maximum number of iterations in case convergence is not reached.
 #' @param ... Method-specific arguments
-#' @param resultFun Function for computing additional results on each CluslongResult object (e.g. criteria)
+#' @param result Function for computing additional results on each CluslongResult object (e.g. criteria)
 #' @param keep The level of model output to preserve (all, minimal, none). This reduces the size of the output.
 #' @param verbose Whether to enable verbose console output
 #' @param seed Set the seed for RNG
@@ -28,11 +29,11 @@ cluslong = function(data,
                     idCol,
                     timeCol,
                     valueCol,
-                    resultFun,
-                    keep,
                     verbose,
                     seed=NULL,
-                    catchError=FALSE
+                    result=getOption('cluslong.result'),
+                    keep=getOption('cluslong.keep', 'all'),
+                    catchError=getOption('cluslong.catchError', FALSE)
                     ) {
 
     clusterMethod = ls('package:cluslong', pattern=paste0('cluslong_', method))[1]
@@ -54,14 +55,14 @@ cluster_longitudinal = function(data,
                                 idCol,
                                 timeCol,
                                 valueCol,
-                                resultFun=NULL,
+                                result=NULL,
                                 keep,
                                 verbose,
                                 seed,
                                 catchError) {
     assert_that(is.numeric(numClus), noNA(numClus), all(numClus >= 1), all(numClus %% 1 == 0))
     assert_that(is.count(maxIter+1), maxIter >= 0)
-    assert_that(is.null(resultFun) || is.function(resultFun))
+    assert_that(is.null(result) || is.function(result))
     assert_that(is.scalar(keep), keep %in% c('all', 'minimal', 'none'))
     assert_that(is.flag(verbose))
     assert_that(is.flag(catchError))
@@ -105,7 +106,7 @@ cluster_longitudinal = function(data,
     ## Clustering
     for(nc in numClus) {
         if(verbose) {
-            message(sprintf('- Analyzing for clusters = %d', nc))
+            printf('- Analyzing for clusters = %d\n', nc)
         }
         set.seed(seed)
         clResult = condTryCatch(
@@ -125,23 +126,26 @@ cluster_longitudinal = function(data,
             }
         )
 
-        if(!is.null(resultFun)) {
+        if(!is.null(result)) {
+            if(verbose) {
+                printf('- Running result function...\n')
+            }
             clResult = condTryCatch(
                 cond=catchError,
-                expr=resultFun(clr, clResult),
+                expr=result(clr, clResult),
                 error=function(e) {
-                    warning(sprintf('Error occurred while evaluating resultFun() for numClus=%d: "%s"', nc, e$message), immmediate.=TRUE)
+                    warning(sprintf('Error occurred while evaluating result() for numClus=%d: "%s"', nc, e$message), immmediate.=TRUE)
                     clResult
                 }
             )
+            assert_that(is.CluslongResult(clResult), msg='result() function returned an object that is not a CluslongResult')
         }
 
         clr = update_clr(clr, clResult, clrName, clrEnv, verbose)
     }
 
     if(verbose) {
-        message(sprintf('  Total time: %g seconds', round(as.numeric(Sys.time() - startTime), 2)))
-        message('- Completed.')
+        printf('  Total time: %g seconds\nCompleted.', round(as.numeric(Sys.time() - startTime), 2))
     }
 
     if(is.null(clrName)) {
@@ -162,28 +166,28 @@ update_clr = function(clr, clResult, clrName, envir, verbose) {
     if(!is.null(clrName)) {
         assign(clrName, clr, envir=envir)
         if(verbose) {
-            message(sprintf(': Updated cluslong record with results (in var "%s")', as.character(clrName)))
+            printf('  Updated cluslong record with results (in var "%s")\n', as.character(clrName))
         }
     }
     return(clr)
 }
 
 
-create_result_update_function = function(clrName, envir, resultFun, verbose) {
+create_result_update_function = function(clrName, envir, result, verbose) {
     return(function(clr, clResults) {
         assert_that(is.CluslongRecord(clr))
         assert_that(is.list(clResults))
         assert_that(all(sapply(clResults, 'is', 'CluslongResult')))
 
         names(clResults) = paste0('c', sapply(clResults, slot, 'numClus'))
-        clResults = lapply(clResults, function(clResult) resultFun(clr, clResult))
-        assert_that(all(sapply(clResults, 'is', 'CluslongResult')), msg='the supplied resultFun function did not output a CluslongResult object')
+        clResults = lapply(clResults, function(clResult) result(clr, clResult))
+        assert_that(all(sapply(clResults, 'is', 'CluslongResult')), msg='the supplied result function did not output a CluslongResult object')
         clr@results = modifyList(clr@results, clResults)
 
         if(!is.null(clrName)) {
             assign(clrName, clr, envir=envir)
             if(verbose) {
-                message(sprintf('Updated cluslong record with results (in var "%s")', as.character(clrName)))
+                printf('  Updated cluslong record with results (in var "%s")\n', as.character(clrName))
             }
         }
         return(clr)

@@ -23,11 +23,11 @@ cluslong_mixtvem = function(data,
                         idCol,
                         timeCol,
                         valueCol,
-                        resultFun=NULL,
-                        keep=getOption('cluslong.keep', 'all'),
                         verbose=TRUE,
                         seed=NULL,
-                        catchError=FALSE) {
+                        result=getOption('cluslong.result'),
+                        keep=getOption('cluslong.keep', 'all'),
+                        catchError=getOption('cluslong.catchError', FALSE)) {
     do.call(cluster_longitudinal, c(prepFun=prep_mixtvem, clusterFun=cluster_mixtvem, mget(names(formals()), sys.frame(sys.nframe()))))
 }
 
@@ -35,7 +35,7 @@ cluslong_mixtvem = function(data,
 
 prep_mixtvem = function(clr, maxIter, numKnots, degree, maxVarianceRatio, assumeIndependence, verbose) {
     if(verbose) {
-        message('=== MixTVEM analysis ===')
+        printf('=== MixTVEM analysis ===\n')
         suppressFun = function(x) x
     } else {
         suppressFun = capture.output
@@ -84,7 +84,7 @@ cluster_mixtvem = function(clr, prepVars, nc, startTime, numRuns, maxIter, numKn
 
     ## Results
     if(verbose) {
-        message('- Computing results...')
+        printf('- Computing results...\n')
     }
     mixtvem_result(clr, numClus=nc, model=model, keep=keep, start=startTime, runTime=runTime)
 }
