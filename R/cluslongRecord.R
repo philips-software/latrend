@@ -51,6 +51,10 @@ cluslongRecord = function(data, idCol, timeCol, valueCol, name='clusLongRecord')
         data = data.table(data, key=c(idCol, timeCol))
     }
 
+    if(is.factor(data[[idCol]])) {
+        assert_that(all(data[, .N, by=c(idCol)]$N > 0), msg='one or more time series are empty, i.e., not all id factor levels are present in the data')
+    }
+
     new('CluslongRecord', name=name, idCol=idCol, timeCol=timeCol, valueCol=valueCol, data=data)
 }
 
