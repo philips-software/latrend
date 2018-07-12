@@ -31,17 +31,17 @@ cluslongRecord = function(data, idCol, timeCol, valueCol, name='clusLongRecord')
     assert_that(is.data.frame(data), msg='data should be a data.frame or data.table')
     assert_that(length(data) >= 3, msg='data should contain 3 columns (id, time, value)')
 
-    if(missing(idCol)) {
+    if(missing(idCol) || is.null(idCol)) {
         idCol = get_id(data)
     } else {
         assert_that(is.scalar(idCol), has_name(data, idCol))
     }
-    if(missing(timeCol)) {
+    if(missing(timeCol) || is.null(timeCol)) {
         timeCol = get_time(data)
     } else {
         assert_that(is.scalar(timeCol), has_name(data, timeCol))
     }
-    if(missing(valueCol)) {
+    if(missing(valueCol) || is.null(valueCol)) {
         valueCol = get_value(data)
     } else {
         assert_that(is.scalar(valueCol), has_name(data, valueCol))
