@@ -5,13 +5,14 @@
 #' @inheritParams cluslong
 #' @param start Method for initializing the model
 #' @param distance Name of the distance function, or a function of d(A, B)
+#' @param imputation Name of the imputation method, see \link[longitudinalData]{imputation}. The default is to not impute the data, in which case an error is thrown when the data contains missing values.
 #' @param center Function specifying the computation of the cluster center
 cluslong_kml = function(data,
                         numClus=2:3,
                         numRuns=10,
                         maxIter=200,
                         start='kmeans++',
-                        imputation='copyMean',
+                        imputation=NULL,
                         distance='euclidean',
                         center=meanNA,
                         idCol=NULL,
@@ -41,6 +42,7 @@ prep_kml = function(clr, maxIter, start, imputation, distance, center, verbose) 
     ## Input checks
     if(is.null(imputation)) {
         assert_that(!anyNA(clr@data[[clr@valueCol]]), msg='data contains missing values, with no imputation method specified')
+        imputation = 'copyMean'
     }
     assert_that(uniqueN(clr@data[, .N, by=c(clr@idCol)]$N) == 1, msg='not all time series are of equal length')
 
