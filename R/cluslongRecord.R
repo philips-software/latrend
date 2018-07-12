@@ -147,9 +147,13 @@ plotCriterion = function(x, criterion=c(), normalize=FALSE, lineSize=1, dotSize=
     panelColor = theme_get()$panel.background$fill
 
     p = p + geom_line() +
-        geom_line(size=lineSize) +
-        geom_point(color=panelColor, size=dotSize*2) +
-        geom_point(size=dotSize) +
+        geom_line(size=lineSize)
+
+    if(!is.null(panelColor)) {
+        p = p + geom_point(color=panelColor, size=dotSize*2)
+    }
+
+    p = p + geom_point(size=dotSize) +
         labs(x='Number of clusters', y=ifelse(normalize, 'Normalized value', 'Value'))
     return(p)
 }

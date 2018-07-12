@@ -1,5 +1,5 @@
 library(cluslong)
-options(deparse.max.lines=5)
+options(deparse.max.lines=3)
 data("testLongData")
 
 clr1 = cluslongRecord(testLongData)
