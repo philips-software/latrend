@@ -52,7 +52,12 @@ prep_kml = function(clr, maxIter, start, imputation, distance, center, verbose) 
     rownames(datamat) = wideData$clr
 
     ## Method
-    par = parALGO(saveFreq=1e99, scale=FALSE, maxIt=maxIter, startingCond=start, imputationMethod=imputation, distanceName=distance, distance=distance, centerMethod=center)
+    if(is.character(distance)) {
+        distanceName = distance
+    } else {
+        distanceName = ''
+    }
+    par = parALGO(saveFreq=1e99, scale=FALSE, maxIt=maxIter, startingCond=start, imputationMethod=imputation, distanceName=distanceName, distance=distance, centerMethod=center)
     cld = clusterLongData(traj=datamat, idAll=rownames(datamat), time=getTimes(clr))
 
     return(list(cld=cld, par=par, suppressFun=suppressFun))

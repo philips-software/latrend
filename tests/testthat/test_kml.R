@@ -7,4 +7,9 @@ test_that('KML', {
 
     expect_equivalent(sort(getClusterProps(getResults(clrA, 3))), c(.242, .340, .418))
     expect_equivalent(sort(getClusterProps(getResults(clrA, 4))), c(.204, .214, .242, .340))
+
+    # custom distance function
+    clrB = cluslongRecord(testLongDataNamed)
+    cluslong_kml(clrB, numClus=3, verbose=FALSE, seed=1, distance=function(x, y) sqrt(sum((x-y)^2)))
+    expect_equivalent(sort(getClusterProps(getResults(clrA, 3))), sort(getClusterProps(getResults(clrB, 3))))
 })
