@@ -192,13 +192,10 @@ setMethod('plot', signature=c('CluslongRecord'), function(x, ...) {
 })
 
 #' @export
+#' @aliases plotTrends
+#' @inheritParams plotCustomTrends
 #' @title Plot trends of a CluslongResult with the trajectories from the CluslongRecord
 #' @param numClus Number of clusters
-#' @param ribbon Whether to show the within-group variability using a ribbon, instead of plotting individual time series
-#' @param ribbonQ Quantile range of the ribbon (90pct interval by default)
-#' @param sample Number of time series to sample per cluster for plotting. Only applicable when ribbon=FALSE.
-#' @param nrow Number of rows for the facet
-#' @param ncol Number of columns for the facet
 plotTrends.CluslongRecord = function(object, numClus,
                                      ribbon=FALSE,
                                      ribbonQ=c(.05, .95),
@@ -216,19 +213,73 @@ plotTrends.CluslongRecord = function(object, numClus,
     assert_that(is.numeric(ribbonQ), length(ribbonQ) == 2)
     clResult = getResults(object, numClus)
 
-    # Prepare data
-    clusNames = getClusterNames(clResult)
-    clusProps = round(getClusterProps(clResult) * 100)
-    newClusNames = sprintf(clusFormat, clusNames, clusProps)
-    newClusters = factor(clResult@clusters, levels=clusNames, labels=newClusNames)
+    args = mget(names(formals()), sys.frame(sys.nframe()))
+    args[['object']] = NULL
+    args[['numClus']] = NULL
+    args[['clr']] = object
+    args[['clusters']] = clResult@clusters
+    args[['trends']] = clResult@trends
+    do.call(plotCustomTrends, args)
+}
+setMethod('plotTrends', signature=c('CluslongRecord'), plotTrends.CluslongRecord)
 
-    xtrends = copy(clResult@trends)
-    xtrends[, Cluster := factor(Cluster, levels=levels(Cluster), labels=newClusNames)] %>%
+#' @export
+#' @title Plot self-derived cluster trends on the data
+#' @param clusters Vector indicating the cluster assignment of each time series.
+#' @param trends Either \code{NULL}, in which case the cluster trends are computed from the data, or a \code{data.frame} describing the trend per cluster. The trends data.frame should contain a time and value column with names corresponding to the cluslongRecord data, as well as a \code{'Cluster'} column.
+#' @param center Function to apply to compute the center in case the trends argument is not specified.
+#' @param ribbon Whether to show the within-group variability using a ribbon, instead of plotting individual time series
+#' @param ribbonQ Quantile range of the ribbon (90pct interval by default)
+#' @param sample Number of time series to sample per cluster for plotting. Only applicable when ribbon=FALSE.
+#' @param nrow Number of rows for the facet
+#' @param ncol Number of columns for the facet
+plotCustomTrends = function(clr, clusters, trends=NULL, center=meanNA,
+                            ribbon=FALSE,
+                            ribbonQ=c(.05, .95),
+                            sample=Inf,
+                            tsColor='steelblue1',
+                            tsSize=.1,
+                            tsAlpha=.5,
+                            trendColor='black',
+                            trendSize=2,
+                            nrow=NULL,
+                            ncol=NULL,
+                            clusFormat='%s (%d%%)') {
+    assert_that(is.CluslongRecord(clr))
+    idCol = clr@idCol
+    timeCol = clr@timeCol
+    valueCol = clr@valueCol
+
+    assert_that(is.numeric(clusters) || is.factor(clusters),
+                length(clusters) == uniqueN(clr@data[[idCol]]),
+                !anyNA(clusters))
+    assert_that(is.function(center))
+
+    if(is.null(trends)) {
+        rowClusters = rep(clusters, clr@data[, .N, by=c(idCol)]$N)
+        rowTimes = clr@data[[timeCol]]
+        trends = clr@data[, .(Value=center(get(valueCol))), keyby=.(Cluster=rowClusters, Time=rowTimes)]
+        setnames(trends, c('Cluster', timeCol, valueCol))
+    } else {
+        assert_that(is.data.frame(trends))
+        assert_that(all(has_name(trends, c(timeCol, valueCol, 'Cluster'))))
+    }
+
+    # Prepare data
+    clusLevels = unique(clusters)
+    clusNames = clusLevels %>% as.character
+    clusProps = table(clusters) %>% prop.table %>% as.numeric
+    newClusNames = sprintf(clusFormat, clusNames, round(clusProps * 100))
+    newClusters = factor(clusters, levels=clusNames, labels=newClusNames)
+
+    xtrends = copy(as.data.table(trends))
+    xtrends[, Cluster := factor(Cluster, levels=clusLevels, labels=newClusNames)] %>%
         setnames(c('Cluster', 'Time', 'Value'))
-    xdata = copy(object@data) %>%
-        setnames(c(object@idCol, object@timeCol, object@valueCol), c('Id', 'Time', 'Value'))
+    xdata = copy(clr@data) %>%
+        setnames(c(idCol, timeCol, valueCol), c('Id', 'Time', 'Value'))
     xdata[, Cluster := newClusters[.GRP], by=Id]
 
+    # Construct plot
     if(ribbon) {
         p = plotData_ribbon(xdata, q=ribbonQ, tsColor=tsColor, tsAlpha=tsAlpha)
     } else {
@@ -238,10 +289,9 @@ plotTrends.CluslongRecord = function(object, numClus,
     p + geom_line(data=xtrends, aes(x=Time, y=Value), color=trendColor, size=trendSize) +
         facet_wrap(~ Cluster, ncol=ncol, nrow=nrow) +
         labs(title='Trends',
-             x=get_trend_time(clResult@trends),
-             y=get_trend_value(clResult@trends))
+             x=get_trend_time(trends),
+             y=get_trend_value(trends))
 }
-setMethod('plotTrends', signature=c('CluslongRecord'), plotTrends.CluslongRecord)
 
 plotData_line = function(xdata, nsample, tsColor, tsSize, tsAlpha) {
     if(nsample < Inf) {
