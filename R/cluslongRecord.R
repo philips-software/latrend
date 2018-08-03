@@ -164,18 +164,25 @@ plotCriterion = function(x, criterion=c(), normalize=FALSE, lineSize=1, dotSize=
 
 #' @export
 #' @title Plot trajectories of a CluslongRecord
-#' @param sample Number of time series to sample per cluster for plotting
-plotTrajectories = function(clr, sample=Inf, tsColor='black', tsSize=.1, tsAlpha=1) {
+#' @param ids The IDs to plot the trajectory of. By default, all trajectories are plotted.
+#' @param sample Number of time series to sample from the selected IDs.
+plotTrajectories = function(clr, ids=NULL, sample=Inf, tsColor='black', tsSize=.1, tsAlpha=1) {
     assert_that(is.scalar(sample), sample > 0)
 
-    xdata = copy(clr@data) %>%
-        setnames(c(clr@idCol, clr@timeCol, clr@valueCol), c('Id', 'Time', 'Value'))
+    if(is.null(ids)) {
+        ids = getIds(clr)
+    } else {
+        assert_that(!anyDuplicated(ids))
+    }
 
     if(sample < Inf) {
-        dt_ids = data.table(Id=getIds(clr)) %>%
-            .[base::sample(1:.N, min(sample, .N))]
-        xdata = xdata[dt_ids]
+        assert_that(sample <= length(ids))
+        ids = ids[sample.int(length(ids), size=sample)]
     }
+
+    dt_ids = data.table(Id=ids)
+    xdata = clr@data[dt_ids]
+    setnames(xdata, c(clr@idCol, clr@timeCol, clr@valueCol), c('Id', 'Time', 'Value'))
 
     p = ggplot() +
         geom_line(data=xdata, aes(x=Time, y=Value, group=Id), color=tsColor, size=tsSize, alpha=tsAlpha) +

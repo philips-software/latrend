@@ -49,6 +49,10 @@ test_that('plots', {
     expect_s3_class(pCrit, 'ggplot')
     suppressWarnings(print(pCrit))
 
+    pTraj = plotTrajectories(clrA, ids=c('G1.1', 'G3.209'))
+    expect_s3_class(pTraj, 'ggplot')
+    print(pTraj)
+
     pTrend = plotTrends(clrA, numClus=3)
     expect_s3_class(pTrend, 'ggplot')
     print(pTrend)
