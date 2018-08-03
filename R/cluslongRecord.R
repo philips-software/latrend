@@ -180,8 +180,8 @@ plotTrajectories = function(clr, ids=NULL, sample=Inf, tsColor='black', tsSize=.
         ids = ids[sample.int(length(ids), size=sample)]
     }
 
-    dt_ids = data.table(Id=ids)
-    xdata = clr@data[dt_ids]
+    dt_ids = data.table(Id=ids) %>% setnames('Id', clr@idCol)
+    xdata = clr@data[dt_ids, on=clr@idCol]
     setnames(xdata, c(clr@idCol, clr@timeCol, clr@valueCol), c('Id', 'Time', 'Value'))
 
     p = ggplot() +
