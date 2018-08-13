@@ -75,3 +75,5 @@ getCriterion(clr)
 plotCriterion(clr, 'BIC')
 plotCriterion(clr, c('BIC', 'AIC'))
 plotCriterion(clr, normalize=TRUE)
+
+plotCenters(clr1)
