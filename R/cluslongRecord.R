@@ -206,7 +206,7 @@ setMethod('plot', signature=c('CluslongRecord'), function(x, ...) {
 plotTrends.CluslongRecord = function(object, numClus,
                                      ribbon=FALSE,
                                      ribbonQ=c(.05, .95),
-                                     sample=Inf,
+                                     tsSample=Inf,
                                      tsColor='steelblue1',
                                      tsSize=.1,
                                      tsAlpha=.5,
@@ -216,7 +216,7 @@ plotTrends.CluslongRecord = function(object, numClus,
                                      ncol=NULL,
                                      clusFormat='%s (%d%%)') {
     assert_that(is.count(numClus))
-    assert_that(is.number(sample), sample > 0)
+    assert_that(is.number(tsSample), tsSample > 0)
     assert_that(is.numeric(ribbonQ), length(ribbonQ) == 2)
     clResult = getResults(object, numClus)
 
@@ -226,7 +226,7 @@ plotTrends.CluslongRecord = function(object, numClus,
     args[['clr']] = object
     args[['clusters']] = clResult@clusters
     args[['trends']] = clResult@trends
-    do.call(plotCustomTrends, args) + labs(title='Trends')
+    do.call(plotCenters, args) + labs(title='Trends')
 }
 setMethod('plotTrends', signature=c('CluslongRecord'), plotTrends.CluslongRecord)
 
@@ -235,32 +235,36 @@ setMethod('plotTrends', signature=c('CluslongRecord'), plotTrends.CluslongRecord
 #' @param clusters Vector indicating the cluster assignment of each time series.
 #' @param trends Either \code{NULL}, in which case the cluster trends are computed from the data, or a \code{data.frame} describing the trend per cluster. The trends data.frame should contain a time and value column with names corresponding to the cluslongRecord data, as well as a \code{'Cluster'} column.
 #' @param center Function to apply to compute the center in case the trends argument is not specified.
+#' @param trendColor Color of the line representing the cluster trend.
+#' @param trendSize Line size of the cluster trend.
 #' @param ribbon Whether to show the within-group variability using a ribbon, instead of plotting individual time series
 #' @param ribbonQ Quantile range of the ribbon (90pct interval by default)
-#' @param ribbonFun Function returning the ribbon geom layer.
-#' @param alpha Alpha channel value [0, 1] of the time series line or ribbon.
-#' @param color Color of the time series lines or fill color of the ribbon.
+#' @param ribbonFun Function returning the ribbon geom layer. The data passed to the geom consists of the columns Cluster, Time, ymin, and ymax.
+#' @param ribbonAlpha Alpha channel value [0, 1] of the ribbon.
+#' @param ribbonFill Fill color of the ribbon.
 #' @param ts Whether to plot the time series.
 #' @param tsSample Number of time series to sample per cluster for plotting. Only applicable when ribbon=FALSE.
 #' @param tsFun Function returning the time series geom layer.
 #' @param tsSize Line size for the time series.
-#' @param trendColor Color of the line representing the cluster trend.
-#' @param trendSize Line size of the cluster trend.
+#' @param tsAlpha Alpha channel value [0, 1] of the time series line.
+#' @param tsColor Color of the time series lines.
 #' @param nrow Number of rows for the facet
 #' @param ncol Number of columns for the facet
-#' @Param clusFormat Formatting of the cluster names to include the cluster proportion, e.g. \code{"%s (%d%%)"} for "A (10%)".
+#' @param clusFormat Formatting of the cluster names to include the cluster proportion, e.g. \code{"%s (%d%%)"} for "A (10%)".
 plotCenters = function(clr, clusters, trends=NULL, center=meanNA,
-                            alpha=.5,
-                            color='steelblue1',
+                            trendColor='black',
+                            trendSize=2,
                             ribbon=length(clusters) > 500,
                             ribbonQ=c(.05, .95),
                             ribbonFun=function(p, ...) p + geom_ribbon(...),
+                            ribbonFill='steelblue1',
+                            ribbonAlpha=.5,
                             ts=!ribbon,
                             tsSample=Inf,
                             tsFun=function(p, ...) p + geom_line(...),
+                            tsColor='steelblue1',
+                            tsAlpha=.5,
                             tsSize=.1,
-                            trendColor='black',
-                            trendSize=2,
                             nrow=NULL,
                             ncol=NULL,
                             clusFormat='%s (%d%%)') {
@@ -308,10 +312,10 @@ plotCenters = function(clr, clusters, trends=NULL, center=meanNA,
     # Construct plot
     p = ggplot()
     if(ribbon) {
-        p = plotData_ribbon(p, xdata, fun=ribbonFun, q=ribbonQ, color=color, alpha=alpha)
+        p = plotData_ribbon(p, xdata, fun=ribbonFun, q=ribbonQ, fill=ribbonFill, alpha=ribbonAlpha)
     }
     if(ts) {
-        p = plotData_line(p, xdata, fun=tsFun, nsample=tsSample, color=color, size=tsSize, alpha=alpha)
+        p = plotData_line(p, xdata, fun=tsFun, nsample=tsSample, color=tsColor, size=tsSize, alpha=tsAlpha)
     }
 
     p + geom_line(data=xtrends, aes(x=Time, y=Value), color=trendColor, size=trendSize) +
@@ -332,9 +336,9 @@ plotData_line = function(p, xdata, fun, nsample, color, size, alpha) {
     fun(p, mapping=aes(x=Time, y=Value, group=Id), data=xdata, color=color, size=size, alpha=alpha)
 }
 
-plotData_ribbon = function(p, xdata, fun, q, color, alpha) {
+plotData_ribbon = function(p, xdata, fun, q, fill, alpha) {
     dt_ribbon = xdata[, as.list(quantile(Value, q, na.rm=TRUE)), by=.(Cluster, Time)] %>%
         setnames(c('Cluster', 'Time', 'ymin', 'ymax'))
 
-    fun(p, mapping=aes(x=Time, ymin=ymin, ymax=ymax), data=dt_ribbon, fill=color, alpha=alpha)
+    fun(p, mapping=aes(x=Time, ymin=ymin, ymax=ymax), data=dt_ribbon, fill=fill, alpha=alpha)
 }

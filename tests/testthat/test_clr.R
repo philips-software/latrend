@@ -57,7 +57,7 @@ test_that('plots', {
     expect_s3_class(pTrend, 'ggplot')
     print(pTrend)
 
-    pCustom = plotCustomTrends(clrA, rep(1:2, each=250))
+    pCustom = plotCenters(clrA, rep(1:2, each=250))
     expect_s3_class(pCustom, 'ggplot')
     print(pCustom)
 })
@@ -74,7 +74,7 @@ test_that('plots with custom names', {
     expect_s3_class(pCrit2, 'ggplot')
     suppressWarnings(print(pCrit2))
 
-    pTrend = plotTrends(clrA, numClus=3, sample=100)
+    pTrend = plotTrends(clrA, numClus=3, tsSample=100)
     expect_s3_class(pTrend, 'ggplot')
     print(pTrend)
 

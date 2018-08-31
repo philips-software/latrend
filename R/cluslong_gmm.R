@@ -2,9 +2,10 @@
 #' @import lcmm
 #' @title Growth mixture modeling
 #' @inheritParams cluslong
-#' @param fixed Fixed effects
-#' @param random Random effects
-#' @param mixture Class-specific effects
+#' @param fixed Fixed effects.
+#' @param random Random effects.
+#' @param mixture Class-specific effects.
+#' @param classmb Formula for the multinomial class membership model. Intercept should NOT be included.
 #' @param diagCov Whether to use a diagonal variance-covariance matrix
 #' @param classCov Whether to use a class-specific variance-covariance matrix
 #' @param start Model initialization method name; gridsearch, gckm, or kml. Alternatively, a custom \code{function(clr, nc, gmmArgs, numRuns, maxIter, verbose)} can be provided, returning the arguments to the \code{lcmm::hlme} call.
@@ -16,6 +17,7 @@ cluslong_gmm = function(data,
                         fixed,
                         random,
                         mixture,
+                        classmb=~-1,
                         diagCov=TRUE,
                         classCov=FALSE,
                         start='gridsearch',
@@ -33,8 +35,8 @@ cluslong_gmm = function(data,
 
 
 
-prep_gmm = function(clr, fixed, random, mixture, start, startMaxIter, maxIter, diagCov, classCov, verbose) {
-    assert_that(is.formula(fixed), is.formula(random), is.formula(mixture))
+prep_gmm = function(clr, fixed, random, mixture, classmb, start, startMaxIter, maxIter, diagCov, classCov, verbose) {
+    assert_that(is.formula(fixed), is.formula(random), is.formula(mixture), is.formula(classmb))
     assert_that(is.scalar(start), is.character(start) || is.function(start))
     assert_that(is.count(startMaxIter+1), startMaxIter >= 0)
     assert_that(is.flag(diagCov), is.flag(classCov))
@@ -48,7 +50,8 @@ prep_gmm = function(clr, fixed, random, mixture, start, startMaxIter, maxIter, d
     }
 }
 
-cluster_gmm = function(clr, prepVars, nc, startTime, numRuns, maxIter, fixed, random, mixture,
+cluster_gmm = function(clr, prepVars, nc, startTime, numRuns, maxIter,
+                       fixed, random, mixture, classmb,
                        diagCov, classCov, start, startMaxIter, keep, verbose) {
     valueCol = clr@valueCol
 
@@ -61,8 +64,13 @@ cluster_gmm = function(clr, prepVars, nc, startTime, numRuns, maxIter, fixed, ra
     }
 
     ## Model initialization
-    gmmArgs = list(fixed=fixed, random=random, mixture=mixture, subject=clr@idCol,
+    gmmArgs = list(fixed=fixed, random=random, mixture=mixture, classmb=classmb, subject=clr@idCol,
                               ng=nc, idiag=diagCov, nwg=classCov, data=clr@data)
+
+    if(nc == 1) {
+        gmmArgs[['classmb']] = NULL #hlme expects classmb to be missing for nc = 1
+    }
+
     initGmm = switch(tolower(start),
                      gridsearch = initGmm_gridsearch,
                      gckm = initGmm_gckm,
@@ -114,6 +122,7 @@ initGmm_gridsearch = function(clr, nc, gmmArgs, numRuns, maxIter, verbose) {
     gcmArgs = gmmArgs
     gcmArgs$ng = 1
     gcmArgs$nwg = FALSE
+    gcmArgs$classmb = NULL
     gcmArgs$mixture = NULL
     gcmArgs$verbose = verbose
     if(verbose) {
@@ -169,10 +178,16 @@ initGmm_kml = function(clr, nc, gmmArgs, numRuns, maxIter, verbose) {
 gmmCoefs_from_clusters = function(clr, gmmArgs, clusters, priors) {
     assert_that(formula(delete.response(terms(gmmArgs$fixed))) == gmmArgs$mixture, msg='Not supported. fixed and mixture effects should be the same')
     rowClusters = rep(clusters, clr@data[, .N, by=c(clr@idCol)]$N)
+
+    if(gmmArgs$classmb != (~-1)) {
+        warning('classmb not supported for cluster initialization. Selected starting values may be suboptimal')
+    }
+
     gcmList = lapply(levels(clusters), function(clus) {
         gcmArgs = gmmArgs
         gcmArgs$data = clr@data[rowClusters == clus]
         gcmArgs$ng = 1
+        gcmArgs$classmb = NULL
         gcmArgs$nwg = FALSE
         gcmArgs$mixture = NULL
         gcmArgs$verbose = FALSE
@@ -236,7 +251,8 @@ gmm_result = function(clr, model, keep, start, runTime, initTime) {
 
     # Compute trends
     assert_that(all(model$pred$Id == as.numeric(clr@data[[idCol]])))
-    dt_trajmarg = data.table(model$pred[grep('Id|pred_m\\d', names(model$pred))], Time=clr@data[[timeCol]]) %>%
+    predCols = c(idCol, grep('pred_m\\d', names(model$pred), value=TRUE))
+    dt_trajmarg = data.table(model$pred[predCols], Time=clr@data[[timeCol]]) %>%
         melt(id=c(idCol, 'Time'), variable.name='Cluster', value.name=valueCol)
     dt_trends = unique(dt_trajmarg[, -idCol, with=FALSE], by=c('Time', 'Cluster')) %>%
         .[, Cluster := factor(as.integer(Cluster), levels=1:numClus, labels=clusNames)] %>%
