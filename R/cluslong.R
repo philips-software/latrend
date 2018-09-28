@@ -145,7 +145,7 @@ cluster_longitudinal = function(data,
     }
 
     if(verbose) {
-        printf('  Total time: %g seconds\nCompleted.', round(as.numeric(Sys.time() - startTime), 2))
+        printf('  Total time: %g seconds\nCompleted.', round(as.numeric(Sys.time() - startTime, 'secs'), 2))
     }
 
     if(is.null(clrName)) {
