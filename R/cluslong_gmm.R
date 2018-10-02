@@ -40,6 +40,7 @@ prep_gmm = function(clr, fixed, random, mixture, classmb, start, startMaxIter, m
     assert_that(is.scalar(start), is.character(start) || is.function(start))
     assert_that(is.count(startMaxIter+1), startMaxIter >= 0)
     assert_that(is.flag(diagCov), is.flag(classCov))
+    assert_that(length(all.vars(update(fixed,  ~ 1))) > 0, msg='expecting fixed formula with LHS')
 
     if(verbose) {
         if(random == ~-1) {

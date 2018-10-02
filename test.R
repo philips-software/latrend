@@ -77,3 +77,9 @@ plotCriterion(clr, c('BIC', 'AIC'))
 plotCriterion(clr, normalize=TRUE)
 
 plotCenters(clr1)
+
+# missing data
+library(data.table)
+library(lcmm)
+testLongData2 = copy(testLongData)[Id == 'G3.100' & Time %in% c(0, 1), Value := NA]
+clrGmm = cluslong_gmm(testLongData, fixed= Value ~ poly(Time, 2), mixture=~poly(Time, 2), random=~1, startMaxIter=20, numRuns=5, numClus=3)
