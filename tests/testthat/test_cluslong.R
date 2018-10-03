@@ -14,13 +14,13 @@ test_that('defaults', {
 })
 
 test_that('result merging', {
-    clrA = cluslongRecord(testLongData)
-    cluslong(clrA, numClus=2, method='kml', verbose=FALSE)
-    expect_length(clrA@results, 1)
-    cluslong(clrA, numClus=2:3, method='kml', verbose=FALSE)
-    expect_length(clrA@results, 2)
-    cluslong(clrA, numClus=4, method='kml', verbose=FALSE)
-    expect_length(clrA@results, 3)
+    clr = cluslongRecord(testLongData)
+    cluslong(clr, numClus=2, method='kml', verbose=FALSE)
+    expect_length(clr@results, 1)
+    cluslong(clr, numClus=2:3, method='kml', verbose=FALSE)
+    expect_length(clr@results, 2)
+    cluslong(clr, numClus=4, method='kml', verbose=FALSE)
+    expect_length(clr@results, 3)
 })
 
 test_that('subfunction assignment', {
@@ -37,26 +37,26 @@ test_that('subfunction assignment', {
 })
 
 test_that('standard data.table input', {
-    clrA = cluslong(testLongData, numClus=2, method='kml', verbose=FALSE)
-    expect_equal(clrA@idCol, 'Id')
-    expect_equal(clrA@timeCol, 'Time')
-    expect_equal(clrA@valueCol, 'Value')
-    expect_length(clrA@results, 1)
+    clr = cluslong(testLongData, numClus=2, method='kml', verbose=FALSE)
+    expect_equal(clr@idCol, 'Subject')
+    expect_equal(clr@timeCol, 'Assessment')
+    expect_equal(clr@valueCol, 'Measurement')
+    expect_length(clr@results, 1)
 })
 
 test_that('data.frame input', {
-    clrA = cluslong(testLongDataFrame, numClus=2, method='kml', verbose=FALSE)
-    expect_equal(clrA@idCol, 'PatientId')
-    expect_equal(clrA@timeCol, 'Assessment')
-    expect_equal(clrA@valueCol, 'Measurement')
-    expect_length(clrA@results, 1)
+    clr = cluslong(as.data.frame(testLongData), numClus=2, method='kml', verbose=FALSE)
+    expect_equal(clr@idCol, 'Subject')
+    expect_equal(clr@timeCol, 'Assessment')
+    expect_equal(clr@valueCol, 'Measurement')
+    expect_length(clr@results, 1)
 })
 
 test_that('method parameter passing', {
-    clrA = cluslongRecord(testLongData)
-    cluslong(clrA, numClus=2, center=median, method='kml', verbose=FALSE)
-    expect_length(clrA@results, 1)
-    expect_equivalent(clrA@results$c2@model['algorithm'], 'kmeans, slow (R)') # using median as the center results in kml using the R implementation
+    clr = cluslongRecord(testLongData)
+    cluslong(clr, numClus=2, center=median, method='kml', verbose=FALSE)
+    expect_length(clr@results, 1)
+    expect_equivalent(clr@results$c2@model['algorithm'], 'kmeans, slow (R)') # using median as the center results in kml using the R implementation
 })
 
 test_that('resultfun', {

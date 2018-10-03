@@ -1,7 +1,7 @@
 Package: cluslong
 Type: Package
 Title: Clustering longitudinal datasets
-Version: 0.4.19
+Version: 0.4.20
 Author: Niek Den Teuling
 Maintainer: Niek Den Teuling <n.g.p.den.teuling@tue.nl>
 Description: Common methods for clustering longitudinal datasets

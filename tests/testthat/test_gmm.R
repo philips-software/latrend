@@ -1,22 +1,22 @@
 context('GMM')
 
 test_that('GMM', {
-    clrA = cluslongRecord(testLongDataNamed[Assessment %in% (c(0, 5, 9)/9)])
-    cluslong_gmm(clrA, numClus=3,
+    clr = cluslongRecord(testLongData[Assessment %in% (c(0, 5, 9)/9)])
+    cluslong_gmm(clr, numClus=3,
                  fixed=Measurement~Assessment,
                  mixture=~Assessment,
                  random=~Assessment, start='gridsearch', numRuns=5, startMaxIter=20,
                  verbose=FALSE, seed=1)
-    expect_length(clrA@results, 1)
+    expect_length(clr@results, 1)
 
-    expect_equivalent(sort(getClusterProps(getResults(clrA, 3))), c(.244, .338, .418))
+    expect_equivalent(sort(getClusterProps(getResults(clr, 3))), c(.244, .338, .418))
 })
 
 test_that('init', {
-    clrA = cluslong_gmm(testLongDataNamed,
+    clr = cluslong_gmm(testLongData,
                          fixed=Measurement ~ poly(Assessment, 2),
                          mixture=~poly(Assessment, 2),
                          random=~Assessment,
                          numClus=3, start='gckm', verbose=FALSE, seed=1)
-    expect_equivalent(sort(getClusterProps(getResults(clrA, 3))), c(.24, .340, .42), tolerance=.01)
+    expect_equivalent(sort(getClusterProps(getResults(clr, 3))), c(.24, .340, .42), tolerance=.01)
 })

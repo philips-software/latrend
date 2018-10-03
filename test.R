@@ -86,18 +86,16 @@ library(lme4)
 library(emmeans)
 library(ggplot2)
 data("testLongData")
-testLongData2 = copy(testLongData)[Id == 'G3.100' & Time %in% c(0, 1), Value := NA]
-testLongData2[, Group := factor(substr(Id, 0, 2))]
-testLongData2[Time == 0, mean(Value, na.rm=TRUE), by=Group]
+testLongData2 = copy(testLongData)[Subject == 'G3.100' & Assessment %in% c(0, 1), Measurement := NA]
+testLongData2[, Group := factor(substr(Subject, 0, 2))]
+testLongData2[Time == 0, mean(Measurement, na.rm=TRUE), by=Group]
 testLongData2[Group == 'G1', TIC := .82] %>%
     .[Group == 'G2', TIC := .33] %>%
     .[Group == 'G3', TIC := .26]
-
 testLongData2[1, TIC := NA]
-mod = lmer(Value ~ 1 + TIC + (poly(Time, 2) | Id), data=testLongData2)
-predict(mod, data.frame(Id='G1.1', Time=seq(0,1,by=.1), TIC=.75))
 
-clrGmm = cluslong_gmm(testLongData2, fixed= Value ~ -1 + Time + I(Time^2) + TIC, mixture= ~ -1 + Time + I(Time^2), random=~Time, startMaxIter=50, numRuns=10, numClus=3)
+clrGmm = cluslong_gmm(testLongData2, fixed= Measurement ~ -1 + Assessment + I(Assessment^2) + TIC, mixture= ~ -1 + Assessment + I(Assessment^2),
+                      random=~Assessment, startMaxIter=50, numRuns=10, numClus=3)
 plotTrends(clrGmm, 3)
 
 summary(clrGmm@results$c3@model)
