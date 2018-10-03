@@ -256,17 +256,23 @@ gmm_result = function(clr, model, keep, start, runTime, initTime) {
     predCols = grep('pred_m\\d', names(model$pred), value=TRUE)
     assert_that(length(predCols) == numClus)
 
-    dt_idprob = data.table(model$pprob[c('Id', probCols)])
-    dt_pred = data.table(model$pred)[dt_idprob, on='Id']
+    dt_idprob = data.table(model$pprob[c(idCol, probCols)])
+    dt_pred = data.table(model$pred)[dt_idprob, on=idCol]
 
     assert_that(nrow(dt_pred) == nrow(clr@data) - length(model$na.action))
-    dt_xmarg = cbind(clr@data[-model$na.action], dt_pred[, -'Id', with=FALSE])
+    if(length(model$na.action) == 0) {
+        validRows = seq_len(nrow(clr@data))
+    } else {
+        validRows = -model$na.action
+    }
+    dt_xmarg = cbind(clr@data[validRows], dt_pred[, -idCol, with=FALSE])
     dt_trajmarg = melt(dt_xmarg, id=c(idCol, timeCol),
                        variable.name='Cluster',
                        measure.vars=list(predCols, probCols),
-                       value.name=c('Value', 'Prob'))
+                       value.name=c(valueCol, 'Prob'))
     # average the marginal estimates of the individuals belonging to the cluster
-    dt_trends = dt_trajmarg[, .(Value=weighted.mean(Value, w=Prob)), by=c('Cluster', timeCol)] %>%
+    dt_trends = dt_trajmarg[, .(Value=weighted.mean(get(valueCol), w=Prob)), by=c('Cluster', timeCol)] %>%
+        setnames('Value', valueCol) %>%
         .[, Cluster := factor(as.integer(Cluster), levels=1:numClus, labels=clusNames)] %>%
         setcolorder(c('Cluster', timeCol, valueCol)) %>%
         setkeyv(c('Cluster', timeCol))
