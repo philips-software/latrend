@@ -12,9 +12,23 @@ setMethod('names', signature('clMethod'), function(x) {
   names(getCall(x))[-1]
 })
 
-#' @title clMethod evaluated argument values
+#' @title Retrieve and evaluate a clMethod argument by name
 setMethod('$', signature('clMethod'), function(x, name) {
-  getCall(x)[[name]] %>% eval(envir=list(globalenv()), enclos=parent.env(getNamespace(.packageName)))
+  x[[name]]
+})
+
+#' @title Retrieve and evaluate a clMethod argument by name
+setMethod('[[', signature('clMethod'), function(x, i) {
+  if (is.character(i)) {
+    assert_that(has_name(x, i), msg=sprintf('method does not have an argument named "%s"', i))
+    arg = getCall(x)[[i]]
+  } else {
+    argName = names(x)[i]
+    assert_that(!is.na(argName), msg=sprintf('index "%s" exceeded argument name options', i))
+    arg = getCall(x)[[names(x)[i]]]
+  }
+
+  eval(arg, envir=list(globalenv()), enclos=parent.env(getNamespace(.packageName)))
 })
 
 setMethod('show', 'clMethod',
