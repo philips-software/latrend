@@ -6,13 +6,14 @@ AlwaysSaveHistory: Yes
 
 EnableCodeIndexing: Yes
 UseSpacesForTab: Yes
-NumSpacesForTab: 4
+NumSpacesForTab: 2
 Encoding: UTF-8
 
 RnwWeave: knitr
 LaTeX: pdfLaTeX
 
 StripTrailingWhitespace: Yes
+LineEndingConversion: Windows
 
 BuildType: Package
 PackageUseDevtools: Yes
