@@ -7,6 +7,18 @@ setGeneric('getName', function(object) standardGeneric('getName'))
 #' @export
 setGeneric('getName0', function(object) standardGeneric('getName0'))
 
+#' @export
+#' @title Formula for a distributional parameter
+setGeneric('getFormula', function(object, ...) standardGeneric('getFormula'))
+setMethod('getFormula', signature('clMethod'), function(object, what='mu') {
+  assert_that(is.scalar(what), is.character(what))
+  if (what == 'mu') {
+    object$formula
+  } else {
+    object[[paste0('formula.', what)]]
+  }
+})
+
 #' @title clMethod argument names
 setMethod('names', signature('clMethod'), function(x) {
   names(getCall(x))[-1]
