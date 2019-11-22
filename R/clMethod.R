@@ -1,11 +1,22 @@
 # Method ####
 setClass('clMethod', slots=c(call='call'))
 
+
+setMethod('show', 'clMethod',
+          function(object) {
+            cat('Cluslong method "', getName(object), '"\n', sep='')
+            clMethodPrintArgs(object)
+          }
+)
+
+
 #' @export
 setGeneric('getName', function(object) standardGeneric('getName'))
 
+
 #' @export
 setGeneric('getName0', function(object) standardGeneric('getName0'))
+
 
 #' @export
 #' @title Extract formula
@@ -21,6 +32,7 @@ formula.clMethod = function(object, what='mu') {
   }
 }
 
+
 #' @title clMethod argument names
 #' @examples
 #' m = clMethodKML()
@@ -29,6 +41,7 @@ setMethod('names', signature('clMethod'), function(x) {
   names(getCall(x))[-1]
 })
 
+
 #' @title Retrieve and evaluate a clMethod argument by name
 #' @examples
 #' m = clMethodKML()
@@ -36,6 +49,7 @@ setMethod('names', signature('clMethod'), function(x) {
 setMethod('$', signature('clMethod'), function(x, name) {
   x[[name]]
 })
+
 
 #' @title Retrieve and evaluate a clMethod argument by name
 #' @examples
@@ -54,19 +68,12 @@ setMethod('[[', signature('clMethod'), function(x, i) {
   eval(arg, envir=list(globalenv()), enclos=parent.env(getNamespace(.packageName)))
 })
 
-setMethod('show', 'clMethod',
-          function(object) {
-            cat('Cluslong method "', getName(object), '"\n', sep='')
-            clMethodPrintArgs(object)
-          }
-)
-
-setGeneric('fit', function(object, ...) standardGeneric('fit'))
 
 #' @export
 getCall.clMethod = function(object) {
   object@call
 }
+
 
 #' @export
 #' @title Update a method specification
@@ -95,6 +102,11 @@ update.clMethod = function(object, ...) {
   return(object)
 }
 
+
+# Local methods ####
+setGeneric('fit', function(method, ...) standardGeneric('fit'))
+
+
 #' @importFrom R.utils insert
 clMethodPrintArgs = function(object) {
   argNames = names(object)
@@ -104,6 +116,7 @@ clMethodPrintArgs = function(object) {
 
   cat(sprintf('  %-16s%s\n', paste0(argNames, ':'), args), sep='')
 }
+
 
 #' # Control ####
 #' setClass('clControl',
