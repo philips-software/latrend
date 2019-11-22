@@ -8,28 +8,39 @@ setGeneric('getName', function(object) standardGeneric('getName'))
 setGeneric('getName0', function(object) standardGeneric('getName0'))
 
 #' @export
-#' @title Formula for a distributional parameter
-setGeneric('getFormula', function(object, ...) standardGeneric('getFormula'))
-setMethod('getFormula', signature('clMethod'), function(object, what='mu') {
+#' @title Extract formula
+#' @examples
+#' m = clMethodKML(Value ~ Time)
+#' formula(m) # Value ~ Time
+formula.clMethod = function(object, what='mu') {
   assert_that(is.scalar(what), is.character(what))
   if (what == 'mu') {
     object$formula
   } else {
     object[[paste0('formula.', what)]]
   }
-})
+}
 
 #' @title clMethod argument names
+#' @examples
+#' m = clMethodKML()
+#' names(m)
 setMethod('names', signature('clMethod'), function(x) {
   names(getCall(x))[-1]
 })
 
 #' @title Retrieve and evaluate a clMethod argument by name
+#' @examples
+#' m = clMethodKML()
+#' m$formula
 setMethod('$', signature('clMethod'), function(x, name) {
   x[[name]]
 })
 
 #' @title Retrieve and evaluate a clMethod argument by name
+#' @examples
+#' m = clMethodKML()
+#' m[['formula']]
 setMethod('[[', signature('clMethod'), function(x, i) {
   if (is.character(i)) {
     assert_that(has_name(x, i), msg=sprintf('method does not have an argument named "%s"', i))
@@ -58,7 +69,12 @@ getCall.clMethod = function(object) {
 }
 
 #' @export
-#' @title Update a clMethod specification
+#' @title Update a method specification
+#' @examples
+#' m = clMethodKML(Value ~ 1)
+#' m2 = update(m, formula=~ . + Time)
+#'
+#' m3 = update(m2, start='randomAll')
 update.clMethod = function(object, ...) {
   ucall = match.call() %>% tail(-2)
   argNames = names(object)
