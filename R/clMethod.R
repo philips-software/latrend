@@ -97,7 +97,7 @@ update.clMethod = function(object, ...) {
       lapply(match.call, definition=formula)
   }
 
-  object@call = replace(getCall(object)[-1], uargNames, ucall[uargNames])
+  object@call = replace(getCall(object), uargNames, ucall[uargNames])
   validObject(object)
   return(object)
 }
