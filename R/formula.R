@@ -7,7 +7,7 @@ hasSingleResponse = function(f) {
 }
 
 getResponse = function(f) {
-  all.vars(update(f, . ~ 1)[[1]])
+  all.vars(update(f, . ~ 1))[[1]]
 }
 
 getCovariates = function(f) {
