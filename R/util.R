@@ -3,10 +3,6 @@ subset_list = function(list, names) {
     list[subnames]
 }
 
-is.formula = function(x) {
-    inherits(x, 'formula')
-}
-
 # tryCatch statement conditional on the first argument
 condTryCatch = function(cond, expr, error) {
     if(cond) {
@@ -14,4 +10,8 @@ condTryCatch = function(cond, expr, error) {
     } else {
         eval(expr)
     }
+}
+
+is.wholeNumber = function(x) {
+    is.numeric(x) & is.finite(x) & (x %% 1 == 0)
 }
