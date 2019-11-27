@@ -106,7 +106,7 @@ update.clMethod = function(object, ...) {
 # Local methods ####
 setGeneric('prepare', function(method, ...) standardGeneric('prepare'))
 setGeneric('fit', function(method, ...) standardGeneric('fit'))
-setGeneric('result', function(method, ...) standardGeneric('result'))
+setGeneric('finalize', function(method, ...) standardGeneric('finalize'))
 
 
 #' @importFrom R.utils insert
