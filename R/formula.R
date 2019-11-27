@@ -1,3 +1,7 @@
+is.formula = function(x) {
+  inherits(x, 'formula')
+}
+
 hasResponse = function(f) {
   terms(f, 'response') != 0
 }
