@@ -9,7 +9,8 @@
     packageStartupMessage('Default options:')
     packageStartupMessage(paste0('\t', names(opts[optMask]), ' = ', opts[optMask], collapse='\n'))
   }
-}
 
-#.onAttach = function(libname, pkgname) {
-#}
+  if(length(getLogger()$handlers) == 0) {
+    packageStartupMessage('NOTE: no logger configured. Run basicConfig() to enable.')
+  }
+}
