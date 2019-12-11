@@ -23,3 +23,21 @@ Imports:
 RoxygenNote: 6.1.1
 Suggests: 
     testthat
+Collate: 
+    'MixTVEM.r'
+    'clMethod.R'
+    'clMethod_kml.R'
+    'clModel.R'
+    'clModelKML.R'
+    'cluslong.R'
+    'cluslong_gbtm.R'
+    'cluslong_gckm.R'
+    'cluslong_gmm.R'
+    'cluslong_kml.R'
+    'cluslong_mixtvem.R'
+    'cluslong_twostep.R'
+    'data.R'
+    'formula.R'
+    'parallel.R'
+    'util.R'
+    'zzz.R'
