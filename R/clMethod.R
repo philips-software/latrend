@@ -102,6 +102,26 @@ update.clMethod = function(object, ...) {
   return(object)
 }
 
+#' @export
+#' @title Extract the method arguments as a list
+#' @param eval Whether to evaluate the arguments.
+as.list.clMethod = function(object, eval=TRUE) {
+  if (eval) {
+    lapply(clm@call[-1], eval)
+  } else {
+    as.list(clm@call[-1])
+  }
+}
+
+#' @export
+#' @title Substitute the call arguments
+#' @return Returns a new call with the substituted arguments.
+substitute.clMethod = function(object) {
+  assert_that(is(object, 'clMethod'))
+  argValues = as.list(object, eval=TRUE)
+  object@call = replace(getCall(object), names(argValues), argValues)
+  return(object)
+}
 
 # Local methods ####
 setGeneric('prepare', function(method, ...) standardGeneric('prepare'))
