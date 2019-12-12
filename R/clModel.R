@@ -94,7 +94,7 @@ deviance.clModel = function(object, ...) {
 nobs.clModel = function(object, ...) {
   # check if nobs is defined for the model
   if (is.null(getS3method('nobs', class=class(object@model), optional=TRUE))) {
-    length(fitted(object))
+    length(modelResponses(object))
   } else {
     nobs(object@model)
   }
