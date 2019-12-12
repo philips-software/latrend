@@ -18,8 +18,14 @@ getCall.clModel = function(object) {
 
 #' @export
 #' @title Plot a clModel
-plot.clModel = function(object) {
-
+#' @param what Response to plot
+plot.clModel = function(object, what='mu') {
+  dt_grouptraj = groupTrajectories(object, what=what)
+  ggplot(data=dt_grouptraj,
+         aes=aes_string(x=getTimeName(object),
+                        y=getResponseName(object, what=what),
+                        color=Cluster)) +
+    geom_line()
 }
 
 #' @export
@@ -31,47 +37,51 @@ update.clModel = function(object, ...) {
 #' @export
 #' @title Summarize a clModel
 summary.clModel = function(object, ...) {
+  summary(object@model)
+}
 
 }
 
 #' @export
 #' @title Coefficients of a clModel
 coef.clModel = function(object, ...) {
-
+  coef(object@model)
 }
 
 #' @export
 #' @title Extract clModel fitted values
-fitted.values.clModel = function(object, ...) {
-
+#' @param all Whether to return a matrix with the fitted value of each class
+#' @return a vector of the fitted values for the respective class, or a matrix of fitted values for each class.
+fitted.clModel = function(object, all=FALSE) {
+  fitted(object@model)
 }
 
 #' @export
 #' @title Extract clModel residuals
 residuals.clModel = function(object, ...) {
-
+  residuals(object@model)
 }
 
 #' @export
 #' @title clModel deviance
 deviance.clModel = function(object, ...) {
-
+  deviance(object@model)
 }
 
 #' @export
 #' @title Extract the number of observations from a clModel
 nobs.clModel = function(object, ...) {
 
+#' @export
+#' @title Extract the residual degrees of freedom from a clModel
+df.residual.clModel = function(object, ...) {
+  df.residual(object@model)
 }
 
 #' @export
 #' @title Extract the log-likelihood of a clModel
 logLik.clModel = function(object, ...) {
-  attr(ll, 'nall') <- N0
-  attr(ll, 'nobs') <- N
-  attr(ll, 'df') <- p + 1
-  class(ll) = 'logLik'
-  ll
+  logLik(object@model)
 }
 
 # Extra methods ####
