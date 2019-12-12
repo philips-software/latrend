@@ -102,6 +102,7 @@ df.residual.clModel = function(object, ...) {
   df.residual(object@model)
 }
 
+
 #' @export
 #' @title Extract the log-likelihood of a clModel
 logLik.clModel = function(object, ...) {
@@ -112,18 +113,23 @@ logLik.clModel = function(object, ...) {
 #' @export
 #' @title Number of clusters
 nClus = function(object) {
+  assert_that(is(object, 'clModel'))
   length(object@clusterNames)
 }
 
 #' @export
 #' @title Get the cluster names
 clusterNames = function(object) {
+  assert_that(is(object, 'clModel'))
   object@clusterNames
 }
 
 #' @export
 #' @title Update the cluster names
 `clusterNames<-` = function(object, value) {
+  assert_that(is(object, 'clModel'))
+  assert_that(is.character(value))
+  assert_that(length(value) == nClus(object))
   object@clusterNames = value
   return(object)
 }
@@ -194,6 +200,7 @@ criterionNames = function(object) {
 #' @export
 #' @title Get the method specification of a clModel
 getMethod = function(object) {
+  assert_that(is(object, 'clModel'))
   object@method
 }
 
