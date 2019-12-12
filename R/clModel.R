@@ -40,10 +40,27 @@ summary.clModel = function(object, ...) {
   summary(object@model)
 }
 
+#' @export
+#' @title Extract model training data
+model.frame.clModel = function(object) {
+  if (is.null(getS3method('model.frame', class=class(object@model), optional=TRUE))) {
+    labs = getMethod(object) %>% formula %>% terms %>% labels
+    modelData(object)[, labs]
+  } else {
+    model.frame(object@model)
+  }
+}
+
+#' @export
+#' @title Extract the formula of a clModel
+#' @param what The distributional parameter
+formula.clModel = function(object, what='mu') {
+  getMethod(object) %>% formula(what=what)
 }
 
 #' @export
 #' @title Coefficients of a clModel
+#' @return A matrix of the coefficients per class.
 coef.clModel = function(object, ...) {
   coef(object@model)
 }
@@ -147,6 +164,40 @@ criterionNames = function(object) {
 getMethod = function(object) {
   object@method
 }
+
+#' @export
+getResponseName = function(object, what='mu') {
+  assert_that(is(object, 'clModel'))
+  if(what == 'mu') {
+    formula(object) %>% getResponse
+  } else {
+    formula(object) %>% getResponse %>% paste(what, sep='.')
+  }
+}
+
+#' @export
+getIdName = function(object) {
+  assert_that(is(object, 'clModel'))
+  getMethod(object)$id
+}
+
+#' @export
+getTimeName = function(object) {
+  assert_that(is(object, 'clModel'))
+  getMethod(object)$time
+}
+
+#' @export
+#' @title Extract model training data
+setGeneric('modelData', function(object) standardGeneric('modelData'))
+
+#' @export
+#' @title Extract the unique time points
+setGeneric('modelTime', function(object) standardGeneric('modelTime'))
+setMethod('modelTime', signature('clModel'), function(object) {
+  data = modelData(object)
+  sort(unique(data[[getMethod(object)$time]]))
+})
 
 # Model summary ####
 setClass('clSummary',
