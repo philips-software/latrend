@@ -231,6 +231,15 @@ getTimeName = function(object) {
 setGeneric('modelData', function(object) standardGeneric('modelData'))
 
 #' @export
+#' @title  Extract model response
+#' @details Model response that was used for training
+setGeneric('modelResponses', function(object) standardGeneric('modelResponses'))
+setMethod('modelResponses', signature('clModel'), function(object) {
+  data = modelData(object)
+  data[[getResponseName(object)]]
+})
+
+#' @export
 #' @title Extract the unique time points
 setGeneric('modelTime', function(object) standardGeneric('modelTime'))
 setMethod('modelTime', signature('clModel'), function(object) {
