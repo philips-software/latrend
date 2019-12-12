@@ -42,13 +42,24 @@ setMethod('modelTime', signature('clModelKML'), function(object) {
   object@model@time
 })
 
-
-setMethod('clusterTrajectories', signature('clModelKML'), function(object) {
+#' @export
+#' @rdname clusterTrajectories
+#' @param at The time points at which to compute the cluster trajectories.
+#' @param approxFun The interpolation function to use for time points not in the feature set.
+setMethod('clusterTrajectories', signature('clModelKML'), function(object, what, at, approxFun=approx) {
   trajmat = calculTrajMean(traj=object@model@traj,
                  clust=getClusters(object@model, nbCluster=nClus(object)),
                  centerMethod=getMethod(object)$center)
 
   times = modelTime(object)
+
+  if(!is.null(at)) {
+    assert_that(all(is.numeric(at)))
+    assert_that(all(is.finite(at)))
+    trajmat = apply(trajmat, 1, function(y) approxFun(x=times, y=y, xout=at)$y) %>% t
+    times = at
+  }
+
   dt_traj = data.table(Cluster=rep(clusterNames(object), each=length(times)),
                        Time=rep(times, nClus(object)),
                        Value=as.numeric(t(trajmat))) %>%
