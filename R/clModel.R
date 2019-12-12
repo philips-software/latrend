@@ -4,12 +4,7 @@ setClass('clModel',
                         method='clMethod',
                         call='call',
                         control='list',
-                        converged='logical',
-                        clusterNames='character',
-                        clusterAssignments='factor',
-                        logLik='numeric',
-                        nSamples='numeric',
-                        df='numeric'))
+                        clusterNames='character'))
 
 setMethod('show', 'clModel',
           function(object) {
