@@ -54,4 +54,6 @@ setMethod('groupTrajectories', signature('clModelKML'), function(object) {
   return(dt_traj)
 })
 
-setMethod('trajectories', signature('clModelKML'), fitted)
+setMethod('trajectories', signature('clModelKML'), function(object) {
+  fitted(object)
+})
