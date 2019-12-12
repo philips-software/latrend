@@ -170,13 +170,14 @@ clusterAssignments = function(object) {
 }
 
 #' @export
+#' @title Extract the cluster trajectories
+#' @return A data.frame of the estimated values at the given times
+setGeneric('clusterTrajectories', function(object, what='mu', at=NULL) standardGeneric('clusterTrajectories'))
+
+#' @export
 #' @title Posterior probability per strata
 setGeneric('pp', function(object, newdata=NULL) standardGeneric('pp'))
 
-#' @export
-#' @title Extract the group trajectories
-#' @return A data.frame of the estimated values at the given times
-setGeneric('groupTrajectories', function(object, what='mu', at=NULL) standardGeneric('groupTrajectories'))
 
 #' @export
 #' @title Extract the fitted trajectories for all strata

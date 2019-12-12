@@ -41,7 +41,7 @@ setMethod('modelTime', signature('clModelKML'), function(object) {
 })
 
 
-setMethod('groupTrajectories', signature('clModelKML'), function(object) {
+setMethod('clusterTrajectories', signature('clModelKML'), function(object) {
   trajmat = calculTrajMean(traj=object@model@traj,
                  clust=getClusters(object@model, nbCluster=nClus(object)),
                  centerMethod=getMethod(object)$center)
