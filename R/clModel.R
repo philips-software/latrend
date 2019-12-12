@@ -76,7 +76,11 @@ fitted.clModel = function(object, all=FALSE) {
 #' @export
 #' @title Extract clModel residuals
 residuals.clModel = function(object, ...) {
-  residuals(object@model)
+  if (is.null(getS3method('residuals', class=class(object@model), optional=TRUE))) {
+    modelResponses(object) - fitted(object)
+  } else {
+    residuals(object@model)
+  }
 }
 
 #' @export
