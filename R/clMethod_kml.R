@@ -120,6 +120,10 @@ setMethod('fit', signature('clMethodKML'), kml_fit)
 
 ##
 kml_finalize = function(method, data, control, fitEnv) {
-
+  model = new('clModelKML')
+  model@model = fitEnv$cld
+  model@method = method
+  model@clusterNames = genClusNames(method$nClusters)
+  return(model)
 }
 setMethod('finalize', signature('clMethodKML'), kml_finalize)
