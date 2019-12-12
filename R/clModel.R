@@ -129,14 +129,39 @@ clusterNames = function(object) {
 }
 
 #' @export
+#' @title Number of strata per cluster
+clusterSizes = function(object) {
+  assert_that(is(object, 'clModel'))
+  clusterAssignments(object) %>% table %>% as.numeric %>% setNames(clusterNames(object))
+}
+
+#' @export
+#' @title Proportional size of each cluster
+clusterProportions = function(object) {
+  assert_that(is(object, 'clModel'))
+  pp(object) %>% colMeans
+}
+
+#' @export
+#' @importFrom IMIFA post_conf_mat
+#' @title Posterior confusion matrix
+confusionMatrix = function(object) {
+  assert_that(is(object, 'clModel'))
+  post_conf_mat(pp(object)) %>%
+    set_colnames(clusterNames(object)) %>%
+    set_rownames(clusterNames(object))
+}
+
+#' @export
 #' @title Get the cluster membership for each strata
 clusterAssignments = function(object) {
-  object@clusterAssignments
+  assert_that(is(object, 'clModel'))
+  pp(object) %>% apply(1, which.max) %>% factor(labels=clusterNames(object))
 }
 
 #' @export
 #' @title Posterior probability per strata
-pp = function(object) {
+setGeneric('pp', function(object, newdata=NULL) standardGeneric('pp'))
 
 }
 
@@ -208,3 +233,8 @@ setMethod('show', 'clSummary',
           function(object) {
             cat('summary!')
           })
+
+
+genClusNames = function(n) {
+  LETTERS[seq_len(n)]
+}
