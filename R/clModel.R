@@ -71,6 +71,13 @@ deviance.clModel = function(object, ...) {
 #' @export
 #' @title Extract the number of observations from a clModel
 nobs.clModel = function(object, ...) {
+  # check if nobs is defined for the model
+  if (is.null(getS3method('nobs', class=class(object@model), optional=TRUE))) {
+    length(fitted(object))
+  } else {
+    nobs(object@model)
+  }
+}
 
 #' @export
 #' @title Extract the residual degrees of freedom from a clModel
