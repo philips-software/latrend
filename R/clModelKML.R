@@ -1,13 +1,15 @@
 #' @include clModel.R
 setClass('clModelKML', contains='clModel')
 
-fitted.clModelKML = function(object, what='mu') {
+#' @export
+fitted.clModelKML = function(object) {
+  dt_ctraj = clusterTrajectories(object)
+  clusters = getClusters(object@model, nClus(object))
 
-}
-
-
-nobs.clModelKML = function(object) {
-  length(object@model@traj)
+  dt_ctraj[[getResponseName(object)]] %>%
+    matrix(ncol=nClus(object)) %>%
+    .[, as.integer(clusters)] %>%
+    as.numeric
 }
 
 
