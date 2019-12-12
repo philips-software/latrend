@@ -41,7 +41,7 @@ setMethod('modelTime', signature('clModelKML'), function(object) {
 })
 
 
-setMethod('groupTrajectories', signature('clModelKML'), function(object, what, at) {
+setMethod('groupTrajectories', signature('clModelKML'), function(object) {
   trajmat = calculTrajMean(traj=object@model@traj,
                  clust=getClusters(object@model, nbCluster=nClus(object)),
                  centerMethod=getMethod(object)$center)
@@ -53,3 +53,5 @@ setMethod('groupTrajectories', signature('clModelKML'), function(object, what, a
     setnames(c('Time', 'Value'), c(getTimeName(object), getResponseName(object)))
   return(dt_traj)
 })
+
+setMethod('trajectories', signature('clModelKML'), fitted)
