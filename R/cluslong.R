@@ -6,6 +6,7 @@
 #' @import magrittr
 #' @import foreach
 #' @import logging
+#' @import ggplot2
 #' @importFrom stackoverflow match.call.defaults
 #' @importFrom R.utils printf
 #' @title Cluster longitudinal data

@@ -19,12 +19,11 @@ getCall.clModel = function(object) {
 #' @export
 #' @title Plot a clModel
 #' @param what Response to plot
-plot.clModel = function(object, what='mu') {
-  dt_grouptraj = groupTrajectories(object, what=what)
-  ggplot(data=dt_grouptraj,
-         aes=aes_string(x=getTimeName(object),
+plot.clModel = function(object, what='mu', at=NULL) {
+  ggplot(data=clusterTrajectories(object, what=what, at=at),
+         mapping=aes_string(x=getTimeName(object),
                         y=getResponseName(object, what=what),
-                        color=Cluster)) +
+                        color='Cluster')) +
     geom_line()
 }
 
