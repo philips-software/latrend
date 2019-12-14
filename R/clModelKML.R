@@ -60,7 +60,7 @@ setMethod('clusterTrajectories', signature('clModelKML'), function(object, what,
     times = at
   }
 
-  dt_traj = data.table(Cluster=rep(clusterNames(object), each=length(times)),
+  dt_traj = data.table(Cluster=rep(clusterNames(object), each=length(times)) %>% factor(levels=clusterNames(object)),
                        Time=rep(times, nClus(object)),
                        Value=as.numeric(t(trajmat))) %>%
     setnames(c('Time', 'Value'), c(getTimeName(object), getResponseName(object)))
