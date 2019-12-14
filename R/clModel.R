@@ -20,7 +20,7 @@ setMethod('initialize', 'clModel', function(.Object, ...) {
 
 setMethod('show', 'clModel',
           function(object) {
-            cat('clModel')
+            summary(object) %>% show
           })
 
 setMethod('getName', signature('clModel'), function(object) getMethod(object) %>% getName)
@@ -54,7 +54,18 @@ update.clModel = function(object, ...) {
 #' @title Summarize a clModel
 #' @description Extracts all relevant information from the underlying model into a list
 summary.clModel = function(object, ...) {
-  summary(object@model)
+  new('clSummary',
+      call=getCall(object),
+      name=getName(object),
+      nClus=nClus(object),
+      nObs=nobs(object),
+      id=getIdName(object),
+      coefficients=coef(object),
+      residuals=residuals(object),
+      clusterNames=clusterNames(object),
+      clusterAssignments=clusterAssignments(object),
+      clusterSizes=clusterSizes(object),
+      clusterProportions=clusterProportions(object))
 }
 
 #' @export
@@ -79,7 +90,11 @@ formula.clModel = function(object, what='mu') {
 #' @title Coefficients of a clModel
 #' @return A matrix of the coefficients per class.
 coef.clModel = function(object, ...) {
-  coef(object@model)
+  if (is.null(getS3method('coef', class=class(object@model), optional=TRUE))) {
+    numeric()
+  } else {
+    coef(object@model)
+  }
 }
 
 #' @export
@@ -272,8 +287,10 @@ setMethod('modelTimes', signature('clModel'), function(object) {
 # Model summary ####
 setClass('clSummary',
          representation(call='call',
+                        name='character',
                         nClus='integer',
                         nObs='numeric',
+                        id='character',
                         coefficients='numeric',
                         residuals='numeric',
                         clusterNames='character',
@@ -284,7 +301,20 @@ setClass('clSummary',
 
 setMethod('show', 'clSummary',
           function(object) {
-            cat('summary!')
+            cat('Longitudinal cluster model using ', object@name, '\n', sep='')
+            cat('\n')
+            sprintf('Cluster sizes (K=%d):\n', object@nClus) %>% cat
+            sprintf('%g (%g%%)', cs, round(cp * 100, 1)) %>%
+              setNames(object@clusterNames) %>%
+              noquote %>%
+              print
+            cat('\n')
+            sprintf('Number of obs: %d, strata (%s): %d\n',
+                        object@nObs, object@id, length(object@clusterAssignments)) %>% cat
+            cat('\n')
+            cat('Scaled residuals:\n')
+            object@residuals %>% scale %>% as.vector %>% summary %>% print
+            cat('\n')
           })
 
 
