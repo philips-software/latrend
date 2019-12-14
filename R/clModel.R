@@ -149,7 +149,11 @@ nobs.clModel = function(object, ...) {
 #' @export
 #' @title Extract the residual degrees of freedom from a clModel
 df.residual.clModel = function(object, ...) {
-  df.residual(object@model)
+  if (is.null(getS3method('df.residual', class=class(object@model), optional=TRUE))) {
+    nobs(object) - attr(logLik(object), 'df')
+  } else {
+    df.residual(object@model)
+  }
 }
 
 
