@@ -6,10 +6,27 @@ setClass('clModel',
                         control='list',
                         clusterNames='character'))
 
+setValidity('clModel', function(object) {
+  assert_that(is(object@method, 'clMethod'))
+  assert_that(!is.null(object@model))
+  assert_that(is.character(object@clusterNames))
+})
+
+setMethod('initialize', 'clModel', function(.Object, ...) {
+  .Object = callNextMethod()
+  validObject(.Object)
+  .Object
+})
+
 setMethod('show', 'clModel',
           function(object) {
             cat('clModel')
           })
+
+setMethod('getName', signature('clModel'), function(object) getMethod(object) %>% getName)
+
+setMethod('getName0', signature('clModel'), function(object) getMethod(object) %>% getName0)
+
 
 #' @export
 getCall.clModel = function(object) {
@@ -255,6 +272,14 @@ setMethod('modelTimes', signature('clModel'), function(object) {
 # Model summary ####
 setClass('clSummary',
          representation(call='call',
+                        nClus='integer',
+                        nObs='numeric',
+                        coefficients='numeric',
+                        residuals='numeric',
+                        clusterNames='character',
+                        clusterAssignments='factor',
+                        clusterSizes='numeric',
+                        clusterProportions='numeric',
                         metrics='numeric'))
 
 setMethod('show', 'clSummary',
