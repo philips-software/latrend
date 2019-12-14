@@ -252,12 +252,7 @@ setGeneric('metric', function(object, name, ...) standardGeneric('metric'))
 setMethod('metric', signature('clModel'), function(object, name) {
   assert_that(is.character(name))
 
-  safeswitch = function(name, ...) {
-    out = switch(name, ...)
-    ifelse(is.null(out), NA, out)
-  }
-
-  vapply(tolower(name), safeswitch,
+  vapply(tolower(name), switch, NA,
          aic=AIC(object),
          bic=BIC(object),
          FUN.VALUE=0) %>%
