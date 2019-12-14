@@ -59,6 +59,7 @@ summary.clModel = function(object, ...) {
       name=getName(object),
       nClus=nClus(object),
       nObs=nobs(object),
+      formula=formula(object),
       id=getIdName(object),
       coefficients=coef(object),
       residuals=residuals(object),
@@ -291,6 +292,7 @@ setClass('clSummary',
                         nClus='integer',
                         nObs='numeric',
                         id='character',
+                        formula='formula',
                         coefficients='numeric',
                         residuals='numeric',
                         clusterNames='character',
@@ -302,6 +304,8 @@ setClass('clSummary',
 setMethod('show', 'clSummary',
           function(object) {
             cat('Longitudinal cluster model using ', object@name, '\n', sep='')
+            cat('Formula: ')
+            print(object@formula)
             cat('\n')
             sprintf('Cluster sizes (K=%d):\n', object@nClus) %>% cat
             sprintf('%g (%g%%)', cs, round(cp * 100, 1)) %>%
