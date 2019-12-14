@@ -226,6 +226,7 @@ clusterAssignments = function(object) {
 }
 
 #' @export
+#' @rdname clusterTrajectories
 #' @title Extract the cluster trajectories
 #' @return A data.frame of the estimated values at the given times
 setGeneric('clusterTrajectories', function(object, what='mu', at=NULL, ...) standardGeneric('clusterTrajectories'))
@@ -236,7 +237,10 @@ setGeneric('pp', function(object, newdata=NULL, ...) standardGeneric('pp'))
 
 
 #' @export
+#' @rdname trajectories
 #' @title Extract the fitted trajectories for all strata
+#' @param what The distributional parameter to compute the response for.
+#' @param at The time points at which to compute the id-specific trajectories.
 setGeneric('trajectories', function(object, what='mu', at=NULL, ...) standardGeneric('trajectories'))
 
 #' @export
