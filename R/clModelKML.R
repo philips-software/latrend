@@ -67,6 +67,24 @@ setMethod('clusterTrajectories', signature('clModelKML'), function(object, what,
   return(dt_traj)
 })
 
-setMethod('trajectories', signature('clModelKML'), function(object) {
-  fitted(object)
+#' @export
+#' @rdname trajectories
+#' @param at The time points at which to compute the cluster trajectories.
+#' @param approxFun The interpolation function to use for time points not in the feature set.
+setMethod('trajectories', signature('clModelKML'), function(object, what, at, approxFun=approx) {
+  dt_ctraj = clusterTrajectories(object, what=what, at=at, approxFun=approxFun)
+  clusters = clusterAssignments(object)
+  ntime = nrow(dt_ctraj) / nClus(object)
+  id = getIdName(object)
+
+  idx = dt_ctraj[, .I] %>%
+    matrix(ncol=nClus(object)) %>%
+    .[, as.integer(clusters)]
+
+  dt_traj = dt_ctraj[as.vector(idx)] %>%
+    .[, c(id) := rep(object@model@idAll, each=ntime)] %>%
+    setkeyv(id) %>%
+    setcolorder
+
+  return(dt_traj[]) #[] to ensure the return table is printed
 })
