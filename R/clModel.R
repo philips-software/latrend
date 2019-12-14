@@ -156,6 +156,12 @@ logLik.clModel = function(object, ...) {
 
 # Extra methods ####
 #' @export
+#' @title Number of strata
+nIds = function(object) {
+  modelIds(object) %>% length
+}
+
+#' @export
 #' @title Number of clusters
 nClus = function(object) {
   assert_that(is(object, 'clModel'))
@@ -283,6 +289,13 @@ setGeneric('modelResponses', function(object) standardGeneric('modelResponses'))
 setMethod('modelResponses', signature('clModel'), function(object) {
   data = modelData(object)
   data[[getResponseName(object)]]
+})
+
+#' @export
+setGeneric('modelIds', function(object) standardGeneric('modelIds'))
+setMethod('modelIds', signature('clModel'), function(object) {
+  data = modelData(object)
+  data[[getIdName(object)]] %>% unique
 })
 
 #' @export
