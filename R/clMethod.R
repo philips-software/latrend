@@ -105,9 +105,14 @@ update.clMethod = function(object, ...) {
 #' @export
 #' @title Extract the method arguments as a list
 #' @param eval Whether to evaluate the arguments.
+#' @examples
+#' method = clMethodKML()
+#' as.list(method)
 as.list.clMethod = function(object, eval=TRUE) {
   if (eval) {
-    lapply(clm@call[-1], eval)
+    argNames = names(object)
+    lapply(argNames, function(arg) object[[arg]]) %>%
+      setNames(argNames)
   } else {
     as.list(clm@call[-1])
   }
