@@ -28,7 +28,7 @@ setMethod('modelData', signature('clModelKML'), function(object) {
   resp = getResponseName(object)
   id = getIdName(object)
   time = getTimeName(object)
-  times = modelTime(object)
+  times = modelTimes(object)
 
   data = data.table(Id=rep(object@model@idAll, each=length(times)),
                     Time=times,
@@ -38,7 +38,7 @@ setMethod('modelData', signature('clModelKML'), function(object) {
 })
 
 
-setMethod('modelTime', signature('clModelKML'), function(object) {
+setMethod('modelTimes', signature('clModelKML'), function(object) {
   object@model@time
 })
 
@@ -51,7 +51,7 @@ setMethod('clusterTrajectories', signature('clModelKML'), function(object, what,
                  clust=getClusters(object@model, nbCluster=nClus(object)),
                  centerMethod=getMethod(object)$center)
 
-  times = modelTime(object)
+  times = modelTimes(object)
 
   if(!is.null(at)) {
     assert_that(all(is.numeric(at)))

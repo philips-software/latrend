@@ -246,8 +246,8 @@ setMethod('modelResponses', signature('clModel'), function(object) {
 
 #' @export
 #' @title Extract the unique time points
-setGeneric('modelTime', function(object) standardGeneric('modelTime'))
-setMethod('modelTime', signature('clModel'), function(object) {
+setGeneric('modelTimes', function(object) standardGeneric('modelTimes'))
+setMethod('modelTimes', signature('clModel'), function(object) {
   data = modelData(object)
   sort(unique(data[[getMethod(object)$time]]))
 })
