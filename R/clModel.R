@@ -187,6 +187,9 @@ nClus = function(object) {
 
 #' @export
 #' @title Get the cluster names
+#' @examples
+#' model = cluslong(method=clMethodKML(), data=testLongData)
+#' clusterNames(model) # A, B
 clusterNames = function(object) {
   assert_that(is(object, 'clModel'))
   object@clusterNames
@@ -194,6 +197,9 @@ clusterNames = function(object) {
 
 #' @export
 #' @title Update the cluster names
+#' @examples
+#' model = cluslong(method=clMethodKML(), data=testLongData)
+#' clusterNames(model) = c('Group 1', 'Group 2')
 `clusterNames<-` = function(object, value) {
   assert_that(is(object, 'clModel'))
   assert_that(is.character(value))
@@ -204,6 +210,9 @@ clusterNames = function(object) {
 
 #' @export
 #' @title Number of strata per cluster
+#' @examples
+#' model = cluslong(method=clMethodKML(), data=testLongData)
+#' clusterSizes(model)
 clusterSizes = function(object) {
   assert_that(is(object, 'clModel'))
   clusterAssignments(object) %>% table %>% as.numeric %>% setNames(clusterNames(object))
@@ -211,6 +220,9 @@ clusterSizes = function(object) {
 
 #' @export
 #' @title Proportional size of each cluster
+#' @examples
+#' model = cluslong(method=clMethodKML(), data=testLongData)
+#' clusterProportions(model)
 clusterProportions = function(object) {
   assert_that(is(object, 'clModel'))
   pp(object) %>% colMeans
@@ -219,6 +231,9 @@ clusterProportions = function(object) {
 #' @export
 #' @importFrom IMIFA post_conf_mat
 #' @title Posterior confusion matrix
+#' @examples
+#' model = cluslong(method=clMethodGMM(), data=testLongData)
+#' confusionMatrix(model)
 confusionMatrix = function(object) {
   assert_that(is(object, 'clModel'))
   post_conf_mat(pp(object)) %>%
@@ -228,6 +243,9 @@ confusionMatrix = function(object) {
 
 #' @export
 #' @title Get the cluster membership for each strata
+#' @examples
+#' model = cluslong(method=clMethodKML(), data=testLongData)
+#' clusterAssignments(model)
 clusterAssignments = function(object) {
   assert_that(is(object, 'clModel'))
   pp(object) %>% apply(1, which.max) %>% factor(labels=clusterNames(object))
@@ -237,10 +255,18 @@ clusterAssignments = function(object) {
 #' @rdname clusterTrajectories
 #' @title Extract the cluster trajectories
 #' @return A data.frame of the estimated values at the given times
+#' @examples
+#' model = cluslong(method=clMethodKML(), data=testLongData)
+#' clusterTrajectories(model)
+#'
+#' clusterTrajectories(model, at=c(0, .5, 1))
 setGeneric('clusterTrajectories', function(object, what='mu', at=NULL, ...) standardGeneric('clusterTrajectories'))
 
 #' @export
 #' @title Posterior probability per strata
+#' @examples
+#' model = cluslong(method=clMethodKML(), data=testLongData)
+#' pp(model)
 setGeneric('pp', function(object, newdata=NULL, ...) standardGeneric('pp'))
 
 
@@ -249,6 +275,11 @@ setGeneric('pp', function(object, newdata=NULL, ...) standardGeneric('pp'))
 #' @title Extract the fitted trajectories for all strata
 #' @param what The distributional parameter to compute the response for.
 #' @param at The time points at which to compute the id-specific trajectories.
+#' @examples
+#' model = cluslong(method=clMethodKML(), data=testLongData)
+#' trajectories(model)
+#'
+#' trajectories(model, at=c(0, .5, 1))
 setGeneric('trajectories', function(object, what='mu', at=NULL, ...) standardGeneric('trajectories'))
 
 #' @export
@@ -273,6 +304,9 @@ setMethod('metric', signature('clModel'), function(object, name) {
 
 #' @export
 #' @title Get the method specification of a clModel
+#' @examples
+#' model = cluslong(method=clMethodKML(), data=testLongData)
+#' getMethod(model)
 getMethod = function(object) {
   assert_that(is(object, 'clModel'))
   object@method
