@@ -10,7 +10,7 @@
 #' @importFrom stackoverflow match.call.defaults
 #' @importFrom R.utils printf
 #' @title Cluster longitudinal data
-cluslong = function(formula=method$formula, method=clMethodKML(), data, control=list(), init='random', ...) {
+cluslong = function(method=clMethodKML(), data, formula=method$formula, control=list(), init='random', ...) {
   assert_that(inherits(method, 'clMethod'), msg='method must be an object of class clMethod')
   assert_that(!missing(data), msg='data must be specified')
   assert_that(is.data.frame(data) || is.matrix(data), msg='data must be data.frame or matrix')
