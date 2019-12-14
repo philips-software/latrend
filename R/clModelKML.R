@@ -15,7 +15,7 @@ fitted.clModelKML = function(object) {
 
 setMethod('pp', signature('clModelKML'), function(object, newdata) {
   if(is.null(newdata)) {
-    pp = slot(object@model, 'c2')[[1]]@postProba
+    pp = getKMLPartition(object)@postProba
   } else {
     stop('not supported')
   }
@@ -88,3 +88,8 @@ setMethod('trajectories', signature('clModelKML'), function(object, what, at, ap
 
   return(dt_traj[]) #[] to ensure the return table is printed
 })
+
+
+getKMLPartition = function(object) {
+  object@model[paste0('c', nClus(object))][[1]]
+}
