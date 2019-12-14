@@ -13,6 +13,20 @@ fitted.clModelKML = function(object) {
 }
 
 
+#' @export
+logLik.clModelKML = function(object) {
+  # A negated version of BIC is precomputed by kml package so let's use that
+  bic = -getKMLPartition(object)@criterionValues['BIC'] %>% unname
+  N = nIds(object)
+  df = nClus(object) * length(modelTimes(object)) + 1
+  ll = -.5 * (bic - df * log(N))
+  attr(ll, 'nobs') = N
+  attr(ll, 'df') = df
+  class(ll) = 'logLik'
+  return(ll)
+}
+
+
 setMethod('pp', signature('clModelKML'), function(object, newdata) {
   if(is.null(newdata)) {
     pp = getKMLPartition(object)@postProba
