@@ -27,7 +27,8 @@ cluslong = function(method=clMethodKML(), data, formula=method$formula, ..., .co
     data = data.frame(data)
   }
 
-  argList = match.call() %>% as.list %>% tail(-1)
+  clCall = match.call.defaults()
+  argList = clCall %>% as.list %>% tail(-1)
   argList[c('method', 'data', '.control', '.init')] = NULL
   method = do.call(update, c(object=method, argList))
 
@@ -47,7 +48,12 @@ cluslong = function(method=clMethodKML(), data, formula=method$formula, ..., .co
   model = finalize(method, data, .control, fitEnv)
   assert_that(inherits(model, 'clModel'), msg='finalize(clMethod, ...) returned an unexpected object. Should be clModel.')
 
-  model@call = do.call(call, c('cluslong', method=quote(getCall(method))))
+  model@call = do.call(call,
+                       c('cluslong',
+                         method=quote(getCall(method)),
+                         data=quote(clCall$data),
+                         .control=quote(clCall$.control),
+                         .init=quote(clCall$.init)))
 
   return(model)
 }
