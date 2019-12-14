@@ -316,7 +316,7 @@ setMethod('show', 'clSummary',
             print(object@formula)
             cat('\n')
             sprintf('Cluster sizes (K=%d):\n', object@nClus) %>% cat
-            sprintf('%g (%g%%)', cs, round(cp * 100, 1)) %>%
+            sprintf('%g (%g%%)', object@clusterSizes, round(object@clusterProportions * 100, 1)) %>%
               setNames(object@clusterNames) %>%
               noquote %>%
               print
