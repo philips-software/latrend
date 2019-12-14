@@ -97,7 +97,7 @@ update.clMethod = function(object, ...) {
   formulaMask = sapply(uargValues, is, 'formula')
 
   if(any(formulaMask)) {
-    oldFormulaArgs = lapply(uargNames[formulaMask], '$', x=object)
+    oldFormulaArgs = lapply(uargNames[formulaMask], function(name) object[[name]])
     ucall[formulaMask] = mapply(update.formula, oldFormulaArgs, uargValues[formulaMask], SIMPLIFY=FALSE) %>%
       lapply(match.call, definition=formula)
   }
