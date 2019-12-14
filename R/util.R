@@ -13,5 +13,5 @@ condTryCatch = function(cond, expr, error) {
 }
 
 is.wholeNumber = function(x) {
-    is.numeric(x) & is.finite(x) & (x %% 1 == 0)
+    is.scalar(x) && is.numeric(x) && is.finite(x) && (x %% 1 == 0)
 }
