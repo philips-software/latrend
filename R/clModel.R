@@ -35,13 +35,21 @@ getCall.clModel = function(object) {
 
 #' @export
 #' @title Plot a clModel
-#' @param what Response to plot
-plot.clModel = function(object, what='mu', at=NULL) {
-  ggplot(data=clusterTrajectories(object, what=what, at=at),
+#' @inheritParams clusterTrajectories
+#' @param clusterLabels Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.
+plot.clModel = function(object, what='mu', at=NULL,
+                        clusterLabels=sprintf('%s (%g%%)', clusterNames(object), round(clusterProportions(object) * 100))) {
+  dt_ctraj = clusterTrajectories(object, what=what, at=at) %>%
+    .[, Cluster := factor(Cluster, levels=levels(Cluster), labels=clusterLabels)]
+  ggplot(data=dt_ctraj,
          mapping=aes_string(x=getTimeName(object),
                         y=getResponseName(object, what=what),
-                        color='Cluster')) +
-    geom_line()
+                        color='Cluster',
+                        shape='Cluster')) +
+    theme(legend.position='top') +
+    geom_line(size=1) +
+    geom_point(size=2) +
+    labs(title='Cluster trajectories')
 }
 
 #' @export
