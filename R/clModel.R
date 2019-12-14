@@ -127,7 +127,12 @@ residuals.clModel = function(object, ...) {
 #' @export
 #' @title clModel deviance
 deviance.clModel = function(object, ...) {
-  deviance(object@model)
+  if (is.null(getS3method('deviance', class=class(object@model), optional=TRUE))) {
+    warning('deviance is not implemented for the given model')
+    as.numeric(NA)
+  } else {
+    deviance(object@model)
+  }
 }
 
 #' @export
