@@ -54,8 +54,16 @@ plot.clModel = function(object, what='mu', at=NULL,
 
 #' @export
 #' @title Update a clModel
+#' @description Fit a new model with modified arguments from the current model.
+#' @inheritDotParams cluslong
 update.clModel = function(object, ...) {
+  updateCall = match.call() %>% tail(-2)
+  updateNames = names(updateCall)
 
+  clCall = getCall(object) %>%
+    replace(updateNames, updateCall[updateNames])
+
+  eval(clCall)
 }
 
 #' @export
