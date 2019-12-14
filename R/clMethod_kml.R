@@ -39,11 +39,7 @@ clMethodKML = function(formula=Value ~ 1,
                        imputation=NULL,
                        distance='euclidean',
                        center=meanNA) {
-  method = new('clMethodKML')
-  method@call = match.call.defaults()
-
-  validObject(method)
-  return(method)
+  new('clMethodKML', call=match.call.defaults())
 }
 
 

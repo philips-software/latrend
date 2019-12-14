@@ -1,6 +1,11 @@
 # Method ####
 setClass('clMethod', slots=c(call='call'))
 
+setMethod('initialize', 'clMethod', function(.Object, ...) {
+  .Object = callNextMethod()
+  validObject(.Object)
+  .Object
+})
 
 setMethod('show', 'clMethod',
           function(object) {
