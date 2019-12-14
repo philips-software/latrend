@@ -240,23 +240,29 @@ setGeneric('pp', function(object, newdata=NULL, ...) standardGeneric('pp'))
 setGeneric('trajectories', function(object, what='mu', at=NULL, ...) standardGeneric('trajectories'))
 
 #' @export
-#' @title Extract a model criterion
-#' @param what The criterion or criteria names to extract
+#' @title Compute model metric(s)
+#' @param name The name(s) of the metric(s) to compute.
 #' @examples
 #' data(testLongData)
 #' model = cluslong(...)
-#' bic = criterion(model, 'BIC')
+#' bic = metric(model, 'BIC')
 #'
-#' ic = criterion(model, c('AIC', 'BIC'))
-criterion = function(object, what) {
+#' ic = metric(model, c('AIC', 'BIC'))
+setGeneric('metric', function(object, name, ...) standardGeneric('metric'))
+setMethod('metric', signature('clModel'), function(object, name) {
+  assert_that(is.character(name))
 
-}
+  safeswitch = function(name, ...) {
+    out = switch(name, ...)
+    ifelse(is.null(out), NA, out)
+  }
 
-#' @export
-#' @title Get the available criteria for this clModel
-criterionNames = function(object) {
-
-}
+  vapply(tolower(name), safeswitch,
+         aic=AIC(object),
+         bic=BIC(object),
+         FUN.VALUE=0) %>%
+    setNames(tolower(name))
+})
 
 #' @export
 #' @title Get the method specification of a clModel
