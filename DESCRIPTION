@@ -26,7 +26,7 @@ Suggests:
 Collate: 
     'MixTVEM.r'
     'clMethod.R'
-    'clMethod_kml.R'
+    'clMethodKML.R'
     'clModel.R'
     'clModelKML.R'
     'cluslong.R'
