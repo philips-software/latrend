@@ -1,5 +1,6 @@
-# Method ####
-kml_validate = function(object) {
+setClass('clMethodKML', contains='clMethod')
+
+setValidity('clMethodKML', function(object) {
   call = getCall(object)
   assert_that(hasSingleResponse(object$formula))
   assert_that(!hasCovariates(object$formula), msg='covariates are not supported')
@@ -9,9 +10,8 @@ kml_validate = function(object) {
   assert_that(is.wholeNumber(object$nClusters))
 
   assert_that(is.wholeNumber(object$nRuns))
-}
+})
 
-setClass('clMethodKML', contains='clMethod', validity=kml_validate)
 
 #' @export
 #' @title Specify KML method
