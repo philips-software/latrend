@@ -3,7 +3,7 @@ is.formula = function(x) {
 }
 
 hasResponse = function(f) {
-  terms(f, 'response') != 0
+  terms(f) %>% attr('response') != 0
 }
 
 hasSingleResponse = function(f) {
@@ -11,11 +11,16 @@ hasSingleResponse = function(f) {
 }
 
 getResponse = function(f) {
-  all.vars(update(f, . ~ 1))[[1]]
+  if (hasResponse(f)) {
+    update(f, . ~ 1) %>% all.vars %>% head(1)
+  }
+  else {
+    return(NULL)
+  }
 }
 
 getCovariates = function(f) {
-  labels(f)
+  update(f, NULL ~ .) %>% all.vars
 }
 
 hasCovariates = function(f) {
