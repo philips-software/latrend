@@ -19,6 +19,21 @@ getResponse = function(f) {
   }
 }
 
+#' @importFrom lme4 findbars
+getREterms = function(f) {
+  terms = lme4::findbars(f)
+}
+
+getREFormula = function(term) {
+  assert_that(is.call(term))
+  as.character(term)[2] %>% reformulate
+}
+
+getREGroupName = function(term) {
+  assert_that(is.call(term))
+  as.character(term)[3]
+}
+
 getCovariates = function(f) {
   update(f, NULL ~ .) %>% all.vars
 }
