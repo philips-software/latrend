@@ -24,7 +24,7 @@ getCovariates = function(f) {
 }
 
 hasCovariates = function(f) {
-  length(getCovariates(f)) == 0
+  length(getCovariates(f)) > 0
 }
 
 # CLUSTER specific ####
