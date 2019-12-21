@@ -5,8 +5,10 @@ library(stats)
 library(utils)
 library(data.table)
 library(magrittr)
-if(require(cluslong)) {
+
+test = function() {
   data('testLongData')
-  dt = testLongData
-  clm = clMethodKML(formula=Measurement ~ 1)
+  dt <<- testLongData
+  clk <<- clMethodKML(formula=Measurement ~ 1)
+  clg <<- clMethodGMM(formula=Measurement ~ Assessment + (1 | ID))
 }
