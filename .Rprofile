@@ -8,7 +8,7 @@ library(magrittr)
 
 test = function() {
   data('testLongData')
-  dt <<- testLongData
+  dat <<- testLongData
   clk <<- clMethodKML(formula=Measurement ~ 1)
   clg <<- clMethodGMM(formula=Measurement ~ Assessment + (1 | ID))
 }
