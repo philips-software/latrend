@@ -26,8 +26,10 @@ Suggests:
 Collate: 
     'MixTVEM.r'
     'clMethod.R'
+    'clMethodGMM.R'
     'clMethodKML.R'
     'clModel.R'
+    'clModelGMM.R'
     'clModelKML.R'
     'cluslong.R'
     'cluslong_gbtm.R'
