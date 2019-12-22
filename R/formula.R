@@ -3,7 +3,21 @@ is.formula = function(x) {
 }
 
 hasResponse = function(f) {
-  terms(f) %>% attr('response') != 0
+  if (is.formula(f)) {
+    tt = terms(f)
+  } else {
+    tt = f
+  }
+  attr(tt, 'response') != 0
+}
+
+hasIntercept = function(f) {
+  if (is.formula(f)) {
+    tt = terms(f)
+  } else {
+    tt = f
+  }
+  attr(tt, 'intercept') != 0
 }
 
 hasSingleResponse = function(f) {
