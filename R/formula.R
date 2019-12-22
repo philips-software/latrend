@@ -49,7 +49,7 @@ getREGroupName = function(term) {
 }
 
 getCovariates = function(f) {
-  update(f, NULL ~ .) %>% all.vars
+  dropResponse(f) %>% all.vars
 }
 
 hasCovariates = function(f) {
