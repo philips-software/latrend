@@ -74,18 +74,30 @@ dropRE = function(f) {
 }
 
 # CLUSTER specific ####
-# Drop any terms that have an interaction with CLUSTER
+#' @title Drop CLUSTER-interactive terms
+#' @description Drop any terms that have an interaction with CLUSTER
 dropCLUSTER = function(f) {
   tt = terms(f)
   vars = labels(tt)
   newvars = vars[!startsWith(vars, 'CLUSTER:') & !endsWith(vars, ':CLUSTER') & vars != 'CLUSTER']
-  reformulate(termlabels=newvars,
-              intercept=attr(tt, 'intercept'),
-              response=getResponse(f),
-              env=attr(f, '.Environment'))
+
+  if (length(newvars) == 0) {
+    if (hasIntercept(f)) {
+      update(f, . ~ 1)
+    }
+    else {
+      dropIntercept(f)
+    }
+  } else {
+    reformulate(termlabels=newvars,
+                intercept=attr(tt, 'intercept'),
+                response=getResponse(f),
+                env=attr(f, '.Environment'))
+  }
 }
 
-# Keep only terms that have an interaction with CLUSTER
+#' @title Drop non-CLUSTER terms
+#' @description Keep only terms that have an interaction with CLUSTER
 keepCLUSTER = function(f) {
   tt = terms(f)
   vars = labels(tt)
@@ -95,8 +107,12 @@ keepCLUSTER = function(f) {
   }
   vars2 = vars[endsWith(vars, ':CLUSTER')] %>% rmstr
 
-  reformulate(termlabels=c(vars1, vars2),
-              intercept='CLUSTER' %in% vars,
-              response=getResponse(f),
-              env=attr(f, '.Environment'))
+  if (length(vars1) + length(vars2) == 0) {
+    update(f, . ~ -1)
+  } else {
+    reformulate(termlabels=c(vars1, vars2),
+                intercept='CLUSTER' %in% vars,
+                response=getResponse(f),
+                env=attr(f, '.Environment'))
+  }
 }
