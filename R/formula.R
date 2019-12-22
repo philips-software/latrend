@@ -56,6 +56,23 @@ hasCovariates = function(f) {
   length(getCovariates(f)) > 0
 }
 
+dropResponse = function(f) {
+  update(f, NULL ~ .)
+}
+
+dropIntercept = function(f) {
+  update(f, . ~ -1)
+}
+
+#' @title Drop random-effects component from a formula
+#' @description Remove the random-effects components specified by "(. | .)" from a formula
+dropRE = function(f) {
+  reStrings = getREterms(f) %>% as.character
+  reIdx = match(reStrings, labels(terms(f)))
+  assert_that(!anyNA(reIdx))
+  drop.terms(terms(f), reIdx, keep.response=hasResponse(f)) %>% formula
+}
+
 # CLUSTER specific ####
 # Drop any terms that have an interaction with CLUSTER
 dropCLUSTER = function(f) {
