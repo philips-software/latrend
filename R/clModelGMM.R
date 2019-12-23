@@ -62,16 +62,17 @@ setMethod('clusterTrajectories', signature('clModelGMM'), function(object, what,
 
 #' @export
 #' @rdname trajectories
-setMethod('trajectories', signature('clModelGMM'), function(object, what, at) {
-  dt_ctraj = clusterTrajectories(object, what=what, at=at, approxFun=approxFun)
-  clusters = clusterAssignments(object)
+setMethod('trajectories', signature('clModelGMM'), function(object, what, at, clusters) {
+  id = getIdName(object)
 
   if(is.null(at)) {
-    newdata = modelData(object)
+    predNames = paste0('pred_m', 1:nClus(object))
+    dt_pred = object@model$pred[, c(id, predNames)] %>%
+      as.data.table %>%
+      .[, c(id) := modelIds(object)[get(id)]] %>%
+      setnames(predNames, clusterNames(object))
+    return(dt_pred[])
   } else {
-    newdata = at
+    stop('not supported')
   }
-
-  subIdx = cbind(seq_along(clusters), as.integer(clusters))
-  predmat = predictY(object@model, newdata=newdata)$pred[, subIdx]
 })
