@@ -71,7 +71,10 @@ dropRE = function(f) {
   reStrings = getREterms(f) %>% as.character
   reIdx = match(reStrings, labels(terms(f)))
   assert_that(!anyNA(reIdx))
-  drop.terms(terms(f), reIdx, keep.response=hasResponse(f)) %>% formula
+  newf = drop.terms(terms(f), reIdx, keep.response=hasResponse(f)) %>%
+    formula
+  environment(newf) = environment(f)
+  return(newf)
 }
 
 # CLUSTER specific ####
@@ -94,7 +97,7 @@ dropCLUSTER = function(f) {
     reformulate(termlabels=newvars,
                 intercept=attr(tt, 'intercept'),
                 response=getResponse(f),
-                env=attr(f, '.Environment'))
+                env=environment(f))
   }
 }
 
@@ -116,6 +119,6 @@ keepCLUSTER = function(f) {
     reformulate(termlabels=c(vars1, vars2),
                 intercept='CLUSTER' %in% vars,
                 response=getResponse(f),
-                env=attr(f, '.Environment'))
+                env=environment(f))
   }
 }
