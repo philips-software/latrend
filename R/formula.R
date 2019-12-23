@@ -78,6 +78,28 @@ addInteraction = function(f, var) {
   }
 }
 
+merge.formula = function(x, y, ...) {
+  assert_that(is.formula(x))
+  assert_that(is.formula(y))
+  assert_that(!hasResponse(y))
+  xlabels = terms(x) %>% labels
+  ylabels = terms(y) %>% labels
+
+  allLabels = union(xlabels, ylabels)
+  if(length(allLabels) == 0) {
+    if(!hasIntercept(x) && hasIntercept(y)) {
+      update(x, ~ 1)
+    } else {
+      x
+    }
+  } else {
+    reformulate(allLabels,
+                response=getResponse(x),
+                intercept=hasIntercept(x) || hasIntercept(y),
+                env=environment(x)) #TODO: merge environments of x and y
+  }
+}
+
 dropResponse = function(f) {
   update(f, NULL ~ .)
 }
