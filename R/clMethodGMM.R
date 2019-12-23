@@ -84,7 +84,7 @@ gmm_prepare = function(method, data, control) {
   logfinest(sprintf('\trandom: %s', deparse(e$random)))
 
   # drop intercept from formula.mb
-  e$formula.mb = formula(method, what='mb') %>% update(~ . + -1)
+  e$formula.mb = formula(method, what='mb') %>% dropIntercept
 
   # Model specification
 
@@ -117,6 +117,11 @@ gmm_fit = function(method, data, control, prepEnv) {
   model = do.call(hlme, args)
 
   e$runTime = as.numeric(Sys.time() - startTime)
+
+  model$fixed = prepEnv$fixed
+  model$mixture = prepEnv$mixture
+  model$random = prepEnv$random
+  model$mb = prepEnv$formula.mb
   e$model = model
 
   return(e)
