@@ -197,12 +197,17 @@ nClus = function(object) {
 
 #' @export
 #' @title Get the cluster names
+#' @param factor Whether to return the cluster names as a factor.
 #' @examples
 #' model = cluslong(method=clMethodKML(), data=testLongData)
 #' clusterNames(model) # A, B
-clusterNames = function(object) {
+clusterNames = function(object, factor=FALSE) {
   assert_that(is(object, 'clModel'))
-  object@clusterNames
+  if(factor[1]) {
+    object@clusterNames %>% factor(levels=object@clusterNames)
+  } else {
+    object@clusterNames
+  }
 }
 
 #' @export
