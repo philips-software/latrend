@@ -294,12 +294,13 @@ setGeneric('converged', function(object, ...) standardGeneric('converged'))
 #' @title Extract the fitted trajectories for all strata
 #' @param what The distributional parameter to compute the response for.
 #' @param at The time points at which to compute the id-specific trajectories.
+#' @param clusters The cluster assignments for the strata to base the trajectories on.
 #' @examples
 #' model = cluslong(method=clMethodKML(), data=testLongData)
 #' trajectories(model)
 #'
 #' trajectories(model, at=c(0, .5, 1))
-setGeneric('trajectories', function(object, what='mu', at=NULL, ...) standardGeneric('trajectories'))
+setGeneric('trajectories', function(object, what='mu', at=NULL, clusters=clusterAssignments(object), ...) standardGeneric('trajectories'))
 
 #' @export
 #' @title Compute model metric(s)

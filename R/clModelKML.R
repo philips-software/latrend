@@ -84,9 +84,8 @@ setMethod('clusterTrajectories', signature('clModelKML'), function(object, what,
 #' @export
 #' @rdname trajectories
 #' @param approxFun The interpolation function to use for time points not in the feature set.
-setMethod('trajectories', signature('clModelKML'), function(object, what, at, approxFun=approx) {
+setMethod('trajectories', signature('clModelKML'), function(object, what, at, clusters, approxFun=approx) {
   dt_ctraj = clusterTrajectories(object, what=what, at=at, approxFun=approxFun)
-  clusters = clusterAssignments(object)
   ntime = nrow(dt_ctraj) / nClus(object)
   id = getIdName(object)
 
