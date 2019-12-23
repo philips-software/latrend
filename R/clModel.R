@@ -317,6 +317,13 @@ setMethod('metric', signature('clModel'), function(object, name) {
 })
 
 #' @export
+#' @title Extract the underlying model
+getModel = function(object) {
+  assert_that(is(object, 'clModel'))
+  object@model
+}
+
+#' @export
 #' @title Get the method specification of a clModel
 #' @examples
 #' model = cluslong(method=clMethodKML(), data=testLongData)
