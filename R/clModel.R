@@ -164,6 +164,16 @@ df.residual.clModel = function(object, ...) {
   }
 }
 
+#' @export
+#' @title Extract residual standard deviation from a clModel
+sigma.clModel = function(object, ...) {
+  if (is.null(getS3method('sigma', class=class(object@model), optional=TRUE))) {
+    residuals(object@model) %>% sd
+  } else {
+    sigma(object@model)
+  }
+}
+
 
 #' @export
 #' @title Extract the log-likelihood of a clModel
