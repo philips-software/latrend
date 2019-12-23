@@ -66,6 +66,7 @@ dropIntercept = function(f) {
 
 #' @title Drop random-effects component from a formula
 #' @description Remove the random-effects components specified by "(. | .)" from a formula
+#' @keywords internal
 dropRE = function(f) {
   reStrings = getREterms(f) %>% as.character
   reIdx = match(reStrings, labels(terms(f)))
@@ -76,6 +77,7 @@ dropRE = function(f) {
 # CLUSTER specific ####
 #' @title Drop CLUSTER-interactive terms
 #' @description Drop any terms that have an interaction with CLUSTER
+#' @keywords internal
 dropCLUSTER = function(f) {
   tt = terms(f)
   vars = labels(tt)
@@ -98,6 +100,7 @@ dropCLUSTER = function(f) {
 
 #' @title Drop non-CLUSTER terms
 #' @description Keep only terms that have an interaction with CLUSTER
+#' @keywords internal
 keepCLUSTER = function(f) {
   tt = terms(f)
   vars = labels(tt)
