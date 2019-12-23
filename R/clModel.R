@@ -279,6 +279,10 @@ setGeneric('clusterTrajectories', function(object, what='mu', at=NULL, ...) stan
 #' pp(model)
 setGeneric('pp', function(object, newdata=NULL, ...) standardGeneric('pp'))
 
+#' @export
+#' @title Whether the model converged
+setGeneric('converged', function(object, ...) standardGeneric('converged'))
+
 
 #' @export
 #' @rdname trajectories
