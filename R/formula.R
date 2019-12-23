@@ -56,6 +56,28 @@ hasCovariates = function(f) {
   length(getCovariates(f)) > 0
 }
 
+addInteraction = function(f, var) {
+  assert_that(is.formula(f))
+  assert_that(is.character(var))
+  vars = terms(f) %>% labels
+
+  if(length(vars) == 0) {
+    if(hasIntercept(f)) {
+      reformulate(var,
+                  response=getResponse(f),
+                  intercept=TRUE,
+                  env=environment(f))
+    } else {
+      f
+    }
+  } else {
+    reformulate(paste(vars, var, sep='*'),
+                response=getResponse(f),
+                intercept=hasIntercept(f),
+                env=environment(f))
+  }
+}
+
 dropResponse = function(f) {
   update(f, NULL ~ .)
 }
