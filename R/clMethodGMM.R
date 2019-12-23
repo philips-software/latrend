@@ -75,9 +75,9 @@ gmm_prepare = function(method, data, control) {
     if (method$nClusters > 1) {
       warning('no cluster-specific terms specified in formula. Defaulting to intercept.', immediate.=TRUE)
     }
-    e$mixture = ~1
+    e$mixture = as.formula('~1', env=environment(e$mixture))
   }
-  e$random = getREFormula(getREterms(f)[[1]])
+  e$random = getREterms(f)[[1]] %>% getREFormula
 
   logfinest(sprintf('\tfixed: %s', deparse(e$fixed)))
   logfinest(sprintf('\tmixture: %s', deparse(e$mixture)))
