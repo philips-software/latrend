@@ -29,6 +29,10 @@ setMethod('pp', signature('clModelGMM'), function(object, newdata) {
   return(pp)
 })
 
+setMethod('converged', signature('clModelGMM'), function(object) {
+  object@model$conv
+})
+
 setMethod('modelData', signature('clModelGMM'), function(object) {
   object@model$data
 })
