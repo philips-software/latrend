@@ -111,6 +111,7 @@ gmm_fit = function(method, data, control, prepEnv) {
   args$ng = method$nClusters
   args$verbose = prepEnv$verbose
   args[setdiff(names(args), formalArgs(hlme))] = NULL #remove undefined arguments
+  args$returndata = TRUE
 
   startTime = Sys.time()
   model = do.call(hlme, args)
