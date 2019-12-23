@@ -61,7 +61,7 @@ dropResponse = function(f) {
 }
 
 dropIntercept = function(f) {
-  update(f, . ~ -1)
+  update(f, ~ . + -1)
 }
 
 #' @title Drop random-effects component from a formula
