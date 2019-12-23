@@ -168,7 +168,7 @@ df.residual.clModel = function(object, ...) {
 #' @title Extract residual standard deviation from a clModel
 sigma.clModel = function(object, ...) {
   if (is.null(getS3method('sigma', class=class(object@model), optional=TRUE))) {
-    residuals(object@model) %>% sd
+    residuals(object) %>% sd
   } else {
     sigma(object@model)
   }
