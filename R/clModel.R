@@ -66,9 +66,9 @@ setMethod('plotQQ', signature('clModel'), function(object, byCluster, ...) {
   rowClusters = clusterAssignments(object)[modelData(object)[[getIdName(object)]]]
 
   p = ggplot(data=data.frame(Cluster=rowClusters, res=residuals(object)), aes(sample=res)) +
-    geom_qq_band(...) +
-    stat_qq_line(...) +
-    stat_qq_point(...) +
+    qqplotr::geom_qq_band(...) +
+    qqplotr::stat_qq_line(...) +
+    qqplotr::stat_qq_point(...) +
     labs(x='Theoretical quantiles', y='Sample quantiles', title='Quantile-quantile plot')
 
   if (byCluster) {
