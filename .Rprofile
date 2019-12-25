@@ -10,5 +10,6 @@ test = function() {
   data('testLongData')
   dat <<- testLongData
   clk <<- clMethodKML(formula=Measurement ~ 1)
-  clg <<- clMethodGMM(formula=Measurement ~ Assessment + (1 | ID))
+  clb <<- clMethodGBTM(formula=Measurement ~ Assessment)
+  clg <<- clMethodGMM(formula=Measurement ~ CLUSTER * Assessment + (1 | ID))
 }
