@@ -77,7 +77,11 @@ gmm_prepare = function(method, data, control) {
     }
     e$mixture = as.formula('~1', env=environment(e$mixture))
   }
-  e$random = getREterms(f)[[1]] %>% getREFormula
+
+  reTerms = getREterms(f)
+  if (length(reTerms) > 0) {
+    e$random = reTerms[[1]] %>% getREFormula
+  }
 
   logfinest(sprintf('\tfixed: %s', deparse(e$fixed)))
   logfinest(sprintf('\tmixture: %s', deparse(e$mixture)))
