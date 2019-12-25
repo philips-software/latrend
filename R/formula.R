@@ -56,6 +56,10 @@ hasCovariates = function(f) {
   length(getCovariates(f)) > 0
 }
 
+hasRE = function(f) {
+  length(getREterms(f)) > 0
+}
+
 addInteraction = function(f, var) {
   assert_that(is.formula(f))
   assert_that(is.character(var))
@@ -113,12 +117,16 @@ dropIntercept = function(f) {
 #' @keywords internal
 dropRE = function(f) {
   reStrings = getREterms(f) %>% as.character
-  reIdx = match(reStrings, labels(terms(f)))
-  assert_that(!anyNA(reIdx))
-  newf = drop.terms(terms(f), reIdx, keep.response=hasResponse(f)) %>%
-    formula
-  environment(newf) = environment(f)
-  return(newf)
+  if(length(reStrings) == 0) {
+    f
+  } else {
+    reIdx = match(reStrings, labels(terms(f)))
+    assert_that(!anyNA(reIdx))
+    newf = drop.terms(terms(f), reIdx, keep.response=hasResponse(f)) %>%
+      formula
+    environment(newf) = environment(f)
+    return(newf)
+  }
 }
 
 # CLUSTER specific ####
