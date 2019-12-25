@@ -52,6 +52,33 @@ plot.clModel = function(object, what='mu', at=NULL,
     labs(title='Cluster trajectories')
 }
 
+
+#' @export
+#' @import qqplotr
+#' @title Quantile-quantile plot
+#' @inheritParams qqplotr::geom_qq_band
+#' @param byCluster Whether to plot the Q-Q line per cluster
+#' @param detrend Whether to detrend the Q-Q line.
+#' @param ... Other arguments passed to qqplotr::geom_qq_band, qqplotr::stat_qq_line, and qqplotr::stat_qq_point.
+setGeneric('plotQQ', function(object, byCluster=FALSE, ...) standardGeneric('plotQQ'))
+setMethod('plotQQ', signature('clModel'), function(object, byCluster, ...) {
+  assert_that(is(object, 'clModel'))
+  rowClusters = clusterAssignments(object)[modelData(object)[[getIdName(object)]]]
+
+  p = ggplot(data=data.frame(Cluster=rowClusters, res=residuals(object)), aes(sample=res)) +
+    geom_qq_band(...) +
+    stat_qq_line(...) +
+    stat_qq_point(...) +
+    labs(x='Theoretical quantiles', y='Sample quantiles', title='Quantile-quantile plot')
+
+  if (byCluster) {
+    p = p + facet_wrap(~Cluster)
+  }
+
+  return(p)
+})
+
+
 #' @export
 #' @title Update a clModel
 #' @description Fit a new model with modified arguments from the current model.
