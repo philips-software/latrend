@@ -13,6 +13,7 @@ setValidity('clModel', function(object) {
 })
 
 setMethod('initialize', 'clModel', function(.Object, ...) {
+  # initialize ####
   .Object = callNextMethod()
   validObject(.Object)
   .Object
@@ -20,6 +21,7 @@ setMethod('initialize', 'clModel', function(.Object, ...) {
 
 setMethod('show', 'clModel',
           function(object) {
+            # show ####
             summary(object) %>% show
           })
 
@@ -54,7 +56,6 @@ plot.clModel = function(object, what='mu', at=NULL,
 
 
 #' @export
-#' @import qqplotr
 #' @title Quantile-quantile plot
 #' @inheritParams qqplotr::geom_qq_band
 #' @param byCluster Whether to plot the Q-Q line per cluster
@@ -62,6 +63,7 @@ plot.clModel = function(object, what='mu', at=NULL,
 #' @param ... Other arguments passed to qqplotr::geom_qq_band, qqplotr::stat_qq_line, and qqplotr::stat_qq_point.
 setGeneric('plotQQ', function(object, byCluster=FALSE, ...) standardGeneric('plotQQ'))
 setMethod('plotQQ', signature('clModel'), function(object, byCluster, ...) {
+  # QQ plot ####
   assert_that(is(object, 'clModel'))
   rowClusters = clusterAssignments(object)[modelData(object)[[getIdName(object)]]]
 
@@ -340,6 +342,7 @@ setGeneric('trajectories', function(object, what='mu', at=NULL, clusters=cluster
 #' ic = metric(model, c('AIC', 'BIC'))
 setGeneric('metric', function(object, name, ...) standardGeneric('metric'))
 setMethod('metric', signature('clModel'), function(object, name) {
+  # metric ####
   assert_that(is.character(name))
 
   vapply(tolower(name), switch, NA,
@@ -397,6 +400,7 @@ setGeneric('modelData', function(object) standardGeneric('modelData'))
 #' @details Model response that was used for training
 setGeneric('modelResponses', function(object) standardGeneric('modelResponses'))
 setMethod('modelResponses', signature('clModel'), function(object) {
+  # modelResponses ####
   data = modelData(object)
   data[[getResponseName(object)]]
 })
@@ -404,6 +408,7 @@ setMethod('modelResponses', signature('clModel'), function(object) {
 #' @export
 setGeneric('modelIds', function(object) standardGeneric('modelIds'))
 setMethod('modelIds', signature('clModel'), function(object) {
+  # modelIds ####
   data = modelData(object)
   data[[getIdName(object)]] %>% unique
 })
@@ -412,6 +417,7 @@ setMethod('modelIds', signature('clModel'), function(object) {
 #' @title Extract the unique time points
 setGeneric('modelTimes', function(object) standardGeneric('modelTimes'))
 setMethod('modelTimes', signature('clModel'), function(object) {
+  # modelTimes ####
   data = modelData(object)
   sort(unique(data[[getMethod(object)$time]]))
 })
@@ -434,6 +440,7 @@ setClass('clSummary',
 
 setMethod('show', 'clSummary',
           function(object) {
+            # show ####
             cat('Longitudinal cluster model using ', object@name, '\n', sep='')
             cat('Formula: ')
             print(object@formula)
