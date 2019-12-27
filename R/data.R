@@ -17,7 +17,7 @@ generateLongData = function(sizes = c(40, 60),
                             fixed = Value ~ 1 + Time,
                             cluster = ~1 + Time,
                             random = ~1,
-                            id = 'Id',
+                            id = getOption('cluslong.id'),
                             data = data.frame(Time=seq(0, 1, by=.1)),
                             fixedCoefs = c(1, .1),
                             clusterCoefs = cbind(c(-2, 1), c(2, -1)),
@@ -97,8 +97,13 @@ generateLongData = function(sizes = c(40, 60),
   alldata[, Value := Mu + rnoise(.N, 0, noiseScales[Cluster])]
 
   ## Finalize
+  if(shuffle) {
+    newOrder = sample.int(nIds)
+    alldata = alldata[order(newOrder[Id])]
+  }
   setnames(alldata, 'Value', response)
   setnames(alldata, 'Id', id)
   setcolorder(alldata, c(id, 'Cluster', response, names(Xf)))
-  return(alldata)
+  alldata[, Cluster := clusterNames[Cluster]]
+  return(alldata[])
 }
