@@ -106,11 +106,19 @@ merge.formula = function(x, y, ...) {
 }
 
 dropResponse = function(f) {
-  update(f, NULL ~ .)
+  if(hasResponse(f)) {
+    update(f, NULL ~ .)
+  } else {
+    f
+  }
 }
 
 dropIntercept = function(f) {
-  update(f, ~ . + -1)
+  if(hasIntercept(f)) {
+    update(f, ~ . + -1)
+  } else {
+    f
+  }
 }
 
 #' @title Drop random-effects component from a formula
@@ -141,7 +149,7 @@ dropCLUSTER = function(f) {
 
   if (length(newvars) == 0) {
     if (hasIntercept(f)) {
-      update(f, . ~ 1)
+      update(f, ~ 1)
     }
     else {
       dropIntercept(f)
@@ -167,7 +175,11 @@ keepCLUSTER = function(f) {
   vars2 = vars[endsWith(vars, ':CLUSTER')] %>% rmstr
 
   if (length(vars1) + length(vars2) == 0) {
-    update(f, . ~ -1)
+    if ('CLUSTER' %in% vars) {
+      update(f, ~1)
+    } else {
+      update(f, ~ -1)
+    }
   } else {
     reformulate(termlabels=c(vars1, vars2),
                 intercept='CLUSTER' %in% vars,
