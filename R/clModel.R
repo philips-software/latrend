@@ -148,7 +148,11 @@ coef.clModel = function(object, ...) {
 #' @param all Whether to return a matrix with the fitted value of each class
 #' @return a vector of the fitted values for the respective class, or a matrix of fitted values for each class.
 fitted.clModel = function(object, all=FALSE) {
-  fitted(object@model)
+  if (is.null(getS3method('fitted', class=class(object@model), optional=TRUE))) {
+    trajectories(object)[[getResponseName(object)]]
+  } else {
+    fitted(object@model)
+  }
 }
 
 #' @export
