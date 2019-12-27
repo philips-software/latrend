@@ -13,6 +13,11 @@
 #' @param noiseScales Scale of the random noise passed to rnoise. Either scalar or defined per cluster.
 #' @param rnoise Random sampler for generating noise at location 0 with the respective scale.
 #' @param shuffle Whether to randomly reorder the strata in which they appear in the data.frame.
+#' @examples
+#' longdata = generateLongData(sizes=c(40, 70), id='Id',
+#'                             cluster=~poly(Time, 2, raw=TRUE),
+#'                             clusterCoefs=cbind(c(1, 2, 5), c(-3, 4, .2)))
+#' plotTrajectories(longdata)
 generateLongData = function(sizes = c(40, 60),
                             fixed = Value ~ 1 + Time,
                             cluster = ~1 + Time,
@@ -65,6 +70,7 @@ generateLongData = function(sizes = c(40, 60),
   assert_that(is.numeric(clusterCoefs) && is.matrix(clusterCoefs))
   assert_that(ncol(clusterCoefs) == nClus)
   Xc = model.matrix(cluster, alldata)
+  assert_that(ncol(Xc) == nrow(clusterCoefs), msg='Missing or too many coefficients specified for cluster effects.')
   alldata[, Mu.cluster := rowSums(Xc * t(clusterCoefs)[Cluster,])]
 
   ## Random effects
