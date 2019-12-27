@@ -36,6 +36,7 @@ Collate:
     'clModelKML.R'
     'clModelLLPA.R'
     'cluslong.R'
+    'data.R'
     'formula.R'
     'parallel.R'
     'util.R'

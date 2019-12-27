@@ -1,0 +1,104 @@
+#' @export
+#' @title Generate longitudinal test data
+#' @param sizes Number of strata per cluster.
+#' @param fixed Fixed effects formula.
+#' @param random Random effects formula.
+#' @param cluster Cluster effects formula.
+#' @param id Name of the strata.
+#' @param data Data with covariates to use for generation. Stratified data may be specified by adding a grouping column.
+#' @param fixedCoefs Coefficients matrix for the fixed effects.
+#' @param clusterCoefs Coefficients matrix for the cluster effects.
+#' @param randomScales Standard deviations matrix for the size of the variance components (random effects).
+#' @param rrandom Random sampler for generating the variance components at location 0.
+#' @param noiseScales Scale of the random noise passed to rnoise. Either scalar or defined per cluster.
+#' @param rnoise Random sampler for generating noise at location 0 with the respective scale.
+#' @param shuffle Whether to randomly reorder the strata in which they appear in the data.frame.
+generateLongData = function(sizes = c(40, 60),
+                            fixed = Value ~ 1 + Time,
+                            cluster = ~1 + Time,
+                            random = ~1,
+                            id = 'Id',
+                            data = data.frame(Time=seq(0, 1, by=.1)),
+                            fixedCoefs = c(1, .1),
+                            clusterCoefs = cbind(c(-2, 1), c(2, -1)),
+                            randomScales = cbind(.1, .1),
+                            rrandom = rnorm,
+                            noiseScales = c(.1, .1),
+                            rnoise = rnorm,
+                            clusterNames = LETTERS[seq_along(sizes)],
+                            shuffle = FALSE) {
+  nClus = length(sizes)
+  assert_that(nClus >= 1)
+  assert_that(all(sizes > 0))
+  assert_that(is.character(id) && nchar(id) > 0)
+  assert_that(is.character(clusterNames))
+  assert_that(length(clusterNames) == nClus)
+  assert_that(is.logical(shuffle))
+  assert_that(is.data.frame(data))
+
+  ## Fixed effects
+  assert_that(is.formula(fixed))
+  assert_that(hasSingleResponse(fixed))
+  assert_that(is.numeric(fixedCoefs) && is.null(dim(fixedCoefs)))
+  nIds = sum(sizes)
+  ids = seq_len(nIds)
+  nObs = nrow(data)
+  clusters = rep(clusterNames, sizes) %>% factor(levels=clusterNames)
+  nTotalObs = nIds * nrow(data)
+  response = getResponse(fixed)
+  rowIds = rep(ids, each=nObs)
+
+  Xf = model.matrix(dropResponse(fixed), data)
+  Xfi = model.matrix(update(fixed, NULL ~ . -1), data) #design matrix without intercept
+  assert_that(ncol(Xf) == length(fixedCoefs), msg='Missing or too many coefficients specified for fixed effects.')
+  fixedValues = Xf %*% fixedCoefs
+
+  alldata = data.table(Id=rowIds,
+                       Cluster=as.integer(clusters)[rowIds],
+                       Mu.fixed=fixedValues[rep(seq_len(nObs), nIds),],
+                       Xfi[rep(seq_len(nObs), nIds),,drop=FALSE])
+
+
+  ## Cluster effects
+  assert_that(is.formula(cluster))
+  assert_that(!hasResponse(cluster))
+  assert_that(is.numeric(clusterCoefs) && is.matrix(clusterCoefs))
+  assert_that(ncol(clusterCoefs) == nClus)
+  Xc = model.matrix(cluster, alldata)
+  alldata[, Mu.cluster := rowSums(Xc * t(clusterCoefs)[Cluster,])]
+
+  ## Random effects
+  assert_that(is.formula(random))
+  assert_that(!hasResponse(random))
+  if(!is.matrix(randomScales)) {
+    randomScales = matrix(randomScales, nrow=length(randomScales), ncol=nClus)
+  }
+  assert_that(is.matrix(randomScales))
+  assert_that(ncol(randomScales) == nClus)
+  Xr = model.matrix(random, alldata)
+  assert_that(nrow(randomScales) == ncol(Xr))
+  # generate id-specific scales
+  idScales = t(randomScales)[rep(1:nClus, sizes),] %>%
+    matrix(ncol=nrow(randomScales))
+  assert_that(nrow(idScales) == nIds)
+  idCoefs = rrandom(nIds * nrow(randomScales), 0, idScales) %>%
+    matrix(ncol=nrow(randomScales))
+  assert_that(nrow(idCoefs) == nIds)
+  alldata[, Mu.random := rowSums(Xr * idCoefs[Id])]
+
+  alldata[, Mu := Mu.fixed + Mu.cluster + Mu.random]
+
+  ## Noise
+  assert_that(is.numeric(noiseScales))
+  if (nClus > 1 && length(noiseScales) == 1) {
+    noiseScales = rep(noiseScales, nClus)
+  }
+  assert_that(length(noiseScales) == nClus)
+  alldata[, Value := Mu + rnoise(.N, 0, noiseScales[Cluster])]
+
+  ## Finalize
+  setnames(alldata, 'Value', response)
+  setnames(alldata, 'Id', id)
+  setcolorder(alldata, c(id, 'Cluster', response, names(Xf)))
+  return(alldata)
+}
