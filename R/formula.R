@@ -38,8 +38,9 @@ getREterms = function(f) {
   terms = lme4::findbars(f)
 }
 
-getREFormula = function(term) {
+REtermAsFormula = function(term) {
   assert_that(is.call(term))
+  assert_that(!is.formula(term))
   as.character(term)[2] %>% reformulate
 }
 

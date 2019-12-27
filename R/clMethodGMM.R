@@ -80,7 +80,7 @@ gmm_prepare = function(method, data, control) {
 
   reTerms = getREterms(f)
   if (length(reTerms) > 0) {
-    e$random = reTerms[[1]] %>% getREFormula
+    e$random = reTerms[[1]] %>% REtermAsFormula
   }
 
   logfinest(sprintf('\tfixed: %s', deparse(e$fixed)))
