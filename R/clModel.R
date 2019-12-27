@@ -1,3 +1,4 @@
+#' @include plot.R
 # Model ####
 setClass('clModel',
          representation(model='ANY',
@@ -53,6 +54,18 @@ plot.clModel = function(object, what='mu', at=NULL,
     geom_point(size=2) +
     labs(title='Cluster trajectories')
 }
+
+#' @export
+#' @rdname plotTrajectories
+#' @title Plot fitted trajectories of a clModel
+#' @inheritDotParams trajectories
+setMethod('plotTrajectories', signature('clModel'), function(object, ...) {
+  data = trajectories(object, ...)
+  plotTrajs(data,
+            response=getResponseName(object),
+            time=getTimeName(object),
+            id=getIdName(object))
+})
 
 
 #' @export

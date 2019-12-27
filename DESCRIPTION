@@ -30,6 +30,7 @@ Collate:
     'clMethodGBTM.R'
     'clMethodKML.R'
     'clMethodLLPA.R'
+    'plot.R'
     'clModel.R'
     'clModelGMM.R'
     'clModelGBTM.R'
