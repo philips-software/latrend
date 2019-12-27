@@ -27,7 +27,7 @@ logLik.clModelKML = function(object) {
 }
 
 
-setMethod('pp', signature('clModelKML'), function(object, newdata) {
+setMethod('postprob', signature('clModelKML'), function(object, newdata) {
   if(is.null(newdata)) {
     pp = getKMLPartition(object)@postProba
   } else {

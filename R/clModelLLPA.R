@@ -1,7 +1,7 @@
 #' @include clModel.R
 setClass('clModelLLPA', contains='clModel')
 
-setMethod('pp', signature('clModelLLPA'), function(object, newdata) {
+setMethod('postprob', signature('clModelLLPA'), function(object, newdata) {
   if(is.null(newdata)) {
     pp = object@model$z
   } else {

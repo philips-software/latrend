@@ -314,8 +314,13 @@ setGeneric('clusterTrajectories', function(object, what='mu', at=NULL, ...) stan
 #' @title Posterior probability per strata
 #' @examples
 #' model = cluslong(method=clMethodKML(), data=testLongData)
-#' pp(model)
-setGeneric('pp', function(object, newdata=NULL, ...) standardGeneric('pp'))
+#' postprob(model)
+setGeneric('postprob', function(object, newdata=NULL, ...) standardGeneric('postprob'))
+#' @export
+postprob.clModel = function(object, ...) {
+  # ensure compatibility with any S3 definitions
+  postprob(object, ...)
+}
 
 #' @export
 #' @title Whether the model converged

@@ -17,7 +17,7 @@ sigma.clModelGMM = function(object) {
   coef(object)['stderr'] %>% unname
 }
 
-setMethod('pp', signature('clModelGMM'), function(object, newdata) {
+setMethod('postprob', signature('clModelGMM'), function(object, newdata) {
   if(is.null(newdata)) {
     pp = object@model$pprob %>%
       as.matrix %>%
