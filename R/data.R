@@ -40,11 +40,11 @@ generateLongData = function(sizes = c(40, 60),
   assert_that(length(clusterNames) == nClus)
   assert_that(is.logical(shuffle))
   assert_that(is.data.frame(data))
+  assert_that(all(sapply(data, is.numeric)))
 
   ## Fixed effects
   assert_that(is.formula(fixed))
   assert_that(hasSingleResponse(fixed))
-  assert_that(is.numeric(fixedCoefs) && is.null(dim(fixedCoefs)))
   nIds = sum(sizes)
   ids = seq_len(nIds)
   nObs = nrow(data)
@@ -54,14 +54,23 @@ generateLongData = function(sizes = c(40, 60),
   rowIds = rep(ids, each=nObs)
 
   Xf = model.matrix(dropResponse(fixed), data)
-  Xfi = model.matrix(update(fixed, NULL ~ . -1), data) #design matrix without intercept
-  assert_that(ncol(Xf) == length(fixedCoefs), msg='Missing or too many coefficients specified for fixed effects.')
-  fixedValues = Xf %*% fixedCoefs
+  if(ncol(Xf) > 0) {
+    assert_that(is.null(fixedCoefs) || is.numeric(fixedCoefs) && is.null(dim(fixedCoefs)))
+    Xfi = model.matrix(update(fixed, NULL ~ . -1), data) #design matrix without intercept
+    assert_that(ncol(Xf) == length(fixedCoefs), msg='Missing or too many coefficients specified for fixed effects.')
+    fixedValues = Xf %*% fixedCoefs
+    alldata = data.table(Id=rowIds,
+                         Cluster=as.integer(clusters)[rowIds],
+                         Mu.fixed=fixedValues[rep(seq_len(nObs), nIds)],
+                         Xfi[rep(seq_len(nObs), nIds),,drop=FALSE],
+                         data[, setdiff(names(data), colnames(Xfi)), drop=FALSE])
+  } else {
+    alldata = data.table(Id=rowIds,
+                         Cluster=as.integer(clusters)[rowIds],
+                         Mu.fixed=0,
+                         data)
+  }
 
-  alldata = data.table(Id=rowIds,
-                       Cluster=as.integer(clusters)[rowIds],
-                       Mu.fixed=fixedValues[rep(seq_len(nObs), nIds),],
-                       Xfi[rep(seq_len(nObs), nIds),,drop=FALSE])
 
 
   ## Cluster effects
@@ -76,23 +85,28 @@ generateLongData = function(sizes = c(40, 60),
   ## Random effects
   assert_that(is.formula(random))
   assert_that(!hasResponse(random))
-  if(!is.matrix(randomScales)) {
-    randomScales = matrix(randomScales, nrow=length(randomScales), ncol=nClus)
-  }
-  assert_that(is.matrix(randomScales))
-  assert_that(ncol(randomScales) == nClus)
   Xr = model.matrix(random, alldata)
-  assert_that(nrow(randomScales) == ncol(Xr))
-  # generate id-specific scales
-  idScales = t(randomScales)[rep(1:nClus, sizes),] %>%
-    matrix(ncol=nrow(randomScales))
-  assert_that(nrow(idScales) == nIds)
-  idCoefs = rrandom(nIds * nrow(randomScales), 0, idScales) %>%
-    matrix(ncol=nrow(randomScales))
-  assert_that(nrow(idCoefs) == nIds)
-  alldata[, Mu.random := rowSums(Xr * idCoefs[Id])]
+  if(ncol(Xr) > 0) {
+    if(!is.matrix(randomScales)) {
+      randomScales = matrix(randomScales, nrow=length(randomScales), ncol=nClus)
+    }
+    assert_that(is.matrix(randomScales))
+    assert_that(ncol(randomScales) == nClus)
+    assert_that(nrow(randomScales) == ncol(Xr))
+    # generate id-specific scales
+    idScales = t(randomScales)[rep(1:nClus, sizes),] %>%
+      matrix(ncol=nrow(randomScales))
+    assert_that(nrow(idScales) == nIds)
+    idCoefs = rrandom(nIds * nrow(randomScales), 0, idScales) %>%
+      matrix(ncol=nrow(randomScales))
+    assert_that(nrow(idCoefs) == nIds)
+    alldata[, Mu.random := rowSums(Xr * idCoefs[Id])]
 
-  alldata[, Mu := Mu.fixed + Mu.cluster + Mu.random]
+    alldata[, Mu := Mu.fixed + Mu.cluster + Mu.random]
+  } else {
+    alldata[, Mu := Mu.fixed + Mu.cluster]
+  }
+
 
   ## Noise
   assert_that(is.numeric(noiseScales))
