@@ -10,6 +10,13 @@ test_that('creation', {
   expect_output(print(method))
 })
 
+test_that('unevaluated creation', {
+  method = new('clMethod', call=call('clMethod', e=quote(xvar)))
+  expect_error(method$e)
+  expect_output(show(method))
+  expect_output(print(method))
+})
+
 test_that('argument retrieval', {
   xvar = 2
   method = new('clMethod', call=call('clMethod', a=1, b='a', c=NULL, d=NA, e=quote(xvar)))
@@ -24,6 +31,16 @@ test_that('argument retrieval', {
   expect_error(method[['missing']])
 
   expect_is(method[['e', eval=FALSE]], 'name')
+})
+
+test_that('environment()', {
+  method = new('clMethod', call=call('clMethod', e=quote(xvar)))
+  e = new.env()
+  e$xvar = 3
+
+  expect_error(method$e)
+  environment(method) = e
+  expect_equal(method$e, e$xvar)
 })
 
 test_that('local variables', {
