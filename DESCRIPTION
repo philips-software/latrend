@@ -39,6 +39,5 @@ Collate:
     'cluslong.R'
     'data.R'
     'formula.R'
-    'parallel.R'
     'util.R'
     'zzz.R'
