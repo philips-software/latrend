@@ -80,7 +80,7 @@ setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=parent.fr
   }
 
   if(eval) {
-    eval(arg, envir=envir, enclos=parent.env(getNamespace(.packageName)))
+    eval(arg, envir=as.list(envir), enclos=parent.env(getNamespace(.packageName)))
   } else {
     arg
   }
