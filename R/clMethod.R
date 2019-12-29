@@ -49,19 +49,27 @@ setMethod('names', signature('clMethod'), function(x) {
 
 
 #' @title Retrieve and evaluate a clMethod argument by name
+#' @param name Name of the argument to retrieve.
 #' @examples
 #' m = clMethodKML()
-#' m$formula
+#' m$nClusters
 setMethod('$', signature('clMethod'), function(x, name) {
   x[[name]]
 })
 
 
 #' @title Retrieve and evaluate a clMethod argument by name
+#' @param i Name or index of the argument to retrieve.
+#' @param eval Whether to evaluate the call argument (enabled by default).
+#' @param envir Environment in which to evaluate the argument. Only applies when eval = TRUE.
 #' @examples
-#' m = clMethodKML()
-#' m[['formula']]
-setMethod('[[', signature('clMethod'), function(x, i) {
+#' m = clMethodKML(nClusters=5)
+#' m[['nClusters']] # 5
+#'
+#' K = 2
+#' m = clMethodKML(nClusters=K)
+#' m[['nClusters', eval=FALSE]] # K
+setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=parent.frame(3)) {
   if (is.character(i)) {
     assert_that(has_name(x, i), msg=sprintf('method does not have an argument named "%s"', i))
     arg = getCall(x)[[i]]
@@ -71,7 +79,11 @@ setMethod('[[', signature('clMethod'), function(x, i) {
     arg = getCall(x)[[names(x)[i]]]
   }
 
-  eval(arg, envir=list(globalenv()), enclos=parent.env(getNamespace(.packageName)))
+  if(eval) {
+    eval(arg, envir=envir, enclos=parent.env(getNamespace(.packageName)))
+  } else {
+    arg
+  }
 })
 
 
@@ -111,14 +123,16 @@ update.clMethod = function(object, ...) {
 #' @export
 #' @title Extract the method arguments as a list
 #' @param eval Whether to evaluate the arguments.
+#' @param envir The environment in which to evaluate the arguments.
 #' @examples
 #' method = clMethodKML()
 #' as.list(method)
-as.list.clMethod = function(object, eval=TRUE) {
+as.list.clMethod = function(object, eval=TRUE, envir=parent.frame()) {
   if (eval) {
     argNames = names(object)
-    lapply(argNames, function(arg) object[[arg]]) %>%
-      setNames(argNames)
+    argValues = lapply(argNames, function(argName) object[[argName, envir=envir]])
+    names(argValues) = argNames
+    return(argValues)
   } else {
     as.list(clm@call[-1])
   }
@@ -126,10 +140,11 @@ as.list.clMethod = function(object, eval=TRUE) {
 
 #' @export
 #' @title Substitute the call arguments
-#' @return Returns a new call with the substituted arguments.
-substitute.clMethod = function(object) {
+#' @param envir The environment in which to evaluate the arguments.
+#' @return A new call with the substituted arguments.
+substitute.clMethod = function(object, envir=parent.frame()) {
   assert_that(is(object, 'clMethod'))
-  argValues = as.list(object, eval=TRUE)
+  argValues = as.list(object, eval=TRUE, envir=envir)
   object@call = replace(getCall(object), names(argValues), argValues)
   return(object)
 }
