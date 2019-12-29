@@ -1,22 +1,5 @@
 setClass('clMethodGMM', contains='clMethod')
 
-setValidity('clMethodGMM', function(object) {
-  call = getCall(object)
-  f = formula(object)
-  assert_that(hasSingleResponse(f))
-  assert_that(!hasResponse(formula(object, 'mb')))
-
-  assert_that(all(formalArgs(clMethodGMM) %in% names(call)), msg='clMethodGMM object is missing required arguments')
-
-  reTerms = getREterms(f)
-  assert_that(length(reTerms) == 1, msg='formula should contain one random-effects component')
-  assert_that(getREGroupName(reTerms[[1]]) %in% c(object$id, 'ID'), msg='Group variable in random-effects component should match the id argument, or equal "ID"')
-
-
-  assert_that(is.wholeNumber(object$nClusters))
-  assert_that(is.wholeNumber(object$maxIter))
-})
-
 #' @export
 #' @import lcmm
 #' @title Specify GMM method
@@ -49,8 +32,42 @@ clMethodGMM = function(formula=Value ~ 1 + CLUSTER + (1 | ID),
                        convB=1e-4,
                        convL=1e-4,
                        convG=1e-4) {
-  new('clMethodGMM', call=match.call.defaults())
+  object = new('clMethodGMM', call=match.call.defaults())
+
+  if(getOption('cluslong.checkArgs')) {
+    checkArgs(object, envir=parent.frame())
+  }
+
+  return(object)
 }
+
+setMethod('checkArgs', signature('clMethodGMM'), function(object, envir) {
+  environment(object) = envir
+  assert_that(all(formalArgs(clMethodGMM) %in% names(getCall(object))), msg='clMethod object is missing required arguments')
+
+  if(isArgDefined(object, 'formula')) {
+    f = formula(object)
+    assert_that(hasSingleResponse(object$formula))
+
+    reTerms = getREterms(f)
+    assert_that(length(reTerms) == 1, msg='formula should contain one random-effects component')
+    assert_that(getREGroupName(reTerms[[1]]) %in% c(object$id, 'ID'), msg='Group variable in random-effects component should match the id argument, or equal "ID"')
+
+  }
+
+  if(isArgDefined(object, 'formula.mb')) {
+    assert_that(!hasResponse(formula(object, 'mb')))
+  }
+
+  if(isArgDefined(object, 'nClusters')) {
+    assert_that(is.count(object$nClusters))
+  }
+
+  if(isArgDefined(object, 'maxIter')) {
+    assert_that(is.count(object$maxIter))
+  }
+})
+
 
 setMethod('getName', signature('clMethodGMM'), function(object) 'growth mixture model')
 

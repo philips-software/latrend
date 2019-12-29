@@ -1,14 +1,5 @@
 setClass('clMethodLLPA', contains='clMethod')
 
-setValidity('clMethodLLPA', function(object) {
-  call = getCall(object)
-  assert_that(hasSingleResponse(object$formula))
-
-  assert_that(all(formalArgs(clMethodLLPA) %in% names(call)), msg='clMethod object is missing required arguments')
-
-  assert_that(is.wholeNumber(object$nClusters))
-})
-
 #' @export
 #' @import mclust
 #' @title Longitudinal latent profile analysis
@@ -29,8 +20,30 @@ clMethodLLPA = function(formula=Value ~ 1,
                        modelNames=NULL,
                        prior=NULL,
                        initialization=NULL) {
-  new('clMethodLLPA', call=match.call.defaults())
+  object = new('clMethodLLPA', call=match.call.defaults())
+
+  if(getOption('cluslong.checkArgs')) {
+    checkArgs(object, envir=parent.frame())
+  }
+
+  return(object)
 }
+
+setMethod('checkArgs', signature('clMethodLLPA'), function(object, envir) {
+  environment(object) = envir
+  assert_that(all(formalArgs(clMethodLLPA) %in% names(getCall(object))), msg='clMethod object is missing required arguments')
+
+  if(isArgDefined(object, 'formula')) {
+    f = formula(object)
+    assert_that(hasSingleResponse(object$formula))
+    assert_that(!hasCovariates(object$formula), msg='covariates are not supported')
+  }
+
+  if(isArgDefined(object, 'nClusters')) {
+    assert_that(is.count(object$nClusters))
+  }
+})
+
 
 setMethod('getName', signature('clMethodLLPA'), function(object) 'longitudinal latent profile analysis')
 

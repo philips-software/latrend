@@ -7,6 +7,11 @@ setMethod('initialize', 'clMethod', function(.Object, ...) {
   .Object
 })
 
+setValidity('clMethod', function(object) {
+  call = getCall(object)
+  assert_that(is.call(call))
+})
+
 setMethod('show', 'clMethod',
           function(object) {
             cat('Cluslong method "', getName(object), '"\n', sep='')
@@ -14,6 +19,31 @@ setMethod('show', 'clMethod',
           }
 )
 
+#' @export
+#' @title Check validity of the arguments in the respective environment.
+#' @description Arguments missing from the environment are skipped.
+#' @param envir The environment in which to evaluate the arguments.
+setGeneric('checkArgs', function(object, envir=parent.frame(), ...) standardGeneric('checkArgs'))
+setMethod('checkArgs', signature('clMethod'), function(object, envir) {})
+
+#' @export
+#' @title Check whether the argument of a clMethod has a defined value.
+#' @keywords internal
+isArgDefined = function(object, name, envir=NULL) {
+  envir = clMethod.env(object, parent.frame(), envir)
+  assert_that(is(object, 'clMethod'))
+  assert_that(is.character(name))
+  arg = object[[name[1], eval=FALSE]]
+
+
+  if(is.name(arg) || is.call(arg)) {
+    arg = try(object[[name, envir=envir]], silent=TRUE)
+    if(is(arg, 'try-error')) {
+      return(FALSE)
+    }
+  }
+  return(TRUE)
+}
 
 #' @export
 setGeneric('getName', function(object) standardGeneric('getName'))
@@ -29,7 +59,8 @@ setMethod('getName0', signature('clMethod'), getName)
 #' @examples
 #' m = clMethodKML(Value ~ Time)
 #' formula(m) # Value ~ Time
-formula.clMethod = function(object, what='mu') {
+formula.clMethod = function(object, what='mu', envir=NULL) {
+  envir = clMethod.env(object, parent.frame(), envir)
   assert_that(is.scalar(what), is.character(what))
   if (what == 'mu') {
     object$formula
@@ -69,7 +100,8 @@ setMethod('$', signature('clMethod'), function(x, name) {
 #' K = 2
 #' m = clMethodKML(nClusters=K)
 #' m[['nClusters', eval=FALSE]] # K
-setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=parent.frame(3)) {
+setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
+  envir = clMethod.env(x, parent.frame(3), envir)
   if (is.character(i)) {
     assert_that(has_name(x, i), msg=sprintf('method does not have an argument named "%s"', i))
     arg = getCall(x)[[i]]
@@ -100,13 +132,14 @@ getCall.clMethod = function(object) {
 #' m2 = update(m, formula=~ . + Time)
 #'
 #' m3 = update(m2, start='randomAll')
-update.clMethod = function(object, ...) {
+update.clMethod = function(object, ..., envir=NULL) {
+  envir = clMethod.env(object, parent.frame(), envir)
   ucall = match.call() %>% tail(-2)
   argNames = names(object)
   uargNames = names(ucall)
   assert_that(all(uargNames %in% argNames),
               msg=sprintf('attempted to update unsupported arguments %s', paste0('"', setdiff(uargNames, argNames), '"', collapse=', ')))
-  uargValues = lapply(ucall, eval, envir=parent.frame())
+  uargValues = lapply(ucall, eval, envir=envir)
   formulaMask = sapply(uargValues, is, 'formula')
 
   if(any(formulaMask)) {
@@ -127,7 +160,8 @@ update.clMethod = function(object, ...) {
 #' @examples
 #' method = clMethodKML()
 #' as.list(method)
-as.list.clMethod = function(object, eval=TRUE, envir=parent.frame()) {
+as.list.clMethod = function(object, eval=TRUE, envir=NULL) {
+  envir = clMethod.env(object, parent.frame(), envir)
   if (eval) {
     argNames = names(object)
     argValues = lapply(argNames, function(argName) object[[argName, envir=envir]])
@@ -142,7 +176,8 @@ as.list.clMethod = function(object, eval=TRUE, envir=parent.frame()) {
 #' @title Substitute the call arguments
 #' @param envir The environment in which to evaluate the arguments.
 #' @return A new call with the substituted arguments.
-substitute.clMethod = function(object, envir=parent.frame()) {
+substitute.clMethod = function(object, envir=NULL) {
+  envir = clMethod.env(object, parent.frame(), envir)
   assert_that(is(object, 'clMethod'))
   argValues = as.list(object, eval=TRUE, envir=envir)
   object@call = replace(getCall(object), names(argValues), argValues)
@@ -163,6 +198,23 @@ clMethodPrintArgs = function(object) {
     sapply(strtrim, 40)
 
   cat(sprintf('  %-16s%s\n', paste0(argNames, ':'), args), sep='')
+}
+
+#' @title Select the preferred environment
+#' @description Returns envir if specified. Otherwise, returns environment(object) if specified. The defaultEnvir is returned when the former two are NULL.
+#' @keywords internal
+clMethod.env = function(object, defaultEnvir, envir) {
+  assert_that(is(object, 'clMethod'))
+  assert_that(is.null(defaultEnvir) || is.environment(defaultEnvir))
+  assert_that(is.null(envir) || is.environment(envir))
+
+  if(!is.null(envir)) {
+    envir
+  } else if(!is.null(environment(object))) {
+    environment(object)
+  } else {
+    defaultEnvir
+  }
 }
 
 

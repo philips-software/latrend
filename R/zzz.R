@@ -1,7 +1,8 @@
 .onLoad = function(libname, pkgname) {
   opts = list(
     cluslong.time='Time',
-    cluslong.id='Id')
+    cluslong.id='Id',
+    cluslong.checkArgs=TRUE)
 
   optMask = not(names(opts) %in% names(options()))
   if(any(optMask)) {

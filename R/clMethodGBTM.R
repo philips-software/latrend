@@ -1,19 +1,6 @@
 #' @include clMethodGMM.R
 setClass('clMethodGBTM', contains='clMethod')
 
-setValidity('clMethodGBTM', function(object) {
-  call = getCall(object)
-  f = formula(object)
-  assert_that(hasSingleResponse(f))
-  assert_that(!hasResponse(formula(object, 'mb')))
-
-  assert_that(all(formalArgs(clMethodGBTM) %in% names(call)), msg='clMethodGBTM object is missing required arguments')
-
-  assert_that(length(getREterms(f)) == 0, msg='formula may not contain random effects. Consider using clMethodGMM.')
-
-  assert_that(is.wholeNumber(object$nClusters))
-  assert_that(is.wholeNumber(object$maxIter))
-})
 
 #' @export
 #' @import lcmm
@@ -43,8 +30,40 @@ clMethodGBTM = function(formula=Value ~ 1 + CLUSTER,
                        convB=1e-4,
                        convL=1e-4,
                        convG=1e-4) {
-  new('clMethodGBTM', call=match.call.defaults())
+  object = new('clMethodGBTM', call=match.call.defaults())
+
+  if(getOption('cluslong.checkArgs')) {
+    checkArgs(object, envir=parent.frame())
+  }
+
+  return(object)
 }
+
+setMethod('checkArgs', signature('clMethodGBTM'), function(object, envir) {
+  environment(object) = envir
+  assert_that(all(formalArgs(clMethodGBTM) %in% names(getCall(object))), msg='clMethod object is missing required arguments')
+
+  if(isArgDefined(object, 'formula')) {
+    f = formula(object)
+    assert_that(hasSingleResponse(object$formula))
+
+    reTerms = getREterms(f)
+    assert_that(length(getREterms(f)) == 0, msg='formula cannot contain random effects. Consider using clMethodGMM.')
+  }
+
+  if(isArgDefined(object, 'formula.mb')) {
+    assert_that(!hasResponse(formula(object, 'mb')))
+  }
+
+  if(isArgDefined(object, 'nClusters')) {
+    assert_that(is.count(object$nClusters))
+  }
+
+  if(isArgDefined(object, 'maxIter')) {
+    assert_that(is.count(object$maxIter))
+  }
+})
+
 
 setMethod('getName', signature('clMethodGBTM'), function(object) 'group-based trajectory modeling')
 
