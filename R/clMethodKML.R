@@ -14,6 +14,8 @@ setValidity('clMethodKML', function(object) {
 
 
 #' @export
+#' @import kml
+#' @import longitudinalData
 #' @title Specify KML method
 #' @param formula Formula. Only intercept is supported.
 #' @param time Time variable.
