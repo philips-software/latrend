@@ -286,7 +286,7 @@ clusterSizes = function(object) {
 #' clusterProportions(model)
 clusterProportions = function(object) {
   assert_that(is(object, 'clModel'))
-  pp(object) %>% colMeans
+  postprob(object) %>% colMeans
 }
 
 #' @export
@@ -297,7 +297,7 @@ clusterProportions = function(object) {
 #' confusionMatrix(model)
 confusionMatrix = function(object) {
   assert_that(is(object, 'clModel'))
-  post_conf_mat(pp(object)) %>%
+  post_conf_mat(postprob(object)) %>%
     set_colnames(clusterNames(object)) %>%
     set_rownames(clusterNames(object))
 }
@@ -309,7 +309,7 @@ confusionMatrix = function(object) {
 #' clusterAssignments(model)
 clusterAssignments = function(object) {
   assert_that(is(object, 'clModel'))
-  pp(object) %>% apply(1, which.max) %>% factor(labels=clusterNames(object))
+  postprob(object) %>% apply(1, which.max) %>% factor(labels=clusterNames(object))
 }
 
 #' @export
