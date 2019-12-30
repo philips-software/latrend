@@ -13,10 +13,11 @@
 #' @param method The clMethod object specifying the longitudinal cluster method to apply.
 #' @param data The data.frame or matrix to which to apply the method.
 #' @param formula The model formula.
-#' @param ... Any other arguments as part of the respective clMethod definition. This updates the clMethod object.
+#' @param ... Any other arguments as part of the respective clMethod definition. The clMethod object is updated accordingly.
 #' @param .control Named list of control options.
 #' @param .init Model initialization strategy.
-cluslong = function(method=clMethodKML(), data, formula=method$formula, ..., .control=list(), .init='random') {
+#' @param envir The environment in which to evaluate the method arguments.
+cluslong = function(method=clMethodKML(), data, ..., .control=list(), .init='random', envir=NULL) {
   assert_that(inherits(method, 'clMethod'), msg='method must be an object of class clMethod')
   assert_that(!missing(data), msg='data must be specified')
   assert_that(is.data.frame(data) || is.matrix(data), msg='data must be data.frame or matrix')
@@ -27,9 +28,8 @@ cluslong = function(method=clMethodKML(), data, formula=method$formula, ..., .co
     data = data.frame(data)
   }
 
-  clCall = match.call.defaults()
-  argList = clCall %>% as.list %>% tail(-1)
-  argList[c('method', 'data', '.control', '.init')] = NULL
+  argList = list(...)
+  argList$envir = clMethod.env(method, parent.frame(), envir)
   method = do.call(update, c(object=method, argList))
 
   if (getLogger()$level >= loglevels['INFO']) {
@@ -37,8 +37,9 @@ cluslong = function(method=clMethodKML(), data, formula=method$formula, ..., .co
     clMethodPrintArgs(method)
   }
 
-  assert_that(hasResponse(method$formula))
   assert_that(hasSingleResponse(method$formula))
+  assert_that(has_name(data, method$id))
+  assert_that(has_name(data, method$time))
 
   loginfo('Preparing data and method...')
   prepEnv = prepare(method, data, .control)
@@ -48,12 +49,14 @@ cluslong = function(method=clMethodKML(), data, formula=method$formula, ..., .co
   model = finalize(method, data, .control, fitEnv)
   assert_that(inherits(model, 'clModel'), msg='finalize(clMethod, ...) returned an unexpected object. Should be clModel.')
 
+  clCall = match.call.defaults()
   model@call = do.call(call,
                        c('cluslong',
                          method=quote(getCall(method)),
                          data=quote(clCall$data),
                          .control=quote(clCall$.control),
                          .init=quote(clCall$.init)))
+  model@call['envir'] = list(clCall$envir)
 
   return(model)
 }
