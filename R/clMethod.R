@@ -112,10 +112,16 @@ setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
   }
 
   if(eval) {
-    eval(arg, envir=as.list(envir), enclos=parent.env(getNamespace(.packageName)))
+    value = eval(arg, envir=as.list(envir), enclos=parent.env(getNamespace(.packageName)))
   } else {
-    arg
+    value = arg
   }
+
+  if(is.formula(value)) {
+    environment(value) = new.env()
+  }
+
+  return(value)
 })
 
 
@@ -135,6 +141,7 @@ getCall.clMethod = function(object) {
 update.clMethod = function(object, ..., envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
   ucall = match.call() %>% tail(-2)
+  ucall$envir = NULL
   argNames = names(object)
   uargNames = names(ucall)
   assert_that(all(uargNames %in% argNames),
