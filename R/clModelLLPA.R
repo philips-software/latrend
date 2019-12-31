@@ -1,6 +1,10 @@
 #' @include clModel.R
 setClass('clModelLLPA', contains='clModel')
 
+setMethod('converged', signature('clModelLLPA'), function(object) {
+  TRUE
+})
+
 setMethod('postprob', signature('clModelLLPA'), function(object, newdata) {
   if(is.null(newdata)) {
     pp = object@model$z
