@@ -27,6 +27,11 @@ logLik.clModelKML = function(object) {
 }
 
 
+setMethod('converged', signature('clModelKML'), function(object) {
+  TRUE
+})
+
+
 setMethod('postprob', signature('clModelKML'), function(object, newdata) {
   if(is.null(newdata)) {
     pp = getKMLPartition(object)@postProba
