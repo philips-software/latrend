@@ -15,7 +15,7 @@ expect_valid_clModel = function(object) {
   expect_true(is.ggplot(plot(object)))
   expect_is(coef(object), 'numeric')
   expect_is(residuals(object), 'numeric')
-  expect_is(converged(object), 'logical')
+  expect_is(converged(object), c('logical', 'numeric', 'integer'))
   expect_false(is.null(getModel(object)))
   fit = fitted(object)
   expect_is(fit, 'numeric')
