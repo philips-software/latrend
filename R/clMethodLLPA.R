@@ -1,7 +1,7 @@
 setClass('clMethodLLPA', contains='clMethod')
 
 #' @export
-#' @import mclust
+#' @importFrom mclust Mclust mclustBIC
 #' @title Longitudinal latent profile analysis
 #' @description Latent profile analysis or finite Gaussian mixture modeling.
 #' @param formula Formula. Covariates are not supported.

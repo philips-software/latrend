@@ -1,7 +1,7 @@
 setClass('clMethodGMM', contains='clMethod')
 
 #' @export
-#' @import lcmm
+#' @importFrom lcmm hlme
 #' @title Specify GMM method
 #' @description Growth mixture modeling through latent-class linear mixed modeling.
 #' @inheritParams clMethodKML

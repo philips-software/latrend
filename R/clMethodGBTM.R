@@ -3,7 +3,6 @@ setClass('clMethodGBTM', contains='clMethod')
 
 
 #' @export
-#' @import lcmm
 #' @title Specify GBTM method
 #' @description Group-based trajectory modeling through fixed-effects modeling.
 #' @inheritParams clMethodKML

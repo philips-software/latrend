@@ -38,6 +38,7 @@ setMethod('modelData', signature('clModelGMM'), function(object) {
 })
 
 #' @export
+#' @importFrom lcmm predictY
 #' @rdname clusterTrajectories
 #' @param at The time points at which to compute the cluster trajectories.
 setMethod('clusterTrajectories', signature('clModelGMM'), function(object, what, at) {
