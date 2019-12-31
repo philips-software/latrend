@@ -42,7 +42,8 @@ setMethod('modelData', signature('clModelGMM'), function(object) {
 #' @param at The time points at which to compute the cluster trajectories.
 setMethod('clusterTrajectories', signature('clModelGMM'), function(object, what, at) {
   time = getTimeName(object)
-  vars = union(getCovariates(object@model$mixture), getCovariates(object@model$fixed))
+  vars = union(getCovariates(object@model$mixture), getCovariates(object@model$fixed)) %>%
+    union(time)
 
   if(is.null(at)) {
     clusdata = modelData(object) %>%
