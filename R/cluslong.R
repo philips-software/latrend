@@ -32,7 +32,7 @@ cluslong = function(method=clMethodKML(), data, ..., .control=list(), .init='ran
   argList$envir = clMethod.env(method, parent.frame(), envir)
   method = do.call(update, c(object=method, argList))
 
-  if (getLogger()$level >= loglevels['INFO']) {
+  if (getLogger()$level <= loglevels['INFO']) {
     cat('== Longitudinal clustering with "', getName(method), '" ==\n', sep='')
     clMethodPrintArgs(method)
   }
