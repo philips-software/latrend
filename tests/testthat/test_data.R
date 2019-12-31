@@ -3,9 +3,9 @@ context('data')
 test_that('testLongData', {
   data('testLongData')
   expect_is(testLongData, 'data.frame')
-  expect_named(testLongData, c('Subject', 'Assessment', 'Amount', 'Cluster'))
-  expect_length(unique(testLongData$Subject), 500)
-  expect_length(unique(testLongData$Assessment), 10)
+  expect_named(testLongData, c('Id', 'Time', 'Value', 'Cluster'))
+  expect_length(unique(testLongData$Id), 500)
+  expect_length(unique(testLongData$Time), 10)
 })
 
 test_that('generateLongData without fixed and random effects', {
