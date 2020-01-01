@@ -39,7 +39,7 @@ cluslong = function(method=clMethodKML(), data, ..., .control=list(), .init='ran
     clMethodPrintArgs(method)
   }
 
-  assert_that(hasSingleResponse(method$formula))
+  assert_that(not('formula' %in% names(method)) || hasSingleResponse(method$formula))
   assert_that(has_name(data, method$id))
   assert_that(has_name(data, method$time))
 
