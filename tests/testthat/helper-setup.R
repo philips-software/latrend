@@ -16,9 +16,7 @@ expect_valid_clModel = function(object) {
   expect_is(coef(object), 'numeric')
   expect_is(residuals(object), 'numeric')
   expect_is(converged(object), c('logical', 'numeric', 'integer'))
-  expect_false(is.null(getModel(object)))
-  fit = fitted(object)
-  expect_is(fit, 'numeric')
+  expect_is(fitted(object), c('NULL', 'numeric'))
 
   expect_true(is.count(nClus(object)))
   clusterNames(object) %>%
