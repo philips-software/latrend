@@ -1,5 +1,6 @@
 .onLoad = function(libname, pkgname) {
   opts = list(
+    cluslong.response='Value',
     cluslong.time='Time',
     cluslong.id='Id',
     cluslong.checkArgs=TRUE)
