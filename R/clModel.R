@@ -47,6 +47,7 @@ getCall.clModel = function(object) {
 plot.clModel = function(object, what='mu', at=NULL,
                         clusterLabels=sprintf('%s (%g%%)', clusterNames(object), round(clusterProportions(object) * 100))) {
   dt_ctraj = clusterTrajectories(object, what=what, at=at) %>%
+    as.data.table %>%
     .[, Cluster := factor(Cluster, levels=levels(Cluster), labels=clusterLabels)]
   ggplot(data=dt_ctraj,
          mapping=aes_string(x=getTimeName(object),
