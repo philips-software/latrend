@@ -30,6 +30,10 @@ setMethod('getName', signature('clModel'), function(object) getMethod(object) %>
 
 setMethod('getName0', signature('clModel'), function(object) getMethod(object) %>% getName0)
 
+#' @export
+is.clModel = function(object) {
+  isS4(object) && is(object, 'clModel')
+}
 
 #' @export
 getCall.clModel = function(object) {
