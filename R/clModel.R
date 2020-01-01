@@ -9,7 +9,6 @@ setClass('clModel',
 
 setValidity('clModel', function(object) {
   assert_that(is(object@method, 'clMethod'))
-  assert_that(!is.null(object@model))
   assert_that(is.character(object@clusterNames))
 })
 
