@@ -5,6 +5,7 @@ setClass('clMethodCustom', contains='clMethod')
 #' @title Specify a custom method based on a model function
 #' @param fun The cluster function with signature (method, data).
 #' @param center Optional method for computing the longitudinal cluster centers.
+#' @param response Response variable.
 #' @param time Time variable.
 #' @param id Strata variable.
 #' @examples
@@ -20,6 +21,7 @@ setClass('clMethodCustom', contains='clMethod')
 #' summary(model)
 clMethodCustom = function(fun,
                        center=meanNA,
+                       response=getOption('cluslong.response'),
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),
                        name='custom') {
@@ -64,7 +66,9 @@ setMethod('getName0', signature('clMethodCustom'), function(object) 'custom')
 
 
 setMethod('prepare', signature('clMethodCustom'), function(method, data, control) {
-
+  assert_that(has_name(data, method$response))
+  assert_that(has_name(data, method$id))
+  assert_that(has_name(data, method$time))
 })
 
 setMethod('fit', signature('clMethodCustom'), function(method, data, control, prepEnv) {
