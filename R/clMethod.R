@@ -223,26 +223,3 @@ clMethod.env = function(object, defaultEnvir, envir) {
     defaultEnvir
   }
 }
-
-
-#' # Control ####
-#' setClass('clControl',
-#'          representation(maxIter='numeric',
-#'                         tolerance='numeric',
-#'                         verbose='numeric'))
-#'
-#' #' @export
-#' #' @title Create a cluslong method control object
-#' clControl = function(maxIter=Inf, tolerance=1e-6, verbose=0) {
-#'   cfg = mget(names(formals()), sys.frame(sys.nframe()))
-#'   do.call(new, c('clControl', cfg))
-#' }
-#'
-#' setMethod('show', 'clControl',
-#'           function(object) {
-#'             cat('Control object:\n')
-#'             slots = slotNames(object)
-#'             values = sapply(slots, slot, object=object)
-#'             sprintf(' %-12s%10f', paste0(slots, ':'), values) %>% paste0(collapse='\n') %>% cat
-#'           }
-#' )

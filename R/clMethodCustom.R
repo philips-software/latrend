@@ -65,13 +65,13 @@ setMethod('getName', signature('clMethodCustom'), function(object) {
 setMethod('getName0', signature('clMethodCustom'), function(object) 'custom')
 
 
-setMethod('prepare', signature('clMethodCustom'), function(method, data, control) {
+setMethod('prepare', signature('clMethodCustom'), function(method, data) {
   assert_that(has_name(data, method$response))
   assert_that(has_name(data, method$id))
   assert_that(has_name(data, method$time))
 })
 
-setMethod('fit', signature('clMethodCustom'), function(method, data, control, prepEnv) {
+setMethod('fit', signature('clMethodCustom'), function(method, data, prepEnv) {
   e = new.env()
   args = as.list(method)
   args$data = data
@@ -82,7 +82,7 @@ setMethod('fit', signature('clMethodCustom'), function(method, data, control, pr
   return(e)
 })
 
-setMethod('finalize', signature('clMethodCustom'), function(method, data, control, fitEnv) {
+setMethod('finalize', signature('clMethodCustom'), function(method, data, fitEnv) {
   # check output
   model = fitEnv$model
   assert_that(is.clModel(model))

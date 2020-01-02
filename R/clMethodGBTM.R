@@ -72,7 +72,7 @@ setMethod('prepare', signature('clMethodGBTM'), gmm_prepare)
 
 setMethod('fit', signature('clMethodGBTM'), gmm_fit)
 
-setMethod('finalize', signature('clMethodGBTM'), function(method, data, control, fitEnv) {
+setMethod('finalize', signature('clMethodGBTM'), function(method, data, fitEnv) {
   model = new('clModelGBTM',
               method=method,
               model=fitEnv$model,

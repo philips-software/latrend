@@ -62,7 +62,7 @@ setMethod('getName0', signature('clMethodKML'), function(object) 'kml')
 
 
 ##
-kml_prepare = function(method, data, control) {
+kml_prepare = function(method, data) {
   e = new.env()
 
   valueColumn = formula(method) %>% getResponse
@@ -107,7 +107,7 @@ setMethod('prepare', signature('clMethodKML'), kml_prepare)
 
 
 ##
-kml_fit = function(method, data, control, prepEnv) {
+kml_fit = function(method, data, prepEnv) {
   e = new.env(parent=prepEnv)
 
   cld = prepEnv$cld
@@ -128,7 +128,7 @@ setMethod('fit', signature('clMethodKML'), kml_fit)
 
 
 ##
-kml_finalize = function(method, data, control, fitEnv) {
+kml_finalize = function(method, data, fitEnv) {
   model = new('clModelKML',
               method=method,
               model=fitEnv$cld,

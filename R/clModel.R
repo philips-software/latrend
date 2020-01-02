@@ -4,7 +4,6 @@ setClass('clModel',
          representation(model='ANY',
                         method='clMethod',
                         call='call',
-                        control='list',
                         clusterNames='character'))
 
 setValidity('clModel', function(object) {

@@ -73,7 +73,7 @@ setMethod('getName', signature('clMethodGMM'), function(object) 'growth mixture 
 
 setMethod('getName0', signature('clMethodGMM'), function(object) 'gmm')
 
-gmm_prepare = function(method, data, control) {
+gmm_prepare = function(method, data) {
   e = new.env()
 
   f = formula(method)
@@ -114,7 +114,7 @@ gmm_prepare = function(method, data, control) {
 setMethod('prepare', signature('clMethodGMM'), gmm_prepare)
 
 ##
-gmm_fit = function(method, data, control, prepEnv) {
+gmm_fit = function(method, data, prepEnv) {
   e = new.env(parent=prepEnv)
 
   valueColumn = formula(method) %>% getResponse
@@ -151,7 +151,7 @@ setMethod('fit', signature('clMethodGMM'), gmm_fit)
 
 
 ##
-gmm_finalize = function(method, data, control, fitEnv) {
+gmm_finalize = function(method, data, fitEnv) {
   model = new('clModelGMM',
               method=method,
               model=fitEnv$model,

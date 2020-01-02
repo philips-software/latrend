@@ -49,7 +49,7 @@ setMethod('getName', signature('clMethodLLPA'), function(object) 'longitudinal l
 
 setMethod('getName0', signature('clMethodLLPA'), function(object) 'llpa')
 
-setMethod('prepare', signature('clMethodLLPA'), function(method, data, control) {
+setMethod('prepare', signature('clMethodLLPA'), function(method, data) {
   e = new.env()
 
   valueColumn = formula(method) %>% getResponse
@@ -64,7 +64,7 @@ setMethod('prepare', signature('clMethodLLPA'), function(method, data, control) 
   return(e)
 })
 
-setMethod('fit', signature('clMethodLLPA'), function(method, data, control, prepEnv) {
+setMethod('fit', signature('clMethodLLPA'), function(method, data, prepEnv) {
   e = new.env(parent=prepEnv)
   args = as.list(method)
   args$data = prepEnv$data
@@ -79,7 +79,7 @@ setMethod('fit', signature('clMethodLLPA'), function(method, data, control, prep
   return(e)
 })
 
-setMethod('finalize', signature('clMethodLLPA'), function(method, data, control, fitEnv) {
+setMethod('finalize', signature('clMethodLLPA'), function(method, data, fitEnv) {
   model = new('clModelLLPA',
               method=method,
               model=fitEnv$model,
