@@ -109,13 +109,12 @@ clModelCustom = function(data,
     center = clusterTrajectories
     rowClusters = clusterAssignments[rleidv(data[[id]])]
     clusterTrajectories = as.data.table(data) %>%
-      .[, center(get(response)), by=.(get(id), get(time), rowClusters)] %>%
-      setnames(c(id, time, 'Cluster', response))
+      .[, center(get(response)), by=.(rowClusters, get(time))] %>%
+      setnames(c('Cluster', time, response))
   }
   assert_that(has_name(clusterTrajectories, 'Cluster'))
   assert_that(has_name(clusterTrajectories, response))
   assert_that(has_name(clusterTrajectories, time))
-  assert_that(has_name(clusterTrajectories, id))
 
   # Converged
   assert_that(is.scalar(converged))
