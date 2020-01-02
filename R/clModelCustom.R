@@ -144,6 +144,11 @@ clModelCustom = function(data,
   return(object)
 }
 
+#' @export
+is.clModelCustom = function(object) {
+  is.clModel(object) && is(object, 'clModelCustom')
+}
+
 setMethod('getName', signature('clModelCustom'), function(object) object@name)
 
 setMethod('getName0', signature('clModelCustom'), function(object) 'custom')
