@@ -58,3 +58,7 @@ cluslong = function(method=clMethodKML(), data, ..., envir=NULL) {
 
   return(model)
 }
+
+canShowModelOutput = function(minLevel='INFO') {
+  getLogger()$level <= loglevels[minLevel]
+}
