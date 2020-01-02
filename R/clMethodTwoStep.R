@@ -1,3 +1,4 @@
+#' @include clModelCustom.R
 setClass('clMethodTwoStep', contains='clMethod')
 
 #' @export
@@ -15,7 +16,12 @@ clMethodTwoStep = function(representationStep,
                            response=getOption('cluslong.response'),
                            time=getOption('cluslong.time'),
                            id=getOption('cluslong.id')) {
-  new('clMethodTwoStep', call=match.call.defaults())
+  object = new('clMethodTwoStep', call=match.call.defaults())
+
+  if(getOption('cluslong.checkArgs')) {
+    checkArgs(object)
+  }
+  return(object)
 }
 
 
