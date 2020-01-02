@@ -1,3 +1,4 @@
+#' @include clMethod.R
 setClass('clMethodGMM', contains='clMethod')
 
 #' @export

@@ -1,3 +1,4 @@
+#' @include clMethod.R
 #' @include clMethodGMM.R
 setClass('clMethodGBTM', contains='clMethod')
 

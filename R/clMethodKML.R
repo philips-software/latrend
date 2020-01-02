@@ -1,3 +1,4 @@
+#' @include clMethod.R
 setClass('clMethodKML', contains='clMethod')
 
 #' @export
@@ -113,7 +114,7 @@ kml_fit = function(method, data, prepEnv) {
   cld = prepEnv$cld
   # Helper variables
   valueColumn = formula(method) %>% getResponse
-  suppressFun = if (getLogger()$level <= loglevels['INFO']) force else capture.output
+  suppressFun = if(canShowModelOutput()) force else capture.output
 
   startTime = Sys.time()
   suppressFun(

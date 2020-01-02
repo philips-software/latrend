@@ -1,3 +1,4 @@
+#' @include clMethod.R
 setClass('clMethodLLPA', contains='clMethod')
 
 #' @export
