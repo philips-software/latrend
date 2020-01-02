@@ -28,27 +28,28 @@ cluslong = function(method=clMethodKML(), data, ..., envir=NULL) {
   argList = list(...)
   envir = clMethod.env(method, parent.frame(), envir)
   argList$envir = envir
-  method = do.call(update, c(object=method, argList)) %>%
-    substitute.clMethod(envir=envir)
+  method = do.call(update, c(object=method, argList))
+  methodx = substitute.clMethod(method, envir=envir)
 
   if (getLogger()$level <= loglevels['INFO']) {
     cat('== Longitudinal clustering with "', getName(method), '" ==\n', sep='')
     clMethodPrintArgs(method)
   }
 
-  assert_that(not('formula' %in% names(method)) || hasSingleResponse(method$formula))
-  assert_that(has_name(data, method$id))
-  assert_that(has_name(data, method$time))
+  assert_that(not('formula' %in% names(methodx)) || hasSingleResponse(methodx$formula))
+  assert_that(has_name(data, methodx$id))
+  assert_that(has_name(data, methodx$time))
 
   loginfo('Preparing data and method...')
-  prepEnv = prepare(method, data)
+  prepEnv = prepare(methodx, data)
   loginfo('Fitting model...')
-  fitEnv = fit(method, data, prepEnv)
+  fitEnv = fit(methodx, data, prepEnv)
   loginfo('Finalizing...')
-  model = finalize(method, data, fitEnv)
+  model = finalize(methodx, data, fitEnv)
   assert_that(inherits(model, 'clModel'), msg='finalize(clMethod, ...) returned an unexpected object. Should be clModel.')
 
   clCall = match.call.defaults()
+  model@method = methodx
   model@call = do.call(call,
                        c('cluslong',
                          method=quote(getCall(method)),
