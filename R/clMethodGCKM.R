@@ -11,7 +11,7 @@ setValidity('clMethodGCKM', function(object) {
 })
 
 #' @export
-#' @importFrom lme4 lmer lmerControl
+#' @importFrom lme4 lmer lmerControl ranef
 #' @title Two-step clustering through linear mixed modeling and k-means
 #' @description Two-step clustering through linear mixed modeling and k-means.
 #' @param formula Formula, including a random effects component for the strata.
