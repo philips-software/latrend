@@ -222,3 +222,29 @@ getSpecialFormula = function(f, special) {
               env=environment(f))
   }
 }
+
+dropSpecial = function(f, special) {
+  assert_that(is.scalar(special))
+  tt = terms(f, specials=special)
+
+  vars = attr(tt, 'variables')
+  specialIdx = attr(tt, 'specials')[[special]]
+
+  if(length(specialIdx) == 0) {
+    return(f)
+  }
+
+  newTerms = labels(tt)[-(specialIdx-1)]
+  if(length(newTerms) == 0) {
+    if(hasIntercept(f)) {
+      update(f, ~1)
+    } else {
+      update(f, ~0)
+    }
+  } else {
+    reformulate(newTerms,
+                response=getResponse(f),
+                intercept=hasIntercept(f),
+                env = environment(f))
+  }
+}

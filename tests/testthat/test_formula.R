@@ -181,3 +181,15 @@ test_that('getSpecialFormula', {
   expect_equal(getSpecialFormula(A~B + time(0) + time(B), special='time'), A~0 + B)
   expect_equal(getSpecialFormula(A~B + time(I(A^2)), special='time'), A~I(A^2))
 })
+
+test_that('dropSpecial', {
+  f = Value ~ 0 + time(1) + time(B + C) + D + time + time(I(A^2)) + I(time(Z))
+  expect_equal(dropSpecial(A~B, special='time'), A~B)
+  expect_equal(dropSpecial(A~1, special='time'), A~1)
+  expect_equal(dropSpecial(A~0, special='time'), A~0)
+  expect_equal(dropSpecial(A~B - 1, special='time'), A~B - 1)
+  expect_equal(dropSpecial(A~B + time, special='time'), A~B + time)
+  expect_equal(dropSpecial(A~B + time(C), special='time'), A~B)
+  expect_equal(dropSpecial(A~B + I(time(C)), special='time'), A~B + I(time(C)))
+  expect_equal(dropSpecial(~B + I(time(C)), special='time'), ~B + I(time(C)))
+})
