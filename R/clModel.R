@@ -510,6 +510,15 @@ getTimeName = function(object) {
   getMethod(object)$time
 }
 
+#' @title Generate a vector indicating the id-number (between 1 and numIds()) per row
+#' @details The id order is determined by the output of modelIds()
+#' @keywords internal
+genIdRowIndices = function(object) {
+  modelData(object)[[getIdName(object)]] %>%
+    factor(levels=modelIds(object)) %>%
+    as.integer
+}
+
 #' @export
 #' @title Extract model training data
 setGeneric('modelData', function(object) standardGeneric('modelData'))
