@@ -1,5 +1,10 @@
 logging::setLevel(loglevels['FATAL'])
 
+mixt_file = file.path('..', '..', 'MixTVEM.R')
+if(file.exists(mixt_file)) {
+  source(mixt_file)
+}
+
 expect_valid_clModel = function(object) {
   expect_s4_class(object, 'clModel')
 

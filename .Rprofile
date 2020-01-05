@@ -3,6 +3,10 @@ library(utils)
 library(data.table)
 library(magrittr)
 
+if(file.exists('MixTVEM.r')) {
+  source('MixTVEM.r')
+}
+
 test = function() {
   data('testLongData')
   dat <<- generateLongData()
