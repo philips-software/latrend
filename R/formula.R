@@ -188,6 +188,7 @@ keepCLUSTER = function(f) {
   }
 }
 
+#' @title Get special terms as character vector
 #' @param f A function containing special function terms, e.g. A ~ B + time(1) + time(I(B^2))
 #' @param special The special function, e.g. time
 #' @return A character vector of the terms encapsulated in a special function
@@ -209,7 +210,9 @@ getSpecialTerms = function(f, special) {
     sapply(deparse)
 }
 
+#' @title Get special terms as formula
 #' @details An intercept is added unless the formula contains a special removing it, e.g. time(0)
+#' @keywords internal
 getSpecialFormula = function(f, special) {
   specialTerms = getSpecialTerms(f, special)
 
