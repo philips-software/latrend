@@ -25,10 +25,10 @@ expect_valid_clModel = function(object) {
   expect_is(fitted(object, clusters=clusterAssignments(object)), c('NULL', 'numeric'))
   expect_is(fitted(object, clusters=NULL), c('NULL', 'matrix'))
 
-  expect_true(is.count(nClus(object)))
+  expect_true(is.count(nClusters(object)))
   clusterNames(object) %>%
     expect_is('character') %>%
-    expect_length(nClus(object))
+    expect_length(nClusters(object))
   expect_is(clusterNames(object, factor=TRUE), 'factor')
 
   clusterAssignments(object) %>%
@@ -40,7 +40,7 @@ expect_valid_clModel = function(object) {
 
   postprob(object) %>%
     expect_is('matrix') %T>%
-    {expect_equal(ncol(.), nClus(object))} %T>%
+    {expect_equal(ncol(.), nClusters(object))} %T>%
     {expect_equal(nrow(.), nIds(object))} %T>%
     {expect_gte(min(.), 0)} %T>%
     {expect_lte(max(.), 1)}

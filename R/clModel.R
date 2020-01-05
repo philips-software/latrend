@@ -40,7 +40,7 @@ setMethod('clusterTrajectories', signature('clModel'), function(object, what, at
       setnames('Time', timeVariable(object))
   } else if(is.list(at)) {
     at = as.data.table(at)
-    idx = seq_len(nrow(at)) %>% rep(nClus(object))
+    idx = seq_len(nrow(at)) %>% rep(nClusters(object))
     newdata = data.table(Cluster=rep(clusterNames(object, factor=TRUE), each=nrow(at)), at[idx,])
   } else {
     stop('unsupported input')
@@ -78,7 +78,7 @@ clusterNames = function(object, factor=FALSE) {
 `clusterNames<-` = function(object, value) {
   assert_that(is(object, 'clModel'))
   assert_that(is.character(value))
-  assert_that(length(value) == nClus(object))
+  assert_that(length(value) == nClusters(object))
   object@clusterNames = value
   return(object)
 }
@@ -293,7 +293,7 @@ setMethod('metric', signature('clModel'), function(object, name) {
 #' @keywords internal
 make.clusterAssignments = function(object, clusters, finite=TRUE) {
   clusNames = clusterNames(object)
-  nClus = nClus(object)
+  nClusters = nClusters(object)
 
   assert_that(!finite || !anyNA(clusters), msg='cluster assignments should be finite values')
 
@@ -301,7 +301,7 @@ make.clusterAssignments = function(object, clusters, finite=TRUE) {
     NULL
   } else if(is.factor(clusters)) {
     # factor
-    assert_that(nlevels(clusters) == nClus)
+    assert_that(nlevels(clusters) == nClusters)
     if(all(levels(clusters) == clusNames)) {
       clusters
     } else {
@@ -311,20 +311,20 @@ make.clusterAssignments = function(object, clusters, finite=TRUE) {
   } else if(is.integer(clusters)) {
     # integer
     assert_that(min(clusters) >= 1)
-    assert_that(max(clusters) <= nClus)
+    assert_that(max(clusters) <= nClusters)
 
-    factor(clusters, levels=seq_len(nClus), labels=clusNames)
+    factor(clusters, levels=seq_len(nClusters), labels=clusNames)
   } else if(is.numeric(clusters)) {
     # numeric
     assert_that(all(sapply(clusters, is.count)))
     clusters = as.integer(clusters)
     assert_that(min(clusters) >= 1)
-    assert_that(max(clusters) <= nClus)
+    assert_that(max(clusters) <= nClusters)
 
-    factor(clusters, levels=seq_len(nClus), labels=clusNames)
+    factor(clusters, levels=seq_len(nClusters), labels=clusNames)
   } else if(is.character(clusters)) {
     # character
-    assert_that(uniqueN(clusters) == nClus)
+    assert_that(uniqueN(clusters) == nClusters)
     assert_that(all(clusters %in% clusNames))
 
     factor(clusters, levels=clusNames)
@@ -340,7 +340,7 @@ make.clusterAssignments = function(object, clusters, finite=TRUE) {
 #' @keywords internal
 make.clusterIndices = function(object, clusters, finite=TRUE) {
   clusNames = clusterNames(object)
-  nClus = nClus(object)
+  nClusters = nClusters(object)
 
   assert_that(!finite || !anyNA(clusters), msg='cluster assignments should be finite values')
 
@@ -349,12 +349,12 @@ make.clusterIndices = function(object, clusters, finite=TRUE) {
   } else if(is.integer(clusters)) {
     # integer
     assert_that(min(clusters) >= 1)
-    assert_that(max(clusters) <= nClus)
+    assert_that(max(clusters) <= nClusters)
 
     clusters
   } else if(is.factor(clusters)) {
     # factor
-    assert_that(nlevels(clusters) == nClus)
+    assert_that(nlevels(clusters) == nClusters)
     if(all(levels(clusters) == clusNames)) {
       as.integer(clusters)
     } else {
@@ -367,12 +367,12 @@ make.clusterIndices = function(object, clusters, finite=TRUE) {
     assert_that(all(sapply(clusters, is.count)))
     clusters = as.integer(clusters)
     assert_that(min(clusters) >= 1)
-    assert_that(max(clusters) <= nClus)
+    assert_that(max(clusters) <= nClusters)
 
     clusters
   } else if(is.character(clusters)) {
     # character
-    assert_that(uniqueN(clusters) == nClus)
+    assert_that(uniqueN(clusters) == nClusters)
     assert_that(all(clusters %in% clusNames))
 
     factor(clusters, levels=clusNames) %>%
@@ -444,7 +444,7 @@ nIds = function(object) {
 
 #' @export
 #' @title Number of clusters
-nClus = function(object) {
+nClusters = function(object) {
   assert_that(is(object, 'clModel'))
   length(object@clusterNames)
 }
@@ -619,7 +619,7 @@ summary.clModel = function(object, ...) {
   new('clSummary',
       call=getCall(object),
       name=getName(object),
-      nClus=nClus(object),
+      nClusters=nClusters(object),
       nObs=nobs(object),
       formula=formula(object),
       id=idVariable(object),
@@ -692,7 +692,7 @@ setMethod('trajectories', signature('clModel'), function(object, what, at, clust
 #' @keywords internal
 transformFitted = function(object, predMat, clusters) {
   assert_that(is.matrix(predMat))
-  assert_that(ncol(predMat) == nClus(object))
+  assert_that(ncol(predMat) == nClusters(object))
   assert_that(nrow(predMat) == nobs(object))
 
   if(is.null(clusters)) {
@@ -709,7 +709,7 @@ transformFitted = function(object, predMat, clusters) {
 #' @keywords internal
 transformPredict = function(object, predMat, newdata) {
   assert_that(is.matrix(predMat))
-  assert_that(ncol(predMat) == nClus(object))
+  assert_that(ncol(predMat) == nClusters(object))
   assert_that(nrow(predMat) == nrow(newdata))
 
   if(has_name(newdata, 'Cluster')) {
@@ -748,7 +748,7 @@ update.clModel = function(object, ...) {
 setClass('clSummary',
          representation(call='call',
                         name='character',
-                        nClus='integer',
+                        nClusters='integer',
                         nObs='numeric',
                         id='character',
                         formula='formula',
@@ -767,7 +767,7 @@ setMethod('show', 'clSummary',
             cat('Formula: ')
             print(object@formula)
             cat('\n')
-            sprintf('Cluster sizes (K=%d):\n', object@nClus) %>% cat
+            sprintf('Cluster sizes (K=%d):\n', object@nClusters) %>% cat
             sprintf('%g (%g%%)', object@clusterSizes, round(object@clusterProportions * 100, 1)) %>%
               setNames(object@clusterNames) %>%
               noquote %>%

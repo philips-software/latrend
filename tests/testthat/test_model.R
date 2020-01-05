@@ -5,7 +5,7 @@ model = cluslong(clMethodKML(), data=testLongData)
 test_that('clusterAssignments', {
   clusterAssignments(model) %>%
     expect_is('factor') %T>%
-    {expect_equal(nlevels(.), nClus(model))}
+    {expect_equal(nlevels(.), nClusters(model))}
 })
 
 test_that('make.clusterAssignments', {

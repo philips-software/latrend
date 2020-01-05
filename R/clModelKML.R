@@ -13,7 +13,7 @@ predict.clModelKML = function(object, newdata=NULL, what='mu', approxFun=approx)
 
   # compute cluster trajectories
   trajMat = calculTrajMean(traj=object@model@traj,
-                           clust=getClusters(object@model, nbCluster=nClus(object)),
+                           clust=getClusters(object@model, nbCluster=nClusters(object)),
                            centerMethod=getMethod(object)$center)
 
   if(is.null(newdata)) {
@@ -45,7 +45,7 @@ logLik.clModelKML = function(object) {
   # A negated version of BIC is precomputed by kml package so let's use that
   bic = -getKMLPartition(object)@criterionValues['BIC'] %>% unname
   N = nIds(object)
-  df = nClus(object) * length(modelTimes(object)) + 1
+  df = nClusters(object) * length(modelTimes(object)) + 1
   ll = -.5 * (bic - df * log(N))
   attr(ll, 'nobs') = N
   attr(ll, 'df') = df
@@ -86,5 +86,5 @@ setMethod('modelTimes', signature('clModelKML'), function(object) {
 
 
 getKMLPartition = function(object) {
-  object@model[paste0('c', nClus(object))][[1]]
+  object@model[paste0('c', nClusters(object))][[1]]
 }

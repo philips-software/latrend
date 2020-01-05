@@ -3,7 +3,7 @@ setClass('clModelGMM', contains='clModel')
 
 #' @export
 fitted.clModelGMM = function(object, clusters=clusterAssignments(object)) {
-  predNames = paste0('pred_m', 1:nClus(object))
+  predNames = paste0('pred_m', 1:nClusters(object))
   predMat = object@model$pred[predNames] %>%
     as.matrix %>%
     set_colnames(clusterNames(object))

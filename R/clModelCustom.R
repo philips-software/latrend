@@ -68,7 +68,7 @@ clModelCustom = function(data,
   if(is.null(clusterAssignments)) {
     assert_that(!is.null(postprob), msg='postprob must be specified when clusterAssignments is null')
     clusterAssignments = apply(postprob, 1, which.max)
-    nClus = ncol(postprob)
+    nClusters = ncol(postprob)
     if(is.null(clusterNames)) {
       clusterNames = colnames(postprob)
     }
@@ -80,13 +80,13 @@ clModelCustom = function(data,
       clusterNames = levels(clusterAssignments)
     }
     clusterAssignments = as.integer(clusterAssignments)
-    nClus = max(clusterAssignments)
+    nClusters = max(clusterAssignments)
   }
-  assert_that(nClus >= 1)
+  assert_that(nClusters >= 1)
 
   # postprob generation
   if(is.null(postprob)) {
-    postprob = matrix(0, nrow=nIds, ncol=nClus)
+    postprob = matrix(0, nrow=nIds, ncol=nClusters)
     idxMat = cbind(1:nIds, clusterAssignments)
     postprob[idxMat] = 1
     colnames(postprob) = clusterNames
@@ -94,10 +94,10 @@ clModelCustom = function(data,
 
   # Cluster names
   if(is.null(clusterNames)) {
-    clusterNames = make.clusterNames(nClus)
+    clusterNames = make.clusterNames(nClusters)
   }
   assert_that(is.character(clusterNames))
-  assert_that(length(clusterNames) == nClus)
+  assert_that(length(clusterNames) == nClusters)
 
   # Trajectories
   assert_that(is.null(trajectories) || is.data.frame(trajectories))
@@ -184,7 +184,7 @@ setMethod('clusterTrajectories', signature('clModelCustom'), function(object, wh
   if(all(at %in% time(object))) {
     dt_traj = object@clusterTrajectories %>%
       as.data.table %>%
-      .[, Cluster := factor(Cluster, levels=1:nClus(object), labels=clusterNames(object))]
+      .[, Cluster := factor(Cluster, levels=1:nClusters(object), labels=clusterNames(object))]
   } else if(is.null(object@predict)) {
     stop('predict() not specified for this model')
   } else {
