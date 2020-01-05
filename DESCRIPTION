@@ -43,4 +43,5 @@ Collate:
     'cluslong.R'
     'data.R'
     'formula.R'
+    'matrix.R'
     'zzz.R'
