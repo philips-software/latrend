@@ -195,12 +195,7 @@ deviance.clModel = function(object, ...) {
 #' @export
 #' @title Extract the number of observations from a clModel
 nobs.clModel = function(object, ...) {
-  # check if nobs is defined for the model
-  if (is.null(getS3method('nobs', class=class(object@model), optional=TRUE))) {
-    length(modelResponses(object))
-  } else {
-    nobs(object@model)
-  }
+  length(modelResponses(object))
 }
 
 #' @export
