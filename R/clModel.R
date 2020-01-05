@@ -244,6 +244,8 @@ genIdRowIndices = function(object) {
 
 
 #' @export
+#' @title Extract the id variable name
+#' @family clModel variables
 idVariable = function(object) {
   assert_that(is(object, 'clModel'))
   getMethod(object)$id
@@ -582,6 +584,7 @@ residuals.clModel = function(object, clusters=clusterAssignments(object), ...) {
 #' @export
 #' @title Extract the response variable.
 #' @inheritParams formula.clModel
+#' @family clModel variables
 responseVariable = function(object, what='mu') {
   assert_that(is(object, 'clModel'))
   if(what == 'mu') {
@@ -630,6 +633,8 @@ summary.clModel = function(object, ...) {
 
 
 #' @export
+#' @title Extract the time variable name
+#' @family clModel variables
 timeVariable = function(object) {
   assert_that(is(object, 'clModel'))
   getMethod(object)$time
