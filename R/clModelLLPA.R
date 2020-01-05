@@ -1,28 +1,79 @@
 #' @include clModel.R
 setClass('clModelLLPA', contains='clModel')
 
-setMethod('converged', signature('clModelLLPA'), function(object) {
-  TRUE
-})
 
-setMethod('postprob', signature('clModelLLPA'), function(object, newdata) {
+#' @export
+#' @rdname predict.clModel
+#' @inheritParams predict.clModel
+#' @param approxFun The interpolation function to use for time points not in the feature set.
+predict.clModelLLPA = function(object, newdata=NULL, what='mu', approxFun=approx) {
+  assert_that(is.newdata(newdata))
+  assert_that(what == 'mu', msg='only what="mu" is supported')
+  assert_that(is.function(approxFun))
+
+  # compute cluster trajectories
+  trajMat = object@model$parameters$mean
+
   if(is.null(newdata)) {
-    pp = object@model$z
+    return(fitted(object))
   } else {
-    pp = predict(object@model, newdata=newdata)$z
+    assert_that(has_name(newdata, getTimeName(object)))
+    newtimes = newdata[[getTimeName(object)]]
+    predMat = apply(trajMat, 2, function(y) approxFun(x=time(object), y=y, xout=newtimes)$y)
   }
+
+  transformPredict(object, predMat, newdata=newdata)
+}
+
+
+#' @export
+fitted.clModelLLPA = function(object, clusters=clusterAssignments(object)) {
+  times = time(object)
+  newdata = data.table(Id=rep(modelIds(object), each=length(times)),
+                       Cluster=rep(clusters, each=length(times)),
+                       Time=times) %>%
+    setnames('Id', getIdName(object)) %>%
+    setnames('Time', getTimeName(object))
+  predict(object, newdata=newdata)
+}
+
+
+# . postprob ####
+setMethod('postprob', signature('clModelLLPA'), function(object) {
+  pp = object@model$z
   colnames(pp) = clusterNames(object)
   return(pp)
 })
 
+
+#. predictPostprob ####
+setMethod('predictPostprob', signature('clModelLLPA'), function(object, newdata=NULL) {
+  if(is.null(newdata)) {
+    postprob(object)
+  } else {
+    stop('not implemented')
+    pp = predict(object@model, newdata=newdata)$z
+  }
+})
+
+
+# . converged ####
+setMethod('converged', signature('clModelLLPA'), function(object) {
+  TRUE
+})
+
+
+# . modelIds ####
 setMethod('modelIds', signature('clModelLLPA'), function(object) {
   object@model$data %>% rownames
 })
 
+# . modelTimes ####
 setMethod('modelTimes', signature('clModelLLPA'), function(object) {
   object@model$time
 })
 
+# . modelData ####
 setMethod('modelData', signature('clModelLLPA'), function(object) {
   resp = getResponseName(object)
   id = getIdName(object)
@@ -34,47 +85,4 @@ setMethod('modelData', signature('clModelLLPA'), function(object) {
                     Value=as.numeric(object@model$data)) %>%
     setnames(c(id, time, resp))
   return(data)
-})
-
-
-#' @export
-#' @rdname clusterTrajectories
-#' @param at The time points at which to compute the cluster trajectories.
-#' @param approxFun The interpolation function to use for time points not in the feature set.
-setMethod('clusterTrajectories', signature('clModelLLPA'), function(object, what, at, approxFun=approx) {
-  trajmat = object@model$parameters$mean
-  times = modelTimes(object)
-
-  if(!is.null(at)) {
-    assert_that(all(is.numeric(at)))
-    assert_that(all(is.finite(at)))
-    trajmat = apply(trajmat, 2, function(y) approxFun(x=times, y=y, xout=at)$y) %>% t
-    times = at
-  }
-
-  dt_traj = data.table(Cluster=rep(clusterNames(object, factor=TRUE), each=length(times)),
-                       Time=rep(times, nClus(object)),
-                       Value=as.numeric(trajmat)) %>%
-    setnames(c('Time', 'Value'), c(getTimeName(object), getResponseName(object)))
-  return(dt_traj)
-})
-
-#' @export
-#' @rdname trajectories
-#' @param approxFun The interpolation function to use for time points not in the feature set.
-setMethod('trajectories', signature('clModelLLPA'), function(object, what, at, clusters, approxFun=approx) {
-  dt_ctraj = clusterTrajectories(object, what=what, at=at, approxFun=approxFun)
-  ntime = nrow(dt_ctraj) / nClus(object)
-  id = getIdName(object)
-
-  idx = dt_ctraj[, .I] %>%
-    matrix(ncol=nClus(object)) %>%
-    .[, as.integer(clusters)]
-
-  dt_traj = dt_ctraj[as.vector(idx)] %>%
-    .[, c(id) := rep(modelIds(object), each=ntime)] %>%
-    setkeyv(id) %>%
-    setcolorder
-
-  return(dt_traj[])
 })

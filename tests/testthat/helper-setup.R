@@ -14,9 +14,11 @@ expect_valid_clModel = function(object) {
   expect_is(trajectories(object), 'data.frame')
   expect_true(is.ggplot(plot(object)))
   expect_is(coef(object), 'numeric')
-  expect_is(residuals(object), 'numeric')
+  expect_is(residuals(object, clusters=clusterAssignments(object)), c('NULL', 'numeric'))
+  expect_is(residuals(object, clusters=NULL), c('NULL', 'matrix'))
   expect_is(converged(object), c('logical', 'numeric', 'integer'))
-  expect_is(fitted(object), c('NULL', 'numeric'))
+  expect_is(fitted(object, clusters=clusterAssignments(object)), c('NULL', 'numeric'))
+  expect_is(fitted(object, clusters=NULL), c('NULL', 'matrix'))
 
   expect_true(is.count(nClus(object)))
   clusterNames(object) %>%

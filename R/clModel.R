@@ -42,7 +42,7 @@ getCall.clModel = function(object) {
 #' @title Plot a clModel
 #' @inheritParams clusterTrajectories
 #' @param clusterLabels Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.
-plot.clModel = function(object, what='mu', at=NULL,
+plot.clModel = function(object, what='mu', at=time(object),
                         clusterLabels=sprintf('%s (%g%%)', clusterNames(object), round(clusterProportions(object) * 100))) {
   dt_ctraj = clusterTrajectories(object, what=what, at=at) %>%
     as.data.table %>%
@@ -67,7 +67,8 @@ setMethod('plotTrajectories', signature('clModel'), function(object, ...) {
   plotTrajs(data,
             response=getResponseName(object),
             time=getTimeName(object),
-            id=getIdName(object))
+            id=getIdName(object),
+            cluster='Cluster')
 })
 
 
@@ -130,6 +131,7 @@ summary.clModel = function(object, ...) {
       clusterProportions=clusterProportions(object))
 }
 
+
 #' @export
 #' @title Extract model training data
 model.frame.clModel = function(object) {
@@ -161,23 +163,98 @@ coef.clModel = function(object, ...) {
 
 #' @export
 #' @title Extract clModel fitted values
-#' @param all Whether to return a matrix with the fitted value of each class
-#' @return a vector of the fitted values for the respective class, or a matrix of fitted values for each class.
-fitted.clModel = function(object, all=FALSE) {
+#' @param clusters Optional cluster assignments per id. If unspecified, a matrix is returned containing the cluster-specific predictions per column.
+#' @return A vector of the fitted values for the respective class, or a matrix of fitted values for each cluster.
+fitted.clModel = function(object, clusters=clusterAssignments(object)) {
   if (is.null(getS3method('fitted', class=class(object@model), optional=TRUE))) {
     trajectories(object)[[getResponseName(object)]]
   } else {
+    warning('clusters argument is ignored in direct call to fitted(object@model)')
     fitted(object@model)
   }
 }
 
+#' @title Helper function for ensuring the right fitted() output
+#' @details Includes additional checks
+#' @keywords internal
+transformFitted = function(object, predMat, clusters) {
+  assert_that(is.matrix(predMat))
+  assert_that(ncol(predMat) == nClus(object))
+  assert_that(nrow(predMat) == nobs(object))
+
+  if(is.null(clusters)) {
+    predMat
+  } else {
+    clusters = make.clusterIndices(object, clusters)
+    rowClusters = clusters[genIdRowIndices(object)]
+    rowColumns(predMat, rowClusters)
+  }
+}
+
+#' @title Helper function for ensuring the right fitted() output
+#' @details Includes additional checks
+#' @keywords internal
+transformPredict = function(object, predMat, newdata) {
+  assert_that(is.matrix(predMat))
+  assert_that(ncol(predMat) == nClus(object))
+  assert_that(nrow(predMat) == nrow(newdata))
+
+  if(has_name(newdata, 'Cluster')) {
+    rowClusters = make.clusterIndices(object, newdata$Cluster)
+    rowColumns(predMat, rowClusters)
+  } else {
+    predMat
+  }
+}
+
+#' @export
+#' @rdname predict.clModel
+#' @title clModel prediction
+#' @param newdata Optional data frame for which to compute the model predictions. If omitted, the model training data is used.
+#' Cluster trajectory predictions are made when ids are not specified. If the clusters are specified under the Cluster column, output is given only for the specified cluster. Otherwise, a matrix is returned with predictions for all clusters.
+#' @param what The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying what='mb'.
+#' @return If newdata specifies the cluster membership; a vector of cluster-specific predictions. Otherwise, a matrix of predictions is returned corresponding to each cluster.
+#' @examples
+#' model = cluslong(clMethodGMM(), testLongData)
+#' predFitted = predict(model) # same result as fitted(model)
+#'
+#' predCluster = predict(model, newdata=data.frame(Cluster='A', Time=time(model))) # Cluster trajectory of cluster A
+#'
+#' predId = predict(model, newdata=data.frame(Cluster='A', Id='S1', Time=time(model))) # Prediction for id S1 given cluster A membership
+#'
+#' predIdAll = predict(model, newdata=data.frame(Id='S1', Time=time(model))) # Prediction matrix for id S1 for all clusters
+predict.clModel = function(object, newdata=NULL, what='mu', ...) {
+  stop('not implemented')
+}
+
+# . predictPostprob ####
+#' @export
+#' @title clModel posterior probability prediction
+#' @param newdata Optional data frame for which to compute the posterior probability. If omitted, the model training data is used.
+setGeneric('predictPostprob', function(object, newdata=NULL, ...) standardGeneric('predictPostprob'))
+setMethod('predictPostprob', signature('clModel'), function(object, newdata, ...) {
+  stop('not implemented')
+})
+
+
 #' @export
 #' @title Extract clModel residuals
-residuals.clModel = function(object, ...) {
-  if (is.null(getS3method('residuals', class=class(object@model), optional=TRUE))) {
-    modelResponses(object) - fitted(object)
+#' @inheritParams fitted.clModel
+#' @return A vector of residuals for the cluster assignments specified by clusters. If clusters is unspecified, a matrix of cluster-specific residuals per observations is returned.
+residuals.clModel = function(object, clusters=clusterAssignments(object), ...) {
+  ypred = fitted(object, clusters=clusters, ...)
+  yref = modelResponses(object)
+
+  if(is.matrix(ypred)) {
+    assert_that(length(yref) == nrow(ypred))
+    resMat = matrix(yref, nrow=nrow(ypred), ncol=ncol(ypred)) - ypred
+    colnames(resMat) = colnames(ypred)
+    resMat
+  } else if(is.numeric(ypred)) {
+    assert_that(length(yref) == length(ypred))
+    yref - ypred
   } else {
-    residuals(object@model)
+    return(NULL)
   }
 }
 
@@ -311,7 +388,9 @@ confusionMatrix = function(object) {
 #' clusterAssignments(model, strategy=function(x) which(x > .9)) # only assign ids with a probability over 0.9
 clusterAssignments = function(object, strategy=which.max, ...) {
   assert_that(is(object, 'clModel'))
-  postprob(object) %>% apply(1, which.max) %>% factor(labels=clusterNames(object))
+  postprob(object) %>%
+    apply(1, strategy, ...) %>%
+    factor(labels=clusterNames(object))
 }
 
 #' @title Ensures a proper cluster assignments factor vector
@@ -412,31 +491,54 @@ make.clusterIndices = function(object, clusters, finite=TRUE) {
 #' @export
 #' @rdname clusterTrajectories
 #' @title Extract the cluster trajectories
+#' @description Extracts a data frame of all cluster trajectories.
+#' @inheritParams predict.clModel
+#' @param at An optional vector, list or data frame of covariates at which to compute the cluster trajectory predictions.
+#' If a vector is specified, this is assumed to be the time covariate. Otherwise, a named list or data frame must be provided.
 #' @return A data.frame of the estimated values at the given times
 #' @examples
-#' model = cluslong(method=clMethodKML(), data=testLongData)
+#' model = cluslong(method=clMethodGMM(), data=testLongData)
 #' clusterTrajectories(model)
 #'
 #' clusterTrajectories(model, at=c(0, .5, 1))
-setGeneric('clusterTrajectories', function(object, what='mu', at=NULL, ...) standardGeneric('clusterTrajectories'))
+setGeneric('clusterTrajectories', function(object, what='mu', at=time(object), ...) standardGeneric('clusterTrajectories'))
+setMethod('clusterTrajectories', signature('clModel'), function(object, what, at, ...) {
+  if(is.numeric(at)) {
+    newdata = data.table(Cluster=rep(clusterNames(object, factor=TRUE), each=length(at)), Time=at) %>%
+      setnames('Time', getTimeName(object))
+  } else if(is.list(at)) {
+    at = as.data.table(at)
+    idx = seq_len(nrow(at)) %>% rep(nClus(object))
+    newdata = data.table(Cluster=rep(clusterNames(object, factor=TRUE), each=nrow(at)), at[idx,])
+  } else {
+    stop('unsupported input')
+  }
+
+  predMat = predict(object, newdata=newdata, what=what, ...)
+
+  assert_that(is.vector(predMat), msg='invalid output from predict function of clModel; expected vector')
+  assert_that(length(predMat) == nrow(newdata), msg='invalid output from predict function of clModel; expected a prediction per newdata row')
+  newdata[, c(getResponseName(object, what=what)) := as.numeric(predMat)]
+  return(newdata[])
+})
+
 
 #' @export
-#' @title Posterior probability per strata
+#' @title Posterior probability per fitted id
 #' @examples
-#' model = cluslong(method=clMethodKML(), data=testLongData)
+#' model = cluslong(clMethodGMM(), data=testLongData)
 #' postprob(model)
-setGeneric('postprob', function(object, newdata=NULL, ...) standardGeneric('postprob'))
-#' @export
-postprob.clModel = function(object, ...) {
-  # ensure compatibility with any S3 definitions
-  postprob(object, ...)
-}
+setGeneric('postprob', function(object, ...) standardGeneric('postprob'))
+setMethod('postprob', signature('clModel'), function(object) {
+  predictPostprob(object, newdata=NULL)
+})
 
+# . converged ####
 #' @export
 #' @title Whether the model converged
 setGeneric('converged', function(object, ...) standardGeneric('converged'))
 
-
+# . trajectories ####
 #' @export
 #' @rdname trajectories
 #' @title Extract the fitted trajectories for all strata
@@ -448,7 +550,39 @@ setGeneric('converged', function(object, ...) standardGeneric('converged'))
 #' trajectories(model)
 #'
 #' trajectories(model, at=c(0, .5, 1))
-setGeneric('trajectories', function(object, what='mu', at=NULL, clusters=clusterAssignments(object), ...) standardGeneric('trajectories'))
+setGeneric('trajectories', function(object, what='mu', at=time(object), clusters=clusterAssignments(object), ...) standardGeneric('trajectories'))
+setMethod('trajectories', signature('clModel'), function(object, what, at, clusters) {
+  ids = modelIds(object)
+  assert_that(length(clusters) == nIds(object))
+
+  if(is.numeric(at)) {
+    newdata = data.table(Id=rep(ids, each=length(at)),
+                         Cluster=rep(clusters, each=length(at)),
+                         Time=at) %>%
+      setnames('Id', getIdName(object)) %>%
+      setnames('Time', getTimeName(object))
+  } else if(is.list(at)) {
+    assert_that(has_name(at, getTimeName(object)), msg='Named list at must contain the time covariate')
+    assert_that(!has_name(at, c(getIdName(object), 'Cluster')))
+
+    at = as.data.table(at)
+    idx = seq_len(nrow(at)) %>% rep(length(ids))
+    newdata = data.table(Id=rep(ids, each=nrow(at)),
+                         Cluster=rep(clusters, each=nrow(at)),
+                         at[idx,]) %>%
+      setnames('Id', getIdName(object))
+  } else {
+    stop('unsupported input')
+  }
+
+  preds = predict(object, newdata=newdata, what=what)
+
+  assert_that(is.vector(preds), msg='invalid output from predict function of clModel; expected vector')
+  assert_that(length(preds) == nrow(newdata), msg='invalid output from predict function of clModel; expected a prediction per newdata row')
+  newdata[, c(getResponseName(object, what=what)) := preds]
+  return(newdata)
+})
+
 
 #' @export
 #' @title Compute model metric(s)

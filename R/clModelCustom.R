@@ -157,14 +157,16 @@ setMethod('modelData', signature('clModelCustom'), function(object) object@data)
 
 setMethod('converged', signature('clModelCustom'), function(object) object@converged)
 
-setMethod('postprob', signature('clModelCustom'), function(object, newdata, ...) {
-  if(is.null(newdata)) {
-    pp = object@postprob
-  } else if(is.null(object@predict)) {
-    stop('predictPostprob() not specified for this model')
-  } else {
-    pp = object@predictPostprob(object, newdata, ...)
-  }
+setMethod('postprob', signature('clModelCustom'), function(object) {
+  pp = object@postprob
+  colnames(pp) = clusterNames(object)
+  return(pp)
+})
+
+
+#. predictPostprob ####
+setMethod('predictPostprob', signature('clModelCustom'), function(object, newdata=NULL, ...) {
+  pp = object@predictPostprob(object, newdata, ...)
 
   assert_that(is.matrix(pp))
   assert_that(nrow(pp) == nIds(object))
@@ -177,8 +179,9 @@ setMethod('postprob', signature('clModelCustom'), function(object, newdata, ...)
   return(pp)
 })
 
+
 setMethod('clusterTrajectories', signature('clModelCustom'), function(object, what, at, ...) {
-  if(is.null(at)) {
+  if(all(at %in% time(object))) {
     dt_traj = object@clusterTrajectories %>%
       as.data.table %>%
       .[, Cluster := factor(Cluster, levels=1:nClus(object), labels=clusterNames(object))]
@@ -191,7 +194,7 @@ setMethod('clusterTrajectories', signature('clModelCustom'), function(object, wh
 })
 
 setMethod('trajectories', signature('clModelCustom'), function(object, what, at, ...) {
-  if(is.null(at)) {
+  if(all(at %in% time(object))) {
     object@trajectories
   } else {
     stop('not supported')

@@ -1,15 +1,42 @@
 #' @include clModel.R
 setClass('clModelKML', contains='clModel')
 
-#' @export
-fitted.clModelKML = function(object) {
-  dt_ctraj = clusterTrajectories(object)
-  clusters = getClusters(object@model, nClus(object))
 
-  dt_ctraj[[getResponseName(object)]] %>%
-    matrix(ncol=nClus(object)) %>%
-    .[, as.integer(clusters)] %>%
-    as.numeric
+#' @export
+#' @rdname predict.clModel
+#' @inheritParams predict.clModel
+#' @param approxFun The interpolation function to use for time points not in the feature set.
+predict.clModelKML = function(object, newdata=NULL, what='mu', approxFun=approx) {
+  assert_that(is.newdata(newdata))
+  assert_that(what == 'mu', msg='only what="mu" is supported')
+  assert_that(is.function(approxFun))
+
+  # compute cluster trajectories
+  trajMat = calculTrajMean(traj=object@model@traj,
+                           clust=getClusters(object@model, nbCluster=nClus(object)),
+                           centerMethod=getMethod(object)$center)
+
+  if(is.null(newdata)) {
+    return(fitted(object))
+  } else {
+    assert_that(has_name(newdata, getTimeName(object)))
+    newtimes = newdata[[getTimeName(object)]]
+    predMat = apply(trajMat, 1, function(y) approxFun(x=time(object), y=y, xout=newtimes)$y)
+  }
+
+  transformPredict(object, predMat, newdata=newdata)
+}
+
+
+#' @export
+fitted.clModelKML = function(object, clusters=clusterAssignments(object)) {
+  times = time(object)
+  newdata = data.table(Id=rep(modelIds(object), each=length(times)),
+                       Cluster=rep(clusters, each=length(times)),
+                       Time=times) %>%
+    setnames('Id', getIdName(object)) %>%
+    setnames('Time', getTimeName(object))
+  predict(object, newdata=newdata)
 }
 
 
@@ -32,12 +59,8 @@ setMethod('converged', signature('clModelKML'), function(object) {
 })
 
 
-setMethod('postprob', signature('clModelKML'), function(object, newdata) {
-  if(is.null(newdata)) {
-    pp = getKMLPartition(object)@postProba
-  } else {
-    stop('not supported')
-  }
+setMethod('postprob', signature('clModelKML'), function(object) {
+  pp = getKMLPartition(object)@postProba
   colnames(pp) = clusterNames(object)
   return(pp)
 })
@@ -59,51 +82,6 @@ setMethod('modelData', signature('clModelKML'), function(object) {
 
 setMethod('modelTimes', signature('clModelKML'), function(object) {
   object@model@time
-})
-
-#' @export
-#' @rdname clusterTrajectories
-#' @param at The time points at which to compute the cluster trajectories.
-#' @param approxFun The interpolation function to use for time points not in the feature set.
-setMethod('clusterTrajectories', signature('clModelKML'), function(object, what, at, approxFun=approx) {
-  trajmat = calculTrajMean(traj=object@model@traj,
-                 clust=getClusters(object@model, nbCluster=nClus(object)),
-                 centerMethod=getMethod(object)$center)
-
-  times = modelTimes(object)
-
-  if(!is.null(at)) {
-    assert_that(all(is.numeric(at)))
-    assert_that(all(is.finite(at)))
-    trajmat = apply(trajmat, 1, function(y) approxFun(x=times, y=y, xout=at)$y) %>% t
-    times = at
-  }
-
-  dt_traj = data.table(Cluster=rep(clusterNames(object, factor=TRUE), each=length(times)),
-                       Time=rep(times, nClus(object)),
-                       Value=as.numeric(t(trajmat))) %>%
-    setnames(c('Time', 'Value'), c(getTimeName(object), getResponseName(object)))
-  return(dt_traj)
-})
-
-#' @export
-#' @rdname trajectories
-#' @param approxFun The interpolation function to use for time points not in the feature set.
-setMethod('trajectories', signature('clModelKML'), function(object, what, at, clusters, approxFun=approx) {
-  dt_ctraj = clusterTrajectories(object, what=what, at=at, approxFun=approxFun)
-  ntime = nrow(dt_ctraj) / nClus(object)
-  id = getIdName(object)
-
-  idx = dt_ctraj[, .I] %>%
-    matrix(ncol=nClus(object)) %>%
-    .[, as.integer(clusters)]
-
-  dt_traj = dt_ctraj[as.vector(idx)] %>%
-    .[, c(id) := rep(object@model@idAll, each=ntime)] %>%
-    setkeyv(id) %>%
-    setcolorder
-
-  return(dt_traj[]) #[] to ensure the return table is printed
 })
 
 
