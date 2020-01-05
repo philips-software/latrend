@@ -187,3 +187,38 @@ keepCLUSTER = function(f) {
                 env=environment(f))
   }
 }
+
+#' @param f A function containing special function terms, e.g. A ~ B + time(1) + time(I(B^2))
+#' @param special The special function, e.g. time
+#' @return A character vector of the terms encapsulated in a special function
+#' @keywords internal
+getSpecialTerms = function(f, special) {
+  assert_that(is.scalar(special))
+  tt = terms(f, specials=special)
+
+  vars = attr(tt, 'variables')
+  specialIdx = attr(tt, 'specials')[[special]]
+
+  if(length(specialIdx) == 0) {
+    return(character())
+  }
+
+  vars[specialIdx+1] %>%
+    as.list %>%
+    lapply('[[', -1) %>%
+    sapply(deparse)
+}
+
+#' @details An intercept is added unless the formula contains a special removing it, e.g. time(0)
+getSpecialFormula = function(f, special) {
+  specialTerms = getSpecialTerms(f, special)
+
+  if(length(specialTerms) == 0) {
+    update(f, ~1)
+  } else {
+    reformulate(specialTerms,
+              response=getResponse(f),
+              intercept=TRUE,
+              env=environment(f))
+  }
+}
