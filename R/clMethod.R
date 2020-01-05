@@ -23,6 +23,7 @@ setMethod('show', 'clMethod',
 #' @title Check validity of the arguments in the respective environment.
 #' @description Arguments missing from the environment are skipped.
 #' @param envir The environment in which to evaluate the arguments.
+#' @family clMethod
 setGeneric('checkArgs', function(object, envir=parent.frame(), ...) standardGeneric('checkArgs'))
 setMethod('checkArgs', signature('clMethod'), function(object, envir) {})
 
@@ -59,6 +60,7 @@ setMethod('getName0', signature('clMethod'), getName)
 #' @examples
 #' m = clMethodKML(Value ~ Time)
 #' formula(m) # Value ~ Time
+#' @family clMethod
 formula.clMethod = function(object, what='mu', envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
   assert_that(is.scalar(what), is.character(what))
@@ -74,6 +76,7 @@ formula.clMethod = function(object, what='mu', envir=NULL) {
 #' @examples
 #' m = clMethodKML()
 #' names(m)
+#' @family clMethod
 setMethod('names', signature('clMethod'), function(x) {
   names(getCall(x))[-1]
 })
@@ -84,6 +87,7 @@ setMethod('names', signature('clMethod'), function(x) {
 #' @examples
 #' m = clMethodKML()
 #' m$nClusters
+#' @family clMethod
 setMethod('$', signature('clMethod'), function(x, name) {
   x[[name]]
 })
@@ -100,6 +104,7 @@ setMethod('$', signature('clMethod'), function(x, name) {
 #' K = 2
 #' m = clMethodKML(nClusters=K)
 #' m[['nClusters', eval=FALSE]] # K
+#' @family clMethod
 setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
   envir = clMethod.env(x, parent.frame(3), envir)
   if (is.character(i)) {
@@ -126,6 +131,7 @@ setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
 
 
 #' @export
+#' @family clMethod
 getCall.clMethod = function(object) {
   object@call
 }
@@ -138,6 +144,7 @@ getCall.clMethod = function(object) {
 #' m2 = update(m, formula=~ . + Time)
 #'
 #' m3 = update(m2, start='randomAll')
+#' @family clMethod
 update.clMethod = function(object, ..., envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
   ucall = match.call() %>% tail(-2)
@@ -167,6 +174,7 @@ update.clMethod = function(object, ..., envir=NULL) {
 #' @examples
 #' method = clMethodKML()
 #' as.list(method)
+#' @family clMethod
 as.list.clMethod = function(object, eval=TRUE, envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
   if (eval) {
@@ -183,6 +191,7 @@ as.list.clMethod = function(object, eval=TRUE, envir=NULL) {
 #' @title Substitute the call arguments
 #' @param envir The environment in which to evaluate the arguments.
 #' @return A new call with the substituted arguments.
+#' @family clMethod
 substitute.clMethod = function(object, envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
   assert_that(is(object, 'clMethod'))
