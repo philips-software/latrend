@@ -319,6 +319,101 @@ clusterAssignments = function(object, strategy=which.max, ...) {
   postprob(object) %>% apply(1, which.max) %>% factor(labels=clusterNames(object))
 }
 
+#' @title Ensures a proper cluster assignments factor vector
+#' @param finite Whether to check for missing or non-finite values.
+#' @return Factor cluster assignments.
+#' @keywords internal
+make.clusterAssignments = function(object, clusters, finite=TRUE) {
+  clusNames = clusterNames(object)
+  nClus = nClus(object)
+
+  assert_that(!finite || !anyNA(clusters), msg='cluster assignments should be finite values')
+
+  if(is.null(clusters)) {
+    NULL
+  } else if(is.factor(clusters)) {
+    # factor
+    assert_that(nlevels(clusters) == nClus)
+    if(all(levels(clusters) == clusNames)) {
+     clusters
+    } else {
+      assert_that(all(levels(clusters) %in% clusNames))
+      factor(clusters, levels=clusNames)
+    }
+  } else if(is.integer(clusters)) {
+    # integer
+    assert_that(min(clusters) >= 1)
+    assert_that(max(clusters) <= nClus)
+
+    factor(clusters, levels=seq_len(nClus), labels=clusNames)
+  } else if(is.numeric(clusters)) {
+    # numeric
+    assert_that(all(sapply(clusters, is.count)))
+    clusters = as.integer(clusters)
+    assert_that(min(clusters) >= 1)
+    assert_that(max(clusters) <= nClus)
+
+    factor(clusters, levels=seq_len(nClus), labels=clusNames)
+  } else if(is.character(clusters)) {
+    # character
+    assert_that(uniqueN(clusters) == nClus)
+    assert_that(all(clusters %in% clusNames))
+
+    factor(clusters, levels=clusNames)
+  } else {
+    stop('unsupported clusters input type; expected factor, numeric, or character')
+  }
+}
+
+#' @title Ensure a proper cluster index vector
+#' @inheritParams make.clusterAssignments
+#' @seealso make.clusterAssignments
+#' @keywords internal
+make.clusterIndices = function(object, clusters, finite=TRUE) {
+  clusNames = clusterNames(object)
+  nClus = nClus(object)
+
+  assert_that(!finite || !anyNA(clusters), msg='cluster assignments should be finite values')
+
+  if(is.null(clusters)) {
+    NULL
+  } else if(is.integer(clusters)) {
+    # integer
+    assert_that(min(clusters) >= 1)
+    assert_that(max(clusters) <= nClus)
+
+    clusters
+  } else if(is.factor(clusters)) {
+    # factor
+    assert_that(nlevels(clusters) == nClus)
+    if(all(levels(clusters) == clusNames)) {
+      as.integer(clusters)
+    } else {
+      assert_that(all(levels(clusters) %in% clusNames))
+      factor(clusters, levels=clusNames) %>%
+        as.integer
+    }
+  } else if(is.numeric(clusters)) {
+    # numeric
+    assert_that(all(sapply(clusters, is.count)))
+    clusters = as.integer(clusters)
+    assert_that(min(clusters) >= 1)
+    assert_that(max(clusters) <= nClus)
+
+    clusters
+  } else if(is.character(clusters)) {
+    # character
+    assert_that(uniqueN(clusters) == nClus)
+    assert_that(all(clusters %in% clusNames))
+
+    factor(clusters, levels=clusNames) %>%
+      as.integer
+  } else {
+    stop('unsupported clusters input type; expected factor, numeric, or character')
+  }
+}
+
+# . clusterTrajectories ####
 #' @export
 #' @rdname clusterTrajectories
 #' @title Extract the cluster trajectories
