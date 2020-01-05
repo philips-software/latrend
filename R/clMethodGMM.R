@@ -156,7 +156,7 @@ gmm_finalize = function(method, data, fitEnv) {
   model = new('clModelGMM',
               method=method,
               model=fitEnv$model,
-              clusterNames=genClusNames(method$nClusters))
+              clusterNames=make.clusterNames(method$nClusters))
   return(model)
 }
 setMethod('finalize', signature('clMethodGMM'), gmm_finalize)

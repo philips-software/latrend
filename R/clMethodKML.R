@@ -133,7 +133,7 @@ kml_finalize = function(method, data, fitEnv) {
   model = new('clModelKML',
               method=method,
               model=fitEnv$cld,
-              clusterNames=genClusNames(method$nClusters))
+              clusterNames=make.clusterNames(method$nClusters))
   return(model)
 }
 setMethod('finalize', signature('clMethodKML'), kml_finalize)

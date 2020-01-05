@@ -208,11 +208,6 @@ formula.clModel = function(object, what='mu') {
 }
 
 
-genClusNames = function(n) {
-  LETTERS[seq_len(n)]
-}
-
-
 #' @export
 getCall.clModel = function(object) {
   object@call
@@ -403,6 +398,10 @@ make.clusterIndices = function(object, clusters, finite=TRUE) {
   }
 }
 
+
+make.clusterNames = function(n) {
+  LETTERS[seq_len(n)]
+}
 
 
 #' @export

@@ -94,7 +94,7 @@ clModelCustom = function(data,
 
   # Cluster names
   if(is.null(clusterNames)) {
-    clusterNames = genClusNames(nClus)
+    clusterNames = make.clusterNames(nClus)
   }
   assert_that(is.character(clusterNames))
   assert_that(length(clusterNames) == nClus)

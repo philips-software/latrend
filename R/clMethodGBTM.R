@@ -77,6 +77,6 @@ setMethod('finalize', signature('clMethodGBTM'), function(method, data, fitEnv) 
   model = new('clModelGBTM',
               method=method,
               model=fitEnv$model,
-              clusterNames=genClusNames(method$nClusters))
+              clusterNames=make.clusterNames(method$nClusters))
   return(model)
 })
