@@ -19,13 +19,6 @@ setMethod('initialize', 'clModel', function(.Object, ...) {
 })
 
 
-setMethod('getName', signature('clModel'), function(object) getMethod(object) %>% getName)
-
-setMethod('getName0', signature('clModel'), function(object) getMethod(object) %>% getName0)
-
-
-
-
 # . clusterTrajectories ####
 #' @export
 #' @rdname clusterTrajectories
@@ -231,6 +224,13 @@ getMethod = function(object) {
   assert_that(is(object, 'clModel'))
   object@method
 }
+
+
+# . getName ####
+setMethod('getName', signature('clModel'), function(object) getMethod(object) %>% getName)
+
+# . getName0 ####
+setMethod('getName0', signature('clModel'), function(object) getMethod(object) %>% getName0)
 
 
 #' @export
