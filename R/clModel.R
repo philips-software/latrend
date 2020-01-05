@@ -451,6 +451,13 @@ setMethod('modelTimes', signature('clModel'), function(object) {
   sort(unique(data[[getMethod(object)$time]]))
 })
 
+#' @export
+#' @title Sampling times of a clModel
+#' @description Identical to modelTimes(object)
+time.clModel = function(object) {
+  modelTimes(object)
+}
+
 # Model summary ####
 setClass('clSummary',
          representation(call='call',
