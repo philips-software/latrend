@@ -307,10 +307,14 @@ confusionMatrix = function(object) {
 
 #' @export
 #' @title Get the cluster membership for each strata
+#' @param strategy A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.
+#' @param ... Any additional arguments passed to the strategy function.
 #' @examples
 #' model = cluslong(method=clMethodKML(), data=testLongData)
 #' clusterAssignments(model)
-clusterAssignments = function(object) {
+#'
+#' clusterAssignments(model, strategy=function(x) which(x > .9)) # only assign ids with a probability over 0.9
+clusterAssignments = function(object, strategy=which.max, ...) {
   assert_that(is(object, 'clModel'))
   postprob(object) %>% apply(1, which.max) %>% factor(labels=clusterNames(object))
 }
