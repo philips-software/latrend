@@ -24,6 +24,7 @@ RoxygenNote: 6.1.1
 Suggests: 
     testthat
 Collate: 
+    'assert.R'
     'clMethod.R'
     'clMethodCustom.R'
     'clMethodGMM.R'
