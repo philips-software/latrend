@@ -3,5 +3,5 @@ is.named = function(x) {
 }
 
 is.newdata = function(x) {
-  is.list(x) && is.named(x)
+  is.null(x) || is.list(x) && is.named(x)
 }
