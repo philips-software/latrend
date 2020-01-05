@@ -80,18 +80,3 @@ setMethod('converged', signature('clModelGMM'), function(object) {
 setMethod('modelData', signature('clModelGMM'), function(object) {
   object@model$data
 })
-
-# setMethod('trajectories', signature('clModelGMM'), function(object, what, at, clusters) {
-#   id = getIdName(object)
-#
-#   if(is.null(at)) {
-#     predNames = paste0('pred_m', 1:nClus(object))
-#     dt_pred = object@model$pred[, c(id, predNames)] %>%
-#       as.data.table %>%
-#       .[, c(id) := modelIds(object)[get(id)]] %>%
-#       setnames(predNames, clusterNames(object))
-#     return(dt_pred[])
-#   } else {
-#     stop('not supported')
-#   }
-# })

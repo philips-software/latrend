@@ -76,7 +76,7 @@ setMethod('clusterTrajectories', signature('clModelMixTVEM'), function(object, w
 #' @export
 #' @rdname trajectories
 setMethod('trajectories', signature('clModelMixTVEM'), function(object, what, at, clusters) {
-  id = getIdName(object)
+  id = idVariable(object)
 
   if(is.null(at)) {
     fitmat = fitted(object)

@@ -37,7 +37,7 @@ setGeneric('clusterTrajectories', function(object, what='mu', at=time(object), .
 setMethod('clusterTrajectories', signature('clModel'), function(object, what, at, ...) {
   if(is.numeric(at)) {
     newdata = data.table(Cluster=rep(clusterNames(object, factor=TRUE), each=length(at)), Time=at) %>%
-      setnames('Time', getTimeName(object))
+      setnames('Time', timeVariable(object))
   } else if(is.list(at)) {
     at = as.data.table(at)
     idx = seq_len(nrow(at)) %>% rep(nClus(object))
@@ -50,7 +50,7 @@ setMethod('clusterTrajectories', signature('clModel'), function(object, what, at
 
   assert_that(is.vector(predMat), msg='invalid output from predict function of clModel; expected vector')
   assert_that(length(predMat) == nrow(newdata), msg='invalid output from predict function of clModel; expected a prediction per newdata row')
-  newdata[, c(getResponseName(object, what=what)) := as.numeric(predMat)]
+  newdata[, c(responseVariable(object, what=what)) := as.numeric(predMat)]
   return(newdata[])
 })
 
@@ -185,7 +185,7 @@ df.residual.clModel = function(object, ...) {
 #' @return A vector of the fitted values for the respective class, or a matrix of fitted values for each cluster.
 fitted.clModel = function(object, clusters=clusterAssignments(object)) {
   if (is.null(getS3method('fitted', class=class(object@model), optional=TRUE))) {
-    trajectories(object)[[getResponseName(object)]]
+    trajectories(object)[[responseVariable(object)]]
   } else {
     warning('clusters argument is ignored in direct call to fitted(object@model)')
     fitted(object@model)
@@ -233,38 +233,20 @@ setMethod('getName', signature('clModel'), function(object) getMethod(object) %>
 setMethod('getName0', signature('clModel'), function(object) getMethod(object) %>% getName0)
 
 
-#' @export
-getResponseName = function(object, what='mu') {
-  assert_that(is(object, 'clModel'))
-  if(what == 'mu') {
-    formula(object) %>% getResponse
-  } else {
-    formula(object) %>% getResponse %>% paste(what, sep='.')
-  }
-}
-
-
-#' @export
-getIdName = function(object) {
-  assert_that(is(object, 'clModel'))
-  getMethod(object)$id
-}
-
-
-#' @export
-getTimeName = function(object) {
-  assert_that(is(object, 'clModel'))
-  getMethod(object)$time
-}
-
-
 #' @title Generate a vector indicating the id-number (between 1 and numIds()) per row
 #' @details The id order is determined by the output of modelIds()
 #' @keywords internal
 genIdRowIndices = function(object) {
-  modelData(object)[[getIdName(object)]] %>%
+  modelData(object)[[idVariable(object)]] %>%
     factor(levels=modelIds(object)) %>%
     as.integer
+}
+
+
+#' @export
+idVariable = function(object) {
+  assert_that(is(object, 'clModel'))
+  getMethod(object)$id
 }
 
 
@@ -428,7 +410,7 @@ setGeneric('modelData', function(object) standardGeneric('modelData'))
 setGeneric('modelResponses', function(object) standardGeneric('modelResponses'))
 setMethod('modelResponses', signature('clModel'), function(object) {
   data = modelData(object)
-  data[[getResponseName(object)]]
+  data[[responseVariable(object)]]
 })
 
 
@@ -437,7 +419,7 @@ setMethod('modelResponses', signature('clModel'), function(object) {
 setGeneric('modelIds', function(object) standardGeneric('modelIds'))
 setMethod('modelIds', signature('clModel'), function(object) {
   data = modelData(object)
-  data[[getIdName(object)]] %>% unique
+  data[[idVariable(object)]] %>% unique
 })
 
 
@@ -514,8 +496,8 @@ plot.clModel = function(object, what='mu', at=time(object),
     as.data.table %>%
     .[, Cluster := factor(Cluster, levels=levels(Cluster), labels=clusterLabels)]
   ggplot(data=dt_ctraj,
-         mapping=aes_string(x=getTimeName(object),
-                            y=getResponseName(object, what=what),
+         mapping=aes_string(x=timeVariable(object),
+                            y=responseVariable(object, what=what),
                             color='Cluster',
                             shape='Cluster')) +
     theme(legend.position='top') +
@@ -531,9 +513,9 @@ plot.clModel = function(object, what='mu', at=time(object),
 setMethod('plotTrajectories', signature('clModel'), function(object, ...) {
   data = trajectories(object, ...)
   plotTrajs(data,
-            response=getResponseName(object),
-            time=getTimeName(object),
-            id=getIdName(object),
+            response=responseVariable(object),
+            time=timeVariable(object),
+            id=idVariable(object),
             cluster='Cluster')
 })
 
@@ -559,7 +541,7 @@ setMethod('postprob', signature('clModel'), function(object) {
 setGeneric('plotQQ', function(object, byCluster=FALSE, ...) standardGeneric('plotQQ'))
 setMethod('plotQQ', signature('clModel'), function(object, byCluster, ...) {
   assert_that(is(object, 'clModel'))
-  rowClusters = clusterAssignments(object)[modelData(object)[[getIdName(object)]]]
+  rowClusters = clusterAssignments(object)[modelData(object)[[idVariable(object)]]]
 
   p = ggplot(data=data.frame(Cluster=rowClusters, res=residuals(object)), aes(sample=res)) +
     qqplotr::geom_qq_band(...) +
@@ -597,6 +579,19 @@ residuals.clModel = function(object, clusters=clusterAssignments(object), ...) {
 }
 
 
+#' @export
+#' @title Extract the response variable.
+#' @inheritParams formula.clModel
+responseVariable = function(object, what='mu') {
+  assert_that(is(object, 'clModel'))
+  if(what == 'mu') {
+    formula(object) %>% getResponse
+  } else {
+    formula(object) %>% getResponse %>% paste(what, sep='.')
+  }
+}
+
+
 # . show ####
 setMethod('show', 'clModel', function(object) {
   summary(object) %>% show
@@ -624,13 +619,20 @@ summary.clModel = function(object, ...) {
       nClus=nClus(object),
       nObs=nobs(object),
       formula=formula(object),
-      id=getIdName(object),
+      id=idVariable(object),
       coefficients=coef(object),
       residuals=residuals(object),
       clusterNames=clusterNames(object),
       clusterAssignments=clusterAssignments(object),
       clusterSizes=clusterSizes(object),
       clusterProportions=clusterProportions(object))
+}
+
+
+#' @export
+timeVariable = function(object) {
+  assert_that(is(object, 'clModel'))
+  getMethod(object)$time
 }
 
 
@@ -655,18 +657,18 @@ setMethod('trajectories', signature('clModel'), function(object, what, at, clust
     newdata = data.table(Id=rep(ids, each=length(at)),
                          Cluster=rep(clusters, each=length(at)),
                          Time=at) %>%
-      setnames('Id', getIdName(object)) %>%
-      setnames('Time', getTimeName(object))
+      setnames('Id', idVariable(object)) %>%
+      setnames('Time', timeVariable(object))
   } else if(is.list(at)) {
-    assert_that(has_name(at, getTimeName(object)), msg='Named list at must contain the time covariate')
-    assert_that(!has_name(at, c(getIdName(object), 'Cluster')))
+    assert_that(has_name(at, timeVariable(object)), msg='Named list at must contain the time covariate')
+    assert_that(!has_name(at, c(idVariable(object), 'Cluster')))
 
     at = as.data.table(at)
     idx = seq_len(nrow(at)) %>% rep(length(ids))
     newdata = data.table(Id=rep(ids, each=nrow(at)),
                          Cluster=rep(clusters, each=nrow(at)),
                          at[idx,]) %>%
-      setnames('Id', getIdName(object))
+      setnames('Id', idVariable(object))
   } else {
     stop('unsupported input')
   }
@@ -675,7 +677,7 @@ setMethod('trajectories', signature('clModel'), function(object, what, at, clust
 
   assert_that(is.vector(preds), msg='invalid output from predict function of clModel; expected vector')
   assert_that(length(preds) == nrow(newdata), msg='invalid output from predict function of clModel; expected a prediction per newdata row')
-  newdata[, c(getResponseName(object, what=what)) := preds]
+  newdata[, c(responseVariable(object, what=what)) := preds]
   return(newdata)
 })
 

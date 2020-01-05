@@ -19,8 +19,8 @@ predict.clModelKML = function(object, newdata=NULL, what='mu', approxFun=approx)
   if(is.null(newdata)) {
     return(fitted(object))
   } else {
-    assert_that(has_name(newdata, getTimeName(object)))
-    newtimes = newdata[[getTimeName(object)]]
+    assert_that(has_name(newdata, timeVariable(object)))
+    newtimes = newdata[[timeVariable(object)]]
     predMat = apply(trajMat, 1, function(y) approxFun(x=time(object), y=y, xout=newtimes)$y)
   }
 
@@ -34,8 +34,8 @@ fitted.clModelKML = function(object, clusters=clusterAssignments(object)) {
   newdata = data.table(Id=rep(modelIds(object), each=length(times)),
                        Cluster=rep(clusters, each=length(times)),
                        Time=times) %>%
-    setnames('Id', getIdName(object)) %>%
-    setnames('Time', getTimeName(object))
+    setnames('Id', idVariable(object)) %>%
+    setnames('Time', timeVariable(object))
   predict(object, newdata=newdata)
 }
 
@@ -67,9 +67,9 @@ setMethod('postprob', signature('clModelKML'), function(object) {
 
 
 setMethod('modelData', signature('clModelKML'), function(object) {
-  resp = getResponseName(object)
-  id = getIdName(object)
-  time = getTimeName(object)
+  resp = responseVariable(object)
+  id = idVariable(object)
+  time = timeVariable(object)
   times = modelTimes(object)
 
   data = data.table(Id=rep(object@model@idAll, each=length(times)),
