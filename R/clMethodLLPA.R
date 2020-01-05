@@ -14,6 +14,7 @@ setClass('clMethodLLPA', contains='clMethod')
 #' method = clMethodLLPA(Measurement ~ 1,
 #'                      time='Assessment',
 #'                      id='Id', nClusters=3)
+#' @family clMethod classes
 clMethodLLPA = function(formula=Value ~ 1,
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),

@@ -24,6 +24,7 @@ setValidity('clMethodGCKM', function(object) {
 #' method = clMethodGCKM(Measurement ~ Assessment + (Assessment | Subject),
 #'                      time='Assessment',
 #'                      id='Subject', nClusters=3)
+#' @family clMethod classes
 clMethodGCKM = function(formula=Value ~ 1,
                         time=getOption('cluslong.time'),
                         id=getOption('cluslong.id'),

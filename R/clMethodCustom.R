@@ -19,6 +19,7 @@ setClass('clMethodCustom', contains='clMethod')
 #' method = clMethodCustom(fun=clusfun)
 #' model = cluslong(method, testLongData)
 #' summary(model)
+#' @family clMethod classes
 clMethodCustom = function(fun,
                        center=meanNA,
                        response=getOption('cluslong.response'),

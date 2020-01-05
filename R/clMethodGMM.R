@@ -21,6 +21,7 @@ setClass('clMethodGMM', contains='clMethod')
 #'                      id='Subject', nClusters=3)
 #' gmm = cluslong(method, data=testLongData)
 #' summary(gmm)
+#' @family clMethod classes
 clMethodGMM = function(formula=Value ~ 1 + CLUSTER + (1 | ID),
                        formula.mb=~1,
                        time=getOption('cluslong.time'),

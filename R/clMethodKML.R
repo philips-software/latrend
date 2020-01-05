@@ -19,6 +19,7 @@ setClass('clMethodKML', contains='clMethod')
 #' method = clMethodKML(Measurement ~ 1,
 #'                      time='Assessment',
 #'                      id='Id', nClusters=3)
+#' @family clMethod classes
 clMethodKML = function(formula=Value ~ 1,
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),
