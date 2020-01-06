@@ -31,7 +31,7 @@ predict.clModelKML = function(object, newdata=NULL, what='mu', approxFun=approx)
 #' @export
 fitted.clModelKML = function(object, clusters=clusterAssignments(object)) {
   times = time(object)
-  newdata = data.table(Id=rep(modelIds(object), each=length(times)),
+  newdata = data.table(Id=rep(ids(object), each=length(times)),
                        Cluster=rep(clusters, each=length(times)),
                        Time=times) %>%
     setnames('Id', idVariable(object)) %>%
@@ -45,7 +45,7 @@ logLik.clModelKML = function(object) {
   # A negated version of BIC is precomputed by kml package so let's use that
   bic = -getKMLPartition(object)@criterionValues['BIC'] %>% unname
   N = nIds(object)
-  df = nClusters(object) * length(modelTimes(object)) + 1
+  df = nClusters(object) * length(time(object)) + 1
   ll = -.5 * (bic - df * log(N))
   attr(ll, 'nobs') = N
   attr(ll, 'df') = df
@@ -64,26 +64,6 @@ setMethod('postprob', signature('clModelKML'), function(object) {
   colnames(pp) = clusterNames(object)
   return(pp)
 })
-
-
-setMethod('modelData', signature('clModelKML'), function(object) {
-  resp = responseVariable(object)
-  id = idVariable(object)
-  time = timeVariable(object)
-  times = modelTimes(object)
-
-  data = data.table(Id=rep(object@model@idAll, each=length(times)),
-                    Time=times,
-                    Value=as.numeric(object@model@traj)) %>%
-    setnames(c(id, time, resp))
-  return(data)
-})
-
-
-setMethod('modelTimes', signature('clModelKML'), function(object) {
-  object@model@time
-})
-
 
 getKMLPartition = function(object) {
   object@model[paste0('c', nClusters(object))][[1]]

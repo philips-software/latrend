@@ -29,7 +29,7 @@ predict.clModelLLPA = function(object, newdata=NULL, what='mu', approxFun=approx
 #' @export
 fitted.clModelLLPA = function(object, clusters=clusterAssignments(object)) {
   times = time(object)
-  newdata = data.table(Id=rep(modelIds(object), each=length(times)),
+  newdata = data.table(Id=rep(ids(object), each=length(times)),
                        Cluster=rep(clusters, each=length(times)),
                        Time=times) %>%
     setnames('Id', idVariable(object)) %>%
@@ -60,29 +60,4 @@ setMethod('predictPostprob', signature('clModelLLPA'), function(object, newdata=
 # . converged ####
 setMethod('converged', signature('clModelLLPA'), function(object) {
   TRUE
-})
-
-
-# . modelIds ####
-setMethod('modelIds', signature('clModelLLPA'), function(object) {
-  object@model$data %>% rownames
-})
-
-# . modelTimes ####
-setMethod('modelTimes', signature('clModelLLPA'), function(object) {
-  object@model$time
-})
-
-# . modelData ####
-setMethod('modelData', signature('clModelLLPA'), function(object) {
-  resp = responseVariable(object)
-  id = idVariable(object)
-  time = timeVariable(object)
-  times = modelTimes(object)
-
-  data = data.table(Id=rep(modelIds(object), each=length(times)),
-                    Time=times,
-                    Value=as.numeric(object@model$data)) %>%
-    setnames(c(id, time, resp))
-  return(data)
 })

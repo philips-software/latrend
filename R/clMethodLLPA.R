@@ -84,6 +84,7 @@ setMethod('fit', signature('clMethodLLPA'), function(method, data, prepEnv) {
 setMethod('finalize', signature('clMethodLLPA'), function(method, data, fitEnv) {
   model = new('clModelLLPA',
               method=method,
+              data=data,
               model=fitEnv$model,
               clusterNames=make.clusterNames(method$nClusters))
   return(model)

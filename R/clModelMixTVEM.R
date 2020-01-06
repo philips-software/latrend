@@ -63,9 +63,6 @@ setMethod('converged', signature('clModelMixTVEM'), function(object) {
   object@model$bestFit$converged
 })
 
-setMethod('modelData', signature('clModelMixTVEM'), function(object) {
-  data.table(Id=object@model$id, Value=object@model$dep, object@model$covarMats)
-})
 
 #' @export
 #' @rdname clusterTrajectories
@@ -80,9 +77,9 @@ setMethod('trajectories', signature('clModelMixTVEM'), function(object, what, at
 
   if(is.null(at)) {
     fitmat = fitted(object)
-    rowClusters = rleid(modelIds(object))
+    rowClusters = rleid(ids(object))
     dt_pred = as.data.table(fitmat[cbind(1:nrow(fitmat), rowClusters)]) %>%
-      .[, Id := modelIds(object)[get(id)]] %>%
+      .[, Id := ids(object)[get(id)]] %>%
       setcolorder('Id') %>%
       setnames(c(id, clusterNames(object)))
     return(dt_pred[])

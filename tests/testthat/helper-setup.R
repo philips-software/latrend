@@ -9,7 +9,7 @@ expect_valid_clModel = function(object) {
   expect_s4_class(object, 'clModel')
 
   expect_is(getCall(object), 'call')
-  expect_is(modelData(object), 'data.frame')
+  expect_is(model.data(object), 'data.frame')
   expect_is(getName(object), 'character')
   expect_is(getName0(object), 'character')
   expect_is(idVariable(object), 'character')

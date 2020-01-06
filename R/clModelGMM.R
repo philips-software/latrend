@@ -25,7 +25,7 @@ predict.clModelGMM = function(object, newdata=NULL, what='mu') {
 
     if(length(missingVars) > 0) {
       # compute marginal means for unspecified covariates
-      missingVarMeans = modelData(object) %>%
+      missingVarMeans = model.data(object) %>%
         .[missingVars] %>%
         sapply(mean, na.rm=TRUE)
       newdata = cbind(newdata, missingVarMeans)
@@ -43,9 +43,9 @@ predict.clModelGMM = function(object, newdata=NULL, what='mu') {
 model.matrix.clModelGMM = function(object, what='mu') {
   if(what == 'mu') {
     f = merge.formula(object@model$fixed, object@model$mixture)
-    model.matrix(f, data=modelData(object))
+    model.matrix(f, data=model.data(object))
   } else {
-    model.matrix(object@model$mb, data=modelData(object))
+    model.matrix(object@model$mb, data=model.data(object))
   }
 }
 
@@ -77,6 +77,3 @@ setMethod('converged', signature('clModelGMM'), function(object) {
   object@model$conv
 })
 
-setMethod('modelData', signature('clModelGMM'), function(object) {
-  object@model$data
-})

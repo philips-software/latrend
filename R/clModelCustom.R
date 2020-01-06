@@ -1,11 +1,7 @@
 #' @include clModel.R
 setClassUnion('functionOrNULL', members=c('function', 'NULL'))
-setClass('clModelCustom',
-         representation(data='data.frame',
-                        response='character',
-                        time='character',
-                        id='character',
-                        clusterAssignments='integer',
+.clModelCustom = setClass('clModelCustom',
+         representation(clusterAssignments='integer',
                         clusterTrajectories='data.frame',
                         trajectories='data.frame',
                         converged='numeric',
@@ -126,13 +122,13 @@ clModelCustom = function(data,
   assert_that(is.null(predictPostprob) || is.function(predictPostprob))
 
   # Create object
-  object = new('clModelCustom',
+  object = .clModelCustom(
                call=call,
                method=method,
+               data=data,
                response=response,
                time=time,
                id=id,
-               data=data,
                clusterNames=clusterNames,
                clusterAssignments=clusterAssignments,
                clusterTrajectories=clusterTrajectories,
@@ -152,8 +148,6 @@ is.clModelCustom = function(object) {
 setMethod('getName', signature('clModelCustom'), function(object) object@name)
 
 setMethod('getName0', signature('clModelCustom'), function(object) 'custom')
-
-setMethod('modelData', signature('clModelCustom'), function(object) object@data)
 
 setMethod('converged', signature('clModelCustom'), function(object) object@converged)
 

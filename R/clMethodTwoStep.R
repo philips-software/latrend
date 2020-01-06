@@ -97,6 +97,7 @@ setMethod('finalize', signature('clMethodTwoStep'), function(method, data, fitEn
     setNames(slotNames(model))
 
   slots$Class = 'clModelTwoStep'
+  slots$data = data
   slots$call = getCall(method) # will be updated by cluslong
   slots$method = method
 

@@ -4,17 +4,37 @@ setClass('clModel',
          representation(model='ANY',
                         method='clMethod',
                         call='call',
+                        data='ANY',
+                        id='character',
+                        time='character',
+                        response='character',
+                        ids='vector',
                         clusterNames='character'))
 
-setValidity('clModel', function(object) {
-  assert_that(is(object@method, 'clMethod'))
-  assert_that(is.character(object@clusterNames))
-})
+# NOTE: do not specify a validity method for clModel!
+# Referencing the clModel object within setValidity breaks clModelCustom intialization resulting in unspecified slots for some mysterious reason.
 
 # . initialize ####
 setMethod('initialize', 'clModel', function(.Object, ...) {
   .Object = callNextMethod()
-  validObject(.Object)
+
+  method = .Object@method
+  if(length(.Object@id) == 0) {
+    assert_that(has_name(method, 'id'))
+    .Object@id = method$id
+  }
+  if(length(.Object@time) == 0) {
+    assert_that(has_name(method, 'time'))
+    .Object@time = method$time
+  }
+  if(length(.Object@response) == 0) {
+    assert_that(has_name(method, 'formula'))
+    .Object@response = method$formula %>% getResponse
+  }
+
+  assert_that(has_name(.Object@data, c(.Object@id, .Object@time, .Object@response)))
+  assert_that(length(.Object@data) > 0, msg='invalid data object for new clModel. Did you forget to specify the data slot?')
+  .Object@ids = ids(.Object)
   .Object
 })
 
@@ -234,21 +254,44 @@ setMethod('getName0', signature('clModel'), function(object) getMethod(object) %
 
 
 #' @title Generate a vector indicating the id-number (between 1 and numIds()) per row
-#' @details The id order is determined by the output of modelIds()
+#' @details The id order is determined by the output of ids()
 #' @keywords internal
 genIdRowIndices = function(object) {
-  modelData(object)[[idVariable(object)]] %>%
-    factor(levels=modelIds(object)) %>%
+  model.data(object)[[idVariable(object)]] %>%
+    factor(levels=ids(object)) %>%
     as.integer
 }
 
 
+# . ids ####
 #' @export
-#' @title Extract the id variable name
+#' @title Get the unique ids included in this model
+#' @details The order returned by ids(clModel) determines the id order for any output involving id-specific values, such as in clusterAssignments() or postprob()
+#' @examples
+#' model = cluslong(clMethodKML(), testLongData)
+#' ids(model) # S1, S2, ..., S500
+ids = function(object) {
+  if(length(object@ids) == 0) {
+    iddata = model.data(object)[[idVariable(object)]]
+    if(is.factor(iddata)) {
+      levels(iddata)
+    } else {
+      unique(iddata) %>% sort
+    }
+  } else {
+    object@ids
+  }
+}
+
+
+#' @export
+#' @title Get the id variable name
+#' @examples
+#' model = cluslong(clMethodKML(), testLongData)
+#' idVariable(model) # "Id"
 #' @family clModel variables
 idVariable = function(object) {
-  assert_that(is(object, 'clModel'))
-  getMethod(object)$id
+  object@id
 }
 
 
@@ -398,7 +441,7 @@ make.clusterNames = function(n) {
 model.frame.clModel = function(object) {
   if (is.null(getS3method('model.frame', class=class(object@model), optional=TRUE))) {
     labs = getMethod(object) %>% formula %>% terms %>% labels
-    modelData(object)[, labs]
+    model.data(object)[, labs]
   } else {
     model.frame(object@model)
   }
@@ -406,45 +449,44 @@ model.frame.clModel = function(object) {
 
 
 #' @export
-#' @title Extract model training data
-setGeneric('modelData', function(object) standardGeneric('modelData'))
+model.data = function(object) {
+  UseMethod('model.data')
+}
 
-
-# . modelResponses ####
 #' @export
-#' @title  Extract model response
+#' @title Extract the model data that was used for fitting
+#' @description Evaluates the data call in the environment that the model was trained from.
+#' @return The resulting dataset that was used for fitting, as a data.frame.
+model.data.clModel = function(object) {
+  if(length(object@data) > 0) {
+    object@data
+  } else {
+    data = eval(getCall(object)$data, envir=environment(object))
+    assert_that(!is.null(data), msg=sprintf('could not find "%s" in the model environment', deparse(data)))
+    assert_that(is.data.frame(data), msg='expected data reference to be a data.frame')
+    return(data)
+  }
+}
+
+
+# . model.response ####
+#' @title  Extract model response data
 #' @details Model response that was used for training
-setGeneric('modelResponses', function(object) standardGeneric('modelResponses'))
-setMethod('modelResponses', signature('clModel'), function(object) {
-  data = modelData(object)
-  data[[responseVariable(object)]]
-})
-
-
-# . modelIds ####
-#' @export
-setGeneric('modelIds', function(object) standardGeneric('modelIds'))
-setMethod('modelIds', signature('clModel'), function(object) {
-  data = modelData(object)
-  data[[idVariable(object)]] %>% unique
-})
-
-
-# . modelTimes ####
-#' @export
-#' @title Extract the unique time points
-setGeneric('modelTimes', function(object) standardGeneric('modelTimes'))
-setMethod('modelTimes', signature('clModel'), function(object) {
-  data = modelData(object)
-  sort(unique(data[[getMethod(object)$time]]))
-})
-
+#' @keywords internal
+model.response = function(object) {
+  model.data(object)[[responseVariable(object)]]
+}
 
 
 #' @export
 #' @title Number of strata
 nIds = function(object) {
-  modelIds(object) %>% length
+  iddata = model.data(object)[[idVariable(object)]]
+  if(is.factor(iddata)) {
+    nlevels(iddata)
+  } else {
+    uniqueN(iddata)
+  }
 }
 
 #' @export
@@ -458,7 +500,7 @@ nClusters = function(object) {
 #' @export
 #' @title Extract the number of observations from a clModel
 nobs.clModel = function(object, ...) {
-  length(modelResponses(object))
+  length(model.response(object))
 }
 
 
@@ -548,7 +590,7 @@ setMethod('postprob', signature('clModel'), function(object) {
 setGeneric('plotQQ', function(object, byCluster=FALSE, ...) standardGeneric('plotQQ'))
 setMethod('plotQQ', signature('clModel'), function(object, byCluster, ...) {
   assert_that(is(object, 'clModel'))
-  rowClusters = clusterAssignments(object)[modelData(object)[[idVariable(object)]]]
+  rowClusters = clusterAssignments(object)[model.data(object)[[idVariable(object)]]]
 
   p = ggplot(data=data.frame(Cluster=rowClusters, res=residuals(object)), aes(sample=res)) +
     qqplotr::geom_qq_band(...) +
@@ -570,7 +612,7 @@ setMethod('plotQQ', signature('clModel'), function(object, byCluster, ...) {
 #' @return A vector of residuals for the cluster assignments specified by clusters. If clusters is unspecified, a matrix of cluster-specific residuals per observations is returned.
 residuals.clModel = function(object, clusters=clusterAssignments(object), ...) {
   ypred = fitted(object, clusters=clusters, ...)
-  yref = modelResponses(object)
+  yref = model.response(object)
 
   if(is.matrix(ypred)) {
     assert_that(length(yref) == nrow(ypred))
@@ -587,15 +629,17 @@ residuals.clModel = function(object, clusters=clusterAssignments(object), ...) {
 
 
 #' @export
-#' @title Extract the response variable.
+#' @title Get the response variable name
 #' @inheritParams formula.clModel
+#' @examples
+#' model = cluslong(clMethodKML(), testLongData)
+#' responseVariable(model) # "Value"
 #' @family clModel variables
 responseVariable = function(object, what='mu') {
-  assert_that(is(object, 'clModel'))
   if(what == 'mu') {
-    formula(object) %>% getResponse
+    object@response
   } else {
-    formula(object) %>% getResponse %>% paste(what, sep='.')
+    paste0(object@response, what, sep='.')
   }
 }
 
@@ -638,11 +682,10 @@ summary.clModel = function(object, ...) {
 
 
 #' @export
-#' @title Extract the time variable name
+#' @title Get the time variable name
 #' @family clModel variables
 timeVariable = function(object) {
-  assert_that(is(object, 'clModel'))
-  getMethod(object)$time
+  object@time
 }
 
 
@@ -660,7 +703,7 @@ timeVariable = function(object) {
 #' trajectories(model, at=c(0, .5, 1))
 setGeneric('trajectories', function(object, what='mu', at=time(object), clusters=clusterAssignments(object), ...) standardGeneric('trajectories'))
 setMethod('trajectories', signature('clModel'), function(object, what, at, clusters) {
-  ids = modelIds(object)
+  ids = ids(object)
   assert_that(length(clusters) == nIds(object))
 
   if(is.numeric(at)) {
@@ -728,9 +771,9 @@ transformPredict = function(object, predMat, newdata) {
 
 #' @export
 #' @title Sampling times of a clModel
-#' @description Identical to modelTimes(object)
+#' @return The unique times at which observations occur.
 time.clModel = function(object) {
-  modelTimes(object)
+  model.data(object)[[getMethod(object)$time]] %>% unique %>% sort
 }
 
 

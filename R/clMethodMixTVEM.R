@@ -137,6 +137,7 @@ setMethod('fit', signature('clMethodMixTVEM'), function(method, data, prepEnv) {
 setMethod('finalize', signature('clMethodMixTVEM'), function(method, data, fitEnv) {
   model = new('clModelMixTVEM',
               method=method,
+              data=data,
               model=fitEnv$model,
               clusterNames=make.clusterNames(method$nClusters))
   return(model)
