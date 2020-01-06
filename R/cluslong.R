@@ -15,7 +15,7 @@
 #' @param formula The model formula.
 #' @param ... Any other arguments as part of the respective clMethod definition. The clMethod object is updated accordingly.
 #' @param envir The environment in which to evaluate the method arguments.
-cluslong = function(method=clMethodKML(), data, ..., envir=NULL) {
+cluslong = function(method, data, ..., envir=NULL) {
   assert_that(inherits(method, 'clMethod'), msg='method must be an object of class clMethod')
   assert_that(!missing(data), msg='data must be specified')
   assert_that(is.data.frame(data) || is.matrix(data), msg='data must be data.frame or matrix')
