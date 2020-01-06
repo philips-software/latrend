@@ -639,7 +639,7 @@ responseVariable = function(object, what='mu') {
   if(what == 'mu') {
     object@response
   } else {
-    paste0(object@response, what, sep='.')
+    paste(object@response, what, sep='.')
   }
 }
 
