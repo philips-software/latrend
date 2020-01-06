@@ -384,7 +384,12 @@ make.clusterIndices = function(object, clusters, finite=TRUE) {
 
 
 make.clusterNames = function(n) {
-  LETTERS[seq_len(n)]
+  assert_that(is.count(n))
+  if(n > length(LETTERS)) {
+    paste0('C', seq_len(n))
+  } else {
+    LETTERS[seq_len(n)]
+  }
 }
 
 
