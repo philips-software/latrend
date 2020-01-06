@@ -26,13 +26,13 @@ plotTrajs = function(data, response, time, id, cluster) {
   assert_that(has_name(data, id))
   assert_that(is.null(cluster) || has_name(data, cluster))
 
-  p = ggplot(data=data, mapping=aes_string(x=time, y=response, group=id)) +
+  p = ggplot(data=data, mapping=aes_string(x=time, y=response, group=id, cluster=cluster)) +
     theme(legend.position='top') +
     geom_line(size=1) +
     labs(title='Trajectories')
 
   if(!is.null(cluster)) {
-    p = p + facet_wrap(Cluster)
+    p = p + facet_wrap(cluster)
   }
   return(p)
 }
