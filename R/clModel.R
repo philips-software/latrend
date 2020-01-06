@@ -731,7 +731,7 @@ setMethod('trajectories', signature('clModel'), function(object, what, at, clust
   assert_that(is.vector(preds), msg='invalid output from predict function of clModel; expected vector')
   assert_that(length(preds) == nrow(newdata), msg='invalid output from predict function of clModel; expected a prediction per newdata row')
   newdata[, c(responseVariable(object, what=what)) := preds]
-  return(newdata)
+  return(newdata[])
 })
 
 
