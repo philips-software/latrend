@@ -46,3 +46,21 @@ test_that('make.clusterIndices', {
   make.clusterIndices(model, factor(refFac, levels=rev(levels(refFac)))) %>%
     expect_equal(refIdx)
 })
+
+test_that('metrics', {
+  expect_length(metric(model, character()), 0)
+
+  metric(model, 'BIC') %>%
+    expect_is('numeric') %>%
+    expect_named('BIC')
+
+  metric(model, '@undefined') %>%
+    expect_is('numeric') %>%
+    expect_named('@undefined') %>%
+    expect_equal(c('@undefined'=NA*0))
+
+  metric(model, c('AIC', '@undefined', 'BIC')) %>%
+    expect_is('numeric') %>%
+    expect_named(c('AIC', '@undefined', 'BIC')) %T>%
+    {expect_equal(unname(.[2]), NA*0)}
+})
