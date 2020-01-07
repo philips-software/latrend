@@ -47,4 +47,5 @@ Collate:
     'data.R'
     'formula.R'
     'matrix.R'
+    'metrics.R'
     'zzz.R'

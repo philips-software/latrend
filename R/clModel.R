@@ -308,26 +308,32 @@ logLik.clModel = function(object, ...) {
 }
 
 
-# . metric ####
 #' @export
 #' @title Compute model metric(s)
-#' @param name The name(s) of the metric(s) to compute.
+#' @param name The name(s) of the metric(s) to compute. Computes all metrics if NULL.
 #' @examples
 #' data(testLongData)
 #' model = cluslong(...)
 #' bic = metric(model, 'BIC')
 #'
 #' ic = metric(model, c('AIC', 'BIC'))
-setGeneric('metric', function(object, name, ...) standardGeneric('metric'))
-setMethod('metric', signature('clModel'), function(object, name) {
+metric = function(object, name) {
   assert_that(is.character(name))
 
-  vapply(tolower(name), switch, NA,
-         aic=AIC(object),
-         bic=BIC(object),
-         FUN.VALUE=0) %>%
-    setNames(tolower(name))
-})
+  funMask = name %in% getModelMetricNames()
+  metricFuns = lapply(name[funMask], getModelMetricDefinition)
+  metricValues = mapply(function(fun, name) {
+    value = fun(object)
+    assert_that(is.scalar(value) && (is.numeric(value) || is.logical(value)),
+                msg=sprintf('invalid output for metric "%s"; expected scalar number or logical value', name))
+    return(value)
+  }, metricFuns, name[funMask])
+
+  allMetrics = rep(NA*0, length(name))
+  allMetrics[funMask] = unlist(metricValues)
+  names(allMetrics) = name
+  return(allMetrics)
+}
 
 
 #' @title Ensures a proper cluster assignments factor vector
