@@ -78,13 +78,156 @@ getMetricDef = function(name, envir) {
 # Internal metric definitions ####
 intMetricsEnv$AIC = AIC
 intMetricsEnv$BIC = BIC
-intMetricsEnv$logLik = logLik
 intMetricsEnv$deviance = deviance
-intMetricsEnv$resSd = sigma
+intMetricsEnv$logLik = logLik
+
+intMetricsEnv$MAE = function(m) {
+  residuals(m) %>% abs %>% mean
+}
+
+intMetricsEnv$RSS = function(m) {
+  sum(residuals(m)^2)
+}
+
+intMetricsEnv$sigma = sigma
+
+intMetricsEnv$WMAE = function(m) {
+  wMat = postprob(m)[genIdRowIndices(m),]
+  resMat = residuals(m, clusters=NULL)
+  mean(wMat * abs(resMat))
+}
+
+intMetricsEnv$WRSS = function(m) {
+  wMat = postprob(m)[genIdRowIndices(m),]
+  resMat = residuals(m, clusters=NULL)
+  sum(wMat * resMat^2)
+}
+
+
 
 # External metric definitions ####
+extMetricsEnv$AdjustedRand = function(m1, m2) {
+  mclust::adjustedRandIndex(
+    clusterAssignments(m1) %>% as.integer,
+    clusterAssignments(m2) %>% as.integer)
+}
+
+extMetricsEnv$CohensKappa = function(m1, m2) {
+  psych::cohen.kappa(
+    cbind(clusterAssignments(m1) %>% as.integer,
+          clusterAssignments(m2) %>% as.integer), alpha=1)$kappa
+}
+
+extMetricsEnv$CzekanowskiDice = function(m1, m2) {
+  extCriteria(clusterAssignments(m1) %>% as.integer,
+              clusterAssignments(m2) %>% as.integer,
+              'Czekanowski_Dice')[[1]]
+}
+
+extMetricsEnv$FolkesMallows = function(m1, m2) {
+  extCriteria(clusterAssignments(m1) %>% as.integer,
+              clusterAssignments(m2) %>% as.integer,
+              'Folkes_Mallows')[[1]]
+}
+
+extMetricsEnv$Hubert = function(m1, m2) {
+  extCriteria(clusterAssignments(m1) %>% as.integer,
+              clusterAssignments(m2) %>% as.integer,
+              'Hubert')[[1]]
+}
+
 extMetricsEnv$Jaccard = function(m1, m2) {
   extCriteria(clusterAssignments(m1) %>% as.integer,
               clusterAssignments(m2) %>% as.integer,
               'Jaccard')[[1]]
+}
+
+extMetricsEnv$Kulczynski = function(m1, m2) {
+  extCriteria(clusterAssignments(m1) %>% as.integer,
+              clusterAssignments(m2) %>% as.integer,
+              'Kulczynski')[[1]]
+}
+
+extMetricsEnv$McNemar = function(m1, m2) {
+  extCriteria(clusterAssignments(m1) %>% as.integer,
+              clusterAssignments(m2) %>% as.integer,
+              'McNemar')[[1]]
+}
+
+extMetricsEnv$NMI = function(m1, m2) {
+  igraph::compare(
+    clusterAssignments(m1) %>% as.integer,
+    clusterAssignments(m2) %>% as.integer,
+    method='nmi')
+}
+
+extMetricsEnv$NSJ = function(m1, m2) {
+  extMetricsEnv$SplitJoin(m1, m2) / (2 * nIds(m1))
+}
+
+extMetricsEnv$Phi = function(m1, m2) {
+  extCriteria(clusterAssignments(m1) %>% as.integer,
+              clusterAssignments(m2) %>% as.integer,
+              'Phi')[[1]]
+}
+
+extMetricsEnv$Precision = function(m1, m2) {
+  extCriteria(clusterAssignments(m1) %>% as.integer,
+              clusterAssignments(m2) %>% as.integer,
+              'Precision')[[1]]
+}
+
+extMetricsEnv$Rand = function(m1, m2) {
+  extCriteria(clusterAssignments(m1) %>% as.integer,
+              clusterAssignments(m2) %>% as.integer,
+              'Rand')[[1]]
+}
+
+extMetricsEnv$Recall = function(m1, m2) {
+  extCriteria(clusterAssignments(m1) %>% as.integer,
+              clusterAssignments(m2) %>% as.integer,
+              'Recall')[[1]]
+}
+
+extMetricsEnv$RogersTanimoto = function(m1, m2) {
+  extCriteria(clusterAssignments(m1) %>% as.integer,
+              clusterAssignments(m2) %>% as.integer,
+              'Rogers_Tanimoto')[[1]]
+}
+
+extMetricsEnv$RusselRao = function(m1, m2) {
+  extCriteria(clusterAssignments(m1) %>% as.integer,
+              clusterAssignments(m2) %>% as.integer,
+              'Russel_Rao')[[1]]
+}
+
+extMetricsEnv$SplitJoin = function(m1, m2) {
+  igraph::split_join_distance(
+    clusterAssignments(m1) %>% as.integer,
+    clusterAssignments(m2) %>% as.integer) %>% sum
+}
+
+extMetricsEnv$SplitJoin1 = function(m1, m2) {
+  igraph::split_join_distance(
+    clusterAssignments(m1) %>% as.integer,
+    clusterAssignments(m2) %>% as.integer)[1]
+}
+
+extMetricsEnv$SokalSneath1 = function(m1, m2) {
+  extCriteria(clusterAssignments(m1) %>% as.integer,
+              clusterAssignments(m2) %>% as.integer,
+              'Sokal_Sneath1')[[1]]
+}
+
+extMetricsEnv$SokalSneath2 = function(m1, m2) {
+  extCriteria(clusterAssignments(m1) %>% as.integer,
+              clusterAssignments(m2) %>% as.integer,
+              'Sokal_Sneath2')[[1]]
+}
+
+extMetricsEnv$VI = function(m1, m2) {
+  igraph::compare(
+    clusterAssignments(m1) %>% as.integer,
+    clusterAssignments(m2) %>% as.integer,
+    method='vi')
 }
