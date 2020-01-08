@@ -311,15 +311,15 @@ logLik.clModel = function(object, ...) {
 #' @export
 #' @title Compute internal model metric(s)
 #' @description Internal metric.
-#' @param name The name(s) of the metric(s) to compute. Computes all metrics if NULL.
+#' @param name The name(s) of the metric(s) to compute. Computes all metrics if not specified.
 #' @examples
 #' data(testLongData)
-#' model = cluslong(...)
+#' model = cluslong(clMethodGMM(), testLongData)
 #' bic = metric(model, 'BIC')
 #'
 #' ic = metric(model, c('AIC', 'BIC'))
 #' @family metric functions
-metric = function(object, name) {
+metric = function(object, name=getInternalMetricNames()) {
   assert_that(is.clModel(object))
   assert_that(is.character(name))
 
@@ -345,11 +345,11 @@ metric = function(object, name) {
 #' @param object2 The other clModel to compare with.
 #' @examples
 #' data(testLongData)
-#' model1 = cluslong(...)
-#' model2 = cluslong(...)
+#' model1 = cluslong(clMethodKML(), testLongData)
+#' model2 = cluslong(clMethodGMM(), testLongData)
 #' bic = externalMetric(model1, model2, 'Rand')
 #' @family metric functions
-externalMetric = function(object, object2, name) {
+externalMetric = function(object, object2, name=getExternalMetricNames()) {
   assert_that(is.clModel(object))
   assert_that(is.clModel(object2))
   assert_that(is.character(name))
