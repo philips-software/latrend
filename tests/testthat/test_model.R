@@ -63,4 +63,8 @@ test_that('metrics', {
     expect_is('numeric') %>%
     expect_named(c('AIC', '@undefined', 'BIC')) %T>%
     {expect_equal(unname(.[2]), NA*0)}
+
+  externalMetric(model, model, 'Jaccard') %>%
+    expect_is('numeric') %>%
+    expect_named('Jaccard')
 })

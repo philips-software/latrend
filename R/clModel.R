@@ -309,7 +309,8 @@ logLik.clModel = function(object, ...) {
 
 
 #' @export
-#' @title Compute model metric(s)
+#' @title Compute internal model metric(s)
+#' @description Internal metric.
 #' @param name The name(s) of the metric(s) to compute. Computes all metrics if NULL.
 #' @examples
 #' data(testLongData)
@@ -317,13 +318,46 @@ logLik.clModel = function(object, ...) {
 #' bic = metric(model, 'BIC')
 #'
 #' ic = metric(model, c('AIC', 'BIC'))
+#' @family metric functions
 metric = function(object, name) {
+  assert_that(is.clModel(object))
   assert_that(is.character(name))
 
-  funMask = name %in% getModelMetricNames()
-  metricFuns = lapply(name[funMask], getModelMetricDefinition)
+  funMask = name %in% getInternalMetricNames()
+  metricFuns = lapply(name[funMask], getInternalMetricDefinition)
   metricValues = mapply(function(fun, name) {
     value = fun(object)
+    assert_that(is.scalar(value) && (is.numeric(value) || is.logical(value)),
+                msg=sprintf('invalid output for metric "%s"; expected scalar number or logical value', name))
+    return(value)
+  }, metricFuns, name[funMask])
+
+  allMetrics = rep(NA*0, length(name))
+  allMetrics[funMask] = unlist(metricValues)
+  names(allMetrics) = name
+  return(allMetrics)
+}
+
+
+#' @export
+#' @title Compute external comparison metric(s) with another clModel.
+#' @inheritParams metric
+#' @param object2 The other clModel to compare with.
+#' @examples
+#' data(testLongData)
+#' model1 = cluslong(...)
+#' model2 = cluslong(...)
+#' bic = externalMetric(model1, model2, 'Rand')
+#' @family metric functions
+externalMetric = function(object, object2, name) {
+  assert_that(is.clModel(object))
+  assert_that(is.clModel(object2))
+  assert_that(is.character(name))
+
+  funMask = name %in% getExternalMetricNames()
+  metricFuns = lapply(name[funMask], getExternalMetricDefinition)
+  metricValues = mapply(function(fun, name) {
+    value = fun(object, object2)
     assert_that(is.scalar(value) && (is.numeric(value) || is.logical(value)),
                 msg=sprintf('invalid output for metric "%s"; expected scalar number or logical value', name))
     return(value)
