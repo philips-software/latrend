@@ -43,6 +43,7 @@ Collate:
     'clModelLLPA.R'
     'clModelMixTVEM.R'
     'clModelTwoStep.R'
+    'clModels.R'
     'cluslong.R'
     'data.R'
     'formula.R'
