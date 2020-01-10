@@ -1,6 +1,22 @@
 #' @include clModel.R
 
 #' @export
+#' @title Construct a (named) list of clModels
+#' @param ... Objects of type clModel, clModels, or a recursive list of clModel objects. Arguments may be named.
+#' @examples
+#' kml = cluslong(clMethodKML(), testLongData)
+#' gmm = cluslong(clMethodGMM(), testLongData)
+#' clModels(kml, gmm)
+#'
+#' clModels(defaults=c(kml, gmm))
+clModels = function(...) {
+  models = list(...) %>%
+    unlist %>%
+    as.clModels
+}
+
+
+#' @export
 is.clModels = function(x) {
   is(x, 'clModels')
 }
