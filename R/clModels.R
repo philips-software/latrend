@@ -1,7 +1,7 @@
 #' @include clModel.R
 
 #' @export
-#' @title Construct a (named) list of clModels
+#' @title Construct a flat (named) list of clModel objects
 #' @param ... Objects of type clModel, clModels, or a recursive list of clModel objects. Arguments may be named.
 #' @examples
 #' kml = cluslong(clMethodKML(), testLongData)
@@ -9,12 +9,18 @@
 #' clModels(kml, gmm)
 #'
 #' clModels(defaults=c(kml, gmm))
+#' @family clModel list functions
 clModels = function(...) {
   models = list(...) %>%
     unlist %>%
     as.clModels
 }
 
+#' @export
+`[.clModels` = function(x, i) {
+  models = NextMethod()
+  as.clModels(models)
+}
 
 #' @export
 is.clModels = function(x) {
@@ -24,6 +30,7 @@ is.clModels = function(x) {
 
 #' @export
 #' @title Convert a list of clModels to a clModels list
+#' @family clModel list functions
 as.clModels = function(x) {
   if(is.clModels(x)) {
     return(x)
@@ -51,6 +58,7 @@ as.list.clModels = function(x) {
 
 #' @export
 #' @rdname as.data.frame.clModels
+#' @family clModel list functions
 as.data.table.clModels = function(x, excludeShared=TRUE) {
   x = as.clModels(x)
 
@@ -107,14 +115,35 @@ plotMetric = function(models, name) {
 
 
 #' @export
-#' @title Subsetting a clModels list
+#' @title Subsetting a clModels list based on method arguments
+#' @param subset
+#' @examples
+#' kml1 = cluslong(clMethodKML(nClusters=1), testLongData)
+#' kml2 = cluslong(clMethodKML(nClusters=2), testLongData)
+#' kml3 = cluslong(clMethodKML(nClusters=3), testLongData)
+#' gmm = cluslong(clMethodGMM(), testLongData)
+#' models = clModels(kml1, kml2, kml3, gmm)
+#' subset(models, nClusters > 1 & method == 'kml')
+#' @family clModel list functions
 subset.clModels = function(x, subset) {
+  x = as.clModels(x)
 
+  if(missing(subset)) {
+    return(x)
+  }
+
+  subsetCall = match.call()$subset
+  dfsub = as.data.table(x) %>%
+    .[, .ROW_INDEX := .I] %>%
+    base::subset(subset=eval(subsetCall))
+
+  x[dfsub$.ROW_INDEX]
 }
 
 #' @export
 #' @title Print clModels list concisely
 #' @param summary Whether to print the complete summary per model. This may be slow for long lists!
+#' @family clModel list functions
 print.clModels = function(x, summary=FALSE) {
   if(summary) {
     as.list(x) %>% print

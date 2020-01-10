@@ -1,6 +1,6 @@
-context('model list')
+context('clModels')
 
-m1 = cluslong(clMethodKML(), testLongData)
+m1 = cluslong(clMethodKML(nRuns=1), testLongData)
 m2 = cluslong(clMethodGMM(), testLongData)
 
 test_that('as', {
@@ -54,4 +54,37 @@ test_that('create', {
     expect_is('clModels') %>%
     expect_length(3) %>%
     expect_named(c('a.a', 'a.b', 'b'))
+})
+
+test_that('subset', {
+  kml1 = cluslong(clMethodKML(nClusters=1, nRuns=1), testLongData)
+  kml2 = cluslong(clMethodKML(nClusters=2, nRuns=1), testLongData)
+  kml3 = cluslong(clMethodKML(nClusters=3, nRuns=1), testLongData)
+  gmm = cluslong(clMethodGMM(), testLongData)
+
+  models = clModels(group=c(kml1, gmm), kml2, kml3)
+  subset(models, nClusters > 1) %>%
+    expect_is('clModels') %>%
+    expect_length(3)
+
+  subset(models, nClusters > Inf) %>%
+    expect_is('clModels') %>%
+    expect_length(0)
+
+  subset(models, ) %>%
+    expect_is('clModels') %>%
+    expect_length(4)
+
+  subset(models, method == 'gmm') %>%
+    expect_is('clModels') %>%
+    expect_length(1)
+
+  subset(models, method == 'gmm') %>%
+    expect_length(1)
+
+  subset(models, method == 'kml') %>%
+    expect_length(3)
+
+  subset(models, method == 'kml' & nClusters > 1) %>%
+    expect_length(2)
 })
