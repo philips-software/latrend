@@ -10,18 +10,19 @@ is.clModels = function(x) {
 #' @title Convert a list of clModels to a clModels list
 as.clModels = function(x) {
   if(is.clModels(x)) {
-    x
+    return(x)
   } else if(is.list(x)) {
     assert_that(all(sapply(x, is.clModel)), msg='object cannot be converted to clModels; not a list of only clModels objects')
-    class(x) = c('clModels', 'list')
-    x
   } else if(is.clModel(x)) {
     x = list(x)
-    class(x) = c('clModels', 'list')
-    x
+  } else if(is.null(x)) {
+    x = list()
   } else {
     stop('cannot convert this type of input to clModels')
   }
+
+  class(x) = c('clModels', 'list')
+  x
 }
 
 

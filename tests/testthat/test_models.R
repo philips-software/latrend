@@ -4,6 +4,10 @@ m1 = cluslong(clMethodKML(), testLongData)
 m2 = cluslong(clMethodGMM(), testLongData)
 
 test_that('as', {
+  as.clModels(NULL) %>%
+    expect_is('clModels') %>%
+    expect_length(0)
+
   as.clModels(m1) %>%
     expect_is('clModels') %>%
     expect_length(1)
