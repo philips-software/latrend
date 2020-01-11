@@ -193,7 +193,7 @@ as.list.clMethod = function(object, eval=TRUE, envir=NULL) {
     names(argValues) = argNames
     return(argValues)
   } else {
-    as.list(clm@call[-1])
+    as.list(object@call[-1])
   }
 }
 

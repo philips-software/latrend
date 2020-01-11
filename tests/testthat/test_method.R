@@ -116,6 +116,9 @@ test_that('as.list', {
   method = new('clMethod', call=call('clMethod', a=1, b='a', c=NULL, d=NA, e=quote(xvar)))
   xvar = 3
   expect_equal(as.list(method), list(a=1, b='a', c=NULL, d=NA, e=xvar))
+
+  as.list(method, eval=FALSE) %>%
+    expect_length(length(method))
 })
 
 test_that('substitute', {
