@@ -13,7 +13,7 @@
 #' clModels(defaults=c(kml, gmm))
 #' @family clModel list functions
 clModels = function(...) {
-  models = list(...) %>%
+  list(...) %>%
     unlist %>%
     as.clModels
 }
