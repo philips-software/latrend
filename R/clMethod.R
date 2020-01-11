@@ -81,6 +81,16 @@ setMethod('names', signature('clMethod'), function(x) {
   names(getCall(x))[-1]
 })
 
+#' @title Length of a clMethod object
+#' @description Extracts the number of specified arguments of a `clMethod` object.
+#' @examples
+#' m = clMethodKML()
+#' length(m)
+#' @family clMethod
+setMethod('length', signature('clMethod'), function(x) {
+  length(getCall(x)) - 1
+})
+
 
 #' @title Retrieve and evaluate a clMethod argument by name
 #' @param name Name of the argument to retrieve.

@@ -17,6 +17,17 @@ test_that('unevaluated creation', {
   expect_output(print(method))
 })
 
+test_that('length', {
+  new('clMethod', call=call('clMethod')) %>%
+    expect_length(0)
+
+  new('clMethod', call=call('clMethod', a=1)) %>%
+    expect_length(1)
+
+  new('clMethod', call=call('clMethod', a=1, e=quote(xvar))) %>%
+    expect_length(2)
+})
+
 test_that('argument retrieval', {
   xvar = 2
   method = new('clMethod', call=call('clMethod', a=1, b='a', c=NULL, d=NA, e=quote(xvar)))
