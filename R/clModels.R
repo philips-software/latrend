@@ -2,7 +2,9 @@
 
 #' @export
 #' @title Construct a flat (named) list of clModel objects
-#' @param ... Objects of type clModel, clModels, or a recursive list of clModel objects. Arguments may be named.
+#' @description Takes the inputs and generates a named `clModels` object containing a list of the input models. Duplicates are preserved.
+#' @param ... `clModel`, `clModels`, or a recursive `list` of `clModel` objects. Arguments may be named.
+#' @return A `clModels` object containing all specified `clModel` objects.
 #' @examples
 #' kml = cluslong(clMethodKML(), testLongData)
 #' gmm = cluslong(clMethodGMM(), testLongData)
@@ -30,6 +32,8 @@ is.clModels = function(x) {
 
 #' @export
 #' @title Convert a list of clModels to a clModels list
+#' @param x An `R` object.
+#' @return A `clModels` object.
 #' @family clModel list functions
 as.clModels = function(x) {
   if(is.clModels(x)) {
@@ -58,7 +62,6 @@ as.list.clModels = function(x) {
 
 #' @export
 #' @rdname as.data.frame.clModels
-#' @family clModel list functions
 as.data.table.clModels = function(x, excludeShared=TRUE) {
   x = as.clModels(x)
 
@@ -94,8 +97,10 @@ as.data.table.clModels = function(x, excludeShared=TRUE) {
 
 #' @export
 #' @title Generate a data.frame comprising all method arguments of a supported column type
-#' @param x A clModels list.
+#' @param x `clModels` or a list of `ClModel`
 #' @param excludeShared Whether to exclude columns which have the same value across all methods.
+#' @return A `data.frame` or `data.table`.
+#' @family clModel list functions
 as.data.frame.clModels = function(x, excludeShared=TRUE) {
   as.data.table(x) %>% as.data.frame
 }
@@ -105,6 +110,7 @@ as.data.frame.clModels = function(x, excludeShared=TRUE) {
 #' @title Plot one or more internal metrics for all clModels
 #' @param models A list of clModels to compute the internal metrics of
 #' @inheritParams metric
+#' @return `ggplot2` object.
 plotMetric = function(models, name) {
   x = as.clModels(models)
   assert_that(is.character(name), name %in% getInternalMetricNames())
@@ -116,13 +122,16 @@ plotMetric = function(models, name) {
 
 #' @export
 #' @title Subsetting a clModels list based on method arguments
-#' @param subset
+#' @param x The `clModels` or list of `clModel` to be subsetted.
+#' @param subset Logical expression based on the `clModel` method arguments, indicating which `clModel` objects to keep.
+#' @return A `clModels` list with the subset of `clModel` objects.
 #' @examples
 #' kml1 = cluslong(clMethodKML(nClusters=1), testLongData)
 #' kml2 = cluslong(clMethodKML(nClusters=2), testLongData)
 #' kml3 = cluslong(clMethodKML(nClusters=3), testLongData)
 #' gmm = cluslong(clMethodGMM(), testLongData)
 #' models = clModels(kml1, kml2, kml3, gmm)
+#'
 #' subset(models, nClusters > 1 & method == 'kml')
 #' @family clModel list functions
 subset.clModels = function(x, subset) {
@@ -149,6 +158,6 @@ print.clModels = function(x, summary=FALSE) {
     as.list(x) %>% print
   } else {
     cat(sprintf('List of %d clModels with\n', length(x)))
-    print(as.data.table(x))
+    print(as.data.table.clModels(x))
   }
 }
