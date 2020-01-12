@@ -230,11 +230,11 @@ as.character.clMethod = function(x,
   charVec
 }
 
-#' @export
 #' @title Substitute the call arguments
 #' @param envir The environment in which to evaluate the arguments.
 #' @return A new call with the substituted arguments.
 #' @family clMethod
+#' @keywords internal
 substitute.clMethod = function(object, envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
   assert_that(is(object, 'clMethod'))
