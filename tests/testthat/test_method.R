@@ -130,3 +130,36 @@ test_that('substitute', {
   expect_null(method2[['c', eval=FALSE]])
   expect_equal(method2[['e', eval=FALSE]], 2)
 })
+
+test_that('as.character', {
+  new('clMethod', call=call('clMethod')) %>%
+    as.character %>%
+    expect_length(0)
+
+  m = new('clMethod', call=call('clMethod',
+                                null=NULL, log=TRUE, int=3L, num=2.5, char='a',
+                                fac=factor('b', levels=c('a', 'b')),
+                                form=A~B,
+                                call=quote(1 + 2 * 3),
+                                name=quote(xvar)))
+  as.character(m) %>%
+    expect_length(length(m)) %>%
+    expect_named(names(m)) %T>%
+    {expect_equal(unname(.), c('NULL', 'TRUE', '3', '2.5', 'a', 'b', 'A ~ B', '1 + 2 * 3', 'xvar'))}
+
+  as.character(m, eval=TRUE) %>%
+    expect_length(length(m)) %>%
+    expect_named(names(m)) %T>%
+    {expect_equal(unname(.), c('NULL', 'TRUE', '3', '2.5', 'a', 'b', 'A ~ B', '7', 'xvar'))}
+
+  xvar = 2
+  as.character(m, eval=TRUE) %>%
+    expect_length(length(m)) %>%
+    expect_named(names(m)) %T>%
+    {expect_equal(unname(.), c('NULL', 'TRUE', '3', '2.5', 'a', 'b', 'A ~ B', '7', '2'))}
+
+  as.character(m, eval=TRUE, evalClasses='NULL') %>%
+    expect_length(length(m)) %>%
+    expect_named(names(m)) %T>%
+    {expect_equal(unname(.), c('NULL', 'TRUE', '3', '2.5', 'a', 'b', 'A ~ B', '1 + 2 * 3', 'xvar'))}
+})

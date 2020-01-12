@@ -198,6 +198,39 @@ as.list.clMethod = function(object, eval=TRUE, envir=NULL) {
 }
 
 #' @export
+#' @title Convert clMethod arguments to character vector
+#' @description Converts the arguments of a `clMethod` to a named `character` vector.
+#' @param x `clMethod` to be coerced to a `character` `vector`.
+#' @param eval Whether to evaluate the arguments in order to replace expression if the resulting value is of a class specified in `evalClasses`.
+#' @param evalClasses The classes which should be converted to character instead of returning a deparsed expression character.
+as.character.clMethod = function(x,
+                                 eval=FALSE,
+                                 evalClasses=c('NULL', 'logical', 'numeric', 'integer', 'character', 'factor'),
+                                 envir=NULL) {
+  argNames = names(x)
+  envir = clMethod.env(x, parent.frame(), envir)
+
+  values = as.list(x, eval=FALSE)
+  if(eval) {
+    evalValues = vector(mode='list', length=length(x))
+    evalMask = sapply(argNames, isArgDefined, object=x, envir=envir)
+    evalValues[evalMask] = lapply(argNames[evalMask], function(name) x[[name, eval=TRUE, envir=envir]])
+    updateMask = evalMask & sapply(evalValues, class) %in% evalClasses
+    values[updateMask] = evalValues[updateMask]
+  }
+
+  valueClasses = sapply(values, class)
+  valueChars = lapply(values, as.character)
+  deparseMask = sapply(valueChars, length) != 1
+
+  charVec = character(length(x))
+  names(charVec) = argNames
+  charVec[!deparseMask] = unlist(valueChars[!deparseMask])
+  charVec[deparseMask] = sapply(values[deparseMask], deparse)
+  charVec
+}
+
+#' @export
 #' @title Substitute the call arguments
 #' @param envir The environment in which to evaluate the arguments.
 #' @return A new call with the substituted arguments.
@@ -216,11 +249,9 @@ setGeneric('fit', function(method, ...) standardGeneric('fit'))
 setGeneric('finalize', function(method, ...) standardGeneric('finalize'))
 
 
-#' @importFrom R.utils insert
-clMethodPrintArgs = function(object) {
+clMethodPrintArgs = function(object, ...) {
   argNames = names(object)
-  args = as.list(getCall(object)[-1])[argNames] %>%
-    sapply(deparse) %>%
+  args = as.character(object, ...) %>%
     sapply(strtrim, 40)
 
   cat(sprintf('  %-16s%s\n', paste0(argNames, ':'), args), sep='')
