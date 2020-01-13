@@ -61,27 +61,21 @@ as.list.clModels = function(x) {
 
 
 #' @export
+#' @title Generate a data.frame comprising all method arguments of a supported column type
+#' @inheritParams as.data.frame.clMethod
+#' @param x `clModels` or a list of `ClModel`
+#' @param excludeShared Whether to exclude columns which have the same value across all methods.
+#' @param ... Arguments passed to [as.data.frame.clMethod].
+#' @return A `data.frame` or `data.table`.
 #' @rdname as.data.frame.clModels
-as.data.table.clModels = function(x, excludeShared=TRUE) {
+as.data.table.clModels = function(x, excludeShared=FALSE, eval=TRUE, ...) {
   x = as.clModels(x)
 
-  rawSummaries = lapply(x, getMethod) %>%
-    lapply(as.list) %>%
-    lapply(function(args) {
-      classes = sapply(args, class)
-      args[classes %in% c('NULL', 'logical', 'numeric', 'integer', 'character', 'factor', 'formula')]
-    })
-
-  atomicSummaries = lapply(rawSummaries, sapply, function(arg) {
-    if(is.atomic(arg)) {
-      arg
-    } else {
-      deparse(arg)
-    }
-  })
+  dfs = lapply(x, getMethod) %>%
+    lapply(as.data.frame, eval=eval, ...)
 
   suppressWarnings({
-    dt = rbindlist(atomicSummaries, use.names=TRUE, fill=TRUE)
+    dt = rbindlist(dfs, use.names=TRUE, fill=TRUE)
   })
 
   if(excludeShared && nrow(dt) > 1) {
@@ -96,13 +90,9 @@ as.data.table.clModels = function(x, excludeShared=TRUE) {
 
 
 #' @export
-#' @title Generate a data.frame comprising all method arguments of a supported column type
-#' @param x `clModels` or a list of `ClModel`
-#' @param excludeShared Whether to exclude columns which have the same value across all methods.
-#' @return A `data.frame` or `data.table`.
 #' @family clModel list functions
-as.data.frame.clModels = function(x, excludeShared=TRUE) {
-  as.data.table(x) %>% as.data.frame
+as.data.frame.clModels = function(x, ...) {
+  as.data.table(x, ...) %>% as.data.frame
 }
 
 
