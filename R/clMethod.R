@@ -209,36 +209,87 @@ as.list.clMethod = function(object, eval=TRUE, envir=NULL) {
 }
 
 #' @export
-#' @title Convert clMethod arguments to character vector
-#' @description Converts the arguments of a `clMethod` to a named `character` vector.
+#' @title Convert clMethod arguments to a list of atomic types
+#' @description Converts the arguments of a `clMethod` to a named `list` of [atomic] types.
+#' @inheritParams as.list.clMethod
 #' @param x `clMethod` to be coerced to a `character` `vector`.
 #' @param eval Whether to evaluate the arguments in order to replace expression if the resulting value is of a class specified in `evalClasses`.
-#' @param evalClasses The classes which should be converted to character instead of returning a deparsed expression character.
-as.character.clMethod = function(x,
-                                 eval=FALSE,
-                                 evalClasses=c('NULL', 'logical', 'numeric', 'integer', 'character', 'factor'),
-                                 envir=NULL) {
-  argNames = names(x)
+#' @param nullValue Value to use to represent the `NULL` type. Must be of length 1.
+#' @family clMethod
+as.data.frame.clMethod = function(x,
+                                eval=FALSE,
+                                envir=NULL,
+                                nullValue=NA) {
+  assert_that(is.logical(eval))
+  assert_that(length(nullValue) == 1)
   envir = clMethod.env(x, parent.frame(), envir)
 
-  values = as.list(x, eval=FALSE)
-  if(eval) {
-    evalValues = vector(mode='list', length=length(x))
-    evalMask = sapply(argNames, isArgDefined, object=x, envir=envir)
-    evalValues[evalMask] = lapply(argNames[evalMask], function(name) x[[name, eval=TRUE, envir=envir]])
-    updateMask = evalMask & sapply(evalValues, class) %in% evalClasses
-    values[updateMask] = evalValues[updateMask]
+  evalClasses = c('NULL', 'logical', 'numeric', 'complex', 'integer', 'character', 'factor')
+  argValues = as.list(x, eval=if(eval) evalClasses else FALSE, envir=envir)
+
+  dfList = lapply(argValues, function(x) {
+    if(is.null(x)) {
+      nullValue
+    } else if(is.atomic(x)) {
+      if(length(x) > 1) {
+        dput(x)
+      } else {
+        x
+      }
+    } else {
+      chr = as.character(x)
+      if(length(chr) > 1) {
+        deparse(x)
+      } else {
+        chr
+      }
+    }
+  })
+
+  if(any(sapply(dfList, length) != 1)) {
+    browser()
   }
 
-  valueClasses = sapply(values, class)
-  valueChars = lapply(values, as.character)
-  deparseMask = sapply(valueChars, length) != 1
+  assert_that(all(sapply(dfList, length) == 1))
+  as.data.frame(dfList, stringsAsFactors=FALSE)
+}
 
-  charVec = character(length(x))
-  names(charVec) = argNames
-  charVec[!deparseMask] = unlist(valueChars[!deparseMask])
-  charVec[deparseMask] = sapply(values[deparseMask], deparse)
-  charVec
+#' @export
+#' @title Convert clMethod arguments to character vector
+#' @description Converts the arguments of a `clMethod` to a named `character` vector.
+#' @inheritParams as.data.frame.clMethod
+#' @param nullString Character to use to represent NULL values.
+#' @seealso as.data.frame.clMethod
+#' @family clMethod
+as.character.clMethod = function(x,
+                                 eval=FALSE,
+                                 envir=NULL,
+                                 nullString='NULL') {
+  envir = clMethod.env(x, parent.frame(), envir)
+  evalClasses = c('NULL', 'logical', 'numeric', 'complex', 'integer', 'character', 'factor')
+  argValues = as.list(x, eval=if(eval) evalClasses else FALSE, envir=envir)
+
+  chrValues = lapply(argValues, function(x) {
+    if(is.null(x)) {
+      nullString
+    } else if(is.atomic(x)) {
+      if(length(x) > 1) {
+        as.character(x) %>% paste0(collapse=', ')
+      } else {
+        as.character(x)
+      }
+    } else {
+      chr = as.character(x)
+      if(length(chr) > 1) {
+        deparse(x)
+      } else {
+        chr
+      }
+    }
+  })
+
+  assert_that(all(sapply(chrValues, length) == 1))
+  unlist(chrValues)
 }
 
 #' @title Substitute the call arguments
