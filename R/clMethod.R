@@ -306,8 +306,14 @@ substitute.clMethod = function(object, envir=NULL) {
 }
 
 # Local methods ####
+#' @title clMethod interface function
+#' @description Called by [cluslong].
 setGeneric('prepare', function(method, ...) standardGeneric('prepare'))
+#' @title clMethod interface function
+#' @description Called by [cluslong].
 setGeneric('fit', function(method, ...) standardGeneric('fit'))
+#' @title clMethod interface function
+#' @description Called by [cluslong].
 setGeneric('finalize', function(method, ...) standardGeneric('finalize'))
 
 
