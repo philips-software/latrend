@@ -179,7 +179,7 @@ update.clMethod = function(object, ..., envir=NULL) {
 
 #' @export
 #' @title Extract the method arguments as a list
-#' @param eval Whether to evaluate the arguments.
+#' @param eval Whether to evaluate the arguments. Alternatively, a character vector of class names of the values that are accepted for replacement, in which case evaluation does not throw an error if an argument is not defined.
 #' @param envir The environment in which to evaluate the arguments.
 #' @examples
 #' method = clMethodKML()
@@ -187,10 +187,21 @@ update.clMethod = function(object, ..., envir=NULL) {
 #' @family clMethod
 as.list.clMethod = function(object, eval=TRUE, envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
-  if (eval) {
+  if(isTRUE(eval) || is.scalar(eval) && eval == 'ANY') {
+    # full evaluation
     argNames = names(object)
     argValues = lapply(argNames, function(argName) object[[argName, envir=envir]])
     names(argValues) = argNames
+    return(argValues)
+  } else if(is.character(eval)) {
+    # partial update
+    argNames = names(object)
+    argValues = as.list(object@call[-1])
+    evalValues = vector(mode='list', length=length(object))
+    evalMask = sapply(argNames, isArgDefined, object=object, envir=envir)
+    evalValues[evalMask] = lapply(argNames[evalMask], function(name) object[[name, eval=TRUE, envir=envir]])
+    updateMask = evalMask & sapply(evalValues, class) %in% eval
+    argValues[updateMask] = evalValues[updateMask]
     return(argValues)
   } else {
     as.list(object@call[-1])
