@@ -134,16 +134,84 @@ setMethod('metric', signature('clModels'), metric.clModels)
 
 #' @export
 #' @title Plot one or more internal metrics for all clModels
-#' @param models A list of clModels to compute the internal metrics of
+#' @param models A `clModels` or list of `clModel` objects to compute and plot the metrics of.
 #' @inheritParams metric
+#' @inheritParams subset.clModels
+#' @param by The argument name along which methods are plotted.
+#' @param group The argument names to use for determining groups of different models. By default, all arguments are included.
+#' Specifying group=character() disabled grouping.
+#' Specifying a single argument for grouping uses that specific column as the grouping column.
+#' In all other cases, groupings are represented by a number.
+#' @param groupExclude Argument names which are removed from the names specified in `group`.
+#' @param facet Whether to facet the plot if multiple model groups are identified.
 #' @return `ggplot2` object.
-plotMetric = function(models, name) {
+#' @examples
+#' plotMetric(models, 'BIC', by='nClusters', group='.name')
+plotMetric = function(models, name, by='nClusters', subset, group=NULL, groupExclude=c('seed'), facet=TRUE) {
   models = as.clModels(models)
-  assert_that(is.character(name), name %in% getInternalMetricNames())
-  browser()
-  df_values = lapply(models, metric, name) %>%
-    do.call(rbind, .) %>%
-    {reshape2::melt(data=., varnames=c('Model', 'Metric'))}
+  assert_that(is.character(name), length(name) >= 1)
+
+  if(!missing(subset)) {
+    models = do.call(subset.clModels, list(x=models, subset=substitute(subset)))
+  }
+
+  metricNames = paste0('.metric.', name)
+  dtMetrics = metric(models, name) %>%
+    as.data.table %>%
+    .[, -c('.name', '.method')] %>%
+    setnames(metricNames)
+
+  dtModels = as.data.table(models)
+  assert_that(nrow(dtModels) == nrow(dtMetrics))
+
+  if(is.null(group)) {
+    group = setdiff(names(dtModels), groupExclude)
+    if(length(group) == 0) {
+      warning('resulting group arguments after groupExclude is empty. Consider removing the names from groupExclude')
+    }
+  }
+  assert_that(has_name(dtModels, group))
+
+  dt = cbind(dtModels, dtMetrics)
+  if(length(group) == 0) {
+    dt[, .group := 'All']
+  } else if(length(grouping) == 1) {
+    dt[, .group := get(group)]
+  } else {
+    dt[, .group := .GRP, by=group]
+  }
+  assert_that(has_name(dt, by))
+
+  # Prepare ggplot data; convert to long format to support multiple metrics
+  dtgg = melt(dt, id.vars=c('.group', by),
+              measure.vars=metricNames,
+              variable.name='.metric',
+              value.name='.value')
+  levels(dtgg$.metric) = name
+
+  if(length(name) == 1) {
+    p = ggplot(dtgg, aes_string(x=by, y='.value', group='.group'))
+  } else {
+    p = ggplot(dtgg, aes_string(x=by, y='.value', group='.metric', color='.metric')) +
+      labs(color='Metric')
+  }
+
+  if(is.numeric(dt[[by]]) || is.logical(dt[[by]])) {
+    p = p + geom_line()
+  }
+  p = p + geom_point()
+
+  if(length(name) == 1) {
+    p = p + ylab(name)
+  } else {
+    p = p + ylab('Value')
+  }
+
+  if(facet && uniqueN(dt$.group) > 1) {
+    p = p + facet_wrap(~.group)
+  }
+
+  return(p)
 }
 
 
@@ -159,7 +227,7 @@ plotMetric = function(models, name) {
 #' gmm = cluslong(clMethodGMM(), testLongData)
 #' models = clModels(kml1, kml2, kml3, gmm)
 #'
-#' subset(models, nClusters > 1 & method == 'kml')
+#' subset(models, nClusters > 1 & .method == 'kml')
 #' @family clModel list functions
 subset.clModels = function(x, subset) {
   x = as.clModels(x)

@@ -119,3 +119,15 @@ test_that('metric', {
     metric(c('AIC', 'BIC')) %>%
     expect_is('data.frame')
 })
+
+test_that('plotMetric', {
+  models = clModels(group=c(kml2, gmm), kml3, kml4)
+  plotMetric(models, name='BIC', subset=.method == 'kml') %>%
+    expect_is('gg')
+
+  plotMetric(models, name=c('logLik', 'BIC'), subset=.method == 'kml') %>%
+    expect_is('gg')
+
+  plotMetric(models, name=c('logLik', 'BIC'), by='nClusters', group=character()) %>%
+    expect_is('gg')
+})
