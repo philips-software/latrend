@@ -163,7 +163,7 @@ update.clMethod = function(object, ..., envir=NULL) {
   uargNames = names(ucall)
   uargValues = lapply(ucall, eval, envir=envir)
   defMask = uargNames %in% argNames
-  formulaMask = sapply(uargValues, is, 'formula')
+  formulaMask = vapply(uargValues, is, 'formula', FUN.VALUE=FALSE)
   updateFormulaMask = formulaMask & defMask
 
   if(any(updateFormulaMask)) {
