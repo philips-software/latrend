@@ -123,7 +123,7 @@ metric.clModels = function(object, name) {
 #' @export
 #' @rdname metric
 setMethod('metric', signature('list'), function(object, name) {
-  metric.clModels(as.clModels(models), name)
+  metric.clModels(as.clModels(object), name)
 })
 
 #' @export

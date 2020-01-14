@@ -114,4 +114,8 @@ test_that('metric', {
   metric(models, c('AIC', 'BIC')) %>%
     expect_is('data.frame') %>%
     expect_named(c('.name', '.method', 'AIC', 'BIC'))
+
+  as.list(models) %>%
+    metric(c('AIC', 'BIC')) %>%
+    expect_is('data.frame')
 })
