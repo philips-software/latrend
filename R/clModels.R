@@ -61,7 +61,7 @@ as.list.clModels = function(x) {
 
 
 #' @export
-#' @title Generate a data.frame comprising all method arguments of a supported column type
+#' @title Generate a data.frame containing the argument values per method per row
 #' @inheritParams as.data.frame.clMethod
 #' @param x `clModels` or a list of `ClModel`
 #' @param excludeShared Whether to exclude columns which have the same value across all methods.
@@ -75,7 +75,7 @@ as.data.table.clModels = function(x, excludeShared=FALSE, eval=TRUE, ...) {
     lapply(as.data.frame, eval=eval, ...)
 
   suppressWarnings({
-    dt = rbindlist(dfs, use.names=TRUE, fill=TRUE)
+    dt = rbindlist(dfs, use.names=TRUE, fill=TRUE, idcol='.name')
   })
 
   if(excludeShared && nrow(dt) > 1) {
@@ -83,8 +83,11 @@ as.data.table.clModels = function(x, excludeShared=FALSE, eval=TRUE, ...) {
     dt = dt[, ..newColumns]
   }
 
-  dt[, method := sapply(x, getName0)]
-  setcolorder(dt, 'method')
+  dt[, `.method` := sapply(x, getName0)]
+  setcolorder(dt, '.method')
+  if(has_name(dt, '.name')) {
+    setcolorder(dt, '.name')
+  }
   return(dt[])
 }
 

@@ -65,13 +65,13 @@ test_that('as.data.table', {
 
   clModels(m1) %>%
     as.data.table %>%
-    expect_length(length(getMethod(m1)) + 1) %>%
-    expect_named(c('method', names(getMethod(m1))))
+    expect_length(length(getMethod(m1)) + 2) %>%
+    expect_named(c('.name', '.method', names(getMethod(m1))))
 
   clModels(m1) %>%
     as.data.table %>%
-    expect_length(length(getMethod(m1)) + 1) %>%
-    expect_named(c('method', names(getMethod(m1))))
+    expect_length(length(getMethod(m1)) + 2) %>%
+    expect_named(c('.name', '.method', names(getMethod(m1))))
 })
 
 test_that('subset', {
@@ -88,16 +88,19 @@ test_that('subset', {
     expect_is('clModels') %>%
     expect_length(4)
 
-  subset(models, method == 'gmm') %>%
+  subset(models, .method == 'gmm') %>%
     expect_is('clModels') %>%
     expect_length(1)
 
-  subset(models, method == 'gmm') %>%
+  subset(models, .method == 'gmm') %>%
     expect_length(1)
 
-  subset(models, method == 'kml') %>%
+  subset(models, .method == 'kml') %>%
     expect_length(3)
 
-  subset(models, method == 'kml' & nClusters > 1) %>%
+  subset(models, .name == 'group1') %>%
+    expect_length(1)
+
+  subset(models, .method == 'kml' & nClusters > 1) %>%
     expect_length(2)
 })
