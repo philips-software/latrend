@@ -15,6 +15,7 @@
 #' @param formula The model formula.
 #' @param ... Any other arguments as part of the respective clMethod definition. The clMethod object is updated accordingly.
 #' @param envir The environment in which to evaluate the method arguments.
+#' @details If a seed value is specified in the `clMethod` object or arguments to `cluslong`, this seed is set using `set.seed` prior to the cluster preparation step.
 cluslong = function(method, data, ..., envir=NULL) {
   assert_that(inherits(method, 'clMethod'), msg='method must be an object of class clMethod')
   assert_that(!missing(data), msg='data must be specified')
@@ -40,6 +41,12 @@ cluslong = function(method, data, ..., envir=NULL) {
   assert_that(isArgDefined(method, 'id'), isArgDefined(method, 'time'))
   assert_that(has_name(data, method$id))
   assert_that(has_name(data, method$time))
+
+  if(isArgDefined(method, 'seed')) {
+    seed = method$seed
+    logfine('Setting seed %s', as.character(seed))
+    set.seed(seed)
+  }
 
   loginfo('Preparing data and method...')
   prepEnv = prepare(method, data)
