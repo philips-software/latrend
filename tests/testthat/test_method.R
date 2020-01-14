@@ -163,7 +163,15 @@ test_that('update', {
   expect_equal(update(method, a=2)$a, 2)
   expect_null(update(method, a=NULL)$a)
   expect_equal(update(method, c=2)$c, 2)
-  expect_error(update(method, missing=1))
+
+  # update with new arguments
+  update(method, new=1) %>%
+    expect_named(c('new', names(method)), ignore.order=TRUE) %T>%
+    {expect_equal(.$new, 1)}
+
+  update(method, newf=A~B) %>%
+    expect_named(c('newf', names(method)), ignore.order=TRUE) %T>%
+    {expect_equal(.$newf, A~B)}
 })
 
 test_that('update.clMethod with local variables', {

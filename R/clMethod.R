@@ -161,14 +161,14 @@ update.clMethod = function(object, ..., envir=NULL) {
   ucall$envir = NULL
   argNames = names(object)
   uargNames = names(ucall)
-  assert_that(all(uargNames %in% argNames),
-              msg=sprintf('attempted to update unsupported arguments %s', paste0('"', setdiff(uargNames, argNames), '"', collapse=', ')))
   uargValues = lapply(ucall, eval, envir=envir)
+  defMask = uargNames %in% argNames
   formulaMask = sapply(uargValues, is, 'formula')
+  updateFormulaMask = formulaMask & defMask
 
-  if(any(formulaMask)) {
-    oldFormulaArgs = lapply(uargNames[formulaMask], function(name) object[[name]])
-    ucall[formulaMask] = mapply(update.formula, oldFormulaArgs, uargValues[formulaMask], SIMPLIFY=FALSE) %>%
+  if(any(updateFormulaMask)) {
+    oldFormulaArgs = lapply(uargNames[updateFormulaMask], function(name) object[[name]])
+    ucall[updateFormulaMask] = mapply(update.formula, oldFormulaArgs, uargValues[updateFormulaMask], SIMPLIFY=FALSE) %>%
       lapply(match.call, definition=formula)
   }
 
