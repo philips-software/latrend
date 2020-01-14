@@ -1,9 +1,9 @@
 context('clModels')
 
-kml1 = cluslong(clMethodKML(nClusters=1, nRuns=1), testLongData)
 kml2 = m1 = cluslong(clMethodKML(nClusters=2, nRuns=1), testLongData)
 kml3 = cluslong(clMethodKML(nClusters=3, nRuns=1), testLongData)
-gmm = m2 = cluslong(clMethodGMM(), testLongData)
+kml4 = cluslong(clMethodKML(nClusters=4, nRuns=1), testLongData)
+gmm = m2 = cluslong(clMethodGMM(nClusters=2), testLongData)
 
 test_that('as', {
   as.clModels(NULL) %>%
@@ -75,10 +75,10 @@ test_that('as.data.table', {
 })
 
 test_that('subset', {
-  models = clModels(group=c(kml1, gmm), kml2, kml3)
-  subset(models, nClusters > 1) %>%
+  models = clModels(group=c(kml2, gmm), kml3, kml4)
+  subset(models, nClusters > 2) %>%
     expect_is('clModels') %>%
-    expect_length(3)
+    expect_length(2)
 
   subset(models, nClusters > Inf) %>%
     expect_is('clModels') %>%
@@ -101,6 +101,17 @@ test_that('subset', {
   subset(models, .name == 'group1') %>%
     expect_length(1)
 
-  subset(models, .method == 'kml' & nClusters > 1) %>%
+  subset(models, .method == 'kml' & nClusters > 2) %>%
     expect_length(2)
+})
+
+test_that('metric', {
+  models = clModels(group=c(kml2, gmm), kml3, kml4)
+  metric(models, 'BIC') %>%
+    expect_is('data.frame') %>%
+    expect_named(c('.name', '.method', 'BIC'))
+
+  metric(models, c('AIC', 'BIC')) %>%
+    expect_is('data.frame') %>%
+    expect_named(c('.name', '.method', 'AIC', 'BIC'))
 })

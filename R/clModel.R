@@ -309,9 +309,11 @@ logLik.clModel = function(object, ...) {
 
 
 #' @export
+#' @rdname metric
 #' @title Compute internal model metric(s)
 #' @description Internal metric.
-#' @param name The name(s) of the metric(s) to compute. Computes all metrics if not specified.
+#' @param object The `clModel`, `clModels`, or `list` of `clModel` objects to compute the metrics for.
+#' @param name The name(s) of the metric(s) to compute. All defined metrics are computed by default.
 #' @examples
 #' data(testLongData)
 #' model = cluslong(clMethodGMM(), testLongData)
@@ -319,7 +321,14 @@ logLik.clModel = function(object, ...) {
 #'
 #' ic = metric(model, c('AIC', 'BIC'))
 #' @family metric functions
-metric = function(object, name=getInternalMetricNames()) {
+setGeneric('metric', function(object, name=getInternalMetricNames(), ...) standardGeneric('metric'))
+
+#' @export
+#' @rdname metric
+#' @return A named `numeric` vector containing the computed model metrics.
+#' @examples
+#' clModel metric example here
+setMethod('metric', signature('clModel'), function(object, name) {
   assert_that(is.clModel(object))
   assert_that(is.character(name))
 
@@ -336,7 +345,7 @@ metric = function(object, name=getInternalMetricNames()) {
   allMetrics[funMask] = unlist(metricValues)
   names(allMetrics) = name
   return(allMetrics)
-}
+})
 
 
 #' @export

@@ -1,4 +1,5 @@
 #' @include clModel.R
+setOldClass('clModels')
 
 #' @export
 #' @title Construct a flat (named) list of clModel objects
@@ -98,6 +99,38 @@ as.data.frame.clModels = function(x, ...) {
   as.data.table(x, ...) %>% as.data.frame
 }
 
+metric.clModels = function(object, name) {
+  assert_that(is.clModels(object))
+  assert_that(is.character(name))
+
+  modelNames = sapply(object, getName0)
+  metricValues = lapply(object, function(model) {
+    metric(model, name) %>%
+      rbind %>%
+      data.frame
+  })
+
+  dtMetrics = rbindlist(metricValues, idcol='.name')
+  dtMetrics[, `.method` := modelNames]
+
+  setcolorder(dtMetrics, '.method')
+  if(has_name(dtMetrics, '.name')) {
+    setcolorder(dtMetrics, '.name')
+  }
+  as.data.frame(dtMetrics)
+}
+
+#' @export
+#' @rdname metric
+setMethod('metric', signature('list'), function(object, name) {
+  metric.clModels(as.clModels(models), name)
+})
+
+#' @export
+#' @rdname metric
+#' @return For metric(clModels) or metric(list): A data.frame with a metric per column.
+setMethod('metric', signature('clModels'), metric.clModels)
+
 
 #' @export
 #' @title Plot one or more internal metrics for all clModels
@@ -105,8 +138,9 @@ as.data.frame.clModels = function(x, ...) {
 #' @inheritParams metric
 #' @return `ggplot2` object.
 plotMetric = function(models, name) {
-  x = as.clModels(models)
+  models = as.clModels(models)
   assert_that(is.character(name), name %in% getInternalMetricNames())
+  browser()
   df_values = lapply(models, metric, name) %>%
     do.call(rbind, .) %>%
     {reshape2::melt(data=., varnames=c('Model', 'Metric'))}
