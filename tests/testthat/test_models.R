@@ -61,7 +61,8 @@ test_that('create', {
 test_that('as.data.table', {
   clModels() %>%
     as.data.table %>%
-    expect_length(1)
+    expect_named(c('.name', '.method')) %T>%
+    {expect_equal(nrow(.), 0)}
 
   clModels(m1) %>%
     as.data.table %>%
@@ -75,7 +76,12 @@ test_that('as.data.table', {
 })
 
 test_that('subset', {
+  subset(clModels(), .method == 'kml') %>%
+    expect_is('clModels') %>%
+    expect_length(0)
+
   models = clModels(group=c(kml2, gmm), kml3, kml4)
+
   subset(models, nClusters > 2) %>%
     expect_is('clModels') %>%
     expect_length(2)
@@ -106,6 +112,10 @@ test_that('subset', {
 })
 
 test_that('metric', {
+  metric(clModels(), 'BIC') %>%
+    expect_is('data.frame') %T>%
+    {expect_equal(nrow(.), 0)}
+
   models = clModels(group=c(kml2, gmm), kml3, kml4)
   metric(models, 'BIC') %>%
     expect_is('data.frame') %>%

@@ -85,10 +85,10 @@ as.data.table.clModels = function(x, excludeShared=FALSE, eval=TRUE, ...) {
   }
 
   dt[, `.method` := sapply(x, getName0)]
-  setcolorder(dt, '.method')
-  if(has_name(dt, '.name')) {
-    setcolorder(dt, '.name')
+  if(!has_name(dt, '.name')) {
+    dt[, `.name` := character()]
   }
+  setcolorder(dt, c('.name', '.method'))
   return(dt[])
 }
 
@@ -149,6 +149,7 @@ setMethod('metric', signature('clModels'), metric.clModels)
 #' plotMetric(models, 'BIC', by='nClusters', group='.name')
 plotMetric = function(models, name, by='nClusters', subset, group=NULL, groupExclude=c('seed'), facet=TRUE) {
   models = as.clModels(models)
+  assert_that(length(models) > 0, msg='need at least 1 clModel to plot')
   assert_that(is.character(name), length(name) >= 1)
 
   if(!missing(subset)) {
