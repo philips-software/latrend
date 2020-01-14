@@ -174,6 +174,12 @@ test_that('update', {
     {expect_equal(.$newf, A~B)}
 })
 
+test_that('update formula', {
+  method = new('clMethod', call=call('clMethod', a=1, f=A~1))
+  update(method, f=.~B) %T>%
+    {expect_equal(.$f, A~B)}
+})
+
 test_that('update.clMethod with local variables', {
   xvar = 2
   method = new('clMethod', call=call('clMethod', e=quote(xvar)))
