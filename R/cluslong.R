@@ -37,6 +37,7 @@ cluslong = function(method, data, ..., envir=NULL) {
   }
 
   assert_that(not('formula' %in% names(method)) || hasSingleResponse(method$formula))
+  assert_that(isArgDefined(method, 'id'), isArgDefined(method, 'time'))
   assert_that(has_name(data, method$id))
   assert_that(has_name(data, method$time))
 
