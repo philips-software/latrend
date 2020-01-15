@@ -40,7 +40,7 @@ generateLongData = function(sizes = c(40, 60),
   assert_that(length(clusterNames) == nClus)
   assert_that(is.logical(shuffle))
   assert_that(is.data.frame(data))
-  assert_that(all(sapply(data, is.numeric)))
+  assert_that(all(vapply(data, is.numeric, FUN.VALUE=FALSE)))
 
   ## Fixed effects
   assert_that(is.formula(fixed))

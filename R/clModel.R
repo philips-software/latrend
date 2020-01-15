@@ -408,7 +408,7 @@ make.clusterAssignments = function(object, clusters, finite=TRUE) {
     factor(clusters, levels=seq_len(nClusters), labels=clusNames)
   } else if(is.numeric(clusters)) {
     # numeric
-    assert_that(all(sapply(clusters, is.count)))
+    assert_that(all(vapply(clusters, is.count, FUN.VALUE=FALSE)))
     clusters = as.integer(clusters)
     assert_that(min(clusters) >= 1)
     assert_that(max(clusters) <= nClusters)
@@ -456,7 +456,7 @@ make.clusterIndices = function(object, clusters, finite=TRUE) {
     }
   } else if(is.numeric(clusters)) {
     # numeric
-    assert_that(all(sapply(clusters, is.count)))
+    assert_that(all(vapply(clusters, is.count, FUN.VALUE=FALSE)))
     clusters = as.integer(clusters)
     assert_that(min(clusters) >= 1)
     assert_that(max(clusters) <= nClusters)

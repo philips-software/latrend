@@ -207,7 +207,7 @@ getSpecialTerms = function(f, special) {
   vars[specialIdx+1] %>%
     as.list %>%
     lapply('[[', -1) %>%
-    sapply(deparse)
+    vapply(deparse, FUN.VALUE='')
 }
 
 #' @title Get special terms as formula

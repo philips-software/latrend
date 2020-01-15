@@ -69,7 +69,7 @@ clModelCustom = function(data,
       clusterNames = colnames(postprob)
     }
   } else {
-    assert_that(is.factor(clusterAssignments) || sapply(clusterAssignments, is.count))
+    assert_that(is.factor(clusterAssignments) || vapply(clusterAssignments, is.count, FUN.VALUE=FALSE))
     assert_that(!anyNA(clusterAssignments))
     assert_that(length(clusterAssignments) == nIds)
     if(is.null(clusterNames) && is.factor(clusterAssignments)) {

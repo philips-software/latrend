@@ -203,9 +203,9 @@ as.list.clMethod = function(object, eval=TRUE, envir=NULL) {
     argNames = names(object)
     argValues = as.list(object@call[-1])
     evalValues = vector(mode='list', length=length(object))
-    evalMask = sapply(argNames, isArgDefined, object=object, envir=envir)
+    evalMask = vapply(argNames, isArgDefined, object=object, envir=envir, FUN.VALUE=FALSE)
     evalValues[evalMask] = lapply(argNames[evalMask], function(name) object[[name, eval=TRUE, envir=envir]])
-    updateMask = evalMask & sapply(evalValues, class) %in% eval
+    updateMask = evalMask & vapply(evalValues, class, FUN.VALUE='') %in% eval
     argValues[updateMask] = evalValues[updateMask]
     return(argValues)
   } else {
@@ -251,11 +251,7 @@ as.data.frame.clMethod = function(x,
     }
   })
 
-  if(any(sapply(dfList, length) != 1)) {
-    browser()
-  }
-
-  assert_that(all(sapply(dfList, length) == 1))
+  assert_that(all(vapply(dfList, length, FUN.VALUE=0) == 1))
   as.data.frame(dfList, stringsAsFactors=FALSE)
 }
 
@@ -293,7 +289,7 @@ as.character.clMethod = function(x,
     }
   })
 
-  assert_that(all(sapply(chrValues, length) == 1))
+  assert_that(all(vapply(chrValues, length, FUN.VALUE=0) == 1))
   unlist(chrValues)
 }
 
@@ -325,7 +321,7 @@ setGeneric('finalize', function(method, ...) standardGeneric('finalize'))
 clMethodPrintArgs = function(object, ...) {
   argNames = names(object)
   args = as.character(object, ...) %>%
-    sapply(strtrim, 40)
+    vapply(strtrim, 40, FUN.VALUE='')
 
   cat(sprintf('  %-16s%s\n', paste0(argNames, ':'), args), sep='')
 }

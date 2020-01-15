@@ -40,7 +40,7 @@ as.clModels = function(x) {
   if(is.clModels(x)) {
     return(x)
   } else if(is.list(x)) {
-    assert_that(all(sapply(x, is.clModel)), msg='object cannot be converted to clModels; not a list of only clModels objects')
+    assert_that(all(vapply(x, is.clModel, FUN.VALUE=FALSE)), msg='object cannot be converted to clModels; not a list of only clModels objects')
   } else if(is.clModel(x)) {
     x = list(x)
   } else if(is.null(x)) {
@@ -80,11 +80,11 @@ as.data.table.clModels = function(x, excludeShared=FALSE, eval=TRUE, ...) {
   })
 
   if(excludeShared && nrow(dt) > 1) {
-    newColumns = names(dt)[sapply(dt, uniqueN) > 1]
+    newColumns = names(dt)[vapply(dt, uniqueN, FUN.VALUE=0) > 1]
     dt = dt[, ..newColumns]
   }
 
-  dt[, `.method` := sapply(x, getName0)]
+  dt[, `.method` := vapply(x, getName0, FUN.VALUE='')]
   if(!has_name(dt, '.name')) {
     dt[, `.name` := character()]
   }
@@ -103,7 +103,7 @@ metric.clModels = function(object, name) {
   assert_that(is.clModels(object))
   assert_that(is.character(name))
 
-  modelNames = sapply(object, getName0)
+  modelNames = vapply(object, getName0, FUN.VALUE='')
   metricValues = lapply(object, function(model) {
     metric(model, name) %>%
       rbind %>%

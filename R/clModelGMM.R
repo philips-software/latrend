@@ -27,7 +27,7 @@ predict.clModelGMM = function(object, newdata=NULL, what='mu') {
       # compute marginal means for unspecified covariates
       missingVarMeans = model.data(object) %>%
         .[missingVars] %>%
-        sapply(mean, na.rm=TRUE)
+        vapply(mean, na.rm=TRUE, FUN.VALUE=0)
       newdata = cbind(newdata, missingVarMeans)
       newdata$Cluster = make.clusterIndices(object, newdata$Cluster)
     }
