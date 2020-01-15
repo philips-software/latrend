@@ -14,3 +14,9 @@ test_that('cluslong with new arguments', {
   cluslong(clMethodKML(), data=testLongData, test=2) %T>%
     {expect_equal(getMethod(.)$test, 2)}
 })
+
+test_that('cluslongRep', {
+  cluslongRep(clMethodKML(), data=testLongData, .rep=2) %>%
+    expect_is('clModels') %>%
+    expect_length(2)
+})
