@@ -1,6 +1,4 @@
 #' @export
-#' @docType methods
-#' @rdname cluslong-methods
 #' @import data.table
 #' @import assertthat
 #' @import magrittr
@@ -17,6 +15,13 @@
 #' @param envir The environment in which to evaluate the method arguments.
 #' @details If a seed value is specified in the `clMethod` object or arguments to `cluslong`, this seed is set using `set.seed` prior to the cluster preparation step.
 #' @return A `clModel` object representing the fitted model.
+#' @examples
+#' model = cluslong(clMethodKML(), data=testLongData)
+#'
+#' model = cluslong(clMethodKML(), data=testLongData, nClusters=3)
+#'
+#' model = cluslong(clMethodKML(), data=testLongData, nClusters=3, seed=1)
+#' @family longitudinal cluster fit functions
 cluslong = function(method, data, ..., envir=NULL) {
   assert_that(inherits(method, 'clMethod'), msg='method must be an object of class clMethod')
   assert_that(!missing(data), msg='data must be specified')
@@ -78,6 +83,11 @@ cluslong = function(method, data, ..., envir=NULL) {
 #' @param .prepareAll Whether to prepare the data separately per repeated run.
 #' @details This method is faster than repeatedly calling [cluslong]() as it only prepares the data once, unless `.prepareAll=TRUE`.
 #' @return A `clModels` object containing the resulting models.
+#' @examples
+#' models = cluslongRep(clMethodKML(), data=testLongData, .rep=5) # 5 repeated runs
+#'
+#' models = cluslongRep(clMethodKML(), data=testLongData, seed=1, .rep=3)
+#' @family longitudinal cluster fit functions
 cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL) {
   assert_that(inherits(method, 'clMethod'), msg='method must be an object of class clMethod')
   assert_that(!missing(data), msg='data must be specified')
