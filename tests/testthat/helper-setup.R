@@ -5,6 +5,14 @@ if(file.exists(mixt_file)) {
   source(mixt_file)
 }
 
+clMethodTestKML = function(...) {
+  clMethodKML(nRuns=1, maxIter=10, ...)
+}
+
+clMethodTestGMM = function(...) {
+  clMethodGMM(maxIter=10, ...)
+}
+
 expect_valid_clModel = function(object) {
   expect_s4_class(object, 'clModel')
 

@@ -1,8 +1,8 @@
 context('clModels')
 
-kml2 = m1 = cluslong(clMethodKML(nClusters=2, nRuns=1), testLongData)
-kml3 = cluslong(clMethodKML(nClusters=3, nRuns=1), testLongData)
-kml4 = cluslong(clMethodKML(nClusters=4, nRuns=1), testLongData)
+kml2 = m1 = cluslong(clMethodTestKML(nClusters=2), testLongData)
+kml3 = cluslong(clMethodTestKML(nClusters=3), testLongData)
+kml4 = cluslong(clMethodTestKML(nClusters=4), testLongData)
 gmm = m2 = cluslong(clMethodGMM(nClusters=2), testLongData)
 
 test_that('as', {

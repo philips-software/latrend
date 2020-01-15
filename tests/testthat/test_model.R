@@ -1,6 +1,6 @@
 context('clModel')
 
-model = cluslong(clMethodKML(), data=testLongData)
+model = cluslong(clMethodTestKML(), data=testLongData)
 
 test_that('clusterAssignments', {
   clusterAssignments(model) %>%
