@@ -34,6 +34,10 @@ isArgDefined = function(object, name, envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
   assert_that(is(object, 'clMethod'))
   assert_that(is.character(name))
+
+  if(!hasName(object, name)) {
+    return(FALSE)
+  }
   arg = object[[name[1], eval=FALSE]]
 
 
