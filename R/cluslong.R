@@ -31,6 +31,7 @@ cluslong = function(method, data, ..., envir=NULL) {
   argList$envir = envir
   method = do.call(update, c(object=method, argList))
   environment(method) = envir
+  validObject(method)
 
   if (getLogger()$level <= loglevels['INFO']) {
     cat('== Longitudinal clustering with "', getName(method), '" ==\n', sep='')
