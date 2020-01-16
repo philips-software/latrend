@@ -132,7 +132,7 @@ setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
   }
 
   if(eval) {
-    value = eval(arg, envir=as.list(envir), enclos=parent.env(getNamespace(.packageName)))
+    value = eval(arg, envir=envir, enclos=parent.env(getNamespace(.packageName)))
   } else {
     value = arg
   }
