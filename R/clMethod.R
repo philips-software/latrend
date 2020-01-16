@@ -162,7 +162,7 @@ getCall.clMethod = function(object) {
 #' @family clMethod
 update.clMethod = function(object, ..., envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
-  ucall = match.call() %>% tail(-2)
+  ucall = match.call()[c(-1, -2)]
   ucall$envir = NULL
   argNames = names(object)
   uargNames = names(ucall)
