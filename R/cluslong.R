@@ -213,6 +213,7 @@ cluslongBatch = function(methods, data, envir=NULL) {
 #' @title Cluster longitudinal data with bootstrapping
 #' @description Performs bootstrapping, generating samples from the given data at the id level, fitting a clModel to each sample.
 #' @inheritParams cluslong
+#' @param data A `data.frame`.
 #' @param .samples The number of bootstrap samples to evaluate.
 #' @return A `clModels` object of length `.samples`.
 #' @examples
@@ -221,7 +222,7 @@ cluslongBatch = function(methods, data, envir=NULL) {
 cluslongBoot = function(method, data, .samples=50, ..., envir=NULL) {
   assert_that(is(method, 'clMethod'), msg='method must be clMethod object (e.g., clMethodKML() )')
   assert_that(!missing(data), msg='data must be specified')
-  assert_that(is.data.frame(data) || is.matrix(data), msg='data must be data.frame or matrix')
+  assert_that(is.data.frame(data), msg='data must be data.frame')
   assert_that(is.count(.samples))
 
   mc = match.call()
