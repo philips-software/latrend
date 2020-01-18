@@ -306,6 +306,67 @@ substitute.clMethod = function(object, envir=NULL) {
   return(object)
 }
 
+#' @export
+#' @title Generate a list of clMethod
+#' @param method The `clMethod` to use as the template, which will be updated for each of the other arguments.
+#' @param ... Any other arguments to update the `clMethod` definition with. Values must be `scalar`, `vector`, `list`, or encapsulated in a `.()` call.
+#' Arguments wrapped in `.()` are passed as-is to the model call, ensuring a readable method.
+#' Arguments comprising a single `symbol` (e.g. a variable name) are interpreted as a constant. To force evaluation, specify `arg=(var)` or `arg=force(var)`.
+#' Arguments of type `vector` or `list` are split across a series of method fit calls.
+#' Arguments of type `scalar` are constant across the method fits.
+#' If a `list` is intended to be passed as a constant argument, then specifying `arg=.(listObject)` results in it being treated as such.
+#' @param envir The `environment` in which to evaluate the method arguments.
+#' @return A `list` of `clMethod` objects.
+#' @examples
+#' kml = clMethodKML()
+#' methods = clMethods(kml, nClusters=1:6)
+#'
+#' nclus = 1:6
+#' methods = clMethods(kml, nClusters=nclus)
+#'
+#' methods = clMethods(kml, nClusters=3, center=.(meanNA, meanNA, median))
+clMethods = function(method, ..., envir=NULL) {
+  assert_that(inherits(method, 'clMethod'), msg='method must be an object of class clMethod')
+  envir = clMethod.env(method, parent.frame(), envir)
+
+  mc = match.call()[-1]
+  argNames = names(mc) %>% setdiff(c('', 'method', 'envir'))
+  argCalls = mc[argNames]
+
+  nameMask = vapply(argCalls, is.name, FUN.VALUE=FALSE)
+  dotMask = vapply(argCalls, function(x) is.call(x) && x[[1]] == '.', FUN.VALUE=FALSE)
+  evalMask = !nameMask & !dotMask
+  evalArgs = lapply(argCalls[evalMask], eval, envir=parent.frame())
+
+  dotLengths = vapply(argCalls[dotMask], length, FUN.VALUE=0) - 1
+  evalLengths = lengths(evalArgs)
+  nModels = max(1, dotLengths, evalLengths)
+
+  assert_that(all(c(dotLengths, evalLengths) %in% c(1L, nModels)), msg=sprintf('arguments must be of length 1 or of equal length to all other arguments (%d)', nModels))
+
+  nameArgs = lapply(which(nameMask), function(i) as.list(argCalls[[i]]))
+  dotArgs = lapply(which(dotMask), function(i) as.list(argCalls[[i]][-1]))
+
+  firstOrN = function(x, i) x[[min(length(x), i)]]
+
+  # using mapply results in dots[[1L]] errors
+  methods = vector('list', nModels)
+  for(i in seq_len(nModels)) {
+    methods[[i]] = do.call(update,
+                           c(object=method,
+                             lapply(nameArgs, firstOrN, i),
+                             lapply(dotArgs, firstOrN, i),
+                             lapply(evalArgs, firstOrN, i),
+                             envir=envir))
+  }
+
+  assert_that(all(vapply(nameArgs, is.list, FUN.VALUE=FALSE)),
+              all(vapply(dotArgs, is.list, FUN.VALUE=FALSE)),
+              all(vapply(evalArgs, is.vector, FUN.VALUE=FALSE)), msg='The processed argument lists are in an unexpected format. Please report this issue.')
+
+  return(methods)
+}
+
 # Local methods ####
 #' @title clMethod interface function
 #' @description Called by [cluslong].

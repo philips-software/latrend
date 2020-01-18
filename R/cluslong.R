@@ -151,95 +151,48 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL)
 }
 
 #' @export
-#' @title Cluster longitudinal data for a series of argument values
-#' @description Fit a specified longitudinal cluster method for a series of argument values.
-#' Non-`scalar` arguments must all be the same length.
+#' @title Cluster longitudinal data for a list of model specifications
+#' @description Fit a list of longitudinal cluster methods.
 #' @inheritParams cluslong
-#' @param data The `data.frame` or `matrix` to which to apply the method. Multiple datasets can be supplied by encapsulating the datasets using `data=.(df1, df2, ..., dfN)`.
-#' @param ... Any other arguments to update the `clMethod` definition with. Values must be `scalar`, `vector`, `list`, or encapsulated in a `.()` call.
-#' Arguments wrapped in `.()` are passed as-is to the model call, ensuring a readable method.
-#' Arguments comprising a single `symbol` (e.g. a variable name) are interpreted as a constant. To force evaluation, specify `arg=(var)` or `arg=force(var)`.
-#' Arguments of type `vector` or `list` are split across a series of method fit calls.
-#' Arguments of type `scalar` are constant across the method fits.
-#' If a `list` is intended to be passed as a constant argument, then specifying `arg=.(listObject)` results in it being treated as such.
-#' @param envir The `environment` in which to evaluate the method arguments.
+#' @param data A `data.frame`, `matrix`, or a `list` thereof to which to apply to the respective `clMethod`. Multiple datasets can be supplied by encapsulating the datasets using `data=.(df1, df2, ..., dfN)`.
+#' @param envir The `environment` in which to evaluate the `clMethod` arguments.
 #' @return A `clModels` object.
 #' @examples
-#' models = cluslongBatch(clMethodKML(), testLongData, nClusters=1:4)
-#' models = cluslongBatch(clMethodKML(), testLongData, nClusters=1:4, seed=1) # same seed for all methods
-#' models = cluslongBatch(clMethodKML(), testLongData, nClusters=1:4, seed=1:4)
-#' nclus = 1:3
-#' models = cluslongBatch(clMethodKML(), testLongData, nClusters=(nclus)) # passing a vector variable.
+#' methods = clMethods(clMethodKML(), nClusters=1:3)
+#' models = cluslongBatch(methods, data=testLongData)
 #'
-#' models = cluslongBatch(clMethodKML(),
-#'    data=.(testLongData[Time > .5,], testLongData[Time < .5,]),
-#'    nClusters=1:2, center=meanNA) # different data per method
+#' models = cluslongBatch(clMethods(clMethodKML(), nClusters=1:2),
+#'    data=.(testLongData[Time > .5,], testLongData[Time < .5,])) # different data per method
 #'
-#' models = cluslongBatch(clMethodKML(),
-#'    data=testLongData,
-#'    nClusters=1:4,
-#'    center=.(meanNA, meanNA, median, median)) # preserve function name per call
-#'
+#' @seealso clMethods
 #' @family longitudinal cluster fit functions
-cluslongBatch = function(method, data, ..., envir=NULL) {
-  assert_that(inherits(method, 'clMethod'), msg='method must be an object of class clMethod')
-  envir = clMethod.env(method, parent.frame(), envir)
+cluslongBatch = function(methods, data, envir=NULL) {
+  if(!is.list(methods)) {methods = list(methods)}
+  assert_that(is.list(methods), all(vapply(methods, inherits, 'clMethod', FUN.VALUE=FALSE)), msg='methods argument must be a list of clMethod objects')
+  assert_that(!missing(data))
+  envir = clMethod.env(methods[[1]], parent.frame(), envir)
 
+  nModels = length(methods)
   mc = match.call()[-1]
-  argNames = names(mc) %>% setdiff(c('', 'method', 'envir'))
-  argCalls = mc[argNames]
+
+  dataCall = mc$data
+  if(is.name(dataCall)) {
+    dataArg = replicate(nModels, dataCall)
+  } else if(is.call(dataCall) && dataCall[[1]] == '.') {
+    assert_that(nModels == length(dataCall) - 1, msg='either provide 1 data object, or a data object per method')
+    dataArg = as.list(dataCall[-1])
+  } else {
+    dataArg = eval(dataCall, envir=parent.frame())
+    if(is(dataArg, 'list')) {
+      assert_that(length(dataArg) %in% c(1, nModels))
+    } else {
+      dataArg = list(dataArg)
+    }
+  }
 
   if (getLogger()$level <= loglevels['INFO']) {
-    cat(sprintf('== Batch estimation for longitudinal clustering of "%s" ==\n', .rep, getName(method)))
-    clMethodPrintArgs(mc)
+    cat(sprintf('== Batch estimation (N=%d) for longitudinal clustering ==\n', nModels))
   }
-
-  nameMask = vapply(argCalls, is.name, FUN.VALUE=FALSE)
-  dotMask = vapply(argCalls, function(x) is.call(x) && x[[1]] == '.', FUN.VALUE=FALSE)
-  evalMask = !nameMask & !dotMask
-  evalArgs = lapply(argCalls[evalMask], eval, envir=parent.frame())
-
-  dotLengths = vapply(argCalls[dotMask], length, FUN.VALUE=0) - 1
-  evalLengths = lengths(evalArgs)
-  nModels = max(1, dotLengths, evalLengths)
-
-  loginfo('Preparing %d method estimations...', nModels)
-  assert_that(all(c(dotLengths, evalLengths) %in% c(1L, nModels)), msg=sprintf('arguments must be of length 1 or of equal length to all other arguments (%d)', nModels))
-
-  # create method for each cluslong call
-  nameArgs = lapply(which(nameMask), function(i) as.list(argCalls[[i]]))
-  dotArgs = lapply(which(dotMask), function(i) as.list(argCalls[[i]][-1]))
-
-  if(hasName(nameArgs, 'data')) {
-    dataArg = nameArgs$data
-    nameArgs$data = NULL
-  } else if(hasName(dotArgs, 'data')) {
-    dataArg = dotArgs$data
-    dotArgs$data = NULL
-  } else if(hasName(evalArgs, 'data')) {
-    dataArg = evalArgs$data
-    evalArgs$data = NULL
-  } else {
-    stop('data not specified')
-  }
-
-  firstOrN = function(x, i) x[[min(length(x), i)]]
-
-  # using mapply results in dots[[1L]] errors
-  methods = vector('list', nModels)
-  for(i in seq_len(nModels)) {
-    logfinest('\tMethod %d/%d', i, nModels)
-    methods[[i]] = do.call(update,
-                           c(object=method,
-                             lapply(nameArgs, firstOrN, i),
-                             lapply(dotArgs, firstOrN, i),
-                             lapply(evalArgs, firstOrN, i),
-                             envir=envir))
-  }
-
-  assert_that(all(vapply(nameArgs, is.list, FUN.VALUE=FALSE)),
-              all(vapply(dotArgs, is.list, FUN.VALUE=FALSE)),
-              all(vapply(evalArgs, is.vector, FUN.VALUE=FALSE)), msg='The processed argument lists are in an unexpected format. Please report this issue.')
 
   # cluslong
   loginfo('Calling cluslong for each method...')
