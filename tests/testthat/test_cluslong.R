@@ -1,18 +1,25 @@
 context('cluslong')
 
 test_that('cluslong', {
-  cluslong(clMethodTestKML(), data=testLongData) %>%
+  model = cluslong(clMethodTestKML(), data=testLongData) %>%
     expect_is('clModel')
+
+  expect_equal(deparse(getCall(model)$data), 'testLongData')
+  expect_equal(deparse(getCall(model)$envir), 'NULL')
 })
 
 test_that('cluslong with overwritten argument', {
-  cluslong(clMethodTestKML(), data=testLongData, nClusters=1) %T>%
-    {expect_equal(nClusters(.), 1)}
+  model = cluslong(clMethodTestKML(), data=testLongData, nClusters=1)
+
+  expect_equal(nClusters(model), 1)
+  expect_equal(getMethod(model)$nClusters, 1)
+  expect_equal(getCall(model)$method$nClusters, 1)
 })
 
 test_that('cluslong with new arguments', {
-  cluslong(clMethodTestKML(), data=testLongData, test=2) %T>%
-    {expect_equal(getMethod(.)$test, 2)}
+  model = cluslong(clMethodTestKML(), data=testLongData, test=2)
+
+  expect_equal(getMethod(model)$test, 2)
 })
 
 test_that('cluslongRep', {
@@ -39,4 +46,16 @@ test_that('cluslongBatch with multiple datasets', {
     {expect_equal(deparse(.$data), 'testLongData[Time < 0.5]')}
   getCall(models[[3]]) %T>%
     {expect_equal(deparse(.$data), 'testLongData[Time >= 0.5]')}
+})
+
+test_that('cluslongBoot', {
+  set.seed(1)
+  models = cluslongBoot(clMethodTestKML(), data=testLongData, .samples=3) %>%
+    expect_is('clModels') %>%
+    expect_length(3)
+
+  # test if data bootstrap sample calls are correct
+  expect_equal(deparse(getCall(models[[1]])$data), 'bootSample(testLongData, "Id", 1140350788L)')
+  expect_equal(deparse(getCall(models[[2]])$data), 'bootSample(testLongData, "Id", 312928385L)')
+  expect_equal(deparse(getCall(models[[3]])$data), 'bootSample(testLongData, "Id", 866248189L)')
 })

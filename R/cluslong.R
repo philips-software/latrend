@@ -209,6 +209,62 @@ cluslongBatch = function(methods, data, envir=NULL) {
   as.clModels(models)
 }
 
+#' @export
+#' @title Cluster longitudinal data with bootstrapping
+#' @description Performs bootstrapping, generating samples from the given data at the id level, fitting a clModel to each sample.
+#' @inheritParams cluslong
+#' @param .samples The number of bootstrap samples to evaluate.
+#' @return A `clModels` object of length `.samples`.
+#' @examples
+#' model = cluslongBoot(clMethodKML(), testLongData, .samples=10)
+#' @family longitudinal cluster fit functions
+cluslongBoot = function(method, data, .samples=50, ..., envir=NULL) {
+  assert_that(is(method, 'clMethod'), msg='method must be clMethod object (e.g., clMethodKML() )')
+  assert_that(!missing(data), msg='data must be specified')
+  assert_that(is.data.frame(data) || is.matrix(data), msg='data must be data.frame or matrix')
+  assert_that(is.count(.samples))
+
+  mc = match.call()
+
+  if(isArgDefined(method, 'seed')) {
+    seed = method$seed
+    logfine('Setting seed %s', as.character(seed))
+    set.seed(seed)
+  }
+
+  assert_that(hasName(method, 'id'))
+  id = method$id
+  assert_that(hasName(data, id))
+
+  # fit models
+  methods = replicate(.samples, method)
+  sampleSeeds = sample.int(.Machine$integer.max, size=.samples, replace=FALSE)
+  dataCalls = lapply(sampleSeeds, function(s) enquote(substitute(bootSample(data, id, s),
+                                                         env=list(data=mc$data, id=id, s=s))))
+  dataCall = do.call(call, c(name='.', dataCalls))
+
+
+
+  cl = do.call(call, list(name='cluslongBatch', methods=methods, data=enquote(dataCall), envir=quote(envir)))
+  models = eval(cl)
+  return(models)
+}
+
+#' @export
+#' @title Generate a bootstrap sample from the data
+#' @param data The `data.frame` to sample from.
+#' @param seed The local seed to set.
+bootSample = function(data, id, seed) {
+  prevSeed = .Random.seed
+  assert_that(is.data.frame(data), has_name(data, id))
+  ids = unique(data[[id]])
+  set.seed(seed)
+  sampleIdx = sample.int(length(ids), replace=TRUE)
+  newdata = data[data[[id]] %in% ids[sampleIdx],]
+  .Random.seed = prevSeed
+  return(newdata)
+}
+
 canShowModelOutput = function(minLevel='INFO') {
   getLogger()$level <= loglevels[minLevel]
 }
