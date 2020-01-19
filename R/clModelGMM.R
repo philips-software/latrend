@@ -68,7 +68,7 @@ sigma.clModelGMM = function(object) {
 setMethod('postprob', signature('clModelGMM'), function(object) {
   pp = object@model$pprob %>%
       as.matrix %>%
-      .[, c(-1, -2)]
+      .[, c(-1, -2), drop=FALSE]
   colnames(pp) = clusterNames(object)
   return(pp)
 })
