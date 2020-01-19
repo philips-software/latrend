@@ -16,6 +16,11 @@ predict.clModelKML = function(object, newdata=NULL, what='mu', approxFun=approx)
                            clust=getClusters(object@model, nbCluster=nClusters(object)),
                            centerMethod=getMethod(object)$center)
 
+  if(!is.matrix(trajMat)) {
+    assert_that(nClusters(object) == 1, msg='undefined state')
+    trajMat = matrix(trajMat, nrow=1)
+  }
+
   if(is.null(newdata)) {
     return(fitted(object))
   } else {
@@ -60,7 +65,11 @@ setMethod('converged', signature('clModelKML'), function(object) {
 
 
 setMethod('postprob', signature('clModelKML'), function(object) {
-  pp = getKMLPartition(object)@postProba
+  if(nClusters(object) == 1) {
+    pp = matrix(1, nrow=nIds(object), ncol=1)
+  } else {
+    pp = getKMLPartition(object)@postProba
+  }
   colnames(pp) = clusterNames(object)
   return(pp)
 })
