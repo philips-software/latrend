@@ -48,10 +48,13 @@ expect_valid_clModel = function(object) {
 
   postprob(object) %>%
     expect_is('matrix') %T>%
+    {expect_true(all(is.finite(.)))} %T>%
     {expect_equal(ncol(.), nClusters(object))} %T>%
     {expect_equal(nrow(.), nIds(object))} %T>%
     {expect_gte(min(.), 0)} %T>%
     {expect_lte(max(.), 1)}
+
+  expect_output(print(object))
 
   return(object)
 }
