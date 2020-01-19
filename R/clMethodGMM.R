@@ -137,6 +137,12 @@ gmm_fit = function(method, data, prepEnv) {
   args$returndata = TRUE
 
   startTime = Sys.time()
+
+  if(method$nClusters == 1) {
+    # classmb is not allowed to be specified for ng=1
+    args$classmb = NULL
+  }
+
   model = do.call(hlme, args)
 
   e$runTime = as.numeric(Sys.time() - startTime)
