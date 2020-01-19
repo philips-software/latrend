@@ -13,6 +13,10 @@ clMethodTestGMM = function(...) {
   clMethodGMM(maxIter=10, ...)
 }
 
+clMethodTestGBTM = function(...) {
+  clMethodGBTM(maxIter=10, ...)
+}
+
 expect_valid_clModel = function(object) {
   expect_s4_class(object, 'clModel')
 
@@ -54,6 +58,7 @@ expect_valid_clModel = function(object) {
     {expect_gte(min(.), 0)} %T>%
     {expect_lte(max(.), 1)}
 
+  expect_is(summary(object), 'clSummary')
   expect_output(print(object))
 
   return(object)
