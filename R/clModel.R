@@ -137,7 +137,7 @@ clusterAssignments = function(object, strategy=which.max, ...) {
   assert_that(is(object, 'clModel'))
   postprob(object) %>%
     apply(1, strategy, ...) %>%
-    factor(labels=clusterNames(object))
+    factor(levels=1:nClusters(object), labels=clusterNames(object))
 }
 
 
