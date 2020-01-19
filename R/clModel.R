@@ -714,6 +714,11 @@ sigma.clModel = function(object, ...) {
 #' @title Summarize a clModel
 #' @description Extracts all relevant information from the underlying model into a list
 summary.clModel = function(object, ...) {
+  res = residuals(object)
+  if(is.null(res)) {
+    res = as.numeric(NA)
+  }
+
   new('clSummary',
       call=getCall(object),
       name=getName(object),
@@ -722,7 +727,7 @@ summary.clModel = function(object, ...) {
       formula=formula(object),
       id=idVariable(object),
       coefficients=coef(object),
-      residuals=residuals(object),
+      residuals=res,
       clusterNames=clusterNames(object),
       clusterAssignments=clusterAssignments(object),
       clusterSizes=clusterSizes(object),
