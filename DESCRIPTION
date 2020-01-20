@@ -46,6 +46,7 @@ Collate:
     'clModelTwoStep.R'
     'clModels.R'
     'cluslong.R'
+    'compute.R'
     'data.R'
     'formula.R'
     'matrix.R'
