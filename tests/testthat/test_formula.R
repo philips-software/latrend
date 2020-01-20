@@ -124,6 +124,8 @@ test_that('dropRE', {
   expect_equal(dropRE(~1), ~1)
   expect_equal(dropRE(A ~ 0), A ~ 0)
   expect_equal(dropRE(A ~ B), A ~ B)
+  expect_equal(dropRE(A ~ (1 | B)), A ~ 1)
+  expect_equal(dropRE(A ~ -1 + (1 | B)), A ~ 1 - 1)
   expect_equal(dropRE(A ~ B + (1 | C)), A ~ B)
   expect_equal(dropRE(A ~ B + (1 | C) + (D | E)), A ~ B)
 })

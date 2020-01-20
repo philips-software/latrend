@@ -129,12 +129,22 @@ dropRE = function(f) {
   if(length(reStrings) == 0) {
     f
   } else {
-    reIdx = match(reStrings, labels(terms(f)))
+    labs = labels(terms(f))
+    reIdx = match(reStrings, labs)
     assert_that(!anyNA(reIdx))
-    newf = drop.terms(terms(f), reIdx, keep.response=hasResponse(f)) %>%
-      formula
-    environment(newf) = environment(f)
-    return(newf)
+
+    if(length(reIdx) == length(labs)) {
+      if(hasIntercept(f)) {
+        update(f, ~1)
+      } else {
+        update(f, ~0)
+      }
+    } else {
+      newf = drop.terms(terms(f), reIdx, keep.response=hasResponse(f)) %>%
+        formula
+      environment(newf) = environment(f)
+      newf
+    }
   }
 }
 
