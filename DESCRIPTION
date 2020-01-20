@@ -28,6 +28,7 @@ Collate:
     'assert.R'
     'clMethod.R'
     'clFlexmixMethod.R'
+    'clFlexmixMethodGBTM.R'
     'plot.R'
     'clModel.R'
     'clFlexmixModel.R'

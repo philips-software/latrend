@@ -22,3 +22,8 @@ test_that('model spec', {
   cluslong(clFlexmixMethod(), data=testLongData, model=model) %>%
     expect_valid_clModel()
 })
+
+test_that('gbtm', {
+  cluslong(clFlexmixMethodGBTM(), data=testLongData) %>%
+    expect_valid_clModel()
+})

@@ -29,6 +29,9 @@ setMethod('prepare', signature('clFlexmixMethod'), function(method, data) {
 
   f = formula(method) %>% dropRE %>% dropCLUSTER
   e$formula = paste(deparse(f), '|', method$id) %>% as.formula
+  if(isArgDefined(method, 'model')) {
+    e$model = method$model
+  }
 
   logfinest(sprintf('\tformula: %s', deparse(e$formula)))
 
@@ -46,11 +49,10 @@ setMethod('prepare', signature('clFlexmixMethod'), function(method, data) {
 setMethod('fit', signature('clFlexmixMethod'), function(method, data, prepEnv) {
   e = new.env(parent=prepEnv)
 
-  valueColumn = formula(method) %>% getResponse
-
   args = as.list(method)
   args$data = data
   args$formula = prepEnv$formula
+  args$model = prepEnv$model
   args$concomitant = prepEnv$formula.mb
   args$k = method$nClusters
   args[setdiff(names(args), formalArgs(flexmix))] = NULL #remove undefined arguments
