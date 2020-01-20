@@ -854,7 +854,7 @@ setClass('clSummary',
                         nObs='numeric',
                         id='character',
                         formula='formula',
-                        coefficients='numeric',
+                        coefficients='ANY', #TODO
                         residuals='numeric',
                         clusterNames='character',
                         clusterAssignments='factor',
