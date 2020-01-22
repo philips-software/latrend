@@ -17,6 +17,10 @@ clMethodTestGBTM = function(...) {
   clMethodGBTM(maxIter=10, ...)
 }
 
+clFlexmixMethodTestGBTM = function(...) {
+  clFlexmixMethodGBTM(..., control=list(iter.max=1, tolerance=1e-2))
+}
+
 expect_valid_clModel = function(object) {
   expect_s4_class(object, 'clModel')
 
