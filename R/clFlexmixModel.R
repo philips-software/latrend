@@ -17,12 +17,8 @@ predict.clFlexmixModel = function(object, newdata=NULL, what='mu') {
   assert_that(what == 'mu', msg='only what="mu" is supported')
 
   predMat = predict(object@model, newdata=newdata) %>%
-    do.call(cbind, .)
-
-  if(ncol(predMat) != length(clusterNames(object))) {
-    browser()
-  }
-    set_colnames(predMat, clusterNames(object))
+    do.call(cbind, .) %>%
+    set_colnames(clusterNames(object))
 
   transformPredict(object, predMat, newdata=newdata)
 }
