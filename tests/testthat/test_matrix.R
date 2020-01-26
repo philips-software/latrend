@@ -18,6 +18,9 @@ test_that('meltRepeatedMeasures', {
     expect_is('data.frame') %>%
     expect_named(c('Id', 'Time', 'Value')) %T>%
     {expect_equal(nrow(.), length(m))} %T>%
+    {expect_is(.$Id, c('integer', 'factor'))} %T>%
+    {expect_is(.$Time, 'numeric')} %T>%
+    {expect_is(.$Value, 'numeric')} %T>%
     {expect_equal(.$Value, as.numeric(t(m)))}
 })
 

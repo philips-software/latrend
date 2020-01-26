@@ -13,7 +13,7 @@ rowColumns = function(x, i) {
 #' @param time The time column name.
 #' @param response The response column name.
 #' @param ids A `vector` specifying the id names. Should match the number of rows of `data`.
-#' @param times A `vector` specifying the times of the measurements. Should match the number of columns of `data`.
+#' @param times A `numeric` `vector` specifying the times of the measurements. Should match the number of columns of `data`.
 #' @param as.data.table Whether to return the result as a `data.table`, or a `data.frame` otherwise.
 #' @return A `data.table` or `data.frame` containing the repeated measures.
 meltRepeatedMeasures = function(data,
@@ -25,9 +25,11 @@ meltRepeatedMeasures = function(data,
                                   as.data.table=FALSE) {
   assert_that(is.matrix(data))
   assert_that(is.character(id), is.character(time), is.character(response))
+  assert_that(length(times) == 0 || is.numeric(times))
 
-  ids = rownames(data)
-  times = colnames(data)
+  if(is.character(ids)) {
+    ids = factor(ids, levels=ids)
+  }
 
   if(length(ids) == 0) {
     ids = seq_len(nrow(data))
@@ -35,7 +37,6 @@ meltRepeatedMeasures = function(data,
   if(length(times) == 0) {
     times = seq(0, 1, length.out=ncol(data))
   }
-
   assert_that(length(ids) == nrow(data), length(times) == ncol(data))
 
   dt = data.table(Id=rep(ids, each=ncol(data)),
