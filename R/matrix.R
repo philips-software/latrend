@@ -21,14 +21,19 @@ meltRepeatedMeasures = function(data,
                                   time=getOption('cluslong.time'),
                                   response=getOption('cluslong.response'),
                                   ids=rownames(data),
-                                  times=as.numeric(colnames(data)),
+                                  times=colnames(data),
                                   as.data.table=FALSE) {
   assert_that(is.matrix(data))
   assert_that(is.character(id), is.character(time), is.character(response))
-  assert_that(length(times) == 0 || is.numeric(times))
+  assert_that(length(times) == 0 || length(times) == ncol(data),
+              length(ids) == 0 || length(ids) == nrow(data),
+              !anyNA(ids), !anyNA(times))
 
   if(is.character(ids)) {
     ids = factor(ids, levels=ids)
+  }
+  if(is.character(times)) {
+    suppressWarnings({times = as.numeric(times)})
   }
 
   if(length(ids) == 0) {
@@ -37,10 +42,17 @@ meltRepeatedMeasures = function(data,
   if(length(times) == 0) {
     times = seq(0, 1, length.out=ncol(data))
   }
-  assert_that(length(ids) == nrow(data), length(times) == ncol(data))
+  if(anyNA(times)) {
+    if(all(!is.finite(times))) {
+      times = seq_along(times)
+      warning('provided times were parsed to numeric NA; resorting to times = seq_along(times) instead.')
+    } else {
+      stop('some time values are non-finite (possible failed to parse to numeric?)')
+    }
+  }
 
   dt = data.table(Id=rep(ids, each=ncol(data)),
-             Time=rep(times, nrow(data)),
+             Time=rep(as.numeric(times), nrow(data)),
              Response=as.numeric(t(data)))
   setnames(dt, c('Id', 'Time', 'Response'), c(id, time, response))
 

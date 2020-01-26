@@ -24,6 +24,22 @@ test_that('meltRepeatedMeasures', {
     {expect_equal(.$Value, as.numeric(t(m)))}
 })
 
+test_that('meltRepeatedMeasures with non-numeric colnames', {
+  m = matrix(1:12, nrow=3)
+  colnames(m) = paste0('Obs', 1:4)
+
+  suppressWarnings({
+    meltRepeatedMeasures(m) %>%
+      expect_is('data.frame') %>%
+      expect_named(c('Id', 'Time', 'Value')) %T>%
+      {expect_equal(nrow(.), length(m))} %T>%
+      {expect_is(.$Id, c('integer', 'factor'))} %T>%
+      {expect_is(.$Time, 'numeric')} %T>%
+      {expect_is(.$Value, 'numeric')} %T>%
+      {expect_equal(.$Value, as.numeric(t(m)))}
+  })
+})
+
 test_that('dcastRepeatedMeasures', {
   m = matrix(1:12, nrow=3)
   df = meltRepeatedMeasures(m)
