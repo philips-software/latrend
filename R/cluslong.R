@@ -27,10 +27,6 @@ cluslong = function(method, data, ..., envir=NULL) {
   assert_that(is.data.frame(data) || is.matrix(data), msg='data must be data.frame or matrix')
   assert_that(is(method, 'clMethod'), msg='method must be clMethod object (e.g., clMethodKML() )')
 
-  if(is.matrix(data)) {
-    data = data.frame(data)
-  }
-
   argList = list(...)
   envir = clMethod.env(method, parent.frame(), envir)
   argList$envir = envir
@@ -45,8 +41,11 @@ cluslong = function(method, data, ..., envir=NULL) {
 
   assert_that(not('formula' %in% names(method)) || hasSingleResponse(method$formula))
   assert_that(isArgDefined(method, 'id'), isArgDefined(method, 'time'))
-  assert_that(has_name(data, method$id))
-  assert_that(has_name(data, method$time))
+  if(is.matrix(data)) {
+    data = meltRepeatedMeasures(data, id=method$id, time=method$time, response=getResponse(formula(method)))
+  } else {
+    assert_that(has_name(data, c(method$id, method$time)))
+  }
 
   if(isArgDefined(method, 'seed')) {
     seed = method$seed
@@ -96,7 +95,9 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL)
   assert_that(is.count(.rep))
 
   if(is.matrix(data)) {
-    data = data.frame(data)
+    data = meltRepeatedMeasures(data, id=method$id, time=method$time, response=getResponse(formula(method)))
+  } else {
+    assert_that(has_name(data, c(method$id, method$time)))
   }
 
   if(isArgDefined(method, 'seed')) {

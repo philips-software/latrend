@@ -8,6 +8,12 @@ test_that('cluslong', {
   expect_equal(deparse(getCall(model)$envir), 'NULL')
 })
 
+test_that('cluslong with matrix input', {
+  mat = dcastRepeatedMeasures(testLongData)
+  model = cluslong(clMethodTestKML(), data=mat) %>%
+    expect_is('clModel')
+})
+
 test_that('cluslong with overwritten argument', {
   model = cluslong(clMethodTestKML(), data=testLongData, nClusters=1)
 
