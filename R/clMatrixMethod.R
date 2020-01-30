@@ -15,15 +15,10 @@ setMethod('prepare', signature('clMatrixMethod'), function(method, data) {
   valueColumn = formula(method) %>% getResponse
 
   # Check data
-  if(!hasName(method, 'approx') || is.null(method$approx)) {
-    assert_that(uniqueN(data[, .N, by=c(method$id)]$N) == 1, msg='not all time series are of equal length')
-  }
-
+  assert_that(uniqueN(data[, .N, by=c(method$id)]$N) == 1, msg='not all time series are of equal length')
 
   # Data
   logfine('Reshaping data...')
-  wideFrame = dcast(data, as.formula(paste(method$id, method$time, sep='~')), value.var=valueColumn)
-  e$dataMat = as.matrix(wideFrame[, -1]) %>%
-    set_rownames(wideFrame[[1]])
+  e$dataMat = dcastRepeatedMeasures(data, id=method$id, time=method$time, response=valueColumn)
   return(e)
 })
