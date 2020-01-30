@@ -21,6 +21,14 @@ clFlexmixMethodTestGBTM = function(...) {
   clFlexmixMethodGBTM(..., control=list(iter.max=1, tolerance=1e-2))
 }
 
+clCrimCVMethodTestGBTM = function(...) {
+  clCrimCVMethodGBTM(..., model='ZIP', dpolyp=2, dpolyl=1, init=2, seed=1)
+}
+
+clCrimCVMethodTestGBTMt = function(...) {
+  clCrimCVMethodGBTM(..., model='ZIPt', dpolyp=2, init=2, seed=1)
+}
+
 expect_valid_clModel = function(object) {
   expect_s4_class(object, 'clModel')
 

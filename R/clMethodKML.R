@@ -1,5 +1,5 @@
 #' @include clMethod.R
-setClass('clMethodKML', contains='clMethod')
+setClass('clMethodKML', contains='clMatrixMethod')
 
 #' @export
 #' @import kml
@@ -63,53 +63,31 @@ setMethod('getName', signature('clMethodKML'), function(object) 'longitudinal k-
 setMethod('getName0', signature('clMethodKML'), function(object) 'kml')
 
 
-##
-kml_prepare = function(method, data) {
-  e = new.env()
-
+setMethod('prepare', signature('clMethodKML'), function(method, data) {
+  e = callNextMethod()
   valueColumn = formula(method) %>% getResponse
 
   # Check data
   if(is.null(method$imputation)) {
     assert_that(!anyNA(data[[valueColumn]]), msg='data contains missing values, with no imputation method specified')
   }
-  assert_that(uniqueN(data[, .N, by=c(method$id)]$N) == 1, msg='not all time series are of equal length')
-
-  # Data
-  logfine('Reshaping data...')
-  wideFrame = dcast(data, get(method$id) ~ get(method$time), value.var=valueColumn)
-  wideData = as.matrix(wideFrame[, -'method']) %>%
-    set_rownames(wideFrame$method)
-
-  # Parameter processing
-  if(is.character(method$distance)) {
-    distanceName = method$distance
-  } else {
-    distanceName = ''
-  }
 
   # Model specification
   logfiner('Creating clusterLongData object...')
-  par = parALGO(saveFreq = 1e99,
+  e$par = parALGO(saveFreq = 1e99,
                 scale = FALSE,
                 maxIt = method$maxIter,
                 startingCond = method$start,
                 imputationMethod = ifelse(is.null(method$imputation), 'copyMean', method$imputation),
-                distanceName = distanceName,
+                distanceName = ifelse(is.character(method$distance), method$distance, ''),
                 distance = method$distance,
                 centerMethod = method$center)
-  assign('par', par, envir=e)
-
-  cld = clusterLongData(traj=wideData, idAll=rownames(wideData), time=sort(unique(data[[method$time]])))
-  assign('cld', cld, envir=e)
-
+  e$cld = clusterLongData(traj=e$dataMat, idAll=rownames(e$dataMat), time=sort(unique(data[[method$time]])))
   return(e)
-}
-setMethod('prepare', signature('clMethodKML'), kml_prepare)
+})
 
 
-##
-kml_fit = function(method, data, prepEnv) {
+setMethod('fit', signature('clMethodKML'), function(method, data, prepEnv) {
   e = new.env(parent=prepEnv)
 
   cld = prepEnv$cld
@@ -122,20 +100,16 @@ kml_fit = function(method, data, prepEnv) {
     kml(cld, nbClusters=method$nClusters, nbRedrawing=method$nRuns, toPlot='none', parAlgo=prepEnv$par)
   )
   runTime = as.numeric(Sys.time() - startTime)
-  assign('cld', cld, envir=e)
-
+  e$cld = cld
   return(e)
-}
-setMethod('fit', signature('clMethodKML'), kml_fit)
+})
 
 
-##
-kml_finalize = function(method, data, fitEnv) {
+setMethod('finalize', signature('clMethodKML'), function(method, data, fitEnv) {
   model = new('clModelKML',
               method=method,
               data=data,
               model=fitEnv$cld,
               clusterNames=make.clusterNames(method$nClusters))
   return(model)
-}
-setMethod('finalize', signature('clMethodKML'), kml_finalize)
+})
