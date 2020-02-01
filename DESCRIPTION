@@ -45,7 +45,6 @@ Collate:
     'clMethodKML.R'
     'clMethodLLPA.R'
     'clMethodMixTVEM.R'
-    'clModelAKMedoids.R'
     'clModelGMM.R'
     'clModelGBTM.R'
     'clModelKML.R'
