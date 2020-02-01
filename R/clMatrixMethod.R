@@ -14,6 +14,8 @@ setMethod('prepare', signature('clMatrixMethod'), function(method, data) {
   data = as.data.table(data)
   valueColumn = formula(method) %>% getResponse
 
+  e$times = sort(unique(data[[method$time]]))
+
   # Check data
   assert_that(uniqueN(data[, .N, by=c(method$id)]$N) == 1, msg='not all time series are of equal length')
 
