@@ -21,12 +21,12 @@ clFlexmixMethodTestGBTM = function(...) {
   clFlexmixMethodGBTM(..., control=list(iter.max=1, tolerance=1e-2))
 }
 
-clCrimCVMethodTestGBTM = function(...) {
-  clCrimCVMethodGBTM(..., model='ZIP', dpolyp=2, dpolyl=1, init=2, seed=1)
+clMethodTestCrimCV = function(...) {
+  clMethodCrimCV(..., model='ZIP', dpolyp=2, dpolyl=1, init=2, seed=1)
 }
 
-clCrimCVMethodTestGBTMt = function(...) {
-  clCrimCVMethodGBTM(..., model='ZIPt', dpolyp=2, init=2, seed=1)
+clMethodTestCrimCVt = function(...) {
+  clMethodCrimCV(..., model='ZIPt', dpolyp=2, init=2, seed=1)
 }
 
 clMethodTestLongclust = function(...) {

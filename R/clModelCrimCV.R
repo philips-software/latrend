@@ -1,20 +1,20 @@
 #' @include clModel.R
-setClass('clCrimCVModelGBTM', contains='clModel')
+setClass('clModelCrimCV', contains='clModel')
 
-fitted.clCrimCVModelGBTM = function(object, clusters=clusterAssignments(object), what='mean') {
+fitted.clModelCrimCV = function(object, clusters=clusterAssignments(object), what='mean') {
   fitMat = predict(object, newdata=NULL, what=what)
 
   transformFitted(object, fitMat, clusters)
 }
 
-setMethod('postprob', signature('clCrimCVModelGBTM'), function(object) {
+setMethod('postprob', signature('clModelCrimCV'), function(object) {
   pp = object@model$gwt
   colnames(pp) = clusterNames(object)
   return(pp)
 })
 
 #' @export
-predict.clCrimCVModelGBTM = function(object, newdata=NULL, what='mean') {
+predict.clModelCrimCV = function(object, newdata=NULL, what='mean') {
   assert_that(is.newdata(newdata))
   assert_that(what %in% c('mu', 'nu', 'mean'))
 
@@ -52,7 +52,7 @@ predict.clCrimCVModelGBTM = function(object, newdata=NULL, what='mean') {
 }
 
 #' @export
-logLik.clCrimCVModelGBTM = function(object) {
+logLik.clModelCrimCV = function(object) {
   ll = object@model$llike
   attr(ll, 'nobs') = nIds(object) #crimCV uses nIds*nTime
   attr(ll, 'df') = length(coef(object)) + 1
@@ -61,7 +61,7 @@ logLik.clCrimCVModelGBTM = function(object) {
 }
 
 #' @export
-coef.clCrimCVModelGBTM = function(object) {
+coef.clModelCrimCV = function(object) {
   betaMat = object@model$beta
   colnames(betaMat) = clusterNames(object)
   rownames(betaMat) = paste0('beta', seq_len(nrow(betaMat)) - 1)
@@ -79,6 +79,6 @@ coef.clCrimCVModelGBTM = function(object) {
   return(coefMat)
 }
 
-setMethod('converged', signature('clCrimCVModelGBTM'), function(object) {
+setMethod('converged', signature('clModelCrimCV'), function(object) {
   TRUE
 })

@@ -1,5 +1,5 @@
 #' @include clMatrixMethod.R
-setClass('clCrimCVMethodGBTM', contains='clMatrixMethod')
+setClass('clMethodCrimCV', contains='clMatrixMethod')
 
 #' @export
 #' @import crimCV
@@ -7,15 +7,15 @@ setClass('clCrimCVMethodGBTM', contains='clMatrixMethod')
 #' @inheritParams clMatrixMethod
 #' @inheritParams crimCV::crimCV
 #' @examples
-#' method = clCrimCVMethodGBTM(Value ~ 1, nClusters=3)
+#' method = clMethodCrimCV(Value ~ 1, nClusters=3)
 #' model = cluslong(method, testLongData)
 #'
 #' library(crimCV)
 #' data(TO1adj)
-#' method = clCrimCVMethodGBTM(Offenses ~ 1, time='Offense', id='Subject')
+#' method = clMethodCrimCV(Offenses ~ 1, time='Offense', id='Subject')
 #' model = cluslong(method, TO1adj)
 #' @family clMethod classes
-clCrimCVMethodGBTM = function(formula=Value ~ 1,
+clMethodCrimCV = function(formula=Value ~ 1,
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),
                        nClusters=2,
@@ -24,15 +24,15 @@ clCrimCVMethodGBTM = function(formula=Value ~ 1,
                        model='ZIPt',
                        rcv=FALSE,
                        init=20, ...) {
-  new('clCrimCVMethodGBTM', call=match.call.defaults())
+  new('clMethodCrimCV', call=match.call.defaults())
 }
 
 
-setMethod('getName', signature('clCrimCVMethodGBTM'), function(object) 'zero-inflated GBTM')
+setMethod('getName', signature('clMethodCrimCV'), function(object) 'zero-inflated GBTM using crimcv')
 
-setMethod('getName0', signature('clCrimCVMethodGBTM'), function(object) 'gbtmzi')
+setMethod('getName0', signature('clMethodCrimCV'), function(object) 'crimcv')
 
-setMethod('prepare', signature('clCrimCVMethodGBTM'), function(method, data) {
+setMethod('prepare', signature('clMethodCrimCV'), function(method, data) {
   times = sort(unique(data[[method$time]]))
 
   refTimes = seq(first(times), last(times), length.out=length(times))
@@ -42,7 +42,7 @@ setMethod('prepare', signature('clCrimCVMethodGBTM'), function(method, data) {
 })
 
 #' @importFrom crimCV crimCV
-setMethod('fit', signature('clCrimCVMethodGBTM'), function(method, data, prepEnv) {
+setMethod('fit', signature('clMethodCrimCV'), function(method, data, prepEnv) {
   e = new.env(parent=prepEnv)
 
   suppressFun = if(canShowModelOutput()) force else capture.output
@@ -65,10 +65,10 @@ setMethod('fit', signature('clCrimCVMethodGBTM'), function(method, data, prepEnv
 })
 
 
-setMethod('finalize', signature('clCrimCVMethodGBTM'), function(method, data, fitEnv) {
+setMethod('finalize', signature('clMethodCrimCV'), function(method, data, fitEnv) {
   assert_that(has_name(fitEnv$model, 'beta'), msg='invalid crimCV model returned from fit. The model either failed to initialize, converge, or its specification is unsupported.')
 
-  model = new('clCrimCVModelGBTM',
+  model = new('clModelCrimCV',
               method=method,
               data=data,
               model=fitEnv$model,
