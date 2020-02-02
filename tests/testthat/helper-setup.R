@@ -29,6 +29,14 @@ clCrimCVMethodTestGBTMt = function(...) {
   clCrimCVMethodGBTM(..., model='ZIPt', dpolyp=2, init=2, seed=1)
 }
 
+clMethodTestLongclust = function(...) {
+  clMethodLongclust(modelSubset='VVA', gaussian=TRUE, ...)
+}
+
+clMethodTestLongclustT = function(...) {
+  clMethodLongclust(modelSubset='VEI', gaussian=FALSE, ...)
+}
+
 expect_valid_clModel = function(object) {
   expect_s4_class(object, 'clModel')
 
