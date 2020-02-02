@@ -1,5 +1,5 @@
 #' @include clMethod.R
-setClass('clFlexmixMethod', contains='clMethod')
+setClass('clMethodFlexmix', contains='clMethod')
 
 #' @export
 #' @importFrom flexmix flexmix FLXPconstant
@@ -9,22 +9,22 @@ setClass('clFlexmixMethod', contains='clMethod')
 #' @examples
 #'
 #' @family clMethod package interfaces
-clFlexmixMethod = function(formula=Value ~ 1,
+clMethodFlexmix = function(formula=Value ~ 1,
                         formula.mb=~1,
                         time=getOption('cluslong.time'),
                         id=getOption('cluslong.id'),
                         nClusters=2,
                         model=NULL,
                         control=NULL) {
-  new('clFlexmixMethod', call=match.call.defaults())
+  new('clMethodFlexmix', call=match.call.defaults())
 }
 
-setMethod('getName', signature('clFlexmixMethod'), function(object) 'flexmix')
+setMethod('getName', signature('clMethodFlexmix'), function(object) 'flexmix')
 
-setMethod('getName0', signature('clFlexmixMethod'), function(object) 'flx')
+setMethod('getName0', signature('clMethodFlexmix'), function(object) 'flx')
 
 
-setMethod('prepare', signature('clFlexmixMethod'), function(method, data) {
+setMethod('prepare', signature('clMethodFlexmix'), function(method, data) {
   e = new.env()
 
   f = formula(method) %>% dropRE %>% dropCLUSTER
@@ -46,7 +46,7 @@ setMethod('prepare', signature('clFlexmixMethod'), function(method, data) {
 })
 
 
-setMethod('fit', signature('clFlexmixMethod'), function(method, data, prepEnv) {
+setMethod('fit', signature('clMethodFlexmix'), function(method, data, prepEnv) {
   e = new.env(parent=prepEnv)
 
   args = as.list(method)
@@ -73,11 +73,11 @@ setMethod('fit', signature('clFlexmixMethod'), function(method, data, prepEnv) {
 })
 
 
-setMethod('finalize', signature('clFlexmixMethod'), function(method, data, fitEnv) {
+setMethod('finalize', signature('clMethodFlexmix'), function(method, data, fitEnv) {
   if(fitEnv$model@k < method$nClusters) {
     warning('flexmix returned a result with fewer components than was specified for nClusters')
   }
-  model = new('clFlexmixModel',
+  model = new('clModelFlexmix',
               method=method,
               data=data,
               model=fitEnv$model,

@@ -17,8 +17,8 @@ clMethodTestGBTM = function(...) {
   clMethodGBTM(maxIter=10, ...)
 }
 
-clFlexmixMethodTestGBTM = function(...) {
-  clFlexmixMethodGBTM(..., control=list(iter.max=1, tolerance=1e-2))
+clMethodTestFlexmixGBTM = function(...) {
+  clMethodFlexmixGBTM(..., control=list(iter.max=1, tolerance=1e-2))
 }
 
 clMethodTestCrimCV = function(...) {

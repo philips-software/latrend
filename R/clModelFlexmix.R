@@ -1,9 +1,9 @@
 #' @include clModel.R
-setClass('clFlexmixModel', contains='clModel')
+setClass('clModelFlexmix', contains='clModel')
 
 #' @export
 #' @importFrom flexmix fitted
-fitted.clFlexmixModel = function(object, clusters=clusterAssignments(object)) {
+fitted.clModelFlexmix = function(object, clusters=clusterAssignments(object)) {
   predNames = paste0('pred_m', 1:nClusters(object))
   predMat = fitted(object@model) %>%
     set_colnames(clusterNames(object))
@@ -12,7 +12,7 @@ fitted.clFlexmixModel = function(object, clusters=clusterAssignments(object)) {
 
 #' @export
 #' @importFrom flexmix predict
-predict.clFlexmixModel = function(object, newdata=NULL, what='mu') {
+predict.clModelFlexmix = function(object, newdata=NULL, what='mu') {
   assert_that(is.newdata(newdata))
   assert_that(what == 'mu', msg='only what="mu" is supported')
 
@@ -23,23 +23,23 @@ predict.clFlexmixModel = function(object, newdata=NULL, what='mu') {
   transformPredict(object, predMat, newdata=newdata)
 }
 
-setMethod('postprob', signature('clFlexmixModel'), function(object) {
+setMethod('postprob', signature('clModelFlexmix'), function(object) {
   pp = postProbFromObs(object@model@posterior$scaled, genIdRowIndices(object))
   colnames(pp) = clusterNames(object)
   return(pp)
 })
 
 #' @export
-logLik.clFlexmixModel = function(object) {
+logLik.clModelFlexmix = function(object) {
   logLik(object@model)
 }
 
 #' @export
 #' @importFrom flexmix parameters
-coef.clFlexmixModel = function(object) {
+coef.clModelFlexmix = function(object) {
   parameters(object@model)
 }
 
-setMethod('converged', signature('clFlexmixModel'), function(object) {
+setMethod('converged', signature('clModelFlexmix'), function(object) {
   object@model@converged
 })
