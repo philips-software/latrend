@@ -1,6 +1,25 @@
 #' @include clModel.R
 setClass('clModelFlexmix', contains='clModel')
 
+
+#' @export
+#' @importFrom flexmix predict
+predict.clModelFlexmix = function(object, newdata=NULL, what='mu') {
+  assert_that(is.newdata(newdata))
+  assert_that(what == 'mu', msg='only what="mu" is supported')
+
+  if(is.null(newdata)) {
+    predOut = predict(object@model)
+  } else {
+    predOut = predict(object@model, newdata=newdata)
+  }
+  predMat = do.call(cbind, predOut) %>%
+    set_colnames(clusterNames(object))
+
+  transformPredict(object, predMat, newdata=newdata)
+}
+
+
 #' @export
 #' @importFrom flexmix fitted
 fitted.clModelFlexmix = function(object, clusters=clusterAssignments(object)) {
@@ -10,18 +29,6 @@ fitted.clModelFlexmix = function(object, clusters=clusterAssignments(object)) {
   transformFitted(object, predMat, clusters=clusters)
 }
 
-#' @export
-#' @importFrom flexmix predict
-predict.clModelFlexmix = function(object, newdata=NULL, what='mu') {
-  assert_that(is.newdata(newdata))
-  assert_that(what == 'mu', msg='only what="mu" is supported')
-
-  predMat = predict(object@model, newdata=newdata) %>%
-    do.call(cbind, .) %>%
-    set_colnames(clusterNames(object))
-
-  transformPredict(object, predMat, newdata=newdata)
-}
 
 setMethod('postprob', signature('clModelFlexmix'), function(object) {
   pp = postProbFromObs(object@model@posterior$scaled, genIdRowIndices(object))
