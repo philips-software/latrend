@@ -1,17 +1,13 @@
 #' @include clModel.R
 setClass('clModelCrimCV', contains='clModel')
 
-fitted.clModelCrimCV = function(object, clusters=clusterAssignments(object), what='mean') {
-  fitMat = predict(object, newdata=NULL, what=what)
-
-  transformFitted(object, fitMat, clusters)
-}
 
 setMethod('postprob', signature('clModelCrimCV'), function(object) {
   pp = object@model$gwt
   colnames(pp) = clusterNames(object)
   return(pp)
 })
+
 
 #' @export
 predict.clModelCrimCV = function(object, newdata=NULL, what='mean') {
@@ -51,6 +47,13 @@ predict.clModelCrimCV = function(object, newdata=NULL, what='mean') {
   transformPredict(object, predMat, newdata=newdata)
 }
 
+
+fitted.clModelCrimCV = function(object, clusters=clusterAssignments(object), what='mean') {
+  predict(object, newdata=NULL, what=what) %>%
+    transformFitted(object, ., clusters)
+}
+
+
 #' @export
 logLik.clModelCrimCV = function(object) {
   ll = object@model$llike
@@ -59,6 +62,7 @@ logLik.clModelCrimCV = function(object) {
   class(ll) = 'logLik'
   return(ll)
 }
+
 
 #' @export
 coef.clModelCrimCV = function(object) {
@@ -78,6 +82,7 @@ coef.clModelCrimCV = function(object) {
   }
   return(coefMat)
 }
+
 
 setMethod('converged', signature('clModelCrimCV'), function(object) {
   TRUE

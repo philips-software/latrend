@@ -22,7 +22,7 @@ predict.clModelKML = function(object, newdata=NULL, what='mu', approxFun=approx)
   }
 
   if(is.null(newdata)) {
-    return(fitted(object))
+    predMat = fitted(object, clusters=NULL)
   } else {
     assert_that(has_name(newdata, timeVariable(object)))
     newtimes = newdata[[timeVariable(object)]]
@@ -37,11 +37,12 @@ predict.clModelKML = function(object, newdata=NULL, what='mu', approxFun=approx)
 fitted.clModelKML = function(object, clusters=clusterAssignments(object)) {
   times = time(object)
   newdata = data.table(Id=rep(ids(object), each=length(times)),
-                       Cluster=rep(clusters, each=length(times)),
                        Time=times) %>%
     setnames('Id', idVariable(object)) %>%
     setnames('Time', timeVariable(object))
-  predict(object, newdata=newdata)
+
+  predict(object, newdata=newdata) %>%
+    transformFitted(object, ., clusters=clusters)
 }
 
 

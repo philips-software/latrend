@@ -16,15 +16,11 @@ predict.clModelLongclust = function(object, newdata=NULL, what='mu', approxFun=a
   assert_that(is.matrix(trajMat), nrow(trajMat) > 0, msg='empty estimate for mu. model probably did not converge')
 
   if(is.null(newdata)) {
-    return(fitted(object))
+    predMat = fitted(object, clusters=NULL)
   } else {
     assert_that(has_name(newdata, timeVariable(object)))
     newtimes = newdata[[timeVariable(object)]]
     predMat = apply(trajMat, 1, function(y) approxFun(x=time(object), y=y, xout=newtimes)$y)
-  }
-
-  if(!is.matrix(predMat)) {
-    browser()
   }
 
   transformPredict(object, predMat, newdata=newdata)
@@ -35,11 +31,11 @@ predict.clModelLongclust = function(object, newdata=NULL, what='mu', approxFun=a
 fitted.clModelLongclust = function(object, clusters=clusterAssignments(object)) {
   times = time(object)
   newdata = data.table(Id=rep(ids(object), each=length(times)),
-                       Cluster=rep(clusters, each=length(times)),
                        Time=times) %>%
     setnames('Id', idVariable(object)) %>%
     setnames('Time', timeVariable(object))
-  predict(object, newdata=newdata)
+  predict(object, newdata=newdata) %>%
+    transformFitted(object, ., clusters)
 }
 
 

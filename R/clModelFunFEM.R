@@ -5,11 +5,11 @@ setClass('clModelFunFEM', contains='clModel')
 fitted.clModelFunFEM = function(object, clusters=clusterAssignments(object)) {
   times = time(object)
   newdata = data.table(Id=rep(ids(object), each=length(times)),
-                       Cluster=rep(clusters, each=length(times)),
                        Time=times) %>%
     setnames('Id', idVariable(object)) %>%
     setnames('Time', timeVariable(object))
-  predict(object, newdata=newdata)
+  predict(object, newdata=newdata) %>%
+    transformFitted(object, ., clusters)
 }
 
 
@@ -23,12 +23,8 @@ predict.clModelFunFEM = function(object, newdata=NULL, what='mu', approxFun=appr
   assert_that(what == 'mu', msg='only what="mu" is supported')
   assert_that(is.function(approxFun))
 
-  # compute cluster trajectories
-  trajMat = object@model$prms$my
-  assert_that(is.matrix(trajMat))
-
   if(is.null(newdata)) {
-    return(fitted(object))
+    predMat = fitted(object, clusters=NULL)
   } else {
     assert_that(has_name(newdata, timeVariable(object)))
     fdmeans = object@model$fd

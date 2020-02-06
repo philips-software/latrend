@@ -17,7 +17,7 @@ predict.clModelGMM = function(object, newdata=NULL, what='mu') {
   assert_that(what == 'mu', msg='only what="mu" is supported')
 
   if(is.null(newdata)) {
-    predMat = fitted(object)
+    predMat = fitted(object, clusters=NULL)
   } else {
     vars = union(getCovariates(object@model$fixed),
                  getCovariates(object@model$mixture))

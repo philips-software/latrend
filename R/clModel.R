@@ -66,11 +66,10 @@ setMethod('clusterTrajectories', signature('clModel'), function(object, what, at
     stop('unsupported input')
   }
 
-  predMat = predict(object, newdata=newdata, what=what, ...)
-
-  assert_that(is.vector(predMat), msg='invalid output from predict function of clModel; expected vector')
-  assert_that(length(predMat) == nrow(newdata), msg='invalid output from predict function of clModel; expected a prediction per newdata row')
-  newdata[, c(responseVariable(object, what=what)) := as.numeric(predMat)]
+  dfPred = predict(object, newdata=newdata, what=what, ...)
+  assert_that(is.data.frame(dfPred), msg='invalid output from predict()')
+  assert_that(nrow(dfPred) == nrow(newdata), msg='invalid output from predict function of clModel; expected a prediction per newdata row')
+  newdata[, c(responseVariable(object, what=what)) := dfPred$Fit]
   return(newdata[])
 })
 
@@ -442,11 +441,9 @@ make.clusterIndices = function(object, clusters, finite=TRUE) {
     # integer
     assert_that(min(clusters) >= 1)
     assert_that(max(clusters) <= nClusters)
-
     clusters
   } else if(is.factor(clusters)) {
     # factor
-    assert_that(nlevels(clusters) == nClusters)
     if(all(levels(clusters) == clusNames)) {
       as.integer(clusters)
     } else {
@@ -460,13 +457,10 @@ make.clusterIndices = function(object, clusters, finite=TRUE) {
     clusters = as.integer(clusters)
     assert_that(min(clusters) >= 1)
     assert_that(max(clusters) <= nClusters)
-
     clusters
   } else if(is.character(clusters)) {
     # character
-    assert_that(uniqueN(clusters) == nClusters)
     assert_that(all(clusters %in% clusNames))
-
     factor(clusters, levels=clusNames) %>%
       as.integer
   } else {
@@ -782,43 +776,79 @@ setMethod('trajectories', signature('clModel'), function(object, what, at, clust
 
   preds = predict(object, newdata=newdata, what=what)
 
-  assert_that(is.vector(preds), msg='invalid output from predict function of clModel; expected vector')
-  assert_that(length(preds) == nrow(newdata), msg='invalid output from predict function of clModel; expected a prediction per newdata row')
-  newdata[, c(responseVariable(object, what=what)) := preds]
+  assert_that(is.data.frame(preds))
+  assert_that(nrow(preds) == nrow(newdata), msg='invalid output from predict function of clModel; expected a prediction per newdata row')
+  newdata[, c(responseVariable(object, what=what)) := preds$Fit]
   return(newdata[])
 })
 
 
 #' @title Helper function for ensuring the right fitted() output
 #' @details Includes additional checks
+#' @return A vector or matrix
 #' @keywords internal
-transformFitted = function(object, predMat, clusters) {
-  assert_that(is.matrix(predMat))
-  assert_that(ncol(predMat) == nClusters(object))
-  assert_that(nrow(predMat) == nobs(object))
+transformFitted = function(object, pred, clusters) {
+  if(!is.data.frame(pred) && is.list(pred)) {
+    # convert to matrix
+    assert_that(length(pred) == nClusters(object))
+    pred = lapply(pred, '[[', 'Fit') %>%
+      do.call(cbind, .)
+  } else if(is.data.frame(pred)) {
+    assert_that(has_name(pred, c('Fit', 'Cluster')))
+    pred = matrix(pred$Fit)
+  }
+
+  assert_that(is.matrix(pred), ncol(pred) == nClusters(object), nrow(pred) == nobs(object))
+  colnames(pred) = clusterNames(object)
 
   if(is.null(clusters)) {
-    predMat
+    pred
   } else {
     clusters = make.clusterIndices(object, clusters)
     rowClusters = clusters[genIdRowIndices(object)]
-    rowColumns(predMat, rowClusters)
+    rowColumns(pred, rowClusters)
   }
 }
 
-#' @title Helper function for ensuring the right fitted() output
+#' @title Helper function that matches the output to the specified newdata
+#' @description If Cluster is not provided, the prediction is outputted in long format per cluster,
+#' resulting in a longer data.frame than the newdata input
 #' @details Includes additional checks
+#' @return A data.frame with the predictions, or a list of cluster-specific prediction frames
 #' @keywords internal
-transformPredict = function(object, predMat, newdata) {
-  assert_that(is.matrix(predMat))
-  assert_that(ncol(predMat) == nClusters(object))
-  assert_that(nrow(predMat) == nrow(newdata))
+transformPredict = function(object, pred, newdata) {
+  if(is.vector(pred)) {
+    assert_that(is.null(newdata) || length(pred) == nrow(newdata))
+    data.frame(Fit=pred)
+  } else if(is.matrix(pred)) {
+    # format where multiple cluster-specific predictions are given per newdata entry (per row)
+    assert_that(is.matrix(pred))
+    assert_that(ncol(pred) == nClusters(object))
+    assert_that(is.null(newdata) || nrow(pred) == nrow(newdata))
 
-  if(has_name(newdata, 'Cluster')) {
-    rowClusters = make.clusterIndices(object, newdata$Cluster)
-    rowColumns(predMat, rowClusters)
+    if(hasName(newdata, 'Cluster')) {
+      rowClusters = make.clusterIndices(object, newdata$Cluster)
+      data.frame(Fit=rowColumns(pred, rowClusters))
+    } else {
+      data.frame(Fit=as.vector(pred)) %>%
+        split(clusterNames(object, factor=TRUE) %>% rep(each=nrow(pred)))
+    }
+  } else if(is.data.frame(pred)) {
+    # generic form, possibly containing more predictions than newdata. These are filtered.
+    # the pred object should contain the newdata variables
+    if(is.data.frame(pred)) {
+      pred = as.data.table(pred)
+    }
+    assert_that(hasName(pred, 'Fit'))
+    assert_that(!is.null(newdata))
+
+    vars = setdiff(names(pred), names(newdata)) %>% union('Fit')
+    assert_that(length(vars) > 0, msg='predict() cannot handle covariates with names of the predict columns (e.g., Fit, Se.fit)')
+    pred[newdata, on=names(newdata)] %>%
+      as.data.frame() %>%
+      .[vars]
   } else {
-    predMat
+    stop('unsupported input for pred')
   }
 }
 
