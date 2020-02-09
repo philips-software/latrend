@@ -149,6 +149,14 @@ dropRE = function(f) {
 }
 
 # CLUSTER specific ####
+
+#' @title Check for CLUSTER terms
+#' @keywords internal
+hasCLUSTER = function(f) {
+  vars = terms(f) %>% labels()
+  any(startsWith(vars, 'CLUSTER:') | endsWith(vars, ':CLUSTER') | vars == 'CLUSTER') # TODO: what about a:CLUSTER:b?
+}
+
 #' @title Drop CLUSTER-interactive terms
 #' @description Drop any terms that have an interaction with CLUSTER
 #' @keywords internal
