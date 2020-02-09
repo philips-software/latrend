@@ -172,7 +172,9 @@ confusionMatrix = function(object) {
 #' @export
 #' @title Whether the model converged
 setGeneric('converged', function(object, ...) standardGeneric('converged'))
-
+setMethod('converged', signature('clModel'), function(object) {
+  TRUE
+})
 
 
 #' @export
