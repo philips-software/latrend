@@ -37,6 +37,10 @@ clMethodTestLongclustT = function(...) {
   clMethodLongclust(modelSubset='VEI', gaussian=FALSE, ...)
 }
 
+clMethodTestMixtoolsNPRM = function(...) {
+  clMethodMixtoolsNPRM(maxiter=10, eps=1e-04)
+}
+
 expect_valid_clModel = function(object) {
   expect_s4_class(object, 'clModel')
 
@@ -55,9 +59,9 @@ expect_valid_clModel = function(object) {
   responseVariable(object) %>%
     expect_is('character')
   coef(object) %>%
-    expect_is(c('numeric', 'matrix'))
+    expect_is(c('numeric', 'matrix', 'NULL'), label='coef')
   converged(object) %>%
-    expect_is(c('logical', 'numeric', 'integer'))
+    expect_is(c('logical', 'numeric', 'integer'), label='converged')
   nClusters(object) %T>%
     {expect_true(is.count(.))}
   clusterNames(object) %>%
@@ -66,7 +70,7 @@ expect_valid_clModel = function(object) {
 
   # Posterior
   postprob(object) %>%
-    expect_is('matrix') %T>%
+    expect_is('matrix', label='postprob') %T>%
     {expect_true(all(is.finite(.)))} %T>%
     {expect_equal(ncol(.), nClusters(object))} %T>%
     {expect_equal(nrow(.), nIds(object))} %T>%
@@ -83,14 +87,14 @@ expect_valid_clModel = function(object) {
   # Predict
   if(!is(object, 'clModelCustom')) {
     predict(object, newdata=data.frame(Cluster='A', Time=time(object)[c(1,3)])) %>% # cluster-specific prediction
-      expect_is('data.frame', info='predictAT') %>%
-      expect_named('Fit', info='predictAT') %T>%
+      expect_is('data.frame', info='predictAT') %T>%
+      {expect_true('Fit' %in% names(.), info='predictAT')} %T>%
       {expect_equal(nrow(.), 2, info='predictAT')}
 
     predict(object, newdata=data.frame(Time=time(object)[c(1,3)])) %>% # prediction for all clusters; list of data.frames
       expect_is('list', info='predictT') %>%
       expect_length(nClusters(object)) %T>%
-      {expect_named(.$A, 'Fit', info='predictT')}
+      {expect_true('Fit' %in% names(.$A), info='predictT')}
 
     fitted(object, clusters=clusterAssignments(object)) %>%
       expect_is(c('NULL', 'numeric'), info='fittedClusters')
@@ -100,22 +104,22 @@ expect_valid_clModel = function(object) {
     predict(object, newdata=NULL) %>%
       expect_is('list', info='predictNull') %>%
       expect_length(nClusters(object)) %T>%
-      {expect_named(.$A, 'Fit', info='predictNull')}
+      {expect_true('Fit' %in% names(.$A), info='predictNull')}
   }
 
 
   # Derivative predict
   clusterTrajectories(object) %>%
-    expect_is('data.frame')
+    expect_is('data.frame', label='clusterTrajectories')
   trajectories(object) %>%
-    expect_is('data.frame')
+    expect_is('data.frame', label='trajectories')
   plot(object) %T>%
     {expect_true(is.ggplot(.))}
 
   residuals(object, clusters=clusterAssignments(object)) %>%
-    expect_is(c('NULL', 'numeric'))
+    expect_is(c('NULL', 'numeric'), label='residuals')
   residuals(object, clusters=NULL) %>%
-    expect_is(c('NULL', 'matrix'))
+    expect_is(c('NULL', 'matrix'), label='residuals')
 
   # Misc
   summary(object) %>%
