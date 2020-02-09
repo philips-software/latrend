@@ -836,17 +836,25 @@ transformPredict = function(object, pred, newdata) {
   } else if(is.data.frame(pred)) {
     # generic form, possibly containing more predictions than newdata. These are filtered.
     # the pred object should contain the newdata variables
-    if(is.data.frame(pred)) {
-      pred = as.data.table(pred)
-    }
+    pred = as.data.table(pred)
+    newdata = as.data.table(newdata)
+
     assert_that(hasName(pred, 'Fit'))
     assert_that(!is.null(newdata))
 
     vars = setdiff(names(pred), names(newdata)) %>% union('Fit')
     assert_that(length(vars) > 0, msg='predict() cannot handle covariates with names of the predict columns (e.g., Fit, Se.fit)')
-    pred[newdata, on=names(newdata)] %>%
+
+    newpred = merge(newdata, pred, by=intersect(names(pred), names(newdata)), allow.cartesian=TRUE) %>%
       as.data.frame() %>%
       .[vars]
+
+    if(!hasName(newpred, 'Cluster') || hasName(newdata, 'Cluster')) {
+      newpred
+    } else {
+      split(newpred, newpred$Cluster)
+    }
+
   } else {
     stop('unsupported input for pred')
   }
