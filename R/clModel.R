@@ -205,12 +205,8 @@ df.residual.clModel = function(object, ...) {
 #' @param clusters Optional cluster assignments per id. If unspecified, a matrix is returned containing the cluster-specific predictions per column.
 #' @return A vector of the fitted values for the respective class, or a matrix of fitted values for each cluster.
 fitted.clModel = function(object, clusters=clusterAssignments(object)) {
-  if (is.null(getS3method('fitted', class=class(object@model), optional=TRUE))) {
-    trajectories(object)[[responseVariable(object)]]
-  } else {
-    warning('clusters argument is ignored in direct call to fitted(object@model)')
-    fitted(object@model)
-  }
+  predict(object, newdata=NULL) %>%
+    transformFitted(object, ., clusters=clusters)
 }
 
 
