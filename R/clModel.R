@@ -847,7 +847,7 @@ transformPredict = function(object, pred, newdata) {
     vars = setdiff(names(pred), names(newdata)) %>% union('Fit')
     assert_that(length(vars) > 0, msg='predict() cannot handle covariates with names of the predict columns (e.g., Fit, Se.fit)')
 
-    newpred = merge(newdata, pred, by=intersect(names(pred), names(newdata)), allow.cartesian=TRUE) %>%
+    newpred = merge(newdata, pred, by=intersect(names(pred), names(newdata)), sort=FALSE, allow.cartesian=TRUE) %>%
       as.data.frame() %>%
       .[vars]
 
