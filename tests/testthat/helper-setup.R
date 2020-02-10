@@ -41,6 +41,10 @@ clMethodTestMixtoolsNPRM = function(...) {
   clMethodMixtoolsNPRM(maxiter=10, eps=1e-04)
 }
 
+clMethodTestMixtoolsGMM = function(...) {
+  clMethodMixtoolsGMM(epsilon=1e-02, ...)
+}
+
 expect_valid_clModel = function(object) {
   expect_s4_class(object, 'clModel')
 
@@ -59,7 +63,7 @@ expect_valid_clModel = function(object) {
   responseVariable(object) %>%
     expect_is('character')
   coef(object) %>%
-    expect_is(c('numeric', 'matrix', 'NULL'), label='coef')
+    expect_is(c('numeric', 'matrix', 'list', 'NULL'), label='coef')
   converged(object) %>%
     expect_is(c('logical', 'numeric', 'integer'), label='converged')
   nClusters(object) %T>%
@@ -87,14 +91,27 @@ expect_valid_clModel = function(object) {
   # Predict
   if(!is(object, 'clModelCustom')) {
     predict(object, newdata=data.frame(Cluster='A', Time=time(object)[c(1,3)])) %>% # cluster-specific prediction
-      expect_is('data.frame', info='predictAT') %T>%
-      {expect_true('Fit' %in% names(.), info='predictAT')} %T>%
-      {expect_equal(nrow(.), 2, info='predictAT')}
+      expect_is('data.frame', info='predictClusterTime') %T>%
+      {expect_true('Fit' %in% names(.), info='predictClusterTime')} %T>%
+      {expect_equal(nrow(.), 2, info='predictClusterTime')}
 
     predict(object, newdata=data.frame(Time=time(object)[c(1,3)])) %>% # prediction for all clusters; list of data.frames
-      expect_is('list', info='predictT') %>%
+      expect_is('list', info='predictTime') %>%
       expect_length(nClusters(object)) %T>%
-      {expect_true('Fit' %in% names(.$A), info='predictT')}
+      {expect_true('Fit' %in% names(.$A), info='predictTime')}
+
+    predict(object, newdata=data.frame(Cluster=rep('A', 4),
+                                       Id=c(ids(object)[c(1,1,2)], tail(ids(object), 1)),
+                                       Time=c(time(object)[c(1,3,1,1)]))) %>% # id-specific prediction for a specific cluster; data.frame
+      expect_is('data.frame', info='predictClusterIdTime') %T>%
+      {expect_true('Fit' %in% names(.), info='predictClusterIdTime')} %T>%
+      {expect_equal(nrow(.), 4, info='predictClusterIdTime')}
+
+    predict(object, newdata=data.frame(Id=c(ids(object)[c(1,1,2)], tail(ids(object), 1)),
+                                       Time=c(time(object)[c(1,3,1,1)]))) %>% # id-specific prediction for all clusters; list of data.frames
+      expect_is('list', info='predictIdTime') %>%
+      expect_length(nClusters(object)) %T>%
+      {expect_true('Fit' %in% names(.$A), info='predictIdTime')}
 
     fitted(object, clusters=clusterAssignments(object)) %>%
       expect_is(c('NULL', 'numeric'), info='fittedClusters')

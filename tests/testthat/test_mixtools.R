@@ -12,6 +12,12 @@ test_that('default np single cluster', {
 
 
 test_that('default np many clusters', {
+  skip('disabled')
   model = cluslong(clMethodTestMixtoolsNPRM(nClusters=5), testLongData) %>%
+    expect_valid_clModel()
+})
+
+test_that('default gmm', {
+  model = cluslong(clMethodTestMixtoolsGMM(), testLongData) %>%
     expect_valid_clModel()
 })
