@@ -1,6 +1,44 @@
 #' @include clModel.R
 setClass('clModelMixTVEM', contains='clModel')
 
+
+#' @export
+predict.clModelMixTVEM = function(object, newdata=NULL, what='mu') {
+  assert_that(is.newdata(newdata))
+  assert_that(what == 'mu', msg='only what="mu" is supported')
+
+  if(is.null(newdata)) {
+    pred = object@model$bestFit$fittedY %>%
+      set_colnames(clusterNames(object))
+  } else {
+    times = object@model$timeGrid
+    newtimes = unique(newdata[[timeVariable(object)]])
+    assert_that(all(newdata$Time %between% range(times)), msg='extrapolation is not supported')
+    # TODO computation of beta at custom times
+    trajMat = object@model$betaByGrid[[1]]
+    predMat = apply(trajMat, 2, function(x) approx(times, x, newtimes)$y) %>%
+      set_colnames(clusterNames(object))
+    pred = data.table(Time=newtimes, G=predMat) %>%
+      setnames(c(timeVariable(object), clusterNames(object))) %>%
+      melt(id.vars='Time', value.name='Fit', variable.name='Cluster')
+  }
+
+  transformPredict(object, pred, newdata)
+}
+
+
+setMethod('postprob', signature('clModelMixTVEM'), function(object) {
+  pp = object@model$bestFit$postProbsBySub
+  colnames(pp) = clusterNames(object)
+  return(pp)
+})
+
+
+setMethod('converged', signature('clModelMixTVEM'), function(object) {
+  object@model$bestFit$converged
+})
+
+
 #' @export
 logLik.clModelMixTVEM = function(object) {
   ll = object@model$bestFit$logLik
@@ -9,6 +47,14 @@ logLik.clModelMixTVEM = function(object) {
   class(ll) = 'logLik'
   return(ll)
 }
+
+
+#' @export
+sigma.clModelMixTVEM = function(object) {
+  sqrt(object@model$bestFit$sigsq.total) %>%
+    weighted.mean(w=clusterProportions(object))
+}
+
 
 #' @export
 coef.clModelMixTVEM = function(object) {
@@ -29,61 +75,3 @@ coef.clModelMixTVEM = function(object) {
             proportionNugget=object@model$bestFit$proportionNugget)
   return(coefs)
 }
-
-#' @export
-fitted.clModelMixTVEM = function(object, clusters=clusterAssignments(object)) {
-  predMat = object@model$bestFit$fittedY
-  colnames(predMat) = clusterNames(object)
-  transformFitted(object, predMat, clusters=clusters)
-}
-
-
-#' @export
-sigma.clModelMixTVEM = function(object) {
-  sqrt(object@model$bestFit$sigsq.total) %>%
-    weighted.mean(w=clusterProportions(object))
-}
-
-
-#' @export
-predict.clModelMixTVEM = function(object, newdata) {
-  # construct design matrix
-  stop('not implemented')
-}
-
-
-setMethod('postprob', signature('clModelMixTVEM'), function(object) {
-  pp = object@model$bestFit$postProbsBySub
-  colnames(pp) = clusterNames(object)
-  return(pp)
-})
-
-
-setMethod('converged', signature('clModelMixTVEM'), function(object) {
-  object@model$bestFit$converged
-})
-
-
-#' @export
-#' @rdname clusterTrajectories
-setMethod('clusterTrajectories', signature('clModelMixTVEM'), function(object, what, at) {
-  stop('not implemented')
-})
-
-#' @export
-#' @rdname trajectories
-setMethod('trajectories', signature('clModelMixTVEM'), function(object, what, at, clusters) {
-  id = idVariable(object)
-
-  if(is.null(at)) {
-    fitmat = fitted(object)
-    rowClusters = rleid(ids(object))
-    dt_pred = as.data.table(fitmat[cbind(1:nrow(fitmat), rowClusters)]) %>%
-      .[, Id := ids(object)[get(id)]] %>%
-      setcolorder('Id') %>%
-      setnames(c(id, clusterNames(object)))
-    return(dt_pred[])
-  } else {
-    stop('not supported')
-  }
-})
