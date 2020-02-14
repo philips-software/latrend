@@ -786,6 +786,9 @@ setMethod('trajectories', signature('clModel'), function(object, what, at, clust
 #' @return A vector or matrix
 #' @keywords internal
 transformFitted = function(object, pred, clusters) {
+  if(is.null(pred)) {
+    return(NULL)
+  }
   if(!is.data.frame(pred) && is.list(pred)) {
     # convert to matrix
     assert_that(length(pred) == nClusters(object))

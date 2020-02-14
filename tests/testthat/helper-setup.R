@@ -122,6 +122,11 @@ expect_valid_clModel = function(object) {
       expect_is('list', info='predictNull') %>%
       expect_length(nClusters(object)) %T>%
       {expect_true('Fit' %in% names(.$A), info='predictNull')}
+
+    residuals(object, clusters=clusterAssignments(object)) %>%
+      expect_is(c('NULL', 'numeric'), label='residuals')
+    residuals(object, clusters=NULL) %>%
+      expect_is(c('NULL', 'matrix'), label='residuals')
   }
 
 
@@ -132,11 +137,6 @@ expect_valid_clModel = function(object) {
     expect_is('data.frame', label='trajectories')
   plot(object) %T>%
     {expect_true(is.ggplot(.))}
-
-  residuals(object, clusters=clusterAssignments(object)) %>%
-    expect_is(c('NULL', 'numeric'), label='residuals')
-  residuals(object, clusters=NULL) %>%
-    expect_is(c('NULL', 'matrix'), label='residuals')
 
   # Misc
   summary(object) %>%

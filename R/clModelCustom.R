@@ -158,6 +158,15 @@ setMethod('postprob', signature('clModelCustom'), function(object) {
 })
 
 
+predict.clModelCustom = function(object, newdata=NULL, what='mu', ...) {
+  if(is.null(object@predict)) {
+    NULL
+  } else {
+    object@predict(object, newdata, what, ...)
+  }
+}
+
+
 #. predictPostprob ####
 setMethod('predictPostprob', signature('clModelCustom'), function(object, newdata=NULL, ...) {
   pp = object@predictPostprob(object, newdata, ...)
