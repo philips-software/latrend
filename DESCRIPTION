@@ -23,7 +23,9 @@ Imports:
 RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
 Suggests: 
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 Collate: 
     'assert.R'
     'clMethod.R'
@@ -67,3 +69,4 @@ Collate:
     'matrix.R'
     'metrics.R'
     'zzz.R'
+VignetteBuilder: knitr
