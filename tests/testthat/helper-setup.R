@@ -5,6 +5,8 @@ if(file.exists(mixt_file)) {
   source(mixt_file)
 }
 
+options(cluslong.id='Id', cluslong.time='Time')
+
 clMethodTestKML = function(...) {
   clMethodKML(nRuns=1, maxIter=10, ...)
 }
