@@ -28,7 +28,7 @@ plotTrajs = function(data, response, time, id, cluster) {
 
   p = ggplot(data=data, mapping=aes_string(x=time, y=response, group=id, cluster=cluster)) +
     theme(legend.position='top') +
-    geom_line(size=1) +
+    geom_line() +
     labs(title='Trajectories')
 
   if(!is.null(cluster)) {
