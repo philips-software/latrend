@@ -139,7 +139,7 @@ setMethod('metric', signature('clModels'), metric.clModels)
 #' @inheritParams subset.clModels
 #' @param by The argument name along which methods are plotted.
 #' @param group The argument names to use for determining groups of different models. By default, all arguments are included.
-#' Specifying group=character() disabled grouping.
+#' Specifying group=character() disables grouping.
 #' Specifying a single argument for grouping uses that specific column as the grouping column.
 #' In all other cases, groupings are represented by a number.
 #' @param groupExclude Argument names which are removed from the names specified in `group`.
@@ -147,7 +147,7 @@ setMethod('metric', signature('clModels'), metric.clModels)
 #' @return `ggplot2` object.
 #' @examples
 #' plotMetric(models, 'BIC', by='nClusters', group='.name')
-plotMetric = function(models, name, by='nClusters', subset, group=NULL, groupExclude=c('seed'), facet=TRUE) {
+plotMetric = function(models, name, by='nClusters', subset, group=character(), groupExclude=c('seed')) {
   models = as.clModels(models)
   assert_that(length(models) > 0, msg='need at least 1 clModel to plot')
   assert_that(is.character(name), length(name) >= 1)
@@ -176,25 +176,23 @@ plotMetric = function(models, name, by='nClusters', subset, group=NULL, groupExc
   dt = cbind(dtModels, dtMetrics)
   if(length(group) == 0) {
     dt[, .group := 'All']
-  } else if(length(grouping) == 1) {
-    dt[, .group := get(group)]
   } else {
-    dt[, .group := .GRP, by=group]
+    dt[, .group := do.call(interaction, subset(dt, select=group))]
   }
   assert_that(has_name(dt, by))
 
   # Prepare ggplot data; convert to long format to support multiple metrics
-  dtgg = melt(dt, id.vars=c('.group', by),
+  dtgg = melt(dt, id.vars=c(by, '.group'),
               measure.vars=metricNames,
-              variable.name='.metric',
-              value.name='.value')
-  levels(dtgg$.metric) = name
+              variable.name='Metric',
+              value.name='Value') %>%
+    setnames('.group', 'Group')
+  levels(dtgg$Metric) = name
 
   if(length(name) == 1) {
-    p = ggplot(dtgg, aes_string(x=by, y='.value', group='.group'))
+    p = ggplot(dtgg, aes_string(x=by, y='Value', group='Group'))
   } else {
-    p = ggplot(dtgg, aes_string(x=by, y='.value', group='.metric', color='.metric')) +
-      labs(color='Metric')
+    p = ggplot(dtgg, aes_string(x=by, y='Value', group='Metric', color='Metric'))
   }
 
   if(is.numeric(dt[[by]]) || is.logical(dt[[by]])) {
@@ -206,10 +204,6 @@ plotMetric = function(models, name, by='nClusters', subset, group=NULL, groupExc
     p = p + ylab(name)
   } else {
     p = p + ylab('Value')
-  }
-
-  if(facet && uniqueN(dt$.group) > 1) {
-    p = p + facet_wrap(~.group)
   }
 
   return(p)
