@@ -132,7 +132,14 @@ setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
   }
 
   if(eval) {
-    value = eval(arg, envir=envir, enclos=parent.env(getNamespace(.packageName)))
+    value = tryCatch({
+      eval(arg, envir=envir)
+    }, error=function(e) {
+      # try evaluation within package scope instead
+      tryCatch({
+        eval(arg, envir=parent.env(getNamespace(.packageName)))
+      }, error=function(e) stop('error in evaluating method argument expression'))
+    })
   } else {
     value = arg
   }
