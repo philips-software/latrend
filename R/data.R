@@ -123,7 +123,7 @@ generateLongData = function(sizes = c(40, 60),
   }
   setnames(alldata, 'Value', response)
   setnames(alldata, 'Id', id)
-  setcolorder(alldata, c(id, 'Cluster', response, names(Xf)))
-  alldata[, Cluster := clusterNames[Cluster]]
+  setcolorder(alldata, c(id, 'Cluster', setdiff(colnames(Xf), '(Intercept)'), response))
+  alldata[, Cluster := factor(clusterNames[Cluster], levels=clusterNames)]
   return(alldata[])
 }
