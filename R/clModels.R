@@ -142,12 +142,11 @@ setMethod('metric', signature('clModels'), metric.clModels)
 #' Specifying group=character() disables grouping.
 #' Specifying a single argument for grouping uses that specific column as the grouping column.
 #' In all other cases, groupings are represented by a number.
-#' @param groupExclude Argument names which are removed from the names specified in `group`.
 #' @param facet Whether to facet the plot if multiple model groups are identified.
 #' @return `ggplot2` object.
 #' @examples
 #' plotMetric(models, 'BIC', by='nClusters', group='.name')
-plotMetric = function(models, name, by='nClusters', subset, group=character(), groupExclude=c('seed')) {
+plotMetric = function(models, name, by='nClusters', subset, group=character()) {
   models = as.clModels(models)
   assert_that(length(models) > 0, msg='need at least 1 clModel to plot')
   assert_that(is.character(name), length(name) >= 1)
@@ -164,38 +163,27 @@ plotMetric = function(models, name, by='nClusters', subset, group=character(), g
 
   dtModels = as.data.table(models)
   assert_that(nrow(dtModels) == nrow(dtMetrics))
+  assert_that(is.null(group) || has_name(dtModels, group))
 
-  if(is.null(group)) {
-    group = setdiff(names(dtModels), groupExclude)
-    if(length(group) == 0) {
-      warning('resulting group arguments after groupExclude is empty. Consider removing the names from groupExclude')
-    }
-  }
-  assert_that(has_name(dtModels, group))
-
-  dt = cbind(dtModels, dtMetrics)
+  dtModelMetrics = cbind(dtModels, dtMetrics)
   if(length(group) == 0) {
-    dt[, .group := 'All']
+    dtModelMetrics[, .group := 'All']
   } else {
-    dt[, .group := do.call(interaction, subset(dt, select=group))]
+    dtModelMetrics[, .group := do.call(interaction, subset(dtModelMetrics, select=group))]
   }
-  assert_that(has_name(dt, by))
+  assert_that(has_name(dtModelMetrics, by))
 
   # Prepare ggplot data; convert to long format to support multiple metrics
-  dtgg = melt(dt, id.vars=c(by, '.group'),
+  dtgg = melt(dtModelMetrics, id.vars=c(by, '.group'),
               measure.vars=metricNames,
               variable.name='Metric',
               value.name='Value') %>%
     setnames('.group', 'Group')
   levels(dtgg$Metric) = name
 
-  if(length(name) == 1) {
-    p = ggplot(dtgg, aes_string(x=by, y='Value', group='Group'))
-  } else {
-    p = ggplot(dtgg, aes_string(x=by, y='Value', group='Metric', color='Metric'))
-  }
+  p = ggplot(dtgg, aes_string(x=by, y='Value', group='Group'))
 
-  if(is.numeric(dt[[by]]) || is.logical(dt[[by]])) {
+  if(is.numeric(dtModelMetrics[[by]]) || is.logical(dtModelMetrics[[by]])) {
     p = p + geom_line()
   }
   p = p + geom_point()
@@ -203,12 +191,12 @@ plotMetric = function(models, name, by='nClusters', subset, group=character(), g
   if(length(name) == 1) {
     p = p + ylab(name)
   } else {
-    p = p + ylab('Value')
+    p = p + ylab('Value') +
+      facet_wrap(~Metric, scales='free_y')
   }
 
   return(p)
 }
-
 
 #' @export
 #' @title Subsetting a clModels list based on method arguments
