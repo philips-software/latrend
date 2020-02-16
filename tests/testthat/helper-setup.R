@@ -1,11 +1,11 @@
-logging::setLevel(loglevels['FATAL'])
-
 mixt_file = file.path('..', '..', 'MixTVEM.R')
 if(file.exists(mixt_file)) {
   source(mixt_file)
 }
 
-options(cluslong.id='Id', cluslong.time='Time')
+options(cluslong.id='Id',
+        cluslong.time='Time',
+        cluslong.verbose=R.utils::Verbose())
 
 clMethodTestKML = function(...) {
   clMethodKML(nRuns=1, maxIter=10, ...)

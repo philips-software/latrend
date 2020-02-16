@@ -26,18 +26,18 @@ setMethod('getName', signature('clMethodMixtoolsNPRM'), function(object) 'non-pa
 setMethod('getName0', signature('clMethodMixtoolsNPRM'), function(object) 'nprm')
 
 
-setMethod('fit', signature('clMethodMixtoolsNPRM'), function(method, data, prepEnv) {
-  e = new.env(parent=prepEnv)
+setMethod('fit', signature('clMethodMixtoolsNPRM'), function(method, data, envir, verbose, ...) {
+  e = new.env(parent=envir)
 
   args = as.list(method)
-  args$x = prepEnv$dataMat
+  args$x = envir$dataMat
   args$mu0 = method$nClusters
-  args$verb = canShowModelOutput('FINE')
+  args$verb = canShow(verbose, 'fine')
   args[setdiff(names(args), formalArgs(npEM))] = NULL #remove undefined arguments
 
   # Helper variables
   valueColumn = formula(method) %>% getResponse
-  suppressFun = if(canShowModelOutput()) force else capture.output
+  suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   startTime = Sys.time()
   suppressFun({
@@ -48,11 +48,11 @@ setMethod('fit', signature('clMethodMixtoolsNPRM'), function(method, data, prepE
 })
 
 
-setMethod('finalize', signature('clMethodMixtoolsNPRM'), function(method, data, fitEnv) {
+setMethod('finalize', signature('clMethodMixtoolsNPRM'), function(method, data, envir, verbose, ...) {
     model = new('clModelMixtoolsRM',
                 method=method,
                 data=data,
-                model=fitEnv$model,
+                model=envir$model,
                 clusterNames=make.clusterNames(method$nClusters))
     return(model)
   })

@@ -1,7 +1,7 @@
 context('twostep models')
 
 test_that('specify', {
-  repfun = function(method, data) {
+  repfun = function(method, data, ...) {
     data[, mean(Value), by=Id]$V1 %>% cbind
   }
   clusfun = function(method, data, repMat, ...) {

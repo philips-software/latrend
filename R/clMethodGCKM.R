@@ -59,12 +59,12 @@ setMethod('getName', signature('clMethodGCKM'), function(object) 'two-step using
 setMethod('getName0', signature('clMethodGCKM'), function(object) 'gckm')
 
 
-setMethod('prepare', signature('clMethodGCKM'), function(method, data) {
+setMethod('prepare', signature('clMethodGCKM'), function(method, data, verbose) {
   method = clMethodGCKM_as_twostep(method)
   callNextMethod()
 })
 
-setMethod('fit', signature('clMethodGCKM'), function(method, data, prepEnv) {
+setMethod('fit', signature('clMethodGCKM'), function(method, data, envir, verbose, ...) {
   method = clMethodGCKM_as_twostep(method)
   callNextMethod()
 })
@@ -77,15 +77,15 @@ clMethodGCKM_as_twostep = function(method) {
   new('clMethodTwoStep', call=call)
 }
 
-representationStepGCKM = function(method, data) {
-  loginfo('Representation step...')
+representationStepGCKM = function(method, data, verbose, ...) {
+  cat(verbose, 'Representation step...')
   fixedStr = deparse(method$formula)
   randomStr = dropResponse(method$formula) %>%
     deparse %>%
     substring(2)
   lmmFormula = paste0(fixedStr, ' + (', randomStr, '|', method$id, ')') %>% as.formula(env=NULL)
 
-  lmm = lmer(formula=lmmFormula, data=data, REML=method$REML, control=method$control, verbose=canShowModelOutput('FINE'))
+  lmm = lmer(formula=lmmFormula, data=data, REML=method$REML, control=method$control, verbose=canShow(verbose, 'fine'))
 
   e = new.env()
   e$model = lmm
@@ -93,9 +93,9 @@ representationStepGCKM = function(method, data) {
   return(e)
 }
 
-clusterStepGCKM = function(method, data, repMat, envir) {
-  loginfo('Cluster step...')
-  km = kmeans(repMat, centers=method$nClusters, trace=canShowModelOutput('FINE'))
+clusterStepGCKM = function(method, data, repMat, envir, verbose, ...) {
+  cat(verbose, 'Cluster step...')
+  km = kmeans(repMat, centers=method$nClusters, trace=canShow(verbose, 'fine'))
 
   clModelCustom(method=method,
                 data=data, clusterAssignments=km$cluster,

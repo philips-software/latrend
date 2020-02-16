@@ -75,12 +75,12 @@ setMethod('getName', signature('clMethodGMM'), function(object) 'growth mixture 
 
 setMethod('getName0', signature('clMethodGMM'), function(object) 'gmm')
 
-gmm_prepare = function(method, data) {
+gmm_prepare = function(method, data, verbose, ...) {
   e = new.env()
 
   f = formula(method)
   valueColumn = getResponse(f)
-  e$verbose = getLogger()$getLevel() < loglevels['INFO']
+  e$verbose = as.logical(verbose)
 
   # Check & process data
   e$data = as.data.table(data) %>%
@@ -92,7 +92,7 @@ gmm_prepare = function(method, data) {
   e$mixture = dropResponse(f) %>% dropRE %>% keepCLUSTER
   if (length(getCovariates(e$mixture)) == 0 && !hasIntercept(e$mixture)) {
     if (method$nClusters > 1) {
-      warning('no cluster-specific terms specified in formula. Defaulting to intercept.', immediate.=TRUE)
+      warning.Verbose(verbose, 'no cluster-specific terms specified in formula. Defaulting to intercept.')
     }
     e$mixture = as.formula('~1', env=environment(e$mixture))
   }
@@ -102,9 +102,9 @@ gmm_prepare = function(method, data) {
     e$random = reTerms[[1]] %>% REtermAsFormula
   }
 
-  logfinest(sprintf('\tfixed: %s', deparse(e$fixed)))
-  logfinest(sprintf('\tmixture: %s', deparse(e$mixture)))
-  logfinest(sprintf('\trandom: %s', deparse(e$random)))
+  cat(verbose, sprintf('\tfixed: %s', deparse(e$fixed)), verboseLevels$finest)
+  cat(verbose, sprintf('\tmixture: %s', deparse(e$mixture)), verboseLevels$finest)
+  cat(verbose, sprintf('\trandom: %s', deparse(e$random)), verboseLevels$finest)
 
   # drop intercept from formula.mb
   e$formula.mb = formula(method, what='mb') %>% dropIntercept
@@ -116,23 +116,23 @@ gmm_prepare = function(method, data) {
 setMethod('prepare', signature('clMethodGMM'), gmm_prepare)
 
 ##
-gmm_fit = function(method, data, prepEnv) {
-  e = new.env(parent=prepEnv)
+gmm_fit = function(method, data, envir, verbose, ...) {
+  e = new.env(parent=envir)
 
   valueColumn = formula(method) %>% getResponse
 
   args = as.list(method)
-  args$data = prepEnv$data
-  args$fixed = prepEnv$fixed
+  args$data = envir$data
+  args$fixed = envir$fixed
   args$maxiter = method$maxIter
   if (method$nClusters > 1) {
-    args$mixture = prepEnv$mixture
+    args$mixture = envir$mixture
   }
-  args$random = prepEnv$random
+  args$random = envir$random
   args$subject = method$id
-  args$classmb = prepEnv$formula.mb
+  args$classmb = envir$formula.mb
   args$ng = method$nClusters
-  args$verbose = prepEnv$verbose
+  args$verbose = envir$verbose
   args[setdiff(names(args), formalArgs(hlme))] = NULL #remove undefined arguments
   args$returndata = TRUE
 
@@ -147,10 +147,10 @@ gmm_fit = function(method, data, prepEnv) {
 
   e$runTime = as.numeric(Sys.time() - startTime)
 
-  model$fixed = prepEnv$fixed
-  model$mixture = prepEnv$mixture
-  model$random = prepEnv$random
-  model$mb = prepEnv$formula.mb
+  model$fixed = envir$fixed
+  model$mixture = envir$mixture
+  model$random = envir$random
+  model$mb = envir$formula.mb
   e$model = model
 
   return(e)
@@ -159,11 +159,11 @@ setMethod('fit', signature('clMethodGMM'), gmm_fit)
 
 
 ##
-gmm_finalize = function(method, data, fitEnv) {
+gmm_finalize = function(method, data, envir, verbose, ...) {
   model = new('clModelGMM',
               method=method,
               data=data,
-              model=fitEnv$model,
+              model=envir$model,
               clusterNames=make.clusterNames(method$nClusters))
   return(model)
 }

@@ -74,11 +74,11 @@ setMethod('prepare', signature('clMethodGBTM'), gmm_prepare)
 
 setMethod('fit', signature('clMethodGBTM'), gmm_fit)
 
-setMethod('finalize', signature('clMethodGBTM'), function(method, data, fitEnv) {
+setMethod('finalize', signature('clMethodGBTM'), function(method, data, envir, verbose, ...) {
   model = new('clModelGBTM',
               method=method,
               data=data,
-              model=fitEnv$model,
+              model=envir$model,
               clusterNames=make.clusterNames(method$nClusters))
   return(model)
 })

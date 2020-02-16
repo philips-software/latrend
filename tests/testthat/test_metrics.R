@@ -3,7 +3,7 @@ context('metrics')
 internalMetrics = getInternalMetricNames() %>%
   setdiff('deviance')
 
-externalMetrics = getExternalMetricNames()
+externalMetrics = getExternalMetricNames() %>% setdiff('McNemar')
 
 test_that('internal, two clusters', {
   model = cluslong(clMethodTestGMM(), testLongData, nClusters=2)

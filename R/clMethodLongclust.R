@@ -28,11 +28,11 @@ setMethod('getName', signature('clMethodLongclust'), function(object) 'longclust
 
 setMethod('getName0', signature('clMethodLongclust'), function(object) 'longclust')
 
-setMethod('fit', signature('clMethodLongclust'), function(method, data, prepEnv) {
-  e = new.env(parent=prepEnv)
+setMethod('fit', signature('clMethodLongclust'), function(method, data, envir, verbose, ...) {
+  e = new.env(parent=envir)
 
   args = as.list(method)
-  args$x = prepEnv$dataMat
+  args$x = envir$dataMat
   args$Gmin = method$nClusters
   args$Gmax = method$nClusters
   if(hasName(method, 'seed')) {
@@ -40,7 +40,7 @@ setMethod('fit', signature('clMethodLongclust'), function(method, data, prepEnv)
   }
   args[setdiff(names(args), formalArgs(longclustEM))] = NULL #remove undefined arguments
 
-  suppressFun = if(canShowModelOutput()) force else capture.output
+  suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   startTime = Sys.time()
   suppressFun({
@@ -50,11 +50,11 @@ setMethod('fit', signature('clMethodLongclust'), function(method, data, prepEnv)
   return(e)
 })
 
-setMethod('finalize', signature('clMethodLongclust'), function(method, data, fitEnv) {
+setMethod('finalize', signature('clMethodLongclust'), function(method, data, envir, verbose, ...) {
   model = new('clModelLongclust',
               method=method,
               data=data,
-              model=fitEnv$model,
+              model=envir$model,
               clusterNames=make.clusterNames(method$nClusters))
   return(model)
 })

@@ -30,7 +30,7 @@ setMethod('getName', signature('clMethodFunFEM'), function(object) 'functional s
 
 setMethod('getName0', signature('clMethodFunFEM'), function(object) 'funfem')
 
-setMethod('prepare', signature('clMethodFunFEM'), function(method, data) {
+setMethod('prepare', signature('clMethodFunFEM'), function(method, data, verbose, ...) {
   e = callNextMethod()
   valueColumn = formula(method) %>% getResponse
 
@@ -41,11 +41,11 @@ setMethod('prepare', signature('clMethodFunFEM'), function(method, data) {
 })
 
 
-setMethod('fit', signature('clMethodFunFEM'), function(method, data, prepEnv) {
-  e = new.env(parent=prepEnv)
+setMethod('fit', signature('clMethodFunFEM'), function(method, data, envir, verbose, ...) {
+  e = new.env(parent=envir)
 
   args = as.list(method)
-  args$fd = prepEnv$fd
+  args$fd = envir$fd
   args$K = method$nClusters
   args$disp = FALSE
   args$graph = FALSE
@@ -53,23 +53,23 @@ setMethod('fit', signature('clMethodFunFEM'), function(method, data, prepEnv) {
 
   # Helper variables
   valueColumn = formula(method) %>% getResponse
-  suppressFun = if(canShowModelOutput()) force else capture.output
+  suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   startTime = Sys.time()
   suppressFun({
     e$model = do.call(funFEM, args)
   })
-  e$model$basis = prepEnv$basis
-  e$model$fd = prepEnv$fd
+  e$model$basis = envir$basis
+  e$model$fd = envir$fd
   e$runTime = as.numeric(Sys.time() - startTime)
   return(e)
 })
 
-setMethod('finalize', signature('clMethodFunFEM'), function(method, data, fitEnv) {
+setMethod('finalize', signature('clMethodFunFEM'), function(method, data, envir, verbose, ...) {
   model = new('clModelFunFEM',
               method=method,
               data=data,
-              model=fitEnv$model,
+              model=envir$model,
               clusterNames=make.clusterNames(method$nClusters))
   return(model)
 })

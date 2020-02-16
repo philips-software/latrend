@@ -1,5 +1,6 @@
 .onLoad = function(libname, pkgname) {
   opts = list(
+    cluslong.verbose=R.utils::Verbose(threshold=-1),
     cluslong.response='Value',
     cluslong.time='Time',
     cluslong.id='Id',
@@ -10,9 +11,5 @@
     options(opts[optMask])
     packageStartupMessage('Default options:')
     packageStartupMessage(paste0('\t', names(opts[optMask]), ' = ', opts[optMask], collapse='\n'))
-  }
-
-  if(length(getLogger()$handlers) == 0) {
-    packageStartupMessage('NOTE: no logger configured. Run basicConfig() to enable.')
   }
 }

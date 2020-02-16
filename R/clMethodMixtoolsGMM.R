@@ -28,7 +28,7 @@ setMethod('getName', signature('clMethodMixtoolsGMM'), function(object) 'growth 
 setMethod('getName0', signature('clMethodMixtoolsGMM'), function(object) 'gmm')
 
 
-setMethod('prepare', signature('clMethodMixtoolsGMM'), function(method, data) {
+setMethod('prepare', signature('clMethodMixtoolsGMM'), function(method, data, verbose, ...) {
   e = new.env()
 
   # Parse formula
@@ -62,24 +62,24 @@ setMethod('prepare', signature('clMethodMixtoolsGMM'), function(method, data) {
 })
 
 #' @importFrom mixtools regmixEM.mixed
-setMethod('fit', signature('clMethodMixtoolsGMM'), function(method, data, prepEnv) {
-  e = new.env(parent=prepEnv)
+setMethod('fit', signature('clMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
+  e = new.env(parent=envir)
 
   args = as.list(method)
-  args$y = prepEnv$y
-  args$x = prepEnv$x
-  args$w = prepEnv$w
+  args$y = envir$y
+  args$x = envir$x
+  args$w = envir$w
   args$k = method$nClusters
   args$addintercept.fixed = FALSE
   args$addintercept.random = FALSE
-  args$verb = canShowModelOutput('FINE')
+  args$verb = canShow(verbose, 'fine')
   args[setdiff(names(args), formalArgs(regmixEM.mixed))] = NULL #remove undefined arguments
 
   startTime = Sys.time()
 
   model = do.call(regmixEM.mixed, args)
-  model$fixed = prepEnv$fixed
-  model$random = prepEnv$random
+  model$fixed = envir$fixed
+  model$random = envir$random
 
   e$runTime = as.numeric(Sys.time() - startTime)
 
@@ -87,11 +87,11 @@ setMethod('fit', signature('clMethodMixtoolsGMM'), function(method, data, prepEn
   return(e)
 })
 
-setMethod('finalize', signature('clMethodMixtoolsGMM'), function(method, data, fitEnv) {
+setMethod('finalize', signature('clMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
   model = new('clModelMixtoolsGMM',
               method=method,
               data=data,
-              model=fitEnv$model,
+              model=envir$model,
               clusterNames=make.clusterNames(method$nClusters))
   return(model)
 })

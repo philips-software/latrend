@@ -24,7 +24,7 @@ setMethod('getName', signature('clMethodFlexmix'), function(object) 'flexmix')
 setMethod('getName0', signature('clMethodFlexmix'), function(object) 'flx')
 
 
-setMethod('prepare', signature('clMethodFlexmix'), function(method, data) {
+setMethod('prepare', signature('clMethodFlexmix'), function(method, data, verbose, ...) {
   e = new.env()
 
   f = formula(method) %>% dropRE %>% dropCLUSTER
@@ -33,7 +33,7 @@ setMethod('prepare', signature('clMethodFlexmix'), function(method, data) {
     e$model = method$model
   }
 
-  logfinest(sprintf('\tformula: %s', deparse(e$formula)))
+  cat(verbose, sprintf('\tformula: %s', deparse(e$formula)), level=verboseLevels$finest)
 
   # drop intercept from formula.mb
   if(hasCovariates(method$formula.mb)) {
@@ -46,14 +46,14 @@ setMethod('prepare', signature('clMethodFlexmix'), function(method, data) {
 })
 
 
-setMethod('fit', signature('clMethodFlexmix'), function(method, data, prepEnv) {
-  e = new.env(parent=prepEnv)
+setMethod('fit', signature('clMethodFlexmix'), function(method, data, envir, verbose, ...) {
+  e = new.env(parent=envir)
 
   args = as.list(method)
   args$data = data
-  args$formula = prepEnv$formula
-  args$model = prepEnv$model
-  args$concomitant = prepEnv$formula.mb
+  args$formula = envir$formula
+  args$model = envir$model
+  args$concomitant = envir$formula.mb
   args$k = method$nClusters
   args[setdiff(names(args), formalArgs(flexmix))] = NULL #remove undefined arguments
 
@@ -73,14 +73,14 @@ setMethod('fit', signature('clMethodFlexmix'), function(method, data, prepEnv) {
 })
 
 
-setMethod('finalize', signature('clMethodFlexmix'), function(method, data, fitEnv) {
-  if(fitEnv$model@k < method$nClusters) {
+setMethod('finalize', signature('clMethodFlexmix'), function(method, data, envir, verbose, ...) {
+  if(envir$model@k < method$nClusters) {
     warning('flexmix returned a result with fewer components than was specified for nClusters')
   }
   model = new('clModelFlexmix',
               method=method,
               data=data,
-              model=fitEnv$model,
-              clusterNames=make.clusterNames(fitEnv$model@k))
+              model=envir$model,
+              clusterNames=make.clusterNames(envir$model@k))
   return(model)
 })

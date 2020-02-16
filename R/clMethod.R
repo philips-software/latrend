@@ -16,7 +16,7 @@ setValidity('clMethod', function(object) {
 setMethod('show', 'clMethod',
           function(object) {
             cat('Cluslong method "', getName(object), '"\n', sep='')
-            clMethodPrintArgs(object)
+            print(object)
           }
 )
 
@@ -313,6 +313,17 @@ substitute.clMethod = function(object, envir=NULL) {
   return(object)
 }
 
+
+#' @export
+print.clMethod = function(object, ...) {
+  argNames = names(object)
+  args = as.character(object, ...) %>%
+    vapply(strtrim, 40, FUN.VALUE='')
+
+  cat(sprintf('%-16s%s\n', paste0(argNames, ':'), args), sep='')
+}
+
+
 #' @export
 #' @title Generate a list of clMethod
 #' @param method The `clMethod` to use as the template, which will be updated for each of the other arguments.
@@ -384,15 +395,6 @@ setGeneric('fit', function(method, ...) standardGeneric('fit'))
 #' @title clMethod interface function
 #' @description Called by [cluslong].
 setGeneric('finalize', function(method, ...) standardGeneric('finalize'))
-
-
-clMethodPrintArgs = function(object, ...) {
-  argNames = names(object)
-  args = as.character(object, ...) %>%
-    vapply(strtrim, 40, FUN.VALUE='')
-
-  cat(sprintf('  %-16s%s\n', paste0(argNames, ':'), args), sep='')
-}
 
 #' @title Select the preferred environment
 #' @description Returns envir if specified. Otherwise, returns environment(object) if specified. The defaultEnvir is returned when the former two are NULL.

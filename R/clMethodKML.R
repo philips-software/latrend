@@ -63,7 +63,7 @@ setMethod('getName', signature('clMethodKML'), function(object) 'longitudinal k-
 setMethod('getName0', signature('clMethodKML'), function(object) 'kml')
 
 
-setMethod('prepare', signature('clMethodKML'), function(method, data) {
+setMethod('prepare', signature('clMethodKML'), function(method, data, verbose, ...) {
   e = callNextMethod()
   valueColumn = formula(method) %>% getResponse
 
@@ -73,7 +73,7 @@ setMethod('prepare', signature('clMethodKML'), function(method, data) {
   }
 
   # Model specification
-  logfiner('Creating clusterLongData object...')
+  cat(verbose, 'Creating clusterLongData object...', verboseLevels$finest)
   e$par = parALGO(saveFreq = 1e99,
                 scale = FALSE,
                 maxIt = method$maxIter,
@@ -87,17 +87,18 @@ setMethod('prepare', signature('clMethodKML'), function(method, data) {
 })
 
 
-setMethod('fit', signature('clMethodKML'), function(method, data, prepEnv) {
-  e = new.env(parent=prepEnv)
+setMethod('fit', signature('clMethodKML'), function(method, data, envir, verbose, ...) {
+  e = new.env(parent=envir)
 
-  cld = prepEnv$cld
+  cld = envir$cld
   # Helper variables
   valueColumn = formula(method) %>% getResponse
-  suppressFun = if(canShowModelOutput()) force else capture.output
+  suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
+  cat(verbose, 'Running kml()...', level=verboseLevels$finest)
   startTime = Sys.time()
   suppressFun(
-    kml(cld, nbClusters=method$nClusters, nbRedrawing=method$nRuns, toPlot='none', parAlgo=prepEnv$par)
+    kml(cld, nbClusters=method$nClusters, nbRedrawing=method$nRuns, toPlot='none', parAlgo=envir$par)
   )
   runTime = as.numeric(Sys.time() - startTime)
   e$cld = cld
@@ -105,11 +106,11 @@ setMethod('fit', signature('clMethodKML'), function(method, data, prepEnv) {
 })
 
 
-setMethod('finalize', signature('clMethodKML'), function(method, data, fitEnv) {
+setMethod('finalize', signature('clMethodKML'), function(method, data, envir, verbose, ...) {
   model = new('clModelKML',
               method=method,
               data=data,
-              model=fitEnv$cld,
+              model=envir$cld,
               clusterNames=make.clusterNames(method$nClusters))
   return(model)
 })

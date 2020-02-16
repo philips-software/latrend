@@ -51,14 +51,13 @@ setMethod('getName', signature('clMethodLLPA'), function(object) 'longitudinal l
 
 setMethod('getName0', signature('clMethodLLPA'), function(object) 'llpa')
 
-setMethod('prepare', signature('clMethodLLPA'), function(method, data) {
+setMethod('prepare', signature('clMethodLLPA'), function(method, data, verbose, ...) {
   e = new.env()
 
   valueColumn = formula(method) %>% getResponse
   assert_that(!anyNA(data[[valueColumn]]), msg='data contains missing values')
 
   # Data
-  logfine('Reshaping data...')
   wideFrame = dcast(data, get(method$id) ~ get(method$time), value.var=valueColumn)
   e$data = as.matrix(wideFrame[, -'method']) %>%
     set_rownames(wideFrame$method)
@@ -66,10 +65,10 @@ setMethod('prepare', signature('clMethodLLPA'), function(method, data) {
   return(e)
 })
 
-setMethod('fit', signature('clMethodLLPA'), function(method, data, prepEnv) {
-  e = new.env(parent=prepEnv)
+setMethod('fit', signature('clMethodLLPA'), function(method, data, envir, verbose, ...) {
+  e = new.env(parent=envir)
   args = as.list(method)
-  args$data = prepEnv$data
+  args$data = envir$data
   args$G = method$nClusters
 
   startTime = Sys.time()
@@ -81,11 +80,11 @@ setMethod('fit', signature('clMethodLLPA'), function(method, data, prepEnv) {
   return(e)
 })
 
-setMethod('finalize', signature('clMethodLLPA'), function(method, data, fitEnv) {
+setMethod('finalize', signature('clMethodLLPA'), function(method, data, envir, verbose, ...) {
   model = new('clModelLLPA',
               method=method,
               data=data,
-              model=fitEnv$model,
+              model=envir$model,
               clusterNames=make.clusterNames(method$nClusters))
   return(model)
 })

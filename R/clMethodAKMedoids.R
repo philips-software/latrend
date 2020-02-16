@@ -25,18 +25,18 @@ setMethod('getName', signature('clMethodAKMedoids'), function(object) 'anchored 
 setMethod('getName0', signature('clMethodAKMedoids'), function(object) 'akm')
 
 
-setMethod('fit', signature('clMethodAKMedoids'), function(method, data, prepEnv) {
-  e = new.env(parent=prepEnv)
+setMethod('fit', signature('clMethodAKMedoids'), function(method, data, envir, verbose, ...) {
+  e = new.env(parent=envir)
 
   args = as.list(method)
-  args$traj = prepEnv$dataMat
+  args$traj = envir$dataMat
   args$k = method$nClusters
   args$id_field = FALSE
   args[setdiff(names(args), formalArgs(akmedoids.clust))] = NULL #remove undefined arguments
 
   # Helper variables
   valueColumn = formula(method) %>% getResponse
-  suppressFun = if(canShowModelOutput()) force else capture.output
+  suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   startTime = Sys.time()
   suppressFun({
@@ -47,10 +47,10 @@ setMethod('fit', signature('clMethodAKMedoids'), function(method, data, prepEnv)
 })
 
 
-setMethod('finalize', signature('clMethodAKMedoids'), function(method, data, fitEnv) {
+setMethod('finalize', signature('clMethodAKMedoids'), function(method, data, envir, verbose, ...) {
   clusNames = make.clusterNames(method$nClusters)
 
-  clModelCustom(data, clusterAssignments=factor(fitEnv$model$memberships, levels=LETTERS[1:method$nClusters], labels=clusNames),
+  clModelCustom(data, clusterAssignments=factor(envir$model$memberships, levels=LETTERS[1:method$nClusters], labels=clusNames),
                 clusterTrajectories=method$clusterCenter,
                 response=getResponse(method$formula),
                 time=method$time,
@@ -58,6 +58,6 @@ setMethod('finalize', signature('clMethodAKMedoids'), function(method, data, fit
                 clusterNames=clusNames,
                 converged=TRUE,
                 method=method,
-                model=fitEnv$model,
+                model=envir$model,
                 name='akmedoids')
 })

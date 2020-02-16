@@ -42,20 +42,20 @@ setMethod('getName', signature('clMethodTwoStep'), function(object) 'two-step cl
 setMethod('getName0', signature('clMethodTwoStep'), function(object) 'twostep')
 
 
-setMethod('prepare', signature('clMethodTwoStep'), function(method, data) {
+setMethod('prepare', signature('clMethodTwoStep'), function(method, data, verbose, ...) {
   assert_that(has_name(data, method$response))
   assert_that(has_name(data, method$id))
   assert_that(has_name(data, method$time))
 })
 
 
-setMethod('fit', signature('clMethodTwoStep'), function(method, data, prepEnv) {
+setMethod('fit', signature('clMethodTwoStep'), function(method, data, envir, verbose, ...) {
   nIds = uniqueN(data[[method$id]])
 
   ## Representation step #
   rstep = method$representationStep
   if(is.function(rstep)) {
-    repOut = rstep(method, data)
+    repOut = rstep(method, data, verbose)
   } else {
     repOut = rstep
   }
@@ -79,7 +79,7 @@ setMethod('fit', signature('clMethodTwoStep'), function(method, data, prepEnv) {
   ## Cluster step #
   clusEnv = new.env(parent=repEnv)
   startTime = Sys.time()
-  model = method$clusterStep(method=method, data=data, repMat=repEnv$repMat, envir=repEnv)
+  model = method$clusterStep(method=method, data=data, repMat=repEnv$repMat, envir=repEnv, verbose=verbose)
   clusEnv$runTime = as.numeric(Sys.time() - startTime)
 
   assert_that(is.clModelCustom(model), msg='invalid output from the clusterStep function; expected object of class clModelCustom. See the documentation of ?clMethodTwoStep for help.')
@@ -88,9 +88,9 @@ setMethod('fit', signature('clMethodTwoStep'), function(method, data, prepEnv) {
 })
 
 
-setMethod('finalize', signature('clMethodTwoStep'), function(method, data, fitEnv) {
+setMethod('finalize', signature('clMethodTwoStep'), function(method, data, envir, verbose, ...) {
   # convert clModelCustom to a clModelTwoStep with the appropriate call
-  model = fitEnv$model
+  model = envir$model
 
   slots = slotNames(model) %>%
     lapply(slot, object=model) %>%

@@ -86,13 +86,14 @@ setMethod('getName', signature('clMethodMixTVEM'), function(object) 'mixture of 
 setMethod('getName0', signature('clMethodMixTVEM'), function(object) 'mixtvem')
 
 
-setMethod('prepare', signature('clMethodMixTVEM'), function(method, data) {
+setMethod('prepare', signature('clMethodMixTVEM'), function(method, data, verbose, ...) {
   e = new.env()
   f.t = getSpecialFormula(method$formula, special='time')
   f.x = dropSpecial(method$formula, special='time')
   tvars = getCovariates(f.t)
   xvars = getCovariates(f.x)
 
+  cat(verbose, 'Constructing model frame...', level=verboseLevels$finest)
   df_model = model.frame(f.t, data=data)
   e$dep = df_model[[1]]
   tmat = as.matrix(df_model[-1])
@@ -111,10 +112,10 @@ setMethod('prepare', signature('clMethodMixTVEM'), function(method, data) {
   return(e)
 })
 
-setMethod('fit', signature('clMethodMixTVEM'), function(method, data, prepEnv) {
+setMethod('fit', signature('clMethodMixTVEM'), function(method, data, envir, verbose, ...) {
   e = new.env()
 
-  args = c(as.list(prepEnv), as.list(method))
+  args = c(as.list(envir), as.list(method))
   args$id = data[[method$id]]
   args$time = data[[method$time]]
   args$doPlot = FALSE
@@ -123,7 +124,7 @@ setMethod('fit', signature('clMethodMixTVEM'), function(method, data, prepEnv) {
   args$max.time = NA
   args$numClasses = method$nClusters
 
-  suppressFun = if(canShowModelOutput()) force else capture.output
+  suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   startTime = Sys.time()
   suppressFun({
@@ -134,11 +135,11 @@ setMethod('fit', signature('clMethodMixTVEM'), function(method, data, prepEnv) {
   return(e)
 })
 
-setMethod('finalize', signature('clMethodMixTVEM'), function(method, data, fitEnv) {
+setMethod('finalize', signature('clMethodMixTVEM'), function(method, data, envir, verbose, ...) {
   model = new('clModelMixTVEM',
               method=method,
               data=data,
-              model=fitEnv$model,
+              model=envir$model,
               clusterNames=make.clusterNames(method$nClusters))
   return(model)
 })

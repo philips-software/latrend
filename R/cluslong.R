@@ -3,15 +3,17 @@
 #' @import assertthat
 #' @import magrittr
 #' @import foreach
-#' @import logging
 #' @import ggplot2
 #' @importFrom stackoverflow match.call.defaults
-#' @importFrom R.utils printf
 #' @title Cluster longitudinal data
 #' @param method The `clMethod` object specifying the longitudinal cluster method to apply.
 #' @param data The `data.frame` or `matrix` to which to apply the method.
 #' @param ... Any other arguments to update the `clMethod` definition with.
 #' @param envir The `environment` in which to evaluate the method arguments.
+#' @param verbose The level of verbosity. Either an object of class `Verbose` (see [R.utils::Verbose] for details),
+#' a `logical` indicating whether to show basic computation information,
+#' a `numeric` indicating the verbosity level (see [Verbose]),
+#' or one of `c('info', 'fine', 'finest')`.
 #' @details If a seed value is specified in the `clMethod` object or arguments to `cluslong`, this seed is set using `set.seed` prior to the cluster preparation step.
 #' @return A `clModel` object representing the fitted model.
 #' @examples
@@ -21,27 +23,30 @@
 #'
 #' model = cluslong(clMethodKML(), data=testLongData, nClusters=3, seed=1)
 #' @family longitudinal cluster fit functions
-cluslong = function(method, data, ..., envir=NULL) {
+cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.verbose')) {
   assert_that(inherits(method, 'clMethod'), msg='method must be an object of class clMethod')
   assert_that(!missing(data), msg='data must be specified')
   assert_that(is.data.frame(data) || is.matrix(data), msg='data must be data.frame or matrix')
-  assert_that(is(method, 'clMethod'), msg='method must be clMethod object (e.g., clMethodKML() )')
 
-  argList = list(...)
+  verbose = as.Verbose(verbose)
   envir = clMethod.env(method, parent.frame(), envir)
+  argList = list(...)
   argList$envir = envir
   method = do.call(update, c(object=method, argList))
   environment(method) = envir
-  validObject(method)
 
-  if (getLogger()$level <= loglevels['INFO']) {
-    cat('== Longitudinal clustering with "', getName(method), '" ==\n', sep='')
-    clMethodPrintArgs(method)
-  }
+  header(verbose, sprintf('Longitudinal clustering with "%s"', getName(method)))
+  cat(verbose, 'Method arguments:')
+  print(verbose, method)
+  ruler(verbose)
+
+  cat(verbose, 'Validating method arguments...', level=verboseLevels$finest)
+  validObject(method)
 
   assert_that(not('formula' %in% names(method)) || hasSingleResponse(method$formula))
   assert_that(isArgDefined(method, 'id'), isArgDefined(method, 'time'))
   if(is.matrix(data)) {
+    cat(verbose, 'Transforming repeated measures matrix to long format...', level=verboseLevels$fine)
     data = meltRepeatedMeasures(data, id=method$id, time=method$time, response=getResponse(formula(method)))
   } else {
     assert_that(has_name(data, c(method$id, method$time)))
@@ -49,17 +54,25 @@ cluslong = function(method, data, ..., envir=NULL) {
 
   if(isArgDefined(method, 'seed')) {
     seed = method$seed
-    logfine('Setting seed %s', as.character(seed))
+    cat(verbose, sprintf('Setting seed %s.', as.character(seed)))
     set.seed(seed)
   }
 
-  loginfo('Preparing data and method...')
-  prepEnv = prepare(method, data)
-  loginfo('Fitting model...')
-  fitEnv = fit(method, data, prepEnv)
-  loginfo('Finalizing...')
-  model = finalize(method, data, fitEnv)
+  cat(verbose, 'Preparing data and method')
+  pushState(verbose)
+  prepEnv = prepare(method=method, data=data, verbose=verbose)
+  popState(verbose)
+
+  cat(verbose, 'Fitting model')
+  pushState(verbose)
+  fitEnv = fit(method=method, data=data, envir=prepEnv, verbose=verbose)
+  popState(verbose)
+
+  cat(verbose, 'Finalizing...')
+  pushState(verbose)
+  model = finalize(method=method, data=data, envir=fitEnv, verbose=verbose)
   assert_that(inherits(model, 'clModel'), msg='finalize(clMethod, ...) returned an unexpected object. Should be clModel.')
+  popState(verbose)
 
   clCall = match.call.defaults()
   model@method = method
@@ -68,8 +81,6 @@ cluslong = function(method, data, ..., envir=NULL) {
                          method=quote(getCall(method)),
                          data=quote(clCall$data)))
   model@call['envir'] = list(clCall$envir)
-
-  loginfo('Done.')
   return(model)
 }
 
@@ -86,13 +97,19 @@ cluslong = function(method, data, ..., envir=NULL) {
 #'
 #' models = cluslongRep(clMethodKML(), data=testLongData, seed=1, .rep=3)
 #' @family longitudinal cluster fit functions
-cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL) {
+cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL, verbose=getOption('cluslong.verbose')) {
   assert_that(inherits(method, 'clMethod'), msg='method must be an object of class clMethod')
   assert_that(!missing(data), msg='data must be specified')
   assert_that(is.data.frame(data) || is.matrix(data), msg='data must be data.frame or matrix')
-  assert_that(is(method, 'clMethod'), msg='method must be clMethod object (e.g., clMethodKML() )')
 
   assert_that(is.count(.rep))
+
+  verbose = as.Verbose(verbose)
+  header(verbose, sprintf('Repeated (%d) longitudinal clustering with "%s"', .rep, getName(method)))
+  cat(verbose, 'Method arguments:')
+  print(verbose, method)
+  ruler(verbose)
+
 
   if(is.matrix(data)) {
     data = meltRepeatedMeasures(data, id=method$id, time=method$time, response=getResponse(formula(method)))
@@ -102,41 +119,40 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL)
 
   if(isArgDefined(method, 'seed')) {
     seed = method$seed
-    logfine('Setting seed %s', as.character(seed))
+    cat(verbose, sprintf('Setting seed %s.', as.character(seed)))
     set.seed(seed)
   }
 
-  argList = list(...)
   envir = clMethod.env(method, parent.frame(), envir)
+  argList = list(...)
   argList$envir = envir
   method = do.call(update, c(object=method, argList))
   environment(method) = envir
+
+  cat(verbose, 'Validating method arguments...', level=verboseLevels$finest)
   validObject(method)
 
-  if (getLogger()$level <= loglevels['INFO']) {
-    cat(sprintf('== Repeated (%d) longitudinal clustering with "%s" ==\n', .rep, getName(method)))
-    clMethodPrintArgs(method)
-  }
-
   if(.prepareAll) {
-    loginfo('Preparing data and method %d times...', .rep)
-    prepEnvs = replicate(.rep, prepare(method, data))
+    enter(verbose, 'Preparing data and method %d times', .rep)
+    prepEnvs = replicate(.rep, prepare(method=method, data=data, verbose=verbose))
+    exit(verbose)
   } else {
-    loginfo('Preparing data and method...')
-    prepEnv = prepare(method, data)
+    enter(verbose, 'Preparing data and method')
+    prepEnv = prepare(method=method, data=data, verbose=verbose)
     prepEnvs = replicate(.rep, prepEnv)
+    exit(verbose)
   }
 
   fitEnvs = mapply(function(i, iPrepEnv) {
-      loginfo('Fitting model %d/%d...', i, .rep)
-      fitEnv = fit(method, data, iPrepEnv)
+      cat(verbose, 'Fitting model %d/%d...', i, .rep)
+      fitEnv = fit(method=method, data=data, envir=iPrepEnv, verbose=verbose)
       return(fitEnv)
     }, seq_len(.rep), prepEnvs, SIMPLIFY=FALSE)
 
-  loginfo('Finalizing models...')
+  enter(verbose, 'Finalizing models')
   clCall = match.call.defaults()
   models = mapply(function(i, iFitEnv) {
-      model = finalize(method, data, iFitEnv)
+      model = finalize(method=method, data=data, envir=iFitEnv, verbose=verbose)
       model@method = method
       model@call = do.call(call,
                            c('cluslong',
@@ -146,8 +162,8 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL)
       assert_that(inherits(model, 'clModel'), msg=sprintf('finalize(clMethod, ...) returned an unexpected object for run %d. Should be clModel.', i))
       return(model)
     }, seq_len(.rep), fitEnvs, SIMPLIFY=FALSE)
+  exit(verbose)
 
-  loginfo('Done.')
   as.clModels(models)
 }
 
@@ -167,7 +183,7 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL)
 #'
 #' @seealso clMethods
 #' @family longitudinal cluster fit functions
-cluslongBatch = function(methods, data, envir=NULL) {
+cluslongBatch = function(methods, data, envir=NULL, verbose=getOption('cluslong.verbose')) {
   if(!is.list(methods)) {methods = list(methods)}
   assert_that(is.list(methods), all(vapply(methods, inherits, 'clMethod', FUN.VALUE=FALSE)), msg='methods argument must be a list of clMethod objects')
   assert_that(!missing(data))
@@ -191,12 +207,11 @@ cluslongBatch = function(methods, data, envir=NULL) {
     }
   }
 
-  if (getLogger()$level <= loglevels['INFO']) {
-    cat(sprintf('== Batch estimation (N=%d) for longitudinal clustering ==\n', nModels))
-  }
+  cat(verbose, sprintf('== Batch estimation (N=%d) for longitudinal clustering ==\n', nModels))
 
   # cluslong
-  loginfo('Calling cluslong for each method...')
+  cat(verbose, 'Calling cluslong for each method...')
+  pushState(verbose)
   models = vector('list', nModels)
   for(i in seq_along(methods)) {
     cl = do.call(call, c('cluslong',
@@ -206,7 +221,8 @@ cluslongBatch = function(methods, data, envir=NULL) {
     models[[i]] = eval(cl)
   }
 
-  loginfo('Done fitting %d models', nModels)
+  popState(verbose)
+  cat(verbose, sprintf('Done fitting %d models.', nModels))
   as.clModels(models)
 }
 
@@ -265,8 +281,4 @@ bootSample = function(data, id, seed) {
   newdata = data[data[[id]] %in% ids[sampleIdx],]
   .Random.seed = prevSeed
   return(newdata)
-}
-
-canShowModelOutput = function(minLevel='INFO') {
-  getLogger()$level <= loglevels[minLevel]
 }

@@ -32,7 +32,7 @@ setMethod('getName', signature('clMethodCrimCV'), function(object) 'zero-inflate
 
 setMethod('getName0', signature('clMethodCrimCV'), function(object) 'crimcv')
 
-setMethod('prepare', signature('clMethodCrimCV'), function(method, data) {
+setMethod('prepare', signature('clMethodCrimCV'), function(method, data, verbose, ...) {
   times = sort(unique(data[[method$time]]))
 
   refTimes = seq(first(times), last(times), length.out=length(times))
@@ -42,22 +42,21 @@ setMethod('prepare', signature('clMethodCrimCV'), function(method, data) {
 })
 
 #' @importFrom crimCV crimCV
-setMethod('fit', signature('clMethodCrimCV'), function(method, data, prepEnv) {
-  e = new.env(parent=prepEnv)
-
-  suppressFun = if(canShowModelOutput()) force else capture.output
+setMethod('fit', signature('clMethodCrimCV'), function(method, data, envir, verbose, ...) {
+  e = new.env(parent=envir)
+  suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   startTime = Sys.time()
 
   args = as.list(method)
-  args$Dat = prepEnv$dataMat
+  args$Dat = envir$dataMat
   args$ng = method$nClusters
   args[setdiff(names(args), formalArgs(crimCV))] = NULL
 
   suppressFun({
     e$model = do.call(crimCV, args)
   })
-  e$model$data = prepEnv$dataMat
+  e$model$data = envir$dataMat
   e$model$minTime = min(data[[method$time]])
   e$model$durTime = max(data[[method$time]]) - e$model$minTime
   e$runTime = as.numeric(Sys.time() - startTime)
@@ -65,13 +64,13 @@ setMethod('fit', signature('clMethodCrimCV'), function(method, data, prepEnv) {
 })
 
 
-setMethod('finalize', signature('clMethodCrimCV'), function(method, data, fitEnv) {
-  assert_that(has_name(fitEnv$model, 'beta'), msg='invalid crimCV model returned from fit. The model either failed to initialize, converge, or its specification is unsupported.')
+setMethod('finalize', signature('clMethodCrimCV'), function(method, data, envir, verbose, ...) {
+  assert_that(has_name(envir$model, 'beta'), msg='invalid crimCV model returned from fit. The model either failed to initialize, converge, or its specification is unsupported.')
 
   model = new('clModelCrimCV',
               method=method,
               data=data,
-              model=fitEnv$model,
+              model=envir$model,
               clusterNames=make.clusterNames(method$nClusters))
   return(model)
 })

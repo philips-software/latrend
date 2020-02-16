@@ -9,7 +9,7 @@ setMethod('getName', signature('clMatrixMethod'), function(object) 'repeated mea
 
 setMethod('getName0', signature('clMatrixMethod'), function(object) 'rm')
 
-setMethod('prepare', signature('clMatrixMethod'), function(method, data) {
+setMethod('prepare', signature('clMatrixMethod'), function(method, data, verbose, ...) {
   e = new.env()
   data = as.data.table(data)
   valueColumn = formula(method) %>% getResponse
@@ -20,7 +20,7 @@ setMethod('prepare', signature('clMatrixMethod'), function(method, data) {
   assert_that(uniqueN(data[, .N, by=c(method$id)]$N) == 1, msg='not all time series are of equal length')
 
   # Data
-  logfine('Reshaping data...')
+  cat(verbose, 'Transforming data to aligned repeated measures matrix format...', level=verboseLevels$fine)
   e$dataMat = dcastRepeatedMeasures(data, id=method$id, time=method$time, response=valueColumn)
   return(e)
 })
