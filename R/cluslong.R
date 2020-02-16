@@ -189,6 +189,7 @@ cluslongBatch = function(methods, data, envir=NULL, verbose=getOption('cluslong.
   assert_that(!missing(data))
   envir = clMethod.env(methods[[1]], parent.frame(), envir)
 
+  verbose = as.Verbose(verbose)
   nModels = length(methods)
   mc = match.call()[-1]
 
@@ -207,7 +208,7 @@ cluslongBatch = function(methods, data, envir=NULL, verbose=getOption('cluslong.
     }
   }
 
-  cat(verbose, sprintf('== Batch estimation (N=%d) for longitudinal clustering ==\n', nModels))
+  header(verbose, sprintf('Batch estimation (N=%d) for longitudinal clustering', nModels))
 
   # cluslong
   cat(verbose, 'Calling cluslong for each method...')
@@ -217,7 +218,8 @@ cluslongBatch = function(methods, data, envir=NULL, verbose=getOption('cluslong.
     cl = do.call(call, c('cluslong',
                   method=quote(methods[[i]]),
                   data=quote(dataArg[[min(i, length(dataArg))]]),
-                  envir=quote(envir)))
+                  envir=quote(envir),
+                  verbose=quote(verbose)))
     models[[i]] = eval(cl)
   }
 
