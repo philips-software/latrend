@@ -102,9 +102,9 @@ gmm_prepare = function(method, data, verbose, ...) {
     e$random = reTerms[[1]] %>% REtermAsFormula
   }
 
-  cat(verbose, sprintf('\tfixed: %s', deparse(e$fixed)), verboseLevels$finest)
-  cat(verbose, sprintf('\tmixture: %s', deparse(e$mixture)), verboseLevels$finest)
-  cat(verbose, sprintf('\trandom: %s', deparse(e$random)), verboseLevels$finest)
+  cat(verbose, sprintf('\tfixed: %s', deparse(e$fixed)), level=verboseLevels$finest)
+  cat(verbose, sprintf('\tmixture: %s', deparse(e$mixture)), level=verboseLevels$finest)
+  cat(verbose, sprintf('\trandom: %s', deparse(e$random)), level=verboseLevels$finest)
 
   # drop intercept from formula.mb
   e$formula.mb = formula(method, what='mb') %>% dropIntercept

@@ -73,7 +73,7 @@ setMethod('prepare', signature('clMethodKML'), function(method, data, verbose, .
   }
 
   # Model specification
-  cat(verbose, 'Creating clusterLongData object...', verboseLevels$finest)
+  cat(verbose, 'Creating clusterLongData object...', level=verboseLevels$finest)
   e$par = parALGO(saveFreq = 1e99,
                 scale = FALSE,
                 maxIt = method$maxIter,
