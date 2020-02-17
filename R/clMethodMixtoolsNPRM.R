@@ -39,11 +39,9 @@ setMethod('fit', signature('clMethodMixtoolsNPRM'), function(method, data, envir
   valueColumn = formula(method) %>% getResponse
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
-  startTime = Sys.time()
   suppressFun({
     e$model = do.call(npEM, args)
   })
-  e$runTime = as.numeric(Sys.time() - startTime)
   return(e)
 })
 

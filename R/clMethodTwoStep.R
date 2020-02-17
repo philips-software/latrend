@@ -46,6 +46,7 @@ setMethod('prepare', signature('clMethodTwoStep'), function(method, data, verbos
   assert_that(has_name(data, method$response))
   assert_that(has_name(data, method$id))
   assert_that(has_name(data, method$time))
+  return(NULL)
 })
 
 
@@ -78,9 +79,7 @@ setMethod('fit', signature('clMethodTwoStep'), function(method, data, envir, ver
 
   ## Cluster step #
   clusEnv = new.env(parent=repEnv)
-  startTime = Sys.time()
   model = method$clusterStep(method=method, data=data, repMat=repEnv$repMat, envir=repEnv, verbose=verbose)
-  clusEnv$runTime = as.numeric(Sys.time() - startTime)
 
   assert_that(is.clModelCustom(model), msg='invalid output from the clusterStep function; expected object of class clModelCustom. See the documentation of ?clMethodTwoStep for help.')
   clusEnv$model = model

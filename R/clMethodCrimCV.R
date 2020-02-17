@@ -46,8 +46,6 @@ setMethod('fit', signature('clMethodCrimCV'), function(method, data, envir, verb
   e = new.env(parent=envir)
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
-  startTime = Sys.time()
-
   args = as.list(method)
   args$Dat = envir$dataMat
   args$ng = method$nClusters
@@ -59,7 +57,6 @@ setMethod('fit', signature('clMethodCrimCV'), function(method, data, envir, verb
   e$model$data = envir$dataMat
   e$model$minTime = min(data[[method$time]])
   e$model$durTime = max(data[[method$time]]) - e$model$minTime
-  e$runTime = as.numeric(Sys.time() - startTime)
   return(e)
 })
 

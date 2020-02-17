@@ -136,16 +136,12 @@ gmm_fit = function(method, data, envir, verbose, ...) {
   args[setdiff(names(args), formalArgs(hlme))] = NULL #remove undefined arguments
   args$returndata = TRUE
 
-  startTime = Sys.time()
-
   if(method$nClusters == 1) {
     # classmb is not allowed to be specified for ng=1
     args$classmb = NULL
   }
 
   model = do.call(hlme, args)
-
-  e$runTime = as.numeric(Sys.time() - startTime)
 
   model$fixed = envir$fixed
   model$mixture = envir$mixture

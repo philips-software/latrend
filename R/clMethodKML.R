@@ -96,11 +96,9 @@ setMethod('fit', signature('clMethodKML'), function(method, data, envir, verbose
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   cat(verbose, 'Running kml()...', level=verboseLevels$finest)
-  startTime = Sys.time()
   suppressFun(
     kml(cld, nbClusters=method$nClusters, nbRedrawing=method$nRuns, toPlot='none', parAlgo=envir$par)
   )
-  runTime = as.numeric(Sys.time() - startTime)
   e$cld = cld
   return(e)
 })

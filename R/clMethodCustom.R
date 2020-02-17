@@ -70,6 +70,7 @@ setMethod('prepare', signature('clMethodCustom'), function(method, data, verbose
   assert_that(has_name(data, method$response))
   assert_that(has_name(data, method$id))
   assert_that(has_name(data, method$time))
+  return(NULL)
 })
 
 setMethod('fit', signature('clMethodCustom'), function(method, data, envir, verbose) {
@@ -77,9 +78,7 @@ setMethod('fit', signature('clMethodCustom'), function(method, data, envir, verb
   args = as.list(method)
   args$data = data
 
-  startTime = Sys.time()
   e$model = do.call(method$fun, args)
-  e$runTime = as.numeric(Sys.time() - startTime)
   return(e)
 })
 

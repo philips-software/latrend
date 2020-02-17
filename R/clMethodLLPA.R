@@ -71,12 +71,9 @@ setMethod('fit', signature('clMethodLLPA'), function(method, data, envir, verbos
   args$data = envir$data
   args$G = method$nClusters
 
-  startTime = Sys.time()
   model = do.call(Mclust, args)
   model$time = unique(data[[method$time]]) %>% sort
   e$model = model
-  e$runTime = as.numeric(Sys.time() - startTime)
-
   return(e)
 })
 

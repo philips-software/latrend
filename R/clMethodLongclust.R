@@ -42,11 +42,9 @@ setMethod('fit', signature('clMethodLongclust'), function(method, data, envir, v
 
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
-  startTime = Sys.time()
   suppressFun({
     e$model = do.call(longclustEM, args)
   })
-  e$runTime = as.numeric(Sys.time() - startTime)
   return(e)
 })
 

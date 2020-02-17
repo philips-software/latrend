@@ -62,13 +62,7 @@ setMethod('fit', signature('clMethodFlexmix'), function(method, data, envir, ver
     args$model = NULL
   }
 
-  startTime = Sys.time()
-
-  model = do.call(flexmix, args)
-
-  e$runTime = as.numeric(Sys.time() - startTime)
-
-  e$model = model
+  e$model = do.call(flexmix, args)
   return(e)
 })
 

@@ -55,13 +55,11 @@ setMethod('fit', signature('clMethodFunFEM'), function(method, data, envir, verb
   valueColumn = formula(method) %>% getResponse
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
-  startTime = Sys.time()
   suppressFun({
     e$model = do.call(funFEM, args)
   })
   e$model$basis = envir$basis
   e$model$fd = envir$fd
-  e$runTime = as.numeric(Sys.time() - startTime)
   return(e)
 })
 

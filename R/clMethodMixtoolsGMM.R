@@ -75,13 +75,9 @@ setMethod('fit', signature('clMethodMixtoolsGMM'), function(method, data, envir,
   args$verb = canShow(verbose, 'fine')
   args[setdiff(names(args), formalArgs(regmixEM.mixed))] = NULL #remove undefined arguments
 
-  startTime = Sys.time()
-
   model = do.call(regmixEM.mixed, args)
   model$fixed = envir$fixed
   model$random = envir$random
-
-  e$runTime = as.numeric(Sys.time() - startTime)
 
   e$model = model
   return(e)

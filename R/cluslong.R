@@ -61,11 +61,15 @@ cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.v
   cat(verbose, 'Preparing data and method')
   pushState(verbose)
   prepEnv = prepare(method=method, data=data, verbose=verbose)
+  assert_that(is.null(prepEnv) || is.environment(prepEnv), msg='expected NULL or environment from prepare(clMethod, ...) call')
   popState(verbose)
 
   cat(verbose, 'Fitting model')
   pushState(verbose)
+  start = Sys.time()
   fitEnv = fit(method=method, data=data, envir=prepEnv, verbose=verbose)
+  runTime = Sys.time() - start
+  assert_that(is.environment(fitEnv), msg='expected environment from fit(clMethod, ...) call')
   popState(verbose)
 
   cat(verbose, 'Finalizing...')
@@ -81,6 +85,7 @@ cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.v
                          method=quote(getCall(method)),
                          data=quote(clCall$data)))
   model@call['envir'] = list(clCall$envir)
+  model@runTime = as.numeric(runTime, 'secs')
   return(model)
 }
 
@@ -145,7 +150,11 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL,
 
   fitEnvs = mapply(function(i, iPrepEnv) {
       cat(verbose, 'Fitting model %d/%d...', i, .rep)
+      start = Sys.time()
       fitEnv = fit(method=method, data=data, envir=iPrepEnv, verbose=verbose)
+      runTime = Sys.time() - start
+      assert_that(is.environment(fitEnv), msg='expected environment from fit(clMethod, ...) call')
+      fitEnv$.runTime = runTime
       return(fitEnv)
     }, seq_len(.rep), prepEnvs, SIMPLIFY=FALSE)
 
@@ -159,6 +168,7 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL,
                              method=quote(getCall(method)),
                              data=quote(clCall$data)))
       model@call['envir'] = list(clCall$envir)
+      model@runTime = as.numeric(iFitEnv$.runTime, 'secs')
       assert_that(inherits(model, 'clModel'), msg=sprintf('finalize(clMethod, ...) returned an unexpected object for run %d. Should be clModel.', i))
       return(model)
     }, seq_len(.rep), fitEnvs, SIMPLIFY=FALSE)

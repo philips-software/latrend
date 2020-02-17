@@ -38,11 +38,9 @@ setMethod('fit', signature('clMethodAKMedoids'), function(method, data, envir, v
   valueColumn = formula(method) %>% getResponse
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
-  startTime = Sys.time()
   suppressFun({
     e$model = do.call(akmedoids.clust, args)
   })
-  e$runTime = as.numeric(Sys.time() - startTime)
   return(e)
 })
 

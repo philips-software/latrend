@@ -9,7 +9,8 @@ setClass('clModel',
                         time='character',
                         response='character',
                         ids='vector',
-                        clusterNames='character'))
+                        clusterNames='character',
+                        runTime='numeric'))
 
 # NOTE: do not specify a validity method for clModel!
 # Referencing the clModel object within setValidity breaks clModelCustom intialization resulting in unspecified slots for some mysterious reason.
@@ -682,6 +683,14 @@ responseVariable = function(object, what='mu') {
   } else {
     paste(object@response, what, sep='.')
   }
+}
+
+
+#' @export
+#' @title Get the model estimation time
+#' @return The model estimation time in seconds.
+runTime = function(object) {
+  object@runTime
 }
 
 

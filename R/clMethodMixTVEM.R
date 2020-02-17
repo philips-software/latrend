@@ -126,12 +126,9 @@ setMethod('fit', signature('clMethodMixTVEM'), function(method, data, envir, ver
 
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
-  startTime = Sys.time()
   suppressFun({
     e$model = do.call(TVEMMixNormal, args[intersect(names(args), formalArgs(TVEMMixNormal))])
   })
-  e$runTime = as.numeric(Sys.time() - startTime)
-
   return(e)
 })
 
