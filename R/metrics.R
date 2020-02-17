@@ -105,6 +105,8 @@ intMetricsEnv$relativeEntropy = function(m) {
   1 - intMetricsEnv$entropy(m) / (N * log(K))
 }
 
+intMetricsEnv$runTime = runTime
+
 intMetricsEnv$RSS = function(m) {
   sum(residuals(m)^2)
 }
