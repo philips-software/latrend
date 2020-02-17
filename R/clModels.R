@@ -202,6 +202,7 @@ plotMetric = function(models, name, by='nClusters', subset, group=character()) {
 #' @title Subsetting a clModels list based on method arguments
 #' @param x The `clModels` or list of `clModel` to be subsetted.
 #' @param subset Logical expression based on the `clModel` method arguments, indicating which `clModel` objects to keep.
+#' @param drop Whether to return a `clModel` object if the result is length 1.
 #' @return A `clModels` list with the subset of `clModel` objects.
 #' @examples
 #' kml1 = cluslong(clMethodKML(nClusters=1), testLongData)
@@ -212,7 +213,7 @@ plotMetric = function(models, name, by='nClusters', subset, group=character()) {
 #'
 #' subset(models, nClusters > 1 & .method == 'kml')
 #' @family clModel list functions
-subset.clModels = function(x, subset) {
+subset.clModels = function(x, subset, drop=FALSE) {
   x = as.clModels(x)
 
   if(missing(subset)) {
@@ -224,7 +225,11 @@ subset.clModels = function(x, subset) {
     .[, .ROW_INDEX := .I] %>%
     base::subset(subset=eval(subsetCall))
 
-  x[dfsub$.ROW_INDEX]
+  if(drop && nrow(dfsub) == 1) {
+    x[[dfsub$.ROW_INDEX]]
+  } else {
+    x[dfsub$.ROW_INDEX]
+  }
 }
 
 #' @export

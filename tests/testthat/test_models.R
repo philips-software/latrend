@@ -109,6 +109,9 @@ test_that('subset', {
 
   subset(models, .method == 'kml' & nClusters > 2) %>%
     expect_length(2)
+
+  subset(models, nClusters == 4, drop=TRUE) %>%
+    expect_is('clModel')
 })
 
 test_that('metric', {
