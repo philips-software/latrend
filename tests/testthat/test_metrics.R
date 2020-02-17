@@ -21,8 +21,7 @@ test_that('internal, single cluster', {
   for(metric in internalMetrics) {
     metric(model, name=metric) %>%
       expect_is('numeric') %>%
-      expect_length(1) %T>%
-      {expect_true(is.finite(.), info=metric)}
+      expect_length(1)
   }
 })
 

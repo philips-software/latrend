@@ -77,12 +77,32 @@ getMetricDef = function(name, envir) {
 
 # Internal metric definitions ####
 intMetricsEnv$AIC = AIC
+
+#' @importFrom matrixStats rowMaxs
+intMetricsEnv$APPA = function(m) {
+  postprob(m) %>%
+    rowMaxs() %>%
+    mean()
+}
+
 intMetricsEnv$BIC = BIC
 intMetricsEnv$deviance = deviance
+
+intMetricsEnv$entropy = function(m) {
+  pp = postprob(m) %>% pmax(.Machine$double.xmin)
+  -sum(rowSums(pp * log(pp)))
+}
+
 intMetricsEnv$logLik = logLik
 
 intMetricsEnv$MAE = function(m) {
   residuals(m) %>% abs %>% mean
+}
+
+intMetricsEnv$relativeEntropy = function(m) {
+  N = nIds(m)
+  K = nClusters(m)
+  1 - intMetricsEnv$entropy(m) / (N * log(K))
 }
 
 intMetricsEnv$RSS = function(m) {
