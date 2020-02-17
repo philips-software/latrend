@@ -866,7 +866,7 @@ transformPredict = function(object, pred, newdata) {
 #' @title Sampling times of a clModel
 #' @return The unique times at which observations occur.
 time.clModel = function(object) {
-  model.data(object)[[getMethod(object)$time]] %>% unique %>% sort
+  model.data(object)[[timeVariable(object)]] %>% unique %>% sort
 }
 
 
