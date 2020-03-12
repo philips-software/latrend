@@ -588,11 +588,11 @@ plot.clModel = function(object, what='mu', at=time(object),
                         points=10,
                         clusterLabels=sprintf('%s (%g%%)', clusterNames(object), round(clusterProportions(object) * 100)),
                         ...) {
-  assert_that(is.numeric(points), min(points) >= 1, max(points) <= length(at))
+  assert_that(is.numeric(points), min(points) >= 1)
   assert_that(length(clusterLabels) == nClusters(object))
 
   if(length(points) == 1) {
-    points = seq(1, length(at), length.out=points)
+    points = seq(1, length(at), length.out=max(length(at), points))
   }
 
   dt_ctraj = clusterTrajectories(object, what=what, at=at) %>%
