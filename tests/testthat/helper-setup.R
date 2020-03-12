@@ -8,7 +8,7 @@ options(cluslong.id='Id',
         cluslong.verbose=R.utils::Verbose())
 
 clMethodTestKML = function(...) {
-  clMethodKML(nRuns=1, maxIter=10, ...)
+  clMethodKML(nbRedrawing=1, maxIt=10, ...)
 }
 
 clMethodTestLcmmGMM = function(...) {

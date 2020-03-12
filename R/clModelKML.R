@@ -14,7 +14,7 @@ predict.clModelKML = function(object, newdata=NULL, what='mu', approxFun=approx)
   # compute cluster trajectories
   trajMat = calculTrajMean(traj=object@model@traj,
                            clust=getClusters(object@model, nbCluster=nClusters(object)),
-                           centerMethod=getMethod(object)$center)
+                           centerMethod=getMethod(object)$centerMethod)
 
   if(!is.matrix(trajMat)) {
     assert_that(nClusters(object) == 1, msg='undefined state')

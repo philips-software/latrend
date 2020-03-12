@@ -190,7 +190,7 @@ test_that('update.clMethod with local variables', {
 
 test_that('dependency function evaluation', {
   method = clMethodKML()
-  expect_is(method$center, 'function')
+  expect_is(method$centerMethod, 'function')
 })
 
 test_that('as.list', {

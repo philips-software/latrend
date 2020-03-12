@@ -4,32 +4,27 @@ setClass('clMethodKML', contains='clMatrixMethod')
 #' @export
 #' @import kml
 #' @import longitudinalData
+#' @inheritParams kml::kml
+#' @inheritParams kml::parALGO
 #' @title Specify KML method
 #' @param formula Formula. Only intercept is supported.
 #' @param time Time variable.
 #' @param id Strata variable.
 #' @param nClusters Number of clusters.
-#' @param nRuns Number of repeated runs among which the best fit is selected.
-#' @param maxIter Maximum number of iterations without convergence.
-#' @param start Internal initialization strategy.
-#' @param imputation Name of the imputation method, see \link[longitudinalData]{imputation}. The default is to not impute the data, in which case an error is thrown when the data contains missing values.
-#' @param distance Distance function or function name.
-#' @param center Function specifying the computation of the cluster center.
 #' @examples
-#' method = clMethodKML(Measurement ~ 1,
-#'                      time='Assessment',
-#'                      id='Id', nClusters=3)
+#' method = clMethodKML(Value ~ 1, nClusters=3)
+#' model = cluslong(method, testLongData)
 #' @family clMethod classes
 clMethodKML = function(formula=Value ~ 1,
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),
                        nClusters=2,
-                       nRuns=20,
-                       maxIter=200,
-                       start='kmeans++',
-                       imputation=NULL,
-                       distance='euclidean',
-                       center=meanNA) {
+                       nbRedrawing=20,
+                       maxIt=200,
+                       startingCond='kmeans++',
+                       imputationMethod='copyMean',
+                       distanceName='euclidean',
+                       centerMethod=meanNA) {
   object = new('clMethodKML', call=match.call.defaults())
 
   if(getOption('cluslong.checkArgs')) {
@@ -51,10 +46,6 @@ setMethod('checkArgs', signature('clMethodKML'), function(object, envir) {
   if(isArgDefined(object, 'nClusters')) {
     assert_that(is.count(object$nClusters))
   }
-
-  if(isArgDefined(object, 'nRuns')) {
-    assert_that(is.count(object$nRuns))
-  }
 })
 
 
@@ -67,21 +58,14 @@ setMethod('prepare', signature('clMethodKML'), function(method, data, verbose, .
   e = callNextMethod()
   valueColumn = formula(method) %>% getResponse
 
-  # Check data
-  if(is.null(method$imputation)) {
-    assert_that(!anyNA(data[[valueColumn]]), msg='data contains missing values, with no imputation method specified')
-  }
-
   # Model specification
   cat(verbose, 'Creating clusterLongData object...', level=verboseLevels$finest)
-  e$par = parALGO(saveFreq = 1e99,
-                scale = FALSE,
-                maxIt = method$maxIter,
-                startingCond = method$start,
-                imputationMethod = ifelse(is.null(method$imputation), 'copyMean', method$imputation),
-                distanceName = ifelse(is.character(method$distance), method$distance, ''),
-                distance = method$distance,
-                centerMethod = method$center)
+
+  parRefArgs = list(saveFreq = 1e99, scale=FALSE)
+  parArgs = modifyList(parRefArgs, as.list(method), keep.null=TRUE)
+  parArgs[setdiff(names(parArgs), formalArgs(parALGO))] = NULL
+  e$par = do.call(parALGO, parArgs)
+
   e$cld = clusterLongData(traj=e$dataMat, idAll=rownames(e$dataMat), time=sort(unique(data[[method$time]])))
   return(e)
 })
@@ -97,7 +81,7 @@ setMethod('fit', signature('clMethodKML'), function(method, data, envir, verbose
 
   cat(verbose, 'Running kml()...', level=verboseLevels$finest)
   suppressFun(
-    kml(cld, nbClusters=method$nClusters, nbRedrawing=method$nRuns, toPlot='none', parAlgo=envir$par)
+    kml(cld, nbClusters=method$nClusters, nbRedrawing=method$nbRedrawing, toPlot='none', parAlgo=envir$par)
   )
   e$cld = cld
   return(e)
