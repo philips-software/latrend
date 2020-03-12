@@ -5,7 +5,7 @@ setClass('clMethodFlexmixGBTM', contains='clMethodFlexmix')
 #' @export
 #' @title Group-based trajectory modeling using flexmix
 #' @description Fits a GBTM based on the [FLXMRglm] driver.
-#' @inheritParams clMethodGBTM
+#' @inheritParams clMethodLcmmGBTM
 #' @inheritParams flexmix::FLXMRglm
 #' @examples
 #' model = cluslong(clMethodFlexmixGBTM(), data=testLongData)

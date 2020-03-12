@@ -8,7 +8,7 @@ setOldClass('clModels')
 #' @return A `clModels` object containing all specified `clModel` objects.
 #' @examples
 #' kml = cluslong(clMethodKML(), testLongData)
-#' gmm = cluslong(clMethodGMM(), testLongData)
+#' gmm = cluslong(clMethodLcmmGMM(), testLongData)
 #' clModels(kml, gmm)
 #'
 #' clModels(defaults=c(kml, gmm))
@@ -208,7 +208,7 @@ plotMetric = function(models, name, by='nClusters', subset, group=character()) {
 #' kml1 = cluslong(clMethodKML(nClusters=1), testLongData)
 #' kml2 = cluslong(clMethodKML(nClusters=2), testLongData)
 #' kml3 = cluslong(clMethodKML(nClusters=3), testLongData)
-#' gmm = cluslong(clMethodGMM(), testLongData)
+#' gmm = cluslong(clMethodLcmmGMM(), testLongData)
 #' models = clModels(kml1, kml2, kml3, gmm)
 #'
 #' subset(models, nClusters > 1 & .method == 'kml')

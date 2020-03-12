@@ -1,8 +1,8 @@
 #' @include clModel.R
-setClass('clModelGMM', contains='clModel')
+setClass('clModelLcmmGMM', contains='clModel')
 
 #' @export
-fitted.clModelGMM = function(object, clusters=clusterAssignments(object)) {
+fitted.clModelLcmmGMM = function(object, clusters=clusterAssignments(object)) {
   predNames = paste0('pred_m', 1:nClusters(object))
   predMat = object@model$pred[predNames] %>%
     as.matrix %>%
@@ -12,7 +12,7 @@ fitted.clModelGMM = function(object, clusters=clusterAssignments(object)) {
 
 #' @export
 #' @importFrom lcmm predictY
-predict.clModelGMM = function(object, newdata=NULL, what='mu') {
+predict.clModelLcmmGMM = function(object, newdata=NULL, what='mu') {
   assert_that(is.newdata(newdata))
   assert_that(what == 'mu', msg='only what="mu" is supported')
 
@@ -40,7 +40,7 @@ predict.clModelGMM = function(object, newdata=NULL, what='mu') {
 }
 
 #' @export
-model.matrix.clModelGMM = function(object, what='mu') {
+model.matrix.clModelLcmmGMM = function(object, what='mu') {
   if(what == 'mu') {
     f = merge.formula(object@model$fixed, object@model$mixture)
     model.matrix(f, data=model.data(object))
@@ -50,7 +50,7 @@ model.matrix.clModelGMM = function(object, what='mu') {
 }
 
 #' @export
-logLik.clModelGMM = function(object) {
+logLik.clModelLcmmGMM = function(object) {
   ll = object@model$loglik
   N = nIds(object)
   df = length(coef(object))
@@ -61,11 +61,11 @@ logLik.clModelGMM = function(object) {
 }
 
 #' @export
-sigma.clModelGMM = function(object) {
-  coef(object)['stderr'] %>% unname
+sigma.clModelLcmmGMM = function(object) {
+  coef(object)[grepl('std err', names(coef(object@model)))] %>% unname
 }
 
-setMethod('postprob', signature('clModelGMM'), function(object) {
+setMethod('postprob', signature('clModelLcmmGMM'), function(object) {
   pp = object@model$pprob %>%
       as.matrix %>%
       .[, c(-1, -2), drop=FALSE]
@@ -73,7 +73,7 @@ setMethod('postprob', signature('clModelGMM'), function(object) {
   return(pp)
 })
 
-setMethod('converged', signature('clModelGMM'), function(object) {
+setMethod('converged', signature('clModelLcmmGMM'), function(object) {
   object@model$conv
 })
 

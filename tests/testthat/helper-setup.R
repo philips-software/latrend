@@ -11,12 +11,12 @@ clMethodTestKML = function(...) {
   clMethodKML(nRuns=1, maxIter=10, ...)
 }
 
-clMethodTestGMM = function(...) {
-  clMethodGMM(maxIter=10, ...)
+clMethodTestLcmmGMM = function(...) {
+  clMethodLcmmGMM(maxiter=10, ...)
 }
 
-clMethodTestGBTM = function(...) {
-  clMethodGBTM(maxIter=10, ...)
+clMethodTestLcmmGBTM = function(...) {
+  clMethodLcmmGBTM(maxiter=10, ...)
 }
 
 clMethodTestFlexmixGBTM = function(...) {

@@ -1,9 +1,9 @@
 #' @include clMethod.R
-setClass('clMethodGMM', contains='clMethod')
+setClass('clMethodLcmmGMM', contains='clMethod')
 
 #' @export
-#' @importFrom lcmm hlme
-#' @title Specify GMM method
+#' @importFrom lcmm lcmm
+#' @title Specify GMM method using lcmm
 #' @description Growth mixture modeling through latent-class linear mixed modeling.
 #' @inheritParams clMethodKML
 #' @param formula Formula of form Response ~ Var1 + CLUSTER * Var2 + . + (Random1 + Random2 + . | Id).
@@ -14,27 +14,33 @@ setClass('clMethodGMM', contains='clMethod')
 #' @param formula.mb Formula for the multinomial class membership model.
 #' @param diagCov Whether to use a diagonal variance-covariance matrix
 #' @param classCov Whether to use a class-specific variance-covariance matrix
-#' @inheritParams lcmm::hlme
+#' @inheritParams lcmm::lcmm
 #' @examples
-#' method = clMethodGMM(Value ~ CLUSTER + (1 | Subject),
-#'                      time='Assessment',
-#'                      id='Subject', nClusters=3)
+#' method = clMethodLcmmGMM(Value ~ Time * CLUSTER + (1 | Id),
+#'                      time='Time',
+#'                      id='Id', nClusters=3)
 #' gmm = cluslong(method, data=testLongData)
 #' summary(gmm)
 #' @family clMethod classes
-clMethodGMM = function(formula=Value ~ 1 + CLUSTER + (1 | ID),
+clMethodLcmmGMM = function(formula=Value ~ 1 + CLUSTER + (1 | ID),
                        formula.mb=~1,
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),
                        nClusters=2,
-                       maxIter=500,
+                       link='linear',
+                       intnodes=NULL,
                        idiag=FALSE,
                        nwg=FALSE,
                        cor=NULL,
+                       epsY=.5,
+                       maxiter=100,
+                       nsim=100,
+                       range=NULL,
+                       partialH=FALSE,
                        convB=1e-4,
                        convL=1e-4,
                        convG=1e-4) {
-  object = new('clMethodGMM', call=match.call.defaults())
+  object = new('clMethodLcmmGMM', call=match.call.defaults())
 
   if(getOption('cluslong.checkArgs')) {
     checkArgs(object, envir=parent.frame())
@@ -43,9 +49,9 @@ clMethodGMM = function(formula=Value ~ 1 + CLUSTER + (1 | ID),
   return(object)
 }
 
-setMethod('checkArgs', signature('clMethodGMM'), function(object, envir) {
+setMethod('checkArgs', signature('clMethodLcmmGMM'), function(object, envir) {
   environment(object) = envir
-  assert_that(all(formalArgs(clMethodGMM) %in% names(getCall(object))), msg='clMethod object is missing required arguments')
+  assert_that(all(formalArgs(clMethodLcmmGMM) %in% names(getCall(object))), msg='clMethod object is missing required arguments')
 
   if(isArgDefined(object, 'formula')) {
     f = formula(object)
@@ -65,15 +71,15 @@ setMethod('checkArgs', signature('clMethodGMM'), function(object, envir) {
     assert_that(is.count(object$nClusters))
   }
 
-  if(isArgDefined(object, 'maxIter')) {
-    assert_that(is.count(object$maxIter))
+  if(isArgDefined(object, 'maxiter')) {
+    assert_that(is.count(object$maxiter))
   }
 })
 
 
-setMethod('getName', signature('clMethodGMM'), function(object) 'growth mixture model')
+setMethod('getName', signature('clMethodLcmmGMM'), function(object) 'growth mixture model')
 
-setMethod('getName0', signature('clMethodGMM'), function(object) 'gmm')
+setMethod('getName0', signature('clMethodLcmmGMM'), function(object) 'gmm')
 
 gmm_prepare = function(method, data, verbose, ...) {
   e = new.env()
@@ -109,11 +115,9 @@ gmm_prepare = function(method, data, verbose, ...) {
   # drop intercept from formula.mb
   e$formula.mb = formula(method, what='mb') %>% dropIntercept
 
-  # Model specification
-
   return(e)
 }
-setMethod('prepare', signature('clMethodGMM'), gmm_prepare)
+setMethod('prepare', signature('clMethodLcmmGMM'), gmm_prepare)
 
 ##
 gmm_fit = function(method, data, envir, verbose, ...) {
@@ -124,24 +128,25 @@ gmm_fit = function(method, data, envir, verbose, ...) {
   args = as.list(method)
   args$data = envir$data
   args$fixed = envir$fixed
-  args$maxiter = method$maxIter
   if (method$nClusters > 1) {
     args$mixture = envir$mixture
+  } else {
+    args$mixture = NULL
   }
   args$random = envir$random
   args$subject = method$id
   args$classmb = envir$formula.mb
   args$ng = method$nClusters
   args$verbose = envir$verbose
-  args[setdiff(names(args), formalArgs(hlme))] = NULL #remove undefined arguments
+  args[setdiff(names(args), formalArgs(lcmm))] = NULL #remove undefined arguments
   args$returndata = TRUE
 
-  if(method$nClusters == 1) {
+  if(method$nClusters == 1 || !hasCovariates(args$classmb)) {
     # classmb is not allowed to be specified for ng=1
     args$classmb = NULL
   }
 
-  model = do.call(hlme, args)
+  model = do.call(lcmm, args)
 
   model$fixed = envir$fixed
   model$mixture = envir$mixture
@@ -151,16 +156,16 @@ gmm_fit = function(method, data, envir, verbose, ...) {
 
   return(e)
 }
-setMethod('fit', signature('clMethodGMM'), gmm_fit)
+setMethod('fit', signature('clMethodLcmmGMM'), gmm_fit)
 
 
 ##
 gmm_finalize = function(method, data, envir, verbose, ...) {
-  model = new('clModelGMM',
+  model = new('clModelLcmmGMM',
               method=method,
               data=data,
               model=envir$model,
               clusterNames=make.clusterNames(method$nClusters))
   return(model)
 }
-setMethod('finalize', signature('clMethodGMM'), gmm_finalize)
+setMethod('finalize', signature('clMethodLcmmGMM'), gmm_finalize)

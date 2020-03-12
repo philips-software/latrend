@@ -50,7 +50,7 @@ setMethod('initialize', 'clModel', function(.Object, ...) {
 #' If a vector is specified, this is assumed to be the time covariate. Otherwise, a named list or data frame must be provided.
 #' @return A data.frame of the estimated values at the given times
 #' @examples
-#' model = cluslong(method=clMethodGMM(), data=testLongData)
+#' model = cluslong(method=clMethodLcmmGMM(), data=testLongData)
 #' clusterTrajectories(model)
 #'
 #' clusterTrajectories(model, at=c(0, .5, 1))
@@ -159,7 +159,7 @@ coef.clModel = function(object, ...) {
 #' @importFrom IMIFA post_conf_mat
 #' @title Posterior confusion matrix
 #' @examples
-#' model = cluslong(method=clMethodGMM(), data=testLongData)
+#' model = cluslong(method=clMethodLcmmGMM(), data=testLongData)
 #' confusionMatrix(model)
 confusionMatrix = function(object) {
   assert_that(is(object, 'clModel'))
@@ -314,7 +314,7 @@ logLik.clModel = function(object, ...) {
 #' @param name The name(s) of the metric(s) to compute. All defined metrics are computed by default.
 #' @examples
 #' data(testLongData)
-#' model = cluslong(clMethodGMM(), testLongData)
+#' model = cluslong(clMethodLcmmGMM(), testLongData)
 #' bic = metric(model, 'BIC')
 #'
 #' ic = metric(model, c('AIC', 'BIC'))
@@ -353,7 +353,7 @@ setMethod('metric', signature('clModel'), function(object, name) {
 #' @examples
 #' data(testLongData)
 #' model1 = cluslong(clMethodKML(), testLongData)
-#' model2 = cluslong(clMethodGMM(), testLongData)
+#' model2 = cluslong(clMethodLcmmGMM(), testLongData)
 #' bic = externalMetric(model1, model2, 'Rand')
 #' @family metric functions
 externalMetric = function(object, object2, name=getExternalMetricNames()) {
@@ -554,7 +554,7 @@ nobs.clModel = function(object, ...) {
 #' @param what The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying what='mb'.
 #' @return If newdata specifies the cluster membership; a vector of cluster-specific predictions. Otherwise, a matrix of predictions is returned corresponding to each cluster.
 #' @examples
-#' model = cluslong(clMethodGMM(), testLongData)
+#' model = cluslong(clMethodLcmmGMM(), testLongData)
 #' predFitted = predict(model) # same result as fitted(model)
 #'
 #' predCluster = predict(model, newdata=data.frame(Cluster='A', Time=time(model))) # Cluster trajectory of cluster A
@@ -627,7 +627,7 @@ setMethod('plotTrajectories', signature('clModel'), function(object, ...) {
 #' @export
 #' @title Posterior probability per fitted id
 #' @examples
-#' model = cluslong(clMethodGMM(), data=testLongData)
+#' model = cluslong(clMethodLcmmGMM(), data=testLongData)
 #' postprob(model)
 setGeneric('postprob', function(object, ...) standardGeneric('postprob'))
 setMethod('postprob', signature('clModel'), function(object) {
