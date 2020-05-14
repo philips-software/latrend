@@ -1,0 +1,91 @@
+---
+title: "How to conduct a simulation study"
+author: "Niek Den Teuling"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true # table of content true
+    toc_depth : 2  
+vignette: >
+  %\VignetteIndexEntry{simulationStudy}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+library(cluslong)
+library(ggplot2)
+knitr::opts_chunk$set(
+  cache = TRUE,
+  collapse = TRUE,
+  comment = "#>"
+)
+update_geom_defaults('line', list(size = .01))
+update_geom_defaults('point', list(size = .5))
+```
+
+```{r, results='hide',message=FALSE,warning=FALSE}
+library(cluslong)
+library(ggplot2)
+library(magrittr)
+```
+
+For convenience, we redefine the package defaults to use the desired naming.
+```{r}
+options(cluslong.id='Id', cluslong.time='Time')
+```
+
+# Generating the datasets
+Specify the datasets to be generated.
+```{r}
+groupProps = c(.3, .5, .2)
+numGroups = length(groupProps)
+groupCoefs = cbind(c(0, 0, 0), 
+                     c(1, -1, .1), 
+                     c(-2, 0, 1))
+
+dataConfigurations = expand.grid(
+  sampleSize = c(200, 500),
+  randomScale = c(.1, .5),
+  noiseScale = .05,
+  seed = 1
+)
+
+dataConfigurations
+```
+
+We create a data generating function that takes the simulation parameters as input, and generates a longitudinal dataset with different group trajectories. The group trajectories are generated at random by sampling the coefficients from a uniform $[-1, 1]$ distribution.
+```{r}
+generateDataset = function(sampleSize, noiseScale, randomScale, seed) {
+  set.seed(seed)
+  generateLongData(sizes = groupProps * sampleSize, 
+                 fixed = Value ~ 0, 
+                 cluster = ~ poly(Time, 2, raw=TRUE),
+                 random = ~ 1,
+                 data = data.frame(Time=seq(0, 1, by=.1)),
+                 clusterCoefs = groupCoefs,
+                 randomScales = t(rep(randomScale, numGroups)),
+                 noiseScales = rep(noiseScale, numGroups),
+                 clusterNames = LETTERS[seq_len(numGroups)])
+}
+```
+
+Now we can generate the list of `r nrow(dataConfigurations)` datasets. One dataset for each row in the `dataConfigurations` table.
+```{r}
+datasets = apply(dataConfigurations, 1, function(cfg) do.call(generateDataset, as.list(cfg)))
+```
+
+Let's plot the data to check whether the generated group trajectories make sense. The first dataset contains the group trajectories with low within-group variability.
+```{r}
+plotTrajectories(datasets[[1]], response='Value') +
+  facet_wrap(~Cluster, nrow=1)
+```
+
+Compare this to a dataset generated with a larger within-group variability of 0.5:
+```{r}
+plotTrajectories(datasets[[3]], response='Value', time='Time', id='Id') +
+  facet_wrap(~Cluster, nrow=1)
+```
+
+
+# Method evaluation

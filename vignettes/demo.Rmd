@@ -1,0 +1,135 @@
+---
+title: "Demonstration of cluslong package"
+subtitle: "derp"
+author: "Niek Den Teuling"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true # table of content true
+    toc_depth : 2  
+vignette: >
+  %\VignetteIndexEntry{demo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+library(cluslong)
+library(ggplot2)
+knitr::opts_chunk$set(
+  cache = TRUE,
+  collapse = TRUE,
+  comment = "#>"
+)
+update_geom_defaults('line', list(size = .01))
+update_geom_defaults('point', list(size = .5))
+options(cluslong.id='Patient', cluslong.time='Day', cluslong.verbose=TRUE)
+```
+
+```{r, results='hide',message=FALSE,warning=FALSE}
+library(cluslong)
+library(ggplot2)
+library(magrittr)
+```
+
+# Loading the data
+```{r}
+data(OSA1y30)
+osaData = OSA1y30
+head(osaData)
+```
+
+```{r}
+options(cluslong.id='Patient', cluslong.time='Day')
+```
+
+```{r}
+ggplot(osaData, aes(x=HoursOfUse)) +
+  geom_histogram(breaks=seq(0, 12, by=.5), color='black') +
+  scale_x_continuous(breaks=seq(0, 12, by=2))
+```
+
+
+# Reference profiles
+```{r, fig.width=10, fig.height=6, out.width='100%'}
+plotTrajectories(osaData, response='HoursOfUse') +
+  facet_wrap(~Profile, nrow=1)
+```
+
+# KML clustering
+```{r}
+method = clMethodKML(HoursOfUse ~ 1)
+kmlModel = cluslong(method, osaData)
+```
+
+```{r}
+metric(kmlModel, c('logLik', 'BIC', 'WRSS'))
+
+metric(kmlModel, 'WMAE') #hours
+```
+
+```{r}
+methods = clMethods(clMethodKML(HoursOfUse ~ 1, nRuns=10), nClusters=1:9)
+
+kmlModels = cluslongBatch(methods, data=osaData, verbose=FALSE)
+
+kmlModels
+```
+
+# Identifying the number of clusters
+```{r warning=FALSE, fig.width=10, fig.height=5, out.width='100%'}
+p = plotMetric(kmlModels, c('logLik', 'BIC', 'WMAE')) +
+  scale_x_continuous(breaks=seq(1, 12, by=2))
+print(p)
+```
+
+# Assessing the preferred model
+```{r}
+kmlModel4 = subset(kmlModels, nClusters == 4, drop=TRUE)
+
+kmlModel4
+```
+```{r}
+plot(kmlModel4)
+```
+
+## Model adequacy
+```{r}
+plotQQ(kmlModel4, detrend=TRUE)
+```
+
+```{r}
+plotQQ(kmlModel4, byCluster=TRUE, detrend=TRUE)
+```
+
+
+```{r}
+bestKmlModel = subset(kmlModels, nClusters == 7, drop=TRUE)
+bestKmlModel
+
+plot(bestKmlModel)
+```
+
+```{r}
+plotQQ(bestKmlModel, detrend=TRUE)
+```
+
+# Clustering using group-based trajectory modeling
+```{r}
+gbtmMethods = clMethodGBTM(HoursOfUse ~ Day * CLUSTER, idiag=TRUE, maxIter=20, convB=1e-2, convL=1e-2, convG=1e-2) %>%
+  clMethods(nClusters=1:8)
+
+gbtmModels = cluslongBatch(gbtmMethods, osaData, verbose=FALSE)
+```
+
+```{r warning=FALSE, fig.width=10, fig.height=5, out.width='100%'}
+p = plotMetric(gbtmModels, c('logLik', 'BIC', 'WMAE')) +
+  scale_x_continuous(breaks=seq(1, 12, by=2))
+print(p)
+```
+
+```{r}
+bestGbtmModel = subset(gbtmModels, nClusters == 5, drop=TRUE)
+plotQQ(bestGbtmModel, detrend=TRUE)
+```
+
