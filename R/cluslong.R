@@ -26,6 +26,9 @@
 cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.verbose')) {
   assert_that(inherits(method, 'clMethod'), msg='method must be an object of class clMethod')
   assert_that(!missing(data), msg='data must be specified')
+  if(is.call(data)) {
+    data = eval(data, envir=envir)
+  }
   assert_that(is.data.frame(data) || is.matrix(data), msg='data must be data.frame or matrix')
 
   verbose = as.Verbose(verbose)
@@ -205,38 +208,43 @@ cluslongBatch = function(methods, data, envir=NULL, verbose=getOption('cluslong.
 
   dataCall = mc$data
   if(is.name(dataCall)) {
-    dataArg = replicate(nModels, dataCall)
-  } else if(is.call(dataCall) && dataCall[[1]] == '.') {
-    assert_that(nModels == length(dataCall) - 1, msg='either provide 1 data object, or a data object per method')
-    dataArg = as.list(dataCall[-1])
-  } else {
-    dataArg = eval(dataCall, envir=parent.frame())
-    if(is(dataArg, 'list')) {
-      assert_that(length(dataArg) %in% c(1, nModels))
+    dataEval = eval(dataCall, envir=parent.frame())
+    assert_that(length(dataEval) >= 1)
+    if(is(dataEval, 'list')) {
+      dataList = lapply(as.numeric(seq_along(dataEval)), function(d) substitute(dataObj[[d]], list(dataObj=dataCall, d=d)))
     } else {
-      dataArg = list(dataArg)
+      dataList = list(dataCall)
     }
+  } else if(is.call(dataCall) && dataCall[[1]] == '.') {
+    dataList = as.list(dataCall[-1])
+  } else {
+    stop('unsupported data input')
   }
+  nData = length(dataList)
 
   header(verbose, sprintf('Batch estimation (N=%d) for longitudinal clustering', nModels))
 
   # cluslong
   cat(verbose, 'Calling cluslong for each method...')
   pushState(verbose)
-  models = vector('list', nModels)
-  for(i in seq_along(methods)) {
-    cl = do.call(call, c('cluslong',
-                  method=quote(methods[[i]]),
-                  data=quote(dataArg[[min(i, length(dataArg))]]),
-                  envir=quote(envir),
-                  verbose=quote(verbose)))
-    models[[i]] = eval(cl)
+
+  models = vector('list', nModels * nData)
+  for(m in seq_along(methods)) {
+    for(d in seq_along(dataList)) {
+      cl = do.call(call, c('cluslong',
+                           method=quote(methods[[m]]),
+                           data=quote(dataList[[d]]),
+                           envir=quote(envir),
+                           verbose=quote(verbose)))
+      models[[(m - 1) * nData + d]] = eval(cl)
+    }
   }
 
   popState(verbose)
   cat(verbose, sprintf('Done fitting %d models.', nModels))
   as.clModels(models)
 }
+
 
 #' @export
 #' @title Cluster longitudinal data with bootstrapping
@@ -269,7 +277,7 @@ cluslongBoot = function(method, data, .samples=50, ..., envir=NULL) {
   # fit models
   methods = replicate(.samples, method)
   sampleSeeds = sample.int(.Machine$integer.max, size=.samples, replace=FALSE)
-  dataCalls = lapply(sampleSeeds, function(s) enquote(substitute(bootSample(data, id, s),
+  dataCalls = lapply(sampleSeeds, function(s) enquote(substitute(bootSample(data=data, id=id, seed=s),
                                                          env=list(data=mc$data, id=id, s=s))))
   dataCall = do.call(call, c(name='.', dataCalls))
 
@@ -284,13 +292,94 @@ cluslongBoot = function(method, data, .samples=50, ..., envir=NULL) {
 #' @title Generate a bootstrap sample from the data
 #' @param data The `data.frame` to sample from.
 #' @param seed The local seed to set.
-bootSample = function(data, id, seed) {
+bootSample = function(data, id=getOption('cluslong.id'), seed=NULL) {
   prevSeed = .Random.seed
   assert_that(is.data.frame(data), has_name(data, id))
   ids = unique(data[[id]])
   set.seed(seed)
   sampleIdx = sample.int(length(ids), replace=TRUE)
   newdata = data[data[[id]] %in% ids[sampleIdx],]
-  .Random.seed = prevSeed
+  if(!is.null(seed)) {
+    .Random.seed = prevSeed
+  }
   return(newdata)
+}
+
+
+#' @export
+#' @title Cluster longitudinal data over k folds
+#' @description Apply k-fold cross validation for internal cluster validation.
+#' Creates k random subsets ("folds") from the data, estimating a model for each of the k-1 combined folds.
+#' @inheritParams cluslong
+#' @param data A `data.frame`.
+#' @param .samples The number of bootstrap samples to evaluate.
+#' @return A `clModels` object of length `.samples`.
+#' @examples
+#' model = cluslongBoot(clMethodKML(), testLongData, .samples=10)
+#' @family longitudinal cluster fit functions
+cluslongFold = function(method, data, .folds=10, ..., envir=NULL) {
+
+}
+
+#' @export
+#' @importFrom caret createFolds
+#' @return A `list` of `data.frame` of the `folds` training datasets.
+createTrainDataFolds = function(data, folds=10, id=getOption('cluslong.id'), seed=NULL) {
+  assert_that(is.count(folds))
+  assert_that(is.data.frame(data), has_name(data, id))
+
+  prevSeed = .Random.seed
+
+  ids = unique(data[[id]])
+  set.seed(seed)
+
+  foldIdsList = caret::createFolds(seq_along(ids), k=folds, list=TRUE, returnTrain=TRUE) %>%
+    lapply(function(i) ids[i])
+
+  dataList = lapply(foldIdsList, function(foldIds) {
+    data[data[[id]] %in% foldIds,]
+  })
+
+  if(!is.null(seed)) {
+    .Random.seed = prevSeed
+  }
+  return(dataList)
+}
+
+#' @export
+createTestDataFold = function(data, trainData, id=getOption('cluslong.id')) {
+  assert_that(is.data.frame(trainData))
+  trainIds = unique(trainData[[id]])
+  allIds = unique(data[[id]])
+  assert_that(all(trainIds %in% allIds))
+  testIds = setdiff(allIds, trainIds)
+  data[data[[id]] %in% testIds]
+}
+
+#' @export
+createTestDataFolds = function(data, trainDataList, ...) {
+  lapply(trainDataList, function(trainData) createTestDataFold(data=data, trainData=trainData, ...))
+}
+
+#' @export
+#' @importFrom caret createFolds
+foldsTrainData = function(data, id, fold, folds, seed) {
+  assert_that(is.data.frame(data), has_name(data, id))
+  assert_that(!is.null(seed))
+
+  prevSeed = .Random.seed
+
+  ids = unique(data[[id]])
+  foldIdx = caret::createFolds(seq_along(ids), k=folds, list=TRUE, returnTrain=TRUE)[[fold]]
+  foldIds = ids[foldIdx]
+
+  .Random.seed = prevSeed
+  return(data[data[[id]] %in% foldIds,])
+}
+
+
+#' @export
+foldsTestData = function(data, id, fold, folds, seed) {
+  trainData = foldsTrainData(data, id=id, fold=fold, folds=folds, seed=seed)
+  createTestDataFold(data, trainData=trainData, id=id)
 }
