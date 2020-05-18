@@ -251,23 +251,24 @@ cluslongBatch = function(methods, data, envir=NULL, verbose=getOption('cluslong.
 #' @description Performs bootstrapping, generating samples from the given data at the id level, fitting a clModel to each sample.
 #' @inheritParams cluslong
 #' @param data A `data.frame`.
-#' @param .samples The number of bootstrap samples to evaluate.
-#' @return A `clModels` object of length `.samples`.
+#' @param samples The number of bootstrap samples to evaluate.
+#' @return A `clModels` object of length `samples`.
 #' @examples
-#' model = cluslongBoot(clMethodKML(), testLongData, .samples=10)
+#' model = cluslongBoot(clMethodKML(), testLongData, samples=10)
 #' @family longitudinal cluster fit functions
-cluslongBoot = function(method, data, .samples=50, ..., envir=NULL) {
+cluslongBoot = function(method, data, samples=50, seed=NULL, envir=NULL) {
   assert_that(is(method, 'clMethod'), msg='method must be clMethod object (e.g., clMethodKML() )')
   assert_that(!missing(data), msg='data must be specified')
   assert_that(is.data.frame(data), msg='data must be data.frame')
-  assert_that(is.count(.samples))
+  assert_that(is.count(samples))
 
   mc = match.call()
 
-  if(isArgDefined(method, 'seed')) {
-    seed = method$seed
-    logfine('Setting seed %s', as.character(seed))
-    set.seed(seed)
+  prevSeed = .Random.seed
+  set.seed(seed)
+
+  if(!is.null(seed)) {
+    .Random.seed = prevSeed
   }
 
   assert_that(hasName(method, 'id'))
@@ -275,8 +276,8 @@ cluslongBoot = function(method, data, .samples=50, ..., envir=NULL) {
   assert_that(hasName(data, id))
 
   # fit models
-  methods = replicate(.samples, method)
-  sampleSeeds = sample.int(.Machine$integer.max, size=.samples, replace=FALSE)
+  methods = replicate(samples, method)
+  sampleSeeds = sample.int(.Machine$integer.max, size=samples, replace=FALSE)
   dataCalls = lapply(sampleSeeds, function(s) enquote(substitute(bootSample(data=data, id=id, seed=s),
                                                          env=list(data=mc$data, id=id, s=s))))
   dataCall = do.call(call, c(name='.', dataCalls))
@@ -285,6 +286,7 @@ cluslongBoot = function(method, data, .samples=50, ..., envir=NULL) {
 
   cl = do.call(call, list(name='cluslongBatch', methods=methods, data=enquote(dataCall), envir=quote(envir)))
   models = eval(cl)
+
   return(models)
 }
 
@@ -312,20 +314,40 @@ bootSample = function(data, id=getOption('cluslong.id'), seed=NULL) {
 #' Creates k random subsets ("folds") from the data, estimating a model for each of the k-1 combined folds.
 #' @inheritParams cluslong
 #' @param data A `data.frame`.
-#' @param .samples The number of bootstrap samples to evaluate.
-#' @return A `clModels` object of length `.samples`.
+#' @param folds The number of folds. Ten folds by default.
+#' @return A `clModels` object of containing the `folds` training models.
 #' @examples
-#' model = cluslongBoot(clMethodKML(), testLongData, .samples=10)
+#' model = cluslongCV(clMethodKML(), testLongData, folds=10)
 #' @family longitudinal cluster fit functions
-cluslongFold = function(method, data, .folds=10, ..., envir=NULL) {
+cluslongCV = function(method, data, folds=10, seed=NULL, envir=NULL) {
+  assert_that(is.count(folds))
+  if(is.null(seed)) {
+    seed = sample.int(.Machine$integer.max, size=1)
+  }
 
+  assert_that(hasName(method, 'id'))
+  id = method$id
+  assert_that(hasName(data, id))
+
+  mc = match.call()
+  dataFoldCalls = lapply(as.numeric(1:folds), function(fold) {
+    enquote(substitute(trainFold(data, fold=fold, id, folds, seed),
+                       env=list(data=mc$data, id=id, fold=fold, folds=folds, seed=seed)))
+  })
+  dataCall = do.call(call, c('.', dataFoldCalls))
+
+  models = do.call(cluslongBatch, list(method=mc$method, data=dataCall))
+
+  return(models)
 }
 
 #' @export
 #' @importFrom caret createFolds
+#' @title Create the training data for each of the k models in k-fold cross validation evaluation
 #' @return A `list` of `data.frame` of the `folds` training datasets.
+#' @family validation
 createTrainDataFolds = function(data, folds=10, id=getOption('cluslong.id'), seed=NULL) {
-  assert_that(is.count(folds))
+  assert_that(is.count(folds), folds > 1)
   assert_that(is.data.frame(data), has_name(data, id))
 
   prevSeed = .Random.seed
@@ -347,6 +369,9 @@ createTrainDataFolds = function(data, folds=10, id=getOption('cluslong.id'), see
 }
 
 #' @export
+#' @title Create the test fold data for validation
+#' @seealso createTrainDataFolds
+#' @family validation
 createTestDataFold = function(data, trainData, id=getOption('cluslong.id')) {
   assert_that(is.data.frame(trainData))
   trainIds = unique(trainData[[id]])
@@ -357,17 +382,21 @@ createTestDataFold = function(data, trainData, id=getOption('cluslong.id')) {
 }
 
 #' @export
+#' @title Create all k test folds from the training data
+#' @family validation
 createTestDataFolds = function(data, trainDataList, ...) {
   lapply(trainDataList, function(trainData) createTestDataFold(data=data, trainData=trainData, ...))
 }
 
 #' @export
 #' @importFrom caret createFolds
-foldsTrainData = function(data, id, fold, folds, seed) {
+#' @family validation
+trainFold = function(data, fold, id, folds, seed) {
   assert_that(is.data.frame(data), has_name(data, id))
   assert_that(!is.null(seed))
 
   prevSeed = .Random.seed
+  set.seed(seed)
 
   ids = unique(data[[id]])
   foldIdx = caret::createFolds(seq_along(ids), k=folds, list=TRUE, returnTrain=TRUE)[[fold]]
@@ -379,7 +408,18 @@ foldsTrainData = function(data, id, fold, folds, seed) {
 
 
 #' @export
-foldsTestData = function(data, id, fold, folds, seed) {
+#' @family validation
+testFold = function(data, fold, id, folds, seed) {
   trainData = foldsTrainData(data, id=id, fold=fold, folds=folds, seed=seed)
   createTestDataFold(data, trainData=trainData, id=id)
+}
+
+
+checkData = function(data) {
+  assert_that(!missing(data), msg='data must be specified')
+  if(is.call(data)) {
+    data = eval(data, envir=envir)
+  }
+  assert_that(is.data.frame(data) || is.matrix(data), msg='data must be data.frame or matrix')
+  return(data)
 }
