@@ -30,7 +30,6 @@ is.clModels = function(x) {
   is(x, 'clModels')
 }
 
-
 #' @export
 #' @title Convert a list of clModels to a clModels list
 #' @param x An `R` object.
@@ -69,7 +68,7 @@ as.list.clModels = function(x) {
 #' @param ... Arguments passed to [as.data.frame.clMethod].
 #' @return A `data.frame` or `data.table`.
 #' @rdname as.data.frame.clModels
-as.data.table.clModels = function(x, excludeShared=FALSE, eval=TRUE, ...) {
+as.data.table.clModels = function(x, excludeShared=getOption('cluslong.hideSharedModelArgs'), eval=TRUE, ...) {
   x = as.clModels(x)
 
   dfs = lapply(x, getMethod) %>%
@@ -88,7 +87,12 @@ as.data.table.clModels = function(x, excludeShared=FALSE, eval=TRUE, ...) {
   if(!has_name(dt, '.name')) {
     dt[, `.name` := character()]
   }
-  setcolorder(dt, c('.name', '.method'))
+
+  dataNames = vapply(x, function(model) deparse(getCall(model)$data), FUN.VALUE='')
+  if(!excludeShared || uniqueN(dataNames) > 1) {
+    dt[, data := dataNames]
+  }
+  setcolorder(dt, intersect(c('.name', '.method', 'data'), names(dt)))
   return(dt[])
 }
 
@@ -99,7 +103,57 @@ as.data.frame.clModels = function(x, ...) {
   as.data.table(x, ...) %>% as.data.frame
 }
 
-metric.clModels = function(object, name) {
+
+#' @export
+#' @rdname metric
+#' @return A named `numeric` vector containing the computed model metrics.
+#' @examples
+#' clModel metric example here
+setMethod('externalMetric', signature('clModels', 'missing'), function(object, object2, name='AdjustedRand') {
+  assert_that(is.character(name), length(name) == 1)
+
+  pairs = combn(seq_along(object), m=2, simplify=FALSE)
+
+  result = lapply(pairs, function(idx) externalMetric(object[[idx[1]]], object[[idx[2]]], name=name) %>% unname())
+
+  m = matrix(NaN, nrow=length(object), ncol=length(object))
+  m[do.call(rbind, pairs)] = unlist(result)
+  as.dist(t(m), diag=FALSE, upper=FALSE)
+})
+
+.externalMetric.clModels = function(object, object2, name) {
+  assert_that(is.character(name))
+
+  result = lapply(object, externalMetric, object2=object2, name=name)
+
+  if(length(name) <= 1) {
+    do.call(c, result) %>%
+      unname()
+  } else {
+    do.call(rbind, result) %>%
+      as.data.frame()
+  }
+}
+
+#' @export
+#' @rdname metric
+#' @return A named `numeric` vector containing the computed model metrics.
+#' @examples
+#' clModel metric example here
+setMethod('externalMetric', signature('clModels', 'clModel'), .externalMetric.clModels)
+
+#' @export
+#' @rdname metric
+#' @return A named `numeric` vector containing the computed model metrics.
+#' @examples
+#' clModel metric example here
+setMethod('externalMetric', signature('list', 'clModel'), function(object, object2, name) {
+  assert_that(is.clModels(object))
+  .externalMetric.clModels(object, object2, name)
+})
+
+
+.metric.clModels = function(object, name) {
   assert_that(is.clModels(object))
   assert_that(is.character(name))
 
@@ -123,14 +177,13 @@ metric.clModels = function(object, name) {
 #' @export
 #' @rdname metric
 setMethod('metric', signature('list'), function(object, name) {
-  metric.clModels(as.clModels(object), name)
+  .metric.clModels(as.clModels(object), name)
 })
 
 #' @export
 #' @rdname metric
 #' @return For metric(clModels) or metric(list): A data.frame with a metric per column.
-setMethod('metric', signature('clModels'), metric.clModels)
-
+setMethod('metric', signature('clModels'), .metric.clModels)
 
 #' @export
 #' @title Plot one or more internal metrics for all clModels

@@ -182,7 +182,6 @@ setMethod('converged', signature('clModel'), function(object) {
 #' @title clModel deviance
 deviance.clModel = function(object, ...) {
   if (is.null(getS3method('deviance', class=class(object@model), optional=TRUE))) {
-    warning('deviance is not implemented for the given model')
     as.numeric(NA)
   } else {
     deviance(object@model)
@@ -272,7 +271,7 @@ ids = function(object) {
   if(length(object@ids) == 0) {
     iddata = model.data(object)[[idVariable(object)]]
     if(is.factor(iddata)) {
-      levels(iddata)
+      levels(iddata)[levels(iddata) %in% iddata]
     } else {
       unique(iddata) %>% sort
     }
@@ -347,7 +346,7 @@ setMethod('metric', signature('clModel'), function(object, name) {
 
 
 #' @export
-#' @title Compute external comparison metric(s) with another clModel.
+#' @title Compute external comparison metric(s) based on a reference clModel.
 #' @inheritParams metric
 #' @param object2 The other clModel to compare with.
 #' @examples
@@ -356,7 +355,14 @@ setMethod('metric', signature('clModel'), function(object, name) {
 #' model2 = cluslong(clMethodLcmmGMM(), testLongData)
 #' bic = externalMetric(model1, model2, 'Rand')
 #' @family metric functions
-externalMetric = function(object, object2, name=getExternalMetricNames()) {
+setGeneric('externalMetric', function(object, object2, name=getExternalMetricNames(), ...) standardGeneric('externalMetric'))
+
+#' @export
+#' @rdname metric
+#' @return A named `numeric` vector containing the computed model metrics.
+#' @examples
+#' clModel metric example here
+setMethod('externalMetric', signature('clModel', 'clModel'), function(object, object2, name) {
   assert_that(is.clModel(object))
   assert_that(is.clModel(object2))
   assert_that(is.character(name))
@@ -374,7 +380,7 @@ externalMetric = function(object, object2, name=getExternalMetricNames()) {
   allMetrics[funMask] = unlist(metricValues)
   names(allMetrics) = name
   return(allMetrics)
-}
+})
 
 
 #' @title Ensures a proper cluster assignments factor vector
