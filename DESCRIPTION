@@ -4,7 +4,7 @@ Title: Clustering longitudinal datasets
 Version: 0.5.0
 Author: Niek Den Teuling
 Maintainer: Niek Den Teuling <n.g.p.den.teuling@tue.nl>
-Description: Common methods for clustering longitudinal datasets
+Description: Common methods for clustering longitudinal datasets with univariate trajectories
 License: TBD
 Encoding: UTF-8
 LazyData: true
@@ -23,7 +23,13 @@ Imports:
     fda (>= 2.4.8),
     plyr (>= 1.8.4),
     stackoverflow (>= 0.3.0),
-    clusterCrit (>= 1.2.8),
+    clusterCrit (>= 1.2.8)
+RoxygenNote: 7.1.0
+Roxygen: list(markdown = TRUE)
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown,
     kml (>= 2.4.1),
     longitudinalData (>= 2.4.1),
     lcmm (>= 1.7.8),
@@ -34,12 +40,6 @@ Imports:
     funFEM (>= 1.1),
     crimCV (>= 0.9.6),
     akmedoids (>= 0.1.5)
-RoxygenNote: 6.1.1
-Roxygen: list(markdown = TRUE)
-Suggests: 
-    testthat,
-    knitr,
-    rmarkdown
 Collate: 
     'assert.R'
     'clMethod.R'
