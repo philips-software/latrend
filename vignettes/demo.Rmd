@@ -23,13 +23,13 @@ knitr::opts_chunk$set(
 )
 update_geom_defaults('line', list(size = .01))
 update_geom_defaults('point', list(size = .5))
-options(cluslong.id='Patient', cluslong.time='Day', cluslong.verbose=TRUE)
 ```
 
 ```{r, results='hide',message=FALSE,warning=FALSE}
 library(cluslong)
 library(ggplot2)
 library(magrittr)
+options(cluslong.verbose=TRUE)
 ```
 
 # Loading the data

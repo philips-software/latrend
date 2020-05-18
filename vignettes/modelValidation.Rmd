@@ -1,0 +1,115 @@
+---
+title: "How to validate cluster models"
+author: "Niek Den Teuling"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true # table of content true
+    toc_depth : 2  
+vignette: >
+  %\VignetteIndexEntry{modelValidation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+library(cluslong)
+library(ggplot2)
+knitr::opts_chunk$set(
+  cache = TRUE,
+  collapse = TRUE,
+  comment = "#>"
+)
+update_geom_defaults('line', list(size = .01))
+update_geom_defaults('point', list(size = .5))
+options(cluslong.verbose=FALSE)
+```
+
+```{r, results='hide',message=FALSE,warning=FALSE}
+library(cluslong)
+library(ggplot2)
+library(magrittr)
+set.seed(1)
+```
+
+# Loading the data
+We explore the `OSA1y30` dataset. This is a synthetic dataset for which the reference group of each trajectory is available. However, in this vignette we will assume that the true group specification and number of groups are unknown. Instead, we have a candidate model which we wish to validate internally.
+```{r}
+data(OSA1y30)
+osaData = OSA1y30
+head(osaData)
+```
+
+Specify the package options to adopt the respective column names of the loaded dataset, for convenience.
+```{r}
+options(cluslong.id='Patient', cluslong.time='Day')
+```
+
+# Candidate model
+```{r}
+kml = clMethodKML(HoursOfUse ~ 1, nClusters=7, nbRedrawing=5)
+kml
+```
+
+# Evaluate stability of the estimation through repeated estimation
+```{r}
+repModels = cluslongRep(kml, data=osaData, .rep=10, verbose=FALSE)
+repModels
+```
+
+```{r}
+repSelfMetrics = metric(repModels)
+head(repSelfMetrics)
+```
+
+```{r}
+repSelfMetrics$WMAE %>% summary()
+```
+
+```{r}
+repSelfMetrics$APPA %>% summary()
+```
+
+## Comparison between fits
+Select the model with the best fit, compare the other fits against this model.
+```{r}
+bestRepModel = repModels[[which.min(repSelfMetrics$BIC)]]
+externalMetric(repModels, bestRepModel, name='AdjustedRand')
+```
+
+```{r}
+distMat = externalMetric(repModels, name='AdjustedRand')
+distMat
+summary(distMat)
+```
+
+
+# Evaluating replicability through bootstrapping
+```{r}
+bootModels = cluslongBoot(kml, data=osaData, .samples=20)
+bootModels
+```
+
+```{r}
+bootMetrics = metric(bootModels)
+bootMetrics
+```
+
+
+# Ten-fold cross validation
+```{r}
+
+```
+
+
+## Manual cross validation
+```{r}
+dataFolds = createTrainDataFolds(osaData, folds=10)
+foldModels = cluslongBatch(kml, data=dataFolds)
+foldModels
+```
+
+```{r}
+testDataFolds = createTestDataFolds(osaData, dataFolds)
+```
+
