@@ -5,7 +5,7 @@
     cluslong.time='Time',
     cluslong.id='Id',
     cluslong.checkArgs=TRUE,
-    cluslong.hideSharedModelArgs=TRUE)
+    cluslong.printSharedModelArgs=FALSE)
 
   optMask = not(names(opts) %in% names(options()))
   if(any(optMask)) {

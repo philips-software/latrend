@@ -68,7 +68,7 @@ as.list.clModels = function(x) {
 #' @param ... Arguments passed to [as.data.frame.clMethod].
 #' @return A `data.frame` or `data.table`.
 #' @rdname as.data.frame.clModels
-as.data.table.clModels = function(x, excludeShared=getOption('cluslong.hideSharedModelArgs'), eval=TRUE, ...) {
+as.data.table.clModels = function(x, excludeShared=FALSE, eval=TRUE, ...) {
   x = as.clModels(x)
 
   dfs = lapply(x, getMethod) %>%
@@ -289,11 +289,11 @@ subset.clModels = function(x, subset, drop=FALSE) {
 #' @title Print clModels list concisely
 #' @param summary Whether to print the complete summary per model. This may be slow for long lists!
 #' @family clModel list functions
-print.clModels = function(x, summary=FALSE) {
+print.clModels = function(x, summary=FALSE, excludeShared=!getOption('cluslong.printSharedModelArgs')) {
   if(summary) {
     as.list(x) %>% print
   } else {
     cat(sprintf('List of %d clModels with\n', length(x)))
-    print(as.data.table.clModels(x))
+    print(as.data.table.clModels(x, excludeShared=excludeShared))
   }
 }
