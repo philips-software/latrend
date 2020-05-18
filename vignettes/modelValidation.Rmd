@@ -53,7 +53,7 @@ kml
 
 # Evaluate stability of the estimation through repeated estimation
 ```{r}
-repModels = cluslongRep(kml, data=osaData, .rep=10, verbose=FALSE)
+repModels = cluslongRep(kml, data=osaData, .rep=10)
 print(repModels, excludeShared=FALSE)
 ```
 
@@ -86,7 +86,7 @@ summary(distMat)
 
 # Evaluating replicability and stability through bootstrapping
 ```{r}
-bootModels = cluslongBoot(kml, data=osaData, .samples=10)
+bootModels = cluslongBoot(kml, data=osaData, samples=10)
 bootModels
 ```
 

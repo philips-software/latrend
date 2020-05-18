@@ -35,3 +35,10 @@ test_that('cluslongFold with data subset', {
   getCall(models[[2]]) %T>%
     {expect_equal(deparse(.$data), 'trainFold(testLongData[Time < 0.5], fold = 2, "Id", 2, 1)')}
 })
+
+test_that('cluslongFold with method var', {
+  kml = clMethodTestKML()
+  cluslongCV(kml, testLongData, folds=2, seed=1) %>%
+    expect_is('clModels') %>%
+    expect_length(2)
+})

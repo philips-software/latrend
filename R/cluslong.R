@@ -257,12 +257,16 @@ cluslongBatch = function(methods, data, envir=NULL, verbose=getOption('cluslong.
 #' @examples
 #' model = cluslongBoot(clMethodKML(), testLongData, samples=10)
 #' @family longitudinal cluster fit functions
+#' @family validation methods
 cluslongBoot = function(method, data, samples=50, seed=NULL, envir=NULL, verbose=getOption('cluslong.verbose')) {
-  header(verbose, sprintf('Longitudinal cluster estimation with %d bootstrap samples', samples))
   assert_that(is(method, 'clMethod'), msg='method must be clMethod object (e.g., clMethodKML() )')
   assert_that(!missing(data), msg='data must be specified')
   assert_that(is.data.frame(data), msg='data must be data.frame')
   assert_that(is.count(samples))
+
+  verbose = as.Verbose(verbose)
+  header(verbose, sprintf('Longitudinal cluster estimation with %d bootstrap samples', samples))
+  ruler(verbose)
 
   mc = match.call()
 
@@ -307,12 +311,15 @@ cluslongBoot = function(method, data, samples=50, seed=NULL, envir=NULL, verbose
 #'
 #' model = cluslongCV(clMethodKML(), testLongData[, Time < .5], folds=10, seed=1)
 #' @family longitudinal cluster fit functions
+#' @family validation methods
 cluslongCV = function(method, data, folds=10, seed=NULL, envir=NULL, verbose=getOption('cluslong.verbose')) {
   assert_that(!missing(data), msg='data must be specified')
   assert_that(is.data.frame(data), msg='data must be data.frame')
   assert_that(is.count(folds))
 
+  verbose = as.Verbose(verbose)
   header(verbose, sprintf('Longitudinal clustering with %d-fold cross validation', folds))
+  ruler(verbose)
 
   if(is.null(seed)) {
     seed = sample.int(.Machine$integer.max, size=1)
@@ -329,7 +336,7 @@ cluslongCV = function(method, data, folds=10, seed=NULL, envir=NULL, verbose=get
   })
   dataCall = do.call(call, c('.', dataFoldCalls))
 
-  models = do.call(cluslongBatch, list(method=mc$method, data=dataCall, verbose=verbose))
+  models = do.call(cluslongBatch, list(method=method, data=dataCall, verbose=verbose))
 
   return(models)
 }
@@ -340,7 +347,7 @@ cluslongCV = function(method, data, folds=10, seed=NULL, envir=NULL, verbose=get
 #' @importFrom caret createFolds
 #' @title Create the training data for each of the k models in k-fold cross validation evaluation
 #' @return A `list` of `data.frame` of the `folds` training datasets.
-#' @family validation
+#' @family validation methods
 #' @examples
 #' createTrainDataFolds(testLongData, folds=10)
 #'
@@ -371,7 +378,7 @@ createTrainDataFolds = function(data, folds=10, id=getOption('cluslong.id'), see
 #' @export
 #' @title Create the test fold data for validation
 #' @seealso createTrainDataFolds
-#' @family validation
+#' @family validation methods
 #' @examples
 #' trainDataList = createTrainDataFolds(testLongData, folds=10)
 #' testData1 = createTestDataFold(testLongData, trainDataList[[1]])
@@ -387,7 +394,7 @@ createTestDataFold = function(data, trainData, id=getOption('cluslong.id')) {
 
 #' @export
 #' @title Create all k test folds from the training data
-#' @family validation
+#' @family validation methods
 #' @examples
 #' trainDataList = createTrainDataFolds(testLongData, folds=10)
 #' testDataList = createTestDataFolds(testLongData, trainDataList)
@@ -400,6 +407,7 @@ createTestDataFolds = function(data, trainDataList, ...) {
 # Data helper functions ####
 
 #' @export
+#' @family validation methods
 #' @family model data filters
 bootSample = function(data, id=getOption('cluslong.id'), seed=NULL) {
   assert_that(is.data.frame(data), has_name(data, id))
@@ -417,7 +425,7 @@ bootSample = function(data, id=getOption('cluslong.id'), seed=NULL) {
 
 #' @export
 #' @importFrom caret createFolds
-#' @family validation
+#' @family validation methods
 #' @family model data filters
 trainFold = function(data, fold, id, folds, seed) {
   assert_that(is.data.frame(data), has_name(data, id))
@@ -436,7 +444,7 @@ trainFold = function(data, fold, id, folds, seed) {
 
 
 #' @export
-#' @family validation
+#' @family validation methods
 #' @family model data filters
 testFold = function(data, fold, id, folds, seed) {
   trainData = foldsTrainData(data, id=id, fold=fold, folds=folds, seed=seed)
