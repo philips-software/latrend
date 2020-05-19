@@ -186,6 +186,7 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL,
 #' @description Fit a list of longitudinal cluster methods.
 #' @inheritParams cluslong
 #' @param data A `data.frame`, `matrix`, or a `list` thereof to which to apply to the respective `clMethod`. Multiple datasets can be supplied by encapsulating the datasets using `data=.(df1, df2, ..., dfN)`.
+#' @param cartesian Whether to fit the provided methods on each of the datasets. If `cartesian=FALSE`, only a single dataset may be provided or a list of data matching the length of `methods`.
 #' @param envir The `environment` in which to evaluate the `clMethod` arguments.
 #' @return A `clModels` object.
 #' @examples
@@ -197,10 +198,11 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL,
 #'
 #' @seealso clMethods
 #' @family longitudinal cluster fit functions
-cluslongBatch = function(methods, data, envir=NULL, verbose=getOption('cluslong.verbose')) {
+cluslongBatch = function(methods, data, cartesian=TRUE, envir=NULL, verbose=getOption('cluslong.verbose')) {
   if(!is.list(methods)) {methods = list(methods)}
   assert_that(is.list(methods), all(vapply(methods, inherits, 'clMethod', FUN.VALUE=FALSE)), msg='methods argument must be a list of clMethod objects')
   assert_that(!missing(data))
+  assert_that(is.logical(cartesian), is.scalar(cartesian))
   envir = clMethod.env(methods[[1]], parent.frame(), envir)
 
   verbose = as.Verbose(verbose)
@@ -224,20 +226,27 @@ cluslongBatch = function(methods, data, envir=NULL, verbose=getOption('cluslong.
     stop('unsupported data input')
   }
   nData = length(dataList)
+  assert_that(cartesian || nData %in% c(1, nModels), msg='number of datasets must be 1 or match the number of specified methods')
 
   # cluslong
   cat(verbose, 'Calling cluslong for each method...')
   pushState(verbose)
 
-  models = vector('list', nModels * nData)
+  models = vector('list', nModels * ifelse(cartesian, nData, 1))
+
   for(m in seq_along(methods)) {
-    for(d in seq_along(dataList)) {
+    if(cartesian) {
+      dOpts = seq_along(dataList)
+    } else {
+      dOpts = min(m, nData, nModels)
+    }
+    for(d in dOpts) {
       cl = do.call(call, c('cluslong',
                            method=quote(methods[[m]]),
                            data=quote(dataList[[d]]),
                            envir=quote(envir),
                            verbose=quote(verbose)))
-      models[[(m - 1) * nData + d]] = eval(cl)
+      models[[(m - 1) * length(dOpts) + ifelse(cartesian, d, 1)]] = eval(cl)
     }
   }
 
@@ -271,12 +280,9 @@ cluslongBoot = function(method, data, samples=50, seed=NULL, envir=NULL, verbose
   mc = match.call()
 
   # generate seeds
-  prevSeed = .Random.seed
-  set.seed(seed)
-  sampleSeeds = sample.int(.Machine$integer.max, size=samples, replace=FALSE)
-  if(!is.null(seed)) {
-    .Random.seed = prevSeed
-  }
+  localRNG(seed=seed, {
+    sampleSeeds = sample.int(.Machine$integer.max, size=samples, replace=FALSE)
+  })
 
   assert_that(hasName(method, 'id'))
   id = method$id
@@ -285,11 +291,11 @@ cluslongBoot = function(method, data, samples=50, seed=NULL, envir=NULL, verbose
   # fit models
   methods = replicate(samples, method)
 
-  dataCalls = lapply(sampleSeeds, function(s) enquote(substitute(bootSample(data=data, id=id, seed=s),
+  dataCalls = lapply(sampleSeeds, function(s) enquote(substitute(bootSample(data, id, s),
                                                          env=list(data=mc$data, id=id, s=s))))
   dataCall = do.call(call, c(name='.', dataCalls))
 
-  cl = do.call(call, list(name='cluslongBatch', methods=methods, data=enquote(dataCall), envir=quote(envir), verbose=verbose))
+  cl = do.call(call, list(name='cluslongBatch', methods=methods, data=enquote(dataCall), cartesian=FALSE, envir=quote(envir), verbose=verbose))
   models = eval(cl)
 
   return(models)
@@ -356,21 +362,16 @@ createTrainDataFolds = function(data, folds=10, id=getOption('cluslong.id'), see
   assert_that(is.count(folds), folds > 1)
   assert_that(is.data.frame(data), has_name(data, id))
 
-  prevSeed = .Random.seed
-
   ids = unique(data[[id]])
-  set.seed(seed)
 
-  foldIdsList = caret::createFolds(seq_along(ids), k=folds, list=TRUE, returnTrain=TRUE) %>%
-    lapply(function(i) ids[i])
+  localRNG(seed=seed, {
+    foldIdsList = caret::createFolds(seq_along(ids), k=folds, list=TRUE, returnTrain=TRUE) %>%
+      lapply(function(i) ids[i])
+  })
 
   dataList = lapply(foldIdsList, function(foldIds) {
     data[data[[id]] %in% foldIds,]
   })
-
-  if(!is.null(seed)) {
-    .Random.seed = prevSeed
-  }
   return(dataList)
 }
 
@@ -411,14 +412,13 @@ createTestDataFolds = function(data, trainDataList, ...) {
 #' @family model data filters
 bootSample = function(data, id=getOption('cluslong.id'), seed=NULL) {
   assert_that(is.data.frame(data), has_name(data, id))
-  prevSeed = .Random.seed
   ids = unique(data[[id]])
-  set.seed(seed)
-  sampleIdx = sample.int(length(ids), replace=TRUE)
+
+  localRNG(seed=seed, {
+    sampleIdx = sample.int(length(ids), replace=TRUE)
+  })
+
   newdata = data[data[[id]] %in% ids[sampleIdx],]
-  if(!is.null(seed)) {
-    .Random.seed = prevSeed
-  }
   return(newdata)
 }
 
@@ -431,14 +431,12 @@ trainFold = function(data, fold, id, folds, seed) {
   assert_that(is.data.frame(data), has_name(data, id))
   assert_that(!is.null(seed))
 
-  prevSeed = .Random.seed
-  set.seed(seed)
-
   ids = unique(data[[id]])
-  foldIdx = caret::createFolds(seq_along(ids), k=folds, list=TRUE, returnTrain=TRUE)[[fold]]
-  foldIds = ids[foldIdx]
+  localRNG(seed=seed, {
+    foldIdx = caret::createFolds(seq_along(ids), k=folds, list=TRUE, returnTrain=TRUE)[[fold]]
+  })
 
-  .Random.seed = prevSeed
+  foldIds = ids[foldIdx]
   return(data[data[[id]] %in% foldIds,])
 }
 
