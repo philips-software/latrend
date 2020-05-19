@@ -82,6 +82,7 @@ Collate:
     'formula.R'
     'matrix.R'
     'metrics.R'
+    'random.R'
     'verbose.R'
     'zzz.R'
 VignetteBuilder: knitr
