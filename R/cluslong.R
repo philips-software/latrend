@@ -9,7 +9,7 @@
 #' @param method The `clMethod` object specifying the longitudinal cluster method to apply.
 #' @param data The `data.frame` or `matrix` to which to apply the method.
 #' @param ... Any other arguments to update the `clMethod` definition with.
-#' @param envir The `environment` in which to evaluate the method arguments.
+#' @param envir The `environment` in which to evaluate the method arguments. Note that this only applies to `data` when `data` is a `call`.
 #' @param verbose The level of verbosity. Either an object of class `Verbose` (see [R.utils::Verbose] for details),
 #' a `logical` indicating whether to show basic computation information,
 #' a `numeric` indicating the verbosity level (see [Verbose]),
@@ -26,6 +26,7 @@
 cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.verbose')) {
   assert_that(inherits(method, 'clMethod'), msg='method must be an object of class clMethod')
   assert_that(!missing(data), msg='data must be specified')
+
   if(is.call(data)) {
     data = eval(data, envir=envir)
   }
