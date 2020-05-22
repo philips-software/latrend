@@ -90,12 +90,32 @@ test_that('custom id and time', {
   expect_equal(deparse(getCall(model)$data), 'nameData')
 })
 
+test_that('id with NA', {
+  set.seed(1)
+  naData = copy(testLongData) %>%
+    .[sample(.N, 10), Id := NA]
+
+  expect_error(cluslong(clMethodTestKML(), data=naData))
+})
+
 test_that('factor id', {
   facData = copy(testLongData) %>%
     .[, Id := factor(Id)]
 
   model = cluslong(clMethodTestKML(), data=facData) %>%
     expect_is('clModel')
+
+  expect_equal(ids(model), levels(facData$Id))
+})
+
+test_that('factor id, out of order', {
+  facData = copy(testLongData) %>%
+    .[, Id := factor(Id, levels=rev(unique(Id)))]
+
+  model = cluslong(clMethodTestKML(), data=facData) %>%
+    expect_is('clModel')
+
+  expect_equal(ids(model), levels(facData$Id))
 })
 
 test_that('factor id with empty levels', {

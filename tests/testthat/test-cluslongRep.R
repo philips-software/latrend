@@ -24,3 +24,21 @@ test_that('single rep', {
     expect_is('clModels') %>%
     expect_length(1)
 })
+
+test_that('matrix input', {
+  mat = dcastRepeatedMeasures(testLongData)
+  cluslongRep(clMethodTestKML(), data=mat, .rep=2) %>%
+    expect_is('clModels') %>%
+    expect_length(2)
+})
+
+test_that('envir', {
+  kml = clMethodKML(nClusters=a, nbRedrawing=1, maxIt=10)
+  e = list2env(list(a = 1))
+
+  models = cluslongRep(kml, data=testLongData, envir=e, .rep=2) %>%
+    expect_is('clModels') %>%
+    expect_length(2)
+
+  expect_equal(nClusters(models[[1]]), 1)
+})

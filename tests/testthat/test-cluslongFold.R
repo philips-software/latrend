@@ -42,3 +42,30 @@ test_that('method var', {
     expect_is('clModels') %>%
     expect_length(2)
 })
+
+test_that('createTrainDataFolds', {
+  trainDataList = createTrainDataFolds(testLongData, folds=2, seed=1)
+  expect_is(trainDataList, 'list')
+  expect_length(trainDataList, 2)
+  expect_is(trainDataList[[1]], 'data.frame')
+  expect_is(trainDataList[[2]], 'data.frame')
+  expect_length(union(unique(trainDataList[[1]]$Id), unique(trainDataList[[2]]$Id)), uniqueN(testLongData$Id))
+})
+
+test_that('createTestDataFold', {
+  trainDataList = createTrainDataFolds(testLongData, folds=2, seed=1)
+  testData = createTestDataFold(testLongData, trainDataList[[1]])
+  expect_length(intersect(unique(testData$Id), unique(trainDataList[[1]]$Id)), 0)
+})
+
+test_that('createTestDataFolds', {
+  trainDataList = createTrainDataFolds(testLongData, folds=2, seed=1)
+  testDataList = createTestDataFolds(testLongData, trainDataList)
+  expect_is(testDataList, 'list')
+  expect_length(testDataList, length(trainDataList))
+
+  for(i in seq_along(testDataList)) {
+    expect_is(testDataList[[i]], 'data.frame')
+    expect_length(intersect(unique(testDataList[[i]]$Id), unique(trainDataList[[i]]$Id)), 0)
+  }
+})
