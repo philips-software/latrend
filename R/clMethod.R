@@ -10,7 +10,7 @@ setMethod('initialize', 'clMethod', function(.Object, ...) {
 setValidity('clMethod', function(object) {
   call = getCall(object)
   assert_that(is.call(call))
-  assert_that(!any(vapply(names(object), substr, 1, 1, FUN.VALUE='') == '.'), msg='argument names cannot start with "."')
+  assert_that(!any(vapply(names(object), startsWith, '.', FUN.VALUE=TRUE)), msg='argument names cannot start with "."')
 })
 
 setMethod('show', 'clMethod',
