@@ -1,9 +1,4 @@
 #' @export
-#' @import data.table
-#' @import assertthat
-#' @import magrittr
-#' @import foreach
-#' @import ggplot2
 #' @importFrom stackoverflow match.call.defaults
 #' @title Cluster longitudinal data
 #' @param method The `clMethod` object specifying the longitudinal cluster method to apply.

@@ -239,3 +239,6 @@ test_that('.arg error', {
   expect_error(new('clMethod', call=call('clMethod', a=1, .b='a')))
 })
 
+test_that('negative nClusters error', {
+  expect_error(new('clMethod', call=call('clMethod', nClusters=-1, .b='a')))
+})

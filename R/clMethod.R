@@ -9,8 +9,15 @@ setMethod('initialize', 'clMethod', function(.Object, ...) {
 
 setValidity('clMethod', function(object) {
   call = getCall(object)
-  assert_that(is.call(call))
-  assert_that(!any(vapply(names(object), startsWith, '.', FUN.VALUE=TRUE)), msg='argument names cannot start with "."')
+  assert_that(!any(vapply(names(object), startsWith, '.', FUN.VALUE=TRUE)), msg='clMethod argument names cannot start with "."')
+
+  if(isArgDefined(object, 'formula')) {
+    assert_that(is.formula(object$formula))
+  }
+
+  if(isArgDefined(object, 'nClusters')) {
+    assert_that(is.count(object$nClusters))
+  }
 })
 
 setMethod('show', 'clMethod',

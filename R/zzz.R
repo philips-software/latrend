@@ -1,3 +1,9 @@
+#' @import data.table
+#' @import assertthat
+#' @import magrittr
+#' @import foreach
+#' @import ggplot2
+
 .onLoad = function(libname, pkgname) {
   opts = list(
     cluslong.verbose=R.utils::Verbose(threshold=-1),
@@ -7,7 +13,7 @@
     cluslong.checkArgs=TRUE,
     cluslong.printSharedModelArgs=FALSE)
 
-  optMask = not(names(opts) %in% names(options()))
+  optMask = !(names(opts) %in% names(options()))
   if(any(optMask)) {
     options(opts[optMask])
     packageStartupMessage('Default options:')
