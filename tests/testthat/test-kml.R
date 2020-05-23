@@ -1,5 +1,10 @@
 context('KML model')
 
+test_that('method', {
+  kml = clMethodKML()
+  expect_output(print(kml))
+})
+
 test_that('default', {
   m = clMethodTestKML()
   model = cluslong(m, testLongData) %>%

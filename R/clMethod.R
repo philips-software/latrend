@@ -21,6 +21,34 @@ setMethod('show', 'clMethod',
 )
 
 #' @export
+#' @title Construct a clMethod object of arbitrary type
+#' @description Creates a clMethod class of the specified type `Class` for the given arguments given in a call, along with any default arguments from reference functions.
+#' @param Class The type of `clMethod` class
+#' @param call The arguments to create the `clMethod` from.
+#' @param defaults List of `function` to obtain defaults from for arguments unspecified by `call`.
+#' @param excludeDefaultArgs The names of the arguments to exclude from the defaults, provided as a `character vector`.
+clMethod = function(Class, call, defaults=list(), excludeDefaultArgs=c()) {
+  classRep = getClass(Class)
+  assert_that('clMethod' %in% names(classRep@contains), msg='specified class does not inherit from clMethod')
+  assert_that(is.call(call))
+  assert_that(is.list(defaults), all(vapply(defaults, is.function, FUN.VALUE=TRUE)))
+  assert_that(is.null(excludeDefaultArgs) || is.character(excludeDefaultArgs))
+
+  allArgs = lapply(defaults, formals) %>%
+    do.call(c, .) %>%
+    as.list()
+
+  args = allArgs[not(names(allArgs) %in% excludeDefaultArgs)] %>%
+    modifyList(as.list(call)[-1])
+
+  argOrder = union(names(call[-1]), setdiff(names(allArgs), excludeDefaultArgs))
+
+  newCall = do.call('call', c(Class, lapply(args[argOrder], enquote)))
+  new(Class, call=newCall)
+}
+
+
+#' @export
 #' @title Check validity of the arguments in the respective environment.
 #' @description Arguments missing from the environment are skipped.
 #' @param envir The environment in which to evaluate the arguments.
@@ -280,25 +308,19 @@ as.character.clMethod = function(x,
   chrValues = lapply(argValues, function(x) {
     if(is.null(x)) {
       nullString
+    } else if(is.character(x)) {
+      paste0('"', x, '"', collapse=', ')
     } else if(is.atomic(x)) {
-      if(length(x) > 1) {
-        as.character(x) %>% paste0(collapse=', ')
-      } else {
-        as.character(x)
-      }
+      paste0(as.character(x), collapse=', ')
     } else {
-      chr = as.character(x)
-      if(length(chr) > 1) {
-        deparse(x)
-      } else {
-        chr
-      }
+      deparse(x) %>% paste0(collapse='')
     }
   })
 
   assert_that(all(vapply(chrValues, length, FUN.VALUE=0) == 1))
   unlist(chrValues)
 }
+
 
 #' @title Substitute the call arguments
 #' @param envir The environment in which to evaluate the arguments.

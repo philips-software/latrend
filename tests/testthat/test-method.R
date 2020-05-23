@@ -1,5 +1,27 @@
 context('clMethod')
 
+test_that('new clmethod', {
+  m = clMethod('clMethodKML', call=call('clMethod', null=NULL, log=TRUE, int=3L, num=2.5, char='a',
+                               fac=factor('b', levels=c('a', 'b')),
+                               form=A~B,
+                               call=quote(1 + 2 * 3),
+                               name=quote(xvar)))
+
+  mchars = as.character(m)
+
+  expect_equivalent(mchars['NA'], 'NULL')
+  expect_equivalent(mchars['log'], 'TRUE')
+  expect_equivalent(mchars['int'], '3')
+  expect_equivalent(mchars['num'], '2.5')
+
+  expect_equivalent(mchars['char'], '"a"')
+  expect_equivalent(mchars['fac'], 'b')
+  expect_equivalent(mchars['form'], 'A ~ B')
+  expect_equivalent(mchars['call'], '1 + 2 * 3')
+  expect_equivalent(mchars['name'], 'xvar')
+})
+
+
 test_that('as.data.frame', {
   # new('clMethod', call=call('clMethod')) %>%
   #   as.data.frame %>%
@@ -53,18 +75,18 @@ test_that('as.character', {
   as.character(m) %>%
     expect_length(length(m)) %>%
     expect_named(names(m)) %T>%
-    {expect_equal(unname(.), c('NULL', 'TRUE', '3', '2.5', 'a', 'b', 'A ~ B', '1 + 2 * 3', 'xvar'))}
+    {expect_equal(unname(.), c('NULL', 'TRUE', '3', '2.5', '"a"', 'b', 'A ~ B', '1 + 2 * 3', 'xvar'))}
 
   as.character(m, eval=TRUE) %>%
     expect_length(length(m)) %>%
     expect_named(names(m)) %T>%
-    {expect_equal(unname(.), c('NULL', 'TRUE', '3', '2.5', 'a', 'b', 'A ~ B', '7', 'xvar'))}
+    {expect_equal(unname(.), c('NULL', 'TRUE', '3', '2.5', '"a"', 'b', 'A ~ B', '7', 'xvar'))}
 
   xvar = 2
   as.character(m, eval=TRUE) %>%
     expect_length(length(m)) %>%
     expect_named(names(m)) %T>%
-    {expect_equal(unname(.), c('NULL', 'TRUE', '3', '2.5', 'a', 'b', 'A ~ B', '7', '2'))}
+    {expect_equal(unname(.), c('NULL', 'TRUE', '3', '2.5', '"a"', 'b', 'A ~ B', '7', '2'))}
 })
 
 

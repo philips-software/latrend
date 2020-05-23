@@ -6,30 +6,30 @@ setClass('clMethodKML', contains='clMatrixMethod')
 #' @import longitudinalData
 #' @inheritParams kml::kml
 #' @inheritParams kml::parALGO
+#' @inheritDotParams kml::kml
+#' @inheritDotParams kml::parALGO
 #' @title Specify KML method
 #' @param formula Formula. Only intercept is supported.
 #' @param time Time variable.
 #' @param id Strata variable.
 #' @param nClusters Number of clusters.
 #' @examples
-#' method = clMethodKML(Value ~ 1, nClusters=3)
+#' method = clMethodKML(Value ~ ., nClusters=3)
 #' model = cluslong(method, testLongData)
 #' @family clMethod classes
-clMethodKML = function(formula=Value ~ 1,
+clMethodKML = function(formula=Value ~ 0,
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),
                        nClusters=2,
-                       nbRedrawing=20,
-                       maxIt=200,
-                       startingCond='kmeans++',
-                       imputationMethod='copyMean',
-                       distanceName='euclidean',
-                       centerMethod=meanNA) {
-  object = new('clMethodKML', call=match.call.defaults())
+                       ...) {
+  #object = new('clMethodKML', call=match.call.defaults())
+  object = clMethod('clMethodKML', call=match.call.defaults(),
+           defaults=c(kml::kml, kml::parALGO),
+           excludeDefaultArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot'))
 
-  if(getOption('cluslong.checkArgs')) {
-    checkArgs(object, envir=parent.frame())
-  }
+  # if(getOption('cluslong.checkArgs')) {
+  #   checkArgs(object, envir=parent.frame())
+  # }
   return(object)
 }
 
