@@ -5,19 +5,23 @@ setClass('clMethodAKMedoids', contains='clMatrixMethod')
 #' @importFrom akmedoids akmedoids.clust
 #' @title Specify KML method
 #' @inheritParams clMatrixMethod
-#' @inheritParams akmedoids::akmedoids.clust
+#' @inheritParams clMethodCustom
+#' @inheritDotParams akmedoids::akmedoids.clust
 #' @examples
-#' method = clMethodAKMedoids(Measurement ~ 1,
+#' method = clMethodAKMedoids(Measurement ~ 0,
 #'                      time='Assessment',
 #'                      id='Id', nClusters=3)
 #' @family clMethod classes
-clMethodAKMedoids = function(formula=Value ~ 1,
+clMethodAKMedoids = function(formula=Value ~ 0,
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),
                        nClusters=3,
-                       method='linear',
-                       clusterCenter=median) {
-  new('clMethodAKMedoids', call=match.call.defaults())
+                       clusterCenter=median,
+                       ...
+) {
+  clMethod('clMethodAKMedoids', call=match.call.defaults(),
+           defaults=akmedoids::akmedoids.clust,
+           excludeArgs=c('traj', 'id_field', 'k'))
 }
 
 setMethod('getName', signature('clMethodAKMedoids'), function(object) 'anchored k-medoids')
@@ -28,11 +32,10 @@ setMethod('getName0', signature('clMethodAKMedoids'), function(object) 'akm')
 setMethod('fit', signature('clMethodAKMedoids'), function(method, data, envir, verbose, ...) {
   e = new.env(parent=envir)
 
-  args = as.list(method)
+  args = as.list(method, fun=akmedoids.clust)
   args$traj = envir$dataMat
   args$k = method$nClusters
   args$id_field = FALSE
-  args[setdiff(names(args), formalArgs(akmedoids.clust))] = NULL #remove undefined arguments
 
   # Helper variables
   valueColumn = formula(method) %>% getResponse

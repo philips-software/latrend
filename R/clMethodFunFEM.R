@@ -18,12 +18,11 @@ clMethodFunFEM = function(formula=Value ~ 1,
                           id=getOption('cluslong.id'),
                           nClusters=2,
                           basis=function(time) create.bspline.basis(time, nbasis=10, norder=3),
-                          model='AkjBk',
-                          init='hclust',
-                          maxit=50,
-                          eps=1e-06,
-                          lambda=0) {
-  new('clMethodFunFEM', call=match.call.defaults())
+                          ...
+) {
+  clMethod('clMethodFunFEM', call=match.call.defaults(),
+           defaults=funFEM::funFEM,
+           excludeArgs=c('fd', 'K', 'disp', 'graph'))
 }
 
 setMethod('getName', signature('clMethodFunFEM'), function(object) 'functional subspace clustering with FunFEM')

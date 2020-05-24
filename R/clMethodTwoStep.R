@@ -1,6 +1,14 @@
 #' @include clModelCustom.R
 setClass('clMethodTwoStep', contains='clMethod')
 
+setValidity('clMethodTwoStep', function(object) {
+  assert_that(hasMethodArgs(object, formalArgs(clMethodTwoStep)))
+
+  assert_that(!isArgDefined(object, 'representationStep') || is.function(object$representationStep) || is.matrix(object$representationStep))
+
+  assert_that(!isArgDefined(object, 'clusterStep') || is.function(object$clusterStep))
+})
+
 #' @export
 #' @title Two-step clustering
 #' @description Two-step clustering.
@@ -17,23 +25,8 @@ clMethodTwoStep = function(representationStep,
                            response=getOption('cluslong.response'),
                            time=getOption('cluslong.time'),
                            id=getOption('cluslong.id')) {
-  object = new('clMethodTwoStep', call=match.call.defaults())
-
-  if(getOption('cluslong.checkArgs')) {
-    checkArgs(object)
-  }
-  return(object)
+  clMethod('clMethodTwoStep', call=match.call.defaults(), excludeArgs=c('verbose'))
 }
-
-
-setMethod('checkArgs', signature('clMethodTwoStep'), function(object, envir) {
-  environment(object) = envir
-  assert_that(all(formalArgs(clMethodTwoStep) %in% names(getCall(object))), msg='clMethod object is missing required arguments')
-
-  assert_that(!isArgDefined(object, 'representationStep') || is.function(object$representationStep) || is.matrix(object$representationStep))
-
-  assert_that(!isArgDefined(object, 'clusterStep') || is.function(object$clusterStep))
-})
 
 
 setMethod('getName', signature('clMethodTwoStep'), function(object) 'two-step clustering')

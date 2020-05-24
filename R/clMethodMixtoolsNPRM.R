@@ -5,20 +5,21 @@ setClass('clMethodMixtoolsNPRM', contains='clMatrixMethod')
 #' @importFrom mixtools npEM
 #' @title Specify non-parametric estimation for independent repeated measures
 #' @inheritParams clMatrixMethod
-#' @inheritParams mixtools::npEM
+#' @inheritDotParams mixtools::npEM
 #' @examples
-#' method = clMethodMixtoolsNPRM(Measurement ~ 1,
+#' method = clMethodMixtoolsNPRM(Measurement ~ 0,
 #'                      time='Assessment',
 #'                      id='Id', nClusters=3)
 #' @family clMethod classes
-clMethodMixtoolsNPRM = function(formula=Value ~ 1,
+clMethodMixtoolsNPRM = function(formula=Value ~ 0,
                              time=getOption('cluslong.time'),
                              id=getOption('cluslong.id'),
                              nClusters=2,
-                             maxiter=500,
-                             eps=1e-8,
-                             ...) {
-  new('clMethodMixtoolsNPRM', call=match.call.defaults())
+                             ...
+) {
+  clMethod('clMethodMixtoolsNPRM', call=match.call.defaults(),
+           defaults=longclust::longclustEM,
+           excludeArgs=c('data', 'x', 'mu0', 'verb'))
 }
 
 setMethod('getName', signature('clMethodMixtoolsNPRM'), function(object) 'non-parametric estimation for independent repeated measurements using mixtools')

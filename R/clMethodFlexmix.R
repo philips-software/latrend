@@ -5,18 +5,20 @@ setClass('clMethodFlexmix', contains='clMethod')
 #' @importFrom flexmix flexmix FLXPconstant
 #' @title Method interface to flexmix()
 #' @description Wrapper to the `flexmix()` method from the `flexmix` package.
-#' @inheritParams flexmix::flexmix
+#' @inheritDotParams flexmix::flexmix
 #' @examples
 #'
 #' @family clMethod package interfaces
-clMethodFlexmix = function(formula=Value ~ 1,
+clMethodFlexmix = function(formula=Value ~ 0,
                         formula.mb=~1,
                         time=getOption('cluslong.time'),
                         id=getOption('cluslong.id'),
                         nClusters=2,
-                        model=NULL,
-                        control=NULL) {
-  new('clMethodFlexmix', call=match.call.defaults())
+                        ...
+) {
+  clMethod('clMethodFlexmix', call=match.call.defaults(),
+           defaults=flexmix::flexmix,
+           excludeArgs=c('data', 'concomitant', 'k'))
 }
 
 setMethod('getName', signature('clMethodFlexmix'), function(object) 'flexmix')
@@ -49,13 +51,12 @@ setMethod('prepare', signature('clMethodFlexmix'), function(method, data, verbos
 setMethod('fit', signature('clMethodFlexmix'), function(method, data, envir, verbose, ...) {
   e = new.env(parent=envir)
 
-  args = as.list(method)
+  args = as.list(method, fun=flexmix)
   args$data = data
   args$formula = envir$formula
   args$model = envir$model
   args$concomitant = envir$formula.mb
   args$k = method$nClusters
-  args[setdiff(names(args), formalArgs(flexmix))] = NULL #remove undefined arguments
 
   if(is.null(args$model)) {
     # flexmix signature not found for call with `model=NULL`

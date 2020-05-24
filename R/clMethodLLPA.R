@@ -1,40 +1,7 @@
 #' @include clMethod.R
 setClass('clMethodLLPA', contains='clMethod')
 
-#' @export
-#' @importFrom mclust Mclust mclustBIC
-#' @title Longitudinal latent profile analysis
-#' @description Latent profile analysis or finite Gaussian mixture modeling.
-#' @param formula Formula. Covariates are not supported.
-#' @param time Time variable.
-#' @param id Strata variable.
-#' @param nClusters Number of clusters.
-#' @inheritParams mclust::Mclust
-#' @examples
-#' method = clMethodLLPA(Measurement ~ 1,
-#'                      time='Assessment',
-#'                      id='Id', nClusters=3)
-#' @family clMethod classes
-clMethodLLPA = function(formula=Value ~ 1,
-                       time=getOption('cluslong.time'),
-                       id=getOption('cluslong.id'),
-                       nClusters=2,
-                       modelNames=NULL,
-                       prior=NULL,
-                       initialization=NULL) {
-  object = new('clMethodLLPA', call=match.call.defaults())
-
-  if(getOption('cluslong.checkArgs')) {
-    checkArgs(object, envir=parent.frame())
-  }
-
-  return(object)
-}
-
-setMethod('checkArgs', signature('clMethodLLPA'), function(object, envir) {
-  environment(object) = envir
-  assert_that(all(formalArgs(clMethodLLPA) %in% names(getCall(object))), msg='clMethod object is missing required arguments')
-
+setValidity('clMethodLLPA', function(object) {
   if(isArgDefined(object, 'formula')) {
     f = formula(object)
     assert_that(hasSingleResponse(object$formula))
@@ -46,6 +13,30 @@ setMethod('checkArgs', signature('clMethodLLPA'), function(object, envir) {
   }
 })
 
+#' @export
+#' @importFrom mclust Mclust mclustBIC emControl mclust.options
+#' @title Longitudinal latent profile analysis
+#' @description Latent profile analysis or finite Gaussian mixture modeling.
+#' @param formula Formula. Covariates are not supported.
+#' @param time Time variable.
+#' @param id Strata variable.
+#' @param nClusters Number of clusters.
+#' @inheritDotParams mclust::Mclust
+#' @examples
+#' method = clMethodLLPA(Measurement ~ 1,
+#'                      time='Assessment',
+#'                      id='Id', nClusters=3)
+#' @family clMethod classes
+clMethodLLPA = function(formula=Value ~ 1,
+                       time=getOption('cluslong.time'),
+                       id=getOption('cluslong.id'),
+                       nClusters=2,
+                       ...
+) {
+  clMethod('clMethodLLPA', call=match.call.defaults(),
+           defaults=mclust::Mclust,
+           excludeArgs=c('data', 'G', 'verbose'))
+}
 
 setMethod('getName', signature('clMethodLLPA'), function(object) 'longitudinal latent profile analysis')
 
@@ -67,6 +58,7 @@ setMethod('prepare', signature('clMethodLLPA'), function(method, data, verbose, 
 
 setMethod('fit', signature('clMethodLLPA'), function(method, data, envir, verbose, ...) {
   e = new.env(parent=envir)
+
   args = as.list(method)
   args$data = envir$data
   args$G = method$nClusters

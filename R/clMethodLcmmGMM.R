@@ -1,58 +1,7 @@
 #' @include clMethod.R
 setClass('clMethodLcmmGMM', contains='clMethod')
 
-#' @export
-#' @importFrom lcmm lcmm
-#' @title Specify GMM method using lcmm
-#' @description Growth mixture modeling through latent-class linear mixed modeling.
-#' @inheritParams clMethodKML
-#' @param formula Formula of form Response ~ Var1 + CLUSTER * Var2 + . + (Random1 + Random2 + . | Id).
-#' Variables specified in the model are included as fixed effects.
-#' If an interaction is specified with the CLUSTER term then these covariates are included as fixed and mixture effects.
-#' The formula must contain a single random-effects component of the form  (. | Id), where Id matches the name specified in id, or in case of 'ID' is replaced by the id argument.
-#' Random effects are cluster-specific.
-#' @param formula.mb Formula for the multinomial class membership model.
-#' @param diagCov Whether to use a diagonal variance-covariance matrix
-#' @param classCov Whether to use a class-specific variance-covariance matrix
-#' @inheritParams lcmm::lcmm
-#' @examples
-#' method = clMethodLcmmGMM(Value ~ Time * CLUSTER + (1 | Id),
-#'                      time='Time',
-#'                      id='Id', nClusters=3)
-#' gmm = cluslong(method, data=testLongData)
-#' summary(gmm)
-#' @family clMethod classes
-clMethodLcmmGMM = function(formula=Value ~ 1 + CLUSTER + (1 | ID),
-                       formula.mb=~1,
-                       time=getOption('cluslong.time'),
-                       id=getOption('cluslong.id'),
-                       nClusters=2,
-                       link='linear',
-                       intnodes=NULL,
-                       idiag=FALSE,
-                       nwg=FALSE,
-                       cor=NULL,
-                       epsY=.5,
-                       maxiter=100,
-                       nsim=100,
-                       range=NULL,
-                       partialH=FALSE,
-                       convB=1e-4,
-                       convL=1e-4,
-                       convG=1e-4) {
-  object = new('clMethodLcmmGMM', call=match.call.defaults())
-
-  if(getOption('cluslong.checkArgs')) {
-    checkArgs(object, envir=parent.frame())
-  }
-
-  return(object)
-}
-
-setMethod('checkArgs', signature('clMethodLcmmGMM'), function(object, envir) {
-  environment(object) = envir
-  assert_that(all(formalArgs(clMethodLcmmGMM) %in% names(getCall(object))), msg='clMethod object is missing required arguments')
-
+setValidity('clMethodLcmmGMM', function(object) {
   if(isArgDefined(object, 'formula')) {
     f = formula(object)
     assert_that(hasSingleResponse(object$formula))
@@ -66,15 +15,37 @@ setMethod('checkArgs', signature('clMethodLcmmGMM'), function(object, envir) {
   if(isArgDefined(object, 'formula.mb')) {
     assert_that(!hasResponse(formula(object, 'mb')))
   }
-
-  if(isArgDefined(object, 'nClusters')) {
-    assert_that(is.count(object$nClusters))
-  }
-
-  if(isArgDefined(object, 'maxiter')) {
-    assert_that(is.count(object$maxiter))
-  }
 })
+
+#' @export
+#' @importFrom lcmm lcmm
+#' @title Specify GMM method using lcmm
+#' @description Growth mixture modeling through latent-class linear mixed modeling.
+#' @inheritParams clMethodKML
+#' @param formula Formula of form Response ~ Var1 + CLUSTER * Var2 + . + (Random1 + Random2 + . | Id).
+#' Variables specified in the model are included as fixed effects.
+#' If an interaction is specified with the CLUSTER term then these covariates are included as fixed and mixture effects.
+#' The formula must contain a single random-effects component of the form  (. | Id), where Id matches the name specified in id, or in case of 'ID' is replaced by the id argument.
+#' Random effects are cluster-specific.
+#' @inheritDotParams lcmm::lcmm
+#' @examples
+#' method = clMethodLcmmGMM(Value ~ Time * CLUSTER + (1 | Id),
+#'                      time='Time',
+#'                      id='Id', nClusters=3)
+#' gmm = cluslong(method, data=testLongData)
+#' summary(gmm)
+#' @family clMethod classes
+clMethodLcmmGMM = function(formula=Value ~ 1 + CLUSTER + (1 | ID),
+                       formula.mb=~1,
+                       time=getOption('cluslong.time'),
+                       id=getOption('cluslong.id'),
+                       nClusters=2,
+                       ...
+) {
+  clMethod('clMethodLcmmGMM', call=match.call.defaults(),
+           defaults=lcmm::lcmm,
+           excludeArgs=c('data', 'fixed', 'random', 'mixture', 'subject', 'classmb', 'returndata', 'ng', 'verbose', 'subset'))
+}
 
 
 setMethod('getName', signature('clMethodLcmmGMM'), function(object) 'growth mixture model')

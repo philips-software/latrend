@@ -1,46 +1,7 @@
 #' @include clMethod.R
 setClass('clMethodMixTVEM', contains='clMethod')
 
-#' @export
-#' @title Specify MixTVEM method
-#' @param formula Formula excluding the time component. Covariates may be included. Time-invariant covariates are detected automatically as these are a special case in MixTVEM.
-#' @param formula.mb Formula for cluster-membership prediction. Included covariates must be time-invariant. Furthermore, the formula must contain an intercept.
-#' @param time Time variable.
-#' @param id Strata variable.
-#' @param nClusters Number of clusters.
-#' @param numInteriorKnots Number of interior knots for the spline.
-#' @param deg Degree of the local polynomials between intervals (knots).
-#' @param numStarts Number of random starts.
-#' @param maxIterations Maximum number of iterations for the EM algorithm.
-#' @param maxVarianceRatio Maximum ratio that between-cluster variances may deviate from each other.
-#' @examples
-#' method = clMethodMixTVEM(Value ~ time(1) - 1,
-#'                      time='Assessment',
-#'                      id='Id', nClusters=3)
-clMethodMixTVEM = function(formula=Value ~ time(1) - 1,
-                           formula.mb=~1,
-                       time=getOption('cluslong.time'),
-                       id=getOption('cluslong.id'),
-                       nClusters=2,
-                       deg=3,
-                       numInteriorKnots=6,
-                       numStarts=1,
-                       gridSize=1000,
-                       maxIterations=1000,
-                       maxVarianceRatio=10,
-                       convergenceCriterion=1e-6) {
-  object = new('clMethodMixTVEM', call=match.call.defaults())
-
-  if(getOption('cluslong.checkArgs')) {
-    checkArgs(object, envir=parent.frame())
-  }
-  return(object)
-}
-
-setMethod('checkArgs', signature('clMethodMixTVEM'), function(object, envir) {
-  environment(object) = envir
-  assert_that(all(formalArgs(clMethodMixTVEM) %in% names(getCall(object))), msg='clMethod object is missing required arguments')
-
+setValidity('clMethodMixTVEM', function(object) {
   if(isArgDefined(object, 'formula')) {
     f = formula(object)
     assert_that(hasSingleResponse(f))
@@ -79,6 +40,34 @@ setMethod('checkArgs', signature('clMethodMixTVEM'), function(object, envir) {
   if(isArgDefined(object, 'convergenceCriterion')) assert_that(is.scalar(object$convergenceCriterion), is.numeric(object$convergenceCriterion))
   if(isArgDefined(object, 'nClusters')) assert_that(is.count(object$nClusters))
 })
+
+#' @export
+#' @title Specify MixTVEM method
+#' @param formula Formula excluding the time component. Covariates may be included. Time-invariant covariates are detected automatically as these are a special case in MixTVEM.
+#' @param formula.mb Formula for cluster-membership prediction. Included covariates must be time-invariant. Furthermore, the formula must contain an intercept.
+#' @param time Time variable.
+#' @param id Strata variable.
+#' @param nClusters Number of clusters.
+#' @param numInteriorKnots Number of interior knots for the spline.
+#' @param deg Degree of the local polynomials between intervals (knots).
+#' @param numStarts Number of random starts.
+#' @param maxIterations Maximum number of iterations for the EM algorithm.
+#' @param maxVarianceRatio Maximum ratio that between-cluster variances may deviate from each other.
+#' @examples
+#' method = clMethodMixTVEM(Value ~ time(1) - 1,
+#'                      time='Assessment',
+#'                      id='Id', nClusters=3)
+clMethodMixTVEM = function(formula=Value ~ time(1) - 1,
+                           formula.mb=~1,
+                       time=getOption('cluslong.time'),
+                       id=getOption('cluslong.id'),
+                       nClusters=2,
+                       ...
+) {
+  clMethod('clMethodMixTVEM', call=match.call.defaults(),
+           defaults=TVEMMixNormal,
+           excludeArgs=c('doPlot', 'getSEs', 'numClasses'))
+}
 
 
 setMethod('getName', signature('clMethodMixTVEM'), function(object) 'mixture of time-varying effect models')

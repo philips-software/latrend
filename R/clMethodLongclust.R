@@ -6,7 +6,7 @@ setClass('clMethodLongclust', contains='clMatrixMethod')
 #' @title Specify Longclust method
 #' @param basis The basis function.
 #' @inheritParams clMatrixMethod
-#' @inheritParams longclust::longclustEM
+#' @inheritDotParams longclust::longclustEM
 #' @examples
 #' method = clMethodLongclust(Value ~ .,
 #'                      time='Time',
@@ -17,11 +17,11 @@ clMethodLongclust = function(formula=Value ~ 1,
                           time=getOption('cluslong.time'),
                           id=getOption('cluslong.id'),
                           nClusters=2,
-                          linearMeans=FALSE,
-                          initWithKMeans=FALSE,
-                          equalDF=FALSE,
-                          gaussian=FALSE, ...) {
-  new('clMethodLongclust', call=match.call.defaults())
+                          ...
+) {
+  clMethod('clMethodLongclust', call=match.call.defaults(),
+           defaults=longclust::longclustEM,
+           excludeArgs=c('data', 'x', 'Gmin', 'Gmax', 'userseed'))
 }
 
 setMethod('getName', signature('clMethodLongclust'), function(object) 'longclust')

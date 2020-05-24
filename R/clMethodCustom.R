@@ -26,17 +26,11 @@ clMethodCustom = function(fun,
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),
                        name='custom') {
-  object = new('clMethodCustom', call=match.call.defaults())
-
-  if(getOption('cluslong.checkArgs')) {
-    checkArgs(object, envir=parent.frame())
-  }
-  return(object)
+  clMethod('clMethodCustom', call=match.call.defaults())
 }
 
-
-setMethod('checkArgs', signature('clMethodCustom'), function(object, envir) {
-  environment(object) = envir
+setValidity('clMethodCustom', function(object) {
+  call = getCall(object)
   assert_that(all(formalArgs(clMethodCustom) %in% names(getCall(object))), msg='clMethod object is missing required arguments')
 
   if(isArgDefined(object, 'fun')) {

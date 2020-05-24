@@ -33,42 +33,76 @@ setMethod('show', 'clMethod',
 #' @param Class The type of `clMethod` class
 #' @param call The arguments to create the `clMethod` from.
 #' @param defaults List of `function` to obtain defaults from for arguments unspecified by `call`.
-#' @param excludeDefaultArgs The names of the arguments to exclude from the defaults, provided as a `character vector`.
-clMethod = function(Class, call, defaults=list(), excludeDefaultArgs=c()) {
+#' @param excludeArgs The names of the arguments to exclude from the defaults, provided as a `character vector`.
+#' @examples
+#' clMethodKML = function(formula=Value ~ 0, time='Id', id='Id', nClusters=2, ...) {
+#'   clMethod('clMethodKML', call=match.call.defaults(),
+#'     defaults=c(kml::kml, kml::parALGO),
+#'     excludeArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq'))
+#' }
+clMethod = function(Class, call, defaults=list(), excludeArgs=c()) {
   classRep = getClass(Class)
   assert_that('clMethod' %in% names(classRep@contains), msg='specified class does not inherit from clMethod')
   assert_that(is.call(call))
-  assert_that(is.list(defaults), all(vapply(defaults, is.function, FUN.VALUE=TRUE)))
-  assert_that(is.null(excludeDefaultArgs) || is.character(excludeDefaultArgs))
+  assert_that(is.function(defaults) || is.list(defaults) && all(vapply(defaults, is.function, FUN.VALUE=TRUE)))
+  assert_that(is.null(excludeArgs) || is.character(excludeArgs))
+
+  if(is.function(defaults)) {
+    defaults = list(defaults)
+  }
 
   allArgs = lapply(defaults, formals) %>%
     do.call(c, .) %>%
     as.list()
 
-  args = allArgs[not(names(allArgs) %in% excludeDefaultArgs)] %>%
+  # drop arguments without defaults (empty symbols)
+  symMask = vapply(allArgs, is.symbol, FUN.VALUE = TRUE)
+  dropSymMask = vapply(allArgs[symMask], nchar, FUN.VALUE = 0) == 0
+  allArgs[symMask[dropSymMask]] = NULL
+
+  # update arguments
+  args = allArgs[not(names(allArgs) %in% excludeArgs)] %>%
     modifyList(as.list(call)[-1])
 
-  argOrder = union(names(call[-1]), setdiff(names(allArgs), excludeDefaultArgs))
+  if(any(names(call[-1]) %in% excludeArgs)) {
+    warning(sprintf('arguments (%s) cannot be defined for this clMethod class. These arguments will be ignored.', paste0(excludeArgs, collapse=', ')))
+  }
 
+  # exclude arguments
+  argOrder = union(names(call[-1]), setdiff(names(allArgs), excludeArgs))
+
+  # create call and clMethod
   newCall = do.call('call', c(Class, lapply(args[argOrder], enquote)))
   new(Class, call=newCall)
 }
 
+#' @export
+hasMethodArgs = function(object, which) {
+  assert_that(is.clMethod(object))
+
+  argNames = setdiff(which, '...')
+  all(has_name(object, argNames))
+}
+
+attr(hasMethodArgs, 'fail') = function(call, env) {
+  object = eval(call$object, env)
+  argNames = setdiff(eval(call$which, env), '...')
+  missingNames = setdiff(argNames, names(object))
+  paste0(class(object), ' is missing required argument(s): ', paste0('"', missingNames, '"', collapse=', '))
+}
+
 
 #' @export
-#' @title Check validity of the arguments in the respective environment.
-#' @description Arguments missing from the environment are skipped.
-#' @param envir The environment in which to evaluate the arguments.
-#' @family clMethod
-setGeneric('checkArgs', function(object, envir=parent.frame(), ...) standardGeneric('checkArgs'))
-setMethod('checkArgs', signature('clMethod'), function(object, envir) {})
+is.clMethod = function(object) {
+  isS4(object) && is(object, 'clMethod')
+}
 
 #' @export
 #' @title Check whether the argument of a clMethod has a defined value.
 #' @keywords internal
 isArgDefined = function(object, name, envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
-  assert_that(is(object, 'clMethod'))
+  assert_that(is.clMethod(object))
   assert_that(is.character(name))
 
   if(!hasName(object, name)) {
@@ -173,7 +207,9 @@ setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
       # try evaluation within package scope instead
       tryCatch({
         eval(arg, envir=parent.env(getNamespace(.packageName)))
-      }, error=function(e) stop('error in evaluating method argument expression'))
+      }, error=function(e) {
+          stop(sprintf('error in evaluating clMethod argument "%s" with expression "%s":\n\t%s', i, deparse(e$call), e$message))
+        })
     })
   } else {
     value = arg
@@ -227,22 +263,27 @@ update.clMethod = function(object, ..., envir=NULL) {
 #' @export
 #' @title Extract the method arguments as a list
 #' @param eval Whether to evaluate the arguments. Alternatively, a character vector of class names of the values that are accepted for replacement, in which case evaluation does not throw an error if an argument is not defined.
+#' @param fun Narrows down the returned arguments to the formal arguments of the given function.
 #' @param envir The environment in which to evaluate the arguments.
 #' @examples
 #' method = clMethodKML()
 #' as.list(method)
 #' @family clMethod
-as.list.clMethod = function(object, eval=TRUE, envir=NULL) {
+as.list.clMethod = function(object, eval=TRUE, fun=NULL, envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
+  if(is.null(fun) || '...' %in% formalArgs(fun)) {
+    argNames = names(object)
+  } else {
+    argNames = intersect(names(object), formalArgs(fun))
+  }
+
   if(isTRUE(eval) || is.scalar(eval) && eval == 'ANY') {
     # full evaluation
-    argNames = names(object)
     argValues = lapply(argNames, function(argName) object[[argName, envir=envir]])
     names(argValues) = argNames
     return(argValues)
   } else if(is.character(eval)) {
     # partial update
-    argNames = names(object)
     argValues = as.list(object@call[-1])
     evalValues = vector(mode='list', length=length(object))
     evalMask = vapply(argNames, isArgDefined, object=object, envir=envir, FUN.VALUE=FALSE)
@@ -284,12 +325,7 @@ as.data.frame.clMethod = function(x,
         x
       }
     } else {
-      chr = as.character(x)
-      if(length(chr) > 1) {
-        deparse(x)
-      } else {
-        chr
-      }
+      deparse(x) %>% paste0(collapse='')
     }
   })
 
@@ -336,7 +372,7 @@ as.character.clMethod = function(x,
 #' @keywords internal
 substitute.clMethod = function(object, envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
-  assert_that(is(object, 'clMethod'))
+  assert_that(is.clMethod(object))
   argValues = as.list(object, eval=TRUE, envir=envir)
   object@call = replace(getCall(object), names(argValues), argValues)
   return(object)
@@ -429,7 +465,7 @@ setGeneric('finalize', function(method, ...) standardGeneric('finalize'))
 #' @description Returns envir if specified. Otherwise, returns environment(object) if specified. The defaultEnvir is returned when the former two are NULL.
 #' @keywords internal
 clMethod.env = function(object, defaultEnvir, envir) {
-  assert_that(is(object, 'clMethod'))
+  assert_that(is.clMethod(object))
   assert_that(is.null(defaultEnvir) || is.environment(defaultEnvir))
   assert_that(is.null(envir) || is.environment(envir))
 

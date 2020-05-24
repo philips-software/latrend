@@ -60,19 +60,19 @@ test_that('create', {
 
 test_that('as.data.table', {
   clModels() %>%
-    as.data.table %>%
-    expect_named(c('.name', '.method')) %T>%
+    as.data.table() %>%
+    expect_named(c('.name', '.method', 'data')) %T>%
     {expect_equal(nrow(.), 0)}
 
   clModels(m1) %>%
-    as.data.table %>%
-    expect_length(length(getMethod(m1)) + 2) %>%
-    expect_named(c('.name', '.method', names(getMethod(m1))))
+    as.data.table() %>%
+    expect_length(length(getMethod(m1)) + 3) %>%
+    expect_named(c('.name', '.method', 'data', names(getMethod(m1))))
 
   clModels(m1) %>%
-    as.data.table %>%
-    expect_length(length(getMethod(m1)) + 2) %>%
-    expect_named(c('.name', '.method', names(getMethod(m1))))
+    as.data.table() %>%
+    expect_length(length(getMethod(m1)) + 3) %>%
+    expect_named(c('.name', '.method', 'data', names(getMethod(m1))))
 })
 
 test_that('subset', {

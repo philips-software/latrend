@@ -4,7 +4,7 @@ setClass('clMethodMixtoolsGMM', contains='clMethod')
 #' @export
 #' @importFrom mixtools regmixEM.mixed
 #' @title Specify mixed mixture regression model using mixtools
-#' @inheritParams mixtools::regmixEM.mixed
+#' @inheritDotParams mixtools::regmixEM.mixed
 #' @examples
 #' method = clMethodMixtoolsGMM(Value ~ Time + (Time | Id),
 #'                      time='Time',
@@ -14,13 +14,11 @@ clMethodMixtoolsGMM = function(formula=Value ~ 1 + (Time + I(Time^2) | Id),
                                time=getOption('cluslong.time'),
                                id=getOption('cluslong.id'),
                                nClusters=2,
-                               arb.sigma=FALSE,
-                               arb.R=FALSE,
-                               ar.1=FALSE,
-                               maxit=500,
-                               epsilon=1e-8,
-                               ...) {
-  new('clMethodMixtoolsGMM', call=match.call.defaults())
+                               ...
+) {
+  clMethod('clMethodMixtoolsGMM', call=match.call.defaults(),
+           defaults=mixtools::regmixEM.mixed,
+           excludeArgs=c('data', 'y', 'x', 'w', 'k', 'addintercept.fixed', 'verb'))
 }
 
 setMethod('getName', signature('clMethodMixtoolsGMM'), function(object) 'growth mixture modeling using mixtools')

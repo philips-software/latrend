@@ -5,26 +5,25 @@ setClass('clMethodCrimCV', contains='clMatrixMethod')
 #' @import crimCV
 #' @title Specify zero-inflated repeated-measures GBTM method
 #' @inheritParams clMatrixMethod
-#' @inheritParams crimCV::crimCV
+#' @inheritDotParams crimCV::crimCV
 #' @examples
-#' method = clMethodCrimCV(Value ~ 1, nClusters=3)
+#' method = clMethodCrimCV(Value ~ 0, nClusters=3)
 #' model = cluslong(method, testLongData)
 #'
 #' library(crimCV)
 #' data(TO1adj)
-#' method = clMethodCrimCV(Offenses ~ 1, time='Offense', id='Subject')
+#' method = clMethodCrimCV(Offenses ~ 0, time='Offense', id='Subject')
 #' model = cluslong(method, TO1adj)
 #' @family clMethod classes
-clMethodCrimCV = function(formula=Value ~ 1,
+clMethodCrimCV = function(formula=Value ~ 0,
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),
                        nClusters=2,
-                       dpolyp=3,
-                       dpolyl=3,
-                       model='ZIPt',
-                       rcv=FALSE,
-                       init=20, ...) {
-  new('clMethodCrimCV', call=match.call.defaults())
+                       ...
+) {
+  clMethod('clMethodCrimCV', call=match.call.defaults(),
+           defaults=crimCV::crimCV,
+           excludeArgs=c('Dat', 'ng'))
 }
 
 

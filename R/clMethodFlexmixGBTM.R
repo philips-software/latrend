@@ -6,7 +6,8 @@ setClass('clMethodFlexmixGBTM', contains='clMethodFlexmix')
 #' @title Group-based trajectory modeling using flexmix
 #' @description Fits a GBTM based on the [FLXMRglm] driver.
 #' @inheritParams clMethodLcmmGBTM
-#' @inheritParams flexmix::FLXMRglm
+#' @inheritDotParams flexmix::flexmix
+#' @inheritDotParams flexmix::FLXMRglm
 #' @examples
 #' model = cluslong(clMethodFlexmixGBTM(), data=testLongData)
 #'
@@ -17,9 +18,11 @@ clMethodFlexmixGBTM = function(formula=Value ~ 1,
                            time=getOption('cluslong.time'),
                            id=getOption('cluslong.id'),
                            nClusters=2,
-                           family='gaussian',
-                           control=NULL) {
-  new('clMethodFlexmixGBTM', call=match.call.defaults())
+                           ...
+) {
+  clMethod('clMethodFlexmixGBTM', call=match.call.defaults(),
+           defaults=c(flexmix::flexmix, flexmix::FLXMRglm),
+           excludeArgs=c('data', 'k'))
 }
 
 setMethod('getName', signature('clMethodFlexmixGBTM'), function(object) 'group-based trajectory model')
