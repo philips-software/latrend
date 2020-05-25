@@ -14,7 +14,7 @@ setClass('clMethodKML', contains='clMatrixMethod')
 #' @examples
 #' method = clMethodKML(Value ~ 0, nClusters=3)
 #' model = cluslong(method, testLongData)
-#' @family clMethod classes
+#' @family clMethod implementations
 clMethodKML = function(formula=Value ~ 0,
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),

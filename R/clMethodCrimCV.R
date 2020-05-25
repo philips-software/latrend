@@ -14,7 +14,7 @@ setClass('clMethodCrimCV', contains='clMatrixMethod')
 #' data(TO1adj)
 #' method = clMethodCrimCV(Offenses ~ 0, time='Offense', id='Subject')
 #' model = cluslong(method, TO1adj)
-#' @family clMethod classes
+#' @family clMethod implementations
 clMethodCrimCV = function(formula=Value ~ 0,
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),

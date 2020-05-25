@@ -10,7 +10,7 @@ setClass('clMethodMixtoolsNPRM', contains='clMatrixMethod')
 #' method = clMethodMixtoolsNPRM(Measurement ~ 0,
 #'                      time='Assessment',
 #'                      id='Id', nClusters=3)
-#' @family clMethod classes
+#' @family clMethod implementations
 clMethodMixtoolsNPRM = function(formula=Value ~ 0,
                              time=getOption('cluslong.time'),
                              id=getOption('cluslong.id'),

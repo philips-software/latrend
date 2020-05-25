@@ -3,15 +3,16 @@ setClass('clMethodAKMedoids', contains='clMatrixMethod')
 
 #' @export
 #' @importFrom akmedoids akmedoids.clust
-#' @title Specify KML method
+#' @title Specify AKMedoids method
 #' @inheritParams clMatrixMethod
 #' @inheritParams clMethodCustom
-#' @inheritDotParams akmedoids::akmedoids.clust
+#' @param ... Arguments passed to \link[akmedoids]{akmedoids.clust}.
 #' @examples
-#' method = clMethodAKMedoids(Measurement ~ 0,
-#'                      time='Assessment',
-#'                      id='Id', nClusters=3)
-#' @family clMethod classes
+#' method = clMethodAKMedoids(HoursOfUse ~ 0,
+#'                      time='Day',
+#'                      id='Patient', nClusters=3)
+#' cluslong(method, data=OSA1y)
+#' @family clMethod implementations
 clMethodAKMedoids = function(formula=Value ~ 0,
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),

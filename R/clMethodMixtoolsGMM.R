@@ -9,7 +9,7 @@ setClass('clMethodMixtoolsGMM', contains='clMethod')
 #' method = clMethodMixtoolsGMM(Value ~ Time + (Time | Id),
 #'                      time='Time',
 #'                      id='Id', nClusters=3)
-#' @family clMethod classes
+#' @family clMethod implementations
 clMethodMixtoolsGMM = function(formula=Value ~ 1 + (Time + I(Time^2) | Id),
                                time=getOption('cluslong.time'),
                                id=getOption('cluslong.id'),

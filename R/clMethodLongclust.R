@@ -12,7 +12,7 @@ setClass('clMethodLongclust', contains='clMatrixMethod')
 #'                      time='Time',
 #'                      id='Id', nClusters=3)
 #' cluslong(method, testLongData)
-#' @family clMethod classes
+#' @family clMethod implementations
 clMethodLongclust = function(formula=Value ~ 1,
                           time=getOption('cluslong.time'),
                           id=getOption('cluslong.id'),

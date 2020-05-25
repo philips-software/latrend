@@ -26,7 +26,7 @@ setValidity('clMethodLLPA', function(object) {
 #' method = clMethodLLPA(Measurement ~ 1,
 #'                      time='Assessment',
 #'                      id='Id', nClusters=3)
-#' @family clMethod classes
+#' @family clMethod implementations
 clMethodLLPA = function(formula=Value ~ 1,
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),

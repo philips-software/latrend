@@ -17,7 +17,7 @@ setValidity('clMethodTwoStep', function(object) {
 #' @param clusterStep A function with signature function(repdata) that computes the cluster model.
 #' @param standardize A function to standardize the output of the representation step. By default, the output is translated and rescaled to ensure zero mean and unit variance.
 #' @inheritParams clMethodCustom
-#' @family clMethod classes
+#' @family clMethod implementations
 clMethodTwoStep = function(representationStep,
                            clusterStep,
                            standardize=scale,

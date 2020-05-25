@@ -28,18 +28,20 @@ setMethod('show', 'clMethod',
 )
 
 #' @export
-#' @title Construct a clMethod object of arbitrary type
+#' @title Construct a clMethod object for a given implementation
 #' @description Creates a clMethod class of the specified type `Class` for the given arguments given in a call, along with any default arguments from reference functions.
 #' @param Class The type of `clMethod` class
 #' @param call The arguments to create the `clMethod` from.
 #' @param defaults List of `function` to obtain defaults from for arguments unspecified by `call`.
 #' @param excludeArgs The names of the arguments to exclude from the defaults, provided as a `character vector`.
 #' @examples
-#' clMethodKML = function(formula=Value ~ 0, time='Id', id='Id', nClusters=2, ...) {
-#'   clMethod('clMethodKML', call=match.call.defaults(),
+#' clMethodKML2 = function(formula=Value ~ 0, time='Id', id='Id', nClusters=2, ...) {
+#'   clMethod('clMethodKML', call=stackoverflow::match.call.defaults(),
 #'     defaults=c(kml::kml, kml::parALGO),
 #'     excludeArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq'))
 #' }
+#' clMethodKML2(nClusters=3)
+#' @family clMethod functions
 clMethod = function(Class, call, defaults=list(), excludeArgs=c()) {
   classRep = getClass(Class)
   assert_that('clMethod' %in% names(classRep@contains), msg='specified class does not inherit from clMethod')
@@ -134,7 +136,7 @@ setMethod('getName0', signature('clMethod'), getName)
 #' @examples
 #' m = clMethodKML(Value ~ Time)
 #' formula(m) # Value ~ Time
-#' @family clMethod
+#' @family clMethod functions
 formula.clMethod = function(object, what='mu', envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
   assert_that(is.scalar(what), is.character(what))
@@ -150,7 +152,7 @@ formula.clMethod = function(object, what='mu', envir=NULL) {
 #' @examples
 #' m = clMethodKML()
 #' names(m)
-#' @family clMethod
+#' @family clMethod functions
 setMethod('names', signature('clMethod'), function(x) {
   names(getCall(x))[-1]
 })
@@ -160,7 +162,7 @@ setMethod('names', signature('clMethod'), function(x) {
 #' @examples
 #' m = clMethodKML()
 #' length(m)
-#' @family clMethod
+#' @family clMethod functions
 setMethod('length', signature('clMethod'), function(x) {
   length(getCall(x)) - 1
 })
@@ -171,7 +173,7 @@ setMethod('length', signature('clMethod'), function(x) {
 #' @examples
 #' m = clMethodKML()
 #' m$nClusters
-#' @family clMethod
+#' @family clMethod functions
 setMethod('$', signature('clMethod'), function(x, name) {
   x[[name]]
 })
@@ -188,7 +190,7 @@ setMethod('$', signature('clMethod'), function(x, name) {
 #' K = 2
 #' m = clMethodKML(nClusters=K)
 #' m[['nClusters', eval=FALSE]] # K
-#' @family clMethod
+#' @family clMethod functions
 setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
   envir = clMethod.env(x, parent.frame(3), envir)
   if (is.character(i)) {
@@ -224,7 +226,7 @@ setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
 
 
 #' @export
-#' @family clMethod
+#' @family clMethod functions
 getCall.clMethod = function(object) {
   object@call
 }
@@ -237,7 +239,7 @@ getCall.clMethod = function(object) {
 #' m2 = update(m, formula=~ . + Time)
 #'
 #' m3 = update(m2, start='randomAll')
-#' @family clMethod
+#' @family clMethod functions
 update.clMethod = function(object, ..., envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
   ucall = match.call()[c(-1, -2)]
@@ -268,7 +270,7 @@ update.clMethod = function(object, ..., envir=NULL) {
 #' @examples
 #' method = clMethodKML()
 #' as.list(method)
-#' @family clMethod
+#' @family clMethod functions
 as.list.clMethod = function(object, eval=TRUE, fun=NULL, envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
   if(is.null(fun) || '...' %in% formalArgs(fun)) {
@@ -303,7 +305,7 @@ as.list.clMethod = function(object, eval=TRUE, fun=NULL, envir=NULL) {
 #' @param x `clMethod` to be coerced to a `character` `vector`.
 #' @param eval Whether to evaluate the arguments in order to replace expression if the resulting value is of a class specified in `evalClasses`.
 #' @param nullValue Value to use to represent the `NULL` type. Must be of length 1.
-#' @family clMethod
+#' @family clMethod functions
 as.data.frame.clMethod = function(x,
                                 eval=FALSE,
                                 envir=NULL,
@@ -339,7 +341,7 @@ as.data.frame.clMethod = function(x,
 #' @inheritParams as.data.frame.clMethod
 #' @param nullString Character to use to represent NULL values.
 #' @seealso as.data.frame.clMethod
-#' @family clMethod
+#' @family clMethod functions
 as.character.clMethod = function(x,
                                  eval=FALSE,
                                  envir=NULL,
@@ -368,7 +370,7 @@ as.character.clMethod = function(x,
 #' @title Substitute the call arguments
 #' @param envir The environment in which to evaluate the arguments.
 #' @return A new call with the substituted arguments.
-#' @family clMethod
+#' @family clMethod functions
 #' @keywords internal
 substitute.clMethod = function(object, envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
@@ -451,12 +453,17 @@ clMethods = function(method, ..., envir=NULL) {
 }
 
 # Local methods ####
+# . prepare ####
 #' @title clMethod interface function
 #' @description Called by [cluslong].
 setGeneric('prepare', function(method, ...) standardGeneric('prepare'))
+
+# . fit ####
 #' @title clMethod interface function
 #' @description Called by [cluslong].
 setGeneric('fit', function(method, ...) standardGeneric('fit'))
+
+# . finalize ####
 #' @title clMethod interface function
 #' @description Called by [cluslong].
 setGeneric('finalize', function(method, ...) standardGeneric('finalize'))

@@ -19,7 +19,7 @@ setClass('clMethodCustom', contains='clMethod')
 #' method = clMethodCustom(fun=clusfun)
 #' model = cluslong(method, testLongData)
 #' summary(model)
-#' @family clMethod classes
+#' @family clMethod implementations
 clMethodCustom = function(fun,
                        center=meanNA,
                        response=getOption('cluslong.response'),
@@ -30,8 +30,7 @@ clMethodCustom = function(fun,
 }
 
 setValidity('clMethodCustom', function(object) {
-  call = getCall(object)
-  assert_that(all(formalArgs(clMethodCustom) %in% names(getCall(object))), msg='clMethod object is missing required arguments')
+  assert_that(hasMethodArgs(object, formalArgs(clMethodCustom)))
 
   if(isArgDefined(object, 'fun')) {
     assert_that(is.function(object$fun))
