@@ -105,7 +105,7 @@ intMetricsEnv$relativeEntropy = function(m) {
   1 - intMetricsEnv$entropy(m) / (N * log(K))
 }
 
-intMetricsEnv$runTime = runTime
+intMetricsEnv$estimationTime = estimationTime
 
 intMetricsEnv$RSS = function(m) {
   sum(residuals(m)^2)
@@ -252,4 +252,9 @@ extMetricsEnv$VI = function(m1, m2) {
     clusterAssignments(m1) %>% as.integer,
     clusterAssignments(m2) %>% as.integer,
     method='vi')
+}
+
+extMetricsEnv$WMMAE = function(m1, m2, newdata=union(time(m1), time(m2))) {
+  clusTraj1 = clusterTrajectories(m1, at=newdata)
+  clusTraj2 = clusterTrajectories(m2, at=newdata)
 }

@@ -67,7 +67,7 @@ cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.v
   pushState(verbose)
   start = Sys.time()
   fitEnv = fit(method=method, data=data, envir=prepEnv, verbose=verbose)
-  runTime = Sys.time() - start
+  estimationTime = Sys.time() - start
   assert_that(is.environment(fitEnv), msg='expected environment from fit(clMethod, ...) call')
   popState(verbose)
 
@@ -84,7 +84,7 @@ cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.v
                          method=quote(getCall(method)),
                          data=quote(clCall$data)))
   model@call['envir'] = list(clCall$envir)
-  model@runTime = as.numeric(runTime, 'secs')
+  model@estimationTime = as.numeric(estimationTime, 'secs')
   return(model)
 }
 
@@ -151,9 +151,9 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL,
       cat(verbose, 'Fitting model %d/%d...', i, .rep)
       start = Sys.time()
       fitEnv = fit(method=method, data=data, envir=iPrepEnv, verbose=verbose)
-      runTime = Sys.time() - start
+      estimationTime = Sys.time() - start
       assert_that(is.environment(fitEnv), msg='expected environment from fit(clMethod, ...) call')
-      fitEnv$.runTime = runTime
+      fitEnv$.estimationTime = estimationTime
       return(fitEnv)
     }, seq_len(.rep), prepEnvs, SIMPLIFY=FALSE)
 
@@ -167,7 +167,7 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL,
                              method=quote(getCall(method)),
                              data=quote(clCall$data)))
       model@call['envir'] = list(clCall$envir)
-      model@runTime = as.numeric(iFitEnv$.runTime, 'secs')
+      model@estimationTime = as.numeric(iFitEnv$.estimationTime, 'secs')
       assert_that(inherits(model, 'clModel'), msg=sprintf('finalize(clMethod, ...) returned an unexpected object for run %d. Should be clModel.', i))
       return(model)
     }, seq_len(.rep), fitEnvs, SIMPLIFY=FALSE)
