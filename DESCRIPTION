@@ -63,6 +63,7 @@ Collate:
     'clMethodMixTVEM.R'
     'clMethodMixtoolsGMM.R'
     'clMethodMixtoolsNPRM.R'
+    'clMethodRandom.R'
     'clModelCrimCV.R'
     'clModelFlexmix.R'
     'clModelFunFEM.R'
