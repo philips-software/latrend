@@ -42,10 +42,6 @@ setMethod('getName', signature('clMethodRandom'), function(object) 'random')
 
 setMethod('getName0', signature('clMethodRandom'), function(object) 'rand')
 
-setMethod('prepare', signature('clMethodRandom'), function(method, data, verbose, ...) {
-  return(NULL)
-})
-
 setMethod('fit', signature('clMethodRandom'), function(method, data, envir, verbose, ...) {
   nIds = uniqueN(data[[method$id]])
 
@@ -55,14 +51,11 @@ setMethod('fit', signature('clMethodRandom'), function(method, data, envir, verb
 
   propSeq = rep(1:method$nClusters, each=ceiling(clusProps * nIds))
 
-  envir$clusAssign = sample(propSeq)[1:nIds]
-  return(envir)
-})
+  clusAssign = sample(propSeq)[1:nIds]
 
-setMethod('finalize', signature('clMethodRandom'), function(method, data, envir, verbose) {
   clModelCustom(method=method,
                 data=data,
-                clusterAssignments=envir$clusAssign,
+                clusterAssignments=clusAssign,
                 clusterTrajectories=method$center,
                 converged=TRUE)
 })

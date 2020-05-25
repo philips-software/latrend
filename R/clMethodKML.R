@@ -6,7 +6,7 @@ setClass('clMethodKML', contains='clMatrixMethod')
 #' @import longitudinalData
 #' @inheritDotParams kml::kml
 #' @inheritDotParams kml::parALGO
-#' @title Specify KML method
+#' @title Specify a longitudinal k-means (KML) method
 #' @param formula Formula used to specify the response variable to model. On the right-hand side, only `~ 0` is supported.
 #' @param time Time variable.
 #' @param id Strata variable.
@@ -53,8 +53,6 @@ setMethod('prepare', signature('clMethodKML'), function(method, data, verbose, .
 
 
 setMethod('fit', signature('clMethodKML'), function(method, data, envir, verbose, ...) {
-  e = new.env(parent=envir)
-
   cld = envir$cld
   # Helper variables
   valueColumn = formula(method) %>% getResponse()
@@ -64,16 +62,11 @@ setMethod('fit', signature('clMethodKML'), function(method, data, envir, verbose
   suppressFun(
     kml(cld, nbClusters=method$nClusters, nbRedrawing=method$nbRedrawing, toPlot='none', parAlgo=envir$par)
   )
-  e$cld = cld
-  return(e)
+
+  new('clModelKML',
+      method=method,
+      data=data,
+      model=cld,
+      clusterNames=make.clusterNames(method$nClusters))
 })
 
-
-setMethod('finalize', signature('clMethodKML'), function(method, data, envir, verbose, ...) {
-  model = new('clModelKML',
-              method=method,
-              data=data,
-              model=envir$cld,
-              clusterNames=make.clusterNames(method$nClusters))
-  return(model)
-})

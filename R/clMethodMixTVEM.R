@@ -102,8 +102,6 @@ setMethod('prepare', signature('clMethodMixTVEM'), function(method, data, verbos
 })
 
 setMethod('fit', signature('clMethodMixTVEM'), function(method, data, envir, verbose, ...) {
-  e = new.env()
-
   args = c(as.list(envir), as.list(method))
   args$id = data[[method$id]]
   args$time = data[[method$time]]
@@ -116,16 +114,12 @@ setMethod('fit', signature('clMethodMixTVEM'), function(method, data, envir, ver
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   suppressFun({
-    e$model = do.call(TVEMMixNormal, args[intersect(names(args), formalArgs(TVEMMixNormal))])
+    model = do.call(TVEMMixNormal, args[intersect(names(args), formalArgs(TVEMMixNormal))])
   })
-  return(e)
-})
 
-setMethod('finalize', signature('clMethodMixTVEM'), function(method, data, envir, verbose, ...) {
-  model = new('clModelMixTVEM',
-              method=method,
-              data=data,
-              model=envir$model,
-              clusterNames=make.clusterNames(method$nClusters))
-  return(model)
+  new('clModelMixTVEM',
+      method=method,
+      data=data,
+      model=model,
+      clusterNames=make.clusterNames(method$nClusters))
 })

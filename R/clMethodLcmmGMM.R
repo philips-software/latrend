@@ -92,8 +92,6 @@ setMethod('prepare', signature('clMethodLcmmGMM'), gmm_prepare)
 
 ##
 gmm_fit = function(method, data, envir, verbose, ...) {
-  e = new.env(parent=envir)
-
   valueColumn = formula(method) %>% getResponse
 
   args = as.list(method)
@@ -123,20 +121,16 @@ gmm_fit = function(method, data, envir, verbose, ...) {
   model$mixture = envir$mixture
   model$random = envir$random
   model$mb = envir$formula.mb
-  e$model = model
 
-  return(e)
-}
-setMethod('fit', signature('clMethodLcmmGMM'), gmm_fit)
-
-
-##
-gmm_finalize = function(method, data, envir, verbose, ...) {
-  model = new('clModelLcmmGMM',
-              method=method,
-              data=data,
-              model=envir$model,
-              clusterNames=make.clusterNames(method$nClusters))
   return(model)
 }
-setMethod('finalize', signature('clMethodLcmmGMM'), gmm_finalize)
+
+setMethod('fit', signature('clMethodLcmmGMM'), function(method, data, envir, verbose, ...) {
+  model = gmm_fit(method, data, envir, verbose, ...)
+
+  new('clModelLcmmGMM',
+      method=method,
+      data=data,
+      model=model,
+      clusterNames=make.clusterNames(method$nClusters))
+})

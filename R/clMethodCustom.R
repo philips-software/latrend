@@ -67,18 +67,12 @@ setMethod('prepare', signature('clMethodCustom'), function(method, data, verbose
 })
 
 setMethod('fit', signature('clMethodCustom'), function(method, data, envir, verbose) {
-  e = new.env()
   args = as.list(method)
   args$data = data
 
-  e$model = do.call(method$fun, args)
-  return(e)
-})
-
-setMethod('finalize', signature('clMethodCustom'), function(method, data, envir, verbose) {
-  # check output
-  model = envir$model
-  assert_that(is.clModel(model))
+  model = do.call(method$fun, args)
   model@method = method
+  assert_that(is.clModel(model))
   return(model)
 })
+

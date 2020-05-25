@@ -66,15 +66,9 @@ cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.v
   cat(verbose, 'Fitting model')
   pushState(verbose)
   start = Sys.time()
-  fitEnv = fit(method=method, data=data, envir=prepEnv, verbose=verbose)
+  model = fit(method=method, data=data, envir=prepEnv, verbose=verbose)
   estimationTime = Sys.time() - start
-  assert_that(is.environment(fitEnv), msg='expected environment from fit(clMethod, ...) call')
-  popState(verbose)
-
-  cat(verbose, 'Finalizing...')
-  pushState(verbose)
-  model = finalize(method=method, data=data, envir=fitEnv, verbose=verbose)
-  assert_that(inherits(model, 'clModel'), msg='finalize(clMethod, ...) returned an unexpected object. Should be clModel.')
+  assert_that(inherits(model, 'clModel'), msg='fit(clMethod, ...) returned an unexpected object. Should be of type clModel.')
   popState(verbose)
 
   clCall = match.call.defaults()
@@ -132,6 +126,7 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL,
   argList$envir = envir
   method = do.call(update, c(object=method, argList))
   environment(method) = envir
+  mc = match.call.defaults()
 
   cat(verbose, 'Validating method arguments...', level=verboseLevels$finest)
   validObject(method)
@@ -147,31 +142,21 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL,
     exit(verbose)
   }
 
-  fitEnvs = mapply(function(i, iPrepEnv) {
+  models = mapply(function(i, iPrepEnv) {
       cat(verbose, 'Fitting model %d/%d...', i, .rep)
       start = Sys.time()
-      fitEnv = fit(method=method, data=data, envir=iPrepEnv, verbose=verbose)
+      model = fit(method=method, data=data, envir=iPrepEnv, verbose=verbose)
       estimationTime = Sys.time() - start
-      assert_that(is.environment(fitEnv), msg='expected environment from fit(clMethod, ...) call')
-      fitEnv$.estimationTime = estimationTime
-      return(fitEnv)
-    }, seq_len(.rep), prepEnvs, SIMPLIFY=FALSE)
-
-  enter(verbose, 'Finalizing models')
-  clCall = match.call.defaults()
-  models = mapply(function(i, iFitEnv) {
-      model = finalize(method=method, data=data, envir=iFitEnv, verbose=verbose)
       model@method = method
       model@call = do.call(call,
                            c('cluslong',
                              method=quote(getCall(method)),
-                             data=quote(clCall$data)))
-      model@call['envir'] = list(clCall$envir)
-      model@estimationTime = as.numeric(iFitEnv$.estimationTime, 'secs')
-      assert_that(inherits(model, 'clModel'), msg=sprintf('finalize(clMethod, ...) returned an unexpected object for run %d. Should be clModel.', i))
+                             data=quote(mc$data)))
+      model@call['envir'] = list(mc$envir)
+      model@estimationTime = as.numeric(estimationTime, 'secs')
+      assert_that(inherits(model, 'clModel'), msg=sprintf('fit(clMethod, ...) returned an unexpected object for run %d. Should be of type clModel.', i))
       return(model)
-    }, seq_len(.rep), fitEnvs, SIMPLIFY=FALSE)
-  exit(verbose)
+    }, seq_len(.rep), prepEnvs, SIMPLIFY=FALSE)
 
   as.clModels(models)
 }

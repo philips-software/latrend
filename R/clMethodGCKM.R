@@ -60,11 +60,6 @@ setMethod('fit', signature('clMethodGCKM'), function(method, data, envir, verbos
   fit(method, data=data, envir=envir, verbose=verbose, ...)
 })
 
-setMethod('finalize', signature('clMethodGCKM'), function(method, data, envir, verbose, ...) {
-  method = clMethodGCKM_as_twostep(method)
-  finalize(method, data=data, envir=envir, verbose=verbose, ...)
-})
-
 
 
 representationStepGCKM = function(method, data, verbose, ...) {

@@ -3,7 +3,7 @@ setClass('clMethodCrimCV', contains='clMatrixMethod')
 
 #' @export
 #' @import crimCV
-#' @title Specify zero-inflated repeated-measures GBTM method
+#' @title Specify a zero-inflated repeated-measures GBTM method
 #' @inheritParams clMatrixMethod
 #' @inheritDotParams crimCV::crimCV
 #' @examples
@@ -42,7 +42,6 @@ setMethod('prepare', signature('clMethodCrimCV'), function(method, data, verbose
 
 #' @importFrom crimCV crimCV
 setMethod('fit', signature('clMethodCrimCV'), function(method, data, envir, verbose, ...) {
-  e = new.env(parent=envir)
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   args = as.list(method)
@@ -51,22 +50,18 @@ setMethod('fit', signature('clMethodCrimCV'), function(method, data, envir, verb
   args[setdiff(names(args), formalArgs(crimCV))] = NULL
 
   suppressFun({
-    e$model = do.call(crimCV, args)
+    model = do.call(crimCV, args)
   })
-  e$model$data = envir$dataMat
-  e$model$minTime = min(data[[method$time]])
-  e$model$durTime = max(data[[method$time]]) - e$model$minTime
-  return(e)
+  model$data = envir$dataMat
+  model$minTime = min(data[[method$time]])
+  model$durTime = max(data[[method$time]]) - model$minTime
+
+  assert_that(has_name(model, 'beta'), msg='invalid crimCV model returned from fit. The model either failed to initialize, converge, or its specification is unsupported.')
+
+  new('clModelCrimCV',
+      method=method,
+      data=data,
+      model=model,
+      clusterNames=make.clusterNames(method$nClusters))
 })
 
-
-setMethod('finalize', signature('clMethodCrimCV'), function(method, data, envir, verbose, ...) {
-  assert_that(has_name(envir$model, 'beta'), msg='invalid crimCV model returned from fit. The model either failed to initialize, converge, or its specification is unsupported.')
-
-  model = new('clModelCrimCV',
-              method=method,
-              data=data,
-              model=envir$model,
-              clusterNames=make.clusterNames(method$nClusters))
-  return(model)
-})

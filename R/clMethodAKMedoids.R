@@ -31,8 +31,6 @@ setMethod('getName0', signature('clMethodAKMedoids'), function(object) 'akm')
 
 
 setMethod('fit', signature('clMethodAKMedoids'), function(method, data, envir, verbose, ...) {
-  e = new.env(parent=envir)
-
   args = as.list(method, fun=akmedoids.clust)
   args$traj = envir$dataMat
   args$k = method$nClusters
@@ -43,16 +41,12 @@ setMethod('fit', signature('clMethodAKMedoids'), function(method, data, envir, v
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   suppressFun({
-    e$model = do.call(akmedoids.clust, args)
+    model = do.call(akmedoids.clust, args)
   })
-  return(e)
-})
 
-
-setMethod('finalize', signature('clMethodAKMedoids'), function(method, data, envir, verbose, ...) {
   clusNames = make.clusterNames(method$nClusters)
 
-  clModelCustom(data, clusterAssignments=factor(envir$model$memberships, levels=LETTERS[1:method$nClusters], labels=clusNames),
+  clModelCustom(data, clusterAssignments=factor(model$memberships, levels=LETTERS[1:method$nClusters], labels=clusNames),
                 clusterTrajectories=method$clusterCenter,
                 response=getResponse(method$formula),
                 time=method$time,
@@ -60,6 +54,6 @@ setMethod('finalize', signature('clMethodAKMedoids'), function(method, data, env
                 clusterNames=clusNames,
                 converged=TRUE,
                 method=method,
-                model=envir$model,
+                model=model,
                 name='akmedoids')
 })

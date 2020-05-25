@@ -51,13 +51,12 @@ setMethod('getName0', signature('clMethodLcmmGBTM'), function(object) 'gbtm')
 
 setMethod('prepare', signature('clMethodLcmmGBTM'), gmm_prepare)
 
-setMethod('fit', signature('clMethodLcmmGBTM'), gmm_fit)
+setMethod('fit', signature('clMethodLcmmGBTM'), function(method, data, envir, verbose, ...) {
+  model = gmm_fit(method, data, envir, verbose, ...)
 
-setMethod('finalize', signature('clMethodLcmmGBTM'), function(method, data, envir, verbose, ...) {
-  model = new('clModelLcmmGBTM',
-              method=method,
-              data=data,
-              model=envir$model,
-              clusterNames=make.clusterNames(method$nClusters))
-  return(model)
+  new('clModelLcmmGBTM',
+      method=method,
+      data=data,
+      model=model,
+      clusterNames=make.clusterNames(method$nClusters))
 })

@@ -28,8 +28,6 @@ setMethod('getName0', signature('clMethodMixtoolsNPRM'), function(object) 'nprm'
 
 
 setMethod('fit', signature('clMethodMixtoolsNPRM'), function(method, data, envir, verbose, ...) {
-  e = new.env(parent=envir)
-
   args = as.list(method)
   args$x = envir$dataMat
   args$mu0 = method$nClusters
@@ -41,17 +39,12 @@ setMethod('fit', signature('clMethodMixtoolsNPRM'), function(method, data, envir
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   suppressFun({
-    e$model = do.call(npEM, args)
+    model = do.call(npEM, args)
   })
-  return(e)
+
+  new('clModelMixtoolsRM',
+      method=method,
+      data=data,
+      model=model,
+      clusterNames=make.clusterNames(method$nClusters))
 })
-
-
-setMethod('finalize', signature('clMethodMixtoolsNPRM'), function(method, data, envir, verbose, ...) {
-    model = new('clModelMixtoolsRM',
-                method=method,
-                data=data,
-                model=envir$model,
-                clusterNames=make.clusterNames(method$nClusters))
-    return(model)
-  })

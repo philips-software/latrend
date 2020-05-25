@@ -61,8 +61,6 @@ setMethod('prepare', signature('clMethodMixtoolsGMM'), function(method, data, ve
 
 #' @importFrom mixtools regmixEM.mixed
 setMethod('fit', signature('clMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
-  e = new.env(parent=envir)
-
   args = as.list(method)
   args$y = envir$y
   args$x = envir$x
@@ -77,15 +75,9 @@ setMethod('fit', signature('clMethodMixtoolsGMM'), function(method, data, envir,
   model$fixed = envir$fixed
   model$random = envir$random
 
-  e$model = model
-  return(e)
-})
-
-setMethod('finalize', signature('clMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
-  model = new('clModelMixtoolsGMM',
-              method=method,
-              data=data,
-              model=envir$model,
-              clusterNames=make.clusterNames(method$nClusters))
-  return(model)
+  new('clModelMixtoolsGMM',
+      method=method,
+      data=data,
+      model=model,
+      clusterNames=make.clusterNames(method$nClusters))
 })

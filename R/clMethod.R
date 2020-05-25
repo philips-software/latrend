@@ -463,11 +463,6 @@ setGeneric('prepare', function(method, ...) standardGeneric('prepare'))
 #' @description Called by [cluslong].
 setGeneric('fit', function(method, ...) standardGeneric('fit'))
 
-# . finalize ####
-#' @title clMethod interface function
-#' @description Called by [cluslong].
-setGeneric('finalize', function(method, ...) standardGeneric('finalize'))
-
 #' @title Select the preferred environment
 #' @description Returns envir if specified. Otherwise, returns environment(object) if specified. The defaultEnvir is returned when the former two are NULL.
 #' @keywords internal

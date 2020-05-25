@@ -29,8 +29,6 @@ setMethod('getName', signature('clMethodLongclust'), function(object) 'longclust
 setMethod('getName0', signature('clMethodLongclust'), function(object) 'longclust')
 
 setMethod('fit', signature('clMethodLongclust'), function(method, data, envir, verbose, ...) {
-  e = new.env(parent=envir)
-
   args = as.list(method)
   args$x = envir$dataMat
   args$Gmin = method$nClusters
@@ -43,16 +41,12 @@ setMethod('fit', signature('clMethodLongclust'), function(method, data, envir, v
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   suppressFun({
-    e$model = do.call(longclustEM, args)
+    model = do.call(longclustEM, args)
   })
-  return(e)
-})
 
-setMethod('finalize', signature('clMethodLongclust'), function(method, data, envir, verbose, ...) {
-  model = new('clModelLongclust',
-              method=method,
-              data=data,
-              model=envir$model,
-              clusterNames=make.clusterNames(method$nClusters))
-  return(model)
+  new('clModelLongclust',
+      method=method,
+      data=data,
+      model=model,
+      clusterNames=make.clusterNames(method$nClusters))
 })

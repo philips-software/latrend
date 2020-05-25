@@ -3,7 +3,7 @@ setClass('clMethodFunFEM', contains='clMatrixMethod')
 
 #' @export
 #' @import funFEM
-#' @title Specify FunFEM method
+#' @title Specify a FunFEM method
 #' @param basis The basis function.
 #' @inheritParams clMatrixMethod
 #' @inheritParams funFEM::funFEM
@@ -41,8 +41,6 @@ setMethod('prepare', signature('clMethodFunFEM'), function(method, data, verbose
 
 
 setMethod('fit', signature('clMethodFunFEM'), function(method, data, envir, verbose, ...) {
-  e = new.env(parent=envir)
-
   args = as.list(method)
   args$fd = envir$fd
   args$K = method$nClusters
@@ -55,18 +53,15 @@ setMethod('fit', signature('clMethodFunFEM'), function(method, data, envir, verb
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   suppressFun({
-    e$model = do.call(funFEM, args)
+    model = do.call(funFEM, args)
   })
-  e$model$basis = envir$basis
-  e$model$fd = envir$fd
-  return(e)
+  model$basis = envir$basis
+  model$fd = envir$fd
+
+  new('clModelFunFEM',
+      method=method,
+      data=data,
+      model=model,
+      clusterNames=make.clusterNames(method$nClusters))
 })
 
-setMethod('finalize', signature('clMethodFunFEM'), function(method, data, envir, verbose, ...) {
-  model = new('clModelFunFEM',
-              method=method,
-              data=data,
-              model=envir$model,
-              clusterNames=make.clusterNames(method$nClusters))
-  return(model)
-})

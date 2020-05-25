@@ -71,19 +71,12 @@ setMethod('fit', signature('clMethodTwoStep'), function(method, data, envir, ver
   assert_that(ncol(repEnv$repMat) >= 1)
 
   ## Cluster step #
-  clusEnv = new.env(parent=repEnv)
   model = method$clusterStep(method=method, data=data, repMat=repEnv$repMat, envir=repEnv, verbose=verbose)
 
   assert_that(is.clModelCustom(model), msg='invalid output from the clusterStep function; expected object of class clModelCustom. See the documentation of ?clMethodTwoStep for help.')
-  clusEnv$model = model
-  return(clusEnv)
-})
 
 
-setMethod('finalize', signature('clMethodTwoStep'), function(method, data, envir, verbose, ...) {
   # convert clModelCustom to a clModelTwoStep with the appropriate call
-  model = envir$model
-
   slots = slotNames(model) %>%
     lapply(slot, object=model) %>%
     setNames(slotNames(model))

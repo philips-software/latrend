@@ -57,23 +57,17 @@ setMethod('prepare', signature('clMethodLLPA'), function(method, data, verbose, 
 })
 
 setMethod('fit', signature('clMethodLLPA'), function(method, data, envir, verbose, ...) {
-  e = new.env(parent=envir)
-
   args = as.list(method)
   args$data = envir$data
   args$G = method$nClusters
 
   model = do.call(Mclust, args)
   model$time = unique(data[[method$time]]) %>% sort
-  e$model = model
-  return(e)
+
+  new('clModelLLPA',
+      method=method,
+      data=data,
+      model=model,
+      clusterNames=make.clusterNames(method$nClusters))
 })
 
-setMethod('finalize', signature('clMethodLLPA'), function(method, data, envir, verbose, ...) {
-  model = new('clModelLLPA',
-              method=method,
-              data=data,
-              model=envir$model,
-              clusterNames=make.clusterNames(method$nClusters))
-  return(model)
-})
