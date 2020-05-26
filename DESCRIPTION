@@ -11,19 +11,15 @@ LazyData: true
 Depends:
     R (>= 3.6.0)
 Imports:
-    data.table (>= 1.12.0),
-    ggplot2 (>= 2.2.1),
-    R.utils (>= 2.9.0),
     assertthat (>= 0.2.0),
     magrittr (>= 1.5),
+    data.table (>= 1.12.0),
     matrixStats (>= 0.55.0),
-    splines (>= 3.5.0),
-    lme4 (>= 1.1),
-    IMIFA (>= 2.1.1),
-    fda (>= 2.4.8),
     plyr (>= 1.8.4),
+    ggplot2 (>= 2.2.1),
+    R.utils (>= 2.9.0),
     stackoverflow (>= 0.3.0),
-    clusterCrit (>= 1.2.8)
+    splines (>= 3.5.0)
 RoxygenNote: 7.1.0
 Roxygen: list(markdown = TRUE)
 Suggests: 
@@ -37,9 +33,15 @@ Suggests:
     longclust (>= 1.2.3),
     mixtools (>= 1.1.0),
     flexmix (>= 2.3),
+    fda (>= 2.4.8),
     funFEM (>= 1.1),
+    IMIFA (>= 2.1.1),
     crimCV (>= 0.9.6),
-    akmedoids (>= 0.1.5)
+    akmedoids (>= 0.1.5),
+    psych (>= 1.9.12.31),
+    clusterCrit (>= 1.2.8),
+    mclustcomp (>= 0.3.1),
+    lme4 (>= 1.1)
 Collate: 
     'assert.R'
     'clMethod.R'
