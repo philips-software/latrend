@@ -46,7 +46,9 @@ setMethod('fit', signature('clMethodAKMedoids'), function(method, data, envir, v
 
   clusNames = make.clusterNames(method$nClusters)
 
-  clModelCustom(data, clusterAssignments=factor(model$memberships, levels=LETTERS[1:method$nClusters], labels=clusNames),
+  assert_that(!is.null(model$membership), msg='no membership output returned')
+
+  clModelCustom(data, clusterAssignments=factor(model$membership, levels=LETTERS[1:method$nClusters], labels=clusNames),
                 clusterTrajectories=method$clusterCenter,
                 response=getResponse(method$formula),
                 time=method$time,
