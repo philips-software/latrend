@@ -1,5 +1,7 @@
 #' @include clModel.R
 #' @importFrom clusterCrit intCriteria extCriteria
+#' @importFrom mclustcomp mclustcomp
+
 intMetricsEnv = new.env()
 extMetricsEnv = new.env()
 
@@ -139,54 +141,105 @@ intMetricsEnv$WRSS = function(m) {
 
 # External metric definitions ####
 extMetricsEnv$adjustedRand = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
   mclust::adjustedRandIndex(
     clusterAssignments(m1) %>% as.integer,
     clusterAssignments(m2) %>% as.integer)
 }
 
 extMetricsEnv$CohensKappa = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
   psych::cohen.kappa(
     cbind(clusterAssignments(m1) %>% as.integer,
           clusterAssignments(m2) %>% as.integer), alpha=1)$kappa
 }
 
-extMetricsEnv$CzekanowskiDice = function(m1, m2) {
-  extCriteria(clusterAssignments(m1) %>% as.integer,
-              clusterAssignments(m2) %>% as.integer,
-              'Czekanowski_Dice')[[1]]
+extMetricsEnv$`F` = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
+  mclustcomp::mclustcomp(clusterAssignments(m1) %>% as.integer,
+                         clusterAssignments(m2) %>% as.integer,
+                         types='f')$scores
+}
+
+extMetricsEnv$F1 = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
+  mclustcomp::mclustcomp(clusterAssignments(m1) %>% as.integer,
+                         clusterAssignments(m2) %>% as.integer,
+                         types='sdc')$scores
 }
 
 extMetricsEnv$FolkesMallows = function(m1, m2) {
-  extCriteria(clusterAssignments(m1) %>% as.integer,
+  assert_that(has_same_ids(m1, m2))
+  clusterCrit::extCriteria(clusterAssignments(m1) %>% as.integer,
               clusterAssignments(m2) %>% as.integer,
               'Folkes_Mallows')[[1]]
 }
 
 extMetricsEnv$Hubert = function(m1, m2) {
-  extCriteria(clusterAssignments(m1) %>% as.integer,
+  assert_that(has_same_ids(m1, m2))
+  clusterCrit::extCriteria(clusterAssignments(m1) %>% as.integer,
               clusterAssignments(m2) %>% as.integer,
               'Hubert')[[1]]
 }
 
 extMetricsEnv$Jaccard = function(m1, m2) {
-  extCriteria(clusterAssignments(m1) %>% as.integer,
+  assert_that(has_same_ids(m1, m2))
+  clusterCrit::extCriteria(clusterAssignments(m1) %>% as.integer,
               clusterAssignments(m2) %>% as.integer,
               'Jaccard')[[1]]
 }
 
+extMetricsEnv$jointEntropy = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
+  mclustcomp::mclustcomp(clusterAssignments(m1) %>% as.integer,
+                         clusterAssignments(m2) %>% as.integer,
+                         types='jent')$scores
+}
+
 extMetricsEnv$Kulczynski = function(m1, m2) {
-  extCriteria(clusterAssignments(m1) %>% as.integer,
+  assert_that(has_same_ids(m1, m2))
+  clusterCrit::extCriteria(clusterAssignments(m1) %>% as.integer,
               clusterAssignments(m2) %>% as.integer,
               'Kulczynski')[[1]]
 }
 
+extMetricsEnv$MaximumMatch = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
+  mclustcomp::mclustcomp(clusterAssignments(m1) %>% as.integer,
+                         clusterAssignments(m2) %>% as.integer,
+                         types='mmm')$scores
+}
+
 extMetricsEnv$McNemar = function(m1, m2) {
-  extCriteria(clusterAssignments(m1) %>% as.integer,
+  assert_that(has_same_ids(m1, m2))
+  clusterCrit::extCriteria(clusterAssignments(m1) %>% as.integer,
               clusterAssignments(m2) %>% as.integer,
               'McNemar')[[1]]
 }
 
+extMetricsEnv$MeilaHeckerman = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
+  mclustcomp::mclustcomp(clusterAssignments(m1) %>% as.integer,
+                         clusterAssignments(m2) %>% as.integer,
+                         types='mhm')$scores
+}
+
+extMetricsEnv$Mirkin = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
+  mclustcomp::mclustcomp(clusterAssignments(m1) %>% as.integer,
+                           clusterAssignments(m2) %>% as.integer,
+                           types='mirkin')$scores
+}
+
+extMetricsEnv$MI = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
+  mclustcomp::mclustcomp(clusterAssignments(m1) %>% as.integer,
+                         clusterAssignments(m2) %>% as.integer,
+                         types='mi')$scores
+}
+
 extMetricsEnv$NMI = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
   igraph::compare(
     clusterAssignments(m1) %>% as.integer,
     clusterAssignments(m2) %>% as.integer,
@@ -197,71 +250,125 @@ extMetricsEnv$NSJ = function(m1, m2) {
   extMetricsEnv$splitJoin(m1, m2) / (2 * nIds(m1))
 }
 
+extMetricsEnv$NVI = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
+  mclustcomp::mclustcomp(clusterAssignments(m1) %>% as.integer,
+                         clusterAssignments(m2) %>% as.integer,
+                         types='nvi')$scores
+}
+
+extMetricsEnv$Overlap = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
+  mclustcomp::mclustcomp(clusterAssignments(m1) %>% as.integer,
+                         clusterAssignments(m2) %>% as.integer,
+                         types='overlap')$scores
+}
+
+extMetricsEnv$PD = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
+  mclustcomp::mclustcomp(clusterAssignments(m1) %>% as.integer,
+                         clusterAssignments(m2) %>% as.integer,
+                         types='pd')$scores
+}
+
+
 extMetricsEnv$Phi = function(m1, m2) {
-  extCriteria(clusterAssignments(m1) %>% as.integer,
+  assert_that(has_same_ids(m1, m2))
+  clusterCrit::extCriteria(clusterAssignments(m1) %>% as.integer,
               clusterAssignments(m2) %>% as.integer,
               'Phi')[[1]]
 }
 
 extMetricsEnv$precision = function(m1, m2) {
-  extCriteria(clusterAssignments(m1) %>% as.integer,
+  assert_that(has_same_ids(m1, m2))
+  clusterCrit::extCriteria(clusterAssignments(m1) %>% as.integer,
               clusterAssignments(m2) %>% as.integer,
               'Precision')[[1]]
 }
 
 extMetricsEnv$Rand = function(m1, m2) {
-  extCriteria(clusterAssignments(m1) %>% as.integer,
+  assert_that(has_same_ids(m1, m2))
+  clusterCrit::extCriteria(clusterAssignments(m1) %>% as.integer,
               clusterAssignments(m2) %>% as.integer,
               'Rand')[[1]]
 }
 
 extMetricsEnv$recall = function(m1, m2) {
-  extCriteria(clusterAssignments(m1) %>% as.integer,
+  assert_that(has_same_ids(m1, m2))
+  clusterCrit::extCriteria(clusterAssignments(m1) %>% as.integer,
               clusterAssignments(m2) %>% as.integer,
               'Recall')[[1]]
 }
 
 extMetricsEnv$RogersTanimoto = function(m1, m2) {
-  extCriteria(clusterAssignments(m1) %>% as.integer,
+  assert_that(has_same_ids(m1, m2))
+  clusterCrit::extCriteria(clusterAssignments(m1) %>% as.integer,
               clusterAssignments(m2) %>% as.integer,
               'Rogers_Tanimoto')[[1]]
 }
 
 extMetricsEnv$RusselRao = function(m1, m2) {
-  extCriteria(clusterAssignments(m1) %>% as.integer,
+  assert_that(has_same_ids(m1, m2))
+  clusterCrit::extCriteria(clusterAssignments(m1) %>% as.integer,
               clusterAssignments(m2) %>% as.integer,
               'Russel_Rao')[[1]]
 }
 
+extMetricsEnv$SMC = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
+  mclustcomp::mclustcomp(clusterAssignments(m1) %>% as.integer,
+                         clusterAssignments(m2) %>% as.integer,
+                         types='smc')$scores
+}
+
 extMetricsEnv$splitJoin = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
   igraph::split_join_distance(
     clusterAssignments(m1) %>% as.integer,
     clusterAssignments(m2) %>% as.integer) %>% sum
 }
 
 extMetricsEnv$splitJoin_ref = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
   igraph::split_join_distance(
     clusterAssignments(m1) %>% as.integer,
     clusterAssignments(m2) %>% as.integer)[1]
 }
 
 extMetricsEnv$SokalSneath1 = function(m1, m2) {
-  extCriteria(clusterAssignments(m1) %>% as.integer,
+  assert_that(has_same_ids(m1, m2))
+  clusterCrit::extCriteria(clusterAssignments(m1) %>% as.integer,
               clusterAssignments(m2) %>% as.integer,
               'Sokal_Sneath1')[[1]]
 }
 
 extMetricsEnv$SokalSneath2 = function(m1, m2) {
-  extCriteria(clusterAssignments(m1) %>% as.integer,
+  assert_that(has_same_ids(m1, m2))
+  clusterCrit::extCriteria(clusterAssignments(m1) %>% as.integer,
               clusterAssignments(m2) %>% as.integer,
               'Sokal_Sneath2')[[1]]
 }
 
 extMetricsEnv$VI = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
   igraph::compare(
     clusterAssignments(m1) %>% as.integer,
     clusterAssignments(m2) %>% as.integer,
     method='vi')
+}
+
+extMetricsEnv$Wallace1 = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
+  mclustcomp::mclustcomp(clusterAssignments(m1) %>% as.integer,
+                         clusterAssignments(m2) %>% as.integer,
+                         types='wallace1')$scores
+}
+
+extMetricsEnv$Wallace2 = function(m1, m2) {
+  assert_that(has_same_ids(m1, m2))
+  mclustcomp::mclustcomp(clusterAssignments(m1) %>% as.integer,
+                         clusterAssignments(m2) %>% as.integer,
+                         types='wallace2')$scores
 }
 
 wmsse = function(m1, m2, newdata=union(time(m1), time(m2))) {
