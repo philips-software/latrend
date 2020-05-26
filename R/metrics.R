@@ -99,6 +99,10 @@ intMetricsEnv$MAE = function(m) {
   residuals(m) %>% abs %>% mean
 }
 
+intMetricsEnv$MSE = function(m) {
+  mean(residuals(m)^2)
+}
+
 intMetricsEnv$relativeEntropy = function(m) {
   N = nIds(m)
   K = nClusters(m)
@@ -119,6 +123,12 @@ intMetricsEnv$WMAE = function(m) {
   mean(wMat * abs(resMat))
 }
 
+intMetricsEnv$WMSE = function(m) {
+  wMat = postprob(m)[genIdRowIndices(m),]
+  resMat = residuals(m, clusters=NULL)
+  mean(wMat * resMat ^ 2)
+}
+
 intMetricsEnv$WRSS = function(m) {
   wMat = postprob(m)[genIdRowIndices(m),]
   resMat = residuals(m, clusters=NULL)
@@ -128,7 +138,7 @@ intMetricsEnv$WRSS = function(m) {
 
 
 # External metric definitions ####
-extMetricsEnv$AdjustedRand = function(m1, m2) {
+extMetricsEnv$adjustedRand = function(m1, m2) {
   mclust::adjustedRandIndex(
     clusterAssignments(m1) %>% as.integer,
     clusterAssignments(m2) %>% as.integer)
@@ -184,7 +194,7 @@ extMetricsEnv$NMI = function(m1, m2) {
 }
 
 extMetricsEnv$NSJ = function(m1, m2) {
-  extMetricsEnv$SplitJoin(m1, m2) / (2 * nIds(m1))
+  extMetricsEnv$splitJoin(m1, m2) / (2 * nIds(m1))
 }
 
 extMetricsEnv$Phi = function(m1, m2) {
@@ -193,7 +203,7 @@ extMetricsEnv$Phi = function(m1, m2) {
               'Phi')[[1]]
 }
 
-extMetricsEnv$Precision = function(m1, m2) {
+extMetricsEnv$precision = function(m1, m2) {
   extCriteria(clusterAssignments(m1) %>% as.integer,
               clusterAssignments(m2) %>% as.integer,
               'Precision')[[1]]
@@ -205,7 +215,7 @@ extMetricsEnv$Rand = function(m1, m2) {
               'Rand')[[1]]
 }
 
-extMetricsEnv$Recall = function(m1, m2) {
+extMetricsEnv$recall = function(m1, m2) {
   extCriteria(clusterAssignments(m1) %>% as.integer,
               clusterAssignments(m2) %>% as.integer,
               'Recall')[[1]]
@@ -223,13 +233,13 @@ extMetricsEnv$RusselRao = function(m1, m2) {
               'Russel_Rao')[[1]]
 }
 
-extMetricsEnv$SplitJoin = function(m1, m2) {
+extMetricsEnv$splitJoin = function(m1, m2) {
   igraph::split_join_distance(
     clusterAssignments(m1) %>% as.integer,
     clusterAssignments(m2) %>% as.integer) %>% sum
 }
 
-extMetricsEnv$SplitJoin1 = function(m1, m2) {
+extMetricsEnv$splitJoin_ref = function(m1, m2) {
   igraph::split_join_distance(
     clusterAssignments(m1) %>% as.integer,
     clusterAssignments(m2) %>% as.integer)[1]
@@ -254,7 +264,7 @@ extMetricsEnv$VI = function(m1, m2) {
     method='vi')
 }
 
-extMetricsEnv$WMMAE = function(m1, m2, newdata=union(time(m1), time(m2))) {
+wmsse = function(m1, m2, newdata=union(time(m1), time(m2))) {
   resp1 = getResponse(formula(m1))
   resp2 = getResponse(formula(m2))
 
@@ -263,19 +273,51 @@ extMetricsEnv$WMMAE = function(m1, m2, newdata=union(time(m1), time(m2))) {
   trajmat2 = clusterTrajectories(m2, at=newdata)[[resp2]] %>%
     matrix(ncol=nClusters(m2))
 
-  prop1 = clusterProportions(m1)
-  prop2 = clusterProportions(m2)
+  groupMetric1 = foreach(g=seq_len(nClusters(m1)), .combine=c) %do% {
+    min(colSums(sweep(trajmat2, 1, trajmat1[, g]) ^ 2))
+  }
 
-  # TODO fix
-  ae1 = abs(sweep(trajmat1, 1, trajmat2))
-  ae2 = abs(sweep(trajmat2, 1, trajmat1))
-  w1 = mean(matrix(prop1, nrow=nrow(trajmat1), ncol=nClusters(m1), byrow=TRUE) * ae1, na.rm=TRUE)
-  w2 = mean(matrix(prop2, nrow=nrow(trajmat2), ncol=nClusters(m2), byrow=TRUE) * ae2, na.rm=TRUE)
+  groupMetric2 = foreach(g=seq_len(nClusters(m2)), .combine=c) %do% {
+    min(colSums(sweep(trajmat1, 1, trajmat2[, g]) ^ 2))
+  }
 
-  (w1 + w2) / 2
+  wmsse1 = clusterProportions(m1) * groupMetric1
+  wmsse2 = clusterProportions(m2) * groupMetric2
+
+  c(wmsse1, wmsse2)
 }
 
-extMetricsEnv$WMMAE1 = function(m1, m2, newdata=time(m1)) {
+extMetricsEnv$WMSSE = function(m1, m2, newdata=union(time(m1), time(m2))) {
+  out = wmsse(m1, m2, newdata)
+  sum(out)
+}
+
+extMetricsEnv$WMSSE_ref = function(m1, m2, newdata=union(time(m1), time(m2))) {
+  out = wmsse(m1, m2, newdata)
+  out[2]
+}
+
+extMetricsEnv$WMMSE = function(m1, m2, newdata=union(time(m1), time(m2))) {
+  if(is.data.frame(newdata) || is.matrix(newdata)) {
+    nob = nrow(newdata)
+  } else {
+    nob = length(newdata)
+  }
+
+  extMetricsEnv$WMSSE(m1, m2, newdata) / (2 * nob)
+}
+
+extMetricsEnv$WMMSE_ref = function(m1, m2, newdata=union(time(m1), time(m2))) {
+  if(is.data.frame(newdata) || is.matrix(newdata)) {
+    nob = nrow(newdata)
+  } else {
+    nob = length(newdata)
+  }
+
+  extMetricsEnv$WMSSE_ref(m1, m2, newdata) / nob
+}
+
+wmmae = function(m1, m2, newdata=union(time(m1), time(m2))) {
   resp1 = getResponse(formula(m1))
   resp2 = getResponse(formula(m2))
 
@@ -284,8 +326,26 @@ extMetricsEnv$WMMAE1 = function(m1, m2, newdata=time(m1)) {
   trajmat2 = clusterTrajectories(m2, at=newdata)[[resp2]] %>%
     matrix(ncol=nClusters(m2))
 
-  prop1 = clusterProportions(m1)
+  groupMetric1 = foreach(g=seq_len(nClusters(m1)), .combine=c) %do% {
+    min(colMeans(abs(sweep(trajmat2, 1, trajmat1[, g]))))
+  }
 
-  ae = abs(sweep(trajmat1, 1, trajmat2))
-  mean(matrix(prop1, nrow=nrow(trajmat1), ncol=nClusters(m1), byrow=TRUE) * ae, na.rm=TRUE)
+  groupMetric2 = foreach(g=seq_len(nClusters(m2)), .combine=c) %do% {
+    min(colMeans(abs(sweep(trajmat1, 1, trajmat2[, g]))))
+  }
+
+  wmmae1 = clusterProportions(m1) * groupMetric1
+  wmmae2 = clusterProportions(m2) * groupMetric2
+
+  c(wmmae1, wmmae2)
+}
+
+extMetricsEnv$WMMAE = function(m1, m2, newdata=union(time(m1), time(m2))) {
+  out = wmmae(m1, m2, newdata)
+  mean(out)
+}
+
+extMetricsEnv$WMMAE_ref = function(m1, m2, newdata=union(time(m1), time(m2))) {
+  out = wmmae(m1, m2, newdata)
+  out[2]
 }
