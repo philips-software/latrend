@@ -14,7 +14,7 @@ setClassUnion('functionOrNULL', members=c('function', 'NULL'))
 #' @export
 #' @title Specify a model based on a pre-computed result.
 #' @param data The data on which the cluster result is based, a data.frame.
-#' @param clusterAssignments A vector indicating cluster membership per strata. Either a numeric vector with range 1:numClus, or a factor.
+#' @param clusterAssignments A vector indicating cluster membership per strata. Either a `numeric` vector with range `1:numClus`, or a `factor`.
 #' @param clusterTrajectories The cluster trajectories as a data.frame, or a function computing the center trajectory based on the strata of the respective cluster.
 #' @param trajectories The fitted trajectories.
 #' @param response The response variable.
@@ -24,6 +24,7 @@ setClassUnion('functionOrNULL', members=c('function', 'NULL'))
 #' @param postprob Optional posterior probability matrix.
 #' @param predict Predict function for the response.
 #' @param predictPostprob Predict function for the posterior probability.
+#' @param method The method used to create this clModelCustom instance. Optional.
 clModelCustom = function(data,
                          clusterAssignments=NULL,
                          clusterTrajectories=mean,
@@ -34,10 +35,11 @@ clModelCustom = function(data,
                          clusterNames=NULL,
                          converged=TRUE,
                          postprob=NULL,
-                         method=new('clMethod'),
                          model=NULL,
                          name='custom',
-                         predict=NULL, predictPostprob=NULL) {
+                         predict=NULL,
+                         predictPostprob=NULL,
+                         method=new('clMethod')) {
   call = match.call()
 
   # Data

@@ -903,11 +903,15 @@ time.clModel = function(object) {
 #' @description Fit a new model with modified arguments from the current model.
 #' @inheritDotParams cluslong
 update.clModel = function(object, ...) {
+  assert_that(is.clModel(object))
+  modelCall = getCall(object)
+
+  assert_that(as.character(modelCall@call[[1]]) != '<undef>', msg='cannot update clModel because clMethod call is undefined')
+
   updateCall = match.call() %>% tail(-2)
   updateNames = names(updateCall)
 
-  clCall = getCall(object) %>%
-    replace(updateNames, updateCall[updateNames])
+  clCall = replace(modelCall, updateNames, updateCall[updateNames])
 
   eval(clCall)
 }
