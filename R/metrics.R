@@ -255,6 +255,37 @@ extMetricsEnv$VI = function(m1, m2) {
 }
 
 extMetricsEnv$WMMAE = function(m1, m2, newdata=union(time(m1), time(m2))) {
-  clusTraj1 = clusterTrajectories(m1, at=newdata)
-  clusTraj2 = clusterTrajectories(m2, at=newdata)
+  resp1 = getResponse(formula(m1))
+  resp2 = getResponse(formula(m2))
+
+  trajmat1 = clusterTrajectories(m1, at=newdata)[[resp1]] %>%
+    matrix(ncol=nClusters(m1))
+  trajmat2 = clusterTrajectories(m2, at=newdata)[[resp2]] %>%
+    matrix(ncol=nClusters(m2))
+
+  prop1 = clusterProportions(m1)
+  prop2 = clusterProportions(m2)
+
+  # TODO fix
+  ae1 = abs(sweep(trajmat1, 1, trajmat2))
+  ae2 = abs(sweep(trajmat2, 1, trajmat1))
+  w1 = mean(matrix(prop1, nrow=nrow(trajmat1), ncol=nClusters(m1), byrow=TRUE) * ae1, na.rm=TRUE)
+  w2 = mean(matrix(prop2, nrow=nrow(trajmat2), ncol=nClusters(m2), byrow=TRUE) * ae2, na.rm=TRUE)
+
+  (w1 + w2) / 2
+}
+
+extMetricsEnv$WMMAE1 = function(m1, m2, newdata=time(m1)) {
+  resp1 = getResponse(formula(m1))
+  resp2 = getResponse(formula(m2))
+
+  trajmat1 = clusterTrajectories(m1, at=newdata)[[resp1]] %>%
+    matrix(ncol=nClusters(m1))
+  trajmat2 = clusterTrajectories(m2, at=newdata)[[resp2]] %>%
+    matrix(ncol=nClusters(m2))
+
+  prop1 = clusterProportions(m1)
+
+  ae = abs(sweep(trajmat1, 1, trajmat2))
+  mean(matrix(prop1, nrow=nrow(trajmat1), ncol=nClusters(m1), byrow=TRUE) * ae, na.rm=TRUE)
 }
