@@ -49,7 +49,7 @@ setMethod('fit', signature('clMethodRandom'), function(method, data, envir, verb
   y = rgamma(method$nClusters, method$alpha)
   clusProps = y / sum(y)
 
-  propSeq = rep(1:method$nClusters, each=ceiling(clusProps * nIds))
+  propSeq = rep(1:method$nClusters, ceiling(clusProps * nIds))
 
   clusAssign = sample(propSeq)[1:nIds]
 
