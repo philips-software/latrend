@@ -82,7 +82,7 @@ setMethod('clusterTrajectories', signature('clModel'), function(object, what, at
 #' model = cluslong(method=clMethodKML(), data=testLongData)
 #' clusterNames(model) # A, B
 clusterNames = function(object, factor=FALSE) {
-  assert_that(is(object, 'clModel'))
+  assert_that(is.clModel(object))
   if(factor[1]) {
     object@clusterNames %>% factor(levels=object@clusterNames)
   } else {
@@ -96,7 +96,7 @@ clusterNames = function(object, factor=FALSE) {
 #' model = cluslong(method=clMethodKML(), data=testLongData)
 #' clusterNames(model) = c('Group 1', 'Group 2')
 `clusterNames<-` = function(object, value) {
-  assert_that(is(object, 'clModel'))
+  assert_that(is.clModel(object))
   assert_that(is.character(value))
   assert_that(length(value) == nClusters(object))
   object@clusterNames = value
@@ -109,7 +109,7 @@ clusterNames = function(object, factor=FALSE) {
 #' model = cluslong(method=clMethodKML(), data=testLongData)
 #' clusterSizes(model)
 clusterSizes = function(object) {
-  assert_that(is(object, 'clModel'))
+  assert_that(is.clModel(object))
   clusterAssignments(object) %>% table %>% as.numeric %>% setNames(clusterNames(object))
 }
 
@@ -119,8 +119,8 @@ clusterSizes = function(object) {
 #' model = cluslong(method=clMethodKML(), data=testLongData)
 #' clusterProportions(model)
 clusterProportions = function(object) {
-  assert_that(is(object, 'clModel'))
-  postprob(object) %>% colMeans
+  assert_that(is.clModel(object))
+  postprob(object) %>% colMeans()
 }
 
 
@@ -134,7 +134,7 @@ clusterProportions = function(object) {
 #'
 #' clusterAssignments(model, strategy=function(x) which(x > .9)) # only assign ids with a probability over 0.9
 clusterAssignments = function(object, strategy=which.max, ...) {
-  assert_that(is(object, 'clModel'))
+  assert_that(is.clModel(object))
   postprob(object) %>%
     apply(1, strategy, ...) %>%
     factor(levels=1:nClusters(object), labels=clusterNames(object))
@@ -162,7 +162,7 @@ coef.clModel = function(object, ...) {
 #' model = cluslong(method=clMethodLcmmGMM(), data=testLongData)
 #' confusionMatrix(model)
 confusionMatrix = function(object) {
-  assert_that(is(object, 'clModel'))
+  assert_that(is.clModel(object))
   post_conf_mat(postprob(object)) %>%
     set_colnames(clusterNames(object)) %>%
     set_rownames(clusterNames(object))
@@ -227,7 +227,7 @@ getCall.clModel = function(object) {
 #' @export
 #' @title Extract the underlying model
 getModel = function(object) {
-  assert_that(is(object, 'clModel'))
+  assert_that(is.clModel(object))
   object@model
 }
 
@@ -238,7 +238,7 @@ getModel = function(object) {
 #' model = cluslong(method=clMethodKML(), data=testLongData)
 #' getMethod(model)
 getMethod = function(object) {
-  assert_that(is(object, 'clModel'))
+  assert_that(is.clModel(object))
   object@method
 }
 
@@ -256,7 +256,7 @@ setMethod('getName0', signature('clModel'), function(object) getMethod(object) %
 genIdRowIndices = function(object) {
   model.data(object)[[idVariable(object)]] %>%
     factor(levels=ids(object)) %>%
-    as.integer
+    as.integer()
 }
 
 
@@ -273,7 +273,7 @@ ids = function(object) {
     if(is.factor(iddata)) {
       levels(iddata)[levels(iddata) %in% iddata]
     } else {
-      unique(iddata) %>% sort
+      unique(iddata) %>% sort()
     }
   } else {
     object@ids
@@ -540,7 +540,7 @@ nIds = function(object) {
 #' @export
 #' @title Number of clusters
 nClusters = function(object) {
-  assert_that(is(object, 'clModel'))
+  assert_that(is.clModel(object))
   length(object@clusterNames)
 }
 
@@ -650,7 +650,7 @@ setMethod('postprob', signature('clModel'), function(object) {
 #' @param ... Other arguments passed to qqplotr::geom_qq_band, qqplotr::stat_qq_line, and qqplotr::stat_qq_point.
 setGeneric('plotQQ', function(object, byCluster=FALSE, ...) standardGeneric('plotQQ'))
 setMethod('plotQQ', signature('clModel'), function(object, byCluster, ...) {
-  assert_that(is(object, 'clModel'))
+  assert_that(is.clModel(object))
   rowClusters = clusterAssignments(object)[model.data(object)[[idVariable(object)]]]
 
   p = ggplot(data=data.frame(Cluster=rowClusters, res=residuals(object)), aes(sample=res)) +

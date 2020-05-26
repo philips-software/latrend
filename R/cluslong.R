@@ -249,7 +249,7 @@ cluslongBatch = function(methods, data, cartesian=TRUE, envir=NULL, verbose=getO
 #' @family longitudinal cluster fit functions
 #' @family validation methods
 cluslongBoot = function(method, data, samples=50, seed=NULL, envir=NULL, verbose=getOption('cluslong.verbose')) {
-  assert_that(is(method, 'clMethod'), msg='method must be clMethod object (e.g., clMethodKML() )')
+  assert_that(is.clMethod(method), msg='method must be clMethod object (e.g., clMethodKML() )')
   assert_that(!missing(data), msg='data must be specified')
   assert_that(is.data.frame(data), msg='data must be data.frame')
   assert_that(is.count(samples))
