@@ -30,7 +30,7 @@ clMethodCustom = function(fun,
 }
 
 setValidity('clMethodCustom', function(object) {
-  assert_that(hasMethodArgs(object, formalArgs(clMethodCustom)))
+  assert_that(has_clMethod_args(object, formalArgs(clMethodCustom)))
 
   if(isArgDefined(object, 'fun')) {
     assert_that(is.function(object$fun))

@@ -2,7 +2,7 @@
 setClass('clMethodGCKM', contains='clMethod')
 
 setValidity('clMethodGCKM', function(object) {
-  assert_that(hasMethodArgs(object, formalArgs(clMethodGCKM)))
+  assert_that(has_clMethod_args(object, formalArgs(clMethodGCKM)))
 
   if(isArgDefined(object, 'formula')) {
     assert_that(hasSingleResponse(object$formula))

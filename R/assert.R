@@ -26,13 +26,30 @@ attr(has_same_ids, 'fail') = function(call, env) {
   paste0('models were not trained on the same ids, or in a different order: ', all.equal(ids(m1), ids(m2)))
 }
 
-has_same_data = function(m1, m2) {
+has_same_modelData = function(m1, m2) {
   assert_that(is.clModel(m1), is.clModel(m2))
   all.equal(model.data(m1), model.data(m2)) %>% isTRUE()
 }
 
-attr(has_same_data, 'fail') = function(call, env) {
+attr(has_same_modelData, 'fail') = function(call, env) {
   m1 = eval(call$m1, env)
   m2 = eval(call$m2, env)
   paste0('models were not trained on the same dataset: ', all.equal(model.data(m1), model.data(m2)))
+}
+
+
+
+#' @export
+has_clMethod_args = function(object, which) {
+  assert_that(is.clMethod(object))
+
+  argNames = setdiff(which, '...')
+  all(has_name(object, argNames))
+}
+
+attr(has_clMethod_args, 'fail') = function(call, env) {
+  object = eval(call$object, env)
+  argNames = setdiff(eval(call$which, env), '...')
+  missingNames = setdiff(argNames, names(object))
+  paste0(class(object), ' is missing required argument(s): ', paste0('"', missingNames, '"', collapse=', '))
 }

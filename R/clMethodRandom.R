@@ -2,7 +2,7 @@
 setClass('clMethodRandom', contains='clMethod')
 
 setValidity('clMethodRandom', function(object) {
-  assert_that(hasMethodArgs(object, formalArgs(clMethodRandom)))
+  assert_that(has_clMethod_args(object, formalArgs(clMethodRandom)))
 
   if(isArgDefined(object, 'alpha')) {
     assert_that(is.numeric(object$alpha), all(object$alpha >= 0), all(is.finite(object$alpha)))

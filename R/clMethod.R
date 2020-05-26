@@ -79,22 +79,6 @@ clMethod = function(Class, call, defaults=list(), excludeArgs=c()) {
 }
 
 #' @export
-hasMethodArgs = function(object, which) {
-  assert_that(is.clMethod(object))
-
-  argNames = setdiff(which, '...')
-  all(has_name(object, argNames))
-}
-
-attr(hasMethodArgs, 'fail') = function(call, env) {
-  object = eval(call$object, env)
-  argNames = setdiff(eval(call$which, env), '...')
-  missingNames = setdiff(argNames, names(object))
-  paste0(class(object), ' is missing required argument(s): ', paste0('"', missingNames, '"', collapse=', '))
-}
-
-
-#' @export
 is.clMethod = function(object) {
   isS4(object) && is(object, 'clMethod')
 }
@@ -457,6 +441,7 @@ clMethods = function(method, ..., envir=NULL) {
 #' @title clMethod interface function
 #' @description Called by [cluslong].
 setGeneric('prepare', function(method, ...) standardGeneric('prepare'))
+setMethod('prepare', signature('clMethod'), function(method, data, verbose) {})
 
 # . fit ####
 #' @title clMethod interface function

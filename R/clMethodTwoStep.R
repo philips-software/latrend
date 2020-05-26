@@ -2,7 +2,7 @@
 setClass('clMethodTwoStep', contains='clMethod')
 
 setValidity('clMethodTwoStep', function(object) {
-  assert_that(hasMethodArgs(object, formalArgs(clMethodTwoStep)))
+  assert_that(has_clMethod_args(object, formalArgs(clMethodTwoStep)))
 
   assert_that(!isArgDefined(object, 'representationStep') || is.function(object$representationStep) || is.matrix(object$representationStep))
 
