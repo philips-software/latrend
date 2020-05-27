@@ -64,7 +64,7 @@ clMethod = function(Class, call, defaults=list(), excludeArgs=c()) {
 
   # update arguments
   args = allArgs[not(names(allArgs) %in% excludeArgs)] %>%
-    modifyList(as.list(call)[-1])
+    modifyList(as.list(call)[-1], keep.null=TRUE)
 
   if(any(names(call[-1]) %in% excludeArgs)) {
     warning(sprintf('arguments (%s) cannot be defined for this clMethod class. These arguments will be ignored.', paste0(excludeArgs, collapse=', ')))
