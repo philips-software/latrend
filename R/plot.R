@@ -7,7 +7,7 @@ setGeneric('plotTrajectories', function(object, ...) standardGeneric('plotTrajec
 #' @param time Time variable name.
 #' @param id Id variable name.
 #' @param cluster Cluster variable name. If unspecified, trajectories are not grouped. Alternatively, cluster is a vector indicating cluster membership per id.
-setMethod('plotTrajectories', signature('data.frame'), function(object, response,
+setMethod('plotTrajectories', signature('data.frame'), function(object, response = getOption('cluslong.response'),
                                                                 time = getOption('cluslong.time'),
                                                                 id = getOption('cluslong.id'),
                                                                 cluster = NULL) {
