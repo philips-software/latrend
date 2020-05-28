@@ -24,7 +24,8 @@ clMethodTwoStep = function(representationStep,
                            center=meanNA,
                            response=getOption('cluslong.response'),
                            time=getOption('cluslong.time'),
-                           id=getOption('cluslong.id')) {
+                           id=getOption('cluslong.id'),
+                           ...) {
   clMethod('clMethodTwoStep', call=match.call.defaults(), excludeArgs=c('verbose'))
 }
 
