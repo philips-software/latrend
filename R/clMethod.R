@@ -16,7 +16,7 @@ setValidity('clMethod', function(object) {
   }
 
   if(isArgDefined(object, 'nClusters')) {
-    assert_that(is.count(object$nClusters))
+    assert_that(is.na(object$nClusters) || is.count(object$nClusters))
   }
 })
 
