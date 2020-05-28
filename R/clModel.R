@@ -1,4 +1,4 @@
-#' @include plot.R
+#' @include clMethod.R plot.R
 # Model ####
 setClass('clModel',
          representation(model='ANY',
@@ -213,8 +213,23 @@ fitted.clModel = function(object, clusters=clusterAssignments(object)) {
 #' @export
 #' @title Extract the formula of a clModel
 #' @param what The distributional parameter
+#' @return Returns the associated `formula`, or ` ~ 0` if not specified.
 formula.clModel = function(object, what='mu') {
-  getMethod(object) %>% formula(what=what)
+  method = getMethod(object)
+  if(what == 'mu') {
+    if(has_name(method, 'formula')) {
+      method$formula
+    } else {
+      as.formula(paste(object@response, '~ 0'))
+    }
+  } else {
+    formulaName = paste('formula', what, sep='.')
+    if(has_name(method, formulaName)) {
+      formula(method, what=what)
+    } else {
+      ~ 0
+    }
+  }
 }
 
 
@@ -863,13 +878,17 @@ transformPredict = function(object, pred, newdata) {
         split(clusterNames(object, factor=TRUE) %>% rep(each=nrow(pred)))
     }
   } else if(is.data.frame(pred)) {
+    assert_that(!is.null(newdata))
     # generic form, possibly containing more predictions than newdata. These are filtered.
     # the pred object should contain the newdata variables
     pred = as.data.table(pred)
     newdata = as.data.table(newdata)
 
-    assert_that(hasName(pred, 'Fit'))
-    assert_that(!is.null(newdata))
+    if(nrow(newdata) == 0) {
+      as.data.table(pred)[0,]
+    }
+
+    assert_that(hasName(pred, 'Fit'), nrow(pred) > 0)
 
     vars = setdiff(names(pred), names(newdata)) %>% union('Fit')
     assert_that(length(vars) > 0, msg='predict() cannot handle covariates with names of the predict columns (e.g., Fit, Se.fit)')
