@@ -34,7 +34,7 @@ cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.v
   method = do.call(update, c(object=method, argList))
   environment(method) = envir
 
-  header(verbose, sprintf('Longitudinal clustering with "%s"', getName(method)))
+  header(verbose, sprintf('Longitudinal clustering using "%s"', getName(method)))
   cat(verbose, 'Method arguments:')
   print(verbose, method)
   ruler(verbose)
@@ -103,7 +103,7 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL,
   assert_that(is.count(.rep))
 
   verbose = as.Verbose(verbose)
-  header(verbose, sprintf('Repeated (%d) longitudinal clustering with "%s"', .rep, getName(method)))
+  header(verbose, sprintf('Repeated (%d) longitudinal clustering using "%s"', .rep, getName(method)))
   cat(verbose, 'Method arguments:')
   print(verbose, method)
   ruler(verbose)
@@ -238,7 +238,7 @@ cluslongBatch = function(methods, data, cartesian=TRUE, envir=NULL, verbose=getO
 
 
 #' @export
-#' @title Cluster longitudinal data with bootstrapping
+#' @title Cluster longitudinal data using bootstrapping
 #' @description Performs bootstrapping, generating samples from the given data at the id level, fitting a clModel to each sample.
 #' @inheritParams cluslong
 #' @param data A `data.frame`.
@@ -255,7 +255,7 @@ cluslongBoot = function(method, data, samples=50, seed=NULL, envir=NULL, verbose
   assert_that(is.count(samples))
 
   verbose = as.Verbose(verbose)
-  header(verbose, sprintf('Longitudinal cluster estimation with %d bootstrap samples', samples))
+  header(verbose, sprintf('Longitudinal cluster estimation using %d bootstrap samples', samples))
   ruler(verbose)
 
   mc = match.call()
