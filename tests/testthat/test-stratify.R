@@ -57,3 +57,28 @@ test_that('logical cluster assignment with empty cluster', {
   expect_valid_clModel(model)
   expect_equal(nClusters(model), 2)
 })
+
+test_that('multiple cluster factor expression', {
+  m = clMethodStratify(cut(mean(Value), c(-Inf, -.5, 0, Inf), labels=c('C', 'B', 'A')))
+  model = cluslong(m, data=testLongData)
+  expect_valid_clModel(model)
+  expect_equal(nClusters(model), 3)
+  expect_equivalent(clusterNames(model), c('C', 'B', 'A'))
+})
+
+test_that('multiple cluster numeric expression', {
+  m = clMethodStratify(as.numeric(cut(mean(Value), c(-Inf, -.5, 0, Inf))))
+  model = cluslong(m, data=testLongData)
+  expect_valid_clModel(model)
+  expect_equal(nClusters(model), 3)
+  expect_equivalent(clusterNames(model), c('A', 'B', 'C'))
+})
+
+test_that('multiple cluster expression with cluster names', {
+  m = clMethodStratify(as.numeric(cut(mean(Value), c(-Inf, -.5, 0, Inf))),
+                       clusterNames=LETTERS[3:1])
+  model = cluslong(m, data=testLongData)
+  expect_valid_clModel(model)
+  expect_equal(nClusters(model), 3)
+  expect_equivalent(clusterNames(model), c('C', 'B', 'A'))
+})
