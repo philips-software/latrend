@@ -205,8 +205,3 @@ setMethod('trajectories', signature('clModelCustom'), function(object, what, at,
     stop('not supported')
   }
 })
-
-#' @export
-formula.clModelCustom = function(object, ...) {
-  as.formula(paste(object@response, '~ 1'))
-}

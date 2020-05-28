@@ -23,7 +23,7 @@ Imports:
 RoxygenNote: 7.1.0
 Roxygen: list(markdown = TRUE)
 Suggests: 
-    testthat,
+    testthat (>= 2.1.0),
     knitr,
     rmarkdown,
     kml (>= 2.4.1),
@@ -44,7 +44,10 @@ Suggests:
     lme4 (>= 1.1)
 Collate: 
     'assert.R'
+    'plot.R'
     'clMethod.R'
+    'clModel.R'
+    'clApproxModel.R'
     'clMatrixMethod.R'
     'clMethodAKMedoids.R'
     'clMethodCrimCV.R'
@@ -52,8 +55,6 @@ Collate:
     'clMethodFlexmix.R'
     'clMethodFlexmixGBTM.R'
     'clMethodFunFEM.R'
-    'plot.R'
-    'clModel.R'
     'clModelCustom.R'
     'clMethodTwoStep.R'
     'clMethodGCKM.R'
@@ -66,6 +67,7 @@ Collate:
     'clMethodMixtoolsGMM.R'
     'clMethodMixtoolsNPRM.R'
     'clMethodRandom.R'
+    'clMethodStratify.R'
     'clModelCrimCV.R'
     'clModelFlexmix.R'
     'clModelFunFEM.R'
@@ -77,6 +79,7 @@ Collate:
     'clModelMixTVEM.R'
     'clModelMixtoolsGMM.R'
     'clModelMixtoolsRM.R'
+    'clModelStratify.R'
     'clModelTwoStep.R'
     'clModels.R'
     'cluslong.R'

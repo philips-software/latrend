@@ -1,49 +1,33 @@
-#' @include clModel.R
-setClass('clModelKML', contains='clModel')
+#' @include clApproxModel.R
+setClass('clModelKML', contains='clApproxModel')
 
+#. clusterTrajectories ####
+setMethod('clusterTrajectories', signature('clModelKML'), function(object, what, at, ...) {
+  if(is.null(at)) {
+    trajMat = calculTrajMean(traj=object@model@traj,
+                             clust=getClusters(object@model, nbCluster=nClusters(object)),
+                             centerMethod=getMethod(object)$centerMethod)
 
-#' @export
-#' @rdname predict.clModel
-#' @inheritParams predict.clModel
-#' @param approxFun The interpolation function to use for time points not in the feature set.
-predict.clModelKML = function(object, newdata=NULL, what='mu', approxFun=approx) {
-  assert_that(is.newdata(newdata))
-  assert_that(what == 'mu', msg='only what="mu" is supported')
-  assert_that(is.function(approxFun))
+    if(!is.matrix(trajMat)) {
+      trajMat = matrix(trajMat, nrow=1)
+      rownames(trajMat) = clusterNames(object)
+    }
 
-  # compute cluster trajectories
-  trajMat = calculTrajMean(traj=object@model@traj,
-                           clust=getClusters(object@model, nbCluster=nClusters(object)),
-                           centerMethod=getMethod(object)$centerMethod)
-
-  if(!is.matrix(trajMat)) {
-    assert_that(nClusters(object) == 1, msg='undefined state')
-    trajMat = matrix(trajMat, nrow=1)
-  }
-
-  if(is.null(newdata)) {
-    predMat = fitted(object, clusters=NULL)
+    meltRepeatedMeasures(trajMat,
+                         times=time(object),
+                         id='Cluster',
+                         time=timeVariable(object),
+                         response=responseVariable(object))
   } else {
-    assert_that(has_name(newdata, timeVariable(object)))
-    newtimes = newdata[[timeVariable(object)]]
-    predMat = apply(trajMat, 1, function(y) approxFun(x=time(object), y=y, xout=newtimes)$y)
+    callNextMethod()
   }
-
-  transformPredict(object, predMat, newdata=newdata)
-}
+})
 
 
-#' @export
-fitted.clModelKML = function(object, clusters=clusterAssignments(object)) {
-  times = time(object)
-  newdata = data.table(Id=rep(ids(object), each=length(times)),
-                       Time=times) %>%
-    setnames('Id', idVariable(object)) %>%
-    setnames('Time', timeVariable(object))
-
-  predict(object, newdata=newdata) %>%
-    transformFitted(object, ., clusters=clusters)
-}
+#. converged ####
+setMethod('converged', signature('clModelKML'), function(object) {
+  TRUE
+})
 
 
 #' @export
@@ -60,11 +44,7 @@ logLik.clModelKML = function(object) {
 }
 
 
-setMethod('converged', signature('clModelKML'), function(object) {
-  TRUE
-})
-
-
+#. postprob ####
 setMethod('postprob', signature('clModelKML'), function(object) {
   if(nClusters(object) == 1) {
     pp = matrix(1, nrow=nIds(object), ncol=1)
@@ -74,6 +54,8 @@ setMethod('postprob', signature('clModelKML'), function(object) {
   colnames(pp) = clusterNames(object)
   return(pp)
 })
+
+
 
 getKMLPartition = function(object) {
   object@model[paste0('c', nClusters(object))][[1]]
