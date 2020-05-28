@@ -1,11 +1,11 @@
 context('clMethod')
 
 test_that('new clmethod', {
-  m = clMethod('clMethodKML', call=call('clMethod', null=NULL, log=TRUE, int=3L, num=2.5, char='a',
-                               fac=factor('b', levels=c('a', 'b')),
-                               form=A~B,
-                               call=quote(1 + 2 * 3),
-                               name=quote(xvar)))
+  m = clMethod('clMethodKML', call=call('clMethod', `NA`=NULL, log=TRUE, int=3L, num=2.5, char='a',
+                                        fac=factor('b', levels=c('a', 'b')),
+                                        form=A~B,
+                                        call=quote(1 + 2 * 3),
+                                        name=quote(xvar)))
 
   mchars = as.character(m)
 
@@ -241,4 +241,26 @@ test_that('.arg error', {
 
 test_that('negative nClusters error', {
   expect_error(new('clMethod', call=call('clMethod', nClusters=-1, .b='a')))
+})
+
+test_that('clMethod function', {
+  clMethodKML2 = function(formula=Value ~ 0, time='Id', id='Id', nClusters=2) {
+    clMethod('clMethodKML', call=match.call.defaults(),
+             defaults=c(kml::kml, kml::parALGO),
+             excludeArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq'))
+  }
+  m = clMethodKML2(nClusters=3)
+
+  expect_true(all(formalArgs(clMethodKML2) %in% names(m)))
+})
+
+test_that('clMethod function with default NULL argument', {
+  clMethodKML2 = function(formula=Value ~ 0, time=NULL, id='Id', nClusters=2) {
+    clMethod('clMethodKML', call=match.call.defaults(),
+             defaults=c(kml::kml, kml::parALGO),
+             excludeArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq'))
+  }
+  m = clMethodKML2(nClusters=3)
+
+  expect_true(all(formalArgs(clMethodKML2) %in% names(m)))
 })
