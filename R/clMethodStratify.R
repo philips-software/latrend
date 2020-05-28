@@ -87,10 +87,8 @@ setMethod('fit', signature('clMethodStratify'), function(method, data, envir, ve
 
   if(is.factor(assignments)) {
     assert_that(is.na(method$nClusters) || nlevels(assignments) == method$nClusters)
-    intAssignments = as.integer(assignments)
-  } else {
-    intAssignments = assignments
   }
+  intAssignments = as.integer(assignments)
   assert_that(is.na(method$nClusters) || max(intAssignments) <= method$nClusters)
 
   # Determine number of clusters
@@ -122,8 +120,22 @@ setMethod('fit', signature('clMethodStratify'), function(method, data, envir, ve
 
   # Compute cluster trajectories
   rowClusters = intAssignments[rleidv(data[[id]])]
-  clusTrajs = data[, method$center(get(method$response)), by=.(rowClusters, get(method$time))] %>%
-    setnames(c('Cluster', method$time, method$response))
+  clusTrajs = data[, .(Value=method$center(get(method$response))), by=.(Cluster=rowClusters, Time=get(method$time))]
+
+  if(uniqueN(intAssignments) < numClus) {
+    warning('empty clusters present. cluster trajectory for empty clusters will be set constant at 0')
+    # add missing clusters
+    emptyClusTraj = clusTrajs[Cluster == first(Cluster), .(Time, Value=0)]
+    clusTrajs = rbind(clusTrajs,
+                      data.table(
+                        Cluster=rep(setdiff(seq_len(numClus), unique(rowClusters)), each=nrow(emptyClusTraj)),
+                        emptyClusTraj))
+  }
+
+  setkey(clusTrajs, Cluster, Time)
+  setnames(clusTrajs, c('Cluster', method$time, method$response))
+
+  assert_that(uniqueN(clusTrajs$Cluster) == numClus)
 
   .clModelStratify(method=method,
                    data=data,
