@@ -12,10 +12,10 @@ setValidity('clMethodTwoStep', function(object) {
 #' @export
 #' @title Two-step clustering
 #' @description Two-step clustering.
-#' @param representationStep A function with signature function(method, data) that computes the representation per strata, returned as a matrix.
-#' Alternatively, representationStep is a pre-computed representation matrix.
-#' @param clusterStep A function with signature function(repdata) that computes the cluster model.
-#' @param standardize A function to standardize the output of the representation step. By default, the output is translated and rescaled to ensure zero mean and unit variance.
+#' @param representationStep A `function` with signature `function(method, data)` that computes the representation per strata, returned as a `matrix`.
+#' Alternatively, `representationStep` is a pre-computed representation `matrix`.
+#' @param clusterStep A `function` with signature `function(repdata)` that outputs a `clModel`.
+#' @param standardize A `function` to standardize the output `matrix` of the representation step. By default, the output is shifted and rescaled to ensure zero mean and unit variance.
 #' @inheritParams clMethodCustom
 #' @family clMethod implementations
 clMethodTwoStep = function(representationStep,
