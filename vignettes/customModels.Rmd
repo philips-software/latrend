@@ -1,0 +1,141 @@
+---
+title: "Implementing new models"
+author: "Niek Den Teuling"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true # table of content true
+    toc_depth : 2  
+vignette: >
+  %\VignetteIndexEntry{custom}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include = FALSE}
+library(cluslong)
+library(ggplot2)
+knitr::opts_chunk$set(
+  cache = TRUE,
+  collapse = TRUE,
+  comment = "#>"
+)
+update_geom_defaults('line', list(size = .01))
+update_geom_defaults('point', list(size = .5))
+options(cluslong.verbose=TRUE)
+```
+
+In this vignette we demonstrate how to define new methods, with varying degrees of completeness.
+# Data
+We will generate a dataset comprising two clusters with a different intercept and slope. Firstly, we configure the default id, time, and response variable, so that these do not need to be provided to the other function calls.
+
+```{r}
+options(cluslong.id = 'Traj', 
+        cluslong.time = 'Time',
+        cluslong.response = 'Y')
+```
+
+Next, we generate the dataset, with 40 trajectories for cluster A and 60 trajectories for cluster B. Cluster A involves trajectories with a downward slope, whereas cluster B has an upward slope. We define a fixed mean of 1, such that all the cluster trajectories are shifted, placing cluster A at intercept 2, and cluster B at intercept 1.
+```{r}
+set.seed(1)
+casedata = generateLongData(sizes = c(40, 60), 
+                        data = data.frame(Time = 0:10),
+                        fixed = Y ~ 1,
+                        fixedCoefs = 1,
+                        cluster = ~ Time, 
+                        clusterCoefs = cbind(c(1, -.05), c(0, .05)),
+                        random = ~ Time,
+                        randomScales = cbind(c(.3, .1), c(.3, .05)),
+                        noiseScales=.05
+                        )
+```
+
+We plot the data to get a sense of different trajectories that have been generated. Visually, there is little group separation.
+```{r}
+plotTrajectories(casedata)
+```
+
+Since we generated the data, we have the luxury of looking at reference cluster trajectories, as stored in the `Mu.cluster` column. Note that `Mu.fixed` must be added to obtain the correct values.
+```{r}
+plotTrajectories(casedata) +
+  geom_line(aes(y=Mu.fixed + Mu.cluster, color=Cluster), size=2)
+```
+
+
+# Stratification
+Rather than starting with clustering, in some case studies there may be prior knowledge on how to sensibly stratify the trajectories. Either by an observed independent variable (e.g., age or gender), or a certain aspect of the observed trajectory (e.g., the intercept, slope, variability).
+
+Let's presume in this example that domain knowledge suggests that stratifying by the intercept may provide a sensible grouping of the trajectories. This approach is further supported by the density plot of the trajectory intercepts, which shows a bimodal distribution.
+```{r}
+ggplot(casedata[Time == 0], aes(x=Mu)) +
+  geom_density(fill='gray', adjust=.3)
+```
+
+Based on the density plot, we will assign trajectories with an intercept above 1.7 to cluster A, and the remainder to cluster B. 
+
+```{r}
+m = clMethodStratify(Y[1] > 1.7)
+model = cluslong(m, casedata)
+```
+
+```{r}
+clusterProportions(model)
+```
+
+The approach we specified requires the first observation to be available, and is sensitive to noise. A more robust alternative would be to fit a linear model per trajectory, and to use the estimated intercept to stratify the trajectories on.
+
+We can specify this stratification model by defining a function which takes the data of separate trajectories as input. This function should return a single cluster assignment for the respective trajectory. By returning a factor, we can pre-specify the cluster names.
+
+```{r}
+stratfun = function(data) {
+  int = coef(lm(Y ~ Time, data))[1]
+  factor(int > 1.7, levels=c(FALSE, TRUE), labels=c('Low', 'High'))
+}
+m2 = clMethodStratify(stratfun, center=mean)
+model2 = cluslong(m2, casedata)
+
+clusterProportions(model2)
+```
+
+In case the linear regression step is time-intensive, a more efficient approach is to save the precomputed trajectory intercepts as a column in the original data. This column can then be referred to in the expression of the stratification model.
+```{r}
+casedata[, Intercept := coef(lm(Y ~ Time, .SD))[1], by=Traj]
+
+m3 = clMethodStratify(Intercept[1] > 1.7, clusterNames=c('Low', 'High'))
+model3 = cluslong(m3, casedata)
+```
+
+
+# Two-step clustering
+We can take the approach involving the estimation of a linear model per trajectory one step further. Instead of using a pre-defined threshold on the intercept, we use a cluster algorithm on both the intercept and slope to automatically find clusters.
+
+# Implementing a new method
+```{r}
+repStep = function(method, data) {
+  coefdata = data[, coef(lm(method$formula, .SD)), keyby=c(method$id)]
+  # exclude the id column
+  coefmat = subset(coefdata, select=-1) %>% as.matrix()
+  rownames(coefmat) = coefdata[[method$id]]
+  return(coefmat)
+}
+```
+
+```{r}
+clusStep = function() {
+  
+}
+```
+
+
+
+
+```{r}
+mtwo = clMethodTwoStep(repStep, clusStep)
+```
+
