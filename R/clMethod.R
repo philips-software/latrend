@@ -60,7 +60,7 @@ clMethod = function(Class, call, defaults=list(), excludeArgs=c()) {
   # drop arguments without defaults (empty symbols)
   symMask = vapply(allArgs, is.symbol, FUN.VALUE = TRUE)
   dropSymMask = vapply(allArgs[symMask], nchar, FUN.VALUE = 0) == 0
-  allArgs[symMask[dropSymMask]] = NULL
+  allArgs[which(symMask)[dropSymMask]] = NULL
 
   # update arguments
   args = allArgs[not(names(allArgs) %in% excludeArgs)] %>%
