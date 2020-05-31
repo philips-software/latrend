@@ -79,6 +79,7 @@ Collate:
     'clModelMixTVEM.R'
     'clModelMixtoolsGMM.R'
     'clModelMixtoolsRM.R'
+    'clModelPartition.R'
     'clModelStratify.R'
     'clModelTwoStep.R'
     'clModels.R'

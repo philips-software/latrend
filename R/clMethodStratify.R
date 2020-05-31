@@ -119,8 +119,7 @@ setMethod('fit', signature('clMethodStratify'), function(method, data, envir, ve
   postprob = postprobFromAssignments(intAssignments, numClus)
 
   # Compute cluster trajectories
-  rowClusters = intAssignments[rleidv(data[[id]])]
-  clusTrajs = data[, .(Value=method$center(get(method$response))), by=.(Cluster=rowClusters, Time=get(method$time))]
+  clusTrajs = computeCenterClusterTrajectories(data, intAssignments, fun=method$center, id=id, time=method$time, response=method$response)
 
   if(uniqueN(intAssignments) < numClus) {
     warning('empty clusters present. cluster trajectory for empty clusters will be set constant at 0')
@@ -147,6 +146,29 @@ setMethod('fit', signature('clMethodStratify'), function(method, data, envir, ve
                    postprob=postprob,
                    name=method$name)
 })
+
+
+#' @export
+computeCenterClusterTrajectories = function(data, assignments, nClusters, fun=mean, id, time, response) {
+  assert_that(is.data.frame(data),
+              has_name(data, response),
+              has_name(data, time),
+              has_name(data, id))
+  assert_that(nClusters >= 1)
+  assert_that(is.integer(assignments),
+              all(is.finite(assignments)),
+              all(vapply(assignments, is.count, FUN.VALUE=TRUE)),
+              length(assignments) == uniqueN(data[[id]]),
+              min(assignments) >= 1,
+              max(assignments) <= nClusters)
+  assert_that(is.function(fun))
+
+  rowClusters = assignments[rleidv(data[[id]])]
+  clusTrajs = data[, .(Value=fun(get(response))), by=.(Cluster=rowClusters, Time=get(time))]
+  setnames(clusTrajs, 'Value', response)
+  setnames(clusTrajs, 'Time', time)
+  return(clusTrajs[])
+}
 
 
 stratifyTrajectories = function(strat, data, id, envir=parent.frame()) {
@@ -177,6 +199,7 @@ stratifyTrajectories = function(strat, data, id, envir=parent.frame()) {
 }
 
 
+#' @export
 postprobFromAssignments = function(assignments, k) {
   assert_that(is.count(k), is.integer(assignments), all(is.finite(assignments)), min(assignments) >= 1, max(assignments) <= k)
 
@@ -184,4 +207,14 @@ postprobFromAssignments = function(assignments, k) {
   idxMat = cbind(seq_along(assignments), assignments)
   postprob[idxMat] = 1
   return(postprob)
+}
+
+#' @export
+meanNA = function(...) {
+  mean(..., na.rm=TRUE)
+}
+
+#' @export
+weighted.meanNA = function(...) {
+  weighted.mean(..., na.rm=TRUE)
 }

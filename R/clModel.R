@@ -17,26 +17,45 @@ setClass('clModel',
 
 # . initialize ####
 setMethod('initialize', 'clModel', function(.Object, ...) {
-  .Object = callNextMethod()
-
+  .Object = callNextMethod(.Object, ...)
   method = .Object@method
+
+  assert_that(length(.Object@id) > 0 || has_name(method, 'id'), msg='@id not specified, nor defined in clMethod')
   if(length(.Object@id) == 0) {
-    assert_that(has_name(method, 'id'))
     .Object@id = method$id
   }
+  assert_that(length(.Object@time) > 0 || has_name(method, 'time'), msg='@time not specified, nor defined in clMethod')
   if(length(.Object@time) == 0) {
-    assert_that(has_name(method, 'time'))
     .Object@time = method$time
   }
+  assert_that(length(.Object@response) > 0 || has_name(method, 'response') || has_name(method, 'formula'), msg='@response not specified, nor defined in clMethod$response or clMethod$formula')
   if(length(.Object@response) == 0) {
-    assert_that(has_name(method, 'formula'))
-    .Object@response = method$formula %>% getResponse
+    if(has_name(method, 'response')) {
+      .Object@response = method$response
+    } else {
+      .Object@response = method$formula %>% getResponse
+    }
+  }
+  .Object
+})
+
+
+setValidity('clModel', function(object) {
+  return(TRUE)
+
+  if(as.character(object@call[[1]]) == "<undef>") {
+    # nothing to validate as clModel is incomplete (yet)
+    return(TRUE)
   }
 
-  assert_that(has_name(.Object@data, c(.Object@id, .Object@time, .Object@response)))
-  assert_that(length(.Object@data) > 0, msg='invalid data object for new clModel. Did you forget to specify the data slot?')
-  .Object@ids = ids(.Object)
-  .Object
+  assert_that(nchar(object@id) > 0,
+              nchar(object@time) > 0,
+              nchar(object@response) > 0)
+
+  data = model.data(object)
+  assert_that(!is.null(data), msg='invalid data object for new clModel. Either specify the data slot or ensure that the model call contains a data argument which correctly evaluates.')
+  assert_that(has_name(data, c(object@id, object@time, object@response)))
+  return(TRUE)
 })
 
 
@@ -54,8 +73,8 @@ setMethod('initialize', 'clModel', function(.Object, ...) {
 #' clusterTrajectories(model)
 #'
 #' clusterTrajectories(model, at=c(0, .5, 1))
-setGeneric('clusterTrajectories', function(object, what='mu', at=time(object), ...) standardGeneric('clusterTrajectories'))
-setMethod('clusterTrajectories', signature('clModel'), function(object, what, at, ...) {
+setGeneric('clusterTrajectories', function(object, at=time(object), what='mu', ...) standardGeneric('clusterTrajectories'))
+setMethod('clusterTrajectories', signature('clModel'), function(object, at, what, ...) {
   if(is.numeric(at)) {
     newdata = data.table(Cluster=rep(clusterNames(object, factor=TRUE), each=length(at)), Time=at) %>%
       setnames('Time', timeVariable(object))
@@ -518,12 +537,15 @@ model.data = function(object) {
 
 #' @export
 #' @title Extract the model data that was used for fitting
-#' @description Evaluates the data call in the environment that the model was trained from.
-#' @return The resulting dataset that was used for fitting, as a data.frame.
+#' @description Evaluates the data call in the environment that the model was trained in.
+#' @return The `data.frame` that was used for fitting the `clModel`.
 model.data.clModel = function(object) {
-  if(length(object@data) > 0) {
+  if(!is.null(object@data)) {
     object@data
+    assert_that(is.data.frame(object@data), msg='expected data reference to be a data.frame')
+    return(object@data)
   } else {
+    assert_that(has_name(getCall(object), 'data'), msg='Cannot determine data used to train this clModel. Data not part of model call, and not assigned to the @data slot')
     data = eval(getCall(object)$data, envir=environment(object))
     assert_that(!is.null(data), msg=sprintf('could not find "%s" in the model environment', deparse(data)))
     assert_that(is.data.frame(data), msg='expected data reference to be a data.frame')
@@ -616,7 +638,7 @@ plot.clModel = function(object, what='mu', at=time(object),
     points = seq(1, length(at), length.out=max(length(at), points))
   }
 
-  dt_ctraj = clusterTrajectories(object, what=what, at=at) %>%
+  dt_ctraj = clusterTrajectories(object, at=at, what=what) %>%
     as.data.table %>%
     .[, Cluster := factor(Cluster, levels=levels(Cluster), labels=clusterLabels)]
 
@@ -755,11 +777,10 @@ summary.clModel = function(object, ...) {
   }
 
   new('clSummary',
-      call=getCall(object),
+      method=getMethod(object),
       name=getName(object),
       nClusters=nClusters(object),
       nObs=nobs(object),
-      formula=formula(object),
       id=idVariable(object),
       coefficients=coef(object),
       residuals=res,
@@ -782,16 +803,16 @@ timeVariable = function(object) {
 #' @export
 #' @rdname trajectories
 #' @title Extract the fitted trajectories for all strata
-#' @param what The distributional parameter to compute the response for.
 #' @param at The time points at which to compute the id-specific trajectories.
+#' @param what The distributional parameter to compute the response for.
 #' @param clusters The cluster assignments for the strata to base the trajectories on.
 #' @examples
 #' model = cluslong(method=clMethodKML(), data=testLongData)
 #' trajectories(model)
 #'
 #' trajectories(model, at=c(0, .5, 1))
-setGeneric('trajectories', function(object, what='mu', at=time(object), clusters=clusterAssignments(object), ...) standardGeneric('trajectories'))
-setMethod('trajectories', signature('clModel'), function(object, what, at, clusters) {
+setGeneric('trajectories', function(object, at=time(object), what='mu', clusters=clusterAssignments(object), ...) standardGeneric('trajectories'))
+setMethod('trajectories', signature('clModel'), function(object, at, what, clusters) {
   ids = ids(object)
   assert_that(length(clusters) == nIds(object))
 
@@ -938,12 +959,11 @@ update.clModel = function(object, ...) {
 
 # Model summary ####
 setClass('clSummary',
-         representation(call='call',
+         representation(method='clMethod',
                         name='character',
                         nClusters='integer',
                         nObs='numeric',
                         id='character',
-                        formula='formula',
                         coefficients='ANY', #TODO
                         residuals='numeric',
                         clusterNames='character',
@@ -956,8 +976,7 @@ setClass('clSummary',
 setMethod('show', 'clSummary',
           function(object) {
             cat('Longitudinal cluster model using ', object@name, '\n', sep='')
-            cat('Formula: ')
-            print(object@formula)
+            print(object@method)
             cat('\n')
             sprintf('Cluster sizes (K=%d):\n', object@nClusters) %>% cat
             sprintf('%g (%g%%)', object@clusterSizes, round(object@clusterProportions * 100, 1)) %>%
