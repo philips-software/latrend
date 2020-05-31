@@ -371,7 +371,7 @@ print.clMethod = function(object, ...) {
   args = as.character(object, ...) %>%
     vapply(strtrim, 40, FUN.VALUE='')
 
-  cat(sprintf('%-16s%s\n', paste0(argNames, ':'), args), sep='')
+  cat(sprintf(' %-16s%s\n', paste0(argNames, ':'), args), sep='')
 }
 
 
