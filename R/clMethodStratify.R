@@ -64,8 +64,8 @@ setMethod('getName', signature('clMethodStratify'), function(object) {
     return(object$name)
   }
 
-  if(isArgDefined(object, 'expr')) {
-    expr = object[['expr', eval=FALSE]]
+  if(isArgDefined(object, 'stratify')) {
+    expr = object[['stratify', eval=FALSE]]
     if(is.name(fun)) {
       return(paste('stratification ', expr))
     }
@@ -119,17 +119,7 @@ setMethod('fit', signature('clMethodStratify'), function(method, data, envir, ve
   postprob = postprobFromAssignments(intAssignments, numClus)
 
   # Compute cluster trajectories
-  clusTrajs = computeCenterClusterTrajectories(data, intAssignments, fun=method$center, id=id, time=method$time, response=method$response)
-
-  if(uniqueN(intAssignments) < numClus) {
-    warning('empty clusters present. cluster trajectory for empty clusters will be set constant at 0')
-    # add missing clusters
-    emptyClusTraj = clusTrajs[Cluster == first(Cluster), .(Time, Value=0)]
-    clusTrajs = rbind(clusTrajs,
-                      data.table(
-                        Cluster=rep(setdiff(seq_len(numClus), unique(rowClusters)), each=nrow(emptyClusTraj)),
-                        emptyClusTraj))
-  }
+  clusTrajs = computeCenterClusterTrajectories(data, intAssignments, nClusters=numClus, fun=method$center, id=id, time=method$time, response=method$response)
 
   setkey(clusTrajs, Cluster, Time)
   setnames(clusTrajs, c('Cluster', method$time, method$response))
