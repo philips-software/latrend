@@ -185,7 +185,7 @@ setMethod('predictPostprob', signature('clModelCustom'), function(object, newdat
 })
 
 
-setMethod('clusterTrajectories', signature('clModelCustom'), function(object, what, at, ...) {
+setMethod('clusterTrajectories', signature('clModelCustom'), function(object, at, what, ...) {
   if(all(at %in% time(object))) {
     dt_traj = object@clusterTrajectories %>%
       as.data.table %>%
@@ -198,7 +198,7 @@ setMethod('clusterTrajectories', signature('clModelCustom'), function(object, wh
   return(dt_traj[])
 })
 
-setMethod('trajectories', signature('clModelCustom'), function(object, what, at, ...) {
+setMethod('trajectories', signature('clModelCustom'), function(object, at, what, ...) {
   if(all(at %in% time(object))) {
     object@trajectories
   } else {

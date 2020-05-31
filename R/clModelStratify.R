@@ -5,7 +5,7 @@
                         name='character'),
          contains='clApproxModel')
 
-setMethod('clusterTrajectories', signature('clModelStratify'), function(object, what, at, ...) {
+setMethod('clusterTrajectories', signature('clModelStratify'), function(object, at, what, ...) {
   if(is.null(at)) {
     clusTrajs = copy(object@clusterTrajectories)
     clusTrajs[, Cluster := factor(Cluster, levels=seq_len(nClusters(object)), labels=clusterNames(object))]
@@ -35,7 +35,8 @@ setMethod('predictPostprob', signature('clModelStratify'), function(object, newd
   }
 
   assignments = stratifyTrajectories(method[['stratify', eval=FALSE]],
-                                     data=newdata, id=method$id) %>%
+                                     data=newdata,
+                                     id=method$id) %>%
     as.integer()
 
   pp = postprobFromAssignments(assignments, nClusters(object))

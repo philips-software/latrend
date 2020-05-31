@@ -2,7 +2,7 @@
 setClass('clModelKML', contains='clApproxModel')
 
 #. clusterTrajectories ####
-setMethod('clusterTrajectories', signature('clModelKML'), function(object, what, at, ...) {
+setMethod('clusterTrajectories', signature('clModelKML'), function(object, at, what, ...) {
   if(is.null(at)) {
     trajMat = calculTrajMean(traj=object@model@traj,
                              clust=getClusters(object@model, nbCluster=nClusters(object)),
