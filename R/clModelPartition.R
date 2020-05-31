@@ -50,10 +50,10 @@ clModelPartition = function(data,
   }
   assert_that(min(intAssignments) >= 1, max(intAssignments) <= numClus)
 
-  pp = postprobFromAssignments(intAssignments, k=nClusters)
+  pp = postprobFromAssignments(intAssignments, k=numClus)
 
   if(is.null(clusterNames)) {
-    clusterNames = make.clusterNames(nClusters)
+    clusterNames = make.clusterNames(numClus)
   }
 
   clusTrajs = computeCenterClusterTrajectories(data,

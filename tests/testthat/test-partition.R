@@ -12,7 +12,7 @@ test_that('integer assignments', {
 })
 
 test_that('factor assignments', {
-  model = clModelPartition(testLongData, clusterAssignments=clusterAssignments(refmodel), nClusters=nClusters(refmodel))
+  model = clModelPartition(testLongData, clusterAssignments=clusterAssignments(refmodel))
   expect_valid_clModel(model)
   expect_equivalent(clusterAssignments(model), clusterAssignments(refmodel))
   expect_equivalent(nClusters(model), nClusters(refmodel))
