@@ -79,6 +79,7 @@ cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.v
                          data=quote(clCall$data)))
   model@call['envir'] = list(clCall$envir)
   model@estimationTime = as.numeric(estimationTime, 'secs')
+  ruler(verbose)
   return(model)
 }
 
