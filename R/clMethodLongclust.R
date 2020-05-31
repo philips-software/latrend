@@ -26,7 +26,7 @@ clMethodLongclust = function(formula=Value ~ 1,
 
 setMethod('getName', signature('clMethodLongclust'), function(object) 'longclust')
 
-setMethod('getName0', signature('clMethodLongclust'), function(object) 'longclust')
+setMethod('getShortName', signature('clMethodLongclust'), function(object) 'longclust')
 
 setMethod('fit', signature('clMethodLongclust'), function(method, data, envir, verbose, ...) {
   args = as.list(method)

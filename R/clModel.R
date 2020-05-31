@@ -280,8 +280,8 @@ getMethod = function(object) {
 # . getName ####
 setMethod('getName', signature('clModel'), function(object) getMethod(object) %>% getName)
 
-# . getName0 ####
-setMethod('getName0', signature('clModel'), function(object) getMethod(object) %>% getName0)
+# . getShortName ####
+setMethod('getShortName', signature('clModel'), function(object) getMethod(object) %>% getShortName)
 
 
 #' @title Generate a vector indicating the id-number (between 1 and numIds()) per row

@@ -27,7 +27,7 @@ clMethodAKMedoids = function(formula=Value ~ 0,
 
 setMethod('getName', signature('clMethodAKMedoids'), function(object) 'anchored k-medoids')
 
-setMethod('getName0', signature('clMethodAKMedoids'), function(object) 'akm')
+setMethod('getShortName', signature('clMethodAKMedoids'), function(object) 'akm')
 
 
 setMethod('fit', signature('clMethodAKMedoids'), function(method, data, envir, verbose, ...) {

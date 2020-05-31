@@ -56,7 +56,7 @@ expect_valid_clModel = function(object) {
     expect_is('data.frame')
   getName(object) %>%
     expect_is('character')
-  getName0(object) %>%
+  getShortName(object) %>%
     expect_is('character')
   idVariable(object) %>%
     expect_is('character')

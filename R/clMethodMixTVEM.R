@@ -72,7 +72,7 @@ clMethodMixTVEM = function(formula=Value ~ time(1) - 1,
 
 setMethod('getName', signature('clMethodMixTVEM'), function(object) 'mixture of time-varying effect models')
 
-setMethod('getName0', signature('clMethodMixTVEM'), function(object) 'mixtvem')
+setMethod('getShortName', signature('clMethodMixTVEM'), function(object) 'mixtvem')
 
 
 setMethod('prepare', signature('clMethodMixTVEM'), function(method, data, verbose, ...) {

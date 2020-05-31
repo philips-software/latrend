@@ -27,7 +27,7 @@ clMethodFunFEM = function(formula=Value ~ 1,
 
 setMethod('getName', signature('clMethodFunFEM'), function(object) 'functional subspace clustering with FunFEM')
 
-setMethod('getName0', signature('clMethodFunFEM'), function(object) 'funfem')
+setMethod('getShortName', signature('clMethodFunFEM'), function(object) 'funfem')
 
 setMethod('prepare', signature('clMethodFunFEM'), function(method, data, verbose, ...) {
   e = callNextMethod()

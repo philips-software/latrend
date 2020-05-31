@@ -40,7 +40,7 @@ clMethodRandom = function(alpha=10,
 
 setMethod('getName', signature('clMethodRandom'), function(object) 'random')
 
-setMethod('getName0', signature('clMethodRandom'), function(object) 'rand')
+setMethod('getShortName', signature('clMethodRandom'), function(object) 'rand')
 
 setMethod('fit', signature('clMethodRandom'), function(method, data, envir, verbose, ...) {
   nIds = uniqueN(data[[method$id]])

@@ -84,7 +84,7 @@ as.data.table.clModels = function(x, excludeShared=FALSE, eval=TRUE, ...) {
     dt = dt[, ..newColumns]
   }
 
-  dt[, `.method` := vapply(x, getName0, FUN.VALUE='')]
+  dt[, `.method` := vapply(x, getShortName, FUN.VALUE='')]
   if(!has_name(dt, '.name')) {
     dt[, `.name` := character()]
   }
@@ -158,7 +158,7 @@ setMethod('externalMetric', signature('list', 'clModel'), function(object, objec
   assert_that(is.clModels(object))
   assert_that(is.character(name))
 
-  modelNames = vapply(object, getName0, FUN.VALUE='')
+  modelNames = vapply(object, getShortName, FUN.VALUE='')
   metricValues = lapply(object, function(model) {
     metric(model, name) %>%
       rbind %>%

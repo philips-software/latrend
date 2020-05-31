@@ -99,8 +99,8 @@ setMethod('converged', signature('clModelPartition'), function(object) {
 # . getName ####
 setMethod('getName', signature('clModelPartition'), function(object) object@name)
 
-# . getName0 ####
-setMethod('getName0', signature('clModelPartition'), function(object) object@name)
+# . getShortName ####
+setMethod('getShortName', signature('clModelPartition'), function(object) object@name)
 
 
 #. postprob ####

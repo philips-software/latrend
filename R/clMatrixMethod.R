@@ -7,7 +7,7 @@ setClass('clMatrixMethod', contains='clMethod')
 
 setMethod('getName', signature('clMatrixMethod'), function(object) 'repeated measures model')
 
-setMethod('getName0', signature('clMatrixMethod'), function(object) 'rm')
+setMethod('getShortName', signature('clMatrixMethod'), function(object) 'rm')
 
 setMethod('prepare', signature('clMatrixMethod'), function(method, data, verbose, ...) {
   e = new.env()

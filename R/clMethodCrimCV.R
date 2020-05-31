@@ -29,7 +29,7 @@ clMethodCrimCV = function(formula=Value ~ 0,
 
 setMethod('getName', signature('clMethodCrimCV'), function(object) 'zero-inflated GBTM using crimcv')
 
-setMethod('getName0', signature('clMethodCrimCV'), function(object) 'crimcv')
+setMethod('getShortName', signature('clMethodCrimCV'), function(object) 'crimcv')
 
 setMethod('prepare', signature('clMethodCrimCV'), function(method, data, verbose, ...) {
   times = sort(unique(data[[method$time]]))

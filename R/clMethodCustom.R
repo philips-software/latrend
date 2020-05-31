@@ -56,7 +56,7 @@ setMethod('getName', signature('clMethodCustom'), function(object) {
   return('custom function')
 })
 
-setMethod('getName0', signature('clMethodCustom'), function(object) 'custom')
+setMethod('getShortName', signature('clMethodCustom'), function(object) 'custom')
 
 
 setMethod('prepare', signature('clMethodCustom'), function(method, data, verbose) {

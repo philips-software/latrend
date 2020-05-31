@@ -74,7 +74,7 @@ setMethod('getName', signature('clMethodStratify'), function(object) {
   return('stratify')
 })
 
-setMethod('getName0', signature('clMethodStratify'), function(object) 'strat')
+setMethod('getShortName', signature('clMethodStratify'), function(object) 'strat')
 
 
 setMethod('fit', signature('clMethodStratify'), function(method, data, envir, verbose) {

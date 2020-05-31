@@ -50,7 +50,7 @@ clMethodLcmmGMM = function(formula=Value ~ 1 + CLUSTER + (1 | ID),
 
 setMethod('getName', signature('clMethodLcmmGMM'), function(object) 'growth mixture model')
 
-setMethod('getName0', signature('clMethodLcmmGMM'), function(object) 'gmm')
+setMethod('getShortName', signature('clMethodLcmmGMM'), function(object) 'gmm')
 
 gmm_prepare = function(method, data, verbose, ...) {
   e = new.env()

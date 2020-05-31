@@ -149,7 +149,7 @@ is.clModelCustom = function(object) {
 
 setMethod('getName', signature('clModelCustom'), function(object) object@name)
 
-setMethod('getName0', signature('clModelCustom'), function(object) 'custom')
+setMethod('getShortName', signature('clModelCustom'), function(object) 'custom')
 
 setMethod('converged', signature('clModelCustom'), function(object) object@converged)
 

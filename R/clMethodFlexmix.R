@@ -23,7 +23,7 @@ clMethodFlexmix = function(formula=Value ~ 0,
 
 setMethod('getName', signature('clMethodFlexmix'), function(object) 'flexmix')
 
-setMethod('getName0', signature('clMethodFlexmix'), function(object) 'flx')
+setMethod('getShortName', signature('clMethodFlexmix'), function(object) 'flx')
 
 
 setMethod('prepare', signature('clMethodFlexmix'), function(method, data, verbose, ...) {

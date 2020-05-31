@@ -23,7 +23,7 @@ clMethodMixtoolsGMM = function(formula=Value ~ 1 + (Time + I(Time^2) | Id),
 
 setMethod('getName', signature('clMethodMixtoolsGMM'), function(object) 'growth mixture modeling using mixtools')
 
-setMethod('getName0', signature('clMethodMixtoolsGMM'), function(object) 'gmm')
+setMethod('getShortName', signature('clMethodMixtoolsGMM'), function(object) 'gmm')
 
 
 setMethod('prepare', signature('clMethodMixtoolsGMM'), function(method, data, verbose, ...) {

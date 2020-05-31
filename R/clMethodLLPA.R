@@ -40,7 +40,7 @@ clMethodLLPA = function(formula=Value ~ 1,
 
 setMethod('getName', signature('clMethodLLPA'), function(object) 'longitudinal latent profile analysis')
 
-setMethod('getName0', signature('clMethodLLPA'), function(object) 'llpa')
+setMethod('getShortName', signature('clMethodLLPA'), function(object) 'llpa')
 
 setMethod('prepare', signature('clMethodLLPA'), function(method, data, verbose, ...) {
   e = new.env()

@@ -33,7 +33,7 @@ clMethodTwoStep = function(representationStep,
 setMethod('getName', signature('clMethodTwoStep'), function(object) 'two-step clustering')
 
 
-setMethod('getName0', signature('clMethodTwoStep'), function(object) 'twostep')
+setMethod('getShortName', signature('clMethodTwoStep'), function(object) 'twostep')
 
 
 setMethod('prepare', signature('clMethodTwoStep'), function(method, data, verbose, ...) {

@@ -27,7 +27,7 @@ clMethodFlexmixGBTM = function(formula=Value ~ 1,
 
 setMethod('getName', signature('clMethodFlexmixGBTM'), function(object) 'group-based trajectory model')
 
-setMethod('getName0', signature('clMethodFlexmixGBTM'), function(object) 'gbtm')
+setMethod('getShortName', signature('clMethodFlexmixGBTM'), function(object) 'gbtm')
 
 #' @importFrom flexmix FLXMRglm
 setMethod('prepare', signature('clMethodFlexmixGBTM'), function(method, data, verbose) {

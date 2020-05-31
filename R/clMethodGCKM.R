@@ -39,7 +39,7 @@ clMethodGCKM = function(formula=Value ~ 1,
 
 setMethod('getName', signature('clMethodGCKM'), function(object) 'two-step using LME and k-means')
 
-setMethod('getName0', signature('clMethodGCKM'), function(object) 'gckm')
+setMethod('getShortName', signature('clMethodGCKM'), function(object) 'gckm')
 
 clMethodGCKM_as_twostep = function(method) {
   call = getCall(method)

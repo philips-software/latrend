@@ -24,7 +24,7 @@ clMethodMixtoolsNPRM = function(formula=Value ~ 0,
 
 setMethod('getName', signature('clMethodMixtoolsNPRM'), function(object) 'non-parametric estimation for independent repeated measurements using mixtools')
 
-setMethod('getName0', signature('clMethodMixtoolsNPRM'), function(object) 'nprm')
+setMethod('getShortName', signature('clMethodMixtoolsNPRM'), function(object) 'nprm')
 
 
 setMethod('fit', signature('clMethodMixtoolsNPRM'), function(method, data, envir, verbose, ...) {

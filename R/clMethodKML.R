@@ -34,7 +34,7 @@ clMethodKML = function(formula=Value ~ 0,
 
 setMethod('getName', signature('clMethodKML'), function(object) 'longitudinal k-means (KML)')
 
-setMethod('getName0', signature('clMethodKML'), function(object) 'kml')
+setMethod('getShortName', signature('clMethodKML'), function(object) 'kml')
 
 
 setMethod('prepare', signature('clMethodKML'), function(method, data, verbose, ...) {

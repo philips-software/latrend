@@ -111,8 +111,8 @@ setGeneric('getName', function(object) standardGeneric('getName'))
 setMethod('getName', signature('clMethod'), function(object) 'custom')
 
 #' @export
-setGeneric('getName0', function(object) standardGeneric('getName0'))
-setMethod('getName0', signature('clMethod'), getName)
+setGeneric('getShortName', function(object) standardGeneric('getShortName'))
+setMethod('getShortName', signature('clMethod'), getName)
 
 
 #' @export

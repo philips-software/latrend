@@ -47,7 +47,7 @@ clMethodLcmmGBTM = function(formula=Value ~ 1 + CLUSTER,
 
 setMethod('getName', signature('clMethodLcmmGBTM'), function(object) 'group-based trajectory modeling using lcmm')
 
-setMethod('getName0', signature('clMethodLcmmGBTM'), function(object) 'gbtm')
+setMethod('getShortName', signature('clMethodLcmmGBTM'), function(object) 'gbtm')
 
 setMethod('prepare', signature('clMethodLcmmGBTM'), gmm_prepare)
 
