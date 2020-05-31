@@ -129,6 +129,17 @@ computeCenterClusterTrajectories = function(data, assignments, nClusters, fun=me
 
   rowClusters = assignments[rleidv(data[[id]])]
   clusTrajs = data[, .(Value=fun(get(response))), by=.(Cluster=rowClusters, Time=get(time))]
+
+  if(uniqueN(assignments) < nClusters) {
+    warning('empty clusters present. cluster trajectory for empty clusters will be set constant at 0')
+    # add missing clusters
+    emptyClusTraj = clusTrajs[, .(Time=unique(Time), Value=0)]
+    clusTrajs = rbind(clusTrajs,
+                      data.table(
+                        Cluster=rep(setdiff(seq_len(nClusters), unique(rowClusters)), each=nrow(emptyClusTraj)),
+                        emptyClusTraj))
+  }
+
   setnames(clusTrajs, 'Value', response)
   setnames(clusTrajs, 'Time', time)
   return(clusTrajs[])
