@@ -21,9 +21,15 @@ clMethodKML = function(formula=Value ~ 0,
                        nClusters=2,
                        ...
 ) {
-  clMethod('clMethodKML', call=match.call.defaults(),
+  m = clMethod('clMethodKML', call=match.call.defaults(),
            defaults=c(kml::kml, kml::parALGO),
            excludeArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq'))
+
+  # fix for meanNA conflict
+  if(has_name(m, 'centerMethod') && as.character(m[['centerMethod', eval=FALSE]]) == 'meanNA') {
+    m = update(m, centerMethod=longitudinalData::meanNA)
+  }
+  return(m)
 }
 
 setMethod('getName', signature('clMethodKML'), function(object) 'longitudinal k-means (KML)')
@@ -54,12 +60,14 @@ setMethod('prepare', signature('clMethodKML'), function(method, data, verbose, .
 
 setMethod('fit', signature('clMethodKML'), function(method, data, envir, verbose, ...) {
   cld = envir$cld
+
   # Helper variables
   valueColumn = formula(method) %>% getResponse()
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   cat(verbose, 'Running kml()...', level=verboseLevels$finest)
   suppressFun(
+    # note that slowKML throws an error for nbClusters=1
     kml(cld, nbClusters=method$nClusters, nbRedrawing=method$nbRedrawing, toPlot='none', parAlgo=envir$par)
   )
 
