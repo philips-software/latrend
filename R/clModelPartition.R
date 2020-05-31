@@ -110,3 +110,26 @@ setMethod('postprob', signature('clModelPartition'), function(object) {
   return(pp)
 })
 
+
+
+#' @export
+computeCenterClusterTrajectories = function(data, assignments, nClusters, fun=mean, id, time, response) {
+  assert_that(is.data.frame(data),
+              has_name(data, response),
+              has_name(data, time),
+              has_name(data, id))
+  assert_that(nClusters >= 1)
+  assert_that(is.integer(assignments),
+              all(is.finite(assignments)),
+              all(vapply(assignments, is.count, FUN.VALUE=TRUE)),
+              length(assignments) == uniqueN(data[[id]]),
+              min(assignments) >= 1,
+              max(assignments) <= nClusters)
+  assert_that(is.function(fun))
+
+  rowClusters = assignments[rleidv(data[[id]])]
+  clusTrajs = data[, .(Value=fun(get(response))), by=.(Cluster=rowClusters, Time=get(time))]
+  setnames(clusTrajs, 'Value', response)
+  setnames(clusTrajs, 'Time', time)
+  return(clusTrajs[])
+}
