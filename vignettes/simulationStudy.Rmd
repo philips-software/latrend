@@ -89,3 +89,13 @@ plotTrajectories(datasets[[3]], response='Value', time='Time', id='Id') +
 
 
 # Method evaluation
+
+# Comparison to ground truth
+```{r}
+refAssignments = casedata[, .(Cluster=first(Cluster)), keyby=Traj]$Cluster
+```
+
+```{r}
+refModel = clModelPartition(casedata, refAssignments)
+print(refModel)
+```

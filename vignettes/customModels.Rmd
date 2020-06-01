@@ -14,13 +14,15 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  message = TRUE
 )
 ```
 
 ```{r setup, include = FALSE}
 library(cluslong)
 library(ggplot2)
+library(magrittr)
 knitr::opts_chunk$set(
   cache = TRUE,
   collapse = TRUE,
@@ -28,11 +30,11 @@ knitr::opts_chunk$set(
 )
 update_geom_defaults('line', list(size = .01))
 update_geom_defaults('point', list(size = .5))
-options(cluslong.verbose=TRUE)
+options(cluslong.verbose = TRUE)
 ```
 
 In this vignette we demonstrate how to define new methods, with varying degrees of completeness.
-# Data
+# Case study data
 We will generate a dataset comprising two clusters with a different intercept and slope. Firstly, we configure the default id, time, and response variable, so that these do not need to be provided to the other function calls.
 
 ```{r}
@@ -52,7 +54,7 @@ casedata = generateLongData(sizes = c(40, 60),
                         clusterCoefs = cbind(c(1, -.05), c(0, .05)),
                         random = ~ Time,
                         randomScales = cbind(c(.3, .1), c(.3, .05)),
-                        noiseScales=.05
+                        noiseScales = .05
                         )
 ```
 
@@ -64,22 +66,21 @@ plotTrajectories(casedata)
 Since we generated the data, we have the luxury of looking at reference cluster trajectories, as stored in the `Mu.cluster` column. Note that `Mu.fixed` must be added to obtain the correct values.
 ```{r}
 plotTrajectories(casedata) +
-  geom_line(aes(y=Mu.fixed + Mu.cluster, color=Cluster), size=2)
+  geom_line(aes(y = Mu.fixed + Mu.cluster, color = Cluster), size = 2)
 ```
-
 
 # Stratification
 Rather than starting with clustering, in some case studies there may be prior knowledge on how to sensibly stratify the trajectories. Either by an observed independent variable (e.g., age or gender), or a certain aspect of the observed trajectory (e.g., the intercept, slope, variability).
 
 Let's presume in this example that domain knowledge suggests that stratifying by the intercept may provide a sensible grouping of the trajectories. This approach is further supported by the density plot of the trajectory intercepts, which shows a bimodal distribution.
 ```{r}
-ggplot(casedata[Time == 0], aes(x=Mu)) +
-  geom_density(fill='gray', adjust=.3)
+ggplot(casedata[Time == 0], aes(x = Mu)) +
+  geom_density(fill = 'gray', adjust = .3)
 ```
 
 Based on the density plot, we will assign trajectories with an intercept above 1.7 to cluster A, and the remainder to cluster B. 
 
-```{r}
+```{r message=TRUE}
 m = clMethodStratify(Y[1] > 1.7)
 model = cluslong(m, casedata)
 ```
@@ -92,22 +93,24 @@ The approach we specified requires the first observation to be available, and is
 
 We can specify this stratification model by defining a function which takes the data of separate trajectories as input. This function should return a single cluster assignment for the respective trajectory. By returning a factor, we can pre-specify the cluster names.
 
-```{r}
+```{r message=TRUE}
 stratfun = function(data) {
   int = coef(lm(Y ~ Time, data))[1]
-  factor(int > 1.7, levels=c(FALSE, TRUE), labels=c('Low', 'High'))
+  factor(int > 1.7, 
+         levels = c(FALSE, TRUE), 
+         labels = c('Low', 'High'))
 }
-m2 = clMethodStratify(stratfun, center=mean)
+m2 = clMethodStratify(stratfun, center = mean)
 model2 = cluslong(m2, casedata)
 
 clusterProportions(model2)
 ```
 
 In case the linear regression step is time-intensive, a more efficient approach is to save the precomputed trajectory intercepts as a column in the original data. This column can then be referred to in the expression of the stratification model.
-```{r}
-casedata[, Intercept := coef(lm(Y ~ Time, .SD))[1], by=Traj]
+```{r message=TRUE}
+casedata[, Intercept := coef(lm(Y ~ Time, .SD))[1], by = Traj]
 
-m3 = clMethodStratify(Intercept[1] > 1.7, clusterNames=c('Low', 'High'))
+m3 = clMethodStratify(Intercept[1] > 1.7, clusterNames = c('Low', 'High'))
 model3 = cluslong(m3, casedata)
 ```
 
@@ -115,27 +118,128 @@ model3 = cluslong(m3, casedata)
 # Two-step clustering
 We can take the approach involving the estimation of a linear model per trajectory one step further. Instead of using a pre-defined threshold on the intercept, we use a cluster algorithm on both the intercept and slope to automatically find clusters.
 
-# Implementing a new method
+We first define the representation step, which estimates the model coefficients per trajectory, and outputs a `matrix` with the coefficients per trajectory per row.
 ```{r}
-repStep = function(method, data) {
-  coefdata = data[, coef(lm(method$formula, .SD)), keyby=c(method$id)]
-  # exclude the id column
-  coefmat = subset(coefdata, select=-1) %>% as.matrix()
-  rownames(coefmat) = coefdata[[method$id]]
+repStep = function(method, data, verbose) {
+  coefdata = data[, lm(Y ~ Time, .SD) %>% coef() %>% as.list(), keyby = Traj]
+  coefmat = subset(coefdata, select = -1) %>% as.matrix()
+  rownames(coefmat) = coefdata$Traj
   return(coefmat)
 }
 ```
 
+The cluster step takes the coefficient matrix as input. A cross-sectional cluster algorithm can then be applied to the matrix. In this example, we apply $k$-means. The cluster step should output a `clModel` object.
+
+The `clModelCustom` function creates a `clModel` object for a given vector of cluster assignments. 
 ```{r}
-clusStep = function() {
-  
+clusStep = function(method, data, repMat, envir, verbose) {
+  km = kmeans(repMat, centers = 3)
+
+  clModelCustom(method = method,
+                data = data, 
+                clusterAssignments = km$cluster,
+                clusterTrajectories = method$center,
+                model = km)
 }
 ```
 
+We are now ready to create the `clMethodTwoStep` method.
+```{r}
+m.twostep = clMethodTwoStep(representationStep = repStep, clusterStep = clusStep)
+```
+
+```{r message=TRUE}
+model.twostep = cluslong(m.twostep, data = casedata)
+summary(model.twostep)
+```
 
 
+## General approach
+The two-step model defined above is hard-coded for a given formula and a fixed number of clusters. In an exploratory setting, it is convenient to define a parameterized method. Here, we change the two functions to take arguments through the `clMethod` object in the `method` variable.
+
+
+Note that we can introduce new arguments which are not originally part of `clMethodTwoStep`, such as `nClusters` to enable the specification of the number of clusters in our method.
+```{r}
+repStep.gen = function(method, data, verbose) {
+  coefdata = data[, lm(method$formula, .SD) %>% coef() %>% as.list(), keyby = c(method$id)]
+  # exclude the id column
+  coefmat = subset(coefdata, select = -1) %>% as.matrix()
+  rownames(coefmat) = coefdata[[method$id]]
+  return(coefmat)
+}
+
+clusStep.gen = function(method, data, repMat, envir, verbose) {
+  km = kmeans(repMat, centers = method$nClusters)
+
+  clModelCustom(method = method,
+                data = data, 
+                clusterAssignments = km$cluster,
+                clusterTrajectories = method$center,
+                model = km)
+}
+```
+
+We create a new `clMethodTwoStep` instance with the more generic functions. Defining values for `formula` and `nClusters` here makes these arguments values act as default values in a call of `cluslong`.
+```{r}
+m.twostepgen = clMethodTwoStep(representationStep = repStep.gen, 
+                               clusterStep = clusStep.gen)
+```
+
+However, because we omitted the specification of `formula` and `nClusters`, these need to be provided in the `cluslong` call.
+```{r message=TRUE}
+model.twostepgen = cluslong(m.twostepgen, formula = Y ~ Time, nClusters = 2, casedata)
+summary(model.twostepgen)
+```
+
+# Implementing a new method
+The use of `clMethodStratify` and `clMethodTwostep` enables quick prototyping. Once the desired model has been identified, it may be worthwhile to implement it as a standalone method in the framework. This way the model can be extended to output more representative cluster trajectories, or to extend the model with predictive capabilities such that it can be validated on external data.
+
+We will implement the two-step model above as a stand-alone model, named "LMKM". We will extend the functionality by implementing a predict function.
+
+## Extending the `clMethod` class
+Firstly, we create a new method class for this model named `clMethodLMKM`, extending the `clMethod` class.
+```{r}
+setClass('clMethodLMKM', contains='clMethod')
+
+setMethod('getName', signature('clMethodLMKM'), function(object) 'lm-kmeans')
+
+setMethod('getShortName', signature('clMethodLMKM'), function(object) 'lmkm')
+```
+Note that a `clMethod` class has a single slot `call`, which stores all the arguments to the method. The purpose of extending the `clMethod` class is to specify a `prepare` and `fit` function, along with optional argument validation.
 
 ```{r}
-mtwo = clMethodTwoStep(repStep, clusStep)
+clMethodLMKM = function(formula=Value ~ Time,
+                        time=getOption('cluslong.time'),
+                        id=getOption('cluslong.id'),
+                        nClusters=2) {
+  new('clMethodLMKM', call=stackoverflow::match.call.defaults())
+}
+```
+
+```{r}
+setMethod('prepare', signature('clMethodLMKM'), function(method, data, verbose) {
+  # optional data processing here
+  return(NULL)
+})
+
+setMethod('fit', signature('clMethodLMKM'), function(method, data, envir, verbose, ...) {
+  # fit lm per trajectory
+  coefdata = data[, lm(method$formula, .SD) %>% coef() %>% as.list(), keyby = c(method$id)]
+  # construct the coefficient matrix
+  coefmat = subset(coefdata, select = -1) %>% as.matrix()
+  # cross-sectional clustering
+  km = kmeans(coefmat, centers = method$nClusters)
+  
+  new('clModelLMKM', 
+      method=method,
+      data=data,
+      model=km,
+      clusterNames=LETTERS[seq_len(method$nClusters)])
+})
+```
+
+## Extending the `clModel` class
+```{r}
+setClass('clModelLcmmGMM', contains='clModel')
 ```
 

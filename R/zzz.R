@@ -10,7 +10,7 @@
     cluslong.response='Value',
     cluslong.time='Time',
     cluslong.id='Id',
-    cluslong.checkArgs=TRUE,
+    cluslong.clusterNames=LETTERS,
     cluslong.printSharedModelArgs=FALSE)
 
   optMask = !(names(opts) %in% names(options()))

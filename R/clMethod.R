@@ -438,12 +438,14 @@ clMethods = function(method, ..., envir=NULL) {
 
 # Local methods ####
 # . prepare ####
+#' @export
 #' @title clMethod interface function
 #' @description Called by [cluslong].
 setGeneric('prepare', function(method, ...) standardGeneric('prepare'))
 setMethod('prepare', signature('clMethod'), function(method, data, verbose) {})
 
 # . fit ####
+#' @export
 #' @title clMethod interface function
 #' @description Called by [cluslong].
 setGeneric('fit', function(method, ...) standardGeneric('fit'))

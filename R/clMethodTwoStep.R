@@ -71,6 +71,8 @@ setMethod('fit', signature('clMethodTwoStep'), function(method, data, envir, ver
   assert_that(nrow(repEnv$repMat) == nIds, msg='invalid output from the representation step; expected "repMat" to be a matrix with one row per id.')
   assert_that(ncol(repEnv$repMat) >= 1)
 
+  repEnv$repMat = standardizeTrajectoryCoefMatrix(repEnv$repMat, method$standardize)
+
   ## Cluster step #
   model = method$clusterStep(method=method, data=data, repMat=repEnv$repMat, envir=repEnv, verbose=verbose)
 
@@ -90,3 +92,17 @@ setMethod('fit', signature('clMethodTwoStep'), function(method, data, envir, ver
   newmodel = do.call(new, slots, quote=TRUE)
   return(newmodel)
 })
+
+#' @export
+standardizeTrajectoryCoefMatrix = function(x, fun) {
+  if(is.function(fun)) {
+    newx = fun(x)
+    assert_that(is.matrix(newx), nrow(newx) == nrow(x), ncol(newx) == ncol(x), msg='standardize function changed dimensions of the input matrix')
+  } else if(isTRUE(fun)) {
+    scale(x)
+  } else if(isFALSE(fun)) {
+    x
+  } else {
+    stop('unsupported value for standardize')
+  }
+}

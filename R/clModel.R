@@ -507,13 +507,28 @@ make.clusterIndices = function(object, clusters, finite=TRUE) {
   }
 }
 
-
+#' @export
 make.clusterNames = function(n) {
   assert_that(is.count(n))
-  if(n > length(LETTERS)) {
-    paste0('C', seq_len(n))
+
+  opt = getOption('cluslong.clusterNames', LETTERS)
+
+  if(length(opt) == 0) {
+    warning('cluslong.clusterNames is NULL or empty. Using LETTERS for names')
+    clusNames = LETTERS
+  } else if(is.function(opt)) {
+    clusNames = opt(n) %>% as.character()
   } else {
-    LETTERS[seq_len(n)]
+    clusNames = as.character(opt)
+  }
+
+  assert_that(length(clusNames) > 0, anyDuplicated(clusNames) == 0)
+
+  if(n > length(LETTERS)) {
+    warning('not enough cluster names provided by cluslong.clusterNames')
+    clusNames = c(clusNames, paste0('C', seq(length(clusNames) + 1, n)))
+  } else {
+    clusNames[seq_len(n)]
   }
 }
 
