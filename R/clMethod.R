@@ -9,6 +9,7 @@ setMethod('initialize', 'clMethod', function(.Object, ...) {
 
 setValidity('clMethod', function(object) {
   call = getCall(object)
+  assert_that(all(vapply(lapply(names(m), nchar), '>', 0, FUN.VALUE=TRUE)), msg='clMethod argument names cannot be empty')
   assert_that(!any(vapply(names(object), startsWith, '.', FUN.VALUE=TRUE)), msg='clMethod argument names cannot start with "."')
 
   if(isArgDefined(object, 'formula')) {
@@ -85,11 +86,13 @@ is.clMethod = function(object) {
 
 #' @export
 #' @title Check whether the argument of a clMethod has a defined value.
+#' @param name The name of the argument.
+#' @param envir The `environment` to evaluate the arguments in. If `NULL`, the argument is not evaluated.
 #' @keywords internal
 isArgDefined = function(object, name, envir=NULL) {
-  envir = clMethod.env(object, parent.frame(), envir)
   assert_that(is.clMethod(object))
   assert_that(is.character(name))
+  assert_that(is.environment(envir) || is.null(envir))
 
   if(!hasName(object, name)) {
     return(FALSE)
@@ -98,12 +101,15 @@ isArgDefined = function(object, name, envir=NULL) {
 
 
   if(is.name(arg) || is.call(arg)) {
-    arg = try(object[[name, envir=envir]], silent=TRUE)
-    if(is(arg, 'try-error')) {
+    if(is.null(envir)) {
       return(FALSE)
+    } else {
+      arg = try(object[[name, envir=envir]], silent=TRUE)
+      return(!is(arg, 'try-error'))
     }
+  } else {
+    return(TRUE)
   }
-  return(TRUE)
 }
 
 #' @export
@@ -132,6 +138,7 @@ formula.clMethod = function(object, what='mu', envir=NULL) {
 }
 
 
+#. names ####
 #' @title clMethod argument names
 #' @examples
 #' m = clMethodKML()
@@ -141,6 +148,7 @@ setMethod('names', signature('clMethod'), function(x) {
   names(getCall(x))[-1]
 })
 
+#. length ####
 #' @title Length of a clMethod object
 #' @description Extracts the number of specified arguments of a `clMethod` object.
 #' @examples
@@ -152,6 +160,8 @@ setMethod('length', signature('clMethod'), function(x) {
 })
 
 
+#. $ ####
+#' @name $,clMethod
 #' @title Retrieve and evaluate a clMethod argument by name
 #' @param name Name of the argument to retrieve.
 #' @examples
@@ -162,7 +172,79 @@ setMethod('$', signature('clMethod'), function(x, name) {
   x[[name]]
 })
 
+#. [char] ####
+#' @export
+#' @name [,clMethod
+#' @title Select arguments by names
+#' @param i A `character vector` of argument names to select. Only available arguments are returned.
+#' @param eval Whether to evaluate the arguments.
+#' Alternatively, a character vector of class names of the values that are accepted for replacement,
+#' in which case evaluation does not throw an error if an argument is not defined.
+#' @param expand Whether to return all arguments when `"..."` is present among the requested argument names.
+#' @param envir The environment in which to evaluate the arguments.
 
+#' @examples
+#' m = clMethodKML()
+#' m[c('nClusters', 'id')]
+#'
+#' m[kml:::parALGO]
+#' @family clMethod functions
+setMethod('[', signature('clMethod'), function(x, i, eval=TRUE, expand=TRUE, envir=NULL) {
+  if(expand == TRUE && '...' %in% i) {
+    argNames = names(x)
+  } else {
+    argNames = intersect(names(x), i)
+  }
+
+  if(isTRUE(eval) || is.scalar(eval) && eval == 'ANY') {
+    # full evaluation
+    argValues = lapply(argNames, function(argName) x[[argName, envir=envir]])
+    names(argValues) = argNames
+    return(argValues)
+  } else if(is.character(eval)) {
+    # partial update
+    argValues = as.list(x@call[-1])
+    evalValues = vector(mode='list', length=length(x))
+    evalMask = vapply(argNames, isArgDefined, object=x, envir=envir, FUN.VALUE=FALSE)
+    evalValues[evalMask] = lapply(argNames[evalMask], function(name) x[[name, eval=TRUE, envir=envir]])
+    updateMask = evalMask & vapply(evalValues, class, FUN.VALUE='') %in% eval
+    argValues[updateMask] = evalValues[updateMask]
+    return(argValues)
+  } else {
+    as.list(x@call[-1])
+  }
+})
+
+#. [list] ####
+#' @export
+#' @name [,clMethod,list
+#' @title Select arguments for functions
+#' @description Select arguments that match the arguments of the given functions or function names
+#' @inheritParams [,clMethod
+#' @family clMethod functions
+setMethod('[', signature('clMethod', 'list'), function(x, i, eval=TRUE, expand=TRUE, envir=NULL) {
+  envir = clMethod.env(x, parent.frame(3), envir)
+  assert_that(all(vapply(i, function(x) is.function(x) || is.character(x), FUN.VALUE=TRUE)), msg='input must be a list of functions or function names')
+
+  argNamesList = lapply(i, formalArgs)
+  argNames = Reduce(union, i)
+  x[argNames, ..., envir=envir]
+})
+
+#. [fun] ####
+#' @export
+#' @name [,clMethod,function
+#' @title Select arguments for a function
+#' @param i The function or function name
+#' @inheritParams [,clMethod
+#' @family clMethod functions
+setMethod('[', signature('clMethod', 'function'), function(x, i, eval=TRUE, expand=TRUE, envir=NULL) {
+  envir = clMethod.env(x, parent.frame(3), envir)
+  x[list(i), eval=eval, expand=expand, envir=envir]
+})
+
+#. [[ ####
+#' @name [[,clMethod
 #' @title Retrieve and evaluate a clMethod argument by name
 #' @param i Name or index of the argument to retrieve.
 #' @param eval Whether to evaluate the call argument (enabled by default).
@@ -173,6 +255,7 @@ setMethod('$', signature('clMethod'), function(x, name) {
 #'
 #' K = 2
 #' m = clMethodKML(nClusters=K)
+#' m[['nClusters']] # 2
 #' m[['nClusters', eval=FALSE]] # K
 #' @family clMethod functions
 setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
@@ -248,38 +331,14 @@ update.clMethod = function(object, ..., envir=NULL) {
 
 #' @export
 #' @title Extract the method arguments as a list
-#' @param eval Whether to evaluate the arguments. Alternatively, a character vector of class names of the values that are accepted for replacement, in which case evaluation does not throw an error if an argument is not defined.
-#' @param fun Narrows down the returned arguments to the formal arguments of the given function.
-#' @param envir The environment in which to evaluate the arguments.
+#' @inheritParams [,clMethod
 #' @examples
 #' method = clMethodKML()
 #' as.list(method)
 #' @family clMethod functions
-as.list.clMethod = function(object, eval=TRUE, fun=NULL, envir=NULL) {
+as.list.clMethod = function(object, eval=TRUE, envir=NULL) {
   envir = clMethod.env(object, parent.frame(), envir)
-  if(is.null(fun) || '...' %in% formalArgs(fun)) {
-    argNames = names(object)
-  } else {
-    argNames = intersect(names(object), formalArgs(fun))
-  }
-
-  if(isTRUE(eval) || is.scalar(eval) && eval == 'ANY') {
-    # full evaluation
-    argValues = lapply(argNames, function(argName) object[[argName, envir=envir]])
-    names(argValues) = argNames
-    return(argValues)
-  } else if(is.character(eval)) {
-    # partial update
-    argValues = as.list(object@call[-1])
-    evalValues = vector(mode='list', length=length(object))
-    evalMask = vapply(argNames, isArgDefined, object=object, envir=envir, FUN.VALUE=FALSE)
-    evalValues[evalMask] = lapply(argNames[evalMask], function(name) object[[name, eval=TRUE, envir=envir]])
-    updateMask = evalMask & vapply(evalValues, class, FUN.VALUE='') %in% eval
-    argValues[updateMask] = evalValues[updateMask]
-    return(argValues)
-  } else {
-    as.list(object@call[-1])
-  }
+  object[names(object), eval=eval, envir=envir]
 }
 
 #' @export
@@ -351,7 +410,7 @@ as.character.clMethod = function(x,
 }
 
 
-#' @title Substitute the call arguments
+#' @title Substitute the call arguments for their evaluated values
 #' @param envir The environment in which to evaluate the arguments.
 #' @return A new call with the substituted arguments.
 #' @family clMethod functions
@@ -366,12 +425,16 @@ substitute.clMethod = function(object, envir=NULL) {
 
 
 #' @export
-print.clMethod = function(object, ...) {
+print.clMethod = function(object, ..., width=40) {
   argNames = names(object)
   args = as.character(object, ...) %>%
-    vapply(strtrim, 40, FUN.VALUE='')
+    vapply(strtrim, width=width, FUN.VALUE='')
 
-  cat(sprintf(' %-16s%s\n', paste0(argNames, ':'), args), sep='')
+  if(length(args) > 0) {
+    cat(sprintf(' %-16s%s\n', paste0(argNames, ':'), args), sep='')
+  } else {
+    cat(' no arguments\n')
+  }
 }
 
 
@@ -417,7 +480,6 @@ clMethods = function(method, ..., envir=NULL) {
   dotArgs = lapply(which(dotMask), function(i) as.list(argCalls[[i]][-1]))
 
   firstOrN = function(x, i) x[[min(length(x), i)]]
-
   # using mapply results in dots[[1L]] errors
   methods = vector('list', nModels)
   for(i in seq_len(nModels)) {
