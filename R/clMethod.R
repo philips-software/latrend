@@ -9,7 +9,7 @@ setMethod('initialize', 'clMethod', function(.Object, ...) {
 
 setValidity('clMethod', function(object) {
   call = getCall(object)
-  assert_that(all(vapply(lapply(names(m), nchar), '>', 0, FUN.VALUE=TRUE)), msg='clMethod argument names cannot be empty')
+  assert_that(all(vapply(lapply(names(object), nchar), '>', 0, FUN.VALUE=TRUE)), msg='clMethod argument names cannot be empty')
   assert_that(!any(vapply(names(object), startsWith, '.', FUN.VALUE=TRUE)), msg='clMethod argument names cannot start with "."')
 
   if(isArgDefined(object, 'formula')) {
