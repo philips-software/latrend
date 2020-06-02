@@ -139,7 +139,10 @@ clusterSizes = function(object) {
 #' clusterProportions(model)
 clusterProportions = function(object) {
   assert_that(is.clModel(object))
-  postprob(object) %>% colMeans()
+  pp = postprob(object)
+  assert_that(!is.null(pp), msg='cannot determine cluster assignments because postprob() returned NULL')
+  assert_that(is.matrix(pp))
+  colMeans(pp)
 }
 
 
@@ -154,8 +157,11 @@ clusterProportions = function(object) {
 #' clusterAssignments(model, strategy=function(x) which(x > .9)) # only assign ids with a probability over 0.9
 clusterAssignments = function(object, strategy=which.max, ...) {
   assert_that(is.clModel(object))
-  postprob(object) %>%
-    apply(1, strategy, ...) %>%
+  pp = postprob(object)
+  assert_that(!is.null(pp), msg='cannot determine cluster assignments because postprob() returned NULL')
+  assert_that(is.matrix(pp))
+
+  apply(pp, 1, strategy, ...) %>%
     factor(levels=1:nClusters(object), labels=clusterNames(object))
 }
 
