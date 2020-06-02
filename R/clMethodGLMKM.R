@@ -22,7 +22,7 @@ setValidity('clMethodGLMKM', function(object) {
 #'                      time='Assessment',
 #'                      id='Subject', nClusters=3)
 #' @family clMethod implementations
-clMethodGLMKM = function(formula = Value ~ 1,
+clMethodGLMKM = function(formula = Value ~ Time,
                         time = getOption('cluslong.time'),
                         id = getOption('cluslong.id'),
                         nClusters = 2,
@@ -30,8 +30,9 @@ clMethodGLMKM = function(formula = Value ~ 1,
                         ...
 ) {
   m = clMethod('clMethodGLMKM', call=match.call.defaults(),
-           defaults=c(glm, kmeans),
-           excludeArgs=c('x', 'data', 'centers', 'trace'))
+           defaults=c(glm, glm.control, kmeans),
+           excludeArgs=c('x', 'data', 'control', 'centers', 'trace'))
+  return(m)
 }
 
 
@@ -42,12 +43,12 @@ setMethod('getShortName', signature('clMethodGLMKM'), function(object) 'glmkm')
 
 setMethod('prepare', signature('clMethodGLMKM'), function(method, data, verbose) {
   cat(verbose, 'Representation step...')
+  glmArgs = method[c(glm, glm.control), expand=FALSE]
 
-  glmArgs = as.list(method)
-
-  coefdata = data[, do.call(glm, c(glmArgs, data=.SD)) %>% coef() %>% as.list(), keyby = c(method$id)]
+  coefdata = data[, do.call(glm, c(glmArgs, data=list(.SD))) %>% coef() %>% as.list(), keyby = c(method$id)]
   # construct the coefficient matrix
   coefmat = subset(coefdata, select = -1) %>% as.matrix()
+  assert_that(nrow(coefmat) == uniqueN(data[[method$id]]))
 
   e = new.env()
   e$x = standardizeTrajectoryCoefMatrix(coefmat, method$standardize)

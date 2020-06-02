@@ -1,6 +1,6 @@
 context('GLM-KM')
 
 test_that('default', {
-  browser()
-  cluslong(clMethodGLMKM(), testLongData)
+  model = cluslong(clMethodGLMKM(), testLongData)
+  expect_valid_clModel(model)
 })

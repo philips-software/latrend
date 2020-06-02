@@ -12,7 +12,8 @@ predict.clModelGLMKM = function(object, newdata=NULL, what='mu') {
 }
 
 setMethod('postprob', signature('clModelGLMKM'), function(object) {
-
+  k = nrow(object@model$centers)
+  postprobFromAssignments(object@model$cluster, k)
 })
 
 setMethod('converged', signature('clModelGLMKM'), function(object) {
