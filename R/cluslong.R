@@ -19,6 +19,7 @@
 #' model = cluslong(clMethodKML(), data=testLongData, nClusters=3, seed=1)
 #' @family longitudinal cluster fit functions
 cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.verbose')) {
+  envir = clMethod.env(method, parent.frame(), envir)
   assert_that(inherits(method, 'clMethod'), msg='method must be an object of class clMethod')
   assert_that(!missing(data), msg='data must be specified')
 
@@ -28,7 +29,6 @@ cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.v
   assert_that(is.data.frame(data) || is.matrix(data), msg='data must be data.frame or matrix')
 
   verbose = as.Verbose(verbose)
-  envir = clMethod.env(method, parent.frame(), envir)
   argList = list(...)
   argList$envir = envir
   method = do.call(update, c(object=method, argList))
@@ -97,6 +97,7 @@ cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.v
 #' models = cluslongRep(clMethodKML(), data=testLongData, seed=1, .rep=3)
 #' @family longitudinal cluster fit functions
 cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL, verbose=getOption('cluslong.verbose')) {
+  envir = clMethod.env(method, parent.frame(), envir)
   assert_that(inherits(method, 'clMethod'), msg='method must be an object of class clMethod')
   assert_that(!missing(data), msg='data must be specified')
   assert_that(is.data.frame(data) || is.matrix(data), msg='data must be data.frame or matrix')
@@ -109,6 +110,11 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL,
   print(verbose, method)
   ruler(verbose)
 
+  argList = list(...)
+  argList$envir = envir
+  method = do.call(update, c(object=method, argList))
+  environment(method) = envir
+  mc = match.call.defaults()
 
   if(is.matrix(data)) {
     data = meltRepeatedMeasures(data, id=method$id, time=method$time, response=getResponse(formula(method)))
@@ -121,13 +127,6 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL,
     cat(verbose, sprintf('Setting seed %s.', as.character(seed)))
     set.seed(seed)
   }
-
-  envir = clMethod.env(method, parent.frame(), envir)
-  argList = list(...)
-  argList$envir = envir
-  method = do.call(update, c(object=method, argList))
-  environment(method) = envir
-  mc = match.call.defaults()
 
   cat(verbose, 'Validating method arguments...', level=verboseLevels$finest)
   validObject(method)

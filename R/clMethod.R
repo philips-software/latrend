@@ -89,7 +89,7 @@ is.clMethod = function(object) {
 #' @param name The name of the argument.
 #' @param envir The `environment` to evaluate the arguments in. If `NULL`, the argument is not evaluated.
 #' @keywords internal
-isArgDefined = function(object, name, envir=NULL) {
+isArgDefined = function(object, name, envir=environment(object)) {
   assert_that(is.clMethod(object))
   assert_that(is.character(name))
   assert_that(is.environment(envir) || is.null(envir))
@@ -227,8 +227,8 @@ setMethod('[', signature('clMethod', 'list'), function(x, i, eval=TRUE, expand=T
   assert_that(all(vapply(i, function(x) is.function(x) || is.character(x), FUN.VALUE=TRUE)), msg='input must be a list of functions or function names')
 
   argNamesList = lapply(i, formalArgs)
-  argNames = Reduce(union, i)
-  x[argNames, ..., envir=envir]
+  argNames = Reduce(union, argNamesList)
+  x[argNames, eval=eval, expand=expand, envir=envir]
 })
 
 #. [fun] ####

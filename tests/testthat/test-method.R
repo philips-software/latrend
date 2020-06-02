@@ -225,6 +225,19 @@ test_that('as.list', {
     expect_length(length(method))
 })
 
+test_that('function subset', {
+  m = clMethodKML()
+  subm = m[kml::parALGO]
+  expect_length(setdiff(names(subm), formalArgs(kml::parALGO)), 0)
+})
+
+test_that('two functions subset', {
+  m = clMethodKML()
+  funs = c(kml::parALGO, kml::kml)
+  subm = m[funs]
+  expect_length(setdiff(names(m[funs]), union(formalArgs(funs[[1]]), formalArgs(funs[[2]]))), 0)
+})
+
 test_that('substitute', {
   xvar = 2
   method = new('clMethod', call=call('clMethod', a=1, b='a', c=NULL, d=NA, e=quote(xvar)))
