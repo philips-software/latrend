@@ -95,9 +95,12 @@ setMethod('fit', signature('clMethodTwoStep'), function(method, data, envir, ver
 
 #' @export
 standardizeTrajectoryCoefMatrix = function(x, fun) {
+  assert_that(is.matrix(x))
+
   if(is.function(fun)) {
     newx = fun(x)
     assert_that(is.matrix(newx), nrow(newx) == nrow(x), ncol(newx) == ncol(x), msg='standardize function changed dimensions of the input matrix')
+    return(newx)
   } else if(isTRUE(fun)) {
     scale(x)
   } else if(isFALSE(fun)) {
