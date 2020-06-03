@@ -14,8 +14,8 @@ setValidity('clMethodLMKM', function(object) {
 #' @param formula Trajectory-specific formula
 #' @param time Time variable.
 #' @param nClusters Number of clusters.
-#' @inheritParams lm
 #' @inheritParams clMethodTwoStep
+#' @inheritDotParams stats::lm
 #' @examples
 #' method = clMethodLMKM(Measurement ~ Assessment + (Assessment | Subject),
 #'                      time='Assessment',

@@ -10,6 +10,7 @@ setClass('clModelPartition',
 #' @title Create a clModel with pre-defined partitioning
 #' @description Represents an arbitrary partitioning of a set of trajectories.
 #' As such, this model has no predictive capabilities. The cluster trajectories are represented by the specified center function (mean by default).
+#' @inheritParams clMethodStratify
 #' @param clusterAssignments A `vector` of cluster membership per trajectory, either `factor`, or `integer` (`1` to `nClusters`).
 #' @param nClusters The number of clusters. Optional for `factor` assignments.
 #' @param clusterNames The names of the clusters, or a function with input `n` outputting a `character vector` of names.

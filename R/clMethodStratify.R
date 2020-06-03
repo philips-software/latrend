@@ -19,13 +19,11 @@ setValidity('clMethodStratify', function(object) {
 
 #' @export
 #' @title Specify a stratification method
+#' @inheritParams clMethodCustom
 #' @param stratify An expression returning a `number` or `factor` value per trajectory, representing the cluster assignment. Alternatively, a `function` that takes separate trajectory `data.frame` as input.
 #' @param center Method for computing the longitudinal cluster centers, used for representing the cluster trajectories.
-#' @param nClusters Number of clusters. Optional, as this is derived from the highest assignment number by default, or the number of `factor` levels.
+#' @param nClusters Number of clusters. Optional, as this is derived from the largest assignment number by default, or the number of `factor` levels.
 #' @param clusterNames Names of the clusters. If a `factor` assignment is returned, the levels are used as the cluster names.
-#' @param response Response variable.
-#' @param time Time variable.
-#' @param id Strata variable.
 #' @examples
 #' # Stratification based on the mean response level
 #' method = clMethodStratify(mean(Value) > 1.7, clusterNames=c('Low', 'High'))
