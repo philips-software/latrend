@@ -1,7 +1,7 @@
 #' @include clMethod.R
-setClass('clMethodLLPA', contains='clMethod')
+setClass('clMethodMclustLLPA', contains='clMethod')
 
-setValidity('clMethodLLPA', function(object) {
+setValidity('clMethodMclustLLPA', function(object) {
   if(isArgDefined(object, 'formula')) {
     f = formula(object)
     assert_that(hasSingleResponse(object$formula))
@@ -23,26 +23,26 @@ setValidity('clMethodLLPA', function(object) {
 #' @param nClusters Number of clusters.
 #' @inheritDotParams mclust::Mclust
 #' @examples
-#' method = clMethodLLPA(Measurement ~ 1,
+#' method = clMethodMclustLLPA(Measurement ~ 1,
 #'                      time='Assessment',
 #'                      id='Id', nClusters=3)
 #' @family clMethod implementations
-clMethodLLPA = function(formula=Value ~ 1,
+clMethodMclustLLPA = function(formula=Value ~ 1,
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),
                        nClusters=2,
                        ...
 ) {
-  clMethod('clMethodLLPA', call=match.call.defaults(),
+  clMethod('clMethodMclustLLPA', call=match.call.defaults(),
            defaults=mclust::Mclust,
            excludeArgs=c('data', 'G', 'verbose'))
 }
 
-setMethod('getName', signature('clMethodLLPA'), function(object) 'longitudinal latent profile analysis')
+setMethod('getName', signature('clMethodMclustLLPA'), function(object) 'longitudinal latent profile analysis')
 
-setMethod('getShortName', signature('clMethodLLPA'), function(object) 'llpa')
+setMethod('getShortName', signature('clMethodMclustLLPA'), function(object) 'llpa')
 
-setMethod('prepare', signature('clMethodLLPA'), function(method, data, verbose, ...) {
+setMethod('prepare', signature('clMethodMclustLLPA'), function(method, data, verbose, ...) {
   e = new.env()
 
   valueColumn = formula(method) %>% getResponse
@@ -56,7 +56,7 @@ setMethod('prepare', signature('clMethodLLPA'), function(method, data, verbose, 
   return(e)
 })
 
-setMethod('fit', signature('clMethodLLPA'), function(method, data, envir, verbose, ...) {
+setMethod('fit', signature('clMethodMclustLLPA'), function(method, data, envir, verbose, ...) {
   args = method[mclust::Mclust]
   args$data = envir$data
   args$G = method$nClusters
@@ -64,7 +64,7 @@ setMethod('fit', signature('clMethodLLPA'), function(method, data, envir, verbos
   model = do.call(mclust::Mclust, args)
   model$time = unique(data[[method$time]]) %>% sort
 
-  new('clModelLLPA',
+  new('clModelMclustLLPA',
       method=method,
       data=data,
       model=model,

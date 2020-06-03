@@ -1,12 +1,12 @@
 #' @include clModel.R
-setClass('clModelLLPA', contains='clModel')
+setClass('clModelMclustLLPA', contains='clModel')
 
 
 #' @export
 #' @rdname predict.clModel
 #' @inheritParams predict.clModel
 #' @param approxFun The interpolation function to use for time points not in the feature set.
-predict.clModelLLPA = function(object, newdata=NULL, what='mu', approxFun=approx) {
+predict.clModelMclustLLPA = function(object, newdata=NULL, what='mu', approxFun=approx) {
   assert_that(is.newdata(newdata))
   assert_that(what == 'mu', msg='only what="mu" is supported')
   assert_that(is.function(approxFun))
@@ -27,7 +27,7 @@ predict.clModelLLPA = function(object, newdata=NULL, what='mu', approxFun=approx
 
 
 #' @export
-fitted.clModelLLPA = function(object, clusters=clusterAssignments(object)) {
+fitted.clModelMclustLLPA = function(object, clusters=clusterAssignments(object)) {
   times = time(object)
   newdata = data.table(Id=rep(ids(object), each=length(times)),
                        Time=times) %>%
@@ -39,7 +39,7 @@ fitted.clModelLLPA = function(object, clusters=clusterAssignments(object)) {
 
 
 # . postprob ####
-setMethod('postprob', signature('clModelLLPA'), function(object) {
+setMethod('postprob', signature('clModelMclustLLPA'), function(object) {
   pp = object@model$z
   colnames(pp) = clusterNames(object)
   return(pp)
@@ -47,7 +47,7 @@ setMethod('postprob', signature('clModelLLPA'), function(object) {
 
 
 #. predictPostprob ####
-setMethod('predictPostprob', signature('clModelLLPA'), function(object, newdata=NULL) {
+setMethod('predictPostprob', signature('clModelMclustLLPA'), function(object, newdata=NULL) {
   if(is.null(newdata)) {
     postprob(object)
   } else {
@@ -58,6 +58,6 @@ setMethod('predictPostprob', signature('clModelLLPA'), function(object, newdata=
 
 
 # . converged ####
-setMethod('converged', signature('clModelLLPA'), function(object) {
+setMethod('converged', signature('clModelMclustLLPA'), function(object) {
   TRUE
 })

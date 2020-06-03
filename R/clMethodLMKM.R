@@ -49,11 +49,6 @@ setMethod('prepare', signature('clMethodLMKM'), function(method, data, verbose) 
   coefmat = subset(coefdata, select = -1) %>% as.matrix()
   assert_that(nrow(coefmat) == uniqueN(data[[method$id]]))
 
-  # create ref model for predict
-  #refdata = data[get(method$id) == first(get(method$id))][1:min(10, .N)]
-  #browser()
-  #refmod = do.call(lm, c(modifyList(lmArgs, list(model=FALSE, qr=FALSE)), data=list(refdata)))
-
   e = new.env()
   e$x = standardizeTrajectoryCoefMatrix(coefmat, method$standardize)
   return(e)
