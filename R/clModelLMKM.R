@@ -1,9 +1,27 @@
 #' @include clModel.R
-setClass('clModelLMKM', contains='clModel')
+setClass('clModelLMKM', representation(coefNames='character'), contains='clModel')
+
+coef.clModelLMKM = function(object, cluster=NULL) {
+  coefmat = t(object@model$centers)
+  colnames(coefmat) = clusterNames(object)
+  rownames(coefmat) = object@coefNames
+
+  if(is.null(cluster)) {
+    return(coefmat)
+  } else {
+    assert_that(is.count(cluster) || is.character(cluster) && cluster %in% clusterNames(object))
+    coefmat[, cluster, drop=FALSE]
+  }
+}
 
 #. converged ####
 setMethod('converged', signature('clModelLMKM'), function(object) {
-  !object@model$ifault
+  if(nClusters(object) == 1) {
+    TRUE
+  }
+  else {
+    !object@model$ifault
+  }
 })
 
 #. postprob ####
@@ -19,21 +37,48 @@ predict.clModelLMKM = function(object, newdata=NULL, what='mu', ...) {
   assert_that(what == 'mu')
 
   if(is.null(newdata)) {
-    newdata = model.data(object)
+    newdata = model.data(object) %>%
+      subset(select=getCovariates(formula(object)))
+  }
+  newdata = as.data.table(newdata)
+
+  if(nrow(newdata) == 0) {
+    # predict.lm cannot handle empty data.frame, so return early
+    return(transformPredict(object, pred=NULL, newdata=newdata))
   }
 
-  # construct lm object per cluster
-  lm = do.call(lm, c(lmArgs, data=data[Id == first(Id)]))
+  # create ref lm
+  method = getMethod(object)
+  lmArgs = method[lm, expand=FALSE]
+  data = model.data(object)
+  refdata = data[get(method$id) == first(get(method$id))][1:min(10, .N)]
+  refmod = do.call(lm, c(lmArgs, data=list(refdata)))
 
-  browser()
-  f = formula(object) %>% dropResponse()
+  # construct lm per cluster
+  clusmods = lapply(clusterNames(object), function(clusName) {
+    clusmod = refmod
+    clusmod$coefficients = coef(object, cluster=clusName)
+    return(clusmod)
+  })
+
+  predfun = function(clusmod, clusdata) {
+    out = predict(clusmod, newdata=clusdata, ...)
+    if(is.numeric(out)) {
+      list(fit=out)
+    } else {
+      out
+    }
+  }
+
   if(has_name(newdata, 'Cluster')) {
-    X = model.matrix(f, data=newdata) %>%
-      cbind(Cluster=newdata$Cluster)
+    clusdataList = split(newdata, by='Cluster', sorted=TRUE)
   } else {
-    x = replicate(nClusters(object), data.frame(model.matrix(f, data=newdata)), simplify=FALSE) %>%
-      rbindlist(idcol='Cluster') %>%
-      .[, Cluster := factor(Cluster, labels=clusterNames(object))]
+    clusdataList = list(newdata)
   }
 
+  dtpred = mapply(predfun, clusmods, clusdataList, SIMPLIFY=FALSE) %>%
+    rbindlist(idcol='Cluster') %>%
+    .[, Cluster := factor(Cluster, labels=clusterNames(object))]
+  setnames(dtpred, 'fit', 'Fit')
+  transformPredict(object, dtpred, newdata=newdata)
 }
