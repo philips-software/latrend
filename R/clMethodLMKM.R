@@ -1,7 +1,7 @@
-setClass('clMethodGLMKM', contains='clMethod')
+setClass('clMethodLMKM', contains='clMethod')
 
-setValidity('clMethodGLMKM', function(object) {
-  assert_that(has_clMethod_args(object, formalArgs(clMethodGLMKM)))
+setValidity('clMethodLMKM', function(object) {
+  assert_that(has_clMethod_args(object, formalArgs(clMethodLMKM)))
 
   if(isArgDefined(object, 'formula')) {
     assert_that(hasSingleResponse(object$formula))
@@ -10,42 +10,41 @@ setValidity('clMethodGLMKM', function(object) {
 
 
 #' @export
-#' @title Two-step clustering through generalized linear modeling and k-means
+#' @title Two-step clustering through linear modeling and k-means
 #' @param formula Trajectory-specific formula
 #' @param time Time variable.
-#' @param id Strata variable.
 #' @param nClusters Number of clusters.
-#' @inheritParams glm
+#' @inheritParams lm
 #' @inheritParams clMethodTwoStep
 #' @examples
-#' method = clMethodGLMKM(Measurement ~ Assessment + (Assessment | Subject),
+#' method = clMethodLMKM(Measurement ~ Assessment + (Assessment | Subject),
 #'                      time='Assessment',
 #'                      id='Subject', nClusters=3)
 #' @family clMethod implementations
-clMethodGLMKM = function(formula = Value ~ Time,
+clMethodLMKM = function(formula = Value ~ Time,
                         time = getOption('cluslong.time'),
                         id = getOption('cluslong.id'),
                         nClusters = 2,
                         standardize = scale,
                         ...
 ) {
-  m = clMethod('clMethodGLMKM', call=match.call.defaults(),
-           defaults=c(glm, glm.control, kmeans),
+  m = clMethod('clMethodLMKM', call=match.call.defaults(),
+           defaults=c(lm, kmeans),
            excludeArgs=c('x', 'data', 'control', 'centers', 'trace'))
   return(m)
 }
 
 
-setMethod('getName', signature('clMethodGLMKM'), function(object) 'glm-kmeans')
+setMethod('getName', signature('clMethodLMKM'), function(object) 'glm-kmeans')
 
-setMethod('getShortName', signature('clMethodGLMKM'), function(object) 'glmkm')
+setMethod('getShortName', signature('clMethodLMKM'), function(object) 'glmkm')
 
 
-setMethod('prepare', signature('clMethodGLMKM'), function(method, data, verbose) {
+setMethod('prepare', signature('clMethodLMKM'), function(method, data, verbose) {
   cat(verbose, 'Representation step...')
-  glmArgs = method[c(glm, glm.control), expand=FALSE]
+  lmArgs = method[lm, expand=FALSE]
 
-  coefdata = data[, do.call(glm, c(glmArgs, data=list(.SD))) %>% coef() %>% as.list(), keyby = c(method$id)]
+  coefdata = data[, do.call(lm, c(lmArgs, data=list(.SD))) %>% coef() %>% as.list(), keyby = c(method$id)]
   # construct the coefficient matrix
   coefmat = subset(coefdata, select = -1) %>% as.matrix()
   assert_that(nrow(coefmat) == uniqueN(data[[method$id]]))
@@ -56,11 +55,11 @@ setMethod('prepare', signature('clMethodGLMKM'), function(method, data, verbose)
 })
 
 
-setMethod('fit', signature('clMethodGLMKM'), function(method, data, envir, verbose, ...) {
+setMethod('fit', signature('clMethodLMKM'), function(method, data, envir, verbose, ...) {
   cat(verbose, 'Cluster step...')
   km = kmeans(envir$x, centers=method$nClusters, trace=canShow(verbose, 'fine'))
 
-  new('clModelGLMKM',
+  new('clModelLMKM',
       method=method,
       data=data,
       model=km,
