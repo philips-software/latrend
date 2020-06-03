@@ -170,7 +170,8 @@ clusterAssignments = function(object, strategy=which.max, ...) {
 
 #' @export
 #' @title Coefficients of a clModel
-#' @return A matrix of the coefficients per class.
+#' @return A `named numeric vector` with all coefficients, or a `matrix` with each column containing the cluster-specific coefficients.
+#' @family model-specific methods
 coef.clModel = function(object, ...) {
   if (is.null(getS3method('coef', class=class(object@model), optional=TRUE))) {
     numeric()
@@ -198,6 +199,7 @@ confusionMatrix = function(object) {
 # . converged ####
 #' @export
 #' @title Whether the model converged
+#' @family model-specific methods
 setGeneric('converged', function(object, ...) standardGeneric('converged'))
 setMethod('converged', signature('clModel'), function(object) {
   TRUE
@@ -230,6 +232,7 @@ df.residual.clModel = function(object, ...) {
 #' @title Extract clModel fitted values
 #' @param clusters Optional cluster assignments per id. If unspecified, a matrix is returned containing the cluster-specific predictions per column.
 #' @return A vector of the fitted values for the respective class, or a matrix of fitted values for each cluster.
+#' @family model-specific methods
 fitted.clModel = function(object, clusters=clusterAssignments(object)) {
   predict(object, newdata=NULL) %>%
     transformFitted(object, ., clusters=clusters)
@@ -627,6 +630,7 @@ nobs.clModel = function(object, ...) {
 #' predId = predict(model, newdata=data.frame(Cluster='A', Id='S1', Time=time(model))) # Prediction for id S1 given cluster A membership
 #'
 #' predIdAll = predict(model, newdata=data.frame(Id='S1', Time=time(model))) # Prediction matrix for id S1 for all clusters
+#' @family model-specific methods
 predict.clModel = function(object, newdata=NULL, what='mu', ...) {
   stop('not implemented')
 }
@@ -635,6 +639,7 @@ predict.clModel = function(object, newdata=NULL, what='mu', ...) {
 #' @export
 #' @title clModel posterior probability prediction
 #' @param newdata Optional data frame for which to compute the posterior probability. If omitted, the model training data is used.
+#' @family model-specific methods
 setGeneric('predictPostprob', function(object, newdata=NULL, ...) standardGeneric('predictPostprob'))
 setMethod('predictPostprob', signature('clModel'), function(object, newdata, ...) {
   stop('not implemented')
@@ -881,8 +886,9 @@ transformFitted = function(object, pred, clusters) {
     pred = lapply(pred, '[[', 'Fit') %>%
       do.call(cbind, .)
   } else if(is.data.frame(pred)) {
+    browser()
     assert_that(has_name(pred, c('Fit', 'Cluster')))
-    pred = matrix(pred$Fit)
+    pred = matrix(pred$Fit, ncol=nClusters(object))
   }
 
   assert_that(is.matrix(pred), ncol(pred) == nClusters(object), nrow(pred) == nobs(object))
@@ -904,10 +910,21 @@ transformFitted = function(object, pred, clusters) {
 #' @return A data.frame with the predictions, or a list of cluster-specific prediction frames
 #' @keywords internal
 transformPredict = function(object, pred, newdata) {
-  if(is.vector(pred)) {
+  if(is.null(pred)) {
+    assert_that(nrow(newdata) == 0)
+    browser()
+    if(hasName(newdata, 'Cluster')) {
+      data.frame(Cluster=factor(levels=seq_len(nClusters(object)),
+                                labels=clusterNames(object)), Fit=numeric(0))
+    } else {
+      data.table(Fit=numeric(0))
+    }
+  }
+  else if(is.vector(pred)) {
     assert_that(is.null(newdata) || length(pred) == nrow(newdata))
     data.frame(Fit=pred)
-  } else if(is.matrix(pred)) {
+  }
+  else if(is.matrix(pred)) {
     # format where multiple cluster-specific predictions are given per newdata entry (per row)
     assert_that(is.matrix(pred))
     assert_that(ncol(pred) == nClusters(object))
@@ -920,33 +937,67 @@ transformPredict = function(object, pred, newdata) {
       data.frame(Fit=as.vector(pred)) %>%
         split(clusterNames(object, factor=TRUE) %>% rep(each=nrow(pred)))
     }
-  } else if(is.data.frame(pred)) {
+  }
+  else if(is.data.frame(pred)) {
     assert_that(!is.null(newdata))
-    # generic form, possibly containing more predictions than newdata. These are filtered.
-    # the pred object should contain the newdata variables
+    # generic form, possibly containing more predictions than newdata. These are filtered
+    # if the pred object contains the newdata variables. Else, newdata is replicated.
     pred = as.data.table(pred)
     newdata = as.data.table(newdata)
 
     if(nrow(newdata) == 0) {
-      as.data.table(pred)[0,]
+      return(as.data.table(pred)[0,])
     }
 
     assert_that(hasName(pred, 'Fit'), nrow(pred) > 0)
 
-    vars = setdiff(names(pred), names(newdata)) %>% union('Fit')
-    assert_that(length(vars) > 0, msg='predict() cannot handle covariates with names of the predict columns (e.g., Fit, Se.fit)')
+    mergevars = intersect(names(pred), names(newdata))
+    predvars = setdiff(names(pred), names(newdata))
 
-    newpred = merge(newdata, pred, by=intersect(names(pred), names(newdata)), sort=FALSE, allow.cartesian=TRUE) %>%
-      as.data.frame() %>%
-      .[vars]
+    if(length(mergevars) == 0) {
+      if(nrow(pred) == nrow(newdata)) {
+        # newdata may have Cluster column, but we assume results are correct since rows match
+        if(hasName(newdata, 'Cluster')) {
+          newpred = cbind(pred, Cluster=newdata$Cluster)
+        } else {
+          newpred = pred
+        }
+      }
+      else if(hasName(pred, 'Cluster')) {
+        assert_that(nrow(pred) == nrow(newdata) * uniqueN(pred$Cluster), msg='cannot merge pred and newdata (no shared columns), and nrow(pred) is not a multiple of nrow(newdata)')
+        newpred = pred
+      }
+      else {
+        stop('non-matching rows for pred and newdata, and no shared columns to merge on')
+      }
+    }
+    else if(length(mergevars) == 1 && mergevars == 'Cluster') {
+      # can only merge on cluster. order cannot be validated
+      # number of observations per cluster must match the number of predictions per cluster
+      obsCounts = pred[, .N, keyby=Cluster] %>%
+        .[newdata[, .N, keyby=Cluster]]
+      if(!all(obsCounts[is.finite(N) & is.finite(i.N), N == i.N]))
+        browser()
+      assert_that(all(obsCounts[is.finite(N) & is.finite(i.N), N == i.N]), msg='number of observations per cluster must match the number of predictions per cluster')
 
-    if(!hasName(newpred, 'Cluster') || hasName(newdata, 'Cluster')) {
+      newpred = pred[Cluster %in% unique(newdata$Cluster)]
+    }
+    else {
+      # attempt to merge pred and newdata to ensure correct filtering of predictions
+      newpred = merge(newdata, pred, by=mergevars, sort=FALSE, allow.cartesian=TRUE) %>%
+        subset(select=predvars)
+    }
+
+
+    # only split when newdata does not specify Cluster
+    if(hasName(newdata, 'Cluster') || !hasName(newpred, 'Cluster')) {
       newpred
     } else {
       split(newpred, newpred$Cluster)
     }
 
-  } else {
+  }
+  else {
     stop('unsupported input for pred')
   }
 }
