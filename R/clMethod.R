@@ -1,4 +1,5 @@
 # Method ####
+#' @export
 setClass('clMethod', slots=c(call='call'))
 
 setMethod('initialize', 'clMethod', function(.Object, ...) {

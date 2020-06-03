@@ -1,5 +1,6 @@
 #' @include clMethod.R plot.R
 # Model ####
+#' @export
 setClass('clModel',
          representation(model='ANY',
                         method='clMethod',
