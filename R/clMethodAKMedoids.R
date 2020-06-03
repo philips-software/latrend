@@ -31,7 +31,7 @@ setMethod('getShortName', signature('clMethodAKMedoids'), function(object) 'akm'
 
 
 setMethod('fit', signature('clMethodAKMedoids'), function(method, data, envir, verbose, ...) {
-  args = as.list(method, fun=akmedoids.clust)
+  args = method[akmedoids::akmedoids.clust]
   args$traj = envir$dataMat
   args$k = method$nClusters
   args$id_field = FALSE
@@ -41,7 +41,7 @@ setMethod('fit', signature('clMethodAKMedoids'), function(method, data, envir, v
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   suppressFun({
-    model = do.call(akmedoids.clust, args)
+    model = do.call(akmedoids::akmedoids.clust, args)
   })
 
   clusNames = make.clusterNames(method$nClusters)

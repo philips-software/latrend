@@ -29,19 +29,18 @@ setMethod('getName', signature('clMethodLongclust'), function(object) 'longclust
 setMethod('getShortName', signature('clMethodLongclust'), function(object) 'longclust')
 
 setMethod('fit', signature('clMethodLongclust'), function(method, data, envir, verbose, ...) {
-  args = as.list(method)
+  args = method[longclust::longclustEM]
   args$x = envir$dataMat
   args$Gmin = method$nClusters
   args$Gmax = method$nClusters
   if(hasName(method, 'seed')) {
     args$userseed = method$seed
   }
-  args[setdiff(names(args), formalArgs(longclustEM))] = NULL #remove undefined arguments
 
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   suppressFun({
-    model = do.call(longclustEM, args)
+    model = do.call(longclust::longclustEM, args)
   })
 
   new('clModelLongclust',

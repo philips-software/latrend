@@ -49,7 +49,7 @@ setMethod('prepare', signature('clMethodFlexmix'), function(method, data, verbos
 
 
 setMethod('fit', signature('clMethodFlexmix'), function(method, data, envir, verbose, ...) {
-  args = as.list(method, fun=flexmix)
+  args = method[flexmix::flexmix]
   args$data = data
   args$formula = envir$formula
   args$model = envir$model
@@ -61,7 +61,7 @@ setMethod('fit', signature('clMethodFlexmix'), function(method, data, envir, ver
     args$model = NULL
   }
 
-  flexmodel = do.call(flexmix, args)
+  flexmodel = do.call(flexmix::flexmix, args)
 
   if(flexmodel@k < method$nClusters) {
     warning('flexmix returned a result with fewer components than was specified for nClusters')

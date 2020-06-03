@@ -57,11 +57,11 @@ setMethod('prepare', signature('clMethodLLPA'), function(method, data, verbose, 
 })
 
 setMethod('fit', signature('clMethodLLPA'), function(method, data, envir, verbose, ...) {
-  args = as.list(method)
+  args = method[mclust::Mclust]
   args$data = envir$data
   args$G = method$nClusters
 
-  model = do.call(Mclust, args)
+  model = do.call(mclust::Mclust, args)
   model$time = unique(data[[method$time]]) %>% sort
 
   new('clModelLLPA',

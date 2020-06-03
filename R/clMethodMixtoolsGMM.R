@@ -61,7 +61,7 @@ setMethod('prepare', signature('clMethodMixtoolsGMM'), function(method, data, ve
 
 #' @importFrom mixtools regmixEM.mixed
 setMethod('fit', signature('clMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
-  args = as.list(method)
+  args = method[mixtools::regmixEM.mixed]
   args$y = envir$y
   args$x = envir$x
   args$w = envir$w
@@ -69,7 +69,6 @@ setMethod('fit', signature('clMethodMixtoolsGMM'), function(method, data, envir,
   args$addintercept.fixed = FALSE
   args$addintercept.random = FALSE
   args$verb = canShow(verbose, 'fine')
-  args[setdiff(names(args), formalArgs(regmixEM.mixed))] = NULL #remove undefined arguments
 
   model = do.call(regmixEM.mixed, args)
   model$fixed = envir$fixed

@@ -44,13 +44,12 @@ setMethod('prepare', signature('clMethodCrimCV'), function(method, data, verbose
 setMethod('fit', signature('clMethodCrimCV'), function(method, data, envir, verbose, ...) {
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
-  args = as.list(method)
+  args = method[crimCV::crimCV]
   args$Dat = envir$dataMat
   args$ng = method$nClusters
-  args[setdiff(names(args), formalArgs(crimCV))] = NULL
 
   suppressFun({
-    model = do.call(crimCV, args)
+    model = do.call(crimCV::crimCV, args)
   })
   model$data = envir$dataMat
   model$minTime = min(data[[method$time]])

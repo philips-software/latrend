@@ -32,6 +32,6 @@ setMethod('getShortName', signature('clMethodFlexmixGBTM'), function(object) 'gb
 #' @importFrom flexmix FLXMRglm
 setMethod('prepare', signature('clMethodFlexmixGBTM'), function(method, data, verbose) {
   e = callNextMethod()
-  e$model = FLXMRglm(family=method$family)
+  e$model = flexmix::FLXMRglm(family=method$family)
   return(e)
 })

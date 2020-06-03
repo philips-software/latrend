@@ -41,19 +41,18 @@ setMethod('prepare', signature('clMethodFunFEM'), function(method, data, verbose
 
 
 setMethod('fit', signature('clMethodFunFEM'), function(method, data, envir, verbose, ...) {
-  args = as.list(method)
+  args = method[funFEM::funFEM]
   args$fd = envir$fd
   args$K = method$nClusters
   args$disp = FALSE
   args$graph = FALSE
-  args[setdiff(names(args), formalArgs(funFEM))] = NULL #remove undefined arguments
 
   # Helper variables
   valueColumn = formula(method) %>% getResponse
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   suppressFun({
-    model = do.call(funFEM, args)
+    model = do.call(funFEM::funFEM, args)
   })
   model$basis = envir$basis
   model$fd = envir$fd

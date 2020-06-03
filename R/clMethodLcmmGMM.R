@@ -94,7 +94,7 @@ setMethod('prepare', signature('clMethodLcmmGMM'), gmm_prepare)
 gmm_fit = function(method, data, envir, verbose, ...) {
   valueColumn = formula(method) %>% getResponse
 
-  args = as.list(method)
+  args = method[lcmm::lcmm]
   args$data = envir$data
   args$fixed = envir$fixed
   if (method$nClusters > 1) {
@@ -107,7 +107,6 @@ gmm_fit = function(method, data, envir, verbose, ...) {
   args$classmb = envir$formula.mb
   args$ng = method$nClusters
   args$verbose = envir$verbose
-  args[setdiff(names(args), formalArgs(lcmm))] = NULL #remove undefined arguments
   args$returndata = TRUE
 
   if(method$nClusters == 1 || !hasCovariates(args$classmb)) {

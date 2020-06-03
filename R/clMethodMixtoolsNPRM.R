@@ -28,18 +28,17 @@ setMethod('getShortName', signature('clMethodMixtoolsNPRM'), function(object) 'n
 
 
 setMethod('fit', signature('clMethodMixtoolsNPRM'), function(method, data, envir, verbose, ...) {
-  args = as.list(method)
+  args = method[mixtools::npEM]
   args$x = envir$dataMat
   args$mu0 = method$nClusters
   args$verb = canShow(verbose, 'fine')
-  args[setdiff(names(args), formalArgs(npEM))] = NULL #remove undefined arguments
 
   # Helper variables
   valueColumn = formula(method) %>% getResponse
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   suppressFun({
-    model = do.call(npEM, args)
+    model = do.call(mixtools::npEM, args)
   })
 
   new('clModelMixtoolsRM',

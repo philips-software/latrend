@@ -50,8 +50,8 @@ setMethod('prepare', signature('clMethodKML'), function(method, data, verbose, .
   cat(verbose, 'Creating clusterLongData object...', level=verboseLevels$finest)
 
   parRefArgs = list(saveFreq = 1e99, scale=FALSE)
-  parArgs = modifyList(parRefArgs, as.list(method, fun=parALGO), keep.null=TRUE)
-  e$par = do.call(parALGO, parArgs)
+  parArgs = modifyList(parRefArgs, method[kml::parALGO], keep.null=TRUE)
+  e$par = do.call(kml::parALGO, parArgs)
 
   e$cld = clusterLongData(traj=e$dataMat, idAll=rownames(e$dataMat), time=sort(unique(data[[method$time]])))
   return(e)
@@ -68,7 +68,7 @@ setMethod('fit', signature('clMethodKML'), function(method, data, envir, verbose
   cat(verbose, 'Running kml()...', level=verboseLevels$finest)
   suppressFun(
     # note that slowKML throws an error for nbClusters=1
-    kml(cld, nbClusters=method$nClusters, nbRedrawing=method$nbRedrawing, toPlot='none', parAlgo=envir$par)
+    kml::kml(cld, nbClusters=method$nClusters, nbRedrawing=method$nbRedrawing, toPlot='none', parAlgo=envir$par)
   )
 
   new('clModelKML',
