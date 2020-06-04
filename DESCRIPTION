@@ -2,8 +2,9 @@ Package: cluslong
 Type: Package
 Title: Clustering longitudinal datasets
 Version: 0.5.0
-Author: Niek Den Teuling
-Maintainer: Niek Den Teuling <n.g.p.den.teuling@tue.nl>
+Authors@R: person("Niek", "Den Teuling", email = "niek.den.teuling@philips.com", role = c("aut", "cre"))
+URL: http://example.com
+BugReports: http://example.com
 Description: Common methods for clustering longitudinal datasets with univariate trajectories
 License: TBD
 Encoding: UTF-8
