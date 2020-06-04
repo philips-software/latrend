@@ -225,17 +225,17 @@ test_that('as.list', {
     expect_length(length(method))
 })
 
-test_that('function subset', {
+test_that('as.list with function', {
   m = clMethodKML()
-  subm = m[kml::parALGO]
-  expect_length(setdiff(names(subm), formalArgs(kml::parALGO)), 0)
+  lis = as.list(m, args=kml::parALGO)
+  expect_length(setdiff(names(lis), formalArgs(kml::parALGO)), 0)
 })
 
-test_that('two functions subset', {
+test_that('as.list with two functions', {
   m = clMethodKML()
   funs = c(kml::parALGO, kml::kml)
-  subm = m[funs]
-  expect_length(setdiff(names(m[funs]), union(formalArgs(funs[[1]]), formalArgs(funs[[2]]))), 0)
+  lis = as.list(m, args=funs)
+  expect_length(setdiff(names(lis), union(formalArgs(funs[[1]]), formalArgs(funs[[2]]))), 0)
 })
 
 test_that('substitute', {
