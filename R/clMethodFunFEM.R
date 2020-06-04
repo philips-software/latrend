@@ -41,7 +41,7 @@ setMethod('prepare', signature('clMethodFunFEM'), function(method, data, verbose
 
 
 setMethod('fit', signature('clMethodFunFEM'), function(method, data, envir, verbose, ...) {
-  args = method[funFEM::funFEM]
+  args = as.list(method, args=funFEM::funFEM)
   args$fd = envir$fd
   args$K = method$nClusters
   args$disp = FALSE

@@ -57,7 +57,7 @@ setMethod('prepare', signature('clMethodMclustLLPA'), function(method, data, ver
 })
 
 setMethod('fit', signature('clMethodMclustLLPA'), function(method, data, envir, verbose, ...) {
-  args = method[mclust::Mclust]
+  args = as.list(method, args=mclust::Mclust)
   args$data = envir$data
   args$G = method$nClusters
 

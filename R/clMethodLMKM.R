@@ -42,7 +42,7 @@ setMethod('getShortName', signature('clMethodLMKM'), function(object) 'glmkm')
 
 setMethod('prepare', signature('clMethodLMKM'), function(method, data, verbose) {
   cat(verbose, 'Representation step...')
-  lmArgs = method[lm, expand=FALSE]
+  lmArgs = as.list(method, args=lm)
 
   coefdata = data[, do.call(lm, c(lmArgs, data=list(.SD))) %>% coef() %>% as.list(), keyby = c(method$id)]
   # construct the coefficient matrix

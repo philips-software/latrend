@@ -49,7 +49,7 @@ setMethod('prepare', signature('clMethodFlexmix'), function(method, data, verbos
 
 
 setMethod('fit', signature('clMethodFlexmix'), function(method, data, envir, verbose, ...) {
-  args = method[flexmix::flexmix]
+  args = as.list(method, args=flexmix::flexmix)
   args$data = data
   args$formula = envir$formula
   args$model = envir$model

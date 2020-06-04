@@ -44,7 +44,7 @@ setMethod('prepare', signature('clMethodCrimCV'), function(method, data, verbose
 setMethod('fit', signature('clMethodCrimCV'), function(method, data, envir, verbose, ...) {
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
-  args = method[crimCV::crimCV]
+  args = as.list(method, args=crimCV::crimCV)
   args$Dat = envir$dataMat
   args$ng = method$nClusters
 

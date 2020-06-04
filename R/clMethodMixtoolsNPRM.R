@@ -28,7 +28,7 @@ setMethod('getShortName', signature('clMethodMixtoolsNPRM'), function(object) 'n
 
 
 setMethod('fit', signature('clMethodMixtoolsNPRM'), function(method, data, envir, verbose, ...) {
-  args = method[mixtools::npEM]
+  args = as.list(method, args=mixtools::npEM)
   args$x = envir$dataMat
   args$mu0 = method$nClusters
   args$verb = canShow(verbose, 'fine')

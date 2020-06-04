@@ -61,7 +61,7 @@ setMethod('prepare', signature('clMethodMixtoolsGMM'), function(method, data, ve
 
 #' @importFrom mixtools regmixEM.mixed
 setMethod('fit', signature('clMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
-  args = method[mixtools::regmixEM.mixed]
+  args = as.list(method, args=mixtools::regmixEM.mixed)
   args$y = envir$y
   args$x = envir$x
   args$w = envir$w

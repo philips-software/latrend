@@ -29,7 +29,7 @@ setMethod('getName', signature('clMethodLongclust'), function(object) 'longclust
 setMethod('getShortName', signature('clMethodLongclust'), function(object) 'longclust')
 
 setMethod('fit', signature('clMethodLongclust'), function(method, data, envir, verbose, ...) {
-  args = method[longclust::longclustEM]
+  args = as.list(method, args=longclust::longclustEM)
   args$x = envir$dataMat
   args$Gmin = method$nClusters
   args$Gmax = method$nClusters
