@@ -8,19 +8,19 @@ options(cluslong.id='Id',
         cluslong.verbose=R.utils::Verbose())
 
 clMethodTestKML = function(...) {
-  clMethodKML(nbRedrawing=1, maxIt=10, ...)
+  clMethodKML(nbRedrawing=1, maxIt=10, ..., seed=1)
 }
 
 clMethodTestLcmmGMM = function(...) {
-  clMethodLcmmGMM(maxiter=10, ...)
+  clMethodLcmmGMM(maxiter=10, ..., seed=1)
 }
 
 clMethodTestLcmmGBTM = function(...) {
-  clMethodLcmmGBTM(maxiter=10, ...)
+  clMethodLcmmGBTM(maxiter=10, ..., seed=1)
 }
 
 clMethodTestFlexmixGBTM = function(...) {
-  clMethodFlexmixGBTM(..., control=list(iter.max=1, tolerance=1e-2))
+  clMethodFlexmixGBTM(..., control=list(iter.max=1, tolerance=1e-2), seed=1)
 }
 
 clMethodTestCrimCV = function(...) {
@@ -32,19 +32,19 @@ clMethodTestCrimCVt = function(...) {
 }
 
 clMethodTestLongclust = function(...) {
-  clMethodLongclust(modelSubset='VVA', gaussian=TRUE, ...)
+  clMethodLongclust(modelSubset='VVA', gaussian=TRUE, ..., seed=1)
 }
 
 clMethodTestLongclustT = function(...) {
-  clMethodLongclust(modelSubset='VEI', gaussian=FALSE, ...)
+  clMethodLongclust(modelSubset='VEI', gaussian=FALSE, ..., seed=1)
 }
 
 clMethodTestMixtoolsNPRM = function(...) {
-  clMethodMixtoolsNPRM(maxiter=10, eps=1e-04)
+  clMethodMixtoolsNPRM(maxiter=10, eps=1e-04, seed=1)
 }
 
 clMethodTestMixtoolsGMM = function(...) {
-  clMethodMixtoolsGMM(epsilon=1e-02, ...)
+  clMethodMixtoolsGMM(epsilon=1e-02, ..., seed=1)
 }
 
 expect_valid_clModel = function(object) {
