@@ -1,7 +1,12 @@
 #' @include clModel.R
+#' @export
+#' @name clApproxModel-class
+#' @aliases clApproxModel
+#' @title clApproxModel class
 #' @description approx models have defined cluster trajectories at fixed moments in time, which should be interpolated
 #' For a correct implementation, clApproxModel requires the extending class to implement clusterTrajectories(at=NULL)
 #' to return the fixed cluster trajectories
+#' @keywords internal
 setClass('clApproxModel', contains='clModel')
 
 #' @export

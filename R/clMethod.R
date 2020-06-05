@@ -1,5 +1,12 @@
 # Method ####
 #' @export
+#' @name clMethod-class
+#' @aliases clMethod
+#' @title clMethod class
+#' @description Base class used to define a longitudinal cluster method. It is implemented as a wrapper around a `call`.
+#' @method Derp aaa
+#' @slot call The `call` representing the arguments of the `clMethod` object.
+#' @family clMethod implementations
 setClass('clMethod', slots=c(call='call'))
 
 setMethod('initialize', 'clMethod', function(.Object, ...) {
@@ -30,21 +37,23 @@ setMethod('show', 'clMethod',
 )
 
 #' @export
-#' @title Construct a clMethod object for a given implementation
+#' @title Construct a clMethod object for a given method type
 #' @description Creates a clMethod class of the specified type `Class` for the given arguments given in a call, along with any default arguments from reference functions.
-#' @param Class The type of `clMethod` class
+#' This function is intended to be used by classes extending `clMethod` to provide an easy way to construct the appropriate `call` object.
+#' @param Class The type of \link{clMethod} class
 #' @param call The arguments to create the `clMethod` from.
-#' @param defaults List of `function` to obtain defaults from for arguments unspecified by `call`.
+#' @param defaults List of `function` to obtain defaults from for arguments not defined in `call`.
 #' @param excludeArgs The names of the arguments to exclude from the defaults, provided as a `character vector`.
 #' @examples
 #' clMethodKML2 = function(formula=Value ~ 0, time='Id', id='Id', nClusters=2, ...) {
-#'   clMethod('clMethodKML', call=stackoverflow::match.call.defaults(),
+#'   .clMethod('clMethodKML', call=stackoverflow::match.call.defaults(),
 #'     defaults=c(kml::kml, kml::parALGO),
 #'     excludeArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq'))
 #' }
-#' clMethodKML2(nClusters=3)
+#' m = clMethodKML2(nClusters=3)
+#' cluslong(m, testLongData)
 #' @family clMethod functions
-clMethod = function(Class, call, defaults=list(), excludeArgs=c()) {
+.clMethod = function(Class, call, defaults=list(), excludeArgs=c()) {
   classRep = getClass(Class)
   assert_that('clMethod' %in% names(classRep@contains), msg='specified class does not inherit from clMethod')
   assert_that(is.call(call))

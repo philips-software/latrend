@@ -1,6 +1,23 @@
 #' @include clMethod.R plot.R
 # Model ####
 #' @export
+#' @name clModel-class
+#' @title clModel class
+#' @description Abstract class for defining estimated longitudinal cluster models.
+#' @details An extending class must implement the following methods to ensure basic functionality:
+#' * predict.clModelExt: Used to obtain the fitted cluster trajectories and trajectories.
+#' * postprob(clModelExt): The posterior probability matrix is used to determine the cluster assignments of the trajectories.
+#'
+#' @slot method The \code{\link{clMethod}} object specifying the arguments under which the model was fitted.
+#' @slot call The `call` that was used to create this `clModel` object. Typically, this is the call to `cluslong()` or any of the other fitting functions.
+#' @slot model An arbitrary underlying model representation.
+#' @slot id The name of the trajectory identifier column.
+#' @slot time The name of the time variable.
+#' @slot response The name of the response variable.
+#' @slot ids The possible trajectory identifier values the model was fitted on.
+#' @slot clusterNames The names of the clusters.
+#' @slot estimationTime The time, in seconds, that it took to fit the model.
+#' @family model-specific methods
 setClass('clModel',
          representation(model='ANY',
                         method='clMethod',
@@ -12,9 +29,6 @@ setClass('clModel',
                         ids='vector',
                         clusterNames='character',
                         estimationTime='numeric'))
-
-# NOTE: do not specify a validity method for clModel!
-# Referencing the clModel object within setValidity breaks clModelCustom intialization resulting in unspecified slots for some mysterious reason.
 
 # . initialize ####
 setMethod('initialize', 'clModel', function(.Object, ...) {
@@ -74,6 +88,7 @@ setValidity('clModel', function(object) {
 #' clusterTrajectories(model)
 #'
 #' clusterTrajectories(model, at=c(0, .5, 1))
+#' @family model-specific methods
 setGeneric('clusterTrajectories', function(object, at=time(object), what='mu', ...) standardGeneric('clusterTrajectories'))
 setMethod('clusterTrajectories', signature('clModel'), function(object, at, what, ...) {
   if(is.numeric(at)) {
@@ -208,6 +223,7 @@ setMethod('converged', signature('clModel'), function(object) {
 
 #' @export
 #' @title clModel deviance
+#' @family model-specific methods
 deviance.clModel = function(object, ...) {
   if (is.null(getS3method('deviance', class=class(object@model), optional=TRUE))) {
     as.numeric(NA)
@@ -219,6 +235,7 @@ deviance.clModel = function(object, ...) {
 
 #' @export
 #' @title Extract the residual degrees of freedom from a clModel
+#' @family model-specific methods
 df.residual.clModel = function(object, ...) {
   if (is.null(getS3method('df.residual', class=class(object@model), optional=TRUE))) {
     nobs(object) - attr(logLik(object), 'df')
@@ -344,6 +361,7 @@ is.clModel = function(object) {
 
 #' @export
 #' @title Extract the log-likelihood of a clModel
+#' @family model-specific methods
 logLik.clModel = function(object, ...) {
   logLik(object@model)
 }
@@ -545,6 +563,7 @@ make.clusterNames = function(n) {
 
 #' @export
 #' @title Extract model training data
+#' @family model-specific methods
 model.frame.clModel = function(object) {
   if (is.null(getS3method('model.frame', class=class(object@model), optional=TRUE))) {
     labs = getMethod(object) %>% formula %>% terms %>% labels
@@ -609,6 +628,7 @@ nClusters = function(object) {
 
 #' @export
 #' @title Extract the number of observations from a clModel
+#' @family model-specific methods
 nobs.clModel = function(object, ...) {
   length(model.response(object))
 }
@@ -699,6 +719,7 @@ setMethod('plotTrajectories', signature('clModel'), function(object, ...) {
 #' @examples
 #' model = cluslong(clMethodLcmmGMM(), data=testLongData)
 #' postprob(model)
+#' @family model-specific methods
 setGeneric('postprob', function(object, ...) standardGeneric('postprob'))
 setMethod('postprob', signature('clModel'), function(object) {
   predictPostprob(object, newdata=NULL)
@@ -735,6 +756,7 @@ setMethod('plotQQ', signature('clModel'), function(object, byCluster, ...) {
 #' @title Extract clModel residuals
 #' @inheritParams fitted.clModel
 #' @return A vector of residuals for the cluster assignments specified by clusters. If clusters is unspecified, a matrix of cluster-specific residuals per observations is returned.
+#' @family model-specific methods
 residuals.clModel = function(object, clusters=clusterAssignments(object), ...) {
   ypred = fitted(object, clusters=clusters, ...)
   yref = model.response(object)
@@ -785,6 +807,7 @@ setMethod('show', 'clModel', function(object) {
 
 #' @export
 #' @title Extract residual standard deviation from a clModel
+#' @family model-specific methods
 sigma.clModel = function(object, ...) {
   if (is.null(getS3method('sigma', class=class(object@model), optional=TRUE))) {
     residuals(object) %>% sd
@@ -838,6 +861,7 @@ timeVariable = function(object) {
 #' trajectories(model)
 #'
 #' trajectories(model, at=c(0, .5, 1))
+#' @family model-specific methods
 setGeneric('trajectories', function(object, at=time(object), what='mu', clusters=clusterAssignments(object), ...) standardGeneric('trajectories'))
 setMethod('trajectories', signature('clModel'), function(object, at, what, clusters) {
   ids = ids(object)
@@ -871,7 +895,7 @@ setMethod('trajectories', signature('clModel'), function(object, at, what, clust
   return(newdata[])
 })
 
-
+#' @export
 #' @title Helper function for ensuring the right fitted() output
 #' @details Includes additional checks
 #' @return A vector or matrix
@@ -903,6 +927,7 @@ transformFitted = function(object, pred, clusters) {
   }
 }
 
+#' @export
 #' @title Helper function that matches the output to the specified newdata
 #' @description If Cluster is not provided, the prediction is outputted in long format per cluster,
 #' resulting in a longer data.frame than the newdata input
@@ -1006,6 +1031,7 @@ transformPredict = function(object, pred, newdata) {
 #' @export
 #' @title Sampling times of a clModel
 #' @return The unique times at which observations occur.
+#' @family model-specific methods
 time.clModel = function(object) {
   model.data(object)[[timeVariable(object)]] %>% unique %>% sort
 }
