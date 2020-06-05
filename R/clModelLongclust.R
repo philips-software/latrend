@@ -58,7 +58,7 @@ logLik.clModelLongclust = function(object) {
     ll = logLiks
   } else {
     # determine best model based on criteria
-    bestIdx = switch(tolower(getMethod(object)$criteria),
+    bestIdx = switch(tolower(getClMethod(object)$criteria),
            bic={which.max(object@model$bicres)},
            icl={which.max(object@model$iclres)})
     ll = logLiks[bestIdx]
@@ -76,7 +76,7 @@ BIC.clModelLongclust = function(object) {
     bics
   } else {
     # determine best model based on criteria
-    bestIdx = switch(tolower(getMethod(object)$criteria),
+    bestIdx = switch(tolower(getClMethod(object)$criteria),
                      bic={which.max(object@model$bicres)},
                      icl={which.max(object@model$iclres)})
     bics[bestIdx]

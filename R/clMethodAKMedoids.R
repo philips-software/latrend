@@ -20,7 +20,7 @@ clMethodAKMedoids = function(formula=Value ~ 0,
                        clusterCenter=median,
                        ...
 ) {
-  clMethod('clMethodAKMedoids', call=match.call.defaults(),
+  .clMethod('clMethodAKMedoids', call=match.call.defaults(),
            defaults=akmedoids::akmedoids.clust,
            excludeArgs=c('traj', 'id_field', 'k'))
 }

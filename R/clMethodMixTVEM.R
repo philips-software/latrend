@@ -64,7 +64,7 @@ clMethodMixTVEM = function(formula=Value ~ time(1) - 1,
                        nClusters=2,
                        ...
 ) {
-  clMethod('clMethodMixTVEM', call=match.call.defaults(),
+  .clMethod('clMethodMixTVEM', call=match.call.defaults(),
            defaults=TVEMMixNormal,
            excludeArgs=c('doPlot', 'getSEs', 'numClasses'))
 }

@@ -32,7 +32,7 @@ clMethodGCKM = function(formula=Value ~ 1,
                         ...
 
 ) {
-  clMethod('clMethodGCKM', call=match.call.defaults(),
+  .clMethod('clMethodGCKM', call=match.call.defaults(),
            defaults=c(lmer, kmeans),
            excludeArgs=c('data', 'centers', 'trace'))
 }

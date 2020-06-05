@@ -67,12 +67,11 @@ as.list.clModels = function(x) {
 #' @param x `clModels` or a list of `ClModel`
 #' @param excludeShared Whether to exclude columns which have the same value across all methods.
 #' @param ... Arguments passed to [as.data.frame.clMethod].
-#' @return A `data.frame` or `data.table`.
-#' @rdname as.data.frame.clModels
-as.data.table.clModels = function(x, excludeShared=FALSE, eval=TRUE, ...) {
+#' @return A `data.frame`.
+as.data.frame.clModels = function(x, excludeShared=FALSE, eval=TRUE, ...) {
   x = as.clModels(x)
 
-  dfs = lapply(x, getMethod) %>%
+  dfs = lapply(x, getClMethod) %>%
     lapply(as.data.frame, eval=eval, ...)
 
   suppressWarnings({
@@ -94,14 +93,7 @@ as.data.table.clModels = function(x, excludeShared=FALSE, eval=TRUE, ...) {
     dt[, data := dataNames]
   }
   setcolorder(dt, intersect(c('.name', '.method', 'data'), names(dt)))
-  return(dt[])
-}
-
-
-#' @export
-#' @family clModel list functions
-as.data.frame.clModels = function(x, ...) {
-  as.data.table(x, ...) %>% as.data.frame
+  as.data.frame(dt)
 }
 
 
@@ -295,6 +287,6 @@ print.clModels = function(x, summary=FALSE, excludeShared=!getOption('cluslong.p
     as.list(x) %>% print
   } else {
     cat(sprintf('List of %d clModels with\n', length(x)))
-    print(as.data.table.clModels(x, excludeShared=excludeShared))
+    print(as.data.frame.clModels(x, excludeShared=excludeShared))
   }
 }

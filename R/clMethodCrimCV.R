@@ -21,7 +21,7 @@ clMethodCrimCV = function(formula=Value ~ 0,
                        nClusters=2,
                        ...
 ) {
-  clMethod('clMethodCrimCV', call=match.call.defaults(),
+  .clMethod('clMethodCrimCV', call=match.call.defaults(),
            defaults=crimCV::crimCV,
            excludeArgs=c('Dat', 'ng'))
 }

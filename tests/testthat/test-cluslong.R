@@ -18,7 +18,7 @@ test_that('overwritten argument', {
   model = cluslong(clMethodTestKML(), data=testLongData, nClusters=1)
 
   expect_equal(nClusters(model), 1)
-  expect_equal(getMethod(model)$nClusters, 1)
+  expect_equal(getClMethod(model)$nClusters, 1)
   expect_equal(getCall(model)$method$nClusters, 1)
 })
 
@@ -27,14 +27,14 @@ test_that('method var with overwritten argument', {
   model = cluslong(kml, data=testLongData, nClusters=1)
 
   expect_equal(nClusters(model), 1)
-  expect_equal(getMethod(model)$nClusters, 1)
+  expect_equal(getClMethod(model)$nClusters, 1)
   expect_equal(getCall(model)$method$nClusters, 1)
 })
 
 test_that('new method arguments', {
   model = cluslong(clMethodTestKML(), data=testLongData, test=2)
 
-  expect_equal(getMethod(model)$test, 2)
+  expect_equal(getClMethod(model)$test, 2)
 })
 
 test_that('subset', {

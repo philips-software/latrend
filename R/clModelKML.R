@@ -6,7 +6,7 @@ setMethod('clusterTrajectories', signature('clModelKML'), function(object, at, w
   if(is.null(at)) {
     trajMat = calculTrajMean(traj=object@model@traj,
                              clust=getClusters(object@model, nbCluster=nClusters(object)),
-                             centerMethod=getMethod(object)$centerMethod)
+                             centerMethod=getClMethod(object)$centerMethod)
 
     if(!is.matrix(trajMat)) {
       trajMat = matrix(trajMat, nrow=1)

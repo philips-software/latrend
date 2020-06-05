@@ -21,7 +21,7 @@ clMethodKML = function(formula=Value ~ 0,
                        nClusters=2,
                        ...
 ) {
-  m = clMethod('clMethodKML', call=match.call.defaults(),
+  m = .clMethod('clMethodKML', call=match.call.defaults(),
            defaults=c(kml::kml, kml::parALGO),
            excludeArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq'))
 

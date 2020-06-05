@@ -48,7 +48,7 @@ predict.clModelLMKM = function(object, newdata=NULL, what='mu', ...) {
   }
 
   # create ref lm
-  method = getMethod(object)
+  method = getClMethod(object)
   lmArgs = as.list(method, args=lm)
   data = model.data(object)
   refdata = data[get(method$id) == first(get(method$id))][1:min(10, .N)]

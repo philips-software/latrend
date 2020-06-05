@@ -22,7 +22,7 @@ predict.clModelCrimCV = function(object, newdata=NULL, what='mean') {
   newtime = (newdata[[timeVariable(object)]] - object@model$minTime) / object@model$durTime
 
   X = bs(x = newtime,
-         degree = getMethod(object)$dpolyp,
+         degree = getClMethod(object)$dpolyp,
          intercept = TRUE,
          Boundary.knots = c(0, 1))
   Xmat = X %*% object@model$beta
@@ -32,7 +32,7 @@ predict.clModelCrimCV = function(object, newdata=NULL, what='mean') {
     nuMat = exp(-object@model$tau * t(Xmat)) %>% t
   } else {
     Zmat = bs(x = newtime,
-              degree = getMethod(object)$dpolyl,
+              degree = getClMethod(object)$dpolyl,
               intercept = TRUE,
               Boundary.knots = c(0, 1))
     nuMat = exp(Zmat %*% object@model$gamma)

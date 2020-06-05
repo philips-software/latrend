@@ -19,7 +19,7 @@ clMethodLongclust = function(formula=Value ~ 1,
                           nClusters=2,
                           ...
 ) {
-  clMethod('clMethodLongclust', call=match.call.defaults(),
+  .clMethod('clMethodLongclust', call=match.call.defaults(),
            defaults=longclust::longclustEM,
            excludeArgs=c('data', 'x', 'Gmin', 'Gmax', 'userseed'))
 }

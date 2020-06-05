@@ -8,7 +8,7 @@
 #' * predict.clModelExt: Used to obtain the fitted cluster trajectories and trajectories.
 #' * postprob(clModelExt): The posterior probability matrix is used to determine the cluster assignments of the trajectories.
 #'
-#' @slot method The \code{\link{clMethod}} object specifying the arguments under which the model was fitted.
+#' @slot method The \link{clMethod-class} object specifying the arguments under which the model was fitted.
 #' @slot call The `call` that was used to create this `clModel` object. Typically, this is the call to `cluslong()` or any of the other fitting functions.
 #' @slot model An arbitrary underlying model representation.
 #' @slot id The name of the trajectory identifier column.
@@ -261,7 +261,7 @@ fitted.clModel = function(object, clusters=clusterAssignments(object)) {
 #' @param what The distributional parameter
 #' @return Returns the associated `formula`, or ` ~ 0` if not specified.
 formula.clModel = function(object, what='mu') {
-  method = getMethod(object)
+  method = getClMethod(object)
   if(what == 'mu') {
     if(has_name(method, 'formula')) {
       method$formula
@@ -297,18 +297,18 @@ getModel = function(object) {
 #' @title Get the method specification of a clModel
 #' @examples
 #' model = cluslong(method=clMethodKML(), data=testLongData)
-#' getMethod(model)
-getMethod = function(object) {
+#' getClMethod(model)
+getClMethod = function(object) {
   assert_that(is.clModel(object))
   object@method
 }
 
 
 # . getName ####
-setMethod('getName', signature('clModel'), function(object) getMethod(object) %>% getName)
+setMethod('getName', signature('clModel'), function(object) getClMethod(object) %>% getName)
 
 # . getShortName ####
-setMethod('getShortName', signature('clModel'), function(object) getMethod(object) %>% getShortName)
+setMethod('getShortName', signature('clModel'), function(object) getClMethod(object) %>% getShortName)
 
 
 #' @title Generate a vector indicating the id-number (between 1 and numIds()) per row
@@ -566,7 +566,7 @@ make.clusterNames = function(n) {
 #' @family model-specific methods
 model.frame.clModel = function(object) {
   if (is.null(getS3method('model.frame', class=class(object@model), optional=TRUE))) {
-    labs = getMethod(object) %>% formula %>% terms %>% labels
+    labs = getClMethod(object) %>% formula %>% terms %>% labels
     model.data(object)[, labs]
   } else {
     model.frame(object@model)
@@ -827,7 +827,7 @@ summary.clModel = function(object, ...) {
   }
 
   new('clSummary',
-      method=getMethod(object),
+      method=getClMethod(object),
       name=getName(object),
       nClusters=nClusters(object),
       nObs=nobs(object),

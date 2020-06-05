@@ -33,7 +33,7 @@ clMethodMclustLLPA = function(formula=Value ~ 1,
                        nClusters=2,
                        ...
 ) {
-  clMethod('clMethodMclustLLPA', call=match.call.defaults(),
+  .clMethod('clMethodMclustLLPA', call=match.call.defaults(),
            defaults=mclust::Mclust,
            excludeArgs=c('data', 'G', 'verbose'))
 }

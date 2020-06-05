@@ -1,7 +1,7 @@
 context('clMethod')
 
 test_that('new clmethod', {
-  m = clMethod('clMethodKML', call=call('clMethod', `NA`=NULL, log=TRUE, int=3L, num=2.5, char='a',
+  m = .clMethod('clMethodKML', call=call('clMethod', `NA`=NULL, log=TRUE, int=3L, num=2.5, char='a',
                                         fac=factor('b', levels=c('a', 'b')),
                                         form=A~B,
                                         call=quote(1 + 2 * 3),
@@ -258,7 +258,7 @@ test_that('negative nClusters error', {
 
 test_that('clMethod function', {
   clMethodKML2 = function(formula=Value ~ 0, time='Id', id='Id', nClusters=2) {
-    clMethod('clMethodKML', call=match.call.defaults(),
+    .clMethod('clMethodKML', call=match.call.defaults(),
              defaults=c(kml::kml, kml::parALGO),
              excludeArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq'))
   }
@@ -269,7 +269,7 @@ test_that('clMethod function', {
 
 test_that('clMethod function with default NULL argument', {
   clMethodKML2 = function(formula=Value ~ 0, time=NULL, id='Id', nClusters=2) {
-    clMethod('clMethodKML', call=match.call.defaults(),
+    .clMethod('clMethodKML', call=match.call.defaults(),
              defaults=c(kml::kml, kml::parALGO),
              excludeArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq'))
   }

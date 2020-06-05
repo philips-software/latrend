@@ -16,7 +16,7 @@ clMethodFlexmix = function(formula=Value ~ 0,
                         nClusters=2,
                         ...
 ) {
-  clMethod('clMethodFlexmix', call=match.call.defaults(),
+  .clMethod('clMethodFlexmix', call=match.call.defaults(),
            defaults=flexmix::flexmix,
            excludeArgs=c('data', 'concomitant', 'k'))
 }

@@ -66,13 +66,13 @@ test_that('as.data.table', {
 
   clModels(m1) %>%
     as.data.table() %>%
-    expect_length(length(getMethod(m1)) + 3) %>%
-    expect_named(c('.name', '.method', 'data', names(getMethod(m1))))
+    expect_length(length(getClMethod(m1)) + 3) %>%
+    expect_named(c('.name', '.method', 'data', names(getClMethod(m1))))
 
   clModels(m1) %>%
     as.data.table() %>%
-    expect_length(length(getMethod(m1)) + 3) %>%
-    expect_named(c('.name', '.method', 'data', names(getMethod(m1))))
+    expect_length(length(getClMethod(m1)) + 3) %>%
+    expect_named(c('.name', '.method', 'data', names(getClMethod(m1))))
 })
 
 test_that('subset', {
