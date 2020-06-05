@@ -1,11 +1,11 @@
 Package: cluslong
 Type: Package
 Title: Clustering longitudinal datasets
-Version: 0.5.0
+Version: 0.6.0
 Authors@R: person("Niek", "Den Teuling", email = "niek.den.teuling@philips.com", role = c("aut", "cre"))
 URL: http://example.com
 BugReports: http://example.com
-Description: Common methods for clustering longitudinal datasets with univariate trajectories
+Description: A framework for clustering longitudinal datasets with univariate trajectories using commonly applied methods. Facilitates reproducible and transparent cluster analyses with internal and external validation, and simulation studies.
 License: TBD
 Encoding: UTF-8
 LazyData: true
@@ -26,8 +26,9 @@ RoxygenNote: 7.1.0
 Roxygen: list(markdown = TRUE)
 Suggests: 
     testthat (>= 2.1.0),
-    knitr,
-    rmarkdown,
+    roxygen2 (>= 7.1.0),
+    knitr (>= 1.24),
+    rmarkdown (>= 1.18),
     kml (>= 2.4.1),
     longitudinalData (>= 2.4.1),
     lcmm (>= 1.7.8),

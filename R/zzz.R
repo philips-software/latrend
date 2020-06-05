@@ -4,6 +4,15 @@
 #' @import magrittr
 #' @import foreach
 #' @import ggplot2
+#' @details
+#' -- Getting started
+#' * See `vignette("demo", package="cluslong")` for an introduction to conducting a longitudinal cluster analysis on a example case study.
+#' * See `vignette("customModels", package="cluslong")` for examples on constructing your own cluster models.
+#' * See `vignette("modelSelection", package="cluslong")`
+#' * See `vignette("modelValidation", package="cluslong")`
+#' * See `vignette("simulationStudy", package="cluslong")`
+"_PACKAGE"
+
 
 .onLoad = function(libname, pkgname) {
   opts = list(
