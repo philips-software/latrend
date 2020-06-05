@@ -15,7 +15,7 @@ setValidity('clMethodRandom', function(object) {
 
 
 #' @export
-#' @title Specify a random-assignment method
+#' @title Specify a random-partitioning method
 #' @description Creates a model with random assignments according to the cluster proportions drawn from a Dirichlet distribution.
 #' @inheritParams clMethodCustom
 #' @param alpha The Dirichlet parameters. Either `scalar` or of length `nClusters`. The higher alpha, the more uniform the clusters will be.
