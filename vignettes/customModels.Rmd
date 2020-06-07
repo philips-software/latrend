@@ -224,29 +224,37 @@ setMethod('getShortName', signature('clMethodSimpleGBTM'), function(object) 'sgb
 
 Implementing the `prepare()` function enables the `clMethod` to do data processing or transforming the data or other arguments in a structure which is suitable for the model fitting procedure. The prepare function takes a `clMethod`, the data as a `data.frame`, and the verbosity level as inputs. The processing is passed onto the `fit` function by returning an `environment` with the relevant variables.
 
-In this example however, there is no use for such data processing, but to illustrate the function signature, we define an empty function that returns `NULL`, which is an accepted output for the function.
+In this example, we need to ensure that the `Id` column is an integer.
 ```{r}
 setMethod('prepare', signature('clMethodSimpleGBTM'), function(method, data, verbose) {
-  NULL
+  envir = new.env()
+  envir$data = as.data.frame(data)
+  envir$data[[method$id]] = factor(data[[method$id]]) %>% as.integer()
+  return(envir)
 })
 ```
 
 The `fit()` function estimates the model and should return an object that extends the `clModel` class. In our implementation, we call the `lcmm()` with the appropriate arguments, and we construct a `clModelSimpleGBTM` instance. The class is defined in the subsection below. The `envir` argument contains the return value of the `prepare()` function, which would be `NULL` here.
 ```{r}
 setMethod('fit', signature('clMethodSimpleGBTM'), function(method, data, envir, verbose, ...) {
-  mod = lcmm::lcmm(fixed = method$formula,
-             mixture = update(method$formula, NULL ~ .),
-             random = ~ 0,
-             subject = method$id,
-             classmb = ~ 0,
-             ng = method$nClusters,
-             nwg = method$nwg,
-             data = data)
+  args = as.list(method, args=lcmm::lcmm)
+  args$data = envir$data
+  args$fixed = method$formula
+  if (method$nClusters > 1) {
+    args$mixture = update(method$formula, NULL ~ .)
+  } else {
+    args$mixture = NULL
+  }
+  args$subject = method$id
+  args$ng = method$nClusters
+  args$returndata = TRUE
+  
+  model = do.call(lcmm::lcmm, args)
   
   new('clModelSimpleGBTM', 
       method = method,
       data = data,
-      model = mod,
+      model = model,
       clusterNames = LETTERS[seq_len(method$nClusters)])
 })
 ```
@@ -271,19 +279,6 @@ predict.clModelSimpleGBTM = function(object, newdata=NULL, what='mu') {
   if(is.null(newdata)) {
     predMat = fitted(object, clusters=NULL)
   } else {
-    vars = union(getCovariates(object@model$fixed),
-                 getCovariates(object@model$mixture))
-    missingVars = setdiff(vars, names(newdata))
-
-    if(length(missingVars) > 0) {
-      # compute marginal means for unspecified covariates
-      missingVarMeans = model.data(object) %>%
-        .[missingVars] %>%
-        vapply(mean, na.rm=TRUE, FUN.VALUE=0)
-      newdata = cbind(newdata, missingVarMeans)
-      newdata$Cluster = make.clusterIndices(object, newdata$Cluster)
-    }
-
     predMat = lcmm::predictY(object@model, newdata=newdata)$pred %>%
       set_colnames(clusterNames(object))
   }
@@ -292,6 +287,7 @@ predict.clModelSimpleGBTM = function(object, newdata=NULL, what='mu') {
 }
 ```
 
+The `fitted()` function should return the fitted values per trajectory per (requested) cluster. If not clusters are provided, the function is expected to return a matrix with the fitted values for each cluster. This logic is handled in the `transformFitted()` function, which is available in the package.
 ```{r}
 fitted.clModelSimpleGBTM = function(object, clusters=clusterAssignments(object)) {
   predNames = paste0('pred_m', 1:nClusters(object))
@@ -301,6 +297,7 @@ fitted.clModelSimpleGBTM = function(object, clusters=clusterAssignments(object))
 }
 ```
 
+In order for the model implementation to return cluster assignments through the `clusterAssignments()` function, we need to implement the `postprob()` function to return the posterior probability matrix for the fitted data.
 ```{r}
 setMethod('postprob', signature('clModelSimpleGBTM'), function(object) {
   pp = as.matrix(object@model$pprob)[, c(-1, -2), drop=FALSE]
@@ -309,6 +306,7 @@ setMethod('postprob', signature('clModelSimpleGBTM'), function(object) {
 })
 ```
 
+Lastly, we override the `converged()` function to return the convergence code of the internal model.
 ```{r}
 setMethod('converged', signature('clModelSimpleGBTM'), function(object) {
   object@model$conv
@@ -317,12 +315,15 @@ setMethod('converged', signature('clModelSimpleGBTM'), function(object) {
 
 ## Applying the new method
 ```{r}
-m = clMethodSimpleGBTM()
-print(m)
+m = clMethodSimpleGBTM(formula = Y ~ Time)
+show(m)
 ```
 
 ```{r}
 sgbtm = cluslong(m, casedata)
 summary(sgbtm)
+```
+```{r}
+plot(sgbtm)
 ```
 

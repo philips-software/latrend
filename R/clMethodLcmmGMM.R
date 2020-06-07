@@ -92,8 +92,6 @@ setMethod('prepare', signature('clMethodLcmmGMM'), gmm_prepare)
 
 ##
 gmm_fit = function(method, data, envir, verbose, ...) {
-  valueColumn = formula(method) %>% getResponse
-
   args = as.list(method, args=lcmm::lcmm)
   args$data = envir$data
   args$fixed = envir$fixed
