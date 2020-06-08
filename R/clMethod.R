@@ -155,6 +155,7 @@ setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
 #' Alternatively, a `function` or `list` of `function`s, whose formal arguments will be selected from the method.
 #' @param eval Whether to evaluate the arguments.
 #' @param expand Whether to return all method arguments when `"..."` is present among the requested argument names.
+#' @param envir The `environment` in which to evaluate the arguments. If `NULL`, the environment associated with the object is used. If not available, the `parent.frame()` is used.
 #' @examples
 #' method = clMethodKML()
 #' as.list(method)
@@ -496,7 +497,6 @@ print.clMethod = function(object, ..., width=40) {
   }
 }
 
-
 #' @title Substitute the call arguments for their evaluated values
 #' @description Substitutes call arguments if they can be evaluated without error.
 #' @inheritParams as.list.clMethod
@@ -531,21 +531,40 @@ substitute.clMethod = function(object, classes='ANY', envir=NULL) {
 
 #' @export
 #' @title Update a method specification
+#' @details Updates or adds arguments to a `clMethod` object. The inputs are evaluated in order to determine the presence of `formula` objects, which are updated accordingly.
+#' @inheritParams as.list.clMethod
+#' @param .eval Whether to assign the evaluated argument values to the method. By default (`FALSE`), the argument expression is preserved.
+#' @return The new `clMethod` object with the additional or updated arguments.
 #' @examples
 #' m = clMethodKML(Value ~ 1)
 #' m2 = update(m, formula=~ . + Time)
 #'
 #' m3 = update(m2, start='randomAll')
+#'
+#' xvar = 2
+#' m4 = update(m, x=xvar) # x: xvar
+#'
+#' m5 = update(m, x=xvar, .eval=TRUE) # x: 2
+#'
 #' @family clMethod functions
-update.clMethod = function(object, ..., envir=NULL) {
-  assert_that(is.clMethod(object))
+update.clMethod = function(object, ..., .eval=FALSE, envir=NULL) {
+  assert_that(is.clMethod(object),
+              is.flag(.eval))
 
   envir = clMethod.env(object, parent.frame(), envir)
-  ucall = match.call()[c(-1, -2)]
-  ucall$envir = NULL
+
   argNames = names(object)
+  if(isTRUE(.eval)) {
+    ucall = list(...)
+    uargValues = ucall
+  } else {
+    ucall = match.call()[c(-1, -2)]
+    ucall$envir = NULL
+    ucall$.eval = NULL
+    uargValues = lapply(ucall, eval, envir=envir)
+  }
   uargNames = names(ucall)
-  uargValues = lapply(ucall, eval, envir=envir)
+
   defMask = uargNames %in% argNames
   formulaMask = vapply(uargValues, is, 'formula', FUN.VALUE=FALSE)
   updateFormulaMask = formulaMask & defMask
@@ -579,7 +598,7 @@ setMethod('prepare', signature('clMethod'), function(method, data, verbose) {})
 #. show ####
 setMethod('show', 'clMethod',
           function(object) {
-            cat('Cluslong method "', getName(object), '"\n', sep='')
+            cat(class(object)[1], ' as "', getName(object), '"\n', sep='')
             print(object)
           }
 )

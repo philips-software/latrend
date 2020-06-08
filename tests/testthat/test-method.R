@@ -170,6 +170,12 @@ test_that('variable from custom environment', {
   expect_equal(method[['e', envir=e]], 2)
 })
 
+test_that('internal variable reference', {
+  # currently not supported
+  method = new('clMethod', call=call('clMethod', iter=1e3, warmup = quote(floor(iter / 2))))
+  expect_error(method$warmup)
+})
+
 test_that('formula', {
   method = new('clMethod', call=call('clMethod', formula=A~B, formula.sigma=~C))
   expect_is(formula(method), 'formula')
@@ -194,6 +200,20 @@ test_that('update', {
   update(method, newf=A~B) %>%
     expect_named(c('newf', names(method)), ignore.order=TRUE) %T>%
     {expect_equal(.$newf, A~B)}
+})
+
+test_that('update with eval', {
+  xvar = 2
+  m0 = new('clMethod', call=call('clMethod', a=1, b='a', c=NULL, d=NA, e=xvar))
+  m1 = update(m0, new=xvar, .eval=TRUE)
+  expect_equal(m1$new, xvar)
+})
+
+test_that('update with formula eval', {
+  xvar = ~ 1
+  m0 = new('clMethod', call=call('clMethod', a=1, f = A ~ 0))
+  m1 = update(m0, f=xvar, .eval=TRUE)
+  expect_equal(m1$f, A ~ 1)
 })
 
 test_that('update formula', {
