@@ -50,9 +50,9 @@ clMethodGCKM_as_twostep = function(method) {
   new('clMethodTwoStep', call=call)
 }
 
-setMethod('prepare', signature('clMethodGCKM'), function(method, data, verbose) {
+setMethod('prefit', signature('clMethodGCKM'), function(method, data, envir, verbose) {
   method = clMethodGCKM_as_twostep(method)
-  prepare(method, data=data, verbose=verbose)
+  prefit(method, data=data, envir=envir, verbose=verbose)
 })
 
 setMethod('fit', signature('clMethodGCKM'), function(method, data, envir, verbose, ...) {

@@ -36,9 +36,10 @@ setValidity('clMethod', function(object) {
 #' @name $,clMethod
 #' @title Retrieve and evaluate a clMethod argument by name
 #' @param name Name of the argument to retrieve.
+#' @return The argument evaluation result.
 #' @examples
-#' m = clMethodKML()
-#' m$nClusters
+#' m = clMethodKML(nClusters = 3)
+#' m$nClusters # 3
 #' @family clMethod functions
 setMethod('$', signature('clMethod'), function(x, name) {
   x[[name]]
@@ -50,15 +51,16 @@ setMethod('$', signature('clMethod'), function(x, name) {
 #' @title Retrieve and evaluate a clMethod argument by name
 #' @param i Name or index of the argument to retrieve.
 #' @param eval Whether to evaluate the call argument (enabled by default).
-#' @param envir Environment in which to evaluate the argument. Only applies when eval = TRUE.
+#' @param envir The `environment` in which to evaluate the argument. This argument is only applicable when `eval = TRUE`.
+#' @return The argument `call` or evaluation result.
 #' @examples
-#' m = clMethodKML(nClusters=5)
+#' m = clMethodKML(nClusters = 5)
 #' m[['nClusters']] # 5
 #'
-#' K = 2
-#' m = clMethodKML(nClusters=K)
+#' k = 2
+#' m = clMethodKML(nClusters = k)
 #' m[['nClusters']] # 2
-#' m[['nClusters', eval=FALSE]] # K
+#' m[['nClusters', eval=FALSE]] # k
 #' @family clMethod functions
 setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
   envir = clMethod.env(x, parent.frame(3), envir)
@@ -103,6 +105,7 @@ setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
 #' @param call The arguments to create the `clMethod` from.
 #' @param defaults List of `function` to obtain defaults from for arguments not defined in `call`.
 #' @param excludeArgs The names of the arguments to exclude from the defaults, provided as a `character vector`.
+#' @return An object of class `Class` that extends `clMethod`.
 #' @examples
 #' clMethodKML2 = function(formula=Value ~ 0, time='Id', id='Id', nClusters=2, ...) {
 #'   .clMethod('clMethodKML', call=stackoverflow::match.call.defaults(),
@@ -156,14 +159,17 @@ setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
 #' @param eval Whether to evaluate the arguments.
 #' @param expand Whether to return all method arguments when `"..."` is present among the requested argument names.
 #' @param envir The `environment` in which to evaluate the arguments. If `NULL`, the environment associated with the object is used. If not available, the `parent.frame()` is used.
+#' @return A `list` with the argument `call`s or evaluated results depending on the value for `eval`.
 #' @examples
 #' method = clMethodKML()
 #' as.list(method)
 #'
 #' as.list(method, args=c('id', 'time'))
 #'
+#' # select arguments used by kml()
 #' as.list(method, args=kml::kml)
 #'
+#' # select arguments used by either kml() or parALGO()
 #' as.list(method, args=c(kml::kml, kml::parALGO))
 #' @family clMethod functions
 as.list.clMethod = function(object, args=names(object), eval=TRUE, expand=FALSE, envir=NULL) {
@@ -209,6 +215,7 @@ as.list.clMethod = function(object, args=names(object), eval=TRUE, expand=FALSE,
 #' @param x `clMethod` to be coerced to a `character` `vector`.
 #' @param eval Whether to evaluate the arguments in order to replace expression if the resulting value is of a class specified in `evalClasses`.
 #' @param nullValue Value to use to represent the `NULL` type. Must be of length 1.
+#' @return A single-row `data.frame` where each columns represents an argument call or evaluation.
 #' @family clMethod functions
 as.data.frame.clMethod = function(x,
                                   eval=FALSE,
@@ -250,6 +257,7 @@ as.data.frame.clMethod = function(x,
 #' @description Converts the arguments of a `clMethod` to a named `character` vector.
 #' @inheritParams as.data.frame.clMethod
 #' @param nullString Character to use to represent NULL values.
+#' @return A `character`
 #' @seealso as.data.frame.clMethod
 #' @family clMethod functions
 as.character.clMethod = function(x,
@@ -383,15 +391,32 @@ clMethods = function(method, ..., envir=NULL) {
 
 # . fit ####
 #' @export
-#' @title clMethod interface function
-#' @description Called by [cluslong].
 setGeneric('fit', function(method, ...) standardGeneric('fit'))
+#' @rdname clMethod-interface
+#' @title clMethod interface
+#' @description Called by [cluslong].
+#' * prepare
+#' * prefit
+#' derpy
+#' * fit
+#' * postfit
+setMethod('fit', signature('clMethod'), function(method, data, envir, verbose) {
+  stop(sprintf('method cannot be estimated because the fit() function is not implemented for clMethod of class %s.
+   define the fit() method using:
+      \tsetMethod("fit", signature("%s"), function(method, data, verbose) {
+      \t\t<your code returning a clModel-extended class here>
+      \t})")'), class(method)[1], class(method)[1])
+})
 
 
 
 
 #' @export
 #' @title Extract formula
+#' @description Extracts the associated `formula` for the given distributional parameter.
+#' @inheritParams as.list.clMethod
+#' @param what The distributional parameter to which this formula applies. By default, the formula specifies `"mu"`.
+#' @return The `formula` for the given distributional parameter.
 #' @examples
 #' m = clMethodKML(Value ~ Time)
 #' formula(m) # Value ~ Time
@@ -433,7 +458,7 @@ isArgDefined = function(object, name, envir=environment(object)) {
   arg = object[[name[1], eval=FALSE]]
 
 
-  if(is.name(arg) || is.call(arg)) {
+  if(is.language(arg)) {
     if(is.null(envir)) {
       return(FALSE)
     } else {
@@ -455,6 +480,7 @@ is.clMethod = function(object) {
 #. length ####
 #' @title Length of a clMethod object
 #' @description Extracts the number of specified arguments of a `clMethod` object.
+#' @return The number of specified arguments.
 #' @examples
 #' m = clMethodKML()
 #' length(m)
@@ -467,6 +493,7 @@ setMethod('length', signature('clMethod'), function(x) {
 
 #. names ####
 #' @title clMethod argument names
+#' @return A `character vector` of argument names.
 #' @examples
 #' m = clMethodKML()
 #' names(m)
@@ -498,10 +525,10 @@ print.clMethod = function(object, ..., width=40) {
 }
 
 #' @title Substitute the call arguments for their evaluated values
-#' @description Substitutes call arguments if they can be evaluated without error.
+#' @description Substitutes the call arguments if they can be evaluated without error.
 #' @inheritParams as.list.clMethod
 #' @param classes Substitute only arguments with specific class types. By default, all types are substituted.
-#' @return A new call with the substituted arguments.
+#' @return A new `clMethod` object with the substituted arguments.
 #' @family clMethod functions
 #' @keywords internal
 substitute.clMethod = function(object, classes='ANY', envir=NULL) {
@@ -583,25 +610,38 @@ update.clMethod = function(object, ..., .eval=FALSE, envir=NULL) {
 
 
 
+# . prefit ####
+#' @export
+setGeneric('prefit', function(method, ...) standardGeneric('prefit'))
+#' @rdname clMethod-interface
+setMethod('prefit', signature('clMethod'), function(method, data, envir, verbose) {
+  return(envir)
+})
 
+# . postfit ####
+#' @export
+setGeneric('postfit', function(method, ...) standardGeneric('postfit'))
+#' @rdname clMethod-interface
+setMethod('postfit', signature('clMethod'), function(method, data, model, envir, verbose) {
+  return(model)
+})
 
 
 # . prepare ####
 #' @export
-#' @title clMethod interface function
-#' @description Called by [cluslong].
 setGeneric('prepare', function(method, ...) standardGeneric('prepare'))
-setMethod('prepare', signature('clMethod'), function(method, data, verbose) {})
+#' @rdname clMethod-interface
+setMethod('prepare', signature('clMethod'), function(method, data, verbose) {
+  return(NULL)
+})
 
 
 
 #. show ####
-setMethod('show', 'clMethod',
-          function(object) {
-            cat(class(object)[1], ' as "', getName(object), '"\n', sep='')
-            print(object)
-          }
-)
+setMethod('show', 'clMethod', function(object) {
+  cat(class(object)[1], ' as "', getName(object), '"\n', sep='')
+  print(object)
+})
 
 
 

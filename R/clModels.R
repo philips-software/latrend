@@ -203,11 +203,12 @@ plotMetric = function(models, name, by='nClusters', subset, group=character()) {
 
   metricNames = paste0('.metric.', name)
   dtMetrics = metric(models, name) %>%
-    as.data.table %>%
+    as.data.table() %>%
     .[, -c('.name', '.method')] %>%
     setnames(metricNames)
 
-  dtModels = as.data.table(models)
+  dtModels = as.data.frame(models) %>%
+    as.data.table()
   assert_that(nrow(dtModels) == nrow(dtMetrics))
   assert_that(is.null(group) || has_name(dtModels, group))
 
@@ -267,7 +268,8 @@ subset.clModels = function(x, subset, drop=FALSE) {
   }
 
   subsetCall = match.call()$subset
-  dfsub = as.data.table(x) %>%
+  dfsub = as.data.frame(x) %>%
+    as.data.table() %>%
     .[, .ROW_INDEX := .I] %>%
     base::subset(subset=eval(subsetCall))
 

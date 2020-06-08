@@ -75,7 +75,7 @@ setMethod('getName', signature('clMethodMixTVEM'), function(object) 'mixture of 
 setMethod('getShortName', signature('clMethodMixTVEM'), function(object) 'mixtvem')
 
 
-setMethod('prepare', signature('clMethodMixTVEM'), function(method, data, verbose, ...) {
+setMethod('prefit', signature('clMethodMixTVEM'), function(method, data, envir, verbose, ...) {
   e = new.env()
   f.t = getSpecialFormula(method$formula, special='time')
   f.x = dropSpecial(method$formula, special='time')

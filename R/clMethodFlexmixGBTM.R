@@ -30,7 +30,7 @@ setMethod('getName', signature('clMethodFlexmixGBTM'), function(object) 'group-b
 setMethod('getShortName', signature('clMethodFlexmixGBTM'), function(object) 'gbtm')
 
 #' @importFrom flexmix FLXMRglm
-setMethod('prepare', signature('clMethodFlexmixGBTM'), function(method, data, verbose) {
+setMethod('prefit', signature('clMethodFlexmixGBTM'), function(method, data, envir, verbose) {
   e = callNextMethod()
   e$model = flexmix::FLXMRglm(family=method$family)
   return(e)

@@ -49,7 +49,7 @@ setMethod('getName', signature('clMethodLcmmGBTM'), function(object) 'group-base
 
 setMethod('getShortName', signature('clMethodLcmmGBTM'), function(object) 'gbtm')
 
-setMethod('prepare', signature('clMethodLcmmGBTM'), gmm_prepare)
+setMethod('prefit', signature('clMethodLcmmGBTM'), gmm_prepare)
 
 setMethod('fit', signature('clMethodLcmmGBTM'), function(method, data, envir, verbose, ...) {
   model = gmm_fit(method, data, envir, verbose, ...)

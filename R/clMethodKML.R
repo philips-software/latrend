@@ -37,7 +37,7 @@ setMethod('getName', signature('clMethodKML'), function(object) 'longitudinal k-
 setMethod('getShortName', signature('clMethodKML'), function(object) 'kml')
 
 
-setMethod('prepare', signature('clMethodKML'), function(method, data, verbose, ...) {
+setMethod('prefit', signature('clMethodKML'), function(method, data, envir, verbose, ...) {
   e = callNextMethod()
 
   assert_that(hasSingleResponse(method$formula))

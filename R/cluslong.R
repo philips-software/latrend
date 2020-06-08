@@ -57,19 +57,16 @@ cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.v
     set.seed(seed)
   }
 
-  cat(verbose, 'Preparing data and method')
-  pushState(verbose)
   prepEnv = prepare(method=method, data=data, verbose=verbose)
-  assert_that(is.null(prepEnv) || is.environment(prepEnv), msg='expected NULL or environment from prepare(clMethod, ...) call')
-  popState(verbose)
-
+  assert_that(is.null(prepEnv) || is.environment(prepEnv), msg='prepare(clMethod, ...) returned an unexpected object. Should be environment or NULL')
   cat(verbose, 'Fitting model')
   pushState(verbose)
+  prepEnv = prefit(method=method, data=data, envir=prepEnv, verbose=verbose)
+  assert_that(is.null(prepEnv) || is.environment(prepEnv), msg='prefit(clMethod, ...) returned an unexpected object. Should be environment or NULL')
   start = Sys.time()
   model = fit(method=method, data=data, envir=prepEnv, verbose=verbose)
   estimationTime = Sys.time() - start
   assert_that(inherits(model, 'clModel'), msg='fit(clMethod, ...) returned an unexpected object. Should be of type clModel.')
-  popState(verbose)
 
   clCall = match.call.defaults()
   model@method = method
@@ -79,6 +76,10 @@ cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.v
                          data=quote(clCall$data)))
   model@call['envir'] = list(clCall$envir)
   model@estimationTime = as.numeric(estimationTime, 'secs')
+
+  model = postfit(method=method, data=data, model=model, envir=prepEnv, verbose=verbose)
+  assert_that(inherits(model, 'clModel'), msg='postfit(clMethod, ...) returned an unexpected object. Should be of type clModel.')
+  popState(verbose)
   ruler(verbose)
   return(model)
 }
@@ -144,9 +145,13 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL,
 
   models = mapply(function(i, iPrepEnv) {
       cat(verbose, 'Fitting model %d/%d...', i, .rep)
+      prefitEnv = prefit(method=method, data=data, envir=iPrepEnv, verbose=verbose)
+      assert_that(is.null(prefitEnv) || is.environment(prefitEnv), msg='prefit(clMethod, ...) returned an unexpected object. Should be environment or NULL')
+
       start = Sys.time()
-      model = fit(method=method, data=data, envir=iPrepEnv, verbose=verbose)
+      model = fit(method=method, data=data, envir=prefitEnv, verbose=verbose)
       estimationTime = Sys.time() - start
+
       model@method = method
       model@call = do.call(call,
                            c('cluslong',
@@ -155,6 +160,10 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL,
       model@call['envir'] = list(mc$envir)
       model@estimationTime = as.numeric(estimationTime, 'secs')
       assert_that(inherits(model, 'clModel'), msg=sprintf('fit(clMethod, ...) returned an unexpected object for run %d. Should be of type clModel.', i))
+
+      model = postfit(method=method, data=data, model=model, envir=prefitEnv, verbose=verbose)
+      assert_that(inherits(model, 'clModel'), msg='postfit(clMethod, ...) returned an unexpected object. Should be of type clModel.')
+
       return(model)
     }, seq_len(.rep), prepEnvs, SIMPLIFY=FALSE)
 
@@ -162,6 +171,7 @@ cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL,
 }
 
 
+# cluslong-derived ####
 #' @export
 #' @title Cluster longitudinal data for a list of model specifications
 #' @description Fit a list of longitudinal cluster methods.

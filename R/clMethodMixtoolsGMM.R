@@ -26,7 +26,7 @@ setMethod('getName', signature('clMethodMixtoolsGMM'), function(object) 'growth 
 setMethod('getShortName', signature('clMethodMixtoolsGMM'), function(object) 'gmm')
 
 
-setMethod('prepare', signature('clMethodMixtoolsGMM'), function(method, data, verbose, ...) {
+setMethod('prefit', signature('clMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
   e = new.env()
 
   # Parse formula

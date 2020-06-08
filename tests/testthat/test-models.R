@@ -58,19 +58,19 @@ test_that('create', {
     expect_named(c('a.a', 'a.b', 'b'))
 })
 
-test_that('as.data.table', {
+test_that('as.data.frame', {
   clModels() %>%
-    as.data.table() %>%
+    as.data.frame() %>%
     expect_named(c('.name', '.method', 'data')) %T>%
     {expect_equal(nrow(.), 0)}
 
   clModels(m1) %>%
-    as.data.table() %>%
+    as.data.frame() %>%
     expect_length(length(getClMethod(m1)) + 3) %>%
     expect_named(c('.name', '.method', 'data', names(getClMethod(m1))))
 
   clModels(m1) %>%
-    as.data.table() %>%
+    as.data.frame() %>%
     expect_length(length(getClMethod(m1)) + 3) %>%
     expect_named(c('.name', '.method', 'data', names(getClMethod(m1))))
 })

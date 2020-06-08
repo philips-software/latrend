@@ -29,7 +29,7 @@ setMethod('getName', signature('clMethodFunFEM'), function(object) 'functional s
 
 setMethod('getShortName', signature('clMethodFunFEM'), function(object) 'funfem')
 
-setMethod('prepare', signature('clMethodFunFEM'), function(method, data, verbose, ...) {
+setMethod('prefit', signature('clMethodFunFEM'), function(method, data, envir, verbose, ...) {
   e = callNextMethod()
   valueColumn = formula(method) %>% getResponse
 

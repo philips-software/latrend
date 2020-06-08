@@ -52,7 +52,7 @@ setMethod('getName', signature('clMethodLcmmGMM'), function(object) 'growth mixt
 
 setMethod('getShortName', signature('clMethodLcmmGMM'), function(object) 'gmm')
 
-gmm_prepare = function(method, data, verbose, ...) {
+gmm_prepare = function(method, data, envir, verbose, ...) {
   e = new.env()
 
   f = formula(method)
@@ -88,7 +88,7 @@ gmm_prepare = function(method, data, verbose, ...) {
 
   return(e)
 }
-setMethod('prepare', signature('clMethodLcmmGMM'), gmm_prepare)
+setMethod('prefit', signature('clMethodLcmmGMM'), gmm_prepare)
 
 ##
 gmm_fit = function(method, data, envir, verbose, ...) {

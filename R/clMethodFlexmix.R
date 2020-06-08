@@ -26,7 +26,7 @@ setMethod('getName', signature('clMethodFlexmix'), function(object) 'flexmix')
 setMethod('getShortName', signature('clMethodFlexmix'), function(object) 'flx')
 
 
-setMethod('prepare', signature('clMethodFlexmix'), function(method, data, verbose, ...) {
+setMethod('prefit', signature('clMethodFlexmix'), function(method, data, envir, verbose, ...) {
   e = new.env()
 
   f = formula(method) %>% dropRE %>% dropCLUSTER
