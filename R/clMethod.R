@@ -295,18 +295,6 @@ as.character.clMethod = function(x,
 }
 
 
-
-#' @export
-#' @family clMethod functions
-setGeneric('getName', function(object) standardGeneric('getName'))
-setMethod('getName', signature('clMethod'), function(object) 'custom')
-
-#' @export
-#' @family clMethod functions
-setGeneric('getShortName', function(object) standardGeneric('getShortName'))
-setMethod('getShortName', signature('clMethod'), getName)
-
-
 #' @title Select the preferred environment
 #' @description Returns envir if specified. Otherwise, returns environment(object) if specified. The defaultEnvir is returned when the former two are NULL.
 #' @keywords internal
@@ -440,6 +428,29 @@ getCall.clMethod = function(object) {
   assert_that(is.clMethod(object))
   object@call
 }
+
+
+#. getLabel ####
+#' @export
+setGeneric('getLabel', function(object) standardGeneric('getLabel'))
+#' @export
+#' @rdname clMethod-interface
+setMethod('getLabel', signature('clMethod'), function(object) '')
+
+
+#. getName ####
+#' @export
+setGeneric('getName', function(object) standardGeneric('getName'))
+#' @export
+#' @rdname clMethod-interface
+setMethod('getName', signature('clMethod'), function(object) 'custom')
+
+#. getShortName ####
+#' @export
+setGeneric('getShortName', function(object) standardGeneric('getShortName'))
+#' @export
+#' @rdname clMethod-interface
+setMethod('getShortName', signature('clMethod'), getName)
 
 
 #' @export
