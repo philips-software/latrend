@@ -728,7 +728,8 @@ setGeneric('validate', function(method, data, ...) standardGeneric('validate'))
 setMethod('validate', signature('clMethod'), function(method, data, envir=NULL) {
   validate_that(hasName(data, idVariable(method)),
                 hasName(data, timeVariable(method)),
-                hasName(data, responseVariable(method)))
+                hasName(data, responseVariable(method)),
+                is.character(getLabel(method)))
 })
 
 

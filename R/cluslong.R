@@ -102,6 +102,7 @@ fitCluslongMethod = function(method, data, envir, mc, verbose) {
   model@id = idVariable(method)
   model@time = timeVariable(method)
   model@response = responseVariable(method)
+  model@label = getLabel(method)
   model@estimationTime = as.numeric(estimationTime, 'secs')
 
   # postFit

@@ -5,8 +5,10 @@
 #' @title clModel class
 #' @description Abstract class for defining estimated longitudinal cluster models.
 #' @details An extending class must implement the following methods to ensure basic functionality:
-#' * predict.clModelExt: Used to obtain the fitted cluster trajectories and trajectories.
-#' * postprob(clModelExt): The posterior probability matrix is used to determine the cluster assignments of the trajectories.
+#' * `predict.clModelExt`: Used to obtain the fitted cluster trajectories and trajectories.
+#' * `postprob(clModelExt)`: The posterior probability matrix is used to determine the cluster assignments of the trajectories.
+#'
+#' For predicting the posterior probability for unseen data, the `predictPostprob()` should be implemented.
 #'
 #' @slot method The \link{clMethod-class} object specifying the arguments under which the model was fitted.
 #' @slot call The `call` that was used to create this `clModel` object. Typically, this is the call to `cluslong()` or any of the other fitting functions.
@@ -14,9 +16,11 @@
 #' @slot id The name of the trajectory identifier column.
 #' @slot time The name of the time variable.
 #' @slot response The name of the response variable.
+#' @slot label The label assigned to this model.
 #' @slot ids The possible trajectory identifier values the model was fitted on.
 #' @slot clusterNames The names of the clusters.
 #' @slot estimationTime The time, in seconds, that it took to fit the model.
+#' @slot tag An arbitrary user-specified data structure. This slot may be accessed and updated directly.
 #' @family model-specific methods
 setClass('clModel',
          representation(model='ANY',
@@ -26,9 +30,11 @@ setClass('clModel',
                         id='character',
                         time='character',
                         response='character',
+                        label='character',
                         ids='vector',
                         clusterNames='character',
-                        estimationTime='numeric'))
+                        estimationTime='numeric',
+                        tag='ANY'))
 
 # . initialize ####
 setMethod('initialize', 'clModel', function(.Object, ...) {
@@ -281,6 +287,11 @@ getCall.clModel = function(object) {
 }
 
 
+setMethod('getLabel', signature('clModel'), function(object) {
+  object@label
+})
+
+
 #' @export
 #' @title Extract the underlying model
 getModel = function(object) {
@@ -301,10 +312,20 @@ getClMethod = function(object) {
 
 
 # . getName ####
-setMethod('getName', signature('clModel'), function(object) getClMethod(object) %>% getName)
+setMethod('getName', signature('clModel'), function(object) {
+  basename = getClMethod(object) %>% getName()
+  lbl = getLabel(object)
+  if(nchar(lbl) > 0) {
+    paste(basename, lbl, sep='-')
+  } else {
+    basename
+  }
+})
 
 # . getShortName ####
-setMethod('getShortName', signature('clModel'), function(object) getClMethod(object) %>% getShortName)
+setMethod('getShortName', signature('clModel'), function(object)
+  getClMethod(object) %>% getShortName()
+)
 
 
 #' @title Generate a vector indicating the id-number (between 1 and numIds()) per row
