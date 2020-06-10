@@ -43,7 +43,7 @@ setMethod('getName', signature('clMethodRandom'), function(object) 'random')
 setMethod('getShortName', signature('clMethodRandom'), function(object) 'rand')
 
 setMethod('fit', signature('clMethodRandom'), function(method, data, envir, verbose, ...) {
-  nIds = uniqueN(data[[method$id]])
+  nIds = uniqueN(data[[idVariable(method)]])
 
   # generate cluster proportions
   y = rgamma(method$nClusters, method$alpha)

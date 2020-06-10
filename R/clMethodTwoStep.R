@@ -37,15 +37,13 @@ setMethod('getShortName', signature('clMethodTwoStep'), function(object) 'twoste
 
 
 setMethod('prepare', signature('clMethodTwoStep'), function(method, data, verbose, ...) {
-  assert_that(has_name(data, method$response))
-  assert_that(has_name(data, method$id))
-  assert_that(has_name(data, method$time))
+  assert_that(has_name(data, responseVariable(method)))
   return(NULL)
 })
 
 
 setMethod('fit', signature('clMethodTwoStep'), function(method, data, envir, verbose, ...) {
-  nIds = uniqueN(data[[method$id]])
+  nIds = uniqueN(data[[idVariable(method)]])
 
   ## Representation step #
   rstep = method$representationStep

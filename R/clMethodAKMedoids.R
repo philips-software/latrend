@@ -13,7 +13,7 @@ setClass('clMethodAKMedoids', contains='clMatrixMethod')
 #'                      id='Patient', nClusters=3)
 #' cluslong(method, data=OSA1y)
 #' @family clMethod implementations
-clMethodAKMedoids = function(formula=Value ~ 0,
+clMethodAKMedoids = function(response=getOption('cluslong.response'),
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),
                        nClusters=3,
@@ -37,7 +37,6 @@ setMethod('fit', signature('clMethodAKMedoids'), function(method, data, envir, v
   args$id_field = FALSE
 
   # Helper variables
-  valueColumn = formula(method) %>% getResponse
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   suppressFun({
@@ -50,9 +49,9 @@ setMethod('fit', signature('clMethodAKMedoids'), function(method, data, envir, v
 
   clModelCustom(data, clusterAssignments=factor(model$membership, levels=LETTERS[1:method$nClusters], labels=clusNames),
                 clusterTrajectories=method$clusterCenter,
-                response=getResponse(method$formula),
-                time=method$time,
-                id=method$id,
+                response=responseVariable(method),
+                time=timeVariable(method),
+                id=idVariable(method),
                 clusterNames=clusNames,
                 converged=TRUE,
                 method=method,

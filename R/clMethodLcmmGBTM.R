@@ -41,7 +41,7 @@ clMethodLcmmGBTM = function(formula=Value ~ 1 + CLUSTER,
 ) {
   .clMethod('clMethodLcmmGBTM', call=match.call.defaults(),
            defaults=lcmm::lcmm,
-           excludeArgs=c('data', 'fixed', 'random', 'mixture', 'subject', 'classmb', 'returndata', 'ng'))
+           excludeArgs=c('data', 'fixed', 'random', 'mixture', 'subject', 'classmb', 'returndata', 'ng', 'verbose'))
 }
 
 
@@ -49,7 +49,7 @@ setMethod('getName', signature('clMethodLcmmGBTM'), function(object) 'group-base
 
 setMethod('getShortName', signature('clMethodLcmmGBTM'), function(object) 'gbtm')
 
-setMethod('prefit', signature('clMethodLcmmGBTM'), gmm_prepare)
+setMethod('preFit', signature('clMethodLcmmGBTM'), gmm_prepare)
 
 setMethod('fit', signature('clMethodLcmmGBTM'), function(method, data, envir, verbose, ...) {
   model = gmm_fit(method, data, envir, verbose, ...)

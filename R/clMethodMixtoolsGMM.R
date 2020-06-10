@@ -26,12 +26,13 @@ setMethod('getName', signature('clMethodMixtoolsGMM'), function(object) 'growth 
 setMethod('getShortName', signature('clMethodMixtoolsGMM'), function(object) 'gmm')
 
 
-setMethod('prefit', signature('clMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
+setMethod('preFit', signature('clMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
   e = new.env()
 
   # Parse formula
   f = formula(method)
-  valueColumn = getResponse(f)
+  valueColumn = responseVariable(method)
+  id = idVariable(method)
   assert_that(!hasCLUSTER(f), msg='CLUSTER-specific fixed effects are not supported for this method')
   e$fixed = dropRE(f)
   reTerms = getREterms(f)
@@ -42,18 +43,18 @@ setMethod('prefit', signature('clMethodMixtoolsGMM'), function(method, data, env
   }
 
   # Response
-  e$y = split(data[[valueColumn]], data[[method$id]])
+  e$y = split(data[[valueColumn]], data[[id]])
 
   # Fixed effects
   W = model.matrix(e$fixed, data=data)
   e$w = as.data.frame(W) %>%
-    split(data[[method$id]]) %>%
+    split(data[[id]]) %>%
     lapply(as.matrix)
 
   # Random effects
   X = model.matrix(e$random, data=data)
   e$x = as.data.frame(X) %>%
-    split(data[[method$id]]) %>% #split() outputs a vector for matrix input..
+    split(data[[id]]) %>% #split() outputs a vector for matrix input..
     lapply(as.matrix)
 
   return(e)

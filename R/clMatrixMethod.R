@@ -11,16 +11,19 @@ setMethod('getShortName', signature('clMatrixMethod'), function(object) 'rm')
 
 setMethod('prepare', signature('clMatrixMethod'), function(method, data, verbose, ...) {
   e = new.env()
-  data = as.data.table(data)
-  valueColumn = formula(method) %>% getResponse
 
-  e$times = sort(unique(data[[method$time]]))
+  data = as.data.table(data)
+  idColumn = idVariable(method)
+  timeColumn = timeVariable(method)
+  valueColumn = responseVariable(method)
+
+  e$times = sort(unique(data[[timeColumn]]))
 
   # Check data
-  assert_that(uniqueN(data[, .N, by=c(method$id)]$N) == 1, msg='not all time series are of equal length')
+  assert_that(uniqueN(data[, .N, by=c(idColumn)]$N) == 1, msg='not all time series are of equal length')
 
   # Data
   cat(verbose, 'Transforming data to aligned repeated measures matrix format...', level=verboseLevels$fine)
-  e$dataMat = dcastRepeatedMeasures(data, id=method$id, time=method$time, response=valueColumn)
+  e$dataMat = dcastRepeatedMeasures(data, id=idColumn, time=timeColumn, response=valueColumn)
   return(e)
 })

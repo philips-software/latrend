@@ -36,7 +36,7 @@ setMethod('predictPostprob', signature('clModelStratify'), function(object, newd
 
   assignments = stratifyTrajectories(method[['stratify', eval=FALSE]],
                                      data=newdata,
-                                     id=method$id) %>%
+                                     id=idVariable(method)) %>%
     as.integer()
 
   pp = postprobFromAssignments(assignments, nClusters(object))

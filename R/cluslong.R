@@ -20,76 +20,108 @@
 #' @family longitudinal cluster fit functions
 cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.verbose')) {
   envir = clMethod.env(method, parent.frame(), envir)
-  assert_that(inherits(method, 'clMethod'), msg='method must be an object of class clMethod')
-  assert_that(!missing(data), msg='data must be specified')
-
-  if(is.call(data)) {
-    data = eval(data, envir=envir)
-  }
-  assert_that(is.data.frame(data) || is.matrix(data), msg='data must be data.frame or matrix')
+  assert_that(is.clMethod(method))
 
   verbose = as.Verbose(verbose)
   argList = list(...)
   argList$envir = envir
-  method = do.call(update, c(object=method, argList))
-  environment(method) = envir
+  newmethod = do.call(update, c(object=method, argList))
+  environment(newmethod) = envir
 
-  header(verbose, sprintf('Longitudinal clustering using "%s"', getName(method)))
+  header(verbose, sprintf('Longitudinal clustering using "%s"', getName(newmethod)))
   cat(verbose, 'Method arguments:')
-  print(verbose, method)
+  print(verbose, newmethod)
   ruler(verbose)
 
-  cat(verbose, 'Validating method arguments...', level=verboseLevels$finest)
-  validObject(method)
+  cat(verbose, 'Composing & validating method arguments...', level=verboseLevels$finest)
 
-  assert_that(not('formula' %in% names(method)) || hasSingleResponse(method$formula))
-  assert_that(isArgDefined(method, 'id'), isArgDefined(method, 'time'))
-  if(is.matrix(data)) {
-    cat(verbose, 'Transforming repeated measures matrix to long format...', level=verboseLevels$fine)
-    data = meltRepeatedMeasures(data, id=method$id, time=method$time, response=getResponse(formula(method)))
-  } else {
-    assert_that(has_name(data, c(method$id, method$time)))
+  # compose
+  cmethod = compose(newmethod, envir=envir)
+
+  id = idVariable(cmethod)
+  time = timeVariable(cmethod)
+  response = responseVariable(cmethod)
+  assert_that(is.character(idVariable(cmethod)),
+              is.character(timeVariable(cmethod)),
+              is.character(responseVariable(cmethod)))
+
+  # transform data
+  modelData = transformCluslongData(data, id=id, time=time, response=response, envir=envir)
+  assert_that(is.data.frame(modelData))
+
+  validationResult = validate(cmethod, modelData)
+  if(!isTRUE(validationResult)) {
+    stop('method validation failed: ', validationResult)
   }
 
-  if(isArgDefined(method, 'seed')) {
-    seed = method$seed
-    cat(verbose, sprintf('Setting seed %s.', as.character(seed)))
-    set.seed(seed)
-  }
+  # prepare
+  modelEnv = prepare(method = cmethod, data = modelData, verbose = verbose)
+  assert_that(is.null(modelEnv) || is.environment(modelEnv), msg = 'prepare(clMethod, ...) returned an unexpected object. Should be environment or NULL')
 
-  prepEnv = prepare(method=method, data=data, verbose=verbose)
-  assert_that(is.null(prepEnv) || is.environment(prepEnv), msg='prepare(clMethod, ...) returned an unexpected object. Should be environment or NULL')
   cat(verbose, 'Fitting model')
   pushState(verbose)
-  prepEnv = prefit(method=method, data=data, envir=prepEnv, verbose=verbose)
-  assert_that(is.null(prepEnv) || is.environment(prepEnv), msg='prefit(clMethod, ...) returned an unexpected object. Should be environment or NULL')
-  start = Sys.time()
-  model = fit(method=method, data=data, envir=prepEnv, verbose=verbose)
-  estimationTime = Sys.time() - start
-  assert_that(inherits(model, 'clModel'), msg='fit(clMethod, ...) returned an unexpected object. Should be of type clModel.')
+  mc = match.call.defaults()
+  model = fitCluslongMethod(cmethod, modelData, envir = modelEnv, mc = mc, verbose = verbose)
+  popState(verbose)
 
-  clCall = match.call.defaults()
+  # done
+  ruler(verbose)
+  return(model)
+}
+
+
+
+
+fitCluslongMethod = function(method, data, envir, mc, verbose) {
+  assert_that(is.clMethod(method),
+              is.data.frame(data),
+              is.call(mc),
+              is.environment(envir) || is.null(envir))
+
+  if(hasName(method, 'seed')) {
+    cat(verbose, sprintf('Setting seed %s.', as.character(method$seed)))
+    set.seed(method$seed)
+  }
+
+  # preFit
+  modelEnv = preFit(method=method, data=data, envir=envir, verbose=verbose)
+  assert_that(is.null(modelEnv) || is.environment(modelEnv), msg='preFit(clMethod, ...) returned an unexpected object. Should be environment or NULL')
+
+  # fit
+  start = Sys.time()
+  model = fit(method=method, data=data, envir=modelEnv, verbose=verbose)
+  estimationTime = Sys.time() - start
+  assert_that(is.clModel(model), msg='fit(clMethod, ...) returned an unexpected object. Should be of type clModel.')
+
   model@method = method
   model@call = do.call(call,
                        c('cluslong',
                          method=quote(getCall(method)),
-                         data=quote(clCall$data)))
-  model@call['envir'] = list(clCall$envir)
+                         data=quote(mc$data)))
+  model@call['envir'] = list(mc$envir)
+  model@id = idVariable(method)
+  model@time = timeVariable(method)
+  model@response = responseVariable(method)
   model@estimationTime = as.numeric(estimationTime, 'secs')
 
-  model = postfit(method=method, data=data, model=model, envir=prepEnv, verbose=verbose)
-  assert_that(inherits(model, 'clModel'), msg='postfit(clMethod, ...) returned an unexpected object. Should be of type clModel.')
-  popState(verbose)
-  ruler(verbose)
+  # postFit
+  model = postFit(method=method, data=data, model=model, envir=modelEnv, verbose=verbose)
+  assert_that(inherits(model, 'clModel'), msg='postFit(clMethod, ...) returned an unexpected object. Should be of type clModel.')
+
   return(model)
 }
+
+
 
 #' @export
 #' @title Cluster longitudinal data repeatedly
 #' @description Performs a repeated fit of the specified cluslong model on the given data.
 #' @inheritParams cluslong
 #' @param .rep The number of repeated fits.
-#' @param .prepareAll Whether to prepare the data separately per repeated run.
+#' @param .errorhandling How to handle fits in which on error occurs.
+#' If `"remove"`, errors are ignored and the respective repetition is exempt from the returned model list.
+#' If `"stop"`, errors are not caught, ensuring that the function halts on the first error.
+#' @param .seed Set the seed for generating the respective seed for each of the repeated fits.
 #' @details This method is faster than repeatedly calling [cluslong]() as it only prepares the data once, unless `.prepareAll=TRUE`.
 #' @return A `clModels` object containing the resulting models.
 #' @examples
@@ -97,75 +129,64 @@ cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.v
 #'
 #' models = cluslongRep(clMethodKML(), data=testLongData, seed=1, .rep=3)
 #' @family longitudinal cluster fit functions
-cluslongRep = function(method, data, .rep=1, .prepareAll=FALSE, ..., envir=NULL, verbose=getOption('cluslong.verbose')) {
+cluslongRep = function(method, data, .rep=10, ..., .errorhandling='remove', .seed=NULL, envir=NULL, verbose=getOption('cluslong.verbose')) {
   envir = clMethod.env(method, parent.frame(), envir)
-  assert_that(inherits(method, 'clMethod'), msg='method must be an object of class clMethod')
-  assert_that(!missing(data), msg='data must be specified')
-  assert_that(is.data.frame(data) || is.matrix(data), msg='data must be data.frame or matrix')
-
-  assert_that(is.count(.rep))
+  assert_that(is.clMethod(method),
+              is.count(.rep))
 
   verbose = as.Verbose(verbose)
-  header(verbose, sprintf('Repeated (%d) longitudinal clustering using "%s"', .rep, getName(method)))
-  cat(verbose, 'Method arguments:')
-  print(verbose, method)
-  ruler(verbose)
-
+  errh = match.arg(.errorhandling, c('stop', 'remove'))
   argList = list(...)
   argList$envir = envir
-  method = do.call(update, c(object=method, argList))
-  environment(method) = envir
+  newmethod = do.call(update, c(object=method, argList))
+  environment(newmethod) = envir
+
+  header(verbose, sprintf('Repeated (%d) longitudinal clustering using "%s"', .rep, getName(method)))
+  cat(verbose, 'Method arguments:')
+  print(verbose, newmethod)
+  ruler(verbose)
+
+
   mc = match.call.defaults()
 
-  if(is.matrix(data)) {
-    data = meltRepeatedMeasures(data, id=method$id, time=method$time, response=getResponse(formula(method)))
-  } else {
-    assert_that(has_name(data, c(method$id, method$time)))
+  # compose
+  cmethod = compose(newmethod, envir=envir)
+
+  # seed
+  if(hasName(cmethod, 'seed')) {
+    warning('The supplied clMethod object defines a seed, which will result in repeated identical results. Use the .seed argument of cluslongRep() to generate different seeds for the repetitions in a reproducible way.')
   }
 
-  if(isArgDefined(method, 'seed')) {
-    seed = method$seed
-    cat(verbose, sprintf('Setting seed %s.', as.character(seed)))
-    set.seed(seed)
+  cat(verbose, sprintf('Generating method seeds for seed = %s.', as.character(.seed)))
+  localRNG(seed=.seed, {
+    repSeeds = sample.int(.Machine$integer.max, size=.rep, replace=FALSE)
+  })
+
+  id = idVariable(cmethod)
+  time = timeVariable(cmethod)
+  response = responseVariable(cmethod)
+  assert_that(is.character(idVariable(cmethod)),
+              is.character(timeVariable(cmethod)),
+              is.character(responseVariable(cmethod)))
+
+  # transform data
+  modelData = transformCluslongData(data, id=id, time=time, response=response, envir=envir)
+  assert_that(is.data.frame(modelData))
+
+  validationResult = validate(cmethod, modelData)
+  if(!isTRUE(validationResult)) {
+    stop('clMethod validation failed: ', validationResult)
   }
 
-  cat(verbose, 'Validating method arguments...', level=verboseLevels$finest)
-  validObject(method)
+  enter(verbose, 'Preparing...')
+  prepEnv = prepare(method = method, data = modelData, verbose = verbose)
+  exit(verbose)
 
-  if(.prepareAll) {
-    enter(verbose, 'Preparing data and method %d times', .rep)
-    prepEnvs = replicate(.rep, prepare(method=method, data=data, verbose=verbose))
-    exit(verbose)
-  } else {
-    enter(verbose, 'Preparing data and method')
-    prepEnv = prepare(method=method, data=data, verbose=verbose)
-    prepEnvs = replicate(.rep, prepEnv)
-    exit(verbose)
+  models = foreach(i = seq_len(.rep), iseed = repSeeds, .combine=c, .errorhandling = errh) %do% {
+    cat(verbose, 'Fitting model %d/%d for seed %s...', i, .rep, as.character(iseed))
+    imethod = update(cmethod, seed = iseed, .eval=TRUE)
+    fitCluslongMethod(imethod, data = modelData, envir = prepEnv, mc = mc, verbose = verbose)
   }
-
-  models = mapply(function(i, iPrepEnv) {
-      cat(verbose, 'Fitting model %d/%d...', i, .rep)
-      prefitEnv = prefit(method=method, data=data, envir=iPrepEnv, verbose=verbose)
-      assert_that(is.null(prefitEnv) || is.environment(prefitEnv), msg='prefit(clMethod, ...) returned an unexpected object. Should be environment or NULL')
-
-      start = Sys.time()
-      model = fit(method=method, data=data, envir=prefitEnv, verbose=verbose)
-      estimationTime = Sys.time() - start
-
-      model@method = method
-      model@call = do.call(call,
-                           c('cluslong',
-                             method=quote(getCall(method)),
-                             data=quote(mc$data)))
-      model@call['envir'] = list(mc$envir)
-      model@estimationTime = as.numeric(estimationTime, 'secs')
-      assert_that(inherits(model, 'clModel'), msg=sprintf('fit(clMethod, ...) returned an unexpected object for run %d. Should be of type clModel.', i))
-
-      model = postfit(method=method, data=data, model=model, envir=prefitEnv, verbose=verbose)
-      assert_that(inherits(model, 'clModel'), msg='postfit(clMethod, ...) returned an unexpected object. Should be of type clModel.')
-
-      return(model)
-    }, seq_len(.rep), prepEnvs, SIMPLIFY=FALSE)
 
   as.clModels(models)
 }
@@ -275,9 +296,8 @@ cluslongBoot = function(method, data, samples=50, seed=NULL, envir=NULL, verbose
     sampleSeeds = sample.int(.Machine$integer.max, size=samples, replace=FALSE)
   })
 
-  assert_that(hasName(method, 'id'))
-  id = method$id
-  assert_that(hasName(data, id))
+  id = idVariable(method)
+  assert_that(has_name(data, id))
 
   # fit models
   methods = replicate(samples, method)
@@ -322,9 +342,8 @@ cluslongCV = function(method, data, folds=10, seed=NULL, envir=NULL, verbose=get
     seed = sample.int(.Machine$integer.max, size=1)
   }
 
-  assert_that(hasName(method, 'id'))
-  id = method$id
-  assert_that(hasName(data, id))
+  id = idVariable(method)
+  assert_that(has_name(data, id))
 
   mc = match.call()
   dataFoldCalls = lapply(as.numeric(1:folds), function(fold) {
@@ -397,6 +416,31 @@ createTestDataFolds = function(data, trainDataList, ...) {
 
 
 # Data helper functions ####
+#. transformCluslongData ####
+#' @export
+#' @title Transform cluslong input data into the right format
+#' @description This function is also responsible for checking whether the input data is valid, such that the fitting process can fail early.
+#' @return A `data.frame` with an id, time, and measurement columns.
+setGeneric('transformCluslongData', function(object, id, time, response, envir) standardGeneric('transformCluslongData'))
+setMethod('transformCluslongData', signature('data.frame'), function(object, id, time, response, envir) {
+  assert_that(is.data.frame(object),
+              has_name(object, id),
+              has_name(object, time),
+              is.numeric(object[[id]]) || is.factor(object[[id]]) || is.character(object[[id]]),
+              noNA(object[[id]]),
+              noNA(object[[time]]))
+  object
+})
+
+setMethod('transformCluslongData', signature('matrix'), function(object, id, time, response, envir) {
+  data = meltRepeatedMeasures(object, id=id, time=time, response=response)
+  transformCluslongData(data, id=id, time=time, response=response, envir=envir)
+})
+
+setMethod('transformCluslongData', signature('call'), function(object, id, time, response, envir) {
+  data = eval(object, envir=envir)
+  transformCluslongData(data, id=id, time=time, response=response, envir=envir)
+})
 
 #' @export
 #' @family validation methods

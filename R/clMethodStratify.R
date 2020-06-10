@@ -75,9 +75,14 @@ setMethod('getName', signature('clMethodStratify'), function(object) {
 setMethod('getShortName', signature('clMethodStratify'), function(object) 'strat')
 
 
+setMethod('compose', signature('clMethodStratify'), function(method, envir=NULL) {
+  substitute.clMethod(method, try=FALSE, exclude='stratify', envir=envir)
+})
+
+
 setMethod('fit', signature('clMethodStratify'), function(method, data, envir, verbose) {
   data = as.data.table(data)
-  id = method$id
+  id = idVariable(method)
 
   # Stratify
   strat = method[['stratify', eval=FALSE]]
@@ -117,18 +122,18 @@ setMethod('fit', signature('clMethodStratify'), function(method, data, envir, ve
   postprob = postprobFromAssignments(intAssignments, numClus)
 
   # Compute cluster trajectories
-  clusTrajs = computeCenterClusterTrajectories(data, intAssignments, nClusters=numClus, fun=method$center, id=id, time=method$time, response=method$response)
+  clusTrajs = computeCenterClusterTrajectories(data, intAssignments, nClusters=numClus, fun=method$center, id=id, time=timeVariable(method), response=responseVariable(method))
 
   setkey(clusTrajs, Cluster, Time)
-  setnames(clusTrajs, c('Cluster', method$time, method$response))
+  setnames(clusTrajs, c('Cluster', timeVariable(method), responseVariable(method)))
 
   assert_that(uniqueN(clusTrajs$Cluster) == numClus)
 
   .clModelStratify(method=method,
                    data=data,
                    id=id,
-                   time=method$time,
-                   response=method$response,
+                   time=timeVariable(method),
+                   response=responseVariable(method),
                    clusterNames=clusNames,
                    clusterTrajectories=clusTrajs,
                    postprob=postprob,

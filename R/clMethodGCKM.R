@@ -50,9 +50,9 @@ clMethodGCKM_as_twostep = function(method) {
   new('clMethodTwoStep', call=call)
 }
 
-setMethod('prefit', signature('clMethodGCKM'), function(method, data, envir, verbose) {
+setMethod('preFit', signature('clMethodGCKM'), function(method, data, envir, verbose) {
   method = clMethodGCKM_as_twostep(method)
-  prefit(method, data=data, envir=envir, verbose=verbose)
+  preFit(method, data=data, envir=envir, verbose=verbose)
 })
 
 setMethod('fit', signature('clMethodGCKM'), function(method, data, envir, verbose, ...) {
@@ -68,13 +68,13 @@ representationStepGCKM = function(method, data, verbose, ...) {
   randomStr = dropResponse(method$formula) %>%
     deparse %>%
     substring(2)
-  lmmFormula = paste0(fixedStr, ' + (', randomStr, '|', method$id, ')') %>% as.formula(env=NULL)
+  lmmFormula = paste0(fixedStr, ' + (', randomStr, '|', idVariable(method), ')') %>% as.formula(env=NULL)
 
   lmm = lmer(formula=lmmFormula, data=data, REML=method$REML, control=method$control, verbose=canShow(verbose, 'fine'))
 
   e = new.env()
   e$model = lmm
-  e$repMat = ranef(lmm)[[method$id]] %>% as.matrix
+  e$repMat = ranef(lmm)[[idVariable(method)]] %>% as.matrix()
   return(e)
 }
 

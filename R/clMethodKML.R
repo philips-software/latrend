@@ -15,7 +15,7 @@ setClass('clMethodKML', contains='clMatrixMethod')
 #' method = clMethodKML(Value ~ 0, nClusters=3)
 #' model = cluslong(method, testLongData)
 #' @family clMethod implementations
-clMethodKML = function(formula=Value ~ 0,
+clMethodKML = function(response=getOption('cluslong.response'),
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),
                        nClusters=2,
@@ -37,14 +37,10 @@ setMethod('getName', signature('clMethodKML'), function(object) 'longitudinal k-
 setMethod('getShortName', signature('clMethodKML'), function(object) 'kml')
 
 
-setMethod('prefit', signature('clMethodKML'), function(method, data, envir, verbose, ...) {
+setMethod('preFit', signature('clMethodKML'), function(method, data, envir, verbose, ...) {
   e = callNextMethod()
 
-  assert_that(hasSingleResponse(method$formula))
-  assert_that(!hasCovariates(method$formula), msg='covariates are not supported')
-
-  valueColumn = formula(method) %>%
-    getResponse()
+  valueColumn = responseVariable(method)
 
   # Model specification
   cat(verbose, 'Creating clusterLongData object...', level=verboseLevels$finest)
@@ -53,7 +49,7 @@ setMethod('prefit', signature('clMethodKML'), function(method, data, envir, verb
   parArgs = modifyList(parRefArgs, as.list(method, args=kml::parALGO), keep.null=TRUE)
   e$par = do.call(kml::parALGO, parArgs)
 
-  e$cld = clusterLongData(traj=e$dataMat, idAll=rownames(e$dataMat), time=sort(unique(data[[method$time]])))
+  e$cld = clusterLongData(traj=e$dataMat, idAll=rownames(e$dataMat), time=sort(unique(data[[timeVariable(method)]])))
   return(e)
 })
 
@@ -62,7 +58,7 @@ setMethod('fit', signature('clMethodKML'), function(method, data, envir, verbose
   cld = envir$cld
 
   # Helper variables
-  valueColumn = formula(method) %>% getResponse()
+  valueColumn = responseVariable(method)
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   cat(verbose, 'Running kml()...', level=verboseLevels$finest)

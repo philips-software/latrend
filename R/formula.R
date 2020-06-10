@@ -21,12 +21,12 @@ hasIntercept = function(f) {
 }
 
 hasSingleResponse = function(f) {
-  hasResponse(f) && length(all.vars(update(f, . ~ 1))) == 1
+  hasResponse(f) && length(getResponse(f)) == 1
 }
 
 getResponse = function(f) {
   if (hasResponse(f)) {
-    update(f, . ~ 1) %>% all.vars %>% head(1)
+    update(f, . ~ 1) %>% all.vars()
   }
   else {
     return(NULL)

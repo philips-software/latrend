@@ -75,7 +75,7 @@ setMethod('getName', signature('clMethodMixTVEM'), function(object) 'mixture of 
 setMethod('getShortName', signature('clMethodMixTVEM'), function(object) 'mixtvem')
 
 
-setMethod('prefit', signature('clMethodMixTVEM'), function(method, data, envir, verbose, ...) {
+setMethod('preFit', signature('clMethodMixTVEM'), function(method, data, envir, verbose, ...) {
   e = new.env()
   f.t = getSpecialFormula(method$formula, special='time')
   f.x = dropSpecial(method$formula, special='time')
@@ -103,8 +103,8 @@ setMethod('prefit', signature('clMethodMixTVEM'), function(method, data, envir, 
 
 setMethod('fit', signature('clMethodMixTVEM'), function(method, data, envir, verbose, ...) {
   args = c(as.list(envir), as.list(method))
-  args$id = data[[method$id]]
-  args$time = data[[method$time]]
+  args$id = data[[idVariable(method)]]
+  args$time = data[[timeVariable(method)]]
   args$doPlot = FALSE
   args$getSEs = FALSE
   args$min.time = NA

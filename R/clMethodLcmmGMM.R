@@ -60,8 +60,9 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
   e$verbose = as.logical(verbose)
 
   # Check & process data
+  id = idVariable(method)
   e$data = as.data.table(data) %>%
-    .[, c(method$id) := factor(get(method$id)) %>% as.integer]
+    .[, c(id) := factor(get(id)) %>% as.integer]
 
   # Parameter processing
   vars = terms(f) %>% labels
@@ -88,7 +89,7 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
 
   return(e)
 }
-setMethod('prefit', signature('clMethodLcmmGMM'), gmm_prepare)
+setMethod('preFit', signature('clMethodLcmmGMM'), gmm_prepare)
 
 ##
 gmm_fit = function(method, data, envir, verbose, ...) {
@@ -101,7 +102,7 @@ gmm_fit = function(method, data, envir, verbose, ...) {
     args$mixture = NULL
   }
   args$random = envir$random
-  args$subject = method$id
+  args$subject = idVariable(method)
   args$classmb = envir$formula.mb
   args$ng = method$nClusters
   args$verbose = envir$verbose

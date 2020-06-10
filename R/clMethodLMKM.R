@@ -43,10 +43,11 @@ setMethod('prepare', signature('clMethodLMKM'), function(method, data, verbose) 
   cat(verbose, 'Representation step...')
   lmArgs = as.list(method, args=lm)
 
-  coefdata = data[, do.call(lm, c(lmArgs, data=list(.SD))) %>% coef() %>% as.list(), keyby = c(method$id)]
+  id = idVariable(method)
+  coefdata = data[, do.call(lm, c(lmArgs, data=list(.SD))) %>% coef() %>% as.list(), keyby = c(id)]
   # construct the coefficient matrix
   coefmat = subset(coefdata, select = -1) %>% as.matrix()
-  assert_that(nrow(coefmat) == uniqueN(data[[method$id]]))
+  assert_that(nrow(coefmat) == uniqueN(data[[id]]))
 
   e = new.env()
   e$x = standardizeTrajectoryCoefMatrix(coefmat, method$standardize)

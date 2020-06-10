@@ -22,6 +22,9 @@ setValidity('clMethod', function(object) {
   call = getCall(object)
   assert_that(all(vapply(lapply(names(object), nchar), '>', 0, FUN.VALUE=TRUE)), msg='clMethod argument names cannot be empty')
   assert_that(!any(vapply(names(object), startsWith, '.', FUN.VALUE=TRUE)), msg='clMethod argument names cannot start with "."')
+  assert_that(!has_name(object, 'data'), msg='clMethod argument name cannot be "data"')
+  assert_that(!has_name(object, 'envir'), msg='clMethod argument name cannot be "envir"')
+  assert_that(!has_name(object, 'verbose'), msg='clMethod argument name cannot be "verbose"')
 
   if(isArgDefined(object, 'formula')) {
     assert_that(is.formula(object$formula))
@@ -122,6 +125,8 @@ setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
   assert_that(is.function(defaults) || is.list(defaults) && all(vapply(defaults, is.function, FUN.VALUE=TRUE)))
   assert_that(is.null(excludeArgs) || is.character(excludeArgs))
 
+  excludeArgs = union(excludeArgs, c('verbose', 'envir', 'data'))
+
   if(is.function(defaults)) {
     defaults = list(defaults)
   }
@@ -140,7 +145,7 @@ setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
     modifyList(as.list(call)[-1], keep.null=TRUE)
 
   if(any(names(call[-1]) %in% excludeArgs)) {
-    warning(sprintf('arguments (%s) cannot be defined for this clMethod class. These arguments will be ignored.', paste0(excludeArgs, collapse=', ')))
+    warning(sprintf('arguments (%s) cannot be defined for this clMethod class. These arguments will be ignored.', paste0(intersect(excludeArgs, names(call[-1])), collapse=', ')))
   }
 
   # exclude arguments
@@ -376,18 +381,31 @@ clMethods = function(method, ..., envir=NULL) {
 }
 
 
+#. compose ####
+#' @export
+setGeneric('compose', function(method, ...) standardGeneric('compose'))
+#' @export
+#' @rdname clMethod-interface
+setMethod('compose', signature('clMethod'), function(method, envir=NULL) {
+  substitute.clMethod(method, try=FALSE, envir=envir)
+})
+
 
 # . fit ####
 #' @export
 setGeneric('fit', function(method, ...) standardGeneric('fit'))
+#' @export
 #' @rdname clMethod-interface
 #' @title clMethod interface
 #' @description Called by [cluslong].
-#' * prepare
-#' * prefit
+#' * compose
+#' * validate
+#' * prepareData
+#' * preFit
+#'
 #' derpy
 #' * fit
-#' * postfit
+#' * postFit
 setMethod('fit', signature('clMethod'), function(method, data, envir, verbose) {
   stop(sprintf('method cannot be estimated because the fit() function is not implemented for clMethod of class %s.
    define the fit() method using:
@@ -395,8 +413,6 @@ setMethod('fit', signature('clMethod'), function(method, data, envir, verbose) {
       \t\t<your code returning a clModel-extended class here>
       \t})")'), class(method)[1], class(method)[1])
 })
-
-
 
 
 #' @export
@@ -435,7 +451,13 @@ getCall.clMethod = function(object) {
 setGeneric('getLabel', function(object) standardGeneric('getLabel'))
 #' @export
 #' @rdname clMethod-interface
-setMethod('getLabel', signature('clMethod'), function(object) '')
+setMethod('getLabel', signature('clMethod'), function(object) {
+  if(hasName(object, 'label')) {
+    object$label
+  } else {
+    ''
+  }
+})
 
 
 #. getName ####
@@ -453,8 +475,16 @@ setGeneric('getShortName', function(object) standardGeneric('getShortName'))
 setMethod('getShortName', signature('clMethod'), getName)
 
 
+#. idVariable ####
+#' @export
+setGeneric('idVariable', function(object, ...) standardGeneric('idVariable'))
+#' @export
+setMethod('idVariable', signature('clMethod'), function(object) object$id)
+
+
 #' @export
 #' @title Check whether the argument of a clMethod has a defined value.
+#' @description Determines whether the associated argument value is defined. If the argument value is of type `language`, the argument is evaluated to see if it can be resolved within its `environment`.
 #' @param name The name of the argument.
 #' @param envir The `environment` to evaluate the arguments in. If `NULL`, the argument is not evaluated.
 #' @keywords internal
@@ -521,8 +551,11 @@ setMethod('names', signature('clMethod'), function(x) {
 
 
 #' @export
-print.clMethod = function(object, ..., width=40) {
+print.clMethod = function(object, ..., eval=FALSE, width=40) {
   assert_that(is.clMethod(object))
+  if(isTRUE(eval)) {
+    object = compose(object)
+  }
 
   argNames = names(object)
   args = as.character(object, ...) %>%
@@ -539,10 +572,12 @@ print.clMethod = function(object, ..., width=40) {
 #' @description Substitutes the call arguments if they can be evaluated without error.
 #' @inheritParams as.list.clMethod
 #' @param classes Substitute only arguments with specific class types. By default, all types are substituted.
+#' @param try Whether to try to evaluate arguments and ignore errors (the default), or to fail on any argument evaluation error.
+#' @param exclude Arguments to exclude from evaluation.
 #' @return A new `clMethod` object with the substituted arguments.
 #' @family clMethod functions
 #' @keywords internal
-substitute.clMethod = function(object, classes='ANY', envir=NULL) {
+substitute.clMethod = function(object, classes='ANY', try=TRUE, exclude=character(), envir=NULL) {
   assert_that(is.clMethod(object))
   assert_that(is.character(classes))
 
@@ -550,7 +585,12 @@ substitute.clMethod = function(object, classes='ANY', envir=NULL) {
 
   argNames = names(object)
   argValues = as.list(object@call[-1])
-  evalMask = vapply(argNames, isArgDefined, object=object, envir=envir, FUN.VALUE=FALSE)
+  if(isTRUE(try)) {
+    evalMask = vapply(argNames, isArgDefined, object=object, envir=envir, FUN.VALUE=FALSE) & !(argNames %in% exclude)
+  } else {
+    evalMask = !(argNames %in% exclude)
+  }
+
   evalValues = vector(mode='list', length=length(object))
   evalValues[evalMask] = lapply(argNames[evalMask], function(name) object[[name, eval=TRUE, envir=envir]])
 
@@ -621,19 +661,19 @@ update.clMethod = function(object, ..., .eval=FALSE, envir=NULL) {
 
 
 
-# . prefit ####
+# . preFit ####
 #' @export
-setGeneric('prefit', function(method, ...) standardGeneric('prefit'))
+setGeneric('preFit', function(method, ...) standardGeneric('preFit'))
 #' @rdname clMethod-interface
-setMethod('prefit', signature('clMethod'), function(method, data, envir, verbose) {
+setMethod('preFit', signature('clMethod'), function(method, data, envir, verbose) {
   return(envir)
 })
 
 # . postfit ####
 #' @export
-setGeneric('postfit', function(method, ...) standardGeneric('postfit'))
+setGeneric('postFit', function(method, ...) standardGeneric('postFit'))
 #' @rdname clMethod-interface
-setMethod('postfit', signature('clMethod'), function(method, data, model, envir, verbose) {
+setMethod('postFit', signature('clMethod'), function(method, data, model, envir, verbose) {
   return(model)
 })
 
@@ -648,11 +688,47 @@ setMethod('prepare', signature('clMethod'), function(method, data, verbose) {
 
 
 
+#. responseVariable ####
+#' @export
+setGeneric('responseVariable', function(object, ...) standardGeneric('responseVariable'))
+#' @export
+#' @title Determine the response variable
+#' @return The response variable
+setMethod('responseVariable', signature('clMethod'), function(object) {
+  if(hasName(object, 'response')) {
+    object$response
+  } else if(hasName(object, 'formula')) {
+    getResponse(object$formula)
+  } else {
+    stop('cannot determine the response variable(s) for class ', class(object)[1],
+         'Consider overriding "responseVariable(clMethod)" to fix this for your clMethod implementation')
+  }
+})
+
+
 #. show ####
 setMethod('show', 'clMethod', function(object) {
   cat(class(object)[1], ' as "', getName(object), '"\n', sep='')
   print(object)
 })
 
+
+#. timeVariable ####
+#' @export
+setGeneric('timeVariable', function(object, ...) standardGeneric('timeVariable'))
+#' @export
+setMethod('timeVariable', signature('clMethod'), function(object) object$time)
+
+
+#. validate ####
+#' @export
+setGeneric('validate', function(method, data, ...) standardGeneric('validate'))
+#' @export
+#' @rdname clMethod-interface
+setMethod('validate', signature('clMethod'), function(method, data, envir=NULL) {
+  validate_that(hasName(data, idVariable(method)),
+                hasName(data, timeVariable(method)),
+                hasName(data, responseVariable(method)))
+})
 
 

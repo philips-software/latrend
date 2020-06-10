@@ -1,7 +1,8 @@
 context('cluslongRep')
 
+m = clMethodKML(nbRedrawing=1, maxIt=10)
 test_that('default', {
-  models = cluslongRep(clMethodTestKML(), data=testLongData, .rep=2) %>%
+  models = cluslongRep(clMethodKML(nbRedrawing=1, maxIt=10), data=testLongData, .rep=2) %>%
     expect_is('clModels') %>%
     expect_length(2)
 
@@ -13,21 +14,21 @@ test_that('default', {
 })
 
 test_that('method var', {
-  kml = clMethodTestKML()
-  cluslongRep(kml, data=testLongData, .rep=2) %>%
+  cluslongRep(m, data=testLongData, .rep=2) %>%
     expect_is('clModels') %>%
     expect_length(2)
 })
 
 test_that('single rep', {
-  cluslongRep(clMethodTestKML(), data=testLongData, .rep=1) %>%
+  cluslongRep(m, data=testLongData, .rep=1) %>%
     expect_is('clModels') %>%
     expect_length(1)
 })
 
 test_that('matrix input', {
   mat = dcastRepeatedMeasures(testLongData)
-  cluslongRep(clMethodTestKML(), data=mat, .rep=2) %>%
+
+  cluslongRep(m, data=mat, .rep=2) %>%
     expect_is('clModels') %>%
     expect_length(2)
 })

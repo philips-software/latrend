@@ -32,7 +32,7 @@ setMethod('getName', signature('clMethodCrimCV'), function(object) 'zero-inflate
 setMethod('getShortName', signature('clMethodCrimCV'), function(object) 'crimcv')
 
 setMethod('prepare', signature('clMethodCrimCV'), function(method, data, verbose, ...) {
-  times = sort(unique(data[[method$time]]))
+  times = sort(unique(data[[timeVariable(method)]]))
 
   refTimes = seq(first(times), last(times), length.out=length(times))
   assert_that(isTRUE(all.equal(times, refTimes)), msg='Measurement times must be equally spaced, starting from 0 and ending at 1. This requirement is enforced because crimCV internally specifies the measurement times in this way.')
@@ -43,6 +43,7 @@ setMethod('prepare', signature('clMethodCrimCV'), function(method, data, verbose
 #' @importFrom crimCV crimCV
 setMethod('fit', signature('clMethodCrimCV'), function(method, data, envir, verbose, ...) {
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
+  time = timeVariable(method)
 
   args = as.list(method, args=crimCV::crimCV)
   args$Dat = envir$dataMat
@@ -52,8 +53,8 @@ setMethod('fit', signature('clMethodCrimCV'), function(method, data, envir, verb
     model = do.call(crimCV::crimCV, args)
   })
   model$data = envir$dataMat
-  model$minTime = min(data[[method$time]])
-  model$durTime = max(data[[method$time]]) - model$minTime
+  model$minTime = min(data[[time]])
+  model$durTime = max(data[[time]]) - model$minTime
 
   assert_that(has_name(model, 'beta'), msg='invalid crimCV model returned from fit. The model either failed to initialize, converge, or its specification is unsupported.')
 

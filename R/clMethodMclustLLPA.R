@@ -27,7 +27,7 @@ setValidity('clMethodMclustLLPA', function(object) {
 #'                      time='Assessment',
 #'                      id='Id', nClusters=3)
 #' @family clMethod implementations
-clMethodMclustLLPA = function(formula=Value ~ 1,
+clMethodMclustLLPA = function(response=getOption('cluslong.response'),
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),
                        nClusters=2,
@@ -45,11 +45,11 @@ setMethod('getShortName', signature('clMethodMclustLLPA'), function(object) 'llp
 setMethod('prepare', signature('clMethodMclustLLPA'), function(method, data, verbose, ...) {
   e = new.env()
 
-  valueColumn = formula(method) %>% getResponse
+  valueColumn = responseVariable(method)
   assert_that(!anyNA(data[[valueColumn]]), msg='data contains missing values')
 
   # Data
-  wideFrame = dcast(data, get(method$id) ~ get(method$time), value.var=valueColumn)
+  wideFrame = dcast(data, get(idVariable(method)) ~ get(timeVariable(method)), value.var=valueColumn)
   e$data = as.matrix(wideFrame[, -'method']) %>%
     set_rownames(wideFrame$method)
 
@@ -62,7 +62,7 @@ setMethod('fit', signature('clMethodMclustLLPA'), function(method, data, envir, 
   args$G = method$nClusters
 
   model = do.call(mclust::Mclust, args)
-  model$time = unique(data[[method$time]]) %>% sort
+  model$time = unique(data[[timeVariable(method)]]) %>% sort
 
   new('clModelMclustLLPA',
       method=method,

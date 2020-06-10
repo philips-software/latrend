@@ -37,19 +37,15 @@ setMethod('initialize', 'clModel', function(.Object, ...) {
 
   assert_that(length(.Object@id) > 0 || has_name(method, 'id'), msg='@id not specified, nor defined in clMethod')
   if(length(.Object@id) == 0) {
-    .Object@id = method$id
+    .Object@id = idVariable(method)
   }
   assert_that(length(.Object@time) > 0 || has_name(method, 'time'), msg='@time not specified, nor defined in clMethod')
   if(length(.Object@time) == 0) {
-    .Object@time = method$time
+    .Object@time = timeVariable(method)
   }
   assert_that(length(.Object@response) > 0 || has_name(method, 'response') || has_name(method, 'formula'), msg='@response not specified, nor defined in clMethod$response or clMethod$formula')
   if(length(.Object@response) == 0) {
-    if(has_name(method, 'response')) {
-      .Object@response = method$response
-    } else {
-      .Object@response = method$formula %>% getResponse
-    }
+    .Object@response = responseVariable(method)
   }
   .Object
 })
@@ -59,7 +55,7 @@ setValidity('clModel', function(object) {
   return(TRUE)
 
   if(as.character(object@call[[1]]) == "<undef>") {
-    # nothing to validate as clModel is incomplete (yet)
+    # nothing to validate as clModel is incomplete
     return(TRUE)
   }
 
@@ -348,9 +344,7 @@ ids = function(object) {
 #' model = cluslong(clMethodKML(), testLongData)
 #' idVariable(model) # "Id"
 #' @family clModel variables
-idVariable = function(object) {
-  object@id
-}
+setMethod('idVariable', signature('clModel'), function(object) object@id)
 
 
 #' @export
@@ -782,14 +776,7 @@ residuals.clModel = function(object, clusters=clusterAssignments(object), ...) {
 #' model = cluslong(clMethodKML(), testLongData)
 #' responseVariable(model) # "Value"
 #' @family clModel variables
-responseVariable = function(object, what='mu') {
-  if(what == 'mu') {
-    object@response
-  } else {
-    paste(object@response, what, sep='.')
-  }
-}
-
+setMethod('responseVariable', signature('clModel'), function(object, ...) object@response)
 
 #' @export
 #' @title Get the model estimation time
@@ -844,9 +831,7 @@ summary.clModel = function(object, ...) {
 #' @export
 #' @title Get the time variable name
 #' @family clModel variables
-timeVariable = function(object) {
-  object@time
-}
+setMethod('timeVariable', signature('clModel'), function(object) object@time)
 
 
 # . trajectories ####
