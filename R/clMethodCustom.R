@@ -59,7 +59,7 @@ setMethod('getName', signature('clMethodCustom'), function(object) {
 setMethod('getShortName', signature('clMethodCustom'), function(object) 'custom')
 
 
-setMethod('prepare', signature('clMethodCustom'), function(method, data, verbose) {
+setMethod('prepareData', signature('clMethodCustom'), function(method, data, verbose) {
   assert_that(has_name(data, responseVariable(method)))
   return(NULL)
 })

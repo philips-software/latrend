@@ -39,7 +39,7 @@ setMethod('getName', signature('clMethodLMKM'), function(object) 'glm-kmeans')
 setMethod('getShortName', signature('clMethodLMKM'), function(object) 'glmkm')
 
 
-setMethod('prepare', signature('clMethodLMKM'), function(method, data, verbose) {
+setMethod('prepareData', signature('clMethodLMKM'), function(method, data, verbose) {
   cat(verbose, 'Representation step...')
   lmArgs = as.list(method, args=lm)
 

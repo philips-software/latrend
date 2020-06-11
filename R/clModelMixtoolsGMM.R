@@ -47,7 +47,7 @@ predict.clModelMixtoolsGMM = function(object, newdata=NULL, what='mu') {
     predMat = fitRan + predFix
   }
 
-  transformPredict(object, predMat, newdata=newdata)
+  transformPredict(pred = predMat, model = object, newdata = newdata)
 }
 
 

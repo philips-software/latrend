@@ -42,7 +42,7 @@ setMethod('getName', signature('clMethodMclustLLPA'), function(object) 'longitud
 
 setMethod('getShortName', signature('clMethodMclustLLPA'), function(object) 'llpa')
 
-setMethod('prepare', signature('clMethodMclustLLPA'), function(method, data, verbose, ...) {
+setMethod('prepareData', signature('clMethodMclustLLPA'), function(method, data, verbose, ...) {
   e = new.env()
 
   valueColumn = responseVariable(method)

@@ -36,7 +36,7 @@ setMethod('getName', signature('clMethodTwoStep'), function(object) 'two-step cl
 setMethod('getShortName', signature('clMethodTwoStep'), function(object) 'twostep')
 
 
-setMethod('prepare', signature('clMethodTwoStep'), function(method, data, verbose, ...) {
+setMethod('prepareData', signature('clMethodTwoStep'), function(method, data, verbose, ...) {
   assert_that(has_name(data, responseVariable(method)))
   return(NULL)
 })

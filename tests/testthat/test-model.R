@@ -2,6 +2,27 @@ context('clModel')
 
 model = cluslong(clMethodTestKML(), data=testLongData)
 
+test_that('default predict', {
+  suppressWarnings({
+    setClass('clModelTest', contains='clModel')
+    testModel = model
+    class(testModel) = 'clModelTest'
+    dfpred = predict(testModel, newdata=data.frame(Time=1))
+    expect_is(dfpred, 'list')
+    expect_is(dfpred$A$Fit, 'numeric')
+    expect_equivalent(nrow(dfpred$A), 1)
+  })
+})
+
+test_that('default fitted', {
+  suppressWarnings({
+    setClass('clModelTest', contains='clModel')
+    testModel = model
+    class(testModel) = 'clModelTest'
+    expect_is(fitted(testModel), 'numeric')
+  })
+})
+
 test_that('clusterAssignments', {
   clusterAssignments(model) %>%
     expect_is('factor') %T>%

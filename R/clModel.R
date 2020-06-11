@@ -1,4 +1,6 @@
 #' @include clMethod.R plot.R
+#' @import stats
+#'
 # Model ####
 #' @export
 #' @name clModel-class
@@ -33,11 +35,13 @@ setClass('clModel',
                         label='character',
                         ids='vector',
                         clusterNames='character',
+                        date='POSIXct',
                         estimationTime='numeric',
                         tag='ANY'))
 
 # . initialize ####
 setMethod('initialize', 'clModel', function(.Object, ...) {
+  .Object@date = Sys.time()
   .Object = callNextMethod(.Object, ...)
   method = .Object@method
 
@@ -147,23 +151,30 @@ clusterNames = function(object, factor=FALSE) {
 #' clusterSizes(model)
 clusterSizes = function(object) {
   assert_that(is.clModel(object))
-  clusterAssignments(object) %>% table %>% as.numeric %>% setNames(clusterNames(object))
+  clusterAssignments(object) %>%
+    table() %>%
+    as.numeric() %>%
+    setNames(clusterNames(object))
 }
 
+#. clusterProportions ####
+#' @export
+setGeneric('clusterProportions', function(object, ...) standardGeneric('clusterProportions'))
 #' @export
 #' @title Proportional size of each cluster
 #' @examples
 #' model = cluslong(method=clMethodKML(), data=testLongData)
 #' clusterProportions(model)
-clusterProportions = function(object) {
-  assert_that(is.clModel(object))
+setMethod('clusterProportions', signature('clModel'), function(object, ...) {
   pp = postprob(object)
   assert_that(!is.null(pp), msg='cannot determine cluster assignments because postprob() returned NULL')
   assert_that(is.matrix(pp))
   colMeans(pp)
-}
+})
 
-
+#. clusterAssignments ####
+#' @export
+setGeneric('clusterAssignments', function(object, ...) standardGeneric('clusterAssignments'))
 #' @export
 #' @title Get the cluster membership for each strata
 #' @param strategy A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.
@@ -173,15 +184,13 @@ clusterProportions = function(object) {
 #' clusterAssignments(model)
 #'
 #' clusterAssignments(model, strategy=function(x) which(x > .9)) # only assign ids with a probability over 0.9
-clusterAssignments = function(object, strategy=which.max, ...) {
-  assert_that(is.clModel(object))
+setMethod('clusterAssignments', signature('clModel'), function(object, strategy = which.max, ...) {
   pp = postprob(object)
-  assert_that(!is.null(pp), msg='cannot determine cluster assignments because postprob() returned NULL')
   assert_that(is.matrix(pp))
 
   apply(pp, 1, strategy, ...) %>%
     factor(levels=1:nClusters(object), labels=clusterNames(object))
-}
+})
 
 
 
@@ -253,8 +262,8 @@ df.residual.clModel = function(object, ...) {
 #' @return A vector of the fitted values for the respective class, or a matrix of fitted values for each cluster.
 #' @family model-specific methods
 fitted.clModel = function(object, clusters=clusterAssignments(object)) {
-  predict(object, newdata=NULL) %>%
-    transformFitted(object, ., clusters=clusters)
+  pred = predict(object, newdata=NULL)
+  transformFitted(pred = pred, model = object, clusters = clusters)
 }
 
 
@@ -667,7 +676,23 @@ nobs.clModel = function(object, ...) {
 #' predIdAll = predict(model, newdata=data.frame(Id='S1', Time=time(model))) # Prediction matrix for id S1 for all clusters
 #' @family model-specific methods
 predict.clModel = function(object, newdata=NULL, what='mu', ...) {
-  stop('not implemented')
+  warning('predict() not implemented for ', class(object)[1], '. Returning NA predictions.')
+
+  if(is.null(newdata)) {
+    newdata = model.data(object)
+    newdata[['Cluster']] = NULL
+  }
+
+  if(hasName(newdata, 'Cluster')) {
+    pred = cbind(newdata, Fit=as.numeric(NA))
+  }
+  else {
+    pred = data.frame(Cluster=clusterNames(object) %>%
+                        rep(each=nrow(newdata)),
+                      Fit=as.numeric(NA))
+  }
+
+  transformPredict(pred = pred, model = object, newdata = newdata)
 }
 
 # . predictPostprob ####
@@ -677,7 +702,18 @@ predict.clModel = function(object, newdata=NULL, what='mu', ...) {
 #' @family model-specific methods
 setGeneric('predictPostprob', function(object, newdata=NULL, ...) standardGeneric('predictPostprob'))
 setMethod('predictPostprob', signature('clModel'), function(object, newdata, ...) {
-  stop('not implemented')
+  warning('predictPostprob() not implemented for ', class(object)[1], '. Returning uniform probability matrix.')
+
+  if(is.null(newdata)) {
+    N = nrow(model.data(object))
+  }
+  else {
+    N = nrow(newdata)
+  }
+
+  pp = matrix(1 / nClusters(object), nrow=N, ncol=nClusters(object))
+  colnames(pp) = clusterNames(object)
+  pp
 })
 
 
@@ -900,138 +936,6 @@ setMethod('trajectories', signature('clModel'), function(object, at, what, clust
   newdata[, c(responseVariable(object, what=what)) := preds$Fit]
   return(newdata[])
 })
-
-#' @export
-#' @title Helper function for ensuring the right fitted() output
-#' @details Includes additional checks
-#' @return A vector or matrix
-#' @keywords internal
-transformFitted = function(object, pred, clusters) {
-  if(is.null(pred)) {
-    return(NULL)
-  }
-  if(!is.data.frame(pred) && is.list(pred)) {
-    # convert to matrix
-    assert_that(length(pred) == nClusters(object))
-    pred = lapply(pred, '[[', 'Fit') %>%
-      do.call(cbind, .)
-  } else if(is.data.frame(pred)) {
-    browser()
-    assert_that(has_name(pred, c('Fit', 'Cluster')))
-    pred = matrix(pred$Fit, ncol=nClusters(object))
-  }
-
-  assert_that(is.matrix(pred), ncol(pred) == nClusters(object), nrow(pred) == nobs(object))
-  colnames(pred) = clusterNames(object)
-
-  if(is.null(clusters)) {
-    pred
-  } else {
-    clusters = make.clusterIndices(object, clusters)
-    rowClusters = clusters[genIdRowIndices(object)]
-    rowColumns(pred, rowClusters)
-  }
-}
-
-#' @export
-#' @title Helper function that matches the output to the specified newdata
-#' @description If Cluster is not provided, the prediction is outputted in long format per cluster,
-#' resulting in a longer data.frame than the newdata input
-#' @details Includes additional checks
-#' @return A data.frame with the predictions, or a list of cluster-specific prediction frames
-#' @keywords internal
-transformPredict = function(object, pred, newdata) {
-  if(is.null(pred)) {
-    assert_that(nrow(newdata) == 0)
-    browser()
-    if(hasName(newdata, 'Cluster')) {
-      data.frame(Cluster=factor(levels=seq_len(nClusters(object)),
-                                labels=clusterNames(object)), Fit=numeric(0))
-    } else {
-      data.table(Fit=numeric(0))
-    }
-  }
-  else if(is.vector(pred)) {
-    assert_that(is.null(newdata) || length(pred) == nrow(newdata))
-    data.frame(Fit=pred)
-  }
-  else if(is.matrix(pred)) {
-    # format where multiple cluster-specific predictions are given per newdata entry (per row)
-    assert_that(is.matrix(pred))
-    assert_that(ncol(pred) == nClusters(object))
-    assert_that(is.null(newdata) || nrow(pred) == nrow(newdata))
-
-    if(hasName(newdata, 'Cluster')) {
-      rowClusters = make.clusterIndices(object, newdata$Cluster)
-      data.frame(Fit=rowColumns(pred, rowClusters))
-    } else {
-      data.frame(Fit=as.vector(pred)) %>%
-        split(clusterNames(object, factor=TRUE) %>% rep(each=nrow(pred)))
-    }
-  }
-  else if(is.data.frame(pred)) {
-    assert_that(!is.null(newdata))
-    # generic form, possibly containing more predictions than newdata. These are filtered
-    # if the pred object contains the newdata variables. Else, newdata is replicated.
-    pred = as.data.table(pred)
-    newdata = as.data.table(newdata)
-
-    if(nrow(newdata) == 0) {
-      return(as.data.table(pred)[0,])
-    }
-
-    assert_that(hasName(pred, 'Fit'), nrow(pred) > 0)
-
-    mergevars = intersect(names(pred), names(newdata))
-    predvars = setdiff(names(pred), names(newdata))
-
-    if(length(mergevars) == 0) {
-      if(nrow(pred) == nrow(newdata)) {
-        # newdata may have Cluster column, but we assume results are correct since rows match
-        if(hasName(newdata, 'Cluster')) {
-          newpred = cbind(pred, Cluster=newdata$Cluster)
-        } else {
-          newpred = pred
-        }
-      }
-      else if(hasName(pred, 'Cluster')) {
-        assert_that(nrow(pred) == nrow(newdata) * uniqueN(pred$Cluster), msg='cannot merge pred and newdata (no shared columns), and nrow(pred) is not a multiple of nrow(newdata)')
-        newpred = pred
-      }
-      else {
-        stop('non-matching rows for pred and newdata, and no shared columns to merge on')
-      }
-    }
-    else if(length(mergevars) == 1 && mergevars == 'Cluster') {
-      # can only merge on cluster. order cannot be validated
-      # number of observations per cluster must match the number of predictions per cluster
-      obsCounts = pred[, .N, keyby=Cluster] %>%
-        .[newdata[, .N, keyby=Cluster]]
-      if(!all(obsCounts[is.finite(N) & is.finite(i.N), N == i.N]))
-        browser()
-      assert_that(all(obsCounts[is.finite(N) & is.finite(i.N), N == i.N]), msg='number of observations per cluster must match the number of predictions per cluster')
-
-      newpred = pred[Cluster %in% unique(newdata$Cluster)]
-    }
-    else {
-      # attempt to merge pred and newdata to ensure correct filtering of predictions
-      newpred = merge(newdata, pred, by=mergevars, sort=FALSE, allow.cartesian=TRUE) %>%
-        subset(select=predvars)
-    }
-
-
-    # only split when newdata does not specify Cluster
-    if(hasName(newdata, 'Cluster') || !hasName(newpred, 'Cluster')) {
-      newpred
-    } else {
-      split(newpred, newpred$Cluster)
-    }
-
-  }
-  else {
-    stop('unsupported input for pred')
-  }
-}
 
 
 #' @export

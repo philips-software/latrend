@@ -44,7 +44,7 @@ predict.clModelLMKM = function(object, newdata=NULL, what='mu', ...) {
 
   if(nrow(newdata) == 0) {
     # predict.lm cannot handle empty data.frame, so return early
-    return(transformPredict(object, pred=NULL, newdata=newdata))
+    return(transformPredict(pred = NULL, model = object, newdata = newdata))
   }
 
   # create ref lm
@@ -81,5 +81,5 @@ predict.clModelLMKM = function(object, newdata=NULL, what='mu', ...) {
     rbindlist(idcol='Cluster') %>%
     .[, Cluster := factor(Cluster, labels=clusterNames(object))]
   setnames(dtpred, 'fit', 'Fit')
-  transformPredict(object, dtpred, newdata=newdata)
+  transformPredict(pred = dtpred, model = object, newdata=newdata)
 }

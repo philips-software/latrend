@@ -47,14 +47,14 @@ predict.clModelMixtoolsRM = function(object, newdata=NULL, what='mu', se=TRUE, c
     .[, c(timeVariable(object)) := rep(newtimes, nClusters(object))] %>%
     setcolorder(c('Cluster', timeVariable(object)))
 
-  transformPredict(object, dtPred, newdata=newdata)
+  transformPredict(pred = dtPred, model = object, newdata = newdata)
 }
 
 
 #' @export
 fitted.clModelMixtoolsRM = function(object, clusters) {
   predList = predict.clModelMixtoolsRM(object, newdata=NULL, se=FALSE, ci=NULL)
-  transformFitted(object, predList, clusters=clusters)
+  transformFitted(predList, model = object, clusters=clusters)
 }
 
 setMethod('postprob', signature('clModelMixtoolsRM'), function(object) {

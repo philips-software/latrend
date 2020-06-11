@@ -44,13 +44,13 @@ predict.clModelCrimCV = function(object, newdata=NULL, what='mean') {
                   nu=nuMat,
                   mean=(1 - nuMat) * lambdaMat)
 
-  transformPredict(object, predMat, newdata=newdata)
+  transformPredict(pred = predMat, model = object, newdata = newdata)
 }
 
 
 fitted.clModelCrimCV = function(object, clusters=clusterAssignments(object), what='mean') {
   predict(object, newdata=NULL, what=what) %>%
-    transformFitted(object, ., clusters)
+    transformFitted(model = object, clusters = clusters)
 }
 
 

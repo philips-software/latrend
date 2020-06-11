@@ -7,7 +7,7 @@ fitted.clModelLcmmGMM = function(object, clusters=clusterAssignments(object)) {
   predMat = object@model$pred[predNames] %>%
     as.matrix %>%
     set_colnames(clusterNames(object))
-  transformFitted(object, predMat, clusters=clusters)
+  transformFitted(predMat, model = object, clusters=clusters)
 }
 
 #' @export
@@ -36,7 +36,7 @@ predict.clModelLcmmGMM = function(object, newdata=NULL, what='mu') {
       set_colnames(clusterNames(object))
   }
 
-  transformPredict(object, predMat, newdata=newdata)
+  transformPredict(pred = predMat, model = object, newdata = newdata)
 }
 
 #' @export

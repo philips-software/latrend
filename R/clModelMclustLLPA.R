@@ -22,7 +22,7 @@ predict.clModelMclustLLPA = function(object, newdata=NULL, what='mu', approxFun=
     predMat = apply(trajMat, 2, function(y) approxFun(x=time(object), y=y, xout=newtimes)$y)
   }
 
-  transformPredict(object, predMat, newdata=newdata)
+  transformPredict(pred = predMat, model = object, newdata = newdata)
 }
 
 
@@ -34,7 +34,7 @@ fitted.clModelMclustLLPA = function(object, clusters=clusterAssignments(object))
     setnames('Id', idVariable(object)) %>%
     setnames('Time', timeVariable(object))
   predict(object, newdata=newdata) %>%
-    transformFitted(object, ., clusters)
+    transformFitted(model = object, clusters)
 }
 
 

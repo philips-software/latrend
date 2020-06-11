@@ -9,7 +9,7 @@ setMethod('getName', signature('clMatrixMethod'), function(object) 'repeated mea
 
 setMethod('getShortName', signature('clMatrixMethod'), function(object) 'rm')
 
-setMethod('prepare', signature('clMatrixMethod'), function(method, data, verbose, ...) {
+setMethod('prepareData', signature('clMatrixMethod'), function(method, data, verbose, ...) {
   e = new.env()
 
   data = as.data.table(data)

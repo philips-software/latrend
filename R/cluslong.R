@@ -55,8 +55,8 @@ cluslong = function(method, data, ..., envir=NULL, verbose=getOption('cluslong.v
   }
 
   # prepare
-  modelEnv = prepare(method = cmethod, data = modelData, verbose = verbose)
-  assert_that(is.null(modelEnv) || is.environment(modelEnv), msg = 'prepare(clMethod, ...) returned an unexpected object. Should be environment or NULL')
+  modelEnv = prepareData(method = cmethod, data = modelData, verbose = verbose)
+  assert_that(is.null(modelEnv) || is.environment(modelEnv), msg = 'prepareData(clMethod, ...) returned an unexpected object. Should be environment or NULL')
 
   cat(verbose, 'Fitting model')
   pushState(verbose)
@@ -123,7 +123,7 @@ fitCluslongMethod = function(method, data, envir, mc, verbose) {
 #' If `"remove"`, errors are ignored and the respective repetition is exempt from the returned model list.
 #' If `"stop"`, errors are not caught, ensuring that the function halts on the first error.
 #' @param .seed Set the seed for generating the respective seed for each of the repeated fits.
-#' @details This method is faster than repeatedly calling [cluslong]() as it only prepares the data once, unless `.prepareAll=TRUE`.
+#' @details This method is faster than repeatedly calling [cluslong]() as it only prepares the data via `prepareData()` once.
 #' @return A `clModels` object containing the resulting models.
 #' @examples
 #' models = cluslongRep(clMethodKML(), data=testLongData, .rep=5) # 5 repeated runs
@@ -180,7 +180,7 @@ cluslongRep = function(method, data, .rep=10, ..., .errorhandling='remove', .see
   }
 
   enter(verbose, 'Preparing...')
-  prepEnv = prepare(method = method, data = modelData, verbose = verbose)
+  prepEnv = prepareData(method = method, data = modelData, verbose = verbose)
   exit(verbose)
 
   models = foreach(i = seq_len(.rep), iseed = repSeeds, .combine=c, .errorhandling = errh) %do% {

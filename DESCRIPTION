@@ -72,6 +72,7 @@ Collate:
     'clMethodMixtoolsNPRM.R'
     'clMethodRandom.R'
     'clMethodStratify.R'
+    'clModel-transform.R'
     'clModelCrimCV.R'
     'clModelFlexmix.R'
     'clModelFunFEM.R'

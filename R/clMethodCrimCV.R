@@ -31,7 +31,7 @@ setMethod('getName', signature('clMethodCrimCV'), function(object) 'zero-inflate
 
 setMethod('getShortName', signature('clMethodCrimCV'), function(object) 'crimcv')
 
-setMethod('prepare', signature('clMethodCrimCV'), function(method, data, verbose, ...) {
+setMethod('prepareData', signature('clMethodCrimCV'), function(method, data, verbose, ...) {
   times = sort(unique(data[[timeVariable(method)]]))
 
   refTimes = seq(first(times), last(times), length.out=length(times))

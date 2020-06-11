@@ -16,7 +16,7 @@ predict.clModelFlexmix = function(object, newdata=NULL, what='mu') {
   predMat = do.call(cbind, predOut) %>%
     set_colnames(clusterNames(object))
 
-  transformPredict(object, predMat, newdata=newdata)
+  transformPredict(pred = predMat, model = object, newdata = newdata)
 }
 
 
@@ -26,7 +26,7 @@ fitted.clModelFlexmix = function(object, clusters=clusterAssignments(object)) {
   predNames = paste0('pred_m', 1:nClusters(object))
   predMat = fitted(object@model) %>%
     set_colnames(clusterNames(object))
-  transformFitted(object, predMat, clusters=clusters)
+  transformFitted(pred = predMat, model = object, clusters = clusters)
 }
 
 

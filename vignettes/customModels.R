@@ -18,18 +18,18 @@ update_geom_defaults('point', list(size = .5))
 
 ## ------------------------------------------------------------------------
 library(cluslong)
-options(cluslong.id = 'Traj', 
+options(cluslong.id = 'Traj',
         cluslong.time = 'Time',
         cluslong.response = 'Y',
         cluslong.verbose = TRUE)
 
 ## ------------------------------------------------------------------------
 set.seed(1)
-casedata = generateLongData(sizes = c(40, 60), 
+casedata = generateLongData(sizes = c(40, 60),
                         data = data.frame(Time = 0:10),
                         fixed = Y ~ 1,
                         fixedCoefs = 1,
-                        cluster = ~ Time, 
+                        cluster = ~ Time,
                         clusterCoefs = cbind(c(1, -.05), c(0, .05)),
                         random = ~ Time,
                         randomScales = cbind(c(.3, .1), c(.3, .05)),
@@ -57,8 +57,8 @@ clusterProportions(model)
 ## ----message=TRUE--------------------------------------------------------
 stratfun = function(data) {
   int = coef(lm(Y ~ Time, data))[1]
-  factor(int > 1.7, 
-         levels = c(FALSE, TRUE), 
+  factor(int > 1.7,
+         levels = c(FALSE, TRUE),
          labels = c('Low', 'High'))
 }
 m2 = clMethodStratify(stratfun, center = mean)
@@ -85,7 +85,7 @@ clusStep = function(method, data, repMat, envir, verbose) {
   km = kmeans(repMat, centers = 3)
 
   clModelCustom(method = method,
-                data = data, 
+                data = data,
                 clusterAssignments = km$cluster,
                 clusterTrajectories = method$center,
                 model = km)
@@ -111,14 +111,14 @@ clusStep.gen = function(method, data, repMat, envir, verbose) {
   km = kmeans(repMat, centers = method$nClusters)
 
   clModelCustom(method = method,
-                data = data, 
+                data = data,
                 clusterAssignments = km$cluster,
                 clusterTrajectories = method$center,
                 model = km)
 }
 
 ## ------------------------------------------------------------------------
-m.twostepgen = clMethodTwoStep(representationStep = repStep.gen, 
+m.twostepgen = clMethodTwoStep(representationStep = repStep.gen,
                                clusterStep = clusStep.gen)
 
 ## ----message=TRUE--------------------------------------------------------
@@ -141,7 +141,7 @@ clMethodLMKM = function(formula=Value ~ Time,
 }
 
 ## ------------------------------------------------------------------------
-setMethod('prepare', signature('clMethodLMKM'), function(method, data, verbose) {
+setMethod('prepareData', signature('clMethodLMKM'), function(method, data, verbose) {
   # optional data processing here
   return(NULL)
 })
@@ -153,8 +153,8 @@ setMethod('fit', signature('clMethodLMKM'), function(method, data, envir, verbos
   coefmat = subset(coefdata, select = -1) %>% as.matrix()
   # cross-sectional clustering
   km = kmeans(coefmat, centers = method$nClusters)
-  
-  new('clModelLMKM', 
+
+  new('clModelLMKM',
       method=method,
       data=data,
       model=km,

@@ -9,7 +9,7 @@ fitted.clModelFunFEM = function(object, clusters=clusterAssignments(object)) {
     setnames('Id', idVariable(object)) %>%
     setnames('Time', timeVariable(object))
   predict(object, newdata=newdata) %>%
-    transformFitted(object, ., clusters)
+    transformFitted(model = object, clusters)
 }
 
 
@@ -32,7 +32,7 @@ predict.clModelFunFEM = function(object, newdata=NULL, what='mu', approxFun=appr
     predMat = eval.fd(evalarg=newdata[[timeVariable(object)]], fdobj=fdmeans)
   }
 
-  transformPredict(object, predMat, newdata=newdata)
+  transformPredict(pred = predMat, model = object, newdata = newdata)
 }
 
 

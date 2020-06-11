@@ -23,7 +23,7 @@ predict.clModelMixTVEM = function(object, newdata=NULL, what='mu') {
       melt(id.vars='Time', value.name='Fit', variable.name='Cluster')
   }
 
-  transformPredict(object, pred, newdata)
+  transformPredict(pred = pred, model = object, newdata = newdata)
 }
 
 

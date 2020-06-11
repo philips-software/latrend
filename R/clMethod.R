@@ -448,7 +448,7 @@ getCall.clMethod = function(object) {
 
 #. getLabel ####
 #' @export
-setGeneric('getLabel', function(object) standardGeneric('getLabel'))
+setGeneric('getLabel', function(object, ...) standardGeneric('getLabel'))
 #' @export
 #' @rdname clMethod-interface
 setMethod('getLabel', signature('clMethod'), function(object) {
@@ -462,14 +462,15 @@ setMethod('getLabel', signature('clMethod'), function(object) {
 
 #. getName ####
 #' @export
-setGeneric('getName', function(object) standardGeneric('getName'))
+setGeneric('getName', function(object, ...) standardGeneric('getName'))
+
 #' @export
 #' @rdname clMethod-interface
 setMethod('getName', signature('clMethod'), function(object) 'custom')
 
 #. getShortName ####
 #' @export
-setGeneric('getShortName', function(object) standardGeneric('getShortName'))
+setGeneric('getShortName', function(object, ...) standardGeneric('getShortName'))
 #' @export
 #' @rdname clMethod-interface
 setMethod('getShortName', signature('clMethod'), getName)
@@ -678,11 +679,11 @@ setMethod('postFit', signature('clMethod'), function(method, data, model, envir,
 })
 
 
-# . prepare ####
+# . prepareData ####
 #' @export
-setGeneric('prepare', function(method, ...) standardGeneric('prepare'))
+setGeneric('prepareData', function(method, ...) standardGeneric('prepareData'))
 #' @rdname clMethod-interface
-setMethod('prepare', signature('clMethod'), function(method, data, verbose) {
+setMethod('prepareData', signature('clMethod'), function(method, data, verbose) {
   return(NULL)
 })
 

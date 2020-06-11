@@ -18,7 +18,7 @@ fitted.clApproxModel = function(object, clusters=clusterAssignments(object)) {
     setnames('Time', timeVariable(object))
 
   predict(object, newdata=newdata) %>%
-    transformFitted(object, ., clusters=clusters)
+    transformFitted(model = object, clusters=clusters)
 }
 
 #' @export
@@ -30,7 +30,7 @@ predict.clApproxModel = function(object, newdata=NULL, what='mu', approxFun=appr
 
   if(is.null(newdata)) {
     predMat = fitted(object, clusters=NULL)
-    transformPredict(object, predMat, newdata=newdata)
+    transformPredict(pred = predMat, model = object, newdata=newdata)
   } else {
     time = timeVariable(object)
     resp = responseVariable(object)
@@ -64,6 +64,6 @@ predict.clApproxModel = function(object, newdata=NULL, what='mu', approxFun=appr
     }
 
     assert_that(nrow(dtcluspred) > 0 || nrow(newdata) == 0)
-    transformPredict(object, dtcluspred, newdata=newdata)
+    transformPredict(pred = dtcluspred, model = object, newdata=newdata)
   }
 }
