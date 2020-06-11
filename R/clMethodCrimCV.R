@@ -2,7 +2,7 @@
 setClass('clMethodCrimCV', contains='clMatrixMethod')
 
 #' @export
-#' @import crimCV
+#' @importFrom crimCV crimCV
 #' @title Specify a zero-inflated repeated-measures GBTM method
 #' @inheritParams clMatrixMethod
 #' @inheritDotParams crimCV::crimCV

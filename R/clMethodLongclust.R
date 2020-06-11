@@ -2,7 +2,7 @@
 setClass('clMethodLongclust', contains='clMatrixMethod')
 
 #' @export
-#' @import longclust
+#' @importFrom longclust longclustEM
 #' @title Specify Longclust method
 #' @param basis The basis function.
 #' @inheritParams clMatrixMethod

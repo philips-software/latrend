@@ -2,8 +2,7 @@
 setClass('clMethodKML', contains='clMatrixMethod')
 
 #' @export
-#' @import kml
-#' @import longitudinalData
+#' @importFrom kml kml parALGO clusterLongData calculTrajMean getClusters
 #' @inheritDotParams kml::kml
 #' @inheritDotParams kml::parALGO
 #' @title Specify a longitudinal k-means (KML) method

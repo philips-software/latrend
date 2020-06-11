@@ -2,7 +2,7 @@
 #' @import assertthat
 #' @import methods
 #' @import magrittr
-#' @import foreach
+#' @importFrom foreach foreach %do%
 #' @import ggplot2
 #' @details
 #' -- Getting started
