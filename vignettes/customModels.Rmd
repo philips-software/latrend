@@ -203,7 +203,7 @@ Firstly, we create a new method class named `clMethodSimpleGBTM`, which extends 
 setClass('clMethodSimpleGBTM', contains='clMethod')
 ```
 
-Note that a `clMethod` class has a single slot `call`, which stores all the arguments to the method. The other aspect of a `clMethod` implementation are the `prepare()` and `fit()` functions, which are called when passing a `clMethod` object to the `cluslong()` function or any other model estimation function.
+Note that a `clMethod` class has a single slot `call`, which stores all the arguments to the method. The other relevant aspects of a `clMethod` implementation are the `prepareData()` and `fit()` functions, which are called when passing a `clMethod` object to the `cluslong()` function or any other model estimation function.
 
 ```{r}
 clMethodSimpleGBTM = function(formula = Value ~ Time,
@@ -222,11 +222,11 @@ setMethod('getName', signature('clMethodSimpleGBTM'), function(object) 'simple g
 setMethod('getShortName', signature('clMethodSimpleGBTM'), function(object) 'sgbtm')
 ```
 
-Implementing the `prepare()` function enables the `clMethod` to do data processing or transforming the data or other arguments in a structure which is suitable for the model fitting procedure. The prepare function takes a `clMethod`, the data as a `data.frame`, and the verbosity level as inputs. The processing is passed onto the `fit` function by returning an `environment` with the relevant variables.
+Implementing the `prepareData()` function enables the `clMethod` to do data processing or transforming the data or other arguments in a structure which is suitable for the model fitting procedure. The prepare function takes a `clMethod`, the data as a `data.frame`, and the verbosity level as inputs. The processing is passed onto the `fit` function by returning an `environment` with the relevant variables.
 
 In this example, we need to ensure that the `Id` column is an integer.
 ```{r}
-setMethod('prepare', signature('clMethodSimpleGBTM'), function(method, data, verbose) {
+setMethod('prepareData', signature('clMethodSimpleGBTM'), function(method, data, verbose) {
   envir = new.env()
   envir$data = as.data.frame(data)
   envir$data[[method$id]] = factor(data[[method$id]]) %>% as.integer()
@@ -269,7 +269,7 @@ Our model inherits a couple of slots from the `clModel` class, namely:
 ```{r}
 slotNames('clModelSimpleGBTM')
 ```
-The `"model"` slot is free to be used to assign an arbitrary data structure that represents the internal model representation(s). In our implementation, this slot contains the `lcmm` model. The other slots are assigned in the constructor of the `clModel` class, or by the `cluslong()` estimation function. It is best practice to use the relevant getter functions for obtaining these values (via e.g., `getIdVariable()`, `getClMethod()`, `getClusterNames()`).
+The `"model"` slot is free to be used to assign an arbitrary data structure that represents the internal model representation(s). In our implementation, this slot contains the `lcmm` model. The other slots are assigned in the constructor of the `clModel` class, or by the `cluslong()` estimation function. It is best practice to use the relevant getter functions for obtaining these values (via e.g., `idVariable()`, `getClMethod()`, `clusterNames()`).
 
 Typically, most effort of implementing the model interface goes to the `predict()` function. While implementing the function is optional, it is used for obtaining the fitted values, fitted trajectories, residuals, and cluster trajectories. Without this function, there is little functionality from a model except for the partitioning of the fitted trajectories.
 
@@ -283,7 +283,7 @@ predict.clModelSimpleGBTM = function(object, newdata=NULL, what='mu') {
       set_colnames(clusterNames(object))
   }
 
-  transformPredict(object, predMat, newdata=newdata)
+  transformPredict(pred = predMat, model = object, newdata=newdata)
 }
 ```
 
@@ -293,7 +293,7 @@ fitted.clModelSimpleGBTM = function(object, clusters=clusterAssignments(object))
   predNames = paste0('pred_m', 1:nClusters(object))
   predMat = as.matrix(object@model$pred[predNames])
   colnames(predMat) = clusterNames(object)
-  transformFitted(object, predMat, clusters=clusters)
+  transformFitted(pred = predMat, model = object, clusters = clusters)
 }
 ```
 

@@ -484,22 +484,22 @@ make.clusterAssignments = function(object, clusters, finite=TRUE) {
     }
   } else if(is.integer(clusters)) {
     # integer
-    assert_that(min(clusters) >= 1)
-    assert_that(max(clusters) <= nClusters)
+    assert_that(min(clusters) >= 1,
+                max(clusters) <= nClusters)
 
     factor(clusters, levels=seq_len(nClusters), labels=clusNames)
   } else if(is.numeric(clusters)) {
     # numeric
     assert_that(all(vapply(clusters, is.count, FUN.VALUE=FALSE)))
     clusters = as.integer(clusters)
-    assert_that(min(clusters) >= 1)
-    assert_that(max(clusters) <= nClusters)
+    assert_that(min(clusters) >= 1,
+                max(clusters) <= nClusters)
 
     factor(clusters, levels=seq_len(nClusters), labels=clusNames)
   } else if(is.character(clusters)) {
     # character
-    assert_that(uniqueN(clusters) == nClusters)
-    assert_that(all(clusters %in% clusNames))
+    assert_that(uniqueN(clusters) == nClusters,
+                all(clusters %in% clusNames))
 
     factor(clusters, levels=clusNames)
   } else {
@@ -522,8 +522,8 @@ make.clusterIndices = function(object, clusters, finite=TRUE) {
     NULL
   } else if(is.integer(clusters)) {
     # integer
-    assert_that(min(clusters) >= 1)
-    assert_that(max(clusters) <= nClusters)
+    assert_that(min(clusters) >= 1,
+                max(clusters) <= nClusters)
     clusters
   } else if(is.factor(clusters)) {
     # factor
@@ -532,20 +532,20 @@ make.clusterIndices = function(object, clusters, finite=TRUE) {
     } else {
       assert_that(all(levels(clusters) %in% clusNames))
       factor(clusters, levels=clusNames) %>%
-        as.integer
+        as.integer()
     }
   } else if(is.numeric(clusters)) {
     # numeric
     assert_that(all(vapply(clusters, is.count, FUN.VALUE=FALSE)))
     clusters = as.integer(clusters)
-    assert_that(min(clusters) >= 1)
-    assert_that(max(clusters) <= nClusters)
+    assert_that(min(clusters) >= 1,
+                max(clusters) <= nClusters)
     clusters
   } else if(is.character(clusters)) {
     # character
     assert_that(all(clusters %in% clusNames))
     factor(clusters, levels=clusNames) %>%
-      as.integer
+      as.integer()
   } else {
     stop('unsupported clusters input type; expected factor, numeric, or character')
   }
@@ -779,9 +779,11 @@ setMethod('postprob', signature('clModel'), function(object) {
 setGeneric('plotQQ', function(object, byCluster=FALSE, ...) standardGeneric('plotQQ'))
 setMethod('plotQQ', signature('clModel'), function(object, byCluster, ...) {
   assert_that(is.clModel(object))
-  rowClusters = clusterAssignments(object)[model.data(object)[[idVariable(object)]]]
+  idIndexColumn = factor(model.data(object)[[idVariable(object)]], levels = ids(object)) %>% as.integer()
+  rowClusters = clusterAssignments(object)[idIndexColumn]
 
-  p = ggplot(data=data.frame(Cluster=rowClusters, res=residuals(object)), aes(sample=res)) +
+  res = residuals(object) %>% scale()
+  p = ggplot(data=data.frame(Cluster=rowClusters, res=res), aes(sample=res)) +
     qqplotr::geom_qq_band(...) +
     qqplotr::stat_qq_line(...) +
     qqplotr::stat_qq_point(...) +

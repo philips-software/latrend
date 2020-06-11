@@ -94,7 +94,7 @@ setMethod('preFit', signature('clMethodLcmmGMM'), gmm_prepare)
 ##
 gmm_fit = function(method, data, envir, verbose, ...) {
   args = as.list(method, args=lcmm::lcmm)
-  args$data = envir$data
+  args$data = as.data.frame(envir$data)
   args$fixed = envir$fixed
   if (method$nClusters > 1) {
     args$mixture = envir$mixture
@@ -113,7 +113,7 @@ gmm_fit = function(method, data, envir, verbose, ...) {
     args$classmb = NULL
   }
 
-  model = do.call(lcmm, args)
+  model = do.call(lcmm::lcmm, args)
 
   model$fixed = envir$fixed
   model$mixture = envir$mixture

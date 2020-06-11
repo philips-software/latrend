@@ -58,7 +58,7 @@ plotTrajectories(osaData, response='HoursOfUse') +
 
 # KML clustering
 ```{r}
-method = clMethodKML(HoursOfUse ~ 1)
+method = clMethodKML(response='HoursOfUse')
 kmlModel = cluslong(method, osaData)
 ```
 
@@ -69,7 +69,7 @@ metric(kmlModel, 'WMAE') #hours
 ```
 
 ```{r}
-methods = clMethods(clMethodKML(HoursOfUse ~ 1, nRuns=10), nClusters=1:9)
+methods = clMethods(clMethodKML(response='HoursOfUse', nRuns=10), nClusters=1:9)
 
 kmlModels = cluslongBatch(methods, data=osaData, verbose=FALSE)
 
@@ -116,8 +116,8 @@ plotQQ(bestKmlModel, detrend=TRUE)
 
 # Clustering using group-based trajectory modeling
 ```{r}
-gbtmMethods = clMethodLcmmGBTM(HoursOfUse ~ Day * CLUSTER, idiag=TRUE, maxIter=20, convB=1e-2, convL=1e-2, convG=1e-2) %>%
-  clMethods(nClusters=1:8)
+gmmRef = clMethodLcmmGMM(HoursOfUse ~ I(Day / 100) * CLUSTER + (1 | Patient), idiag=TRUE, maxIter=20, convB=1e-2, convL=1e-2, convG=1e-2)
+gbtmMethods = clMethods(gbtmRef, nClusters=1:6)
 
 gbtmModels = cluslongBatch(gbtmMethods, osaData, verbose=FALSE)
 ```
