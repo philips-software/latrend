@@ -15,8 +15,8 @@ setOldClass('clModels')
 #' @family clModel list functions
 clModels = function(...) {
   list(...) %>%
-    unlist %>%
-    as.clModels
+    unlist() %>%
+    as.clModels()
 }
 
 #' @export
@@ -38,14 +38,17 @@ is.clModels = function(x) {
 as.clModels = function(x) {
   if(is.clModels(x)) {
     return(x)
-  } else if(is.clModel(x)) {
+  }
+  else if(is.clModel(x)) {
     x = list(x)
   }
   else if(is.list(x)) {
       assert_that(all(vapply(x, is.clModel, FUN.VALUE=FALSE)), msg='object cannot be converted to clModels; not a list of only clModels objects')
-  } else if(is.null(x)) {
+  }
+  else if(is.null(x)) {
     x = list()
-  } else {
+  }
+  else {
     stop('cannot convert this type of input to clModels')
   }
 
@@ -56,6 +59,7 @@ as.clModels = function(x) {
 
 #' @export
 as.list.clModels = function(x) {
+  assert_that(is.clModels(x) || is.list(x) || is.null(x))
   class(x) = 'list'
   return(x)
 }
@@ -78,9 +82,9 @@ as.data.frame.clModels = function(x, excludeShared=FALSE, eval=TRUE, ...) {
     dt = rbindlist(dfs, use.names=TRUE, fill=TRUE, idcol='.name')
   })
 
-  if(excludeShared && nrow(dt) > 1) {
+  if(isTRUE(excludeShared) && nrow(dt) > 1) {
     newColumns = names(dt)[vapply(dt, uniqueN, FUN.VALUE=0) > 1]
-    dt = dt[, ..newColumns]
+    dt = subset(dt, select = newColumns)
   }
 
   dt[, `.method` := vapply(x, getShortName, FUN.VALUE='')]
@@ -273,7 +277,7 @@ subset.clModels = function(x, subset, drop=FALSE) {
     .[, .ROW_INDEX := .I] %>%
     base::subset(subset=eval(subsetCall))
 
-  if(drop && nrow(dfsub) == 1) {
+  if(isTRUE(drop) && nrow(dfsub) == 1) {
     x[[dfsub$.ROW_INDEX]]
   } else {
     x[dfsub$.ROW_INDEX]
@@ -285,8 +289,8 @@ subset.clModels = function(x, subset, drop=FALSE) {
 #' @param summary Whether to print the complete summary per model. This may be slow for long lists!
 #' @family clModel list functions
 print.clModels = function(x, summary=FALSE, excludeShared=!getOption('cluslong.printSharedModelArgs')) {
-  if(summary) {
-    as.list(x) %>% print
+  if(isTRUE(summary)) {
+    as.list(x) %>% print()
   } else {
     cat(sprintf('List of %d clModels with\n', length(x)))
     print(as.data.frame.clModels(x, excludeShared=excludeShared))
