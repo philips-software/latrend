@@ -613,6 +613,7 @@ substitute.clMethod = function(object, classes='ANY', try=TRUE, exclude=characte
 #' @details Updates or adds arguments to a `clMethod` object. The inputs are evaluated in order to determine the presence of `formula` objects, which are updated accordingly.
 #' @inheritParams as.list.clMethod
 #' @param .eval Whether to assign the evaluated argument values to the method. By default (`FALSE`), the argument expression is preserved.
+#' @param .remove Names of arguments that should be removed.
 #' @return The new `clMethod` object with the additional or updated arguments.
 #' @examples
 #' m = clMethodKML(Value ~ 1)
@@ -626,9 +627,10 @@ substitute.clMethod = function(object, classes='ANY', try=TRUE, exclude=characte
 #' m5 = update(m, x=xvar, .eval=TRUE) # x: 2
 #'
 #' @family clMethod functions
-update.clMethod = function(object, ..., .eval=FALSE, envir=NULL) {
+update.clMethod = function(object, ..., .eval=FALSE, .remove=character(), envir=NULL) {
   assert_that(is.clMethod(object),
-              is.flag(.eval))
+              is.flag(.eval),
+              is.character(.remove))
 
   envir = clMethod.env(object, parent.frame(), envir)
 
@@ -640,6 +642,7 @@ update.clMethod = function(object, ..., .eval=FALSE, envir=NULL) {
     ucall = match.call()[c(-1, -2)]
     ucall$envir = NULL
     ucall$.eval = NULL
+    ucall$.remove = NULL
     uargValues = lapply(ucall, eval, envir=envir)
   }
   uargNames = names(ucall)
@@ -655,6 +658,9 @@ update.clMethod = function(object, ..., .eval=FALSE, envir=NULL) {
   }
 
   object@call = replace(getCall(object), uargNames, ucall[uargNames])
+  if(length(.remove) > 0) {
+    object@call[.remove] = NULL
+  }
   validObject(object)
   return(object)
 }

@@ -302,14 +302,6 @@ setMethod('getLabel', signature('clModel'), function(object) {
 
 
 #' @export
-#' @title Extract the underlying model
-getModel = function(object) {
-  assert_that(is.clModel(object))
-  object@model
-}
-
-
-#' @export
 #' @title Get the method specification of a clModel
 #' @examples
 #' model = cluslong(method=clMethodKML(), data=testLongData)
