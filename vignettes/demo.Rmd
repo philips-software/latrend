@@ -129,7 +129,7 @@ print(p)
 ```
 
 ```{r}
-bestGbtmModel = subset(gbtmModels, nClusters == 5, drop=TRUE)
+bestGbtmModel = subset(gbtmModels, nClusters == 3, drop=TRUE)
 plotQQ(bestGbtmModel, detrend=TRUE)
 ```
 

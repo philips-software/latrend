@@ -782,7 +782,7 @@ setMethod('plotQQ', signature('clModel'), function(object, byCluster, ...) {
   idIndexColumn = factor(model.data(object)[[idVariable(object)]], levels = ids(object)) %>% as.integer()
   rowClusters = clusterAssignments(object)[idIndexColumn]
 
-  res = residuals(object) %>% scale()
+  res = residuals(object)
   p = ggplot(data=data.frame(Cluster=rowClusters, res=res), aes(sample=res)) +
     qqplotr::geom_qq_band(...) +
     qqplotr::stat_qq_line(...) +
