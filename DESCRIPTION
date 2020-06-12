@@ -1,7 +1,7 @@
 Package: cluslong
 Type: Package
 Title: Clustering longitudinal datasets
-Version: 0.6.0
+Version: 0.7.0
 Authors@R: person("Niek", "Den Teuling", email = "niek.den.teuling@philips.com", role = c("aut", "cre"))
 URL: http://example.com
 BugReports: http://example.com

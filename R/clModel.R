@@ -397,7 +397,7 @@ logLik.clModel = function(object, ...) {
 #'
 #' ic = metric(model, c('AIC', 'BIC'))
 #' @family metric functions
-setGeneric('metric', function(object, name=getInternalMetricNames(), ...) standardGeneric('metric'))
+setGeneric('metric', function(object, name=c('logLik', 'AIC', 'BIC', 'WRSS', 'APPA'), ...) standardGeneric('metric'))
 
 #' @export
 #' @rdname metric
@@ -405,10 +405,13 @@ setGeneric('metric', function(object, name=getInternalMetricNames(), ...) standa
 #' @examples
 #' clModel metric example here
 setMethod('metric', signature('clModel'), function(object, name) {
-  assert_that(is.clModel(object))
-  assert_that(is.character(name))
+  assert_that(is.clModel(object),
+              is.character(name))
 
   funMask = name %in% getInternalMetricNames()
+  if(!all(funMask)) {
+    warning('Internal metric(s) ', paste0('"', name[!funMask], '"', collapse=', '), ' are not defined. Returning NA.')
+  }
   metricFuns = lapply(name[funMask], getInternalMetricDefinition)
   metricValues = mapply(function(fun, name) {
     value = fun(object)
@@ -434,7 +437,7 @@ setMethod('metric', signature('clModel'), function(object, name) {
 #' model2 = cluslong(clMethodLcmmGMM(), testLongData)
 #' bic = externalMetric(model1, model2, 'Rand')
 #' @family metric functions
-setGeneric('externalMetric', function(object, object2, name=getExternalMetricNames(), ...) standardGeneric('externalMetric'))
+setGeneric('externalMetric', function(object, object2, name='adjustedRand', ...) standardGeneric('externalMetric'))
 
 #' @export
 #' @rdname metric
@@ -447,6 +450,9 @@ setMethod('externalMetric', signature('clModel', 'clModel'), function(object, ob
   assert_that(is.character(name))
 
   funMask = name %in% getExternalMetricNames()
+  if(!all(funMask)) {
+    warning('External metric(s) ', paste0('"', name[!funMask], '"', collapse=', '), ' are not defined. Returning NA.')
+  }
   metricFuns = lapply(name[funMask], getExternalMetricDefinition)
   metricValues = mapply(function(fun, name) {
     value = fun(object, object2)
