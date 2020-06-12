@@ -6,9 +6,10 @@
 #' @details Because the `clMethod` arguments may be unevaluated, evaluation functions such as `[[` accept an `envir` argument.
 #' A default `environment` can be assigned or obtained from a `clMethod` object using the `environment()` function.
 #' @seealso \link{environment}
-#' @slot call The `call` representing the arguments of the `clMethod` object.
+#' @slot call The `call` representing the arguments of the `clMethod` object. Do not modify or access.
+#' @slot source A list of calls for tracking the original call after substitution. Used for printing objects which require too many characters (e.g. ,function definitions, matrices).
 #' @family clMethod implementations
-setClass('clMethod', slots=c(call='call'))
+setClass('clMethod', slots=c(call='call', source='list'))
 
 #. initialize ####
 setMethod('initialize', 'clMethod', function(.Object, ...) {
