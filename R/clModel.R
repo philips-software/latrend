@@ -1,6 +1,7 @@
 #' @include clMethod.R plot.R
-#' @import stats
-#'
+#' @importFrom stats coef deviance df.residual getCall logLik model.frame model.matrix predict residuals sigma time update
+
+
 # Model ####
 #' @export
 #' @name clModel-class
