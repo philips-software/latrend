@@ -28,7 +28,7 @@ clMethodLMKM = function(formula = Value ~ Time,
                         standardize = scale,
                         ...
 ) {
-  .clMethod('clMethodLMKM', call=match.call.defaults(),
+  .clMethod.call('clMethodLMKM', call=match.call.defaults(),
            defaults=c(lm, kmeans),
            excludeArgs=c('x', 'data', 'control', 'centers', 'trace'))
 }

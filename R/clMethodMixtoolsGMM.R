@@ -16,7 +16,7 @@ clMethodMixtoolsGMM = function(formula=Value ~ Time + (1 | Id),
                                nClusters=2,
                                ...
 ) {
-  .clMethod('clMethodMixtoolsGMM', call=match.call.defaults(),
+  .clMethod.call('clMethodMixtoolsGMM', call=match.call.defaults(),
            defaults=mixtools::regmixEM.mixed,
            excludeArgs=c('data', 'y', 'x', 'w', 'k', 'addintercept.fixed', 'verb'))
 }

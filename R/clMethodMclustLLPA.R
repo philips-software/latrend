@@ -33,7 +33,7 @@ clMethodMclustLLPA = function(response=getOption('cluslong.response'),
                        nClusters=2,
                        ...
 ) {
-  .clMethod('clMethodMclustLLPA', call=match.call.defaults(),
+  .clMethod.call('clMethodMclustLLPA', call=match.call.defaults(),
            defaults=mclust::Mclust,
            excludeArgs=c('data', 'G', 'verbose'))
 }

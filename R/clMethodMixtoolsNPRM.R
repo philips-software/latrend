@@ -17,7 +17,7 @@ clMethodMixtoolsNPRM = function(formula=Value ~ 0,
                              nClusters=2,
                              ...
 ) {
-  .clMethod('clMethodMixtoolsNPRM', call=match.call.defaults(),
+  .clMethod.call('clMethodMixtoolsNPRM', call=match.call.defaults(),
            defaults=longclust::longclustEM,
            excludeArgs=c('data', 'x', 'mu0', 'verb'))
 }

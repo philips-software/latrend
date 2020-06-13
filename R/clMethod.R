@@ -6,10 +6,10 @@
 #' @details Because the `clMethod` arguments may be unevaluated, evaluation functions such as `[[` accept an `envir` argument.
 #' A default `environment` can be assigned or obtained from a `clMethod` object using the `environment()` function.
 #' @seealso \link{environment}
-#' @slot call The `call` representing the arguments of the `clMethod` object. Do not modify or access.
-#' @slot source A list of calls for tracking the original call after substitution. Used for printing objects which require too many characters (e.g. ,function definitions, matrices).
+#' @slot arguments A `list` representing the arguments of the `clMethod` object. Arguments are not evaluated upon creation of the method object. Instead, arguments are stored similar to a `call` object. Do not modify or access.
+#' @slot sourceCalls A list of calls for tracking the original call after substitution. Used for printing objects which require too many characters (e.g. ,function definitions, matrices).
 #' @family clMethod implementations
-setClass('clMethod', slots=c(call='call', source='list'))
+setClass('clMethod', slots=c(arguments='list', sourceCalls='list'))
 
 #. initialize ####
 setMethod('initialize', 'clMethod', function(.Object, ...) {
@@ -99,10 +99,20 @@ setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
   return(value)
 })
 
-
+#' @export
+#' @title Create a clMethod object for an arbitrary class
+#' @description Provides a mechanism for creating `clMethod` objects for an arbitrary class.
+#' Note that it is advisable to use the class-specific constructors instead.
+#' @param Class The type of \link{clMethod} class
+#' @param ... Any arguments to assign to the method object.
+.clMethod = function(.class, ..., .defaults=list(), .excludeArgs=c()) {
+  args = list(...)
+  browser()
+  do.call(.clMethod.call, list(.class = .class, args, .defaults = .defaults, .excludeArgs = .excludeArgs))
+}
 
 #' @export
-#' @title Construct a clMethod object for a given method type
+#' @title Create a clMethod object from a call
 #' @description Creates a clMethod class of the specified type `Class` for the given arguments given in a call, along with any default arguments from reference functions.
 #' This function is intended to be used by classes extending `clMethod` to provide an easy way to construct the appropriate `call` object.
 #' @param Class The type of \link{clMethod} class
@@ -112,14 +122,14 @@ setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
 #' @return An object of class `Class` that extends `clMethod`.
 #' @examples
 #' clMethodKML2 = function(formula=Value ~ 0, time='Id', id='Id', nClusters=2, ...) {
-#'   .clMethod('clMethodKML', call=stackoverflow::match.call.defaults(),
+#'   .clMethod.call('clMethodKML', call=stackoverflow::match.call.defaults(),
 #'     defaults=c(kml::kml, kml::parALGO),
 #'     excludeArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq'))
 #' }
 #' m = clMethodKML2(nClusters=3)
 #' cluslong(m, testLongData)
 #' @family clMethod functions
-.clMethod = function(Class, call, defaults=list(), excludeArgs=c()) {
+.clMethod.call = function(Class, call, defaults=list(), excludeArgs=c()) {
   classRep = getClass(Class)
   assert_that('clMethod' %in% names(classRep@contains), msg='specified class does not inherit from clMethod')
   assert_that(is.call(call))
@@ -154,7 +164,7 @@ setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
 
   # create call and clMethod
   newCall = do.call('call', c(Class, lapply(args[argOrder], enquote)))
-  new(Class, call=newCall)
+  new(Class, arguments=as.list(newCall[-1]))
 }
 
 
@@ -210,7 +220,7 @@ as.list.clMethod = function(object, args=names(object), eval=TRUE, expand=FALSE,
     method = object
   }
 
-  as.list(method@call[-1][selArgNames])
+  as.list(method@arguments[selArgNames])
 }
 
 
@@ -256,48 +266,6 @@ as.data.frame.clMethod = function(x,
 
   assert_that(all(vapply(dfList, length, FUN.VALUE=0) == 1))
   as.data.frame(dfList, stringsAsFactors=FALSE)
-}
-
-#' @export
-#' @title Convert clMethod arguments to character vector
-#' @description Converts the arguments of a `clMethod` to a named `character` vector.
-#' @inheritParams as.data.frame.clMethod
-#' @param nullString Character to use to represent NULL values.
-#' @return A `character`
-#' @seealso as.data.frame.clMethod
-#' @family clMethod functions
-as.character.clMethod = function(x,
-                                 eval=FALSE,
-                                 nullString='NULL',
-                                 envir=NULL) {
-  assert_that(is.clMethod(x),
-              is.flag(eval),
-              is.character(nullString),
-              is.scalar(nullString))
-
-  if(isTRUE(eval)) {
-    envir = clMethod.env(x, parent.frame(), envir)
-    evalClasses = c('NULL', 'logical', 'numeric', 'complex', 'integer', 'character', 'factor')
-    method = substitute.clMethod(x, classes = evalClasses, envir=envir)
-  } else {
-    method = x
-  }
-  argList = as.list(method, eval=FALSE)
-
-  chrValues = lapply(argList, function(a) {
-    if(is.null(a)) {
-      nullString
-    } else if(is.character(a)) {
-      paste0('"', a, '"', collapse=', ')
-    } else if(is.atomic(a)) {
-      paste0(as.character(a), collapse=', ')
-    } else {
-      deparse(a) %>% paste0(collapse='')
-    }
-  })
-
-  assert_that(all(vapply(chrValues, length, FUN.VALUE=0) == 1))
-  unlist(chrValues)
 }
 
 
@@ -443,7 +411,7 @@ formula.clMethod = function(object, what='mu', envir=NULL) {
 #' @family clMethod functions
 getCall.clMethod = function(object) {
   assert_that(is.clMethod(object))
-  object@call
+  do.call(call, c(class(object)[1], lapply(object@arguments, enquote)))
 }
 
 
@@ -551,17 +519,63 @@ setMethod('names', signature('clMethod'), function(x) {
 })
 
 
+# . preFit ####
+#' @export
+setGeneric('preFit', function(method, ...) standardGeneric('preFit'))
+#' @rdname clMethod-interface
+setMethod('preFit', signature('clMethod'), function(method, data, envir, verbose) {
+  return(envir)
+})
+
+
+# . prepareData ####
+#' @export
+setGeneric('prepareData', function(method, ...) standardGeneric('prepareData'))
+#' @rdname clMethod-interface
+setMethod('prepareData', signature('clMethod'), function(method, data, verbose) {
+  return(NULL)
+})
+
+
+# . postfit ####
+#' @export
+setGeneric('postFit', function(method, ...) standardGeneric('postFit'))
+#' @rdname clMethod-interface
+setMethod('postFit', signature('clMethod'), function(method, data, model, envir, verbose) {
+  return(model)
+})
+
 
 #' @export
-print.clMethod = function(object, ..., eval=FALSE, width=40) {
-  assert_that(is.clMethod(object))
+print.clMethod = function(object, ..., eval=FALSE, width=40, envir=NULL) {
+  assert_that(is.clMethod(object),
+              is.flag(eval))
+  envir = clMethod.env(object, parent.frame(), envir)
   if(isTRUE(eval)) {
-    object = compose(object)
+    object = substitute.clMethod(object, envir=envir)
+  }
+
+  arg2char = function(a) {
+    if(is.null(a)) {
+      'NULL'
+    } else if(is.character(a)) {
+      paste0('"', a, '"', collapse=', ')
+    } else if(is.atomic(a)) {
+      paste0(as.character(a), collapse=', ')
+    } else {
+      deparse(a) %>% paste0(collapse='')
+    }
   }
 
   argNames = names(object)
-  args = as.character(object, ...) %>%
-    vapply(strtrim, width=width, FUN.VALUE='')
+  chrValues = lapply(object@arguments, arg2char) %>% unlist()
+  assert_that(all(vapply(chrValues, length, FUN.VALUE=0) == 1))
+
+  sourceMask = vapply(chrValues, nchar, FUN.VALUE=0) > width & argNames %in% names(object@sourceCalls)
+  chrSource = lapply(object@sourceCalls[argNames[sourceMask]], arg2char) %>% unlist()
+  chrValues[sourceMask] = paste('<eval>', chrSource)
+
+  args = vapply(chrValues, strtrim, width=width, FUN.VALUE='')
 
   if(length(args) > 0) {
     cat(sprintf(' %-16s%s\n', paste0(argNames, ':'), args), sep='')
@@ -586,7 +600,6 @@ substitute.clMethod = function(object, classes='ANY', try=TRUE, exclude=characte
   envir = clMethod.env(object, parent.frame(), envir)
 
   argNames = names(object)
-  argValues = as.list(object@call[-1])
   if(isTRUE(try)) {
     evalMask = vapply(argNames, isArgDefined, object=object, envir=envir, FUN.VALUE=FALSE) & !(argNames %in% exclude)
   } else {
@@ -603,7 +616,9 @@ substitute.clMethod = function(object, classes='ANY', try=TRUE, exclude=characte
   }
 
   newmethod = object
-  newmethod@call = replace(getCall(object), names(object)[updateMask], evalValues[updateMask])
+  sourceMask = vapply(newmethod@arguments, is.language, FUN.VALUE=FALSE)
+  newmethod@sourceCalls[argNames[updateMask & sourceMask]] = newmethod@arguments[updateMask & sourceMask]
+  newmethod@arguments = replace(object@arguments, names(object)[updateMask], evalValues[updateMask])
   return(newmethod)
 }
 
@@ -658,41 +673,16 @@ update.clMethod = function(object, ..., .eval=FALSE, .remove=character(), envir=
       lapply(match.call, definition=formula)
   }
 
-  object@call = replace(getCall(object), uargNames, ucall[uargNames])
+  object@arguments = replace(object@arguments, uargNames, ucall[uargNames])
+  object@sourceCalls[uargNames] = NULL
+
   if(length(.remove) > 0) {
-    object@call[.remove] = NULL
+    object@arguments[.remove] = NULL
+    object@sourceCalls[.remove] = NULL
   }
   validObject(object)
   return(object)
 }
-
-
-
-
-# . preFit ####
-#' @export
-setGeneric('preFit', function(method, ...) standardGeneric('preFit'))
-#' @rdname clMethod-interface
-setMethod('preFit', signature('clMethod'), function(method, data, envir, verbose) {
-  return(envir)
-})
-
-# . postfit ####
-#' @export
-setGeneric('postFit', function(method, ...) standardGeneric('postFit'))
-#' @rdname clMethod-interface
-setMethod('postFit', signature('clMethod'), function(method, data, model, envir, verbose) {
-  return(model)
-})
-
-
-# . prepareData ####
-#' @export
-setGeneric('prepareData', function(method, ...) standardGeneric('prepareData'))
-#' @rdname clMethod-interface
-setMethod('prepareData', signature('clMethod'), function(method, data, verbose) {
-  return(NULL)
-})
 
 
 

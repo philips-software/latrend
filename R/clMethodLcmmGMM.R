@@ -42,7 +42,7 @@ clMethodLcmmGMM = function(formula=Value ~ 1 + CLUSTER + (1 | ID),
                        nClusters=2,
                        ...
 ) {
-  .clMethod('clMethodLcmmGMM', call=match.call.defaults(),
+  .clMethod.call('clMethodLcmmGMM', call=match.call.defaults(),
            defaults=lcmm::lcmm,
            excludeArgs=c('data', 'fixed', 'random', 'mixture', 'subject', 'classmb', 'returndata', 'ng', 'verbose', 'subset'))
 }

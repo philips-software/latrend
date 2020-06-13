@@ -32,7 +32,7 @@ clMethodGCKM = function(formula=Value ~ 1,
                         ...
 
 ) {
-  .clMethod('clMethodGCKM', call=match.call.defaults(),
+  .clMethod.call('clMethodGCKM', call=match.call.defaults(),
            defaults=c(lmer, kmeans),
            excludeArgs=c('data', 'centers', 'trace'))
 }
@@ -47,7 +47,7 @@ clMethodGCKM_as_twostep = function(method) {
   call$representationStep = representationStepGCKM
   call$clusterStep = clusterStepGCKM
   call$standardize = scale
-  new('clMethodTwoStep', call=call)
+  .clMethod.call('clMethodTwoStep', call=call)
 }
 
 setMethod('preFit', signature('clMethodGCKM'), function(method, data, envir, verbose) {

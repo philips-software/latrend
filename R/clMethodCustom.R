@@ -26,7 +26,7 @@ clMethodCustom = function(fun,
                        time=getOption('cluslong.time'),
                        id=getOption('cluslong.id'),
                        name='custom') {
-  .clMethod('clMethodCustom', call=match.call.defaults())
+  .clMethod.call('clMethodCustom', call=match.call.defaults())
 }
 
 setValidity('clMethodCustom', function(object) {

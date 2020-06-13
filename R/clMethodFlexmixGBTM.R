@@ -20,7 +20,7 @@ clMethodFlexmixGBTM = function(formula=Value ~ 1,
                            nClusters=2,
                            ...
 ) {
-  .clMethod('clMethodFlexmixGBTM', call=match.call.defaults(),
+  .clMethod.call('clMethodFlexmixGBTM', call=match.call.defaults(),
            defaults=c(flexmix::flexmix, flexmix::FLXMRglm),
            excludeArgs=c('data', 'k'))
 }
