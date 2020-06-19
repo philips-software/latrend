@@ -121,8 +121,6 @@ setMethod('transformPredict', signature('data.frame', 'clModel'), function(pred,
     # number of observations per cluster must match the number of predictions per cluster
     obsCounts = pred[, .N, keyby=Cluster] %>%
       .[newdata[, .N, keyby=Cluster]]
-    if(!all(obsCounts[is.finite(N) & is.finite(i.N), N == i.N]))
-      browser()
     assert_that(all(obsCounts[is.finite(N) & is.finite(i.N), N == i.N]), msg='number of observations per cluster must match the number of predictions per cluster')
 
     newpred = pred[Cluster %in% unique(newdata$Cluster)]
