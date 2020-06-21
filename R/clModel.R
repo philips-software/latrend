@@ -187,7 +187,7 @@ setGeneric('clusterAssignments', function(object, ...) standardGeneric('clusterA
 #' clusterAssignments(model, strategy=function(x) which(x > .9)) # only assign ids with a probability over 0.9
 setMethod('clusterAssignments', signature('clModel'), function(object, strategy = which.max, ...) {
   pp = postprob(object)
-  assert_that(is.matrix(pp))
+  assert_that(is_valid_postprob(pp, object))
 
   apply(pp, 1, strategy, ...) %>%
     factor(levels=1:nClusters(object), labels=clusterNames(object))
@@ -675,29 +675,68 @@ nobs.clModel = function(object, ...) {
 #' predIdAll = predict(model, newdata=data.frame(Id='S1', Time=time(model))) # Prediction matrix for id S1 for all clusters
 #' @family model-specific methods
 predict.clModel = function(object, newdata=NULL, what='mu', ...) {
-  warning('predict() not implemented for ', class(object)[1], '. Returning NA predictions.')
-
+  # special case for when no newdata is provided
   if(is.null(newdata)) {
     newdata = model.data(object)
-    newdata[['Cluster']] = NULL
+    if(hasName(newdata, 'Cluster')) {
+      newdata[['Cluster']] = NULL # allowing the Cluster column to remain would break the fitted() output.
+    }
   }
 
   if(hasName(newdata, 'Cluster')) {
-    pred = cbind(newdata, Fit=as.numeric(NA))
+    # predictForCluster with newdata subsets
+    clusnewdata = as.data.table(newdata) %>%
+      split(by = 'Cluster', sorted = TRUE)
   }
   else {
-    pred = data.frame(Cluster=clusterNames(object) %>%
-                        rep(each=nrow(newdata)),
-                      Fit=as.numeric(NA))
+    # predictForCluster with newdata for each cluster
+    clusnewdata = replicate(nClusters(object), newdata, simplify = FALSE)
   }
+
+  predList = mapply(function(cname, cdata) {
+    predictForCluster(object, cluster = cname, newdata = cdata, what = what, ...)
+  }, clusterNames(object), clusnewdata, SIMPLIFY = FALSE)
+
+  assert_that(uniqueN(vapply(predList, class, FUN.VALUE='')) == 1, msg='output from predictForCluster() must be same class for all clusters. Check the model implementation.')
+
+  if(is.data.frame(predList[[1]])) {
+    pred = rbindlist(predList, idcol='Cluster')
+  }
+  else if(is.numeric(predList[[1]])) {
+    pred = data.table(Cluster=rep(seq_len(nClusters(object)), each=nrow(newdata)),
+                      Fit=do.call(c, predList))
+  }
+  else {
+    stop('unsupported output from predictForCluster(): must be data.frame or numeric. Check the model implementation.')
+  }
+
+  pred[, Cluster := factor(Cluster, levels=seq_len(nClusters(object)), labels=clusterNames(object))]
 
   transformPredict(pred = pred, model = object, newdata = newdata)
 }
 
+
+# . predictForCluster ####
+#' @export
+#' @rdname predict.clModel
+#' @return A `vector` with the predictions per `newdata` observation, or a `data.frame` with the predictions and newdata alongside.
+#' @family model-specific methods
+setGeneric('predictForCluster', function(object, cluster, newdata, what='mu', ...) standardGeneric('predictForCluster'))
+setMethod('predictForCluster', signature('clModel'), function(object, cluster, newdata, what='mu', ...) {
+  assert_that(is.newdata(newdata), !is.null(newdata))
+  warning('predictForCluster() not implemented for ', class(object)[1], '. Returning NA predictions.')
+
+  rep(as.numeric(NA), nrow(newdata))
+})
+
+
+
 # . predictPostprob ####
 #' @export
 #' @title clModel posterior probability prediction
+#' @details The default implementation returns a uniform probability matrix.
 #' @param newdata Optional data frame for which to compute the posterior probability. If omitted, the model training data is used.
+#' @return A `matrix` indicating the posterior probability per trajectory per measurement on each row, for each cluster (the columns).
 #' @family model-specific methods
 setGeneric('predictPostprob', function(object, newdata=NULL, ...) standardGeneric('predictPostprob'))
 setMethod('predictPostprob', signature('clModel'), function(object, newdata, ...) {
@@ -715,6 +754,25 @@ setMethod('predictPostprob', signature('clModel'), function(object, newdata, ...
   pp
 })
 
+
+#. predictAssignments ####
+#' @export
+setGeneric('predictAssignments', function(object, newdata=NULL, ...) standardGeneric('predictAssignments'))
+#' @export
+#' @title Predict the cluster assignments for new trajectories
+#' @description Computes the posterior probability based on the provided (observed) data.
+#' @param strategy A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.
+#' @details The default implementation uses [predictPostprob] to determine the cluster membership.
+#' @return A `factor` with length `nrow(newdata)` that indicates the posterior probability per trajectory per observation.
+#' @family model-specific methods
+setMethod('predictAssignments', signature('clModel'), function(object, newdata, strategy = which.max, ...) {
+  pp = predictPostprob(object, newdata=newdata)
+  assert_that(is_valid_postprob(pp, object),
+              nrow(pp) == nrow(newdata))
+
+  apply(pp, 1, strategy, ...) %>%
+    factor(levels=1:nClusters(object), labels=clusterNames(object))
+})
 
 
 #' @export
