@@ -25,20 +25,24 @@
 #' @slot estimationTime The time, in seconds, that it took to fit the model.
 #' @slot tag An arbitrary user-specified data structure. This slot may be accessed and updated directly.
 #' @family model-specific methods
-setClass('clModel',
-         representation(model='ANY',
-                        method='clMethod',
-                        call='call',
-                        data='ANY',
-                        id='character',
-                        time='character',
-                        response='character',
-                        label='character',
-                        ids='vector',
-                        clusterNames='character',
-                        date='POSIXct',
-                        estimationTime='numeric',
-                        tag='ANY'))
+setClass(
+  'clModel',
+  representation(
+    model = 'ANY',
+    method = 'clMethod',
+    call = 'call',
+    data = 'ANY',
+    id = 'character',
+    time = 'character',
+    response = 'character',
+    label = 'character',
+    ids = 'vector',
+    clusterNames = 'character',
+    date = 'POSIXct',
+    estimationTime = 'numeric',
+    tag = 'ANY'
+  )
+)
 
 # . initialize ####
 setMethod('initialize', 'clModel', function(.Object, ...) {
@@ -46,16 +50,23 @@ setMethod('initialize', 'clModel', function(.Object, ...) {
   .Object = callNextMethod(.Object, ...)
   method = .Object@method
 
-  assert_that(length(.Object@id) > 0 || has_name(method, 'id'), msg='@id not specified, nor defined in clMethod')
-  if(length(.Object@id) == 0) {
+  assert_that(length(.Object@id) > 0 ||
+                has_name(method, 'id'), msg = '@id not specified, nor defined in clMethod')
+  if (length(.Object@id) == 0) {
     .Object@id = idVariable(method)
   }
-  assert_that(length(.Object@time) > 0 || has_name(method, 'time'), msg='@time not specified, nor defined in clMethod')
-  if(length(.Object@time) == 0) {
+  assert_that(length(.Object@time) > 0 ||
+                has_name(method, 'time'), msg = '@time not specified, nor defined in clMethod')
+  if (length(.Object@time) == 0) {
     .Object@time = timeVariable(method)
   }
-  assert_that(length(.Object@response) > 0 || has_name(method, 'response') || has_name(method, 'formula'), msg='@response not specified, nor defined in clMethod$response or clMethod$formula')
-  if(length(.Object@response) == 0) {
+  assert_that(
+    length(.Object@response) > 0 ||
+      has_name(method, 'response') ||
+      has_name(method, 'formula'),
+    msg = '@response not specified, nor defined in clMethod$response or clMethod$formula'
+  )
+  if (length(.Object@response) == 0) {
     .Object@response = responseVariable(method)
   }
   .Object
@@ -65,7 +76,7 @@ setMethod('initialize', 'clModel', function(.Object, ...) {
 setValidity('clModel', function(object) {
   return(TRUE)
 
-  if(as.character(object@call[[1]]) == "<undef>") {
+  if (as.character(object@call[[1]]) == "<undef>") {
     # nothing to validate as clModel is incomplete
     return(TRUE)
   }
@@ -75,8 +86,10 @@ setValidity('clModel', function(object) {
               nchar(object@response) > 0)
 
   data = model.data(object)
-  assert_that(!is.null(data), msg='invalid data object for new clModel. Either specify the data slot or ensure that the model call contains a data argument which correctly evaluates.')
-  assert_that(has_name(data, c(object@id, object@time, object@response)))
+  assert_that(!is.null(data), msg = 'invalid data object for new clModel. Either specify the data slot or ensure that the model call contains a data argument which correctly evaluates.')
+  assert_that(has_name(data, c(
+    object@id, object@time, object@response
+  )))
   return(TRUE)
 })
 
@@ -96,23 +109,29 @@ setValidity('clModel', function(object) {
 #'
 #' clusterTrajectories(model, at=c(0, .5, 1))
 #' @family model-specific methods
-setGeneric('clusterTrajectories', function(object, at=time(object), what='mu', ...) standardGeneric('clusterTrajectories'))
+setGeneric('clusterTrajectories', function(object,
+                                           at = time(object),
+                                           what = 'mu',
+                                           ...) standardGeneric('clusterTrajectories'))
 setMethod('clusterTrajectories', signature('clModel'), function(object, at, what, ...) {
-  if(is.numeric(at)) {
-    newdata = data.table(Cluster=rep(clusterNames(object, factor=TRUE), each=length(at)), Time=at) %>%
+  if (is.numeric(at)) {
+    newdata = data.table(
+      Cluster = rep(clusterNames(object, factor = TRUE), each = length(at)),
+      Time = at) %>%
       setnames('Time', timeVariable(object))
-  } else if(is.list(at)) {
+  } else if (is.list(at)) {
     at = as.data.table(at)
     idx = seq_len(nrow(at)) %>% rep(nClusters(object))
-    newdata = data.table(Cluster=rep(clusterNames(object, factor=TRUE), each=nrow(at)), at[idx,])
+    newdata = data.table(
+      Cluster = rep(clusterNames(object, factor = TRUE), each = nrow(at)), at[idx,])
   } else {
     stop('unsupported input')
   }
 
-  dfPred = predict(object, newdata=newdata, what=what, ...)
-  assert_that(is.data.frame(dfPred), msg='invalid output from predict()')
-  assert_that(nrow(dfPred) == nrow(newdata), msg='invalid output from predict function of clModel; expected a prediction per newdata row')
-  newdata[, c(responseVariable(object, what=what)) := dfPred$Fit]
+  dfPred = predict(object, newdata = newdata, what = what, ...)
+  assert_that(is.data.frame(dfPred), msg = 'invalid output from predict()')
+  assert_that(nrow(dfPred) == nrow(newdata), msg = 'invalid output from predict function of clModel; expected a prediction per newdata row')
+  newdata[, c(responseVariable(object, what = what)) := dfPred$Fit]
   return(newdata[])
 })
 
@@ -123,10 +142,10 @@ setMethod('clusterTrajectories', signature('clModel'), function(object, at, what
 #' @examples
 #' model = cluslong(method=clMethodKML(), data=testLongData)
 #' clusterNames(model) # A, B
-clusterNames = function(object, factor=FALSE) {
+clusterNames = function(object, factor = FALSE) {
   assert_that(is.clModel(object))
-  if(factor[1]) {
-    object@clusterNames %>% factor(levels=object@clusterNames)
+  if (factor[1]) {
+    object@clusterNames %>% factor(levels = object@clusterNames)
   } else {
     object@clusterNames
   }
@@ -168,7 +187,7 @@ setGeneric('clusterProportions', function(object, ...) standardGeneric('clusterP
 #' clusterProportions(model)
 setMethod('clusterProportions', signature('clModel'), function(object, ...) {
   pp = postprob(object)
-  assert_that(!is.null(pp), msg='cannot determine cluster assignments because postprob() returned NULL')
+  assert_that(!is.null(pp), msg = 'cannot determine cluster assignments because postprob() returned NULL')
   assert_that(is.matrix(pp))
   colMeans(pp)
 })
@@ -190,7 +209,8 @@ setMethod('clusterAssignments', signature('clModel'), function(object, strategy 
   assert_that(is_valid_postprob(pp, object))
 
   apply(pp, 1, strategy, ...) %>%
-    factor(levels=1:nClusters(object), labels=clusterNames(object))
+    factor(levels = 1:nClusters(object),
+           labels = clusterNames(object))
 })
 
 
@@ -200,7 +220,11 @@ setMethod('clusterAssignments', signature('clModel'), function(object, strategy 
 #' @return A `named numeric vector` with all coefficients, or a `matrix` with each column containing the cluster-specific coefficients.
 #' @family model-specific methods
 coef.clModel = function(object, ...) {
-  if (is.null(getS3method('coef', class=class(object@model), optional=TRUE))) {
+  if (is.null(getS3method(
+    'coef',
+    class = class(object@model),
+    optional = TRUE
+  ))) {
     numeric()
   } else {
     coef(object@model)
@@ -237,7 +261,11 @@ setMethod('converged', signature('clModel'), function(object) {
 #' @title clModel deviance
 #' @family model-specific methods
 deviance.clModel = function(object, ...) {
-  if (is.null(getS3method('deviance', class=class(object@model), optional=TRUE))) {
+  if (is.null(getS3method(
+    'deviance',
+    class = class(object@model),
+    optional = TRUE
+  ))) {
     as.numeric(NA)
   } else {
     deviance(object@model)
@@ -249,7 +277,11 @@ deviance.clModel = function(object, ...) {
 #' @title Extract the residual degrees of freedom from a clModel
 #' @family model-specific methods
 df.residual.clModel = function(object, ...) {
-  if (is.null(getS3method('df.residual', class=class(object@model), optional=TRUE))) {
+  if (is.null(getS3method(
+    'df.residual',
+    class = class(object@model),
+    optional = TRUE
+  ))) {
     nobs(object) - attr(logLik(object), 'df')
   } else {
     df.residual(object@model)
@@ -262,9 +294,11 @@ df.residual.clModel = function(object, ...) {
 #' @param clusters Optional cluster assignments per id. If unspecified, a matrix is returned containing the cluster-specific predictions per column.
 #' @return A vector of the fitted values for the respective class, or a matrix of fitted values for each cluster.
 #' @family model-specific methods
-fitted.clModel = function(object, clusters=clusterAssignments(object)) {
-  pred = predict(object, newdata=NULL)
-  transformFitted(pred = pred, model = object, clusters = clusters)
+fitted.clModel = function(object, clusters = clusterAssignments(object)) {
+  pred = predict(object, newdata = NULL)
+  transformFitted(pred = pred,
+                  model = object,
+                  clusters = clusters)
 }
 
 
@@ -272,18 +306,18 @@ fitted.clModel = function(object, clusters=clusterAssignments(object)) {
 #' @title Extract the formula of a clModel
 #' @param what The distributional parameter
 #' @return Returns the associated `formula`, or ` ~ 0` if not specified.
-formula.clModel = function(object, what='mu') {
+formula.clModel = function(object, what = 'mu') {
   method = getClMethod(object)
-  if(what == 'mu') {
-    if(has_name(method, 'formula')) {
+  if (what == 'mu') {
+    if (has_name(method, 'formula')) {
       method$formula
     } else {
       as.formula(paste(object@response, '~ 0'))
     }
   } else {
-    formulaName = paste('formula', what, sep='.')
-    if(has_name(method, formulaName)) {
-      formula(method, what=what)
+    formulaName = paste('formula', what, sep = '.')
+    if (has_name(method, formulaName)) {
+      formula(method, what = what)
     } else {
       ~ 0
     }
@@ -317,8 +351,8 @@ getClMethod = function(object) {
 setMethod('getName', signature('clModel'), function(object) {
   basename = getClMethod(object) %>% getName()
   lbl = getLabel(object)
-  if(nchar(lbl) > 0) {
-    paste(basename, lbl, sep='-')
+  if (nchar(lbl) > 0) {
+    paste(basename, lbl, sep = '-')
   } else {
     basename
   }
@@ -326,8 +360,7 @@ setMethod('getName', signature('clModel'), function(object) {
 
 # . getShortName ####
 setMethod('getShortName', signature('clModel'), function(object)
-  getClMethod(object) %>% getShortName()
-)
+  getClMethod(object) %>% getShortName())
 
 
 #' @title Generate a vector indicating the id-number (between 1 and numIds()) per row
@@ -335,7 +368,7 @@ setMethod('getShortName', signature('clModel'), function(object)
 #' @keywords internal
 genIdRowIndices = function(object) {
   model.data(object)[[idVariable(object)]] %>%
-    factor(levels=ids(object)) %>%
+    factor(levels = ids(object)) %>%
     as.integer()
 }
 
@@ -348,9 +381,9 @@ genIdRowIndices = function(object) {
 #' model = cluslong(clMethodKML(), testLongData)
 #' ids(model) # S1, S2, ..., S500
 ids = function(object) {
-  if(length(object@ids) == 0) {
+  if (length(object@ids) == 0) {
     iddata = model.data(object)[[idVariable(object)]]
-    if(is.factor(iddata)) {
+    if (is.factor(iddata)) {
       levels(iddata)[levels(iddata) %in% iddata]
     } else {
       unique(iddata) %>% sort()
@@ -367,7 +400,8 @@ ids = function(object) {
 #' model = cluslong(clMethodKML(), testLongData)
 #' idVariable(model) # "Id"
 #' @family clModel variables
-setMethod('idVariable', signature('clModel'), function(object) object@id)
+setMethod('idVariable', signature('clModel'), function(object)
+  object@id)
 
 
 #' @export
@@ -397,7 +431,9 @@ logLik.clModel = function(object, ...) {
 #'
 #' ic = metric(model, c('AIC', 'BIC'))
 #' @family metric functions
-setGeneric('metric', function(object, name=c('logLik', 'AIC', 'BIC', 'WRSS', 'APPA'), ...) standardGeneric('metric'))
+setGeneric('metric', function(object,
+                              name = c('logLik', 'AIC', 'BIC', 'WRSS', 'APPA'),
+                              ...) standardGeneric('metric'))
 
 #' @export
 #' @rdname metric
@@ -409,18 +445,27 @@ setMethod('metric', signature('clModel'), function(object, name) {
               is.character(name))
 
   funMask = name %in% getInternalMetricNames()
-  if(!all(funMask)) {
-    warning('Internal metric(s) ', paste0('"', name[!funMask], '"', collapse=', '), ' are not defined. Returning NA.')
+  if (!all(funMask)) {
+    warning(
+      'Internal metric(s) ',
+      paste0('"', name[!funMask], '"', collapse = ', '),
+      ' are not defined. Returning NA.'
+    )
   }
   metricFuns = lapply(name[funMask], getInternalMetricDefinition)
   metricValues = mapply(function(fun, name) {
     value = fun(object)
-    assert_that(is.scalar(value) && (is.numeric(value) || is.logical(value)),
-                msg=sprintf('invalid output for metric "%s"; expected scalar number or logical value', name))
+    assert_that(
+      is.scalar(value) && (is.numeric(value) || is.logical(value)),
+      msg = sprintf(
+        'invalid output for metric "%s"; expected scalar number or logical value',
+        name
+      )
+    )
     return(value)
   }, metricFuns, name[funMask])
 
-  allMetrics = rep(NA*0, length(name))
+  allMetrics = rep(NA * 0, length(name))
   allMetrics[funMask] = unlist(metricValues)
   names(allMetrics) = name
   return(allMetrics)
@@ -437,7 +482,7 @@ setMethod('metric', signature('clModel'), function(object, name) {
 #' model2 = cluslong(clMethodLcmmGMM(), testLongData)
 #' bic = externalMetric(model1, model2, 'Rand')
 #' @family metric functions
-setGeneric('externalMetric', function(object, object2, name='adjustedRand', ...) standardGeneric('externalMetric'))
+setGeneric('externalMetric', function(object, object2, name = 'adjustedRand', ...) standardGeneric('externalMetric'))
 
 #' @export
 #' @rdname metric
@@ -450,18 +495,27 @@ setMethod('externalMetric', signature('clModel', 'clModel'), function(object, ob
   assert_that(is.character(name))
 
   funMask = name %in% getExternalMetricNames()
-  if(!all(funMask)) {
-    warning('External metric(s) ', paste0('"', name[!funMask], '"', collapse=', '), ' are not defined. Returning NA.')
+  if (!all(funMask)) {
+    warning(
+      'External metric(s) ',
+      paste0('"', name[!funMask], '"', collapse = ', '),
+      ' are not defined. Returning NA.'
+    )
   }
   metricFuns = lapply(name[funMask], getExternalMetricDefinition)
   metricValues = mapply(function(fun, name) {
     value = fun(object, object2)
-    assert_that(is.scalar(value) && (is.numeric(value) || is.logical(value)),
-                msg=sprintf('invalid output for metric "%s"; expected scalar number or logical value', name))
+    assert_that(
+      is.scalar(value) && (is.numeric(value) || is.logical(value)),
+      msg = sprintf(
+        'invalid output for metric "%s"; expected scalar number or logical value',
+        name
+      )
+    )
     return(value)
   }, metricFuns, name[funMask])
 
-  allMetrics = rep(NA*0, length(name))
+  allMetrics = rep(NA * 0, length(name))
   allMetrics[funMask] = unlist(metricValues)
   names(allMetrics) = name
   return(allMetrics)
@@ -472,43 +526,48 @@ setMethod('externalMetric', signature('clModel', 'clModel'), function(object, ob
 #' @param finite Whether to check for missing or non-finite values.
 #' @return Factor cluster assignments.
 #' @keywords internal
-make.clusterAssignments = function(object, clusters, finite=TRUE) {
+make.clusterAssignments = function(object, clusters, finite = TRUE) {
   clusNames = clusterNames(object)
   nClusters = nClusters(object)
 
-  assert_that(!finite || !anyNA(clusters), msg='cluster assignments should be finite values')
+  assert_that(!finite ||
+                !anyNA(clusters), msg = 'cluster assignments should be finite values')
 
-  if(is.null(clusters)) {
+  if (is.null(clusters)) {
     NULL
-  } else if(is.factor(clusters)) {
+  } else if (is.factor(clusters)) {
     # factor
     assert_that(nlevels(clusters) == nClusters)
-    if(all(levels(clusters) == clusNames)) {
+    if (all(levels(clusters) == clusNames)) {
       clusters
     } else {
       assert_that(all(levels(clusters) %in% clusNames))
-      factor(clusters, levels=clusNames)
+      factor(clusters, levels = clusNames)
     }
-  } else if(is.integer(clusters)) {
+  } else if (is.integer(clusters)) {
     # integer
     assert_that(min(clusters) >= 1,
                 max(clusters) <= nClusters)
 
-    factor(clusters, levels=seq_len(nClusters), labels=clusNames)
-  } else if(is.numeric(clusters)) {
+    factor(clusters,
+           levels = seq_len(nClusters),
+           labels = clusNames)
+  } else if (is.numeric(clusters)) {
     # numeric
-    assert_that(all(vapply(clusters, is.count, FUN.VALUE=FALSE)))
+    assert_that(all(vapply(clusters, is.count, FUN.VALUE = FALSE)))
     clusters = as.integer(clusters)
     assert_that(min(clusters) >= 1,
                 max(clusters) <= nClusters)
 
-    factor(clusters, levels=seq_len(nClusters), labels=clusNames)
-  } else if(is.character(clusters)) {
+    factor(clusters,
+           levels = seq_len(nClusters),
+           labels = clusNames)
+  } else if (is.character(clusters)) {
     # character
     assert_that(uniqueN(clusters) == nClusters,
                 all(clusters %in% clusNames))
 
-    factor(clusters, levels=clusNames)
+    factor(clusters, levels = clusNames)
   } else {
     stop('unsupported clusters input type; expected factor, numeric, or character')
   }
@@ -519,39 +578,40 @@ make.clusterAssignments = function(object, clusters, finite=TRUE) {
 #' @inheritParams make.clusterAssignments
 #' @seealso make.clusterAssignments
 #' @keywords internal
-make.clusterIndices = function(object, clusters, finite=TRUE) {
+make.clusterIndices = function(object, clusters, finite = TRUE) {
   clusNames = clusterNames(object)
   nClusters = nClusters(object)
 
-  assert_that(!finite || !anyNA(clusters), msg='cluster assignments should be finite values')
+  assert_that(!finite ||
+                !anyNA(clusters), msg = 'cluster assignments should be finite values')
 
-  if(is.null(clusters)) {
+  if (is.null(clusters)) {
     NULL
-  } else if(is.integer(clusters)) {
+  } else if (is.integer(clusters)) {
     # integer
     assert_that(min(clusters) >= 1,
                 max(clusters) <= nClusters)
     clusters
-  } else if(is.factor(clusters)) {
+  } else if (is.factor(clusters)) {
     # factor
-    if(all(levels(clusters) == clusNames)) {
+    if (all(levels(clusters) == clusNames)) {
       as.integer(clusters)
     } else {
       assert_that(all(levels(clusters) %in% clusNames))
-      factor(clusters, levels=clusNames) %>%
+      factor(clusters, levels = clusNames) %>%
         as.integer()
     }
-  } else if(is.numeric(clusters)) {
+  } else if (is.numeric(clusters)) {
     # numeric
-    assert_that(all(vapply(clusters, is.count, FUN.VALUE=FALSE)))
+    assert_that(all(vapply(clusters, is.count, FUN.VALUE = FALSE)))
     clusters = as.integer(clusters)
     assert_that(min(clusters) >= 1,
                 max(clusters) <= nClusters)
     clusters
-  } else if(is.character(clusters)) {
+  } else if (is.character(clusters)) {
     # character
     assert_that(all(clusters %in% clusNames))
-    factor(clusters, levels=clusNames) %>%
+    factor(clusters, levels = clusNames) %>%
       as.integer()
   } else {
     stop('unsupported clusters input type; expected factor, numeric, or character')
@@ -564,10 +624,10 @@ make.clusterNames = function(n) {
 
   opt = getOption('cluslong.clusterNames', LETTERS)
 
-  if(length(opt) == 0) {
+  if (length(opt) == 0) {
     warning('cluslong.clusterNames is NULL or empty. Using LETTERS for names')
     clusNames = LETTERS
-  } else if(is.function(opt)) {
+  } else if (is.function(opt)) {
     clusNames = opt(n) %>% as.character()
   } else {
     clusNames = as.character(opt)
@@ -575,7 +635,7 @@ make.clusterNames = function(n) {
 
   assert_that(length(clusNames) > 0, anyDuplicated(clusNames) == 0)
 
-  if(n > length(LETTERS)) {
+  if (n > length(LETTERS)) {
     warning('not enough cluster names provided by cluslong.clusterNames')
     clusNames = c(clusNames, paste0('C', seq(length(clusNames) + 1, n)))
   } else {
@@ -588,7 +648,11 @@ make.clusterNames = function(n) {
 #' @title Extract model training data
 #' @family model-specific methods
 model.frame.clModel = function(object) {
-  if (is.null(getS3method('model.frame', class=class(object@model), optional=TRUE))) {
+  if (is.null(getS3method(
+    'model.frame',
+    class = class(object@model),
+    optional = TRUE
+  ))) {
     labs = getClMethod(object) %>% formula %>% terms %>% labels
     model.data(object)[, labs]
   } else {
@@ -607,15 +671,16 @@ model.data = function(object) {
 #' @description Evaluates the data call in the environment that the model was trained in.
 #' @return The `data.frame` that was used for fitting the `clModel`.
 model.data.clModel = function(object) {
-  if(!is.null(object@data)) {
+  if (!is.null(object@data)) {
     object@data
-    assert_that(is.data.frame(object@data), msg='expected data reference to be a data.frame')
+    assert_that(is.data.frame(object@data), msg = 'expected data reference to be a data.frame')
     return(object@data)
   } else {
-    assert_that(has_name(getCall(object), 'data'), msg='Cannot determine data used to train this clModel. Data not part of model call, and not assigned to the @data slot')
-    data = eval(getCall(object)$data, envir=environment(object))
-    assert_that(!is.null(data), msg=sprintf('could not find "%s" in the model environment', deparse(data)))
-    assert_that(is.data.frame(data), msg='expected data reference to be a data.frame')
+    assert_that(has_name(getCall(object), 'data'), msg = 'Cannot determine data used to train this clModel. Data not part of model call, and not assigned to the @data slot')
+    data = eval(getCall(object)$data, envir = environment(object))
+    assert_that(!is.null(data),
+                msg = sprintf('could not find "%s" in the model environment', deparse(data)))
+    assert_that(is.data.frame(data), msg = 'expected data reference to be a data.frame')
     return(data)
   }
 }
@@ -634,7 +699,7 @@ model.response = function(object) {
 #' @title Number of strata
 nIds = function(object) {
   iddata = model.data(object)[[idVariable(object)]]
-  if(is.factor(iddata)) {
+  if (is.factor(iddata)) {
     nlevels(iddata)
   } else {
     uniqueN(iddata)
@@ -676,16 +741,19 @@ nobs.clModel = function(object, ...) {
 #'
 #' predIdAll = predict(model, newdata=data.frame(Id='S1', Time=time(model))) # Prediction matrix for id S1 for all clusters
 #' @family model-specific methods
-predict.clModel = function(object, newdata=NULL, what='mu', ...) {
+predict.clModel = function(object,
+                           newdata = NULL,
+                           what = 'mu',
+                           ...) {
   # special case for when no newdata is provided
-  if(is.null(newdata)) {
+  if (is.null(newdata)) {
     newdata = model.data(object)
-    if(hasName(newdata, 'Cluster')) {
+    if (hasName(newdata, 'Cluster')) {
       newdata[['Cluster']] = NULL # allowing the Cluster column to remain would break the fitted() output.
     }
   }
 
-  if(hasName(newdata, 'Cluster')) {
+  if (hasName(newdata, 'Cluster')) {
     # predictForCluster with newdata subsets
     clusnewdata = as.data.table(newdata) %>%
       split(by = 'Cluster', sorted = TRUE)
@@ -696,25 +764,36 @@ predict.clModel = function(object, newdata=NULL, what='mu', ...) {
   }
 
   predList = mapply(function(cname, cdata) {
-    predictForCluster(object, cluster = cname, newdata = cdata, what = what, ...)
+    predictForCluster(object,
+                      cluster = cname,
+                      newdata = cdata,
+                      what = what,
+                      ...)
   }, clusterNames(object), clusnewdata, SIMPLIFY = FALSE)
 
-  assert_that(uniqueN(vapply(predList, class, FUN.VALUE='')) == 1, msg='output from predictForCluster() must be same class for all clusters. Check the model implementation.')
+  assert_that(uniqueN(vapply(predList, class, FUN.VALUE = '')) == 1, msg =
+                'output from predictForCluster() must be same class for all clusters. Check the model implementation.')
 
-  if(is.data.frame(predList[[1]])) {
-    pred = rbindlist(predList, idcol='Cluster')
+  if (is.data.frame(predList[[1]])) {
+    pred = rbindlist(predList, idcol = 'Cluster')
   }
-  else if(is.numeric(predList[[1]])) {
-    pred = data.table(Cluster=rep(seq_len(nClusters(object)), each=nrow(newdata)),
-                      Fit=do.call(c, predList))
+  else if (is.numeric(predList[[1]])) {
+    pred = data.table(Cluster = rep(seq_len(nClusters(object)), each = nrow(newdata)),
+                      Fit = do.call(c, predList))
   }
   else {
-    stop('unsupported output from predictForCluster(): must be data.frame or numeric. Check the model implementation.')
+    stop(
+      'unsupported output from predictForCluster(): must be data.frame or numeric. Check the model implementation.'
+    )
   }
 
-  pred[, Cluster := factor(Cluster, levels=seq_len(nClusters(object)), labels=clusterNames(object))]
+  pred[, Cluster := factor(Cluster,
+                           levels = seq_len(nClusters(object)),
+                           labels = clusterNames(object))]
 
-  transformPredict(pred = pred, model = object, newdata = newdata)
+  transformPredict(pred = pred,
+                   model = object,
+                   newdata = newdata)
 }
 
 
@@ -726,10 +805,14 @@ predict.clModel = function(object, newdata=NULL, what='mu', ...) {
 #' @return A `vector` with the predictions per `newdata` observation, or a `data.frame` with the predictions and newdata alongside.
 #' @seealso [predict.clModel]
 #' @family model-specific methods
-setGeneric('predictForCluster', function(object, cluster, newdata, what='mu', ...) standardGeneric('predictForCluster'))
-setMethod('predictForCluster', signature('clModel'), function(object, cluster, newdata, what='mu', ...) {
+setGeneric('predictForCluster', function(object, cluster, newdata, what = 'mu', ...) standardGeneric('predictForCluster'))
+setMethod('predictForCluster', signature('clModel'), function(object, cluster, newdata, what = 'mu', ...) {
   assert_that(is.newdata(newdata), !is.null(newdata))
-  warning('predictForCluster() not implemented for ', class(object)[1], '. Returning NA predictions.')
+  warning(
+    'predictForCluster() not implemented for ',
+    class(object)[1],
+    '. Returning NA predictions.'
+  )
 
   rep(as.numeric(NA), nrow(newdata))
 })
@@ -743,18 +826,24 @@ setMethod('predictForCluster', signature('clModel'), function(object, cluster, n
 #' @param newdata Optional data frame for which to compute the posterior probability. If omitted, the model training data is used.
 #' @return A `matrix` indicating the posterior probability per trajectory per measurement on each row, for each cluster (the columns).
 #' @family model-specific methods
-setGeneric('predictPostprob', function(object, newdata=NULL, ...) standardGeneric('predictPostprob'))
+setGeneric('predictPostprob', function(object, newdata = NULL, ...) standardGeneric('predictPostprob'))
 setMethod('predictPostprob', signature('clModel'), function(object, newdata, ...) {
-  warning('predictPostprob() not implemented for ', class(object)[1], '. Returning uniform probability matrix.')
+  warning(
+    'predictPostprob() not implemented for ',
+    class(object)[1],
+    '. Returning uniform probability matrix.'
+  )
 
-  if(is.null(newdata)) {
+  if (is.null(newdata)) {
     N = nrow(model.data(object))
   }
   else {
     N = nrow(newdata)
   }
 
-  pp = matrix(1 / nClusters(object), nrow=N, ncol=nClusters(object))
+  pp = matrix(1 / nClusters(object),
+              nrow = N,
+              ncol = nClusters(object))
   colnames(pp) = clusterNames(object)
   pp
 })
@@ -762,7 +851,7 @@ setMethod('predictPostprob', signature('clModel'), function(object, newdata, ...
 
 #. predictAssignments ####
 #' @export
-setGeneric('predictAssignments', function(object, newdata=NULL, ...) standardGeneric('predictAssignments'))
+setGeneric('predictAssignments', function(object, newdata = NULL, ...) standardGeneric('predictAssignments'))
 #' @export
 #' @title Predict the cluster assignments for new trajectories
 #' @description Computes the posterior probability based on the provided (observed) data.
@@ -771,12 +860,13 @@ setGeneric('predictAssignments', function(object, newdata=NULL, ...) standardGen
 #' @return A `factor` with length `nrow(newdata)` that indicates the posterior probability per trajectory per observation.
 #' @family model-specific methods
 setMethod('predictAssignments', signature('clModel'), function(object, newdata, strategy = which.max, ...) {
-  pp = predictPostprob(object, newdata=newdata)
+  pp = predictPostprob(object, newdata = newdata)
   assert_that(is_valid_postprob(pp, object),
               nrow(pp) == nrow(newdata))
 
   apply(pp, 1, strategy, ...) %>%
-    factor(levels=1:nClusters(object), labels=clusterNames(object))
+    factor(levels = 1:nClusters(object),
+           labels = clusterNames(object))
 })
 
 
@@ -787,30 +877,38 @@ setMethod('predictAssignments', signature('clModel'), function(object, newdata, 
 #' @param clusterLabels Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.
 #' @param ... Any other arguments passed to [clusterTrajectories].
 #' @return A `ggplot` object.
-plot.clModel = function(object, what='mu', at=time(object),
-                        points=10,
-                        clusterLabels=sprintf('%s (%g%%)', clusterNames(object), round(clusterProportions(object) * 100)),
+plot.clModel = function(object,
+                        what = 'mu',
+                        at = time(object),
+                        points = 10,
+                        clusterLabels = sprintf('%s (%g%%)',
+                                                clusterNames(object),
+                                                round(clusterProportions(object) * 100)),
                         ...) {
   assert_that(is.numeric(points), min(points) >= 1)
   assert_that(length(clusterLabels) == nClusters(object))
 
-  if(length(points) == 1) {
-    points = seq(1, length(at), length.out=max(length(at), points))
+  if (length(points) == 1) {
+    points = seq(1, length(at), length.out = max(length(at), points))
   }
 
-  dt_ctraj = clusterTrajectories(object, at=at, what=what) %>%
+  dt_ctraj = clusterTrajectories(object, at = at, what = what) %>%
     as.data.table %>%
-    .[, Cluster := factor(Cluster, levels=levels(Cluster), labels=clusterLabels)]
+    .[, Cluster := factor(Cluster, levels = levels(Cluster), labels = clusterLabels)]
 
-    ggplot(data=dt_ctraj,
-         mapping=aes_string(x=timeVariable(object),
-                            y=responseVariable(object, what=what),
-                            color='Cluster',
-                            shape='Cluster')) +
-    scale_shape_manual(values=seq_len(nClusters(object))) +
+  ggplot(
+    data = dt_ctraj,
+    mapping = aes_string(
+      x = timeVariable(object),
+      y = responseVariable(object, what = what),
+      color = 'Cluster',
+      shape = 'Cluster'
+    )
+  ) +
+    scale_shape_manual(values = seq_len(nClusters(object))) +
     geom_line() +
-    geom_point(data=dt_ctraj[get(timeVariable(object)) %in% at[points]]) +
-    labs(title='Cluster trajectories')
+    geom_point(data = dt_ctraj[get(timeVariable(object)) %in% at[points]]) +
+    labs(title = 'Cluster trajectories')
 }
 
 #' @export
@@ -819,11 +917,13 @@ plot.clModel = function(object, what='mu', at=time(object),
 #' @inheritDotParams trajectories
 setMethod('plotTrajectories', signature('clModel'), function(object, ...) {
   data = trajectories(object, ...)
-  plotTrajs(data,
-            response=responseVariable(object),
-            time=timeVariable(object),
-            id=idVariable(object),
-            cluster='Cluster')
+  plotTrajs(
+    data,
+    response = responseVariable(object),
+    time = timeVariable(object),
+    id = idVariable(object),
+    cluster = 'Cluster'
+  )
 })
 
 
@@ -835,7 +935,7 @@ setMethod('plotTrajectories', signature('clModel'), function(object, ...) {
 #' @family model-specific methods
 setGeneric('postprob', function(object, ...) standardGeneric('postprob'))
 setMethod('postprob', signature('clModel'), function(object) {
-  predictPostprob(object, newdata=NULL)
+  predictPostprob(object, newdata = NULL)
 })
 
 
@@ -846,21 +946,22 @@ setMethod('postprob', signature('clModel'), function(object) {
 #' @param byCluster Whether to plot the Q-Q line per cluster
 #' @param detrend Whether to detrend the Q-Q line.
 #' @param ... Other arguments passed to qqplotr::geom_qq_band, qqplotr::stat_qq_line, and qqplotr::stat_qq_point.
-setGeneric('plotQQ', function(object, byCluster=FALSE, ...) standardGeneric('plotQQ'))
+setGeneric('plotQQ', function(object, byCluster = FALSE, ...) standardGeneric('plotQQ'))
 setMethod('plotQQ', signature('clModel'), function(object, byCluster, ...) {
   assert_that(is.clModel(object))
   idIndexColumn = factor(model.data(object)[[idVariable(object)]], levels = ids(object)) %>% as.integer()
   rowClusters = clusterAssignments(object)[idIndexColumn]
 
   res = residuals(object)
-  p = ggplot(data=data.frame(Cluster=rowClusters, res=res), aes(sample=res)) +
+  p = ggplot(data = data.frame(Cluster = rowClusters, res = res), aes(sample =
+                                                                        res)) +
     qqplotr::geom_qq_band(...) +
     qqplotr::stat_qq_line(...) +
     qqplotr::stat_qq_point(...) +
-    labs(x='Theoretical quantiles', y='Sample quantiles', title='Quantile-quantile plot')
+    labs(x = 'Theoretical quantiles', y = 'Sample quantiles', title = 'Quantile-quantile plot')
 
   if (byCluster) {
-    p = p + facet_wrap(~Cluster)
+    p = p + facet_wrap(~ Cluster)
   }
 
   return(p)
@@ -872,16 +973,16 @@ setMethod('plotQQ', signature('clModel'), function(object, byCluster, ...) {
 #' @inheritParams fitted.clModel
 #' @return A vector of residuals for the cluster assignments specified by clusters. If clusters is unspecified, a matrix of cluster-specific residuals per observations is returned.
 #' @family model-specific methods
-residuals.clModel = function(object, clusters=clusterAssignments(object), ...) {
-  ypred = fitted(object, clusters=clusters, ...)
+residuals.clModel = function(object, clusters = clusterAssignments(object), ...) {
+  ypred = fitted(object, clusters = clusters, ...)
   yref = model.response(object)
 
-  if(is.matrix(ypred)) {
+  if (is.matrix(ypred)) {
     assert_that(length(yref) == nrow(ypred))
-    resMat = matrix(yref, nrow=nrow(ypred), ncol=ncol(ypred)) - ypred
+    resMat = matrix(yref, nrow = nrow(ypred), ncol = ncol(ypred)) - ypred
     colnames(resMat) = colnames(ypred)
     resMat
-  } else if(is.numeric(ypred)) {
+  } else if (is.numeric(ypred)) {
     assert_that(length(yref) == length(ypred))
     yref - ypred
   } else {
@@ -897,7 +998,8 @@ residuals.clModel = function(object, clusters=clusterAssignments(object), ...) {
 #' model = cluslong(clMethodKML(), testLongData)
 #' responseVariable(model) # "Value"
 #' @family clModel variables
-setMethod('responseVariable', signature('clModel'), function(object, ...) object@response)
+setMethod('responseVariable', signature('clModel'), function(object, ...)
+  object@response)
 
 #' @export
 #' @title Get the model estimation time
@@ -917,7 +1019,11 @@ setMethod('show', 'clModel', function(object) {
 #' @title Extract residual standard deviation from a clModel
 #' @family model-specific methods
 sigma.clModel = function(object, ...) {
-  if (is.null(getS3method('sigma', class=class(object@model), optional=TRUE))) {
+  if (is.null(getS3method(
+    'sigma',
+    class = class(object@model),
+    optional = TRUE
+  ))) {
     residuals(object) %>% sd
   } else {
     sigma(object@model)
@@ -930,29 +1036,32 @@ sigma.clModel = function(object, ...) {
 #' @description Extracts all relevant information from the underlying model into a list
 summary.clModel = function(object, ...) {
   res = residuals(object)
-  if(is.null(res)) {
+  if (is.null(res)) {
     res = as.numeric(NA)
   }
 
-  new('clSummary',
-      method=getClMethod(object),
-      name=getName(object),
-      nClusters=nClusters(object),
-      nObs=nobs(object),
-      id=idVariable(object),
-      coefficients=coef(object),
-      residuals=res,
-      clusterNames=clusterNames(object),
-      clusterAssignments=clusterAssignments(object),
-      clusterSizes=clusterSizes(object),
-      clusterProportions=clusterProportions(object))
+  new(
+    'clSummary',
+    method = getClMethod(object),
+    name = getName(object),
+    nClusters = nClusters(object),
+    nObs = nobs(object),
+    id = idVariable(object),
+    coefficients = coef(object),
+    residuals = res,
+    clusterNames = clusterNames(object),
+    clusterAssignments = clusterAssignments(object),
+    clusterSizes = clusterSizes(object),
+    clusterProportions = clusterProportions(object)
+  )
 }
 
 
 #' @export
 #' @title Get the time variable name
 #' @family clModel variables
-setMethod('timeVariable', signature('clModel'), function(object) object@time)
+setMethod('timeVariable', signature('clModel'), function(object)
+  object@time)
 
 
 # . trajectories ####
@@ -968,36 +1077,42 @@ setMethod('timeVariable', signature('clModel'), function(object) object@time)
 #'
 #' trajectories(model, at=c(0, .5, 1))
 #' @family model-specific methods
-setGeneric('trajectories', function(object, at=time(object), what='mu', clusters=clusterAssignments(object), ...) standardGeneric('trajectories'))
+setGeneric('trajectories', function(object,
+                                    at = time(object),
+                                    what = 'mu',
+                                    clusters = clusterAssignments(object),
+                                    ...) standardGeneric('trajectories'))
 setMethod('trajectories', signature('clModel'), function(object, at, what, clusters) {
   ids = ids(object)
   assert_that(length(clusters) == nIds(object))
 
-  if(is.numeric(at)) {
-    newdata = data.table(Id=rep(ids, each=length(at)),
-                         Cluster=rep(clusters, each=length(at)),
-                         Time=at) %>%
+  if (is.numeric(at)) {
+    newdata = data.table(
+      Id = rep(ids, each = length(at)),
+      Cluster = rep(clusters, each = length(at)),
+      Time = at
+    ) %>%
       setnames('Id', idVariable(object)) %>%
       setnames('Time', timeVariable(object))
-  } else if(is.list(at)) {
-    assert_that(has_name(at, timeVariable(object)), msg='Named list at must contain the time covariate')
+  } else if (is.list(at)) {
+    assert_that(has_name(at, timeVariable(object)), msg = 'Named list at must contain the time covariate')
     assert_that(!has_name(at, c(idVariable(object), 'Cluster')))
 
     at = as.data.table(at)
     idx = seq_len(nrow(at)) %>% rep(length(ids))
-    newdata = data.table(Id=rep(ids, each=nrow(at)),
-                         Cluster=rep(clusters, each=nrow(at)),
+    newdata = data.table(Id = rep(ids, each = nrow(at)),
+                         Cluster = rep(clusters, each = nrow(at)),
                          at[idx,]) %>%
       setnames('Id', idVariable(object))
   } else {
     stop('unsupported input')
   }
 
-  preds = predict(object, newdata=newdata, what=what)
+  preds = predict(object, newdata = newdata, what = what)
 
   assert_that(is.data.frame(preds))
-  assert_that(nrow(preds) == nrow(newdata), msg='invalid output from predict function of clModel; expected a prediction per newdata row')
-  newdata[, c(responseVariable(object, what=what)) := preds$Fit]
+  assert_that(nrow(preds) == nrow(newdata), msg = 'invalid output from predict function of clModel; expected a prediction per newdata row')
+  newdata[, c(responseVariable(object, what = what)) := preds$Fit]
   return(newdata[])
 })
 
@@ -1019,7 +1134,7 @@ update.clModel = function(object, ...) {
   assert_that(is.clModel(object))
   modelCall = getCall(object)
 
-  assert_that(as.character(modelCall@call[[1]]) != '<undef>', msg='cannot update clModel because clMethod call is undefined')
+  assert_that(as.character(modelCall@call[[1]]) != '<undef>', msg = 'cannot update clModel because clMethod call is undefined')
 
   updateCall = match.call() %>% tail(-2)
   updateNames = names(updateCall)
@@ -1031,34 +1146,45 @@ update.clModel = function(object, ...) {
 
 
 # Model summary ####
-setClass('clSummary',
-         representation(method='clMethod',
-                        name='character',
-                        nClusters='integer',
-                        nObs='numeric',
-                        id='character',
-                        coefficients='ANY', #TODO
-                        residuals='numeric',
-                        clusterNames='character',
-                        clusterAssignments='factor',
-                        clusterSizes='numeric',
-                        clusterProportions='numeric',
-                        metrics='numeric'))
+setClass(
+  'clSummary',
+  representation(
+    method = 'clMethod',
+    name = 'character',
+    nClusters = 'integer',
+    nObs = 'numeric',
+    id = 'character',
+    coefficients = 'ANY',
+    #TODO
+    residuals = 'numeric',
+    clusterNames = 'character',
+    clusterAssignments = 'factor',
+    clusterSizes = 'numeric',
+    clusterProportions = 'numeric',
+    metrics = 'numeric'
+  )
+)
 
 # . show ####
 setMethod('show', 'clSummary',
           function(object) {
-            cat('Longitudinal cluster model using ', object@name, '\n', sep='')
+            cat('Longitudinal cluster model using ', object@name, '\n', sep = '')
             print(object@method)
             cat('\n')
             sprintf('Cluster sizes (K=%d):\n', object@nClusters) %>% cat
-            sprintf('%g (%g%%)', object@clusterSizes, round(object@clusterProportions * 100, 1)) %>%
+            sprintf('%g (%g%%)',
+                    object@clusterSizes,
+                    round(object@clusterProportions * 100, 1)) %>%
               setNames(object@clusterNames) %>%
               noquote %>%
               print
             cat('\n')
-            sprintf('Number of obs: %d, strata (%s): %d\n',
-                        object@nObs, object@id, length(object@clusterAssignments)) %>% cat
+            sprintf(
+              'Number of obs: %d, strata (%s): %d\n',
+              object@nObs,
+              object@id,
+              length(object@clusterAssignments)
+            ) %>% cat
             cat('\n')
             cat('Scaled residuals:\n')
             object@residuals %>% scale %>% as.vector %>% summary %>% print

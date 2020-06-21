@@ -1,2 +1,2 @@
 #' @include clModelLcmmGMM.R
-setClass('clModelLcmmGBTM', contains='clModelLcmmGMM')
+setClass('clModelLcmmGBTM', contains = 'clModelLcmmGMM')

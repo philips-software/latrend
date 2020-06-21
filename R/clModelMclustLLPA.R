@@ -1,36 +1,46 @@
 #' @include clModel.R
-setClass('clModelMclustLLPA', contains='clModel')
+setClass('clModelMclustLLPA', contains = 'clModel')
 
 
 #' @export
-predict.clModelMclustLLPA = function(object, newdata=NULL, what='mu', approxFun=approx) {
+predict.clModelMclustLLPA = function(object,
+                                     newdata = NULL,
+                                     what = 'mu',
+                                     approxFun = approx) {
   assert_that(is.newdata(newdata))
-  assert_that(what == 'mu', msg='only what="mu" is supported')
+  assert_that(what == 'mu', msg = 'only what="mu" is supported')
   assert_that(is.function(approxFun))
 
   # compute cluster trajectories
   trajMat = object@model$parameters$mean
 
-  if(is.null(newdata)) {
-    predMat = fitted(object, clusters=NULL)
+  if (is.null(newdata)) {
+    predMat = fitted(object, clusters = NULL)
   } else {
     assert_that(has_name(newdata, timeVariable(object)))
     newtimes = newdata[[timeVariable(object)]]
-    predMat = apply(trajMat, 2, function(y) approxFun(x=time(object), y=y, xout=newtimes)$y)
+    predMat = apply(trajMat, 2, function(y)
+      approxFun(
+        x = time(object),
+        y = y,
+        xout = newtimes
+      )$y)
   }
 
-  transformPredict(pred = predMat, model = object, newdata = newdata)
+  transformPredict(pred = predMat,
+                   model = object,
+                   newdata = newdata)
 }
 
 
 #' @export
-fitted.clModelMclustLLPA = function(object, clusters=clusterAssignments(object)) {
+fitted.clModelMclustLLPA = function(object, clusters = clusterAssignments(object)) {
   times = time(object)
-  newdata = data.table(Id=rep(ids(object), each=length(times)),
-                       Time=times) %>%
+  newdata = data.table(Id = rep(ids(object), each = length(times)),
+                       Time = times) %>%
     setnames('Id', idVariable(object)) %>%
     setnames('Time', timeVariable(object))
-  predict(object, newdata=newdata) %>%
+  predict(object, newdata = newdata) %>%
     transformFitted(model = object, clusters)
 }
 
@@ -44,12 +54,13 @@ setMethod('postprob', signature('clModelMclustLLPA'), function(object) {
 
 
 #. predictPostprob ####
-setMethod('predictPostprob', signature('clModelMclustLLPA'), function(object, newdata=NULL) {
-  if(is.null(newdata)) {
+setMethod('predictPostprob', signature('clModelMclustLLPA'), function(object, newdata =
+                                                                        NULL) {
+  if (is.null(newdata)) {
     postprob(object)
   } else {
     stop('not implemented')
-    pp = predict(object@model, newdata=newdata)$z
+    pp = predict(object@model, newdata = newdata)$z
   }
 })
 

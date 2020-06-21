@@ -1,5 +1,5 @@
 #' @include clMatrixMethod.R
-setClass('clMethodCrimCV', contains='clMatrixMethod')
+setClass('clMethodCrimCV', contains = 'clMatrixMethod')
 
 #' @export
 #' @importFrom crimCV crimCV
@@ -15,15 +15,17 @@ setClass('clMethodCrimCV', contains='clMatrixMethod')
 #' method = clMethodCrimCV(Offenses ~ 0, time='Offense', id='Subject')
 #' model = cluslong(method, TO1adj)
 #' @family clMethod implementations
-clMethodCrimCV = function(formula=Value ~ 0,
-                       time=getOption('cluslong.time'),
-                       id=getOption('cluslong.id'),
-                       nClusters=2,
-                       ...
-) {
-  .clMethod.call('clMethodCrimCV', call=match.call.defaults(),
-           defaults=crimCV::crimCV,
-           excludeArgs=c('Dat', 'ng'))
+clMethodCrimCV = function(formula = Value ~ 0,
+                          time = getOption('cluslong.time'),
+                          id = getOption('cluslong.id'),
+                          nClusters = 2,
+                          ...) {
+  .clMethod.call(
+    'clMethodCrimCV',
+    call = match.call.defaults(),
+    defaults = crimCV::crimCV,
+    excludeArgs = c('Dat', 'ng')
+  )
 }
 
 
@@ -34,8 +36,8 @@ setMethod('getShortName', signature('clMethodCrimCV'), function(object) 'crimcv'
 setMethod('prepareData', signature('clMethodCrimCV'), function(method, data, verbose, ...) {
   times = sort(unique(data[[timeVariable(method)]]))
 
-  refTimes = seq(first(times), last(times), length.out=length(times))
-  assert_that(isTRUE(all.equal(times, refTimes)), msg='Measurement times must be equally spaced, starting from 0 and ending at 1. This requirement is enforced because crimCV internally specifies the measurement times in this way.')
+  refTimes = seq(first(times), last(times), length.out = length(times))
+  assert_that(isTRUE(all.equal(times, refTimes)), msg = 'Measurement times must be equally spaced, starting from 0 and ending at 1. This requirement is enforced because crimCV internally specifies the measurement times in this way.')
 
   callNextMethod()
 })
@@ -45,7 +47,7 @@ setMethod('fit', signature('clMethodCrimCV'), function(method, data, envir, verb
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
   time = timeVariable(method)
 
-  args = as.list(method, args=crimCV::crimCV)
+  args = as.list(method, args = crimCV::crimCV)
   args$Dat = envir$dataMat
   args$ng = method$nClusters
 
@@ -56,12 +58,13 @@ setMethod('fit', signature('clMethodCrimCV'), function(method, data, envir, verb
   model$minTime = min(data[[time]])
   model$durTime = max(data[[time]]) - model$minTime
 
-  assert_that(has_name(model, 'beta'), msg='invalid crimCV model returned from fit. The model either failed to initialize, converge, or its specification is unsupported.')
+  assert_that(has_name(model, 'beta'), msg = 'invalid crimCV model returned from fit. The model either failed to initialize, converge, or its specification is unsupported.')
 
-  new('clModelCrimCV',
-      method=method,
-      data=data,
-      model=model,
-      clusterNames=make.clusterNames(method$nClusters))
+  new(
+    'clModelCrimCV',
+    method = method,
+    data = data,
+    model = model,
+    clusterNames = make.clusterNames(method$nClusters)
+  )
 })
-

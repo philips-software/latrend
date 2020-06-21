@@ -1,14 +1,14 @@
 #' @include clMethod.R
-setClass('clMethodMclustLLPA', contains='clMethod')
+setClass('clMethodMclustLLPA', contains = 'clMethod')
 
 setValidity('clMethodMclustLLPA', function(object) {
-  if(isArgDefined(object, 'formula')) {
+  if (isArgDefined(object, 'formula')) {
     f = formula(object)
     assert_that(hasSingleResponse(object$formula))
-    assert_that(!hasCovariates(object$formula), msg='covariates are not supported')
+    assert_that(!hasCovariates(object$formula), msg = 'covariates are not supported')
   }
 
-  if(isArgDefined(object, 'nClusters')) {
+  if (isArgDefined(object, 'nClusters')) {
     assert_that(is.count(object$nClusters))
   }
 })
@@ -27,15 +27,17 @@ setValidity('clMethodMclustLLPA', function(object) {
 #'                      time='Assessment',
 #'                      id='Id', nClusters=3)
 #' @family clMethod implementations
-clMethodMclustLLPA = function(response=getOption('cluslong.response'),
-                       time=getOption('cluslong.time'),
-                       id=getOption('cluslong.id'),
-                       nClusters=2,
-                       ...
-) {
-  .clMethod.call('clMethodMclustLLPA', call=match.call.defaults(),
-           defaults=mclust::Mclust,
-           excludeArgs=c('data', 'G', 'verbose'))
+clMethodMclustLLPA = function(response = getOption('cluslong.response'),
+                              time = getOption('cluslong.time'),
+                              id = getOption('cluslong.id'),
+                              nClusters = 2,
+                              ...) {
+  .clMethod.call(
+    'clMethodMclustLLPA',
+    call = match.call.defaults(),
+    defaults = mclust::Mclust,
+    excludeArgs = c('data', 'G', 'verbose')
+  )
 }
 
 setMethod('getName', signature('clMethodMclustLLPA'), function(object) 'longitudinal latent profile analysis')
@@ -46,10 +48,11 @@ setMethod('prepareData', signature('clMethodMclustLLPA'), function(method, data,
   e = new.env()
 
   valueColumn = responseVariable(method)
-  assert_that(!anyNA(data[[valueColumn]]), msg='data contains missing values')
+  assert_that(!anyNA(data[[valueColumn]]), msg = 'data contains missing values')
 
   # Data
-  wideFrame = dcast(data, get(idVariable(method)) ~ get(timeVariable(method)), value.var=valueColumn)
+  wideFrame = dcast(data, get(idVariable(method)) ~ get(timeVariable(method)), value.var =
+                      valueColumn)
   e$data = as.matrix(wideFrame[, -'method']) %>%
     set_rownames(wideFrame$method)
 
@@ -57,17 +60,18 @@ setMethod('prepareData', signature('clMethodMclustLLPA'), function(method, data,
 })
 
 setMethod('fit', signature('clMethodMclustLLPA'), function(method, data, envir, verbose, ...) {
-  args = as.list(method, args=mclust::Mclust)
+  args = as.list(method, args = mclust::Mclust)
   args$data = envir$data
   args$G = method$nClusters
 
   model = do.call(mclust::Mclust, args)
   model$time = unique(data[[timeVariable(method)]]) %>% sort
 
-  new('clModelMclustLLPA',
-      method=method,
-      data=data,
-      model=model,
-      clusterNames=make.clusterNames(method$nClusters))
+  new(
+    'clModelMclustLLPA',
+    method = method,
+    data = data,
+    model = model,
+    clusterNames = make.clusterNames(method$nClusters)
+  )
 })
-

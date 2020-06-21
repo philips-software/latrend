@@ -1,10 +1,14 @@
 #' @include clApproxModel.R
-setClass('clModelPartition',
-         representation(center='function',
-                        clusterTrajectories='data.frame',
-                        postprob='matrix',
-                        name='character'),
-         contains='clApproxModel')
+setClass(
+  'clModelPartition',
+  representation(
+    center = 'function',
+    clusterTrajectories = 'data.frame',
+    postprob = 'matrix',
+    name = 'character'
+  ),
+  contains = 'clApproxModel'
+)
 
 #' @export
 #' @title Create a clModel with pre-defined partitioning
@@ -16,32 +20,41 @@ setClass('clModelPartition',
 #' @param clusterNames The names of the clusters, or a function with input `n` outputting a `character vector` of names.
 clModelPartition = function(data,
                             clusterAssignments,
-                            nClusters=NA,
-                            center=meanNA,
-                            clusterNames=NULL,
-                            response=getOption('cluslong.response'),
-                            time=getOption('cluslong.time'),
-                            id=getOption('cluslong.id'),
-                            name='part') {
-  assert_that(is.data.frame(data),
-              has_name(data, response),
-              has_name(data, time),
-              has_name(data, id))
-  assert_that(is.character(clusterNames) || is.null(clusterNames),
-              length(clusterNames) %in% c(0, nClusters))
+                            nClusters = NA,
+                            center = meanNA,
+                            clusterNames = NULL,
+                            response = getOption('cluslong.response'),
+                            time = getOption('cluslong.time'),
+                            id = getOption('cluslong.id'),
+                            name = 'part') {
+  assert_that(
+    is.data.frame(data),
+    has_name(data, response),
+    has_name(data, time),
+    has_name(data, id)
+  )
+  assert_that(
+    is.character(clusterNames) || is.null(clusterNames),
+    length(clusterNames) %in% c(0, nClusters)
+  )
   assert_that(is.function(center))
-  assert_that(all(vapply(clusterAssignments, is.count, FUN.VALUE=TRUE)) || is.factor(clusterAssignments),
-              length(clusterAssignments) == uniqueN(data[[id]]))
+  assert_that(
+    all(vapply(
+      clusterAssignments, is.count, FUN.VALUE = TRUE
+    )) || is.factor(clusterAssignments),
+    length(clusterAssignments) == uniqueN(data[[id]])
+  )
 
-  if(is.factor(clusterAssignments)) {
-    assert_that(is.na(nClusters) || nlevels(clusterAssignments) == nClusters)
+  if (is.factor(clusterAssignments)) {
+    assert_that(is.na(nClusters) ||
+                  nlevels(clusterAssignments) == nClusters)
   }
   intAssignments = as.integer(clusterAssignments)
   assert_that(is.na(nClusters) || max(intAssignments) <= nClusters)
 
   # Determine number of clusters
-  if(is.na(nClusters)) {
-    if(is.factor(clusterAssignments)) {
+  if (is.na(nClusters)) {
+    if (is.factor(clusterAssignments)) {
       numClus = nlevels(clusterAssignments)
     } else {
       numClus = max(intAssignments)
@@ -51,39 +64,45 @@ clModelPartition = function(data,
   }
   assert_that(min(intAssignments) >= 1, max(intAssignments) <= numClus)
 
-  pp = postprobFromAssignments(intAssignments, k=numClus)
+  pp = postprobFromAssignments(intAssignments, k = numClus)
 
-  if(is.null(clusterNames)) {
+  if (is.null(clusterNames)) {
     clusterNames = make.clusterNames(numClus)
   }
 
-  clusTrajs = computeCenterClusterTrajectories(data,
-                                               assignments=intAssignments,
-                                               nClusters=numClus,
-                                               fun=center,
-                                               id=id,
-                                               time=time,
-                                               response=response)
+  clusTrajs = computeCenterClusterTrajectories(
+    data,
+    assignments = intAssignments,
+    nClusters = numClus,
+    fun = center,
+    id = id,
+    time = time,
+    response = response
+  )
 
   mc = match.call()
-  model = new('clModelPartition',
-              call = mc,
-              center = center,
-              clusterTrajectories = clusTrajs,
-              postprob = pp,
-              name = name,
-              clusterNames = clusterNames,
-              id = id,
-              time = time,
-              response = response)
+  model = new(
+    'clModelPartition',
+    call = mc,
+    center = center,
+    clusterTrajectories = clusTrajs,
+    postprob = pp,
+    name = name,
+    clusterNames = clusterNames,
+    id = id,
+    time = time,
+    response = response
+  )
   return(model)
 }
 
 
 setMethod('clusterTrajectories', signature('clModelPartition'), function(object, at, what, ...) {
-  if(is.null(at)) {
+  if (is.null(at)) {
     clusTrajs = as.data.table(object@clusterTrajectories)
-    clusTrajs[, Cluster := factor(Cluster, levels=seq_len(nClusters(object)), labels=clusterNames(object))]
+    clusTrajs[, Cluster := factor(Cluster,
+                                  levels = seq_len(nClusters(object)),
+                                  labels = clusterNames(object))]
     return(clusTrajs[])
   } else {
     callNextMethod()
@@ -98,10 +117,12 @@ setMethod('converged', signature('clModelPartition'), function(object) {
 
 
 # . getName ####
-setMethod('getName', signature('clModelPartition'), function(object) object@name)
+setMethod('getName', signature('clModelPartition'), function(object)
+  object@name)
 
 # . getShortName ####
-setMethod('getShortName', signature('clModelPartition'), function(object) object@name)
+setMethod('getShortName', signature('clModelPartition'), function(object)
+  object@name)
 
 
 #. postprob ####
@@ -114,31 +135,45 @@ setMethod('postprob', signature('clModelPartition'), function(object) {
 
 
 #' @export
-computeCenterClusterTrajectories = function(data, assignments, nClusters, fun=mean, id, time, response) {
-  assert_that(is.data.frame(data),
-              has_name(data, response),
-              has_name(data, time),
-              has_name(data, id))
+computeCenterClusterTrajectories = function(data,
+                                            assignments,
+                                            nClusters,
+                                            fun = mean,
+                                            id,
+                                            time,
+                                            response) {
+  assert_that(
+    is.data.frame(data),
+    has_name(data, response),
+    has_name(data, time),
+    has_name(data, id)
+  )
   assert_that(nClusters >= 1)
-  assert_that(is.integer(assignments),
-              all(is.finite(assignments)),
-              all(vapply(assignments, is.count, FUN.VALUE=TRUE)),
-              length(assignments) == uniqueN(data[[id]]),
-              min(assignments) >= 1,
-              max(assignments) <= nClusters)
+  assert_that(
+    is.integer(assignments),
+    all(is.finite(assignments)),
+    all(vapply(assignments, is.count, FUN.VALUE = TRUE)),
+    length(assignments) == uniqueN(data[[id]]),
+    min(assignments) >= 1,
+    max(assignments) <= nClusters
+  )
   assert_that(is.function(fun))
 
   rowClusters = assignments[rleidv(data[[id]])]
-  clusTrajs = data[, .(Value=fun(get(response))), by=.(Cluster=rowClusters, Time=get(time))]
+  clusTrajs = data[, .(Value = fun(get(response))), by = .(Cluster = rowClusters, Time =
+                                                             get(time))]
 
-  if(uniqueN(assignments) < nClusters) {
-    warning('empty clusters present. cluster trajectory for empty clusters will be set constant at 0')
+  if (uniqueN(assignments) < nClusters) {
+    warning(
+      'empty clusters present. cluster trajectory for empty clusters will be set constant at 0'
+    )
     # add missing clusters
-    emptyClusTraj = clusTrajs[, .(Time=unique(Time), Value=0)]
+    emptyClusTraj = clusTrajs[, .(Time = unique(Time), Value = 0)]
     clusTrajs = rbind(clusTrajs,
-                      data.table(
-                        Cluster=rep(setdiff(seq_len(nClusters), unique(rowClusters)), each=nrow(emptyClusTraj)),
-                        emptyClusTraj))
+                      data.table(Cluster = rep(
+                        setdiff(seq_len(nClusters), unique(rowClusters)), each = nrow(emptyClusTraj)
+                      ),
+                      emptyClusTraj))
   }
 
   setnames(clusTrajs, 'Value', response)

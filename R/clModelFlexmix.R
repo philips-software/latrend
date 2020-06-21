@@ -1,30 +1,36 @@
 #' @include clModel.R
-setClass('clModelFlexmix', contains='clModel')
+setClass('clModelFlexmix', contains = 'clModel')
 
 
 #' @export
-predict.clModelFlexmix = function(object, newdata=NULL, what='mu') {
+predict.clModelFlexmix = function(object,
+                                  newdata = NULL,
+                                  what = 'mu') {
   assert_that(is.newdata(newdata))
-  assert_that(what == 'mu', msg='only what="mu" is supported')
+  assert_that(what == 'mu', msg = 'only what="mu" is supported')
 
-  if(is.null(newdata)) {
+  if (is.null(newdata)) {
     predOut = flexmix::predict(object@model)
   } else {
-    predOut = flexmix::predict(object@model, newdata=newdata)
+    predOut = flexmix::predict(object@model, newdata = newdata)
   }
   predMat = do.call(cbind, predOut) %>%
     set_colnames(clusterNames(object))
 
-  transformPredict(pred = predMat, model = object, newdata = newdata)
+  transformPredict(pred = predMat,
+                   model = object,
+                   newdata = newdata)
 }
 
 
 #' @export
-fitted.clModelFlexmix = function(object, clusters=clusterAssignments(object)) {
+fitted.clModelFlexmix = function(object, clusters = clusterAssignments(object)) {
   predNames = paste0('pred_m', 1:nClusters(object))
   predMat = flexmix::fitted(object@model) %>%
     set_colnames(clusterNames(object))
-  transformFitted(pred = predMat, model = object, clusters = clusters)
+  transformFitted(pred = predMat,
+                  model = object,
+                  clusters = clusters)
 }
 
 setMethod('postprob', signature('clModelFlexmix'), function(object) {

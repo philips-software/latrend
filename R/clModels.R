@@ -36,16 +36,16 @@ is.clModels = function(x) {
 #' @return A `clModels` object.
 #' @family clModel list functions
 as.clModels = function(x) {
-  if(is.clModels(x)) {
+  if (is.clModels(x)) {
     return(x)
   }
-  else if(is.clModel(x)) {
+  else if (is.clModel(x)) {
     x = list(x)
   }
-  else if(is.list(x)) {
-      assert_that(all(vapply(x, is.clModel, FUN.VALUE=FALSE)), msg='object cannot be converted to clModels; not a list of only clModels objects')
+  else if (is.list(x)) {
+    assert_that(all(vapply(x, is.clModel, FUN.VALUE = FALSE)), msg = 'object cannot be converted to clModels; not a list of only clModels objects')
   }
-  else if(is.null(x)) {
+  else if (is.null(x)) {
     x = list()
   }
   else {
@@ -72,28 +72,35 @@ as.list.clModels = function(x) {
 #' @param excludeShared Whether to exclude columns which have the same value across all methods.
 #' @param ... Arguments passed to [as.data.frame.clMethod].
 #' @return A `data.frame`.
-as.data.frame.clModels = function(x, excludeShared=FALSE, eval=TRUE, ...) {
+as.data.frame.clModels = function(x,
+                                  excludeShared = FALSE,
+                                  eval = TRUE,
+                                  ...) {
   x = as.clModels(x)
 
   dfs = lapply(x, getClMethod) %>%
-    lapply(as.data.frame, eval=eval, ...)
+    lapply(as.data.frame, eval = eval, ...)
 
   suppressWarnings({
-    dt = rbindlist(dfs, use.names=TRUE, fill=TRUE, idcol='.name')
+    dt = rbindlist(dfs,
+                   use.names = TRUE,
+                   fill = TRUE,
+                   idcol = '.name')
   })
 
-  if(isTRUE(excludeShared) && nrow(dt) > 1) {
-    newColumns = names(dt)[vapply(dt, uniqueN, FUN.VALUE=0) > 1]
+  if (isTRUE(excludeShared) && nrow(dt) > 1) {
+    newColumns = names(dt)[vapply(dt, uniqueN, FUN.VALUE = 0) > 1]
     dt = subset(dt, select = newColumns)
   }
 
-  dt[, `.method` := vapply(x, getShortName, FUN.VALUE='')]
-  if(!has_name(dt, '.name')) {
+  dt[, `.method` := vapply(x, getShortName, FUN.VALUE = '')]
+  if (!has_name(dt, '.name')) {
     dt[, `.name` := character()]
   }
 
-  dataNames = vapply(x, function(model) deparse(getCall(model)$data), FUN.VALUE='')
-  if(!excludeShared || uniqueN(dataNames) > 1) {
+  dataNames = vapply(x, function(model)
+    deparse(getCall(model)$data), FUN.VALUE = '')
+  if (!excludeShared || uniqueN(dataNames) > 1) {
     dt[, data := dataNames]
   }
   setcolorder(dt, intersect(c('.name', '.method', 'data'), names(dt)))
@@ -106,24 +113,26 @@ as.data.frame.clModels = function(x, excludeShared=FALSE, eval=TRUE, ...) {
 #' @return A named `numeric` vector containing the computed model metrics.
 #' @examples
 #' clModel metric example here
-setMethod('externalMetric', signature('clModels', 'missing'), function(object, object2, name='AdjustedRand') {
+setMethod('externalMetric', signature('clModels', 'missing'), function(object, object2, name =
+                                                                         'AdjustedRand') {
   assert_that(is.character(name), length(name) == 1)
 
-  pairs = combn(seq_along(object), m=2, simplify=FALSE)
+  pairs = combn(seq_along(object), m = 2, simplify = FALSE)
 
-  result = lapply(pairs, function(idx) externalMetric(object[[idx[1]]], object[[idx[2]]], name=name) %>% unname())
+  result = lapply(pairs, function(idx)
+    externalMetric(object[[idx[1]]], object[[idx[2]]], name = name) %>% unname())
 
-  m = matrix(NaN, nrow=length(object), ncol=length(object))
+  m = matrix(NaN, nrow = length(object), ncol = length(object))
   m[do.call(rbind, pairs)] = unlist(result)
-  as.dist(t(m), diag=FALSE, upper=FALSE)
+  as.dist(t(m), diag = FALSE, upper = FALSE)
 })
 
 .externalMetric.clModels = function(object, object2, name) {
   assert_that(is.character(name))
 
-  result = lapply(object, externalMetric, object2=object2, name=name)
+  result = lapply(object, externalMetric, object2 = object2, name = name)
 
-  if(length(name) <= 1) {
+  if (length(name) <= 1) {
     do.call(c, result) %>%
       unname()
   } else {
@@ -137,7 +146,9 @@ setMethod('externalMetric', signature('clModels', 'missing'), function(object, o
 #' @return A named `numeric` vector containing the computed model metrics.
 #' @examples
 #' clModel metric example here
-setMethod('externalMetric', signature('clModels', 'clModel'), .externalMetric.clModels)
+setMethod('externalMetric',
+          signature('clModels', 'clModel'),
+          .externalMetric.clModels)
 
 #' @export
 #' @rdname metric
@@ -154,18 +165,18 @@ setMethod('externalMetric', signature('list', 'clModel'), function(object, objec
   assert_that(is.clModels(object))
   assert_that(is.character(name))
 
-  modelNames = vapply(object, getShortName, FUN.VALUE='')
+  modelNames = vapply(object, getShortName, FUN.VALUE = '')
   metricValues = lapply(object, function(model) {
     metric(model, name) %>%
       rbind %>%
       data.frame
   })
 
-  dtMetrics = rbindlist(metricValues, idcol='.name')
+  dtMetrics = rbindlist(metricValues, idcol = '.name')
   dtMetrics[, `.method` := modelNames]
 
   setcolorder(dtMetrics, '.method')
-  if(has_name(dtMetrics, '.name')) {
+  if (has_name(dtMetrics, '.name')) {
     setcolorder(dtMetrics, '.name')
   }
   as.data.frame(dtMetrics)
@@ -196,13 +207,17 @@ setMethod('metric', signature('clModels'), .metric.clModels)
 #' @return `ggplot2` object.
 #' @examples
 #' plotMetric(models, 'BIC', by='nClusters', group='.name')
-plotMetric = function(models, name, by='nClusters', subset, group=character()) {
+plotMetric = function(models,
+                      name,
+                      by = 'nClusters',
+                      subset,
+                      group = character()) {
   models = as.clModels(models)
-  assert_that(length(models) > 0, msg='need at least 1 clModel to plot')
+  assert_that(length(models) > 0, msg = 'need at least 1 clModel to plot')
   assert_that(is.character(name), length(name) >= 1)
 
-  if(!missing(subset)) {
-    models = do.call(subset.clModels, list(x=models, subset=substitute(subset)))
+  if (!missing(subset)) {
+    models = do.call(subset.clModels, list(x = models, subset = substitute(subset)))
   }
 
   metricNames = paste0('.metric.', name)
@@ -217,33 +232,38 @@ plotMetric = function(models, name, by='nClusters', subset, group=character()) {
   assert_that(is.null(group) || has_name(dtModels, group))
 
   dtModelMetrics = cbind(dtModels, dtMetrics)
-  if(length(group) == 0) {
+  if (length(group) == 0) {
     dtModelMetrics[, .group := 'All']
   } else {
-    dtModelMetrics[, .group := do.call(interaction, subset(dtModelMetrics, select=group))]
+    dtModelMetrics[, .group := do.call(interaction, subset(dtModelMetrics, select =
+                                                             group))]
   }
   assert_that(has_name(dtModelMetrics, by))
 
   # Prepare ggplot data; convert to long format to support multiple metrics
-  dtgg = melt(dtModelMetrics, id.vars=c(by, '.group'),
-              measure.vars=metricNames,
-              variable.name='Metric',
-              value.name='Value') %>%
+  dtgg = melt(
+    dtModelMetrics,
+    id.vars = c(by, '.group'),
+    measure.vars = metricNames,
+    variable.name = 'Metric',
+    value.name = 'Value'
+  ) %>%
     setnames('.group', 'Group')
   levels(dtgg$Metric) = name
 
-  p = ggplot(dtgg, aes_string(x=by, y='Value', group='Group'))
+  p = ggplot(dtgg, aes_string(x = by, y = 'Value', group = 'Group'))
 
-  if(is.numeric(dtModelMetrics[[by]]) || is.logical(dtModelMetrics[[by]])) {
+  if (is.numeric(dtModelMetrics[[by]]) ||
+      is.logical(dtModelMetrics[[by]])) {
     p = p + geom_line()
   }
   p = p + geom_point()
 
-  if(length(name) == 1) {
+  if (length(name) == 1) {
     p = p + ylab(name)
   } else {
     p = p + ylab('Value') +
-      facet_wrap(~Metric, scales='free_y')
+      facet_wrap( ~ Metric, scales = 'free_y')
   }
 
   return(p)
@@ -264,10 +284,10 @@ plotMetric = function(models, name, by='nClusters', subset, group=character()) {
 #'
 #' subset(models, nClusters > 1 & .method == 'kml')
 #' @family clModel list functions
-subset.clModels = function(x, subset, drop=FALSE) {
+subset.clModels = function(x, subset, drop = FALSE) {
   x = as.clModels(x)
 
-  if(missing(subset)) {
+  if (missing(subset)) {
     return(x)
   }
 
@@ -275,9 +295,9 @@ subset.clModels = function(x, subset, drop=FALSE) {
   dfsub = as.data.frame(x) %>%
     as.data.table() %>%
     .[, .ROW_INDEX := .I] %>%
-    base::subset(subset=eval(subsetCall))
+    base::subset(subset = eval(subsetCall))
 
-  if(isTRUE(drop) && nrow(dfsub) == 1) {
+  if (isTRUE(drop) && nrow(dfsub) == 1) {
     x[[dfsub$.ROW_INDEX]]
   } else {
     x[dfsub$.ROW_INDEX]
@@ -288,11 +308,13 @@ subset.clModels = function(x, subset, drop=FALSE) {
 #' @title Print clModels list concisely
 #' @param summary Whether to print the complete summary per model. This may be slow for long lists!
 #' @family clModel list functions
-print.clModels = function(x, summary=FALSE, excludeShared=!getOption('cluslong.printSharedModelArgs')) {
-  if(isTRUE(summary)) {
+print.clModels = function(x,
+                          summary = FALSE,
+                          excludeShared = !getOption('cluslong.printSharedModelArgs')) {
+  if (isTRUE(summary)) {
     as.list(x) %>% print()
   } else {
     cat(sprintf('List of %d clModels with\n', length(x)))
-    print(as.data.frame.clModels(x, excludeShared=excludeShared))
+    print(as.data.frame.clModels(x, excludeShared = excludeShared))
   }
 }

@@ -23,18 +23,21 @@ has_same_ids = function(m1, m2) {
 attr(has_same_ids, 'fail') = function(call, env) {
   m1 = eval(call$m1, env)
   m2 = eval(call$m2, env)
-  paste0('models were not trained on the same ids, or in a different order: ', all.equal(ids(m1), ids(m2)))
+  paste0('models were not trained on the same ids, or in a different order: ',
+         all.equal(ids(m1), ids(m2)))
 }
 
 has_same_modelData = function(m1, m2) {
   assert_that(is.clModel(m1), is.clModel(m2))
-  all.equal(model.data(m1), model.data(m2)) %>% isTRUE()
+  all.equal(model.data(m1), model.data(m2)) %>%
+    isTRUE()
 }
 
 attr(has_same_modelData, 'fail') = function(call, env) {
   m1 = eval(call$m1, env)
   m2 = eval(call$m2, env)
-  paste0('models were not trained on the same dataset: ', all.equal(model.data(m1), model.data(m2)))
+  paste0('models were not trained on the same dataset: ',
+         all.equal(model.data(m1), model.data(m2)))
 }
 
 
@@ -51,7 +54,11 @@ attr(has_clMethod_args, 'fail') = function(call, env) {
   object = eval(call$object, env)
   argNames = setdiff(eval(call$which, env), '...')
   missingNames = setdiff(argNames, names(object))
-  paste0(class(object), ' is missing required argument(s): ', paste0('"', missingNames, '"', collapse=', '))
+  paste0(
+    class(object),
+    ' is missing required argument(s): ',
+    paste0('"', missingNames, '"', collapse = ', ')
+  )
 }
 
 
@@ -63,7 +70,12 @@ is_valid_postprob = function(pp, model) {
     noNA(pp) &&
     min(pp) >= 0 &&
     max(pp) <= 1 &&
-    isTRUE(all.equal(rowSums(pp), rep(1, nrow(pp)), check.attributes=FALSE, use.names=FALSE))
+    isTRUE(all.equal(
+      rowSums(pp),
+      rep(1, nrow(pp)),
+      check.attributes = FALSE,
+      use.names = FALSE
+    ))
 }
 
 attr(is_valid_postprob, 'fail') = function(call, env) {

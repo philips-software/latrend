@@ -66,20 +66,24 @@ addInteraction = function(f, var) {
   assert_that(is.character(var))
   vars = terms(f) %>% labels
 
-  if(length(vars) == 0) {
-    if(hasIntercept(f)) {
-      reformulate(var,
-                  response=getResponse(f),
-                  intercept=TRUE,
-                  env=environment(f))
+  if (length(vars) == 0) {
+    if (hasIntercept(f)) {
+      reformulate(
+        var,
+        response = getResponse(f),
+        intercept = TRUE,
+        env = environment(f)
+      )
     } else {
       f
     }
   } else {
-    reformulate(paste(vars, var, sep='*'),
-                response=getResponse(f),
-                intercept=hasIntercept(f),
-                env=environment(f))
+    reformulate(
+      paste(vars, var, sep = '*'),
+      response = getResponse(f),
+      intercept = hasIntercept(f),
+      env = environment(f)
+    )
   }
 }
 
@@ -91,22 +95,24 @@ merge.formula = function(x, y, ...) {
   ylabels = terms(y) %>% labels
 
   allLabels = union(xlabels, ylabels)
-  if(length(allLabels) == 0) {
-    if(!hasIntercept(x) && hasIntercept(y)) {
+  if (length(allLabels) == 0) {
+    if (!hasIntercept(x) && hasIntercept(y)) {
       update(x, ~ 1)
     } else {
       x
     }
   } else {
-    reformulate(allLabels,
-                response=getResponse(x),
-                intercept=hasIntercept(x) || hasIntercept(y),
-                env=environment(x)) #TODO: merge environments of x and y
+    reformulate(
+      allLabels,
+      response = getResponse(x),
+      intercept = hasIntercept(x) || hasIntercept(y),
+      env = environment(x)
+    ) #TODO: merge environments of x and y
   }
 }
 
 dropResponse = function(f) {
-  if(hasResponse(f)) {
+  if (hasResponse(f)) {
     update(f, NULL ~ .)
   } else {
     f
@@ -114,8 +120,8 @@ dropResponse = function(f) {
 }
 
 dropIntercept = function(f) {
-  if(hasIntercept(f)) {
-    update(f, ~ . + -1)
+  if (hasIntercept(f)) {
+    update(f, ~ .+-1)
   } else {
     f
   }
@@ -126,21 +132,21 @@ dropIntercept = function(f) {
 #' @keywords internal
 dropRE = function(f) {
   reStrings = getREterms(f) %>% as.character
-  if(length(reStrings) == 0) {
+  if (length(reStrings) == 0) {
     f
   } else {
     labs = labels(terms(f))
     reIdx = match(reStrings, labs)
     assert_that(!anyNA(reIdx))
 
-    if(length(reIdx) == length(labs)) {
-      if(hasIntercept(f)) {
-        update(f, ~1)
+    if (length(reIdx) == length(labs)) {
+      if (hasIntercept(f)) {
+        update(f, ~ 1)
       } else {
-        update(f, ~0)
+        update(f, ~ 0)
       }
     } else {
-      newf = drop.terms(terms(f), reIdx, keep.response=hasResponse(f)) %>%
+      newf = drop.terms(terms(f), reIdx, keep.response = hasResponse(f)) %>%
         formula
       environment(newf) = environment(f)
       newf
@@ -154,7 +160,9 @@ dropRE = function(f) {
 #' @keywords internal
 hasCLUSTER = function(f) {
   vars = terms(f) %>% labels()
-  any(startsWith(vars, 'CLUSTER:') | endsWith(vars, ':CLUSTER') | vars == 'CLUSTER') # TODO: what about a:CLUSTER:b?
+  any(startsWith(vars, 'CLUSTER:') |
+        endsWith(vars, ':CLUSTER') |
+        vars == 'CLUSTER') # TODO: what about a:CLUSTER:b?
 }
 
 #' @title Drop CLUSTER-interactive terms
@@ -163,7 +171,8 @@ hasCLUSTER = function(f) {
 dropCLUSTER = function(f) {
   tt = terms(f)
   vars = labels(tt)
-  newvars = vars[!startsWith(vars, 'CLUSTER:') & !endsWith(vars, ':CLUSTER') & vars != 'CLUSTER']
+  newvars = vars[!startsWith(vars, 'CLUSTER:') &
+                   !endsWith(vars, ':CLUSTER') & vars != 'CLUSTER']
 
   if (length(newvars) == 0) {
     if (hasIntercept(f)) {
@@ -173,10 +182,12 @@ dropCLUSTER = function(f) {
       dropIntercept(f)
     }
   } else {
-    reformulate(termlabels=newvars,
-                intercept=attr(tt, 'intercept'),
-                response=getResponse(f),
-                env=environment(f))
+    reformulate(
+      termlabels = newvars,
+      intercept = attr(tt, 'intercept'),
+      response = getResponse(f),
+      env = environment(f)
+    )
   }
 }
 
@@ -186,23 +197,25 @@ dropCLUSTER = function(f) {
 keepCLUSTER = function(f) {
   tt = terms(f)
   vars = labels(tt)
-  vars1 = vars[startsWith(vars, 'CLUSTER:')] %>% substring(first=9)
+  vars1 = vars[startsWith(vars, 'CLUSTER:')] %>% substring(first = 9)
   rmstr = function(x) {
-    substr(x, start=0, stop=nchar(x) - 8)
+    substr(x, start = 0, stop = nchar(x) - 8)
   }
   vars2 = vars[endsWith(vars, ':CLUSTER')] %>% rmstr
 
   if (length(vars1) + length(vars2) == 0) {
     if ('CLUSTER' %in% vars) {
-      update(f, ~1)
+      update(f, ~ 1)
     } else {
       update(f, ~ -1)
     }
   } else {
-    reformulate(termlabels=c(vars1, vars2),
-                intercept='CLUSTER' %in% vars,
-                response=getResponse(f),
-                env=environment(f))
+    reformulate(
+      termlabels = c(vars1, vars2),
+      intercept = 'CLUSTER' %in% vars,
+      response = getResponse(f),
+      env = environment(f)
+    )
   }
 }
 
@@ -213,19 +226,19 @@ keepCLUSTER = function(f) {
 #' @keywords internal
 getSpecialTerms = function(f, special) {
   assert_that(is.scalar(special))
-  tt = terms(f, specials=special)
+  tt = terms(f, specials = special)
 
   vars = attr(tt, 'variables')
   specialIdx = attr(tt, 'specials')[[special]]
 
-  if(length(specialIdx) == 0) {
+  if (length(specialIdx) == 0) {
     return(character())
   }
 
-  vars[specialIdx+1] %>%
+  vars[specialIdx + 1] %>%
     as.list %>%
     lapply('[[', -1) %>%
-    vapply(deparse, FUN.VALUE='')
+    vapply(deparse, FUN.VALUE = '')
 }
 
 #' @title Get special terms as formula
@@ -234,38 +247,42 @@ getSpecialTerms = function(f, special) {
 getSpecialFormula = function(f, special) {
   specialTerms = getSpecialTerms(f, special)
 
-  if(length(specialTerms) == 0) {
-    update(f, ~1)
+  if (length(specialTerms) == 0) {
+    update(f, ~ 1)
   } else {
-    reformulate(specialTerms,
-              response=getResponse(f),
-              intercept=TRUE,
-              env=environment(f))
+    reformulate(
+      specialTerms,
+      response = getResponse(f),
+      intercept = TRUE,
+      env = environment(f)
+    )
   }
 }
 
 dropSpecial = function(f, special) {
   assert_that(is.scalar(special))
-  tt = terms(f, specials=special)
+  tt = terms(f, specials = special)
 
   vars = attr(tt, 'variables')
   specialIdx = attr(tt, 'specials')[[special]]
 
-  if(length(specialIdx) == 0) {
+  if (length(specialIdx) == 0) {
     return(f)
   }
 
-  newTerms = labels(tt)[-(specialIdx-1)]
-  if(length(newTerms) == 0) {
-    if(hasIntercept(f)) {
-      update(f, ~1)
+  newTerms = labels(tt)[-(specialIdx - 1)]
+  if (length(newTerms) == 0) {
+    if (hasIntercept(f)) {
+      update(f, ~ 1)
     } else {
-      update(f, ~0)
+      update(f, ~ 0)
     }
   } else {
-    reformulate(newTerms,
-                response=getResponse(f),
-                intercept=hasIntercept(f),
-                env = environment(f))
+    reformulate(
+      newTerms,
+      response = getResponse(f),
+      intercept = hasIntercept(f),
+      env = environment(f)
+    )
   }
 }

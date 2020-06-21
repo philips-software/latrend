@@ -1,5 +1,5 @@
 #' @include clMethod.R
-setClass('clMethodMixtoolsGMM', contains='clMethod')
+setClass('clMethodMixtoolsGMM', contains = 'clMethod')
 
 #' @export
 #' @importFrom mixtools regmixEM.mixed
@@ -10,15 +10,17 @@ setClass('clMethodMixtoolsGMM', contains='clMethod')
 #'                      time='Time',
 #'                      id='Id', nClusters=3)
 #' @family clMethod implementations
-clMethodMixtoolsGMM = function(formula=Value ~ Time + (1 | Id),
-                               time=getOption('cluslong.time'),
-                               id=getOption('cluslong.id'),
-                               nClusters=2,
-                               ...
-) {
-  .clMethod.call('clMethodMixtoolsGMM', call=match.call.defaults(),
-           defaults=mixtools::regmixEM.mixed,
-           excludeArgs=c('data', 'y', 'x', 'w', 'k', 'addintercept.fixed', 'verb'))
+clMethodMixtoolsGMM = function(formula = Value ~ Time + (1 | Id),
+                               time = getOption('cluslong.time'),
+                               id = getOption('cluslong.id'),
+                               nClusters = 2,
+                               ...) {
+  .clMethod.call(
+    'clMethodMixtoolsGMM',
+    call = match.call.defaults(),
+    defaults = mixtools::regmixEM.mixed,
+    excludeArgs = c('data', 'y', 'x', 'w', 'k', 'addintercept.fixed', 'verb')
+  )
 }
 
 setMethod('getName', signature('clMethodMixtoolsGMM'), function(object) 'growth mixture modeling using mixtools')
@@ -33,7 +35,7 @@ setMethod('preFit', signature('clMethodMixtoolsGMM'), function(method, data, env
   f = formula(method)
   valueColumn = responseVariable(method)
   id = idVariable(method)
-  assert_that(!hasCLUSTER(f), msg='CLUSTER-specific fixed effects are not supported for this method')
+  assert_that(!hasCLUSTER(f), msg = 'CLUSTER-specific fixed effects are not supported for this method')
   e$fixed = dropRE(f)
   reTerms = getREterms(f)
   if (length(reTerms) > 0) {
@@ -46,13 +48,13 @@ setMethod('preFit', signature('clMethodMixtoolsGMM'), function(method, data, env
   e$y = split(data[[valueColumn]], data[[id]])
 
   # Fixed effects
-  W = model.matrix(e$fixed, data=data)
+  W = model.matrix(e$fixed, data = data)
   e$w = as.data.frame(W) %>%
     split(data[[id]]) %>%
     lapply(as.matrix)
 
   # Random effects
-  X = model.matrix(e$random, data=data)
+  X = model.matrix(e$random, data = data)
   e$x = as.data.frame(X) %>%
     split(data[[id]]) %>% #split() outputs a vector for matrix input..
     lapply(as.matrix)
@@ -62,7 +64,7 @@ setMethod('preFit', signature('clMethodMixtoolsGMM'), function(method, data, env
 
 #' @importFrom mixtools regmixEM.mixed
 setMethod('fit', signature('clMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
-  args = as.list(method, args=mixtools::regmixEM.mixed)
+  args = as.list(method, args = mixtools::regmixEM.mixed)
   args$y = envir$y
   args$x = envir$x
   args$w = envir$w
@@ -75,9 +77,11 @@ setMethod('fit', signature('clMethodMixtoolsGMM'), function(method, data, envir,
   model$fixed = envir$fixed
   model$random = envir$random
 
-  new('clModelMixtoolsGMM',
-      method=method,
-      data=data,
-      model=model,
-      clusterNames=make.clusterNames(method$nClusters))
+  new(
+    'clModelMixtoolsGMM',
+    method = method,
+    data = data,
+    model = model,
+    clusterNames = make.clusterNames(method$nClusters)
+  )
 })

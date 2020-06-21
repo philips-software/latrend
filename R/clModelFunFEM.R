@@ -1,35 +1,41 @@
 #' @include clModel.R
-setClass('clModelFunFEM', contains='clModel')
+setClass('clModelFunFEM', contains = 'clModel')
 
 #' @export
-fitted.clModelFunFEM = function(object, clusters=clusterAssignments(object)) {
+fitted.clModelFunFEM = function(object, clusters = clusterAssignments(object)) {
   times = time(object)
-  newdata = data.table(Id=rep(ids(object), each=length(times)),
-                       Time=times) %>%
+  newdata = data.table(Id = rep(ids(object), each = length(times)),
+                       Time = times) %>%
     setnames('Id', idVariable(object)) %>%
     setnames('Time', timeVariable(object))
-  predict(object, newdata=newdata) %>%
+  predict(object, newdata = newdata) %>%
     transformFitted(model = object, clusters)
 }
 
 
 #' @export
 #' @importFrom fda eval.fd
-predict.clModelFunFEM = function(object, newdata=NULL, what='mu', approxFun=approx) {
+predict.clModelFunFEM = function(object,
+                                 newdata = NULL,
+                                 what = 'mu',
+                                 approxFun = approx) {
   assert_that(is.newdata(newdata))
-  assert_that(what == 'mu', msg='only what="mu" is supported')
+  assert_that(what == 'mu', msg = 'only what="mu" is supported')
   assert_that(is.function(approxFun))
 
-  if(is.null(newdata)) {
-    predMat = fitted(object, clusters=NULL)
+  if (is.null(newdata)) {
+    predMat = fitted(object, clusters = NULL)
   } else {
     assert_that(has_name(newdata, timeVariable(object)))
     fdmeans = object@model$fd
     fdmeans$coefs = t(object@model$prms$my)
-    predMat = eval.fd(evalarg=newdata[[timeVariable(object)]], fdobj=fdmeans)
+    predMat = eval.fd(evalarg = newdata[[timeVariable(object)]], fdobj =
+                        fdmeans)
   }
 
-  transformPredict(pred = predMat, model = object, newdata = newdata)
+  transformPredict(pred = predMat,
+                   model = object,
+                   newdata = newdata)
 }
 
 

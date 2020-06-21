@@ -1,5 +1,5 @@
 #' @include clMethod.R
-setClass('clMethodFunFEM', contains='clMatrixMethod')
+setClass('clMethodFunFEM', contains = 'clMatrixMethod')
 
 #' @export
 #' @importFrom funFEM funFEM
@@ -13,16 +13,19 @@ setClass('clMethodFunFEM', contains='clMatrixMethod')
 #'                      id='Id', nClusters=3)
 #' cluslong(method, testLongData)
 #' @family clMethod implementations
-clMethodFunFEM = function(formula=Value ~ 1,
-                          time=getOption('cluslong.time'),
-                          id=getOption('cluslong.id'),
-                          nClusters=2,
-                          basis=function(time) create.bspline.basis(time, nbasis=10, norder=3),
-                          ...
-) {
-  .clMethod.call('clMethodFunFEM', call=match.call.defaults(),
-           defaults=funFEM::funFEM,
-           excludeArgs=c('fd', 'K', 'disp', 'graph'))
+clMethodFunFEM = function(formula = Value ~ 1,
+                          time = getOption('cluslong.time'),
+                          id = getOption('cluslong.id'),
+                          nClusters = 2,
+                          basis = function(time)
+                            create.bspline.basis(time, nbasis = 10, norder = 3),
+                          ...) {
+  .clMethod.call(
+    'clMethodFunFEM',
+    call = match.call.defaults(),
+    defaults = funFEM::funFEM,
+    excludeArgs = c('fd', 'K', 'disp', 'graph')
+  )
 }
 
 setMethod('getName', signature('clMethodFunFEM'), function(object) 'functional subspace clustering with FunFEM')
@@ -41,7 +44,7 @@ setMethod('preFit', signature('clMethodFunFEM'), function(method, data, envir, v
 
 
 setMethod('fit', signature('clMethodFunFEM'), function(method, data, envir, verbose, ...) {
-  args = as.list(method, args=funFEM::funFEM)
+  args = as.list(method, args = funFEM::funFEM)
   args$fd = envir$fd
   args$K = method$nClusters
   args$disp = FALSE
@@ -57,10 +60,11 @@ setMethod('fit', signature('clMethodFunFEM'), function(method, data, envir, verb
   model$basis = envir$basis
   model$fd = envir$fd
 
-  new('clModelFunFEM',
-      method=method,
-      data=data,
-      model=model,
-      clusterNames=make.clusterNames(method$nClusters))
+  new(
+    'clModelFunFEM',
+    method = method,
+    data = data,
+    model = model,
+    clusterNames = make.clusterNames(method$nClusters)
+  )
 })
-

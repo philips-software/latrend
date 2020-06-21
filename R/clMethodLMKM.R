@@ -1,9 +1,9 @@
-setClass('clMethodLMKM', contains='clMethod')
+setClass('clMethodLMKM', contains = 'clMethod')
 
 setValidity('clMethodLMKM', function(object) {
   assert_that(has_clMethod_args(object, formalArgs(clMethodLMKM)))
 
-  if(isArgDefined(object, 'formula')) {
+  if (isArgDefined(object, 'formula')) {
     assert_that(hasSingleResponse(object$formula))
   }
 })
@@ -26,11 +26,13 @@ clMethodLMKM = function(formula = Value ~ Time,
                         id = getOption('cluslong.id'),
                         nClusters = 2,
                         standardize = scale,
-                        ...
-) {
-  .clMethod.call('clMethodLMKM', call=match.call.defaults(),
-           defaults=c(lm, kmeans),
-           excludeArgs=c('x', 'data', 'control', 'centers', 'trace'))
+                        ...) {
+  .clMethod.call(
+    'clMethodLMKM',
+    call = match.call.defaults(),
+    defaults = c(lm, kmeans),
+    excludeArgs = c('x', 'data', 'control', 'centers', 'trace')
+  )
 }
 
 
@@ -41,10 +43,10 @@ setMethod('getShortName', signature('clMethodLMKM'), function(object) 'glmkm')
 
 setMethod('prepareData', signature('clMethodLMKM'), function(method, data, verbose) {
   cat(verbose, 'Representation step...')
-  lmArgs = as.list(method, args=lm)
+  lmArgs = as.list(method, args = lm)
 
   id = idVariable(method)
-  coefdata = data[, do.call(lm, c(lmArgs, data=list(.SD))) %>% coef() %>% as.list(), keyby = c(id)]
+  coefdata = data[, do.call(lm, c(lmArgs, data = list(.SD))) %>% coef() %>% as.list(), keyby = c(id)]
   # construct the coefficient matrix
   coefmat = subset(coefdata, select = -1) %>% as.matrix()
   assert_that(nrow(coefmat) == uniqueN(data[[id]]))
@@ -57,12 +59,16 @@ setMethod('prepareData', signature('clMethodLMKM'), function(method, data, verbo
 
 setMethod('fit', signature('clMethodLMKM'), function(method, data, envir, verbose, ...) {
   cat(verbose, 'Cluster step...')
-  km = kmeans(envir$x, centers=method$nClusters, trace=canShow(verbose, 'fine'))
+  km = kmeans(envir$x,
+              centers = method$nClusters,
+              trace = canShow(verbose, 'fine'))
 
-  new('clModelLMKM',
-      method=method,
-      data=data,
-      model=km,
-      coefNames=colnames(envir$x),
-      clusterNames=make.clusterNames(method$nClusters))
+  new(
+    'clModelLMKM',
+    method = method,
+    data = data,
+    model = km,
+    coefNames = colnames(envir$x),
+    clusterNames = make.clusterNames(method$nClusters)
+  )
 })

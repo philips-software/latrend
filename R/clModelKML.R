@@ -1,23 +1,28 @@
 #' @include clApproxModel.R
-setClass('clModelKML', contains='clApproxModel')
+setClass('clModelKML', contains = 'clApproxModel')
 
 #. clusterTrajectories ####
 setMethod('clusterTrajectories', signature('clModelKML'), function(object, at, what, ...) {
-  if(is.null(at)) {
-    trajMat = calculTrajMean(traj=object@model@traj,
-                             clust=getClusters(object@model, nbCluster=nClusters(object)),
-                             centerMethod=getClMethod(object)$centerMethod)
+  if (is.null(at)) {
+    trajMat = calculTrajMean(
+      traj = object@model@traj,
+      clust = getClusters(object@model, nbCluster =
+                            nClusters(object)),
+      centerMethod = getClMethod(object)$centerMethod
+    )
 
-    if(!is.matrix(trajMat)) {
-      trajMat = matrix(trajMat, nrow=1)
+    if (!is.matrix(trajMat)) {
+      trajMat = matrix(trajMat, nrow = 1)
       rownames(trajMat) = clusterNames(object)
     }
 
-    meltRepeatedMeasures(trajMat,
-                         times=time(object),
-                         id='Cluster',
-                         time=timeVariable(object),
-                         response=responseVariable(object))
+    meltRepeatedMeasures(
+      trajMat,
+      times = time(object),
+      id = 'Cluster',
+      time = timeVariable(object),
+      response = responseVariable(object)
+    )
   } else {
     callNextMethod()
   }
@@ -46,8 +51,8 @@ logLik.clModelKML = function(object) {
 
 #. postprob ####
 setMethod('postprob', signature('clModelKML'), function(object) {
-  if(nClusters(object) == 1) {
-    pp = matrix(1, nrow=nIds(object), ncol=1)
+  if (nClusters(object) == 1) {
+    pp = matrix(1, nrow = nIds(object), ncol = 1)
   } else {
     pp = getKMLPartition(object)@postProba
   }

@@ -1,18 +1,19 @@
 #' @include clMethod.R
-setClass('clMethodLcmmGMM', contains='clMethod')
+setClass('clMethodLcmmGMM', contains = 'clMethod')
 
 setValidity('clMethodLcmmGMM', function(object) {
-  if(isArgDefined(object, 'formula')) {
+  if (isArgDefined(object, 'formula')) {
     f = formula(object)
     assert_that(hasSingleResponse(object$formula))
 
     reTerms = getREterms(f)
-    assert_that(length(reTerms) == 1, msg='formula should contain one random-effects component')
-    assert_that(getREGroupName(reTerms[[1]]) %in% c(object$id, 'ID'), msg='Group variable in random-effects component should match the id argument, or equal "ID"')
+    assert_that(length(reTerms) == 1, msg = 'formula should contain one random-effects component')
+    assert_that(getREGroupName(reTerms[[1]]) %in% c(object$id, 'ID'), msg =
+                  'Group variable in random-effects component should match the id argument, or equal "ID"')
 
   }
 
-  if(isArgDefined(object, 'formula.mb')) {
+  if (isArgDefined(object, 'formula.mb')) {
     assert_that(!hasResponse(formula(object, 'mb')))
   }
 })
@@ -35,16 +36,29 @@ setValidity('clMethodLcmmGMM', function(object) {
 #' gmm = cluslong(method, data=testLongData)
 #' summary(gmm)
 #' @family clMethod implementations
-clMethodLcmmGMM = function(formula=Value ~ 1 + CLUSTER + (1 | ID),
-                       formula.mb=~1,
-                       time=getOption('cluslong.time'),
-                       id=getOption('cluslong.id'),
-                       nClusters=2,
-                       ...
-) {
-  .clMethod.call('clMethodLcmmGMM', call=match.call.defaults(),
-           defaults=lcmm::lcmm,
-           excludeArgs=c('data', 'fixed', 'random', 'mixture', 'subject', 'classmb', 'returndata', 'ng', 'verbose', 'subset'))
+clMethodLcmmGMM = function(formula = Value ~ 1 + CLUSTER + (1 | ID),
+                           formula.mb =  ~ 1,
+                           time = getOption('cluslong.time'),
+                           id = getOption('cluslong.id'),
+                           nClusters = 2,
+                           ...) {
+  .clMethod.call(
+    'clMethodLcmmGMM',
+    call = match.call.defaults(),
+    defaults = lcmm::lcmm,
+    excludeArgs = c(
+      'data',
+      'fixed',
+      'random',
+      'mixture',
+      'subject',
+      'classmb',
+      'returndata',
+      'ng',
+      'verbose',
+      'subset'
+    )
+  )
 }
 
 
@@ -68,11 +82,15 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
   vars = terms(f) %>% labels
   e$fixed = dropRE(f) %>% dropCLUSTER
   e$mixture = dropResponse(f) %>% dropRE %>% keepCLUSTER
-  if (length(getCovariates(e$mixture)) == 0 && !hasIntercept(e$mixture)) {
+  if (length(getCovariates(e$mixture)) == 0 &&
+      !hasIntercept(e$mixture)) {
     if (method$nClusters > 1) {
-      warning.Verbose(verbose, 'no cluster-specific terms specified in formula. Defaulting to intercept.')
+      warning.Verbose(
+        verbose,
+        'no cluster-specific terms specified in formula. Defaulting to intercept.'
+      )
     }
-    e$mixture = as.formula('~1', env=environment(e$mixture))
+    e$mixture = as.formula('~1', env = environment(e$mixture))
   }
 
   reTerms = getREterms(f)
@@ -80,12 +98,12 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
     e$random = reTerms[[1]] %>% REtermAsFormula
   }
 
-  cat(verbose, sprintf('\tfixed: %s', deparse(e$fixed)), level=verboseLevels$finest)
-  cat(verbose, sprintf('\tmixture: %s', deparse(e$mixture)), level=verboseLevels$finest)
-  cat(verbose, sprintf('\trandom: %s', deparse(e$random)), level=verboseLevels$finest)
+  cat(verbose, sprintf('\tfixed: %s', deparse(e$fixed)), level = verboseLevels$finest)
+  cat(verbose, sprintf('\tmixture: %s', deparse(e$mixture)), level = verboseLevels$finest)
+  cat(verbose, sprintf('\trandom: %s', deparse(e$random)), level = verboseLevels$finest)
 
   # drop intercept from formula.mb
-  e$formula.mb = formula(method, what='mb') %>% dropIntercept
+  e$formula.mb = formula(method, what = 'mb') %>% dropIntercept
 
   return(e)
 }
@@ -93,7 +111,7 @@ setMethod('preFit', signature('clMethodLcmmGMM'), gmm_prepare)
 
 ##
 gmm_fit = function(method, data, envir, verbose, ...) {
-  args = as.list(method, args=lcmm::lcmm)
+  args = as.list(method, args = lcmm::lcmm)
   args$data = as.data.frame(envir$data)
   args$fixed = envir$fixed
   if (method$nClusters > 1) {
@@ -108,7 +126,7 @@ gmm_fit = function(method, data, envir, verbose, ...) {
   args$verbose = envir$verbose
   args$returndata = TRUE
 
-  if(method$nClusters == 1 || !hasCovariates(args$classmb)) {
+  if (method$nClusters == 1 || !hasCovariates(args$classmb)) {
     # classmb is not allowed to be specified for ng=1
     args$classmb = NULL
   }
@@ -126,9 +144,11 @@ gmm_fit = function(method, data, envir, verbose, ...) {
 setMethod('fit', signature('clMethodLcmmGMM'), function(method, data, envir, verbose, ...) {
   model = gmm_fit(method, data, envir, verbose, ...)
 
-  new('clModelLcmmGMM',
-      method=method,
-      data=data,
-      model=model,
-      clusterNames=make.clusterNames(method$nClusters))
+  new(
+    'clModelLcmmGMM',
+    method = method,
+    data = data,
+    model = model,
+    clusterNames = make.clusterNames(method$nClusters)
+  )
 })

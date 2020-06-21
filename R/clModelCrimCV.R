@@ -1,5 +1,5 @@
 #' @include clModel.R
-setClass('clModelCrimCV', contains='clModel')
+setClass('clModelCrimCV', contains = 'clModel')
 
 
 setMethod('postprob', signature('clModelCrimCV'), function(object) {
@@ -10,46 +10,56 @@ setMethod('postprob', signature('clModelCrimCV'), function(object) {
 
 
 #' @export
-predict.clModelCrimCV = function(object, newdata=NULL, what='mean') {
+predict.clModelCrimCV = function(object,
+                                 newdata = NULL,
+                                 what = 'mean') {
   assert_that(is.newdata(newdata))
   assert_that(what %in% c('mu', 'nu', 'mean'))
 
   # compute cluster trajectories
-  if(is.null(newdata)) {
+  if (is.null(newdata)) {
     newdata = model.data(object)
   }
   assert_that(has_name(newdata, timeVariable(object)))
   newtime = (newdata[[timeVariable(object)]] - object@model$minTime) / object@model$durTime
 
-  X = bs(x = newtime,
-         degree = getClMethod(object)$dpolyp,
-         intercept = TRUE,
-         Boundary.knots = c(0, 1))
+  X = bs(
+    x = newtime,
+    degree = getClMethod(object)$dpolyp,
+    intercept = TRUE,
+    Boundary.knots = c(0, 1)
+  )
   Xmat = X %*% object@model$beta
   lambdaMat = exp(Xmat)
 
-  if(hasName(object@model, 'tau')) {
+  if (hasName(object@model, 'tau')) {
     nuMat = exp(-object@model$tau * t(Xmat)) %>% t
   } else {
-    Zmat = bs(x = newtime,
-              degree = getClMethod(object)$dpolyl,
-              intercept = TRUE,
-              Boundary.knots = c(0, 1))
+    Zmat = bs(
+      x = newtime,
+      degree = getClMethod(object)$dpolyl,
+      intercept = TRUE,
+      Boundary.knots = c(0, 1)
+    )
     nuMat = exp(Zmat %*% object@model$gamma)
   }
   nuMat = nuMat / (1 + nuMat)
 
   predMat = switch(what,
-                  mu=lambdaMat,
-                  nu=nuMat,
-                  mean=(1 - nuMat) * lambdaMat)
+                   mu = lambdaMat,
+                   nu = nuMat,
+                   mean = (1 - nuMat) * lambdaMat)
 
-  transformPredict(pred = predMat, model = object, newdata = newdata)
+  transformPredict(pred = predMat,
+                   model = object,
+                   newdata = newdata)
 }
 
 
-fitted.clModelCrimCV = function(object, clusters=clusterAssignments(object), what='mean') {
-  predict(object, newdata=NULL, what=what) %>%
+fitted.clModelCrimCV = function(object,
+                                clusters = clusterAssignments(object),
+                                what = 'mean') {
+  predict(object, newdata = NULL, what = what) %>%
     transformFitted(model = object, clusters = clusters)
 }
 
@@ -70,9 +80,9 @@ coef.clModelCrimCV = function(object) {
   colnames(betaMat) = clusterNames(object)
   rownames(betaMat) = paste0('beta', seq_len(nrow(betaMat)) - 1)
 
-  if(hasName(object@model, 'tau')) {
+  if (hasName(object@model, 'tau')) {
     tau = object@model$tau
-    tauMat = matrix(tau, nrow=length(tau), ncol=nClusters(object))
+    tauMat = matrix(tau, nrow = length(tau), ncol = nClusters(object))
     rownames(tauMat) = paste0('tau', seq_along(tau))
     coefMat = rbind(betaMat, tauMat)
   } else {

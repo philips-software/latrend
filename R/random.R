@@ -1,5 +1,5 @@
-localRNG = function(seed=NULL, expr) {
-  if(is.null(seed)) {
+localRNG = function(seed = NULL, expr) {
+  if (is.null(seed)) {
     force(expr)
     return(invisible())
   } else {

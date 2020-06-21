@@ -1,15 +1,19 @@
 #' @include clModel.R
-setClassUnion('functionOrNULL', members=c('function', 'NULL'))
-.clModelCustom = setClass('clModelCustom',
-         representation(clusterAssignments='integer',
-                        clusterTrajectories='data.frame',
-                        trajectories='data.frame',
-                        converged='numeric',
-                        postprob='matrix',
-                        name='character',
-                        predict='functionOrNULL',
-                        predictPostprob='functionOrNULL'),
-         contains='clModel')
+setClassUnion('functionOrNULL', members = c('function', 'NULL'))
+.clModelCustom = setClass(
+  'clModelCustom',
+  representation(
+    clusterAssignments = 'integer',
+    clusterTrajectories = 'data.frame',
+    trajectories = 'data.frame',
+    converged = 'numeric',
+    postprob = 'matrix',
+    name = 'character',
+    predict = 'functionOrNULL',
+    predictPostprob = 'functionOrNULL'
+  ),
+  contains = 'clModel'
+)
 
 #' @export
 #' @title Specify a model based on a pre-computed result.
@@ -26,20 +30,20 @@ setClassUnion('functionOrNULL', members=c('function', 'NULL'))
 #' @param predictPostprob Predict function for the posterior probability.
 #' @param method The method used to create this clModelCustom instance. Optional.
 clModelCustom = function(data,
-                         clusterAssignments=NULL,
-                         clusterTrajectories=mean,
-                         trajectories=data,
-                         response=getOption('cluslong.response'),
-                         time=getOption('cluslong.time'),
-                         id=getOption('cluslong.id'),
-                         clusterNames=NULL,
-                         converged=TRUE,
-                         postprob=NULL,
-                         model=NULL,
-                         name='custom',
-                         predict=NULL,
-                         predictPostprob=NULL,
-                         method=new('clMethod')) {
+                         clusterAssignments = NULL,
+                         clusterTrajectories = mean,
+                         trajectories = data,
+                         response = getOption('cluslong.response'),
+                         time = getOption('cluslong.time'),
+                         id = getOption('cluslong.id'),
+                         clusterNames = NULL,
+                         converged = TRUE,
+                         postprob = NULL,
+                         model = NULL,
+                         name = 'custom',
+                         predict = NULL,
+                         predictPostprob = NULL,
+                         method = new('clMethod')) {
   call = match.call()
 
   # Data
@@ -53,7 +57,7 @@ clModelCustom = function(data,
   times = unique(data[[time]]) %>% sort
 
   # postprob
-  if(!is.null(postprob)) {
+  if (!is.null(postprob)) {
     assert_that(is.matrix(postprob))
     assert_that(nrow(postprob) == nIds)
     assert_that(!anyNA(postprob))
@@ -63,18 +67,21 @@ clModelCustom = function(data,
   }
 
   # Cluster assignments
-  if(is.null(clusterAssignments)) {
-    assert_that(!is.null(postprob), msg='postprob must be specified when clusterAssignments is null')
+  if (is.null(clusterAssignments)) {
+    assert_that(!is.null(postprob), msg = 'postprob must be specified when clusterAssignments is null')
     clusterAssignments = apply(postprob, 1, which.max)
     nClusters = ncol(postprob)
-    if(is.null(clusterNames)) {
+    if (is.null(clusterNames)) {
       clusterNames = colnames(postprob)
     }
   } else {
-    assert_that(is.factor(clusterAssignments) || vapply(clusterAssignments, is.count, FUN.VALUE=FALSE))
+    assert_that(
+      is.factor(clusterAssignments) ||
+        vapply(clusterAssignments, is.count, FUN.VALUE = FALSE)
+    )
     assert_that(!anyNA(clusterAssignments))
     assert_that(length(clusterAssignments) == nIds)
-    if(is.null(clusterNames) && is.factor(clusterAssignments)) {
+    if (is.null(clusterNames) && is.factor(clusterAssignments)) {
       clusterNames = levels(clusterAssignments)
     }
     clusterAssignments = as.integer(clusterAssignments)
@@ -83,15 +90,15 @@ clModelCustom = function(data,
   assert_that(nClusters >= 1)
 
   # postprob generation
-  if(is.null(postprob)) {
-    postprob = matrix(0, nrow=nIds, ncol=nClusters)
+  if (is.null(postprob)) {
+    postprob = matrix(0, nrow = nIds, ncol = nClusters)
     idxMat = cbind(1:nIds, clusterAssignments)
     postprob[idxMat] = 1
     colnames(postprob) = clusterNames
   }
 
   # Cluster names
-  if(is.null(clusterNames)) {
+  if (is.null(clusterNames)) {
     clusterNames = make.clusterNames(nClusters)
   }
   assert_that(is.character(clusterNames))
@@ -101,13 +108,14 @@ clModelCustom = function(data,
   assert_that(is.null(trajectories) || is.data.frame(trajectories))
 
   # Cluster trajectories
-  assert_that(is.data.frame(clusterTrajectories) || is.function(clusterTrajectories))
-  if(is.function(clusterTrajectories)) {
+  assert_that(is.data.frame(clusterTrajectories) ||
+                is.function(clusterTrajectories))
+  if (is.function(clusterTrajectories)) {
     # compute cluster trajectories
     center = clusterTrajectories
     rowClusters = clusterAssignments[rleidv(data[[id]])]
     clusterTrajectories = as.data.table(data) %>%
-      .[, center(get(response)), by=.(rowClusters, get(time))] %>%
+      .[, center(get(response)), by = .(rowClusters, get(time))] %>%
       setnames(c('Cluster', time, response))
   }
   assert_that(has_name(clusterTrajectories, 'Cluster'))
@@ -116,29 +124,32 @@ clModelCustom = function(data,
 
   # Converged
   assert_that(is.scalar(converged))
-  assert_that(is.logical(converged) || is.numeric(converged) || is.integer(converged))
+  assert_that(is.logical(converged) ||
+                is.numeric(converged) || is.integer(converged))
   assert_that(is.finite(converged))
 
   # Predict
   assert_that(is.null(predict) || is.function(predict))
-  assert_that(is.null(predictPostprob) || is.function(predictPostprob))
+  assert_that(is.null(predictPostprob) ||
+                is.function(predictPostprob))
 
   # Create object
   object = .clModelCustom(
-               call=call,
-               method=method,
-               data=data,
-               response=response,
-               time=time,
-               id=id,
-               clusterNames=clusterNames,
-               clusterAssignments=clusterAssignments,
-               clusterTrajectories=clusterTrajectories,
-               converged=as.numeric(converged),
-               name=name,
-               postprob=postprob,
-               predict=predict,
-               predictPostprob=predictPostprob)
+    call = call,
+    method = method,
+    data = data,
+    response = response,
+    time = time,
+    id = id,
+    clusterNames = clusterNames,
+    clusterAssignments = clusterAssignments,
+    clusterTrajectories = clusterTrajectories,
+    converged = as.numeric(converged),
+    name = name,
+    postprob = postprob,
+    predict = predict,
+    predictPostprob = predictPostprob
+  )
   return(object)
 }
 
@@ -147,11 +158,14 @@ is.clModelCustom = function(object) {
   is.clModel(object) && is(object, 'clModelCustom')
 }
 
-setMethod('getName', signature('clModelCustom'), function(object) object@name)
+setMethod('getName', signature('clModelCustom'), function(object)
+  object@name)
 
-setMethod('getShortName', signature('clModelCustom'), function(object) 'custom')
+setMethod('getShortName', signature('clModelCustom'), function(object)
+  'custom')
 
-setMethod('converged', signature('clModelCustom'), function(object) object@converged)
+setMethod('converged', signature('clModelCustom'), function(object)
+  object@converged)
 
 setMethod('postprob', signature('clModelCustom'), function(object) {
   pp = object@postprob
@@ -160,8 +174,11 @@ setMethod('postprob', signature('clModelCustom'), function(object) {
 })
 
 
-predict.clModelCustom = function(object, newdata=NULL, what='mu', ...) {
-  if(is.null(object@predict)) {
+predict.clModelCustom = function(object,
+                                 newdata = NULL,
+                                 what = 'mu',
+                                 ...) {
+  if (is.null(object@predict)) {
     NULL
   } else {
     object@predict(object, newdata, what, ...)
@@ -170,7 +187,8 @@ predict.clModelCustom = function(object, newdata=NULL, what='mu', ...) {
 
 
 #. predictPostprob ####
-setMethod('predictPostprob', signature('clModelCustom'), function(object, newdata=NULL, ...) {
+setMethod('predictPostprob', signature('clModelCustom'), function(object, newdata =
+                                                                    NULL, ...) {
   pp = object@predictPostprob(object, newdata, ...)
 
   assert_that(is.matrix(pp))
@@ -186,11 +204,13 @@ setMethod('predictPostprob', signature('clModelCustom'), function(object, newdat
 
 
 setMethod('clusterTrajectories', signature('clModelCustom'), function(object, at, what, ...) {
-  if(all(at %in% time(object))) {
+  if (all(at %in% time(object))) {
     dt_traj = object@clusterTrajectories %>%
       as.data.table %>%
-      .[, Cluster := factor(Cluster, levels=1:nClusters(object), labels=clusterNames(object))]
-  } else if(is.null(object@predict)) {
+      .[, Cluster := factor(Cluster,
+                            levels = 1:nClusters(object),
+                            labels = clusterNames(object))]
+  } else if (is.null(object@predict)) {
     stop('predict() not specified for this model')
   } else {
     dt_traj = object@predict(object, at, ...)
@@ -199,7 +219,7 @@ setMethod('clusterTrajectories', signature('clModelCustom'), function(object, at
 })
 
 setMethod('trajectories', signature('clModelCustom'), function(object, at, what, ...) {
-  if(all(at %in% time(object))) {
+  if (all(at %in% time(object))) {
     object@trajectories
   } else {
     stop('not supported')

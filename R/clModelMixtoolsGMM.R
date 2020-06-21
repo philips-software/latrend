@@ -1,5 +1,5 @@
 #' @include clModel.R
-setClass('clModelMixtoolsGMM', contains='clModel')
+setClass('clModelMixtoolsGMM', contains = 'clModel')
 
 
 setMethod('postprob', signature('clModelMixtoolsGMM'), function(object) {
@@ -11,13 +11,15 @@ setMethod('postprob', signature('clModelMixtoolsGMM'), function(object) {
 
 #' @export
 #' @importFrom plyr alply
-predict.clModelMixtoolsGMM = function(object, newdata=NULL, what='mu') {
+predict.clModelMixtoolsGMM = function(object,
+                                      newdata = NULL,
+                                      what = 'mu') {
   assert_that(is.newdata(newdata),
               what %in% c('mu'))
 
-  if(is.null(newdata)) {
+  if (is.null(newdata)) {
     newdata = model.data(object) %>%
-      subset(select=setdiff(names(.), 'Cluster'))
+      subset(select = setdiff(names(.), 'Cluster'))
   }
   assert_that(has_name(newdata, timeVariable(object)))
 
@@ -26,28 +28,32 @@ predict.clModelMixtoolsGMM = function(object, newdata=NULL, what='mu') {
   random = object@model$random
   betaMat = object@model$mu
 
-  Xfix = model.matrix(fixed, data=newdata)
+  Xfix = model.matrix(fixed, data = newdata)
   predFix = as.vector(Xfix %*% object@model$alpha)
 
   # compute fitted per cluster
-  Xran = model.matrix(random, data=newdata)
-  if(hasName(newdata, idVar)) {
+  Xran = model.matrix(random, data = newdata)
+  if (hasName(newdata, idVar)) {
     # patient-specific prediction
     XidList = split(Xran, newdata[[idVar]]) %>%
-      lapply(matrix, ncol=ncol(Xran))
+      lapply(matrix, ncol = ncol(Xran))
     ranefList = ranef.clModelMixtoolsGMM(object) %>% asplit(2)
-    assert_that(all(names(XidList) %in% names(ranefList)), msg='unknown Ids specified in newdata. prediction for new Ids is not supported')
+    assert_that(all(names(XidList) %in% names(ranefList)), msg = 'unknown Ids specified in newdata. prediction for new Ids is not supported')
 
-    predMat = mapply('%*%', XidList, ranefList[names(XidList)], SIMPLIFY=FALSE) %>%
+    predMat = mapply('%*%', XidList, ranefList[names(XidList)], SIMPLIFY =
+                       FALSE) %>%
       do.call(rbind, .) + predFix
     assert_that(nrow(predMat) == nrow(newdata))
   } else {
-    fitRan = apply(betaMat, 2, function(beta) Xran %*% beta) %>%
+    fitRan = apply(betaMat, 2, function(beta)
+      Xran %*% beta) %>%
       set_colnames(clusterNames(object))
     predMat = fitRan + predFix
   }
 
-  transformPredict(pred = predMat, model = object, newdata = newdata)
+  transformPredict(pred = predMat,
+                   model = object,
+                   newdata = newdata)
 }
 
 
@@ -63,11 +69,15 @@ logLik.clModelMixtoolsGMM = function(object) {
 
 #' @export
 coef.clModelMixtoolsGMM = function(object) {
-  return(list(alpha=object@model$alpha,
-              beta=object@model$mu,
-              cov=object@model$R,
-              rho=object@model$rho,
-              sigma=object@model$sigma))
+  return(
+    list(
+      alpha = object@model$alpha,
+      beta = object@model$mu,
+      cov = object@model$R,
+      rho = object@model$rho,
+      sigma = object@model$sigma
+    )
+  )
 }
 
 #' @export
@@ -84,7 +94,9 @@ ranef.clModelMixtoolsGMM = function(object) {
   assert_that(nrow(ranefMat) == nBeta * nIds(object))
   assert_that(ncol(ranefMat) == nClusters(object))
 
-  array(ranefMat,
-            dim=c(nBeta, nIds(object), nClusters(object)),
-            dimnames=list(betaNames, ids(object), clusterNames(object)))
+  array(
+    ranefMat,
+    dim = c(nBeta, nIds(object), nClusters(object)),
+    dimnames = list(betaNames, ids(object), clusterNames(object))
+  )
 }

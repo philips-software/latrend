@@ -1,10 +1,10 @@
 #' @include clMethodTwoStep.R
-setClass('clMethodGCKM', contains='clMethod')
+setClass('clMethodGCKM', contains = 'clMethod')
 
 setValidity('clMethodGCKM', function(object) {
   assert_that(has_clMethod_args(object, formalArgs(clMethodGCKM)))
 
-  if(isArgDefined(object, 'formula')) {
+  if (isArgDefined(object, 'formula')) {
     assert_that(hasSingleResponse(object$formula))
   }
 })
@@ -24,17 +24,18 @@ setValidity('clMethodGCKM', function(object) {
 #'                      time='Assessment',
 #'                      id='Subject', nClusters=3)
 #' @family clMethod implementations
-clMethodGCKM = function(formula=Value ~ 1,
-                        time=getOption('cluslong.time'),
-                        id=getOption('cluslong.id'),
-                        nClusters=2,
-                        center=meanNA,
-                        ...
-
-) {
-  .clMethod.call('clMethodGCKM', call=match.call.defaults(),
-           defaults=c(lmer, kmeans),
-           excludeArgs=c('data', 'centers', 'trace'))
+clMethodGCKM = function(formula = Value ~ 1,
+                        time = getOption('cluslong.time'),
+                        id = getOption('cluslong.id'),
+                        nClusters = 2,
+                        center = meanNA,
+                        ...) {
+  .clMethod.call(
+    'clMethodGCKM',
+    call = match.call.defaults(),
+    defaults = c(lmer, kmeans),
+    excludeArgs = c('data', 'centers', 'trace')
+  )
 }
 
 setMethod('getName', signature('clMethodGCKM'), function(object) 'two-step using LME and k-means')
@@ -47,17 +48,24 @@ clMethodGCKM_as_twostep = function(method) {
   call$representationStep = representationStepGCKM
   call$clusterStep = clusterStepGCKM
   call$standardize = scale
-  .clMethod.call('clMethodTwoStep', call=call)
+  .clMethod.call('clMethodTwoStep', call = call)
 }
 
 setMethod('preFit', signature('clMethodGCKM'), function(method, data, envir, verbose) {
   method = clMethodGCKM_as_twostep(method)
-  preFit(method, data=data, envir=envir, verbose=verbose)
+  preFit(method,
+         data = data,
+         envir = envir,
+         verbose = verbose)
 })
 
 setMethod('fit', signature('clMethodGCKM'), function(method, data, envir, verbose, ...) {
   method = clMethodGCKM_as_twostep(method)
-  fit(method, data=data, envir=envir, verbose=verbose, ...)
+  fit(method,
+      data = data,
+      envir = envir,
+      verbose = verbose,
+      ...)
 })
 
 
@@ -68,9 +76,16 @@ representationStepGCKM = function(method, data, verbose, ...) {
   randomStr = dropResponse(method$formula) %>%
     deparse %>%
     substring(2)
-  lmmFormula = paste0(fixedStr, ' + (', randomStr, '|', idVariable(method), ')') %>% as.formula(env=NULL)
+  lmmFormula = paste0(fixedStr, ' + (', randomStr, '|', idVariable(method), ')') %>% as.formula(env =
+                                                                                                  NULL)
 
-  lmm = lmer(formula=lmmFormula, data=data, REML=method$REML, control=method$control, verbose=canShow(verbose, 'fine'))
+  lmm = lmer(
+    formula = lmmFormula,
+    data = data,
+    REML = method$REML,
+    control = method$control,
+    verbose = canShow(verbose, 'fine')
+  )
 
   e = new.env()
   e$model = lmm
@@ -80,11 +95,16 @@ representationStepGCKM = function(method, data, verbose, ...) {
 
 clusterStepGCKM = function(method, data, repMat, envir, verbose, ...) {
   cat(verbose, 'Cluster step...')
-  km = kmeans(repMat, centers=method$nClusters, trace=canShow(verbose, 'fine'))
+  km = kmeans(repMat,
+              centers = method$nClusters,
+              trace = canShow(verbose, 'fine'))
 
-  clModelCustom(method=method,
-                data=data, clusterAssignments=km$cluster,
-                clusterTrajectories=method$center,
-                model=km,
-                converged=!km$ifault)
+  clModelCustom(
+    method = method,
+    data = data,
+    clusterAssignments = km$cluster,
+    clusterTrajectories = method$center,
+    model = km,
+    converged = !km$ifault
+  )
 }

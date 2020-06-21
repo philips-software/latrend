@@ -1,17 +1,17 @@
 #' @include clMethod.R
 #' @include clMethodLcmmGMM.R
-setClass('clMethodLcmmGBTM', contains='clMethod')
+setClass('clMethodLcmmGBTM', contains = 'clMethod')
 
 setValidity('clMethodLcmmGBTM', function(object) {
-  if(isArgDefined(object, 'formula')) {
+  if (isArgDefined(object, 'formula')) {
     f = formula(object)
     assert_that(hasSingleResponse(object$formula))
 
     reTerms = getREterms(f)
-    assert_that(length(getREterms(f)) == 0, msg='formula cannot contain random effects. Consider using clMethodLcmmGMM.')
+    assert_that(length(getREterms(f)) == 0, msg = 'formula cannot contain random effects. Consider using clMethodLcmmGMM.')
   }
 
-  if(isArgDefined(object, 'formula.mb')) {
+  if (isArgDefined(object, 'formula.mb')) {
     assert_that(!hasResponse(formula(object, 'mb')))
   }
 })
@@ -32,16 +32,28 @@ setValidity('clMethodLcmmGBTM', function(object) {
 #' gmm = cluslong(method, data=testLongData)
 #' summary(gmm)
 #' @family clMethod implementations
-clMethodLcmmGBTM = function(formula=Value ~ 1 + CLUSTER,
-                       formula.mb=~1,
-                       time=getOption('cluslong.time'),
-                       id=getOption('cluslong.id'),
-                       nClusters=2,
-                       ...
-) {
-  .clMethod.call('clMethodLcmmGBTM', call=match.call.defaults(),
-           defaults=lcmm::lcmm,
-           excludeArgs=c('data', 'fixed', 'random', 'mixture', 'subject', 'classmb', 'returndata', 'ng', 'verbose'))
+clMethodLcmmGBTM = function(formula = Value ~ 1 + CLUSTER,
+                            formula.mb =  ~ 1,
+                            time = getOption('cluslong.time'),
+                            id = getOption('cluslong.id'),
+                            nClusters = 2,
+                            ...) {
+  .clMethod.call(
+    'clMethodLcmmGBTM',
+    call = match.call.defaults(),
+    defaults = lcmm::lcmm,
+    excludeArgs = c(
+      'data',
+      'fixed',
+      'random',
+      'mixture',
+      'subject',
+      'classmb',
+      'returndata',
+      'ng',
+      'verbose'
+    )
+  )
 }
 
 
@@ -54,9 +66,11 @@ setMethod('preFit', signature('clMethodLcmmGBTM'), gmm_prepare)
 setMethod('fit', signature('clMethodLcmmGBTM'), function(method, data, envir, verbose, ...) {
   model = gmm_fit(method, data, envir, verbose, ...)
 
-  new('clModelLcmmGBTM',
-      method=method,
-      data=data,
-      model=model,
-      clusterNames=make.clusterNames(method$nClusters))
+  new(
+    'clModelLcmmGBTM',
+    method = method,
+    data = data,
+    model = model,
+    clusterNames = make.clusterNames(method$nClusters)
+  )
 })

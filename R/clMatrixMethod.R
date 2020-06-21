@@ -3,7 +3,7 @@
 #' @name clMatrixMethod
 #' @param id Id to use for the rownames of the matrix.
 #' @keywords internal
-setClass('clMatrixMethod', contains='clMethod')
+setClass('clMatrixMethod', contains = 'clMethod')
 
 setMethod('getName', signature('clMatrixMethod'), function(object) 'repeated measures model')
 
@@ -20,10 +20,17 @@ setMethod('prepareData', signature('clMatrixMethod'), function(method, data, ver
   e$times = sort(unique(data[[timeColumn]]))
 
   # Check data
-  assert_that(uniqueN(data[, .N, by=c(idColumn)]$N) == 1, msg='not all time series are of equal length')
+  assert_that(uniqueN(data[, .N, by = c(idColumn)]$N) == 1, msg = 'not all time series are of equal length')
 
   # Data
-  cat(verbose, 'Transforming data to aligned repeated measures matrix format...', level=verboseLevels$fine)
-  e$dataMat = dcastRepeatedMeasures(data, id=idColumn, time=timeColumn, response=valueColumn)
+  cat(
+    verbose,
+    'Transforming data to aligned repeated measures matrix format...',
+    level = verboseLevels$fine
+  )
+  e$dataMat = dcastRepeatedMeasures(data,
+                                    id = idColumn,
+                                    time = timeColumn,
+                                    response = valueColumn)
   return(e)
 })
