@@ -19,7 +19,7 @@ clMethodFlexmixGBTM = function(formula = Value ~ 1,
                                id = getOption('cluslong.id'),
                                nClusters = 2,
                                ...) {
-  .clMethod.call(
+  clMethod.call(
     'clMethodFlexmixGBTM',
     call = match.call.defaults(),
     defaults = c(flexmix::flexmix, flexmix::FLXMRglm),

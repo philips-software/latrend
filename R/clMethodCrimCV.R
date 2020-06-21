@@ -20,7 +20,7 @@ clMethodCrimCV = function(formula = Value ~ 0,
                           id = getOption('cluslong.id'),
                           nClusters = 2,
                           ...) {
-  .clMethod.call(
+  clMethod.call(
     'clMethodCrimCV',
     call = match.call.defaults(),
     defaults = crimCV::crimCV,

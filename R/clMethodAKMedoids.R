@@ -19,7 +19,7 @@ clMethodAKMedoids = function(response = getOption('cluslong.response'),
                              nClusters = 3,
                              clusterCenter = median,
                              ...) {
-  .clMethod.call(
+  clMethod.call(
     'clMethodAKMedoids',
     call = match.call.defaults(),
     defaults = akmedoids::akmedoids.clust,

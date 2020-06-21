@@ -81,7 +81,7 @@ clMethodMixTVEM = function(formula = Value ~ time(1) - 1,
                            id = getOption('cluslong.id'),
                            nClusters = 2,
                            ...) {
-  .clMethod.call(
+  clMethod.call(
     'clMethodMixTVEM',
     call = match.call.defaults(),
     defaults = TVEMMixNormal,

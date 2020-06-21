@@ -32,7 +32,7 @@ clMethodMclustLLPA = function(response = getOption('cluslong.response'),
                               id = getOption('cluslong.id'),
                               nClusters = 2,
                               ...) {
-  .clMethod.call(
+  clMethod.call(
     'clMethodMclustLLPA',
     call = match.call.defaults(),
     defaults = mclust::Mclust,

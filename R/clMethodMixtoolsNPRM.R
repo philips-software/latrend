@@ -16,7 +16,7 @@ clMethodMixtoolsNPRM = function(formula = Value ~ 0,
                                 id = getOption('cluslong.id'),
                                 nClusters = 2,
                                 ...) {
-  .clMethod.call(
+  clMethod.call(
     'clMethodMixtoolsNPRM',
     call = match.call.defaults(),
     defaults = longclust::longclustEM,

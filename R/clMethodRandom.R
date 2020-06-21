@@ -37,7 +37,7 @@ clMethodRandom = function(alpha = 10,
                           id = getOption('cluslong.id'),
                           nClusters = 2,
                           name = 'random') {
-  .clMethod.call('clMethodRandom', call = match.call.defaults())
+  clMethod.call('clMethodRandom', call = match.call.defaults())
 }
 
 setMethod('getName', signature('clMethodRandom'), function(object) 'random')

@@ -38,7 +38,7 @@ clMethodLcmmGBTM = function(formula = Value ~ 1 + CLUSTER,
                             id = getOption('cluslong.id'),
                             nClusters = 2,
                             ...) {
-  .clMethod.call(
+  clMethod.call(
     'clMethodLcmmGBTM',
     call = match.call.defaults(),
     defaults = lcmm::lcmm,

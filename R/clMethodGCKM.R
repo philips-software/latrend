@@ -30,7 +30,7 @@ clMethodGCKM = function(formula = Value ~ 1,
                         nClusters = 2,
                         center = meanNA,
                         ...) {
-  .clMethod.call(
+  clMethod.call(
     'clMethodGCKM',
     call = match.call.defaults(),
     defaults = c(lmer, kmeans),
@@ -48,7 +48,7 @@ clMethodGCKM_as_twostep = function(method) {
   call$representationStep = representationStepGCKM
   call$clusterStep = clusterStepGCKM
   call$standardize = scale
-  .clMethod.call('clMethodTwoStep', call = call)
+  clMethod.call('clMethodTwoStep', call = call)
 }
 
 setMethod('preFit', signature('clMethodGCKM'), function(method, data, envir, verbose) {

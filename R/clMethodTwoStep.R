@@ -31,7 +31,7 @@ clMethodTwoStep = function(representationStep,
                            time = getOption('cluslong.time'),
                            id = getOption('cluslong.id'),
                            ...) {
-  .clMethod.call('clMethodTwoStep',
+  clMethod.call('clMethodTwoStep',
                  call = match.call.defaults(),
                  excludeArgs = c('verbose'))
 }

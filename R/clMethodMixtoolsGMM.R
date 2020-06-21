@@ -15,7 +15,7 @@ clMethodMixtoolsGMM = function(formula = Value ~ Time + (1 | Id),
                                id = getOption('cluslong.id'),
                                nClusters = 2,
                                ...) {
-  .clMethod.call(
+  clMethod.call(
     'clMethodMixtoolsGMM',
     call = match.call.defaults(),
     defaults = mixtools::regmixEM.mixed,

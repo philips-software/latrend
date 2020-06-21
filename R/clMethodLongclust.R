@@ -18,7 +18,7 @@ clMethodLongclust = function(formula = Value ~ 1,
                              id = getOption('cluslong.id'),
                              nClusters = 2,
                              ...) {
-  .clMethod.call(
+  clMethod.call(
     'clMethodLongclust',
     call = match.call.defaults(),
     defaults = longclust::longclustEM,

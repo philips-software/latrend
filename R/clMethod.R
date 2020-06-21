@@ -114,18 +114,19 @@ setMethod('[[', signature('clMethod'), function(x, i, eval = TRUE, envir =
 })
 
 #' @export
-#' @title Create a clMethod object for an arbitrary class
+#' @title Create a clMethod object of the specified type and arguments
 #' @description Provides a mechanism for creating `clMethod` objects for an arbitrary class.
 #' Note that it is advisable to use the class-specific constructors instead.
 #' @param Class The type of \link{clMethod} class
 #' @param ... Any arguments to assign to the method object.
-.clMethod = function(.class,
+#' @seealso [clMethod.call]
+clMethod = function(.class,
                      ...,
                      .defaults = list(),
                      .excludeArgs = c()) {
   args = list(...)
   do.call(
-    .clMethod.call,
+    clMethod.call,
     list(
       .class = .class,
       args,
@@ -146,14 +147,14 @@ setMethod('[[', signature('clMethod'), function(x, i, eval = TRUE, envir =
 #' @return An object of class `Class` that extends `clMethod`.
 #' @examples
 #' clMethodKML2 = function(formula=Value ~ 0, time='Id', id='Id', nClusters=2, ...) {
-#'   .clMethod.call('clMethodKML', call=stackoverflow::match.call.defaults(),
+#'   clMethod.call('clMethodKML', call=stackoverflow::match.call.defaults(),
 #'     defaults=c(kml::kml, kml::parALGO),
 #'     excludeArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq'))
 #' }
 #' m = clMethodKML2(nClusters=3)
 #' cluslong(m, testLongData)
-#' @family clMethod functions
-.clMethod.call = function(Class,
+#' @seealso [clMethod]
+clMethod.call = function(Class,
                           call,
                           defaults = list(),
                           excludeArgs = c()) {
@@ -654,7 +655,7 @@ print.clMethod = function(object,
   sourceMask = vapply(chrValues, nchar, FUN.VALUE = 0) > width &
     argNames %in% names(object@sourceCalls)
   chrSource = lapply(object@sourceCalls[argNames[sourceMask]], arg2char) %>% unlist()
-  chrValues[sourceMask] = paste('<eval>', chrSource)
+  chrValues[sourceMask] = paste0('`', chrSource, '`')
 
   args = vapply(chrValues, strtrim, width = width, FUN.VALUE = '')
 

@@ -20,7 +20,7 @@ clMethodFunFEM = function(formula = Value ~ 1,
                           basis = function(time)
                             create.bspline.basis(time, nbasis = 10, norder = 3),
                           ...) {
-  .clMethod.call(
+  clMethod.call(
     'clMethodFunFEM',
     call = match.call.defaults(),
     defaults = funFEM::funFEM,

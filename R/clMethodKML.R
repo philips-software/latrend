@@ -19,7 +19,7 @@ clMethodKML = function(response = getOption('cluslong.response'),
                        id = getOption('cluslong.id'),
                        nClusters = 2,
                        ...) {
-  m = .clMethod.call(
+  m = clMethod.call(
     'clMethodKML',
     call = match.call.defaults(),
     defaults = c(kml::kml, kml::parALGO),

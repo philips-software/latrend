@@ -55,7 +55,7 @@ clMethodStratify = function(stratify,
                             time = getOption('cluslong.time'),
                             id = getOption('cluslong.id'),
                             name = 'stratify') {
-  .clMethod.call('clMethodStratify', call = match.call.defaults())
+  clMethod.call('clMethodStratify', call = match.call.defaults())
 }
 
 setMethod('getName', signature('clMethodStratify'), function(object) {

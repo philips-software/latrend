@@ -27,7 +27,7 @@ clMethodLMKM = function(formula = Value ~ Time,
                         nClusters = 2,
                         standardize = scale,
                         ...) {
-  .clMethod.call(
+  clMethod.call(
     'clMethodLMKM',
     call = match.call.defaults(),
     defaults = c(lm, kmeans),
