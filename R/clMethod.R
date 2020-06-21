@@ -107,7 +107,6 @@ setMethod('[[', signature('clMethod'), function(x, i, eval=TRUE, envir=NULL) {
 #' @param ... Any arguments to assign to the method object.
 .clMethod = function(.class, ..., .defaults=list(), .excludeArgs=c()) {
   args = list(...)
-  browser()
   do.call(.clMethod.call, list(.class = .class, args, .defaults = .defaults, .excludeArgs = .excludeArgs))
 }
 

@@ -8,18 +8,17 @@ test_that('new clmethod', {
                                         call=quote(1 + 2 * 3),
                                         name=quote(xvar)))
 
-  mchars = as.character(m)
+  expect_equivalent(m[['NA']], NULL)
+  expect_equivalent(m$`NA`, NULL)
+  expect_equivalent(m$log, TRUE)
+  expect_equivalent(m$int, 3)
+  expect_equivalent(m$num, 2.5)
 
-  expect_equivalent(mchars['NA'], 'NULL')
-  expect_equivalent(mchars['log'], 'TRUE')
-  expect_equivalent(mchars['int'], '3')
-  expect_equivalent(mchars['num'], '2.5')
-
-  expect_equivalent(mchars['char'], '"a"')
-  expect_equivalent(mchars['fac'], 'b')
-  expect_equivalent(mchars['form'], 'A ~ B')
-  expect_equivalent(mchars['call'], '1 + 2 * 3')
-  expect_equivalent(mchars['name'], 'xvar')
+  expect_equivalent(m$char, 'a')
+  expect_equivalent(m$fac, factor('b', levels=c('a', 'b')))
+  expect_equivalent(m$form, A ~ B)
+  expect_equivalent(m$call, 1 + 2 * 3)
+  expect_equivalent(m[['name', eval=FALSE]], quote(xvar))
 })
 
 
@@ -60,34 +59,6 @@ test_that('as.data.frame', {
 
   m2 = .clMethod.call('clMethodTest', call=call('clMethod', vec=LETTERS[1:2]))
   expect_output(print(m2))
-})
-
-test_that('as.character', {
-  .clMethod.call('clMethodTest', call=call('clMethod')) %>%
-    as.character %>%
-    expect_length(0)
-
-  m = .clMethod.call('clMethodTest', call=call('clMethod',
-                                null=NULL, log=TRUE, int=3L, num=2.5, char='a',
-                                fac=factor('b', levels=c('a', 'b')),
-                                form=A~B,
-                                call=quote(1 + 2 * 3),
-                                name=quote(xvar)))
-  as.character(m) %>%
-    expect_length(length(m)) %>%
-    expect_named(names(m)) %T>%
-    {expect_equal(unname(.), c('NULL', 'TRUE', '3', '2.5', '"a"', 'b', 'A ~ B', '1 + 2 * 3', 'xvar'))}
-
-  as.character(m, eval=TRUE) %>%
-    expect_length(length(m)) %>%
-    expect_named(names(m)) %T>%
-    {expect_equal(unname(.), c('NULL', 'TRUE', '3', '2.5', '"a"', 'b', 'A ~ B', '7', 'xvar'))}
-
-  xvar = 2
-  as.character(m, eval=TRUE) %>%
-    expect_length(length(m)) %>%
-    expect_named(names(m)) %T>%
-    {expect_equal(unname(.), c('NULL', 'TRUE', '3', '2.5', '"a"', 'b', 'A ~ B', '7', '2'))}
 })
 
 
