@@ -15,9 +15,6 @@ fitted.clModelFunFEM = function(object, clusters=clusterAssignments(object)) {
 
 #' @export
 #' @importFrom fda eval.fd
-#' @rdname predict.clModel
-#' @inheritParams predict.clModel
-#' @param approxFun The interpolation function to use for time points not in the feature set.
 predict.clModelFunFEM = function(object, newdata=NULL, what='mu', approxFun=approx) {
   assert_that(is.newdata(newdata))
   assert_that(what == 'mu', msg='only what="mu" is supported')

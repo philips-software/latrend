@@ -659,7 +659,9 @@ nobs.clModel = function(object, ...) {
 
 #' @export
 #' @rdname predict.clModel
-#' @title clModel prediction
+#' @title clModel predictions
+#' @description Predicts the expected trajectory observations at the given time for each cluster, unless specified.
+#' @details The default `predict.clModel` implementation.
 #' @param newdata Optional data frame for which to compute the model predictions. If omitted, the model training data is used.
 #' Cluster trajectory predictions are made when ids are not specified. If the clusters are specified under the Cluster column, output is given only for the specified cluster. Otherwise, a matrix is returned with predictions for all clusters.
 #' @param what The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying what='mb'.
@@ -718,8 +720,11 @@ predict.clModel = function(object, newdata=NULL, what='mu', ...) {
 
 # . predictForCluster ####
 #' @export
-#' @rdname predict.clModel
+#' @title clModel prediction for a specific cluster
+#' @description Predicts the expected trajectory observations at the given time under the assumption that the trajectory belongs to the specified cluster.
+#' @inheritParams predict.clModel
 #' @return A `vector` with the predictions per `newdata` observation, or a `data.frame` with the predictions and newdata alongside.
+#' @seealso [predict.clModel]
 #' @family model-specific methods
 setGeneric('predictForCluster', function(object, cluster, newdata, what='mu', ...) standardGeneric('predictForCluster'))
 setMethod('predictForCluster', signature('clModel'), function(object, cluster, newdata, what='mu', ...) {
