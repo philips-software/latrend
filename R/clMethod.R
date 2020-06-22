@@ -254,7 +254,7 @@ as.list.clMethod = function(object,
 
   if (isTRUE(eval)) {
     # full evaluation
-    method = substitute.clMethod(object, envir = envir)
+    method = evaluate.clMethod(object, envir = envir)
   } else {
     method = object
   }
@@ -289,7 +289,7 @@ as.data.frame.clMethod = function(x,
                     'integer',
                     'character',
                     'factor')
-    method = substitute.clMethod(x, classes = evalClasses, envir = envir)
+    method = evaluate.clMethod(x, classes = evalClasses, envir = envir)
   } else {
     method = x
   }
@@ -415,7 +415,7 @@ setGeneric('compose', function(method, ...)
 #' @export
 #' @rdname clMethod-interface
 setMethod('compose', signature('clMethod'), function(method, envir = NULL) {
-  substitute.clMethod(method, try = FALSE, envir = envir)
+  evaluate.clMethod(method, try = FALSE, envir = envir)
 })
 
 
@@ -633,7 +633,7 @@ print.clMethod = function(object,
               is.flag(eval))
   envir = clMethod.env(object, parent.frame(), envir)
   if (isTRUE(eval)) {
-    object = substitute.clMethod(object, envir = envir)
+    object = evaluate.clMethod(object, envir = envir)
   }
 
   arg2char = function(a) {
@@ -666,6 +666,8 @@ print.clMethod = function(object,
   }
 }
 
+#' @importFrom R.utils evaluate
+#' @export
 #' @title Substitute the call arguments for their evaluated values
 #' @description Substitutes the call arguments if they can be evaluated without error.
 #' @inheritParams as.list.clMethod
@@ -674,8 +676,7 @@ print.clMethod = function(object,
 #' @param exclude Arguments to exclude from evaluation.
 #' @return A new `clMethod` object with the substituted arguments.
 #' @family clMethod functions
-#' @keywords internal
-substitute.clMethod = function(object,
+evaluate.clMethod = function(object,
                                classes = 'ANY',
                                try = TRUE,
                                exclude = character(),

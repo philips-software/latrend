@@ -233,7 +233,7 @@ test_that('as.list with two functions', {
 test_that('substitute', {
   xvar = 2
   method = clMethod.call('clMethodTest', call=call('clMethod', a=1, b='a', c=NULL, d=NA, e=quote(xvar)))
-  method2 = substitute.clMethod(method)
+  method2 = evaluate.clMethod(method)
 
   expect_equal(method2[['a', eval=FALSE]], 1)
   expect_null(method2[['c', eval=FALSE]])

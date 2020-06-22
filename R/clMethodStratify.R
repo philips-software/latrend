@@ -77,7 +77,7 @@ setMethod('getShortName', signature('clMethodStratify'), function(object) 'strat
 
 
 setMethod('compose', signature('clMethodStratify'), function(method, envir = NULL) {
-  substitute.clMethod(method,
+  evaluate.clMethod(method,
                       try = FALSE,
                       exclude = 'stratify',
                       envir = envir)
