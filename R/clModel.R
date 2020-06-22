@@ -755,12 +755,13 @@ predict.clModel = function(object,
 
   if (hasName(newdata, 'Cluster')) {
     # predictForCluster with newdata subsets
-    clusnewdata = as.data.table(newdata) %>%
-      split(by = 'Cluster', sorted = TRUE)
+    clusdataList = as.data.table(newdata) %>%
+      split(by = 'Cluster', sorted = TRUE) %>%
+      lapply(function(cdata) cdata[, Cluster := NULL])
   }
   else {
     # predictForCluster with newdata for each cluster
-    clusnewdata = replicate(nClusters(object), newdata, simplify = FALSE)
+    clusdataList = replicate(nClusters(object), newdata, simplify = FALSE)
   }
 
   predList = mapply(function(cname, cdata) {
@@ -769,7 +770,7 @@ predict.clModel = function(object,
                       newdata = cdata,
                       what = what,
                       ...)
-  }, clusterNames(object), clusnewdata, SIMPLIFY = FALSE)
+  }, clusterNames(object), clusdataList, SIMPLIFY = FALSE)
 
   assert_that(uniqueN(vapply(predList, class, FUN.VALUE = '')) == 1, msg =
                 'output from predictForCluster() must be same class for all clusters. Check the model implementation.')
@@ -778,7 +779,10 @@ predict.clModel = function(object,
     pred = rbindlist(predList, idcol = 'Cluster')
   }
   else if (is.numeric(predList[[1]])) {
-    pred = data.table(Cluster = rep(seq_len(nClusters(object)), each = nrow(newdata)),
+    clusDataRows = vapply(clusdataList, nrow, FUN.VALUE=0)
+    clusPredRows = vapply(predList, length, FUN.VALUE=0)
+    assert_that(all(clusDataRows == clusPredRows), msg='Numeric output length from predictForCluster() does not match the number of input newdata rows for one or more clusters')
+    pred = data.table(Cluster = rep(seq_len(nClusters(object)), clusDataRows),
                       Fit = do.call(c, predList))
   }
   else {
