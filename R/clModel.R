@@ -197,6 +197,8 @@ setMethod('clusterProportions', signature('clModel'), function(object, ...) {
 setGeneric('clusterAssignments', function(object, ...) standardGeneric('clusterAssignments'))
 #' @export
 #' @title Get the cluster membership for each strata
+#' @details While the default strategy is \link{which.max}, it is recommended to use \link[nnet]{which.is.max} instead, as this function breaks ties randomly.
+#' Another strategy to consider is the function \link{which.weight}, which enables weighted sampling of cluster assignments.
 #' @param strategy A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.
 #' @param ... Any additional arguments passed to the strategy function.
 #' @examples
