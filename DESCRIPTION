@@ -2,7 +2,10 @@ Package: cluslong
 Type: Package
 Title: Clustering longitudinal datasets
 Version: 0.7.0
-Authors@R: person("Niek", "Den Teuling", email = "niek.den.teuling@philips.com", role = c("aut", "cre"))
+Authors@R: c(person("Niek", "Den Teuling", email = "niek.den.teuling@philips.com", role = c("aut", "cre")),
+    person("Steffen", "Pauws", email = "s.c.pauws@uvt.nl", role = "ctb"),
+    person("Edwin", "van den Heuvel", email = "e.r.v.d.heuvel@tue.nl", role = "ctb"),
+    person("Philips", role = "cph"))
 URL: http://example.com
 BugReports: http://example.com
 Description: A framework for clustering longitudinal datasets with univariate trajectories using commonly applied methods. Facilitates reproducible and transparent cluster analyses with internal and external validation, and simulation studies.

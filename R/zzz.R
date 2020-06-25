@@ -4,8 +4,7 @@
 #' @import magrittr
 #' @importFrom foreach foreach %do%
 #' @import ggplot2
-#' @details
-#' -- Getting started
+#' @section Getting started:
 #' * See `vignette("demo", package="cluslong")` for an introduction to conducting a longitudinal cluster analysis on a example case study.
 #' * See `vignette("customModels", package="cluslong")` for examples on constructing your own cluster models.
 #' * See `vignette("modelSelection", package="cluslong")`
