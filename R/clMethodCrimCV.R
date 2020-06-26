@@ -2,7 +2,6 @@
 setClass('clMethodCrimCV', contains = 'clMatrixMethod')
 
 #' @export
-#' @importFrom crimCV crimCV
 #' @title Specify a zero-inflated repeated-measures GBTM method
 #' @inheritParams clMatrixMethod
 #' @inheritDotParams crimCV::crimCV
@@ -42,7 +41,6 @@ setMethod('prepareData', signature('clMethodCrimCV'), function(method, data, ver
   callNextMethod()
 })
 
-#' @importFrom crimCV crimCV
 setMethod('fit', signature('clMethodCrimCV'), function(method, data, envir, verbose, ...) {
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
   time = timeVariable(method)

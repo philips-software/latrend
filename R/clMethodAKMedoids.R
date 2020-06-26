@@ -2,7 +2,6 @@
 setClass('clMethodAKMedoids', contains = 'clMatrixMethod')
 
 #' @export
-#' @importFrom akmedoids akmedoids.clust
 #' @title Specify AKMedoids method
 #' @inheritParams clMatrixMethod
 #' @inheritParams clMethodCustom

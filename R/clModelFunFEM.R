@@ -14,7 +14,6 @@ fitted.clModelFunFEM = function(object, clusters = clusterAssignments(object)) {
 
 
 #' @export
-#' @importFrom fda eval.fd
 predict.clModelFunFEM = function(object,
                                  newdata = NULL,
                                  what = 'mu',
@@ -29,7 +28,7 @@ predict.clModelFunFEM = function(object,
     assert_that(has_name(newdata, timeVariable(object)))
     fdmeans = object@model$fd
     fdmeans$coefs = t(object@model$prms$my)
-    predMat = eval.fd(evalarg = newdata[[timeVariable(object)]], fdobj =
+    predMat = fda::eval.fd(evalarg = newdata[[timeVariable(object)]], fdobj =
                         fdmeans)
   }
 

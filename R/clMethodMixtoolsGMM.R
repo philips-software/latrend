@@ -2,7 +2,6 @@
 setClass('clMethodMixtoolsGMM', contains = 'clMethod')
 
 #' @export
-#' @importFrom mixtools regmixEM.mixed
 #' @title Specify mixed mixture regression model using mixtools
 #' @inheritDotParams mixtools::regmixEM.mixed
 #' @examples
@@ -62,7 +61,6 @@ setMethod('preFit', signature('clMethodMixtoolsGMM'), function(method, data, env
   return(e)
 })
 
-#' @importFrom mixtools regmixEM.mixed
 setMethod('fit', signature('clMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
   args = as.list(method, args = mixtools::regmixEM.mixed)
   args$y = envir$y
@@ -73,7 +71,7 @@ setMethod('fit', signature('clMethodMixtoolsGMM'), function(method, data, envir,
   args$addintercept.random = FALSE
   args$verb = canShow(verbose, 'fine')
 
-  model = do.call(regmixEM.mixed, args)
+  model = do.call(mixtools::regmixEM.mixed, args)
   model$fixed = envir$fixed
   model$random = envir$random
 

@@ -45,9 +45,8 @@ logLik.clModelFlexmix = function(object) {
 }
 
 #' @export
-#' @importFrom flexmix parameters
 coef.clModelFlexmix = function(object) {
-  parameters(object@model)
+  flexmix::parameters(object@model)
 }
 
 setMethod('converged', signature('clModelFlexmix'), function(object) {

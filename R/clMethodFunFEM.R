@@ -2,7 +2,6 @@
 setClass('clMethodFunFEM', contains = 'clMatrixMethod')
 
 #' @export
-#' @importFrom funFEM funFEM
 #' @title Specify a FunFEM method
 #' @param basis The basis function.
 #' @inheritParams clMatrixMethod

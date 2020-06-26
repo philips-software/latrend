@@ -2,7 +2,6 @@
 setClass('clMethodKML', contains = 'clMatrixMethod')
 
 #' @export
-#' @importFrom kml kml parALGO clusterLongData calculTrajMean getClusters
 #' @inheritDotParams kml::kml
 #' @inheritDotParams kml::parALGO
 #' @title Specify a longitudinal k-means (KML) method
@@ -52,7 +51,7 @@ setMethod('preFit', signature('clMethodKML'), function(method, data, envir, verb
                          TRUE)
   e$par = do.call(kml::parALGO, parArgs)
 
-  e$cld = clusterLongData(
+  e$cld = kml::clusterLongData(
     traj = e$dataMat,
     idAll = rownames(e$dataMat),
     time = sort(unique(data[[timeVariable(method)]]))

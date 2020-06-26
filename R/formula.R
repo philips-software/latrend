@@ -33,7 +33,6 @@ getResponse = function(f) {
   }
 }
 
-#' @importFrom lme4 findbars
 getREterms = function(f) {
   terms = lme4::findbars(f)
 }

@@ -2,7 +2,6 @@
 setClass('clMethodFlexmix', contains = 'clMethod')
 
 #' @export
-#' @importFrom flexmix flexmix FLXPconstant
 #' @title Method interface to flexmix()
 #' @description Wrapper to the `flexmix()` method from the `flexmix` package.
 #' @inheritDotParams flexmix::flexmix
@@ -41,9 +40,9 @@ setMethod('preFit', signature('clMethodFlexmix'), function(method, data, envir, 
 
   # drop intercept from formula.mb
   if (hasCovariates(method$formula.mb)) {
-    e$concomitant = FLXPmultinom(formula = method$formula.mb)
+    e$concomitant = flexmix::FLXPmultinom(formula = method$formula.mb)
   } else {
-    e$concomitant = FLXPconstant()
+    e$concomitant = flexmix::FLXPconstant()
   }
 
   return(e)

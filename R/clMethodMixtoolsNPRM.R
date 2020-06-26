@@ -2,7 +2,6 @@
 setClass('clMethodMixtoolsNPRM', contains = 'clMatrixMethod')
 
 #' @export
-#' @importFrom mixtools npEM
 #' @title Specify non-parametric estimation for independent repeated measures
 #' @inheritParams clMatrixMethod
 #' @inheritDotParams mixtools::npEM
@@ -15,11 +14,14 @@ clMethodMixtoolsNPRM = function(formula = Value ~ 0,
                                 time = getOption('cluslong.time'),
                                 id = getOption('cluslong.id'),
                                 nClusters = 2,
+                                blockid = NULL,
+                                bw = NULL,
+                                h = NULL,
                                 ...) {
   clMethod.call(
     'clMethodMixtoolsNPRM',
     call = match.call.defaults(),
-    defaults = longclust::longclustEM,
+    defaults = mixtools::npEM,
     excludeArgs = c('data', 'x', 'mu0', 'verb')
   )
 }
@@ -28,12 +30,15 @@ setMethod('getName', signature('clMethodMixtoolsNPRM'), function(object) 'non-pa
 
 setMethod('getShortName', signature('clMethodMixtoolsNPRM'), function(object) 'nprm')
 
-
 setMethod('fit', signature('clMethodMixtoolsNPRM'), function(method, data, envir, verbose, ...) {
   args = as.list(method, args = mixtools::npEM)
   args$x = envir$dataMat
   args$mu0 = method$nClusters
   args$verb = canShow(verbose, 'fine')
+
+  if(is.null(args$blockid)) { args$blockid = NULL }
+  if(is.null(args$h)) { args$h = NULL }
+  if(is.null(args$bw)) { args$bw = NULL }
 
   # Helper variables
   valueColumn = formula(method) %>% getResponse

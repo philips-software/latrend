@@ -44,6 +44,7 @@ cluslong = function(method,
 
   # compose
   cmethod = compose(newmethod, envir = envir)
+  assert_that(is.clMethod(cmethod), msg=paste0('invalid clMethod output from compose(', class(newmethod), ')'))
 
   id = idVariable(cmethod)
   time = timeVariable(cmethod)

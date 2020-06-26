@@ -10,7 +10,6 @@ setValidity('clMethodGCKM', function(object) {
 })
 
 #' @export
-#' @importFrom lme4 lmer lmerControl ranef
 #' @title Two-step clustering through linear mixed modeling and k-means
 #' @description Two-step clustering through linear mixed modeling and k-means.
 #' @param formula Formula, including a random effects component for the strata.
@@ -30,10 +29,12 @@ clMethodGCKM = function(formula = Value ~ 1,
                         nClusters = 2,
                         center = meanNA,
                         ...) {
+  library(lme4)
+
   clMethod.call(
     'clMethodGCKM',
     call = match.call.defaults(),
-    defaults = c(lmer, kmeans),
+    defaults = c(lme4::lmer, kmeans),
     excludeArgs = c('data', 'centers', 'trace')
   )
 }
@@ -50,6 +51,10 @@ clMethodGCKM_as_twostep = function(method) {
   call$standardize = scale
   clMethod.call('clMethodTwoStep', call = call)
 }
+
+setMethod('compose', signature('clMethodGCKM'), function(method, envir = NULL) {
+  evaluate.clMethod(method, try = TRUE, envir = envir)
+})
 
 setMethod('preFit', signature('clMethodGCKM'), function(method, data, envir, verbose) {
   method = clMethodGCKM_as_twostep(method)
@@ -78,8 +83,7 @@ representationStepGCKM = function(method, data, verbose, ...) {
     substring(2)
   lmmFormula = paste0(fixedStr, ' + (', randomStr, '|', idVariable(method), ')') %>% as.formula(env =
                                                                                                   NULL)
-
-  lmm = lmer(
+  lmm = lme4::lmer(
     formula = lmmFormula,
     data = data,
     REML = method$REML,
@@ -89,7 +93,7 @@ representationStepGCKM = function(method, data, verbose, ...) {
 
   e = new.env()
   e$model = lmm
-  e$repMat = ranef(lmm)[[idVariable(method)]] %>% as.matrix()
+  e$repMat = lme4::ranef(lmm)[[idVariable(method)]] %>% as.matrix()
   return(e)
 }
 

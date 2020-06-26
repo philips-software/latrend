@@ -19,7 +19,6 @@ setValidity('clMethodLcmmGMM', function(object) {
 })
 
 #' @export
-#' @importFrom lcmm lcmm
 #' @title Specify GMM method using lcmm
 #' @description Growth mixture modeling through latent-class linear mixed modeling.
 #' @inheritParams clMethodKML

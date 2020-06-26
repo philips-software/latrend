@@ -11,7 +11,6 @@ fitted.clModelLcmmGMM = function(object, clusters = clusterAssignments(object)) 
 }
 
 #' @export
-#' @importFrom lcmm predictY
 predict.clModelLcmmGMM = function(object,
                                   newdata = NULL,
                                   what = 'mu') {
@@ -34,7 +33,7 @@ predict.clModelLcmmGMM = function(object,
       newdata$Cluster = make.clusterIndices(object, newdata$Cluster)
     }
 
-    predMat = predictY(object@model, newdata = newdata)$pred %>%
+    predMat = lcmm::predictY(object@model, newdata = newdata)$pred %>%
       set_colnames(clusterNames(object))
   }
 

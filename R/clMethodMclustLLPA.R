@@ -14,7 +14,6 @@ setValidity('clMethodMclustLLPA', function(object) {
 })
 
 #' @export
-#' @importFrom mclust Mclust mclustBIC emControl mclust.options
 #' @title Longitudinal latent profile analysis
 #' @description Latent profile analysis or finite Gaussian mixture modeling.
 #' @param formula Formula. Covariates are not supported.
@@ -32,6 +31,8 @@ clMethodMclustLLPA = function(response = getOption('cluslong.response'),
                               id = getOption('cluslong.id'),
                               nClusters = 2,
                               ...) {
+  library(mclust)
+
   clMethod.call(
     'clMethodMclustLLPA',
     call = match.call.defaults(),
@@ -57,6 +58,10 @@ setMethod('prepareData', signature('clMethodMclustLLPA'), function(method, data,
     set_rownames(wideFrame$method)
 
   return(e)
+})
+
+setMethod('compose', signature('clMethodMclustLLPA'), function(method, envir = NULL) {
+  evaluate.clMethod(method, try = TRUE, envir = envir)
 })
 
 setMethod('fit', signature('clMethodMclustLLPA'), function(method, data, envir, verbose, ...) {
