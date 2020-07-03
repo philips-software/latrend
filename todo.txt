@@ -4,7 +4,7 @@ tsclust distance model
 1-NN cluster validation
 clValid package for validation (see TSclust)
 clv package for validation (see TSclust)
-?
+? clMethod argument environment representation. Within-scope evaluation
 ? try-catch for postFit
 ? support for list of clModel from fit
 
