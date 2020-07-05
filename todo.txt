@@ -1,12 +1,15 @@
 plot cluster trajectories with data
 tsclust distance model
+fix update(clModel, ...)
 ? dropping clusters from a clModel
 1-NN cluster validation
 clValid package for validation (see TSclust)
 clv package for validation (see TSclust)
+test clusterNames setting
 ?
 ? try-catch for postFit
 ? support for list of clModel from fit
+? clusterAssignments for newdata? predictAssignments?
 
 -- names --
 cluslong
