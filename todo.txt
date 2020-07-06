@@ -5,8 +5,8 @@ fix update(clModel, ...)
 1-NN cluster validation
 clValid package for validation (see TSclust)
 clv package for validation (see TSclust)
-test clusterNames setting
-?
+? test clusterNames setting
+? clMethod argument environment representation. Within-scope evaluation
 ? try-catch for postFit
 ? support for list of clModel from fit
 ? clusterAssignments for newdata? predictAssignments?
