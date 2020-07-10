@@ -353,7 +353,7 @@ getClMethod = function(object) {
 setMethod('getName', signature('clModel'), function(object) {
   basename = getClMethod(object) %>% getName()
   lbl = getLabel(object)
-  if (nchar(lbl) > 0) {
+  if (length(lbl) > 0 && nchar(lbl) > 0) {
     paste(basename, lbl, sep = '-')
   } else {
     basename
