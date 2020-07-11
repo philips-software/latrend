@@ -878,43 +878,11 @@ setMethod('predictAssignments', signature('clModel'), function(object, newdata, 
 
 #' @export
 #' @title Plot a clModel
-#' @inheritParams clusterTrajectories
-#' @param points The indices of the `at` argument at which to draw points, or the number of points to draw. By default, 10 evenly spread points are drawn.
-#' @param clusterLabels Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.
-#' @param ... Any other arguments passed to [clusterTrajectories].
+#' @description Plot a clModel. By default, the cluster trajectories of the model solution are plotted.
+#' @param ... Arguments passed to [clusterTrajectories].
 #' @return A `ggplot` object.
-plot.clModel = function(object,
-                        what = 'mu',
-                        at = time(object),
-                        points = 10,
-                        clusterLabels = sprintf('%s (%g%%)',
-                                                clusterNames(object),
-                                                round(clusterProportions(object) * 100)),
-                        ...) {
-  assert_that(is.numeric(points), min(points) >= 1)
-  assert_that(length(clusterLabels) == nClusters(object))
-
-  if (length(points) == 1) {
-    points = seq(1, length(at), length.out = max(length(at), points))
-  }
-
-  dt_ctraj = clusterTrajectories(object, at = at, what = what) %>%
-    as.data.table %>%
-    .[, Cluster := factor(Cluster, levels = levels(Cluster), labels = clusterLabels)]
-
-  ggplot(
-    data = dt_ctraj,
-    mapping = aes_string(
-      x = timeVariable(object),
-      y = responseVariable(object, what = what),
-      color = 'Cluster',
-      shape = 'Cluster'
-    )
-  ) +
-    scale_shape_manual(values = seq_len(nClusters(object))) +
-    geom_line() +
-    geom_point(data = dt_ctraj[get(timeVariable(object)) %in% at[points]]) +
-    labs(title = 'Cluster trajectories')
+plot.clModel = function(object, ...) {
+  plotClusterTrajectories(object, ...)
 }
 
 #' @export
@@ -930,6 +898,36 @@ setMethod('plotTrajectories', signature('clModel'), function(object, ...) {
     id = idVariable(object),
     cluster = 'Cluster'
   )
+})
+
+#' @export
+#' @rdname plotClusterTrajectories
+#' @title Plot the cluster trajectories of a clModel
+#' @inheritDotParams clusterTrajectories
+#' @param clusterLabels Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.
+#' @param ... Any other arguments passed to [clusterTrajectories].
+#' @return A `ggplot` object.
+setMethod('plotClusterTrajectories', signature('clModel'),
+  function(object,
+    what = 'mu',
+    at = time(object),
+    clusterLabels = sprintf('%s (%g%%)',
+      clusterNames(object),
+      round(clusterProportions(object) * 100),
+    showTrajs = FALSE)
+  ) {
+  assert_that(length(clusterLabels) == nClusters(object))
+
+  cdata = clusterTrajectories(object, at = at, what = what) %>%
+    as.data.table() %>%
+    .[, Cluster := factor(Cluster, levels = levels(Cluster), labels = clusterLabels)]
+
+  .plotClusterTrajs(cdata,
+    response = responseVariable(object, what = what),
+    time = timeVariable(object),
+    id = idVariable(object),
+    showTrajs = showTrajs,
+    rawdata = model.data(object))
 })
 
 
