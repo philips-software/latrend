@@ -4,6 +4,7 @@ kml2 = m1 = cluslong(clMethodTestKML(nClusters=2), testLongData)
 kml3 = cluslong(clMethodTestKML(nClusters=3), testLongData)
 kml4 = cluslong(clMethodTestKML(nClusters=4), testLongData)
 gmm = m2 = cluslong(clMethodTestLcmmGMM(nClusters=2), testLongData)
+models = clModels(group=c(kml2, gmm), kml3, kml4)
 
 test_that('as', {
   as.clModels(NULL) %>%
@@ -80,8 +81,6 @@ test_that('subset', {
     expect_is('clModels') %>%
     expect_length(0)
 
-  models = clModels(group=c(kml2, gmm), kml3, kml4)
-
   subset(models, nClusters > 2) %>%
     expect_is('clModels') %>%
     expect_length(2)
@@ -114,27 +113,45 @@ test_that('subset', {
     expect_is('clModel')
 })
 
-test_that('metric', {
+test_that('single metric', {
   metric(clModels(), 'BIC') %>%
-    expect_is('data.frame') %T>%
-    {expect_equal(nrow(.), 0)}
+    expect_is('numeric') %>%
+    expect_length(0)
 
-  models = clModels(group=c(kml2, gmm), kml3, kml4)
   metric(models, 'BIC') %>%
-    expect_is('data.frame') %>%
-    expect_named(c('.name', '.method', 'BIC'))
+    expect_is('numeric')
 
-  metric(models, c('AIC', 'BIC')) %>%
-    expect_is('data.frame') %>%
-    expect_named(c('.name', '.method', 'AIC', 'BIC'))
+  x = metric(models, 'BIC', drop = FALSE)
+  expect_is(x, 'matrix')
+  expect_true(ncol(x) == 1)
+  expect_true(colnames(x) == 'BIC')
+})
+
+test_that('multiple metrics', {
+  metric(clModels(), c('AIC', 'BIC')) %>%
+    expect_is('numeric') %>%
+    expect_length(0)
+
+  x = metric(models, c('AIC', 'BIC'))
+  expect_is(x, 'matrix')
+  expect_equivalent(colnames(x), c('AIC', 'BIC'))
 
   as.list(models) %>%
     metric(c('AIC', 'BIC')) %>%
-    expect_is('data.frame')
+    expect_is('matrix')
+})
+
+test_that('min', {
+  min(models, 'WRSS') %>%
+    expect_is('clModel')
+})
+
+test_that('max', {
+  max(models, 'WRSS') %>%
+    expect_is('clModel')
 })
 
 test_that('plotMetric', {
-  models = clModels(group=c(kml2, gmm), kml3, kml4)
   plotMetric(models, name='BIC', subset=.method == 'kml') %>%
     expect_is('gg')
 
