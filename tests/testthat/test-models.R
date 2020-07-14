@@ -161,3 +161,14 @@ test_that('plotMetric', {
   plotMetric(models, name=c('logLik', 'BIC'), by='nClusters', group=character()) %>%
     expect_is('gg')
 })
+
+test_that('externalMetric of list', {
+  d = externalMetric(models, name = 'adjustedRand')
+  expect_is(d, 'dist')
+})
+
+test_that('externalMetric against model', {
+  externalMetric(models, models[[1]], name = 'adjustedRand') %>%
+    expect_is('numeric') %>%
+    expect_length(length(models))
+})

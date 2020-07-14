@@ -1,10 +1,6 @@
-dedicated plotClusterTrajectories function
-plot cluster trajectories with data
 tsclust distance model
 fix update(clModel, ...)
 ? auto-separated labels for clustraj plot
-min() for clModels for a given metric
-distance matrix for clModels metric
 clusterNames<- bug
 ? dropping clusters from a clModel
 predictPostprob for KML

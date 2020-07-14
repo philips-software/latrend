@@ -113,8 +113,7 @@ as.data.frame.clModels = function(x,
 #' @return A named `numeric` vector containing the computed model metrics.
 #' @examples
 #' clModel metric example here
-setMethod('externalMetric', signature('clModels', 'missing'), function(object, object2, name =
-                                                                         'AdjustedRand') {
+setMethod('externalMetric', signature('clModels', 'missing'), function(object, object2, name = 'adjustedRand') {
   assert_that(is.character(name), length(name) == 1)
 
   pairs = combn(seq_along(object), m = 2, simplify = FALSE)
