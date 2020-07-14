@@ -1138,7 +1138,7 @@ update.clModel = function(object, ...) {
   assert_that(is.clModel(object))
   modelCall = getCall(object)
 
-  assert_that(as.character(modelCall@call[[1]]) != '<undef>', msg = 'cannot update clModel because clMethod call is undefined')
+  assert_that(as.character(modelCall[[1]]) != '<undef>', msg = 'cannot update clModel because clMethod call is undefined')
 
   updateCall = match.call() %>% tail(-2)
   updateNames = names(updateCall)

@@ -26,9 +26,11 @@ clMethodKML = function(response = getOption('cluslong.response'),
   )
 
   # fix for meanNA conflict
-  if (has_name(m, 'centerMethod') &&
-      as.character(m[['centerMethod', eval = FALSE]]) == 'meanNA') {
-    m = update(m, centerMethod = longitudinalData::meanNA)
+  if (has_name(m, 'centerMethod')) {
+    centerMethod = m[['centerMethod', eval = FALSE]]
+    if (is.name(centerMethod) && as.character(centerMethod) == 'meanNA') {
+      m = update(m, centerMethod = longitudinalData::meanNA)
+    }
   }
   return(m)
 }

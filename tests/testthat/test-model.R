@@ -89,3 +89,9 @@ test_that('metrics', {
     expect_is('numeric') %>%
     expect_named('Jaccard')
 })
+
+test_that('update', {
+  m = update(model, nClusters = 3)
+  expect_is(m, 'clModel')
+  expect_equal(nClusters(m), 3)
+})

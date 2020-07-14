@@ -1,5 +1,4 @@
 tsclust distance model
-fix update(clModel, ...)
 ? auto-separated labels for clustraj plot
 clusterNames<- bug
 ? dropping clusters from a clModel
@@ -12,7 +11,6 @@ validation metrics from https://rdrr.io/cran/dtwclust/man/cvi.html
 ? clMethod argument environment representation. Within-scope evaluation
 ? try-catch for postFit
 ? support for list of clModel from fit
-? clusterAssignments for newdata? predictAssignments?
 
 -- names --
 cluslong
