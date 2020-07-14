@@ -36,7 +36,10 @@ is.clModels = function(x) {
 #' @return A `clModels` object.
 #' @family clModel list functions
 as.clModels = function(x) {
-  if (is.clModels(x)) {
+  if (missing(x) || is.null(x)) {
+    x = list()
+  }
+  else if (is.clModels(x)) {
     return(x)
   }
   else if (is.clModel(x)) {
@@ -44,9 +47,6 @@ as.clModels = function(x) {
   }
   else if (is.list(x)) {
     assert_that(all(vapply(x, is.clModel, FUN.VALUE = FALSE)), msg = 'object cannot be converted to clModels; not a list of only clModels objects')
-  }
-  else if (is.null(x)) {
-    x = list()
   }
   else {
     stop('cannot convert this type of input to clModels')
@@ -127,17 +127,28 @@ setMethod('externalMetric', signature('clModels', 'missing'), function(object, o
   as.dist(t(m), diag = FALSE, upper = FALSE)
 })
 
-.externalMetric.clModels = function(object, object2, name) {
-  assert_that(is.character(name))
+.externalMetric.clModels = function(object, object2, name, drop = TRUE) {
+  assert_that(is.character(name),
+              is.flag(drop))
 
-  result = lapply(object, externalMetric, object2 = object2, name = name)
+  if (length(object) == 0) {
+    if (drop) {
+      numeric()
+    } else {
+      matrix(nrow=0, ncol=length(name)) %>%
+        set_colnames(name)
+    }
+  }
+  else {
+    metMat = lapply(object, externalMetric, object2 = object2, name = name) %>%
+      do.call(rbind, .) %>%
+      set_colnames(name)
 
-  if (length(name) <= 1) {
-    do.call(c, result) %>%
-      unname()
-  } else {
-    do.call(rbind, result) %>%
-      as.data.frame()
+    if(drop && ncol(metMat) == 1) {
+      as.numeric(metMat)
+    } else {
+      metMat
+    }
   }
 }
 
@@ -146,52 +157,100 @@ setMethod('externalMetric', signature('clModels', 'missing'), function(object, o
 #' @return A named `numeric` vector containing the computed model metrics.
 #' @examples
 #' clModel metric example here
-setMethod('externalMetric',
-          signature('clModels', 'clModel'),
-          .externalMetric.clModels)
+setMethod('externalMetric', signature('clModels', 'clModel'), .externalMetric.clModels)
 
 #' @export
 #' @rdname metric
 #' @return A named `numeric` vector containing the computed model metrics.
 #' @examples
 #' clModel metric example here
-setMethod('externalMetric', signature('list', 'clModel'), function(object, object2, name) {
+setMethod('externalMetric', signature('list', 'clModel'), function(object, object2, name, drop = TRUE) {
   assert_that(is.clModels(object))
-  .externalMetric.clModels(object, object2, name)
+  .externalMetric.clModels(object, object2, name, drop = drop)
 })
 
 
-.metric.clModels = function(object, name) {
-  assert_that(is.clModels(object))
-  assert_that(is.character(name))
+.metric.clModels = function(object, name, drop = TRUE) {
+  assert_that(is.clModels(object),
+              is.character(name),
+              is.flag(drop))
 
-  modelNames = vapply(object, getShortName, FUN.VALUE = '')
-  metricValues = lapply(object, function(model) {
-    metric(model, name) %>%
-      rbind %>%
-      data.frame
-  })
-
-  dtMetrics = rbindlist(metricValues, idcol = '.name')
-  dtMetrics[, `.method` := modelNames]
-
-  setcolorder(dtMetrics, '.method')
-  if (has_name(dtMetrics, '.name')) {
-    setcolorder(dtMetrics, '.name')
+  if (length(object) == 0) {
+    if (drop) {
+      numeric()
+    } else {
+      matrix(nrow=0, ncol=length(name)) %>%
+        set_colnames(name)
+    }
   }
-  as.data.frame(dtMetrics)
+  else {
+    metMat = lapply(object, metric, name = name) %>%
+      do.call(rbind, .) %>%
+      set_colnames(name)
+
+    if(drop && ncol(metMat) == 1) {
+      as.numeric(metMat)
+    } else {
+      metMat
+    }
+  }
 }
 
 #' @export
 #' @rdname metric
-setMethod('metric', signature('list'), function(object, name) {
-  .metric.clModels(as.clModels(object), name)
+setMethod('metric', signature('list'), function(object, name, drop = TRUE) {
+  .metric.clModels(as.clModels(object), name, drop = drop)
 })
 
 #' @export
 #' @rdname metric
 #' @return For metric(clModels) or metric(list): A data.frame with a metric per column.
 setMethod('metric', signature('clModels'), .metric.clModels)
+
+#' @export
+#' @title Select the clModel with the lowest metric value
+#' @param name The name of the internal metric.
+#' @return The clModel with the lowest metric value
+#' @examples
+#' kml1 = cluslong(clMethodKML(nClusters=1), testLongData)
+#' kml2 = cluslong(clMethodKML(nClusters=2), testLongData)
+#' kml3 = cluslong(clMethodKML(nClusters=3), testLongData)
+
+#' models = clModels(kml1, kml2, kml3)
+#' min(models, 'WRSS')
+min.clModels = function(x, name, ...) {
+  x = as.clModels(x)
+  values = metric(x, name)
+  bestIdx = which.min(values)
+  if (length(bestIdx) == 0) {
+    return(as.clModels(NULL))
+  } else {
+    x[[bestIdx]]
+  }
+}
+
+#' @export
+#' @title Select the clModel with the highest metric value
+#' @param name The name of the internal metric.
+#' @return The clModel with the highest metric value
+#' @examples
+#' kml1 = cluslong(clMethodKML(nClusters=1), testLongData)
+#' kml2 = cluslong(clMethodKML(nClusters=2), testLongData)
+#' kml3 = cluslong(clMethodKML(nClusters=3), testLongData)
+
+#' models = clModels(kml1, kml2, kml3)
+#' max(models, 'WRSS')
+max.clModels = function(x, name, ...) {
+  x = as.clModels(x)
+  values = metric(x, name)
+  bestIdx = which.max(values)
+  if (length(bestIdx) == 0) {
+    return(as.clModels(NULL))
+  } else {
+    x[[bestIdx]]
+  }
+}
+
 
 #' @export
 #' @title Plot one or more internal metrics for all clModels
@@ -221,10 +280,9 @@ plotMetric = function(models,
   }
 
   metricNames = paste0('.metric.', name)
-  dtMetrics = metric(models, name) %>%
-    as.data.table() %>%
-    .[, -c('.name', '.method')] %>%
-    setnames(metricNames)
+  dtMetrics = metric(models, name, drop = FALSE) %>%
+    set_colnames(metricNames) %>%
+    as.data.table()
 
   dtModels = as.data.frame(models) %>%
     as.data.table()
