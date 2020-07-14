@@ -36,7 +36,10 @@ is.clModels = function(x) {
 #' @return A `clModels` object.
 #' @family clModel list functions
 as.clModels = function(x) {
-  if (is.clModels(x)) {
+  if (missing(x) || is.null(x)) {
+    x = list()
+  }
+  else if (is.clModels(x)) {
     return(x)
   }
   else if (is.clModel(x)) {
@@ -44,9 +47,6 @@ as.clModels = function(x) {
   }
   else if (is.list(x)) {
     assert_that(all(vapply(x, is.clModel, FUN.VALUE = FALSE)), msg = 'object cannot be converted to clModels; not a list of only clModels objects')
-  }
-  else if (is.null(x)) {
-    x = list()
   }
   else {
     stop('cannot convert this type of input to clModels')
