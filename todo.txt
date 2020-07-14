@@ -11,6 +11,7 @@ predictPostprob for KML
 1-NN cluster validation
 clValid package for validation (see TSclust)
 clv package for validation (see TSclust)
+validation metrics from https://rdrr.io/cran/dtwclust/man/cvi.html
 ? test clusterNames setting
 ? clMethod argument environment representation. Within-scope evaluation
 ? try-catch for postFit
