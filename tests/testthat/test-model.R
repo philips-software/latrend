@@ -95,3 +95,16 @@ test_that('update', {
   expect_is(m, 'clModel')
   expect_equal(nClusters(m), 3)
 })
+
+test_that('clusterNames', {
+  expect_equal(clusterNames(model), LETTERS[1:2])
+})
+
+test_that('clusterNames<-', {
+  x = update(model, nClusters = 3)
+  oldNames = LETTERS[1:3]
+  newNames = c('Z', 'Y', 'X')
+  expect_equal(clusterNames(x), oldNames)
+  clusterNames(x) = newNames
+  expect_equal(clusterNames(x), newNames)
+})
