@@ -915,8 +915,8 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
     at = time(object),
     clusterLabels = sprintf('%s (%g%%)',
       clusterNames(object),
-      round(clusterProportions(object) * 100),
-    showTrajs = FALSE)
+      round(clusterProportions(object) * 100)),
+    showTrajs = FALSE
   ) {
   assert_that(length(clusterLabels) == nClusters(object))
 
