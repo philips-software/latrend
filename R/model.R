@@ -916,11 +916,12 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
     clusterLabels = sprintf('%s (%g%%)',
       clusterNames(object),
       round(clusterProportions(object) * 100)),
-    showTrajs = FALSE
+    showTrajs = FALSE,
+    ...
   ) {
   assert_that(length(clusterLabels) == nClusters(object))
 
-  cdata = clusterTrajectories(object, at = at, what = what) %>%
+  cdata = clusterTrajectories(object, at = at, what = what, ...) %>%
     as.data.table() %>%
     .[, Cluster := factor(Cluster, levels = levels(Cluster), labels = clusterLabels)]
 
