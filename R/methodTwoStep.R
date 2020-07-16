@@ -23,16 +23,16 @@ setValidity('lcMethodTwoStep', function(object) {
 #' @param standardize A `function` to standardize the output `matrix` of the representation step. By default, the output is shifted and rescaled to ensure zero mean and unit variance.
 #' @inheritParams lcMethodCustom
 #' @family lcMethod implementations
-lcMethodTwoStep = function(representationStep,
+lcMethodTwoStep = function(response,
+                           representationStep,
                            clusterStep,
                            standardize = scale,
                            center = meanNA,
-                           response = getOption('latrend.response'),
                            time = getOption('latrend.time'),
                            id = getOption('latrend.id'),
                            ...) {
   lcMethod.call('lcMethodTwoStep',
-                 call = match.call.defaults(),
+                 call = match.call.all(),
                  excludeArgs = c('verbose'))
 }
 

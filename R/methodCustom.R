@@ -20,9 +20,9 @@ setClass('lcMethodCustom', contains = 'lcMethod')
 #' model = latrend(method, testLongData)
 #' summary(model)
 #' @family lcMethod implementations
-lcMethodCustom = function(fun,
+lcMethodCustom = function(response,
+                          fun,
                           center = meanNA,
-                          response = getOption('latrend.response'),
                           time = getOption('latrend.time'),
                           id = getOption('latrend.id'),
                           name = 'custom') {

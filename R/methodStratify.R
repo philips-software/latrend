@@ -47,15 +47,15 @@ setValidity('lcMethodStratify', function(object) {
 #' method = lcMethodStratify(stratfun3)
 #'
 #' @family lcMethod implementations
-lcMethodStratify = function(stratify,
+lcMethodStratify = function(response,
+                            stratify,
                             center = meanNA,
                             nClusters = NaN,
                             clusterNames = NULL,
-                            response = getOption('latrend.response'),
                             time = getOption('latrend.time'),
                             id = getOption('latrend.id'),
                             name = 'stratify') {
-  lcMethod.call('lcMethodStratify', call = match.call.defaults())
+  lcMethod.call('lcMethodStratify', call = match.call.all())
 }
 
 setMethod('getName', signature('lcMethodStratify'), function(object) {

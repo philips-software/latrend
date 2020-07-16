@@ -3,7 +3,7 @@ context('weighted partition')
 refmodel = latrend(lcMethodTestKML(), testLongData)
 
 test_that('default', {
-  model = lcModelWeightedPartition(testLongData, weights=postprob(refmodel))
+  model = lcModelWeightedPartition(testLongData, response = 'Value', weights=postprob(refmodel))
 
   expect_valid_lcModel(model)
   expect_equivalent(nClusters(model), nClusters(refmodel))
@@ -12,7 +12,7 @@ test_that('default', {
 })
 
 test_that('non-unit weights', {
-  model = lcModelWeightedPartition(testLongData, weights=2 * postprob(refmodel))
+  model = lcModelWeightedPartition(testLongData, response = 'Value', weights=2 * postprob(refmodel))
 
   expect_valid_lcModel(model)
   expect_equivalent(nClusters(model), nClusters(refmodel))

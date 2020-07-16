@@ -804,7 +804,7 @@ setMethod('responseVariable', signature('lcMethod'), function(object) {
     stop(
       'cannot determine the response variable(s) for class ',
       class(object)[1],
-      'Consider overriding "responseVariable(lcMethod)" to fix this for your lcMethod implementation'
+      '\nConsider overriding "responseVariable(lcMethod)" to fix this for your lcMethod implementation'
     )
   }
 })

@@ -20,7 +20,6 @@ update_geom_defaults('point', list(size = .5))
 library(latrend)
 options(latrend.id = 'Traj',
         latrend.time = 'Time',
-        latrend.response = 'Y',
         latrend.verbose = TRUE)
 
 ## ------------------------------------------------------------------------
@@ -37,10 +36,10 @@ casedata = generateLongData(sizes = c(40, 60),
                         )
 
 ## ------------------------------------------------------------------------
-plotTrajectories(casedata)
+plotTrajectories(casedata, response = 'Y')
 
 ## ------------------------------------------------------------------------
-plotTrajectories(casedata) +
+plotTrajectories(casedata, response = 'Y') +
   geom_line(aes(y = Mu.fixed + Mu.cluster, color = Cluster), size = 2)
 
 ## ------------------------------------------------------------------------
@@ -48,7 +47,7 @@ ggplot(casedata[Time == 0], aes(x = Mu)) +
   geom_density(fill = 'gray', adjust = .3)
 
 ## ----message=TRUE--------------------------------------------------------
-m = lcMethodStratify(Y[1] > 1.7)
+m = lcMethodStratify(response = 'Y', Y[1] > 1.7)
 model = latrend(m, casedata)
 
 ## ------------------------------------------------------------------------
@@ -61,7 +60,7 @@ stratfun = function(data) {
          levels = c(FALSE, TRUE),
          labels = c('Low', 'High'))
 }
-m2 = lcMethodStratify(stratfun, center = mean)
+m2 = lcMethodStratify(response = 'Y', stratify = stratfun, center = mean)
 model2 = latrend(m2, casedata)
 
 clusterProportions(model2)
@@ -69,7 +68,7 @@ clusterProportions(model2)
 ## ----message=TRUE--------------------------------------------------------
 casedata[, Intercept := coef(lm(Y ~ Time, .SD))[1], by = Traj]
 
-m3 = lcMethodStratify(Intercept[1] > 1.7, clusterNames = c('Low', 'High'))
+m3 = lcMethodStratify(response = 'Y', Intercept[1] > 1.7, clusterNames = c('Low', 'High'))
 model3 = latrend(m3, casedata)
 
 ## ------------------------------------------------------------------------
@@ -92,7 +91,9 @@ clusStep = function(method, data, repMat, envir, verbose) {
 }
 
 ## ------------------------------------------------------------------------
-m.twostep = lcMethodTwoStep(representationStep = repStep, clusterStep = clusStep)
+m.twostep = lcMethodTwoStep(response = 'Y',
+                            representationStep = repStep,
+                            clusterStep = clusStep)
 
 ## ----message=TRUE--------------------------------------------------------
 model.twostep = latrend(m.twostep, data = casedata)
@@ -111,6 +112,7 @@ clusStep.gen = function(method, data, repMat, envir, verbose) {
   km = kmeans(repMat, centers = method$nClusters)
 
   lcModelCustom(method = method,
+                response = method$response,
                 data = data,
                 clusterAssignments = km$cluster,
                 clusterTrajectories = method$center,
@@ -118,7 +120,8 @@ clusStep.gen = function(method, data, repMat, envir, verbose) {
 }
 
 ## ------------------------------------------------------------------------
-m.twostepgen = lcMethodTwoStep(representationStep = repStep.gen,
+m.twostepgen = lcMethodTwoStep(response = 'Y',
+                               representationStep = repStep.gen,
                                clusterStep = clusStep.gen)
 
 ## ----message=TRUE--------------------------------------------------------
@@ -133,11 +136,11 @@ setMethod('getName', signature('lcMethodLMKM'), function(object) 'lm-kmeans')
 setMethod('getShortName', signature('lcMethodLMKM'), function(object) 'lmkm')
 
 ## ------------------------------------------------------------------------
-lcMethodLMKM = function(formula=Value ~ Time,
-                        time=getOption('latrend.time'),
-                        id=getOption('latrend.id'),
-                        nClusters=2) {
-  new('lcMethodLMKM', call=stackoverflow::match.call.defaults())
+lcMethodLMKM = function(formula,
+                        time = getOption('latrend.time'),
+                        id = getOption('latrend.id'),
+                        nClusters = 2) {
+  new('lcMethodLMKM', call = stackoverflow::match.call.defaults())
 }
 
 ## ------------------------------------------------------------------------

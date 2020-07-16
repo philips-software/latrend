@@ -6,11 +6,11 @@ setClass('lcMethodMixtoolsNPRM', contains = 'lcMatrixMethod')
 #' @inheritParams lcMatrixMethod
 #' @inheritDotParams mixtools::npEM
 #' @examples
-#' method = lcMethodMixtoolsNPRM(Measurement ~ 0,
+#' method = lcMethodMixtoolsNPRM(response = 'Measurement',
 #'                      time='Assessment',
 #'                      id='Id', nClusters=3)
 #' @family lcMethod implementations
-lcMethodMixtoolsNPRM = function(formula = Value ~ 0,
+lcMethodMixtoolsNPRM = function(response,
                                 time = getOption('latrend.time'),
                                 id = getOption('latrend.id'),
                                 nClusters = 2,
@@ -41,7 +41,7 @@ setMethod('fit', signature('lcMethodMixtoolsNPRM'), function(method, data, envir
   if(is.null(args$bw)) { args$bw = NULL }
 
   # Helper variables
-  valueColumn = formula(method) %>% getResponse
+  valueColumn = method$response
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   suppressFun({

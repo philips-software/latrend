@@ -1,7 +1,7 @@
 context('random')
 
 test_that('default', {
-  model = latrend(lcMethodRandom(alpha=1, nClusters=3), data=testLongData, seed=1) %T>%
+  model = latrend(lcMethodTestRandom(alpha=1, nClusters=3), data=testLongData, seed=1) %T>%
     expect_valid_lcModel()
 
   expect_equal(nClusters(model), 3)
@@ -9,7 +9,7 @@ test_that('default', {
 })
 
 test_that('uniform groups', {
-  model = latrend(lcMethodRandom(alpha=1e3, nClusters=8), data=testLongData, seed=1) %T>%
+  model = latrend(lcMethodTestRandom(alpha=1e3, nClusters=8), data=testLongData, seed=1) %T>%
     expect_valid_lcModel()
 
   expect_equal(nClusters(model), 8)
@@ -17,7 +17,7 @@ test_that('uniform groups', {
 })
 
 test_that('single group', {
-  model = latrend(lcMethodRandom(alpha=1, nClusters=1), data=testLongData, seed=1) %T>%
+  model = latrend(lcMethodTestRandom(alpha=1, nClusters=1), data=testLongData, seed=1) %T>%
     expect_valid_lcModel()
 
   expect_equal(nClusters(model), 1)

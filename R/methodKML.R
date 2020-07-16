@@ -13,7 +13,7 @@ setClass('lcMethodKML', contains = 'lcMatrixMethod')
 #' method = lcMethodKML(Value ~ 0, nClusters=3)
 #' model = latrend(method, testLongData)
 #' @family lcMethod implementations
-lcMethodKML = function(response = getOption('latrend.response'),
+lcMethodKML = function(response,
                        time = getOption('latrend.time'),
                        id = getOption('latrend.id'),
                        nClusters = 2,

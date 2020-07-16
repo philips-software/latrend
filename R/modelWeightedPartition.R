@@ -7,10 +7,10 @@ setClass('lcModelWeightedPartition', contains = 'lcModelPartition')
 #' @param nClusters The number of clusters
 #' @param clusterNames The names of the clusters, or a function with input `n` outputting a `character vector` of names.
 lcModelWeightedPartition = function(data,
+                                    response,
                                     weights,
                                     center = weighted.meanNA,
                                     clusterNames = colnames(weights),
-                                    response = getOption('latrend.response'),
                                     time = getOption('latrend.time'),
                                     id = getOption('latrend.id'),
                                     name = 'wpart') {

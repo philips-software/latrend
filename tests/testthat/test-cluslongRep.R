@@ -1,8 +1,8 @@
 context('latrendRep')
 
-m = lcMethodKML(nbRedrawing=1, maxIt=10)
+m = lcMethodKML(response = 'Value', nbRedrawing=1, maxIt=10)
 test_that('default', {
-  models = latrendRep(lcMethodKML(nbRedrawing=1, maxIt=10), data=testLongData, .rep=2) %>%
+  models = latrendRep(lcMethodKML(nbRedrawing=1, maxIt=10, response = 'Value'), data=testLongData, .rep=2) %>%
     expect_is('lcModels') %>%
     expect_length(2)
 
@@ -26,7 +26,7 @@ test_that('single rep', {
 })
 
 test_that('matrix input', {
-  mat = dcastRepeatedMeasures(testLongData)
+  mat = dcastRepeatedMeasures(testLongData, response = 'Value')
 
   latrendRep(m, data=mat, .rep=2) %>%
     expect_is('lcModels') %>%
@@ -34,7 +34,7 @@ test_that('matrix input', {
 })
 
 test_that('envir', {
-  kml = lcMethodKML(nClusters=a, nbRedrawing=1, maxIt=10)
+  kml = lcMethodKML(nClusters=a, response = 'Value', nbRedrawing=1, maxIt=10)
   e = list2env(list(a = 1))
 
   models = latrendRep(kml, data=testLongData, envir=e, .rep=2) %>%

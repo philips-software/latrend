@@ -13,7 +13,7 @@ setClass('lcMethodFlexmixGBTM', contains = 'lcMethodFlexmix')
 #'
 #' model = latrend(lcMethodFlexmixGBTM(Value ~ Time, family='Gamma'), data=copy(testLongData)[, Value := abs(Value)])
 #' @family lcMethod package interfaces
-lcMethodFlexmixGBTM = function(formula = Value ~ 1,
+lcMethodFlexmixGBTM = function(formula,
                                formula.mb =  ~ 1,
                                time = getOption('latrend.time'),
                                id = getOption('latrend.id'),

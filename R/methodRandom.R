@@ -30,9 +30,9 @@ setValidity('lcMethodRandom', function(object) {
 #' # single large cluster
 #' m = lcMethodRandom(alpha=c(100, 1, 1, 1), nClusters=4)
 #' @family lcMethod implementations
-lcMethodRandom = function(alpha = 10,
+lcMethodRandom = function(response,
+                          alpha = 10,
                           center = meanNA,
-                          response = getOption('latrend.response'),
                           time = getOption('latrend.time'),
                           id = getOption('latrend.id'),
                           nClusters = 2,
@@ -57,6 +57,7 @@ setMethod('fit', signature('lcMethodRandom'), function(method, data, envir, verb
 
   lcModelCustom(
     method = method,
+    response = method$response,
     data = data,
     clusterAssignments = clusAssign,
     clusterTrajectories = method$center,

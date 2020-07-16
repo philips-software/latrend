@@ -12,7 +12,7 @@ setClass('lcMethodFunFEM', contains = 'lcMatrixMethod')
 #'                      id='Id', nClusters=3)
 #' latrend(method, testLongData)
 #' @family lcMethod implementations
-lcMethodFunFEM = function(formula = Value ~ 1,
+lcMethodFunFEM = function(response,
                           time = getOption('latrend.time'),
                           id = getOption('latrend.id'),
                           nClusters = 2,
@@ -33,8 +33,6 @@ setMethod('getShortName', signature('lcMethodFunFEM'), function(object) 'funfem'
 
 setMethod('preFit', signature('lcMethodFunFEM'), function(method, data, envir, verbose, ...) {
   e = callNextMethod()
-  valueColumn = formula(method) %>% getResponse
-
   e$basis = method$basis(range(e$times))
   e$fd = smooth.basis(e$times, t(e$dataMat), e$basis)$fd
 
@@ -50,7 +48,6 @@ setMethod('fit', signature('lcMethodFunFEM'), function(method, data, envir, verb
   args$graph = FALSE
 
   # Helper variables
-  valueColumn = formula(method) %>% getResponse
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   suppressFun({

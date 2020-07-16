@@ -8,43 +8,79 @@ options(latrend.id='Id',
         latrend.verbose=R.utils::Verbose())
 
 lcMethodTestKML = function(...) {
-  lcMethodKML(nbRedrawing=1, maxIt=10, ..., seed=1)
+  lcMethodKML(response = 'Value', nbRedrawing=1, maxIt=10, ..., seed=1)
 }
 
 lcMethodTestLcmmGMM = function(...) {
-  lcMethodLcmmGMM(maxiter=10, ..., seed=1)
+  lcMethodLcmmGMM(formula = Value ~ 1 + CLUSTER + (1 | ID), maxiter=10, ..., seed=1)
 }
 
 lcMethodTestLcmmGBTM = function(...) {
-  lcMethodLcmmGBTM(maxiter=10, ..., seed=1)
+  lcMethodLcmmGBTM(formula = Value ~ CLUSTER, maxiter=10, ..., seed=1)
 }
 
 lcMethodTestFlexmixGBTM = function(...) {
-  lcMethodFlexmixGBTM(..., control=list(iter.max=1, tolerance=1e-2), seed=1)
+  lcMethodFlexmixGBTM(formula = Value ~ 1, ..., control=list(iter.max=1, tolerance=1e-2), seed=1)
 }
 
 lcMethodTestCrimCV = function(...) {
-  lcMethodCrimCV(..., model='ZIP', dpolyp=2, dpolyl=1, init=2, seed=1)
+  lcMethodCrimCV(response = 'Value', ..., model='ZIP', dpolyp=2, dpolyl=1, init=2, seed=1)
+}
+
+lcMethodTestFunFEM = function(...) {
+  lcMethodFunFEM(response = 'Value', ...)
+}
+
+lcMethodTestMclustLLPA = function(...) {
+  lcMethodMclustLLPA(response = 'Value', ...)
+}
+
+lcMethodTestRandom = function(...) {
+  lcMethodRandom(response = 'Value', ...)
+}
+
+lcMethodTestStratify = function(...) {
+  lcMethodStratify(response = 'Value', ...)
+}
+
+lcMethodTestFlexmix = function(...) {
+  lcMethodFlexmix(formula = Value ~ 0, ...)
+}
+
+lcMethodTestGCKM = function(...) {
+  lcMethodGCKM(formula = Value ~ Time, ...)
+}
+
+lcMethodTestLMKM = function(...) {
+  lcMethodLMKM(formula = Value ~ Time, ...)
+}
+
+lcMethodTestTwoStep = function(...) {
+  lcMethodTwoStep(response = 'Value', ...)
+}
+
+lcMethodTestMixTVEM = function(...) {
+  lcMethodMixTVEM(formula = Value ~ time(1) - 1, ...)
 }
 
 lcMethodTestCrimCVt = function(...) {
-  lcMethodCrimCV(..., model='ZIPt', dpolyp=2, init=2, seed=1)
+  lcMethodCrimCV(response = 'Value', ..., model='ZIPt', dpolyp=2, init=2, seed=1)
 }
 
 lcMethodTestLongclust = function(...) {
-  lcMethodLongclust(modelSubset='VVA', gaussian=TRUE, ..., seed=1)
+  lcMethodLongclust(response = 'Value', modelSubset='VVA', gaussian=TRUE, ..., seed=1)
 }
 
 lcMethodTestLongclustT = function(...) {
-  lcMethodLongclust(modelSubset='VEI', gaussian=FALSE, ..., seed=1)
+  lcMethodLongclust(response = 'Value', modelSubset='VEI', gaussian=FALSE, ..., seed=1)
 }
 
 lcMethodTestMixtoolsNPRM = function(...) {
-  lcMethodMixtoolsNPRM(maxiter=10, eps=1e-04, seed=1)
+  lcMethodMixtoolsNPRM(response = 'Value', maxiter=10, eps=1e-04, seed=1)
 }
 
 lcMethodTestMixtoolsGMM = function(...) {
-  lcMethodMixtoolsGMM(epsilon=1e-02, ..., seed=1)
+  lcMethodMixtoolsGMM(formula = Value ~ Time + (Time | Id), epsilon=1e-02, ..., seed=1)
 }
 
 expect_valid_lcModel = function(object) {

@@ -11,10 +11,10 @@ setClass('lcMethodCrimCV', contains = 'lcMatrixMethod')
 #'
 #' library(crimCV)
 #' data(TO1adj)
-#' method = lcMethodCrimCV(Offenses ~ 0, time='Offense', id='Subject')
+#' method = lcMethodCrimCV(response = 'Offenses', time='Offense', id='Subject')
 #' model = latrend(method, TO1adj)
 #' @family lcMethod implementations
-lcMethodCrimCV = function(formula = Value ~ 0,
+lcMethodCrimCV = function(response,
                           time = getOption('latrend.time'),
                           id = getOption('latrend.id'),
                           nClusters = 2,

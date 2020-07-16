@@ -13,7 +13,7 @@ setClass('lcMethodAKMedoids', contains = 'lcMatrixMethod')
 #'                      id='Patient', nClusters=3)
 #' latrend(method, data=OSA1y)
 #' @family lcMethod implementations
-lcMethodAKMedoids = function(response = getOption('latrend.response'),
+lcMethodAKMedoids = function(response,
                              time = getOption('latrend.time'),
                              id = getOption('latrend.id'),
                              nClusters = 3,

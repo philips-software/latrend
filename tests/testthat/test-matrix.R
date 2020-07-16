@@ -14,7 +14,7 @@ test_that('rowColumns', {
 
 test_that('meltRepeatedMeasures', {
   m = matrix(1:12, nrow=3)
-  meltRepeatedMeasures(m) %>%
+  meltRepeatedMeasures(m, response = 'Value') %>%
     expect_is('data.frame') %>%
     expect_named(c('Id', 'Time', 'Value')) %T>%
     {expect_equal(nrow(.), length(m))} %T>%
@@ -29,7 +29,7 @@ test_that('meltRepeatedMeasures with non-numeric colnames', {
   colnames(m) = paste0('Obs', 1:4)
 
   suppressWarnings({
-    meltRepeatedMeasures(m) %>%
+    meltRepeatedMeasures(m, response = 'Value') %>%
       expect_is('data.frame') %>%
       expect_named(c('Id', 'Time', 'Value')) %T>%
       {expect_equal(nrow(.), length(m))} %T>%
@@ -42,8 +42,8 @@ test_that('meltRepeatedMeasures with non-numeric colnames', {
 
 test_that('dcastRepeatedMeasures', {
   m = matrix(1:12, nrow=3)
-  df = meltRepeatedMeasures(m)
-  dcastRepeatedMeasures(df) %>%
+  df = meltRepeatedMeasures(m, response = 'Value')
+  dcastRepeatedMeasures(df, response = 'Value') %>%
     expect_is('matrix') %T>%
     {expect_equal(nrow(.), nrow(m))} %T>%
     {expect_equal(ncol(.), ncol(m))} %T>%

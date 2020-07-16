@@ -1,14 +1,14 @@
 context('KML model')
 
 test_that('method', {
-  kml = lcMethodKML()
+  kml = lcMethodTestKML()
   expect_output(print(kml))
 })
 
 test_that('default', {
   m = lcMethodTestKML()
   model = latrend(m, testLongData) %>%
-    expect_silent
+    expect_silent()
   expect_valid_lcModel(model)
 })
 

@@ -203,7 +203,7 @@ test_that('update.lcMethod with local variables', {
 })
 
 test_that('dependency function evaluation', {
-  method = lcMethodKML()
+  method = lcMethodTestKML()
   expect_is(method$centerMethod, 'function')
 })
 
@@ -218,13 +218,13 @@ test_that('as.list', {
 })
 
 test_that('as.list with function', {
-  m = lcMethodKML()
+  m = lcMethodTestKML()
   lis = as.list(m, args=kml::parALGO)
   expect_length(setdiff(names(lis), formalArgs(kml::parALGO)), 0)
 })
 
 test_that('as.list with two functions', {
-  m = lcMethodKML()
+  m = lcMethodTestKML()
   funs = c(kml::parALGO, kml::kml)
   lis = as.list(m, args=funs)
   expect_length(setdiff(names(lis), union(formalArgs(funs[[1]]), formalArgs(funs[[2]]))), 0)
@@ -249,23 +249,23 @@ test_that('negative nClusters error', {
 })
 
 test_that('lcMethod function', {
-  lcMethodKML2 = function(formula=Value ~ 0, time='Id', id='Id', nClusters=2) {
+  lcMethodTestKML2 = function(time='Id', id='Id', response = 'Value', nClusters=2) {
     lcMethod.call('lcMethodKML', call=match.call.defaults(),
              defaults=c(kml::kml, kml::parALGO),
              excludeArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq'))
   }
-  m = lcMethodKML2(nClusters=3)
+  m = lcMethodTestKML2(nClusters=3)
 
-  expect_true(all(formalArgs(lcMethodKML2) %in% names(m)))
+  expect_true(all(formalArgs(lcMethodTestKML2) %in% names(m)))
 })
 
 test_that('lcMethod function with default NULL argument', {
-  lcMethodKML2 = function(formula=Value ~ 0, time=NULL, id='Id', nClusters=2) {
+  lcMethodTestKML2 = function(time=NULL, id='Id', response = 'Value', nClusters=2) {
     lcMethod.call('lcMethodKML', call=match.call.defaults(),
              defaults=c(kml::kml, kml::parALGO),
              excludeArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq'))
   }
-  m = lcMethodKML2(nClusters=3)
+  m = lcMethodTestKML2(nClusters=3)
 
-  expect_true(all(formalArgs(lcMethodKML2) %in% names(m)))
+  expect_true(all(formalArgs(lcMethodTestKML2) %in% names(m)))
 })

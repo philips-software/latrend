@@ -75,7 +75,7 @@ setValidity('lcMethodMixTVEM', function(object) {
 #' method = lcMethodMixTVEM(Value ~ time(1) - 1,
 #'                      time='Assessment',
 #'                      id='Id', nClusters=3)
-lcMethodMixTVEM = function(formula = Value ~ time(1) - 1,
+lcMethodMixTVEM = function(formula,
                            formula.mb =  ~ 1,
                            time = getOption('latrend.time'),
                            id = getOption('latrend.id'),

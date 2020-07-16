@@ -9,7 +9,7 @@ setClass('lcMethodMixtoolsGMM', contains = 'lcMethod')
 #'                      time='Time',
 #'                      id='Id', nClusters=3)
 #' @family lcMethod implementations
-lcMethodMixtoolsGMM = function(formula = Value ~ Time + (1 | Id),
+lcMethodMixtoolsGMM = function(formula,
                                time = getOption('latrend.time'),
                                id = getOption('latrend.id'),
                                nClusters = 2,

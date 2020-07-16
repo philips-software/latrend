@@ -1,7 +1,7 @@
 context('stratify')
 
 test_that('expression', {
-  m = lcMethodStratify(mean(Value) > 1)
+  m = lcMethodTestStratify(stratify = mean(Value) > 1)
   model = latrend(m, data=testLongData)
   expect_valid_lcModel(model)
 
@@ -13,7 +13,7 @@ test_that('expression', {
 
 test_that('function', {
   stratfun = function(data) mean(data$Value) < 1
-  m = lcMethodStratify(stratfun)
+  m = lcMethodTestStratify(stratify = stratfun)
 
   model = latrend(m, data=testLongData)
   expect_valid_lcModel(model)
@@ -24,7 +24,7 @@ test_that('function', {
 })
 
 test_that('in-line function', {
-  m = lcMethodStratify(function(data) mean(data$Value) > 1)
+  m = lcMethodTestStratify(stratify = function(data) mean(data$Value) > 1)
 
   model = latrend(m, data=testLongData)
   expect_valid_lcModel(model)
@@ -33,7 +33,7 @@ test_that('in-line function', {
 
 test_that('single logical cluster assignment', {
   stratfun = function(data) FALSE
-  m = lcMethodStratify(stratfun)
+  m = lcMethodTestStratify(stratify = stratfun)
 
   model = latrend(m, data=testLongData)
   expect_valid_lcModel(model)
@@ -42,7 +42,7 @@ test_that('single logical cluster assignment', {
 
 test_that('single numeric cluster assignment', {
   stratfun = function(data) 1
-  m = lcMethodStratify(stratfun)
+  m = lcMethodTestStratify(stratify = stratfun)
 
   model = latrend(m, data=testLongData)
   expect_valid_lcModel(model)
@@ -51,7 +51,7 @@ test_that('single numeric cluster assignment', {
 
 test_that('logical cluster assignment with empty cluster', {
   stratfun = function(data) TRUE
-  m = lcMethodStratify(stratfun)
+  m = lcMethodTestStratify(stratify = stratfun)
 
   expect_warning({model = latrend(m, data=testLongData)})
   expect_valid_lcModel(model)
@@ -59,7 +59,7 @@ test_that('logical cluster assignment with empty cluster', {
 })
 
 test_that('multiple cluster factor expression', {
-  m = lcMethodStratify(cut(mean(Value), c(-Inf, -.5, 0, Inf), labels=c('C', 'B', 'A')))
+  m = lcMethodTestStratify(stratify = cut(mean(Value), c(-Inf, -.5, 0, Inf), labels=c('C', 'B', 'A')))
   model = latrend(m, data=testLongData)
   expect_valid_lcModel(model)
   expect_equal(nClusters(model), 3)
@@ -67,7 +67,7 @@ test_that('multiple cluster factor expression', {
 })
 
 test_that('multiple cluster numeric expression', {
-  m = lcMethodStratify(as.numeric(cut(mean(Value), c(-Inf, -.5, 0, Inf))))
+  m = lcMethodTestStratify(stratify = as.numeric(cut(mean(Value), c(-Inf, -.5, 0, Inf))))
   model = latrend(m, data=testLongData)
   expect_valid_lcModel(model)
   expect_equal(nClusters(model), 3)
@@ -75,7 +75,7 @@ test_that('multiple cluster numeric expression', {
 })
 
 test_that('multiple cluster expression with cluster names', {
-  m = lcMethodStratify(as.numeric(cut(mean(Value), c(-Inf, -.5, 0, Inf))),
+  m = lcMethodTestStratify(stratify = as.numeric(cut(mean(Value), c(-Inf, -.5, 0, Inf))),
                        clusterNames=LETTERS[3:1])
   model = latrend(m, data=testLongData)
   expect_valid_lcModel(model)

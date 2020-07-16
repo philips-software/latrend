@@ -32,7 +32,7 @@ setValidity('lcMethodLcmmGBTM', function(object) {
 #' gmm = latrend(method, data=testLongData)
 #' summary(gmm)
 #' @family lcMethod implementations
-lcMethodLcmmGBTM = function(formula = Value ~ 1 + CLUSTER,
+lcMethodLcmmGBTM = function(formula,
                             formula.mb =  ~ 1,
                             time = getOption('latrend.time'),
                             id = getOption('latrend.id'),

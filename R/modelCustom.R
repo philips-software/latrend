@@ -30,10 +30,10 @@ setClassUnion('functionOrNULL', members = c('function', 'NULL'))
 #' @param predictPostprob Predict function for the posterior probability.
 #' @param method The method used to create this lcModelCustom instance. Optional.
 lcModelCustom = function(data,
+                         response,
                          clusterAssignments = NULL,
                          clusterTrajectories = mean,
                          trajectories = data,
-                         response = getOption('latrend.response'),
                          time = getOption('latrend.time'),
                          id = getOption('latrend.id'),
                          clusterNames = NULL,

@@ -23,7 +23,7 @@ setValidity('lcMethodGCKM', function(object) {
 #'                      time='Assessment',
 #'                      id='Subject', nClusters=3)
 #' @family lcMethod implementations
-lcMethodGCKM = function(formula = Value ~ 1,
+lcMethodGCKM = function(formula,
                         time = getOption('latrend.time'),
                         id = getOption('latrend.id'),
                         nClusters = 2,
@@ -105,6 +105,7 @@ clusterStepGCKM = function(method, data, repMat, envir, verbose, ...) {
 
   lcModelCustom(
     method = method,
+    response = responseVariable(method),
     data = data,
     clusterAssignments = km$cluster,
     clusterTrajectories = method$center,

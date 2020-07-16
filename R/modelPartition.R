@@ -19,11 +19,11 @@ setClass(
 #' @param nClusters The number of clusters. Optional for `factor` assignments.
 #' @param clusterNames The names of the clusters, or a function with input `n` outputting a `character vector` of names.
 lcModelPartition = function(data,
+                            response,
                             clusterAssignments,
                             nClusters = NA,
                             center = meanNA,
                             clusterNames = NULL,
-                            response = getOption('latrend.response'),
                             time = getOption('latrend.time'),
                             id = getOption('latrend.id'),
                             name = 'part') {

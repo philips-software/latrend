@@ -52,7 +52,7 @@ test_that('data call', {
 })
 
 test_that('specify id and time with matrix input', {
-  mat = dcastRepeatedMeasures(testLongData)
+  mat = dcastRepeatedMeasures(testLongData, response = 'Value')
   model = latrend(lcMethodTestKML(), id='Device', time='Observation', data=mat) %>%
     expect_is('lcModel')
 
@@ -60,7 +60,7 @@ test_that('specify id and time with matrix input', {
 })
 
 test_that('envir', {
-  kml = lcMethodKML(nClusters=a, nbRedrawing=1, maxIt=10)
+  kml = lcMethodKML(nClusters=a, response = 'Value', nbRedrawing=1, maxIt=10)
   e = list2env(list(a = 1))
 
   model = latrend(kml, data=testLongData, envir=e) %>%
@@ -76,7 +76,7 @@ test_that('data.frame input', {
 })
 
 test_that('matrix input', {
-  mat = dcastRepeatedMeasures(testLongData)
+  mat = dcastRepeatedMeasures(testLongData, response = 'Value')
   model = latrend(lcMethodTestKML(), data=mat) %>%
     expect_is('lcModel')
 })

@@ -1,8 +1,8 @@
 context('mclust models')
 
 test_that('default llpa', {
-  m = lcMethodMclustLLPA()
+  m = lcMethodTestMclustLLPA()
   model = latrend(m, testLongData) %>%
-    expect_silent
+    expect_silent()
   expect_valid_lcModel(model)
 })

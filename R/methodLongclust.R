@@ -7,12 +7,12 @@ setClass('lcMethodLongclust', contains = 'lcMatrixMethod')
 #' @inheritParams lcMatrixMethod
 #' @inheritDotParams longclust::longclustEM
 #' @examples
-#' method = lcMethodLongclust(Value ~ .,
+#' method = lcMethodLongclust(Value ~ 1,
 #'                      time='Time',
 #'                      id='Id', nClusters=3)
 #' latrend(method, testLongData)
 #' @family lcMethod implementations
-lcMethodLongclust = function(formula = Value ~ 1,
+lcMethodLongclust = function(response,
                              time = getOption('latrend.time'),
                              id = getOption('latrend.id'),
                              nClusters = 2,

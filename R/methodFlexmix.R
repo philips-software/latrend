@@ -8,7 +8,7 @@ setClass('lcMethodFlexmix', contains = 'lcMethod')
 #' @examples
 #'
 #' @family lcMethod package interfaces
-lcMethodFlexmix = function(formula = Value ~ 0,
+lcMethodFlexmix = function(formula,
                            formula.mb =  ~ 1,
                            time = getOption('latrend.time'),
                            id = getOption('latrend.id'),

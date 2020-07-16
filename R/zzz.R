@@ -16,7 +16,6 @@
 .onLoad = function(libname, pkgname) {
   opts = list(
     latrend.verbose = R.utils::Verbose(threshold = -1),
-    latrend.response = 'Value',
     latrend.time = 'Time',
     latrend.id = 'Id',
     latrend.clusterNames = LETTERS,

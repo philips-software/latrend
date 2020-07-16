@@ -21,7 +21,7 @@ setValidity('lcMethodLMKM', function(object) {
 #'                      time='Assessment',
 #'                      id='Subject', nClusters=3)
 #' @family lcMethod implementations
-lcMethodLMKM = function(formula = Value ~ Time,
+lcMethodLMKM = function(formula,
                         time = getOption('latrend.time'),
                         id = getOption('latrend.id'),
                         nClusters = 2,

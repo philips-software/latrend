@@ -26,7 +26,7 @@ setValidity('lcMethodMclustLLPA', function(object) {
 #'                      time='Assessment',
 #'                      id='Id', nClusters=3)
 #' @family lcMethod implementations
-lcMethodMclustLLPA = function(response = getOption('latrend.response'),
+lcMethodMclustLLPA = function(response,
                               time = getOption('latrend.time'),
                               id = getOption('latrend.id'),
                               nClusters = 2,
