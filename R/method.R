@@ -841,3 +841,26 @@ setMethod('validate', signature('lcMethod'), function(method, data, envir =
     is.character(getLabel(method))
   )
 })
+
+
+#' @export
+match.call.all = function(definition = sys.function(sys.parent()),
+                           call = sys.call(sys.parent()),
+                           expand.dots = TRUE,
+                           envir = parent.frame(2L)) {
+  call = stackoverflow::match.call.defaults(definition = definition,
+                                            call = call,
+                                            expand.dots = expand.dots,
+                                            envir = envir)
+  # search for ..N arguments
+  nameMask = vapply(call, is.name, FUN.VALUE = TRUE)
+  dotMask = grepl('\\.\\.\\d+', as.character(call[nameMask]))
+
+  if (any(dotMask)) {
+    dotNames = names(call)[nameMask][dotMask]
+    for (dotArg in dotNames) {
+      call[[dotArg]] = do.call(substitute, list(as.name(dotArg)), env = parent.frame())
+    }
+  }
+  return (call)
+}
