@@ -1,12 +1,12 @@
-context('clModel')
+context('lcModel')
 
-model = cluslong(clMethodTestKML(), data=testLongData)
+model = latrend(lcMethodTestKML(), data=testLongData)
 
 test_that('default predict', {
   suppressWarnings({
-    setClass('clModelTest', contains='clModel')
+    setClass('lcModelTest', contains='lcModel')
     testModel = model
-    class(testModel) = 'clModelTest'
+    class(testModel) = 'lcModelTest'
     dfpred = predict(testModel, newdata=data.frame(Time=1))
     expect_is(dfpred, 'list')
     expect_is(dfpred$A$Fit, 'numeric')
@@ -16,9 +16,9 @@ test_that('default predict', {
 
 test_that('default fitted', {
   suppressWarnings({
-    setClass('clModelTest', contains='clModel')
+    setClass('lcModelTest', contains='lcModel')
     testModel = model
-    class(testModel) = 'clModelTest'
+    class(testModel) = 'lcModelTest'
     expect_is(fitted(testModel), 'numeric')
   })
 })
@@ -92,7 +92,7 @@ test_that('metrics', {
 
 test_that('update', {
   m = update(model, nClusters = 3)
-  expect_is(m, 'clModel')
+  expect_is(m, 'lcModel')
   expect_equal(nClusters(m), 3)
 })
 

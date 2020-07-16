@@ -5,11 +5,11 @@ test_that('default', {
        clusters = data[, mean(Value) > 0, by=Id]$V1 %>%
            factor(levels=c(F,T), labels=c('Low', 'High'))
        list(clusters=clusters)
-       clModelCustom(data=data, clusterAssignments=clusters)
+       lcModelCustom(data=data, clusterAssignments=clusters)
   }
-  method = clMethodCustom(fun=clusfun)
+  method = lcMethodCustom(fun=clusfun)
 
-  model = cluslong(method, testLongData)
+  model = latrend(method, testLongData)
 
-  expect_valid_clModel(model)
+  expect_valid_lcModel(model)
 })

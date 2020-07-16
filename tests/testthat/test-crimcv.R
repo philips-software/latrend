@@ -6,8 +6,8 @@ subTO1adj = TO1adj[1:100, seq(1, ncol(TO1adj), by=2)]
 
 test_that('default tau', {
   suppressWarnings({
-    model = cluslong(clMethodTestCrimCVt(), subTO1adj) %>%
-      expect_valid_clModel()
+    model = latrend(lcMethodTestCrimCVt(), subTO1adj) %>%
+      expect_valid_lcModel()
   })
 
   plot(model, what='nu') %>%
@@ -16,8 +16,8 @@ test_that('default tau', {
 
 test_that('default', {
   suppressWarnings({
-    model = cluslong(clMethodTestCrimCV(), subTO1adj) %>%
-      expect_valid_clModel()
+    model = latrend(lcMethodTestCrimCV(), subTO1adj) %>%
+      expect_valid_lcModel()
   })
 
   plot(model, what='nu') %>%
@@ -26,7 +26,7 @@ test_that('default', {
 
 test_that('many clusters', {
   suppressWarnings({
-    model = cluslong(clMethodTestCrimCVt(nClusters=4), subTO1adj) %>%
-      expect_valid_clModel()
+    model = latrend(lcMethodTestCrimCVt(nClusters=4), subTO1adj) %>%
+      expect_valid_lcModel()
   })
 })

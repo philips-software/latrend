@@ -10,14 +10,14 @@ rownames(trajMat) = traj[,1]
 
 test_that('default', {
   suppressWarnings({
-    model = cluslong(clMethodAKMedoids(), trajMat) %>%
-      expect_valid_clModel()
+    model = latrend(lcMethodAKMedoids(), trajMat) %>%
+      expect_valid_lcModel()
   })
 })
 
 test_that('many clusters', {
   suppressWarnings({
-    model = cluslong(clMethodAKMedoids(nClusters=10), trajMat) %>%
-      expect_valid_clModel()
+    model = latrend(lcMethodAKMedoids(nClusters=10), trajMat) %>%
+      expect_valid_lcModel()
   })
 })

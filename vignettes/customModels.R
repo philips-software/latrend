@@ -17,11 +17,11 @@ update_geom_defaults('line', list(size = .01))
 update_geom_defaults('point', list(size = .5))
 
 ## ------------------------------------------------------------------------
-library(cluslong)
-options(cluslong.id = 'Traj',
-        cluslong.time = 'Time',
-        cluslong.response = 'Y',
-        cluslong.verbose = TRUE)
+library(latrend)
+options(latrend.id = 'Traj',
+        latrend.time = 'Time',
+        latrend.response = 'Y',
+        latrend.verbose = TRUE)
 
 ## ------------------------------------------------------------------------
 set.seed(1)
@@ -48,8 +48,8 @@ ggplot(casedata[Time == 0], aes(x = Mu)) +
   geom_density(fill = 'gray', adjust = .3)
 
 ## ----message=TRUE--------------------------------------------------------
-m = clMethodStratify(Y[1] > 1.7)
-model = cluslong(m, casedata)
+m = lcMethodStratify(Y[1] > 1.7)
+model = latrend(m, casedata)
 
 ## ------------------------------------------------------------------------
 clusterProportions(model)
@@ -61,16 +61,16 @@ stratfun = function(data) {
          levels = c(FALSE, TRUE),
          labels = c('Low', 'High'))
 }
-m2 = clMethodStratify(stratfun, center = mean)
-model2 = cluslong(m2, casedata)
+m2 = lcMethodStratify(stratfun, center = mean)
+model2 = latrend(m2, casedata)
 
 clusterProportions(model2)
 
 ## ----message=TRUE--------------------------------------------------------
 casedata[, Intercept := coef(lm(Y ~ Time, .SD))[1], by = Traj]
 
-m3 = clMethodStratify(Intercept[1] > 1.7, clusterNames = c('Low', 'High'))
-model3 = cluslong(m3, casedata)
+m3 = lcMethodStratify(Intercept[1] > 1.7, clusterNames = c('Low', 'High'))
+model3 = latrend(m3, casedata)
 
 ## ------------------------------------------------------------------------
 repStep = function(method, data, verbose) {
@@ -84,7 +84,7 @@ repStep = function(method, data, verbose) {
 clusStep = function(method, data, repMat, envir, verbose) {
   km = kmeans(repMat, centers = 3)
 
-  clModelCustom(method = method,
+  lcModelCustom(method = method,
                 data = data,
                 clusterAssignments = km$cluster,
                 clusterTrajectories = method$center,
@@ -92,10 +92,10 @@ clusStep = function(method, data, repMat, envir, verbose) {
 }
 
 ## ------------------------------------------------------------------------
-m.twostep = clMethodTwoStep(representationStep = repStep, clusterStep = clusStep)
+m.twostep = lcMethodTwoStep(representationStep = repStep, clusterStep = clusStep)
 
 ## ----message=TRUE--------------------------------------------------------
-model.twostep = cluslong(m.twostep, data = casedata)
+model.twostep = latrend(m.twostep, data = casedata)
 summary(model.twostep)
 
 ## ------------------------------------------------------------------------
@@ -110,7 +110,7 @@ repStep.gen = function(method, data, verbose) {
 clusStep.gen = function(method, data, repMat, envir, verbose) {
   km = kmeans(repMat, centers = method$nClusters)
 
-  clModelCustom(method = method,
+  lcModelCustom(method = method,
                 data = data,
                 clusterAssignments = km$cluster,
                 clusterTrajectories = method$center,
@@ -118,35 +118,35 @@ clusStep.gen = function(method, data, repMat, envir, verbose) {
 }
 
 ## ------------------------------------------------------------------------
-m.twostepgen = clMethodTwoStep(representationStep = repStep.gen,
+m.twostepgen = lcMethodTwoStep(representationStep = repStep.gen,
                                clusterStep = clusStep.gen)
 
 ## ----message=TRUE--------------------------------------------------------
-model.twostepgen = cluslong(m.twostepgen, formula = Y ~ Time, nClusters = 2, casedata)
+model.twostepgen = latrend(m.twostepgen, formula = Y ~ Time, nClusters = 2, casedata)
 summary(model.twostepgen)
 
 ## ------------------------------------------------------------------------
-setClass('clMethodLMKM', contains='clMethod')
+setClass('lcMethodLMKM', contains='lcMethod')
 
-setMethod('getName', signature('clMethodLMKM'), function(object) 'lm-kmeans')
+setMethod('getName', signature('lcMethodLMKM'), function(object) 'lm-kmeans')
 
-setMethod('getShortName', signature('clMethodLMKM'), function(object) 'lmkm')
+setMethod('getShortName', signature('lcMethodLMKM'), function(object) 'lmkm')
 
 ## ------------------------------------------------------------------------
-clMethodLMKM = function(formula=Value ~ Time,
-                        time=getOption('cluslong.time'),
-                        id=getOption('cluslong.id'),
+lcMethodLMKM = function(formula=Value ~ Time,
+                        time=getOption('latrend.time'),
+                        id=getOption('latrend.id'),
                         nClusters=2) {
-  new('clMethodLMKM', call=stackoverflow::match.call.defaults())
+  new('lcMethodLMKM', call=stackoverflow::match.call.defaults())
 }
 
 ## ------------------------------------------------------------------------
-setMethod('prepareData', signature('clMethodLMKM'), function(method, data, verbose) {
+setMethod('prepareData', signature('lcMethodLMKM'), function(method, data, verbose) {
   # optional data processing here
   return(NULL)
 })
 
-setMethod('fit', signature('clMethodLMKM'), function(method, data, envir, verbose, ...) {
+setMethod('fit', signature('lcMethodLMKM'), function(method, data, envir, verbose, ...) {
   # fit lm per trajectory
   coefdata = data[, lm(method$formula, .SD) %>% coef() %>% as.list(), keyby = c(method$id)]
   # construct the coefficient matrix
@@ -154,7 +154,7 @@ setMethod('fit', signature('clMethodLMKM'), function(method, data, envir, verbos
   # cross-sectional clustering
   km = kmeans(coefmat, centers = method$nClusters)
 
-  new('clModelLMKM',
+  new('lcModelLMKM',
       method=method,
       data=data,
       model=km,
@@ -162,5 +162,5 @@ setMethod('fit', signature('clMethodLMKM'), function(method, data, envir, verbos
 })
 
 ## ------------------------------------------------------------------------
-setClass('clModelLcmmGMM', contains='clModel')
+setClass('lcModelLcmmGMM', contains='lcModel')
 

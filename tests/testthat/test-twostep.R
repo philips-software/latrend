@@ -6,17 +6,17 @@ test_that('specify', {
   }
   clusfun = function(method, data, repMat, ...) {
     clusters = factor(repMat[,1] > 0, levels=c(F,T), labels=c('Low', 'High'))
-    clModelCustom(data=data, clusterAssignments=clusters)
+    lcModelCustom(data=data, clusterAssignments=clusters)
   }
-  method = clMethodTwoStep(representationStep=repfun, clusterStep=clusfun, standardize=scale)
+  method = lcMethodTwoStep(representationStep=repfun, clusterStep=clusfun, standardize=scale)
 
-  model = expect_silent(cluslong(method, testLongData))
+  model = expect_silent(latrend(method, testLongData))
 
-  expect_valid_clModel(model)
+  expect_valid_lcModel(model)
 })
 
 test_that('gckm', {
-  method = clMethodGCKM()
-  model = expect_silent(cluslong(method, testLongData))
-  expect_valid_clModel(model)
+  method = lcMethodGCKM()
+  model = expect_silent(latrend(method, testLongData))
+  expect_valid_lcModel(model)
 })

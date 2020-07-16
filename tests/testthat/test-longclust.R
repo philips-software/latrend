@@ -1,16 +1,16 @@
 context('longclust')
 
 test_that('default', {
-  model = cluslong(clMethodTestLongclust(), testLongData) %>%
-    expect_valid_clModel()
+  model = latrend(lcMethodTestLongclust(), testLongData) %>%
+    expect_valid_lcModel()
 })
 
 test_that('t', {
-  model = cluslong(clMethodTestLongclustT(), testLongData) %>%
-    expect_valid_clModel()
+  model = latrend(lcMethodTestLongclustT(), testLongData) %>%
+    expect_valid_lcModel()
 })
 
 test_that('many clusters', {
-  model = cluslong(clMethodTestLongclust(nClusters=5), testLongData) %>%
-    expect_valid_clModel()
+  model = latrend(lcMethodTestLongclust(nClusters=5), testLongData) %>%
+    expect_valid_lcModel()
 })

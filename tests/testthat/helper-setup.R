@@ -3,52 +3,52 @@ if(file.exists(mixt_file)) {
   source(mixt_file)
 }
 
-options(cluslong.id='Id',
-        cluslong.time='Time',
-        cluslong.verbose=R.utils::Verbose())
+options(latrend.id='Id',
+        latrend.time='Time',
+        latrend.verbose=R.utils::Verbose())
 
-clMethodTestKML = function(...) {
-  clMethodKML(nbRedrawing=1, maxIt=10, ..., seed=1)
+lcMethodTestKML = function(...) {
+  lcMethodKML(nbRedrawing=1, maxIt=10, ..., seed=1)
 }
 
-clMethodTestLcmmGMM = function(...) {
-  clMethodLcmmGMM(maxiter=10, ..., seed=1)
+lcMethodTestLcmmGMM = function(...) {
+  lcMethodLcmmGMM(maxiter=10, ..., seed=1)
 }
 
-clMethodTestLcmmGBTM = function(...) {
-  clMethodLcmmGBTM(maxiter=10, ..., seed=1)
+lcMethodTestLcmmGBTM = function(...) {
+  lcMethodLcmmGBTM(maxiter=10, ..., seed=1)
 }
 
-clMethodTestFlexmixGBTM = function(...) {
-  clMethodFlexmixGBTM(..., control=list(iter.max=1, tolerance=1e-2), seed=1)
+lcMethodTestFlexmixGBTM = function(...) {
+  lcMethodFlexmixGBTM(..., control=list(iter.max=1, tolerance=1e-2), seed=1)
 }
 
-clMethodTestCrimCV = function(...) {
-  clMethodCrimCV(..., model='ZIP', dpolyp=2, dpolyl=1, init=2, seed=1)
+lcMethodTestCrimCV = function(...) {
+  lcMethodCrimCV(..., model='ZIP', dpolyp=2, dpolyl=1, init=2, seed=1)
 }
 
-clMethodTestCrimCVt = function(...) {
-  clMethodCrimCV(..., model='ZIPt', dpolyp=2, init=2, seed=1)
+lcMethodTestCrimCVt = function(...) {
+  lcMethodCrimCV(..., model='ZIPt', dpolyp=2, init=2, seed=1)
 }
 
-clMethodTestLongclust = function(...) {
-  clMethodLongclust(modelSubset='VVA', gaussian=TRUE, ..., seed=1)
+lcMethodTestLongclust = function(...) {
+  lcMethodLongclust(modelSubset='VVA', gaussian=TRUE, ..., seed=1)
 }
 
-clMethodTestLongclustT = function(...) {
-  clMethodLongclust(modelSubset='VEI', gaussian=FALSE, ..., seed=1)
+lcMethodTestLongclustT = function(...) {
+  lcMethodLongclust(modelSubset='VEI', gaussian=FALSE, ..., seed=1)
 }
 
-clMethodTestMixtoolsNPRM = function(...) {
-  clMethodMixtoolsNPRM(maxiter=10, eps=1e-04, seed=1)
+lcMethodTestMixtoolsNPRM = function(...) {
+  lcMethodMixtoolsNPRM(maxiter=10, eps=1e-04, seed=1)
 }
 
-clMethodTestMixtoolsGMM = function(...) {
-  clMethodMixtoolsGMM(epsilon=1e-02, ..., seed=1)
+lcMethodTestMixtoolsGMM = function(...) {
+  lcMethodMixtoolsGMM(epsilon=1e-02, ..., seed=1)
 }
 
-expect_valid_clModel = function(object) {
-  expect_s4_class(object, 'clModel')
+expect_valid_lcModel = function(object) {
+  expect_s4_class(object, 'lcModel')
 
   getCall(object) %>%
     expect_is('call')
@@ -90,7 +90,7 @@ expect_valid_clModel = function(object) {
   expect_lte(max(as.integer(clus)), nIds(object))
 
   # Predict
-  if(!is(object, 'clModelCustom')) {
+  if(!is(object, 'lcModelCustom')) {
     # cluster-specific prediction
     pred = predict(object, newdata=data.frame(Cluster='A', Time=time(object)[c(1,3)]))
     expect_is(pred, 'data.frame', info='predictClusterTime')

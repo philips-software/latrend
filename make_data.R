@@ -1,5 +1,5 @@
 library(usethis)
-library(cluslong)
+library(latrend)
 source('osa.R')
 
 # Test data ####

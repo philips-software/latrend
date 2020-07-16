@@ -1,21 +1,21 @@
 context('KML model')
 
 test_that('method', {
-  kml = clMethodKML()
+  kml = lcMethodKML()
   expect_output(print(kml))
 })
 
 test_that('default', {
-  m = clMethodTestKML()
-  model = cluslong(m, testLongData) %>%
+  m = lcMethodTestKML()
+  model = latrend(m, testLongData) %>%
     expect_silent
-  expect_valid_clModel(model)
+  expect_valid_lcModel(model)
 })
 
 test_that('nclusters', {
-  methods = clMethods(clMethodTestKML(), nClusters=c(1, 5))
-  models = cluslongBatch(methods, testLongData)
+  methods = lcMethods(lcMethodTestKML(), nClusters=c(1, 5))
+  models = latrendBatch(methods, testLongData)
 
-  expect_valid_clModel(models[[1]])
-  expect_valid_clModel(models[[2]])
+  expect_valid_lcModel(models[[1]])
+  expect_valid_lcModel(models[[2]])
 })

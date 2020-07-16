@@ -1,8 +1,8 @@
-context('cluslongBoot')
+context('latrendBoot')
 
-test_that('cluslongBoot', {
-  models = cluslongBoot(clMethodTestKML(), data=testLongData, samples=3, seed=1) %>%
-    expect_is('clModels') %>%
+test_that('latrendBoot', {
+  models = latrendBoot(lcMethodTestKML(), data=testLongData, samples=3, seed=1) %>%
+    expect_is('lcModels') %>%
     expect_length(3)
 
   # test if data bootstrap sample calls are correct
@@ -11,21 +11,21 @@ test_that('cluslongBoot', {
   expect_equal(deparse(getCall(models[[3]])$data), 'bootSample(testLongData, "Id", 866248189L)')
 })
 
-test_that('cluslongBoot without seed', {
-  cluslongBoot(clMethodTestKML(), data=testLongData, samples=2) %>%
-    expect_is('clModels') %>%
+test_that('latrendBoot without seed', {
+  latrendBoot(lcMethodTestKML(), data=testLongData, samples=2) %>%
+    expect_is('lcModels') %>%
     expect_length(2)
 })
 
-test_that('cluslongBoot with method var', {
-  kml = clMethodTestKML()
-  cluslongBoot(kml, data=testLongData, samples=2) %>%
-    expect_is('clModels') %>%
+test_that('latrendBoot with method var', {
+  kml = lcMethodTestKML()
+  latrendBoot(kml, data=testLongData, samples=2) %>%
+    expect_is('lcModels') %>%
     expect_length(2)
 })
 
-test_that('cluslongBoot with single sample', {
-  cluslongBoot(clMethodTestKML(), data=testLongData, samples=1) %>%
-    expect_is('clModels') %>%
+test_that('latrendBoot with single sample', {
+  latrendBoot(lcMethodTestKML(), data=testLongData, samples=1) %>%
+    expect_is('lcModels') %>%
     expect_length(1)
 })

@@ -1,8 +1,8 @@
-context('cluslongBatch')
+context('latrendBatch')
 
 test_that('single method and data, cartesian=TRUE', {
-  models = cluslongBatch(clMethodTestKML(), testLongData, cartesian=TRUE) %>%
-    expect_is('clModels') %>%
+  models = latrendBatch(lcMethodTestKML(), testLongData, cartesian=TRUE) %>%
+    expect_is('lcModels') %>%
     expect_length(1)
 
   getCall(models[[1]]) %T>%
@@ -10,8 +10,8 @@ test_that('single method and data, cartesian=TRUE', {
 })
 
 test_that('single method and data, cartesian=FALSE', {
-  models = cluslongBatch(clMethodTestKML(), testLongData, cartesian=FALSE) %>%
-    expect_is('clModels') %>%
+  models = latrendBatch(lcMethodTestKML(), testLongData, cartesian=FALSE) %>%
+    expect_is('lcModels') %>%
     expect_length(1)
 
   getCall(models[[1]]) %T>%
@@ -19,10 +19,10 @@ test_that('single method and data, cartesian=FALSE', {
 })
 
 test_that('multiple datasets', {
-  methods = clMethods(clMethodTestKML(), nClusters=1:2)
+  methods = lcMethods(lcMethodTestKML(), nClusters=1:2)
 
-  models = cluslongBatch(methods, data=.(testLongData, testLongData[Time < .5], testLongData[Time >= .5]), cartesian=TRUE) %>%
-    expect_is('clModels') %>%
+  models = latrendBatch(methods, data=.(testLongData, testLongData[Time < .5], testLongData[Time >= .5]), cartesian=TRUE) %>%
+    expect_is('lcModels') %>%
     expect_length(2*3)
 
   getCall(models[[1]]) %T>%
@@ -34,11 +34,11 @@ test_that('multiple datasets', {
 })
 
 test_that('datasets list', {
-  methods = clMethods(clMethodTestKML(), nClusters=1:2)
+  methods = lcMethods(lcMethodTestKML(), nClusters=1:2)
   dataList = list(testLongData, testLongData[Time < .5], testLongData[Time >= .5])
 
-  models = cluslongBatch(methods, data=dataList, cartesian=TRUE) %>%
-    expect_is('clModels') %>%
+  models = latrendBatch(methods, data=dataList, cartesian=TRUE) %>%
+    expect_is('lcModels') %>%
     expect_length(2*3)
 
   getCall(models[[1]]) %T>%
@@ -50,10 +50,10 @@ test_that('datasets list', {
 })
 
 test_that('datasets list, cartesian=FALSE', {
-  methods = clMethods(clMethodTestKML(), nClusters=1:3)
+  methods = lcMethods(lcMethodTestKML(), nClusters=1:3)
   dataList = list(testLongData, testLongData[Time < .5], testLongData[Time >= .5])
-  models = cluslongBatch(methods, data=dataList, cartesian=FALSE) %>%
-    expect_is('clModels') %>%
+  models = latrendBatch(methods, data=dataList, cartesian=FALSE) %>%
+    expect_is('lcModels') %>%
     expect_length(3)
 
   getCall(models[[1]]) %T>%
@@ -67,8 +67,8 @@ test_that('datasets list, cartesian=FALSE', {
 test_that('single method, multiple datasets', {
   dataList = list(testLongData, testLongData[Time < .5], testLongData[Time >= .5])
 
-  models = cluslongBatch(clMethodTestKML(), data=dataList, cartesian=TRUE) %>%
-    expect_is('clModels') %>%
+  models = latrendBatch(lcMethodTestKML(), data=dataList, cartesian=TRUE) %>%
+    expect_is('lcModels') %>%
     expect_length(3)
 
   getCall(models[[1]]) %T>%

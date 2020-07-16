@@ -16,8 +16,8 @@ setGeneric('plotTrajectories', function(object, ...) standardGeneric('plotTrajec
 #' plotTrajectories(testLongData, response = quote(exp(Value)))
 setMethod('plotTrajectories', signature('data.frame'), function(object,
                                                                 response,
-                                                                time = getOption('cluslong.time'),
-                                                                id = getOption('cluslong.id'),
+                                                                time = getOption('latrend.time'),
+                                                                id = getOption('latrend.id'),
                                                                 cluster = NULL,
                                                                 facet = TRUE) {
   if (length(cluster) > 1) {
@@ -58,7 +58,7 @@ setMethod('plotTrajectories', signature('data.frame'), function(object,
 setGeneric('plotClusterTrajectories', function(object, ...) standardGeneric('plotClusterTrajectories'))
 
 #' @export
-#' @title
+#' @title Plot cluster trajectories
 #' @param object The (cluster) trajectory data.
 #' @param cluster The cluster assignment column
 #' @param center A function for aggregating multiple points at the same point in time
@@ -67,10 +67,10 @@ setGeneric('plotClusterTrajectories', function(object, ...) standardGeneric('plo
 setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     response,
     cluster = 'Cluster',
-    time = getOption('cluslong.time'),
+    time = getOption('latrend.time'),
     center = meanNA,
     showTrajs = FALSE,
-    id = getOption('cluslong.id')
+    id = getOption('latrend.id')
   ) {
   assert_that(has_name(object, cluster),
     has_name(object, response),

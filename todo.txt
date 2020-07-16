@@ -1,6 +1,5 @@
 tsclust distance model
 ? auto-separated labels for clustraj plot
-clusterNames<- bug
 ? dropping clusters from a clModel
 predictPostprob for KML
 1-NN cluster validation

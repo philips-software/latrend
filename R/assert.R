@@ -16,7 +16,7 @@ attr(is.newdata, 'fail') = function(call, env) {
 
 
 has_same_ids = function(m1, m2) {
-  assert_that(is.clModel(m1), is.clModel(m2))
+  assert_that(is.lcModel(m1), is.lcModel(m2))
   all.equal(ids(m1), ids(m2)) %>% isTRUE()
 }
 
@@ -28,7 +28,7 @@ attr(has_same_ids, 'fail') = function(call, env) {
 }
 
 has_same_modelData = function(m1, m2) {
-  assert_that(is.clModel(m1), is.clModel(m2))
+  assert_that(is.lcModel(m1), is.lcModel(m2))
   all.equal(model.data(m1), model.data(m2)) %>%
     isTRUE()
 }
@@ -43,14 +43,14 @@ attr(has_same_modelData, 'fail') = function(call, env) {
 
 
 #' @export
-has_clMethod_args = function(object, which) {
-  assert_that(is.clMethod(object))
+has_lcMethod_args = function(object, which) {
+  assert_that(is.lcMethod(object))
 
   argNames = setdiff(which, '...')
   all(has_name(object, argNames))
 }
 
-attr(has_clMethod_args, 'fail') = function(call, env) {
+attr(has_lcMethod_args, 'fail') = function(call, env) {
   object = eval(call$object, env)
   argNames = setdiff(eval(call$which, env), '...')
   missingNames = setdiff(argNames, names(object))
@@ -65,7 +65,7 @@ attr(has_clMethod_args, 'fail') = function(call, env) {
 
 #' @export
 is_valid_postprob = function(pp, model) {
-  assert_that(is.clModel(model))
+  assert_that(is.lcModel(model))
   is.matrix(pp) &&
     noNA(pp) &&
     min(pp) >= 0 &&

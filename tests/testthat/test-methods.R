@@ -1,35 +1,35 @@
-context('clMethods')
+context('lcMethods')
 
 test_that('default', {
-  clMethods(clMethodTestKML()) %>%
+  lcMethods(lcMethodTestKML()) %>%
     expect_is('list') %>%
     expect_length(1)
 })
 
 test_that('var', {
-  kml = clMethodTestKML()
-  clMethods(kml) %>%
+  kml = lcMethodTestKML()
+  lcMethods(kml) %>%
     expect_is('list') %>%
     expect_length(1)
 })
 
 
 test_that('scalar argument', {
-  clMethods(clMethodTestKML(), nClusters=2) %>%
+  lcMethods(lcMethodTestKML(), nClusters=2) %>%
     expect_is('list') %>%
     expect_length(1) %T>%
     {expect_equal(.[[1]]$nClusters, 2)}
 })
 
 test_that('vector argument', {
-  clMethods(clMethodTestKML(), testLongData, nClusters=1:3) %>%
+  lcMethods(lcMethodTestKML(), testLongData, nClusters=1:3) %>%
     expect_is('list') %>%
     expect_length(3)
 })
 
 test_that('var with vector argument', {
-  kml = clMethodTestKML()
-  clMethods(kml, testLongData, nClusters=1:3) %>%
+  kml = lcMethodTestKML()
+  lcMethods(kml, testLongData, nClusters=1:3) %>%
     expect_is('list') %>%
     expect_length(3)
 })
@@ -37,7 +37,7 @@ test_that('var with vector argument', {
 test_that('.() argument', {
   a = 1
   b = 2
-  methods = clMethods(clMethodTestKML(), testLongData, nClusters=.(a,b)) %>%
+  methods = lcMethods(lcMethodTestKML(), testLongData, nClusters=.(a,b)) %>%
     expect_is('list') %>%
     expect_length(2)
 

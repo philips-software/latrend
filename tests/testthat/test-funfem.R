@@ -6,21 +6,21 @@ femData = CanadianWeather$dailyAv[,,'Temperature.C'] %>% t
 
 test_that('default', {
   suppressWarnings({
-    model = cluslong(clMethodFunFEM(), femData) %>%
-      expect_valid_clModel()
+    model = latrend(lcMethodFunFEM(), femData) %>%
+      expect_valid_lcModel()
   })
 })
 
 test_that('many clusters', {
   suppressWarnings({
-    model = cluslong(clMethodFunFEM(nClusters=4), femData) %>%
-      expect_valid_clModel()
+    model = latrend(lcMethodFunFEM(nClusters=4), femData) %>%
+      expect_valid_lcModel()
   })
 })
 
 test_that('testLongData', {
   suppressWarnings({
-    model = cluslong(clMethodFunFEM(), testLongData) %>%
-      expect_valid_clModel()
+    model = latrend(lcMethodFunFEM(), testLongData) %>%
+      expect_valid_lcModel()
   })
 })

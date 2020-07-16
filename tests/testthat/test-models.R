@@ -1,100 +1,100 @@
-context('clModels')
+context('lcModels')
 
-kml2 = m1 = cluslong(clMethodTestKML(nClusters=2), testLongData)
-kml3 = cluslong(clMethodTestKML(nClusters=3), testLongData)
-kml4 = cluslong(clMethodTestKML(nClusters=4), testLongData)
-gmm = m2 = cluslong(clMethodTestLcmmGMM(nClusters=2), testLongData)
-models = clModels(group=c(kml2, gmm), kml3, kml4)
+kml2 = m1 = latrend(lcMethodTestKML(nClusters=2), testLongData)
+kml3 = latrend(lcMethodTestKML(nClusters=3), testLongData)
+kml4 = latrend(lcMethodTestKML(nClusters=4), testLongData)
+gmm = m2 = latrend(lcMethodTestLcmmGMM(nClusters=2), testLongData)
+models = lcModels(group=c(kml2, gmm), kml3, kml4)
 
 test_that('as', {
-  as.clModels(NULL) %>%
-    expect_is('clModels') %>%
+  as.lcModels(NULL) %>%
+    expect_is('lcModels') %>%
     expect_length(0)
 
-  as.clModels(m1) %>%
-    expect_is('clModels') %>%
+  as.lcModels(m1) %>%
+    expect_is('lcModels') %>%
     expect_length(1)
 
-  as.clModels(c(m1, m2)) %>%
-    expect_is('clModels') %>%
+  as.lcModels(c(m1, m2)) %>%
+    expect_is('lcModels') %>%
     expect_length(2)
 
-  as.clModels(c(A=m1, B=m2)) %>%
+  as.lcModels(c(A=m1, B=m2)) %>%
     expect_length(2) %>%
     expect_named()
 })
 
 test_that('create', {
-  clModels() %>%
-    expect_is('clModels') %>%
+  lcModels() %>%
+    expect_is('lcModels') %>%
     expect_length(0)
 
-  clModels(m1) %>%
-    expect_is('clModels') %>%
+  lcModels(m1) %>%
+    expect_is('lcModels') %>%
     expect_length(1)
 
-  clModels(a=m1) %>%
-    expect_is('clModels') %>%
+  lcModels(a=m1) %>%
+    expect_is('lcModels') %>%
     expect_length(1) %>%
     expect_named('a')
 
-  clModels(a=m1, b=m2) %>%
-    expect_is('clModels') %>%
+  lcModels(a=m1, b=m2) %>%
+    expect_is('lcModels') %>%
     expect_length(2) %>%
     expect_named(c('a', 'b'))
 
-  clModels(c(a=m1, b=m2)) %>%
-    expect_is('clModels') %>%
+  lcModels(c(a=m1, b=m2)) %>%
+    expect_is('lcModels') %>%
     expect_length(2) %>%
     expect_named(c('a', 'b'))
 
-  clModels(a=c(a=m1, b=m2)) %>%
-    expect_is('clModels') %>%
+  lcModels(a=c(a=m1, b=m2)) %>%
+    expect_is('lcModels') %>%
     expect_length(2) %>%
     expect_named(c('a.a', 'a.b'))
 
-  clModels(a=c(a=m1, b=m2), b=m1) %>%
-    expect_is('clModels') %>%
+  lcModels(a=c(a=m1, b=m2), b=m1) %>%
+    expect_is('lcModels') %>%
     expect_length(3) %>%
     expect_named(c('a.a', 'a.b', 'b'))
 })
 
 test_that('as.data.frame', {
-  clModels() %>%
+  lcModels() %>%
     as.data.frame() %>%
     expect_named(c('.name', '.method', 'data')) %T>%
     {expect_equal(nrow(.), 0)}
 
-  clModels(m1) %>%
+  lcModels(m1) %>%
     as.data.frame() %>%
-    expect_length(length(getClMethod(m1)) + 3) %>%
-    expect_named(c('.name', '.method', 'data', names(getClMethod(m1))))
+    expect_length(length(getLcMethod(m1)) + 3) %>%
+    expect_named(c('.name', '.method', 'data', names(getLcMethod(m1))))
 
-  clModels(m1) %>%
+  lcModels(m1) %>%
     as.data.frame() %>%
-    expect_length(length(getClMethod(m1)) + 3) %>%
-    expect_named(c('.name', '.method', 'data', names(getClMethod(m1))))
+    expect_length(length(getLcMethod(m1)) + 3) %>%
+    expect_named(c('.name', '.method', 'data', names(getLcMethod(m1))))
 })
 
 test_that('subset', {
-  subset(clModels(), .method == 'kml') %>%
-    expect_is('clModels') %>%
+  subset(lcModels(), .method == 'kml') %>%
+    expect_is('lcModels') %>%
     expect_length(0)
 
   subset(models, nClusters > 2) %>%
-    expect_is('clModels') %>%
+    expect_is('lcModels') %>%
     expect_length(2)
 
   subset(models, nClusters > Inf) %>%
-    expect_is('clModels') %>%
+    expect_is('lcModels') %>%
     expect_length(0)
 
   subset(models, ) %>%
-    expect_is('clModels') %>%
+    expect_is('lcModels') %>%
     expect_length(4)
 
   subset(models, .method == 'gmm') %>%
-    expect_is('clModels') %>%
+    expect_is('lcModels') %>%
     expect_length(1)
 
   subset(models, .method == 'gmm') %>%
@@ -110,11 +110,11 @@ test_that('subset', {
     expect_length(2)
 
   subset(models, nClusters == 4, drop=TRUE) %>%
-    expect_is('clModel')
+    expect_is('lcModel')
 })
 
 test_that('single metric', {
-  metric(clModels(), 'BIC') %>%
+  metric(lcModels(), 'BIC') %>%
     expect_is('numeric') %>%
     expect_length(0)
 
@@ -128,7 +128,7 @@ test_that('single metric', {
 })
 
 test_that('multiple metrics', {
-  metric(clModels(), c('AIC', 'BIC')) %>%
+  metric(lcModels(), c('AIC', 'BIC')) %>%
     expect_is('numeric') %>%
     expect_length(0)
 
@@ -143,12 +143,12 @@ test_that('multiple metrics', {
 
 test_that('min', {
   min(models, 'WRSS') %>%
-    expect_is('clModel')
+    expect_is('lcModel')
 })
 
 test_that('max', {
   max(models, 'WRSS') %>%
-    expect_is('clModel')
+    expect_is('lcModel')
 })
 
 test_that('plotMetric', {

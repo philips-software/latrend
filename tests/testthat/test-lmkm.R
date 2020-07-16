@@ -2,13 +2,13 @@ context('LM-KM')
 
 test_that('default', {
   set.seed(1)
-  m = clMethodLMKM()
-  model = cluslong(m, testLongData)
-  expect_valid_clModel(model)
+  m = lcMethodLMKM()
+  model = latrend(m, testLongData)
+  expect_valid_lcModel(model)
 })
 
 test_that('single cluster', {
-  m = clMethodLMKM(nClusters=1)
-  model = cluslong(m, testLongData)
-  expect_valid_clModel(model)
+  m = lcMethodLMKM(nClusters=1)
+  model = latrend(m, testLongData)
+  expect_valid_lcModel(model)
 })

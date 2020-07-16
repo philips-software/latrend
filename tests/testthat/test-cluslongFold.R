@@ -1,14 +1,14 @@
-context('cluslongFold')
+context('latrendFold')
 
 test_that('2 folds', {
-  cluslongCV(clMethodTestKML(), testLongData, folds=2, seed=1) %>%
-    expect_is('clModels') %>%
+  latrendCV(lcMethodTestKML(), testLongData, folds=2, seed=1) %>%
+    expect_is('lcModels') %>%
     expect_length(2)
 })
 
 test_that('3 folds', {
-  models = cluslongCV(clMethodTestKML(), testLongData, folds=3, seed=1) %>%
-    expect_is('clModels') %>%
+  models = latrendCV(lcMethodTestKML(), testLongData, folds=3, seed=1) %>%
+    expect_is('lcModels') %>%
     expect_length(3)
 
   getCall(models[[1]]) %T>%
@@ -20,14 +20,14 @@ test_that('3 folds', {
 })
 
 test_that('without seed', {
-  cluslongCV(clMethodTestKML(), testLongData, folds=2) %>%
-    expect_is('clModels') %>%
+  latrendCV(lcMethodTestKML(), testLongData, folds=2) %>%
+    expect_is('lcModels') %>%
     expect_length(2)
 })
 
 test_that('data subset', {
-  models = cluslongCV(clMethodTestKML(), testLongData[Time < .5], folds=2, seed=1) %>%
-    expect_is('clModels') %>%
+  models = latrendCV(lcMethodTestKML(), testLongData[Time < .5], folds=2, seed=1) %>%
+    expect_is('lcModels') %>%
     expect_length(2)
 
   getCall(models[[1]]) %T>%
@@ -37,9 +37,9 @@ test_that('data subset', {
 })
 
 test_that('method var', {
-  kml = clMethodTestKML()
-  cluslongCV(kml, testLongData, folds=2, seed=1) %>%
-    expect_is('clModels') %>%
+  kml = lcMethodTestKML()
+  latrendCV(kml, testLongData, folds=2, seed=1) %>%
+    expect_is('lcModels') %>%
     expect_length(2)
 })
 

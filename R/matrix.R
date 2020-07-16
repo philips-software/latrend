@@ -18,9 +18,9 @@ rowColumns = function(x, i) {
 #' @param as.data.table Whether to return the result as a `data.table`, or a `data.frame` otherwise.
 #' @return A `data.table` or `data.frame` containing the repeated measures.
 meltRepeatedMeasures = function(data,
-                                id = getOption('cluslong.id'),
-                                time = getOption('cluslong.time'),
-                                response = getOption('cluslong.response'),
+                                id = getOption('latrend.id'),
+                                time = getOption('latrend.time'),
+                                response = getOption('latrend.response'),
                                 ids = rownames(data),
                                 times = colnames(data),
                                 as.data.table = FALSE) {
@@ -80,9 +80,9 @@ meltRepeatedMeasures = function(data,
 #' @inheritParams meltRepeatedMeasures
 #' @return A `matrix` of the repeated measures.
 dcastRepeatedMeasures = function(data,
-                                 id = getOption('cluslong.id'),
-                                 time = getOption('cluslong.time'),
-                                 response = getOption('cluslong.response')) {
+                                 id = getOption('latrend.id'),
+                                 time = getOption('latrend.time'),
+                                 response = getOption('latrend.response')) {
   assert_that(has_name(data, c(id, time, response)))
   df = reshape2::dcast(
     data,
