@@ -1,4 +1,5 @@
 #' @include method.R
+#' @importFrom longitudinalData meanNA
 setClass('lcMethodStratify', contains = 'lcMethod')
 
 setValidity('lcMethodStratify', function(object) {
@@ -204,11 +205,6 @@ postprobFromAssignments = function(assignments, k) {
   idxMat = cbind(seq_along(assignments), assignments)
   postprob[idxMat] = 1
   return(postprob)
-}
-
-#' @export
-meanNA = function(x) {
-  mean(x, na.rm = TRUE)
 }
 
 #' @export

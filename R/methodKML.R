@@ -18,21 +18,12 @@ lcMethodKML = function(response,
                        id = getOption('latrend.id'),
                        nClusters = 2,
                        ...) {
-  m = lcMethod.call(
+  lcMethod.call(
     'lcMethodKML',
     call = match.call.defaults(),
     defaults = c(kml::kml, kml::parALGO),
     excludeArgs = c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq')
   )
-
-  # fix for meanNA conflict
-  if (has_name(m, 'centerMethod')) {
-    centerMethod = m[['centerMethod', eval = FALSE]]
-    if (is.name(centerMethod) && as.character(centerMethod) == 'meanNA') {
-      m = update(m, centerMethod = longitudinalData::meanNA)
-    }
-  }
-  return(m)
 }
 
 setMethod('getName', signature('lcMethodKML'), function(object) 'longitudinal k-means (KML)')
