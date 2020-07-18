@@ -1,33 +1,11 @@
-tsclust distance model
-? auto-separated labels for clustraj plot
-? dropping clusters from a clModel
-predictPostprob for KML
-1-NN cluster validation
+tsclust method
+dtwclust method
 clValid package for validation (see TSclust)
 clv package for validation (see TSclust)
 validation metrics from https://rdrr.io/cran/dtwclust/man/cvi.html
-? test clusterNames setting
+? 1-NN cluster validation
+? auto-separated labels for clustraj plot
 ? clMethod argument environment representation. Within-scope evaluation
 ? try-catch for postFit
+? dropping clusters from a clModel
 ? support for list of clModel from fit
-
--- names --
-cluslong
-clusild
-cilda ("Clustering Intensive Longitudinal DatA")
-exclusilda ("Exploratory Clustering of intensive longitudinal DatA")
-latrend ("latent trend")
-lacilda ("Latent-class ILD analysis")
-longclusive ("conclusive"; longitudinal clustering)
-trendily
-
-cluslong
-clustrend ("clustered")
-clustrendy
-trendiclust ("trendy cluster")
-exclusild
-extangle
-loclust ("locust")
-trending
-latrent
-latent trend

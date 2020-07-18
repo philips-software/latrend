@@ -19,3 +19,10 @@ test_that('nclusters', {
   expect_valid_lcModel(models[[1]])
   expect_valid_lcModel(models[[2]])
 })
+
+test_that('predictPostprob', {
+  model = latrend(lcMethodTestKML(), testLongData)
+  testData = testLongData[Id %in% unique(Id)[1:3]]
+  pp = predictPostprob(model, newdata = testData)
+  expect_true(is_valid_postprob(pp, model))
+})
