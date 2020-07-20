@@ -143,9 +143,8 @@ test_that('variable from custom environment', {
 })
 
 test_that('internal variable reference', {
-  # currently not supported
   method = lcMethod.call('lcMethodTest', call=call('lcMethod', iter=1e3, warmup = quote(floor(iter / 2))))
-  expect_error(method$warmup)
+  expect_equal(method$warmup, floor(method$iter / 2))
 })
 
 test_that('formula', {

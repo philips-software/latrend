@@ -83,21 +83,26 @@ setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL)
   }
 
   if (eval) {
+    # within-method scope
     value = tryCatch({
-      eval(arg, envir = envir)
+      eval(arg, envir = x@arguments)
     }, error = function(e) {
-      # try evaluation within package scope instead
       tryCatch({
-        eval(arg, envir = parent.env(getNamespace(.packageName)))
-      }, error = function(e) {
-        stop(
-          sprintf(
-            'error in evaluating lcMethod argument "%s" with expression "%s":\n\t%s',
-            i,
-            deparse(e$call),
-            e$message
+        eval(arg, envir = envir)
+      }, error = function(e2) {
+        # try evaluation within package scope instead
+        tryCatch({
+          eval(arg, envir = parent.env(getNamespace(.packageName)))
+        }, error = function(e3) {
+          stop(
+            sprintf(
+              'error in evaluating lcMethod argument "%s" with expression "%s":\n\t%s',
+              i,
+              deparse(e2$call),
+              e2$message
+            )
           )
-        )
+        })
       })
     })
   } else {
@@ -200,7 +205,7 @@ lcMethod.call = function(Class,
   # exclude arguments
   argOrder = union(names(call[-1]), setdiff(names(allArgs), excludeArgs))
 
-  argEnv = list2env(rev(args), parent = parent.frame(), hash = FALSE)
+  argEnv = list2env(rev(args), hash = FALSE)
 
   new(Class, arguments = argEnv)
 }
