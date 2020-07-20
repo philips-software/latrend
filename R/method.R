@@ -9,7 +9,7 @@
 #' @slot arguments A `list` representing the arguments of the `lcMethod` object. Arguments are not evaluated upon creation of the method object. Instead, arguments are stored similar to a `call` object. Do not modify or access.
 #' @slot sourceCalls A list of calls for tracking the original call after substitution. Used for printing objects which require too many characters (e.g. ,function definitions, matrices).
 #' @family lcMethod implementations
-setClass('lcMethod', slots = c(arguments = 'list', sourceCalls = 'list'))
+setClass('lcMethod', slots = c(arguments = 'environment', sourceCalls = 'list'))
 
 #. initialize ####
 setMethod('initialize', 'lcMethod', function(.Object, ...) {
@@ -20,7 +20,6 @@ setMethod('initialize', 'lcMethod', function(.Object, ...) {
 
 #. validity ####
 setValidity('lcMethod', function(object) {
-  call = getCall(object)
   assert_that(all(vapply(
     lapply(names(object), nchar), '>', 0, FUN.VALUE = TRUE
   )), msg = 'lcMethod argument names cannot be empty')
@@ -70,18 +69,17 @@ setMethod('$', signature('lcMethod'), function(x, name) {
 #' m[['nClusters']] # 2
 #' m[['nClusters', eval=FALSE]] # k
 #' @family lcMethod functions
-setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir =
-                                                  NULL) {
+setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL) {
   envir = lcMethod.env(x, parent.frame(3), envir)
   if (is.character(i)) {
     assert_that(has_name(x, i),
                 msg = sprintf('method does not have an argument named "%s"', i))
-    arg = getCall(x)[[i]]
+    arg = get(i, envir = x@arguments)
   } else {
     argName = names(x)[i]
     assert_that(!is.na(argName),
                 msg = sprintf('index "%s" exceeded argument name options', i))
-    arg = getCall(x)[[names(x)[i]]]
+    arg = get(i, envir = x@arguments)
   }
 
   if (eval) {
@@ -124,14 +122,19 @@ lcMethod = function(.class,
                      ...,
                      .defaults = list(),
                      .excludeArgs = c()) {
-  args = list(...)
+  mc = match.call()
+  mc[[1]] = as.name(.class)
+  mc$.class = NULL
+  mc$.defaults = NULL
+  mc$.excludeArgs = NULL
+
   do.call(
     lcMethod.call,
     list(
-      .class = .class,
-      args,
-      .defaults = .defaults,
-      .excludeArgs = .excludeArgs
+      Class = .class,
+      call = quote(mc),
+      defaults = .defaults,
+      excludeArgs = .excludeArgs
     )
   )
 }
@@ -197,9 +200,9 @@ lcMethod.call = function(Class,
   # exclude arguments
   argOrder = union(names(call[-1]), setdiff(names(allArgs), excludeArgs))
 
-  # create call and lcMethod
-  newCall = do.call('call', c(Class, lapply(args[argOrder], enquote)))
-  new(Class, arguments = as.list(newCall[-1]))
+  argEnv = list2env(rev(args), parent = parent.frame(), hash = FALSE)
+
+  new(Class, arguments = argEnv)
 }
 
 
@@ -259,7 +262,7 @@ as.list.lcMethod = function(object,
     method = object
   }
 
-  as.list(method@arguments[selArgNames])
+  as.list(method@arguments)[selArgNames]
 }
 
 
@@ -479,7 +482,7 @@ formula.lcMethod = function(object,
 #' @family lcMethod functions
 getCall.lcMethod = function(object) {
   assert_that(is.lcMethod(object))
-  do.call(call, c(class(object)[1], lapply(object@arguments, enquote)))
+  do.call(call, c(class(object)[1], eapply(object@arguments, enquote)))
 }
 
 
@@ -571,9 +574,8 @@ is.lcMethod = function(object) {
 #' length(m)
 #' @family lcMethod functions
 setMethod('length', signature('lcMethod'), function(x) {
-  length(getCall(x)) - 1
+  length(x@arguments)
 })
-
 
 
 #. names ####
@@ -584,7 +586,7 @@ setMethod('length', signature('lcMethod'), function(x) {
 #' names(m)
 #' @family lcMethod functions
 setMethod('names', signature('lcMethod'), function(x) {
-  argNames = names(getCall(x))[-1]
+  argNames = names(x@arguments)
   if (is.null(argNames)) {
     character(0)
   } else {
@@ -681,8 +683,8 @@ evaluate.lcMethod = function(object,
                                try = TRUE,
                                exclude = character(),
                                envir = NULL) {
-  assert_that(is.lcMethod(object))
-  assert_that(is.character(classes))
+  assert_that(is.lcMethod(object),
+              is.character(classes))
 
   envir = lcMethod.env(object, parent.frame(), envir)
 
@@ -706,15 +708,21 @@ evaluate.lcMethod = function(object,
   if ('ANY' %in% classes) {
     updateMask = evalMask
   } else {
-    updateMask = evalMask &
-      vapply(evalValues, class, FUN.VALUE = '') %in% classes
+    updateMask = evalMask & vapply(evalValues, class, FUN.VALUE = '') %in% classes
   }
 
   newmethod = object
   sourceMask = vapply(newmethod@arguments, is.language, FUN.VALUE = FALSE)
-  newmethod@sourceCalls[argNames[updateMask &
-                                   sourceMask]] = newmethod@arguments[updateMask & sourceMask]
-  newmethod@arguments = replace(object@arguments, names(object)[updateMask], evalValues[updateMask])
+  sourceNames = argNames[updateMask & sourceMask]
+  newmethod@sourceCalls[sourceNames] = mget(sourceNames, newmethod@arguments)
+
+  updateNames = argNames[updateMask]
+  updateValues = evalValues[updateMask]
+
+  for (i in seq_along(updateNames)) {
+    assign(updateNames[i], updateValues[[i]], pos = object@arguments)
+  }
+  # newmethod@arguments = replace(object@arguments, names(object)[updateMask], evalValues[updateMask])
   return(newmethod)
 }
 
@@ -770,16 +778,25 @@ update.lcMethod = function(object,
   if (any(updateFormulaMask)) {
     oldFormulaArgs = lapply(uargNames[updateFormulaMask], function(name)
       object[[name]])
-    ucall[updateFormulaMask] = mapply(update.formula, oldFormulaArgs, uargValues[updateFormulaMask], SIMPLIFY =
-                                        FALSE) %>%
+    ucall[updateFormulaMask] =
+      mapply(update.formula, oldFormulaArgs, uargValues[updateFormulaMask], SIMPLIFY = FALSE) %>%
       lapply(match.call, definition = formula)
   }
 
-  object@arguments = replace(object@arguments, uargNames, ucall[uargNames])
+  # copy environment
+  object@arguments = list2env(as.list(object@arguments),
+                              hash = FALSE,
+                              parent = parent.env(object@arguments))
+
+  for (arg in uargNames) {
+    assign(arg, ucall[[arg]], pos = object@arguments)
+  }
+  #object@arguments = replace(object@arguments, uargNames, ucall[uargNames])
   object@sourceCalls[uargNames] = NULL
 
   if (length(.remove) > 0) {
-    object@arguments[.remove] = NULL
+    remove(list = .remove, pos = object@arguments)
+    #object@arguments[.remove] = NULL
     object@sourceCalls[.remove] = NULL
   }
   validObject(object)
@@ -819,21 +836,19 @@ setMethod('show', 'lcMethod', function(object) {
 
 #. timeVariable ####
 #' @export
-setGeneric('timeVariable', function(object, ...)
-  standardGeneric('timeVariable'))
+setGeneric('timeVariable', function(object, ...) standardGeneric('timeVariable'))
+
 #' @export
-setMethod('timeVariable', signature('lcMethod'), function(object)
-  object$time)
+setMethod('timeVariable', signature('lcMethod'), function(object) object$time)
 
 
 #. validate ####
 #' @export
-setGeneric('validate', function(method, data, ...)
-  standardGeneric('validate'))
+setGeneric('validate', function(method, data, ...) standardGeneric('validate'))
+
 #' @export
 #' @rdname lcMethod-interface
-setMethod('validate', signature('lcMethod'), function(method, data, envir =
-                                                        NULL) {
+setMethod('validate', signature('lcMethod'), function(method, data, envir = NULL) {
   validate_that(
     hasName(data, idVariable(method)),
     hasName(data, timeVariable(method)),

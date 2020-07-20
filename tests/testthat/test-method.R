@@ -2,11 +2,11 @@ context('lcMethod')
 setClass('lcMethodTest', contains='lcMethod')
 
 test_that('new clmethod', {
-  m = lcMethod.call('lcMethodTest', call=call('lcMethod', `NA`=NULL, log=TRUE, int=3L, num=2.5, char='a',
+  m = lcMethod('lcMethodTest', `NA`=NULL, log=TRUE, int=3L, num=2.5, char='a',
                                         fac=factor('b', levels=c('a', 'b')),
                                         form=A~B,
-                                        call=quote(1 + 2 * 3),
-                                        name=quote(xvar)))
+                                        call=1 + 2 * 3,
+                                        name=xvar)
 
   expect_equivalent(m[['NA']], NULL)
   expect_equivalent(m$`NA`, NULL)
@@ -165,13 +165,13 @@ test_that('update', {
   expect_equal(update(method, c=2)$c, 2)
 
   # update with new arguments
-  update(method, new=1) %>%
-    expect_named(c('new', names(method)), ignore.order=TRUE) %T>%
-    {expect_equal(.$new, 1)}
+  m2 = update(method, new=1)
+  expect_named(m2, c('new', names(method)), ignore.order=TRUE)
+  expect_equal(m2$new, 1)
 
-  update(method, newf=A~B) %>%
-    expect_named(c('newf', names(method)), ignore.order=TRUE) %T>%
-    {expect_equal(.$newf, A~B)}
+  m3 = update(method, newf=A~B)
+  expect_named(m3, c('newf', names(method)), ignore.order=TRUE)
+  expect_equal(m3$newf, A~B)
 })
 
 test_that('update with eval', {
@@ -183,7 +183,7 @@ test_that('update with eval', {
 
 test_that('update with formula eval', {
   xvar = ~ 1
-  m0 = lcMethod.call('lcMethodTest', call=call('lcMethod', a=1, f = A ~ 0))
+  m0 = lcMethod('lcMethodTest', a=1, f = A ~ 0)
   m1 = update(m0, f=xvar, .eval=TRUE)
   expect_equal(m1$f, A ~ 1)
 })
