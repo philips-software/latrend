@@ -40,8 +40,7 @@ setMethod('preFit', signature('lcMethodKML'), function(method, data, envir, verb
   cat(verbose, 'Creating clusterLongData object...', level = verboseLevels$finest)
 
   parRefArgs = list(saveFreq = 1e99, scale = FALSE)
-  parArgs = modifyList(parRefArgs, as.list(method, args = kml::parALGO), keep.null =
-                         TRUE)
+  parArgs = modifyList(parRefArgs, as.list(method, args = kml::parALGO), keep.null = TRUE)
   e$par = do.call(kml::parALGO, parArgs)
 
   e$cld = kml::clusterLongData(
