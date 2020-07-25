@@ -263,10 +263,10 @@ latrendRep = function(method,
     .errorhandling = errh
   ) %do% {
     cat(verbose,
-        'Fitting model %d/%d for seed %s...',
+        sprintf('Fitting model %d/%d for seed %s...',
         i,
         .rep,
-        as.character(iseed))
+        as.character(iseed)))
     imethod = update(cmethod, seed = iseed, .eval = TRUE)
     fitLatrendMethod(
       imethod,
