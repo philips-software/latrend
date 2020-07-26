@@ -60,14 +60,9 @@ setMethod('initialize', 'lcModel', function(.Object, ...) {
   if (length(.Object@time) == 0) {
     .Object@time = timeVariable(method)
   }
-  assert_that(
-    length(.Object@response) > 0 ||
-      has_name(method, 'response') ||
-      has_name(method, 'formula'),
-    msg = '@response not specified, nor defined in lcMethod$response or lcMethod$formula'
-  )
   if (length(.Object@response) == 0) {
     .Object@response = responseVariable(method)
+    assert_that(!is.null(.Object@response))
   }
   .Object
 })
@@ -812,6 +807,8 @@ predict.lcModel = function(object,
 #' @seealso [predict.lcModel]
 #' @family model-specific methods
 setGeneric('predictForCluster', function(object, cluster, newdata, what = 'mu', ...) standardGeneric('predictForCluster'))
+
+
 setMethod('predictForCluster', signature('lcModel'), function(object, cluster, newdata, what = 'mu', ...) {
   assert_that(is.newdata(newdata), !is.null(newdata))
   warning(
@@ -934,6 +931,7 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
 })
 
 
+#. postprob ####
 #' @export
 #' @title Posterior probability per fitted id
 #' @examples
@@ -942,7 +940,14 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
 #' @family model-specific methods
 setGeneric('postprob', function(object, ...) standardGeneric('postprob'))
 setMethod('postprob', signature('lcModel'), function(object) {
-  predictPostprob(object, newdata = NULL)
+  warning('postprob() not implemented for ', class(object)[1],
+    '. Returning uniform posterior probability matrix.')
+
+  pp = matrix(1 / nClusters(object),
+              nrow = nIds(object),
+              ncol = nClusters(object))
+  colnames(pp) = clusterNames(object)
+  pp
 })
 
 
