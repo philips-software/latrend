@@ -571,13 +571,7 @@ is.lcMethod = function(object) {
 
 
 #. length ####
-#' @title Length of a lcMethod object
-#' @description Extracts the number of specified arguments of a `lcMethod` object.
-#' @return The number of specified arguments.
-#' @examples
-#' m = lcMethodKML()
-#' length(m)
-#' @family lcMethod functions
+#' @export
 setMethod('length', signature('lcMethod'), function(x) {
   length(x@arguments)
 })
@@ -812,8 +806,8 @@ update.lcMethod = function(object,
 
 #. responseVariable ####
 #' @export
-setGeneric('responseVariable', function(object, ...)
-  standardGeneric('responseVariable'))
+setGeneric('responseVariable', function(object, ...) standardGeneric('responseVariable'))
+
 #' @export
 #' @title Determine the response variable
 #' @return The response variable
