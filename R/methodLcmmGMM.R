@@ -78,7 +78,6 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
     .[, c(id) := factor(get(id)) %>% as.integer]
 
   # Parameter processing
-  vars = terms(f) %>% labels
   e$fixed = dropRE(f) %>% dropCLUSTER
   e$mixture = dropResponse(f) %>% dropRE %>% keepCLUSTER
   if (length(getCovariates(e$mixture)) == 0 &&

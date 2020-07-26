@@ -1,7 +1,7 @@
 Package: latrend
 Type: Package
 Title: Clustering longitudinal datasets
-Version: 0.9.0
+Version: 0.9.1
 Authors@R: c(person("Niek", "Den Teuling", email = "niek.den.teuling@philips.com", role = c("aut", "cre")),
     person("Steffen", "Pauws", email = "s.c.pauws@uvt.nl", role = "ctb"),
     person("Edwin", "van den Heuvel", email = "e.r.v.d.heuvel@tue.nl", role = "ctb"),
@@ -44,6 +44,8 @@ Suggests:
     IMIFA (>= 2.1.1),
     crimCV (>= 0.9.6),
     akmedoids (>= 0.1.5),
+    dtwclust (>= 5.5.6),
+    mixAK (>= 5.3),
     psych (>= 1.9.12.31),
     clusterCrit (>= 1.2.8),
     mclustcomp (>= 0.3.1),
@@ -60,7 +62,6 @@ Collate:
     'methodAKMedoids.R'
     'methodCrimCV.R'
     'methodCustom.R'
-    'methodDissimilarity.R'
     'methodDtwclust.R'
     'methodFlexmix.R'
     'methodFlexmixGBTM.R'
@@ -76,6 +77,7 @@ Collate:
     'methodLcmmGBTM.R'
     'methodLongclust.R'
     'methodMclustLLPA.R'
+    'methodMixAK_GLMM.R'
     'methodMixTVEM.R'
     'methodMixtoolsGMM.R'
     'methodMixtoolsNPRM.R'
@@ -94,6 +96,8 @@ Collate:
     'modelLcmmGBTM.R'
     'modelLongclust.R'
     'modelMclustLLPA.R'
+    'modelMixAK_GLMM.R'
+    'modelMixAK_GLMMlist.R'
     'modelMixTVEM.R'
     'modelMixtoolsGMM.R'
     'modelMixtoolsRM.R'

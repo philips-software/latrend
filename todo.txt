@@ -1,11 +1,8 @@
-dtwclust method
-mixAK method
 ? clValid package for validation (see TSclust)
 ? clv package for validation (see TSclust)
-validation metrics from https://rdrr.io/cran/dtwclust/man/cvi.html
-? tsclust method
+? validation metrics from https://rdrr.io/cran/dtwclust/man/cvi.html
+? tsclust support
 ? 1-NN cluster validation
 ? auto-separated labels for clustraj plot
 ? try-catch for postFit
-? dropping clusters from a clModel
 ? support for list of clModel from fit

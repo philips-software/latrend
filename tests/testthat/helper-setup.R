@@ -83,6 +83,10 @@ lcMethodTestMixtoolsGMM = function(...) {
   lcMethodMixtoolsGMM(formula = Value ~ Time + (Time | Id), epsilon=1e-02, ..., seed=1)
 }
 
+lcMethodTestMixAK_GLMM = function(...) {
+  lcMethodMixAK_GLMM(fixed = Value ~ 1, random = ~ Time, ..., seed=1)
+}
+
 expect_valid_lcModel = function(object) {
   expect_s4_class(object, 'lcModel')
 
