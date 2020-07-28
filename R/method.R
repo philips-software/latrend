@@ -833,6 +833,25 @@ setMethod('show', 'lcMethod', function(object) {
 })
 
 
+# . strip ####
+#' @export
+setGeneric('strip', function(object) standardGeneric('strip'))
+
+#' @title Strip a lcMethod for serialization
+#' @description Removes associated environments from any of the arguments. This typically is the case for formulas.
+setMethod('strip', signature('lcMethod'), function(object) {
+  newObject = object
+
+  environment(newObject) = NULL
+  newObject@arguments = eapply(object@arguments, 'environment<-', NULL) %>%
+    list2env(hash = FALSE, parent = emptyenv())
+
+  newObject@sourceCalls = lapply(object@sourceCalls, 'environment<-', NULL)
+
+  return(newObject)
+})
+
+
 #. timeVariable ####
 #' @export
 setGeneric('timeVariable', function(object, ...) standardGeneric('timeVariable'))

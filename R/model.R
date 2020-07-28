@@ -1042,6 +1042,27 @@ sigma.lcModel = function(object, ...) {
   }
 }
 
+#. strip ####
+setMethod('strip', signature('lcModel'), function(object) {
+  newObject = object
+
+  environment(newObject) = NULL
+  newObject@method = strip(object@method)
+
+  # recursively strip elements (for calls in calls)
+  rstrip = function(x) {
+    if(is.list(x) || is(x, 'call')) { # is.call is TRUE for formulas
+      replace(x, seq_along(x), lapply(x, rstrip))
+    } else {
+      environment(x) = NULL
+      x
+    }
+  }
+
+  newObject@call = rstrip(object@call)
+
+  return(newObject)
+})
 
 #' @export
 #' @title Summarize a lcModel
