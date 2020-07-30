@@ -878,9 +878,9 @@ setMethod('predictAssignments', signature('lcModel'), function(object, newdata, 
 #' @description Plot a lcModel. By default, the cluster trajectories of the model solution are plotted.
 #' @param ... Arguments passed to [clusterTrajectories].
 #' @return A `ggplot` object.
-plot.lcModel = function(object, ...) {
-  plotClusterTrajectories(object, ...)
-}
+setMethod('plot', signature('lcModel'), function(x, ...) {
+  plotClusterTrajectories(x, ...)
+})
 
 #. plotTrajectories ####
 #' @export
