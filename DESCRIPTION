@@ -1,7 +1,7 @@
 Package: latrend
 Type: Package
 Title: Clustering longitudinal datasets
-Version: 0.9.3
+Version: 0.9.4
 Authors@R: c(person("Niek", "Den Teuling", email = "niek.den.teuling@philips.com", role = c("aut", "cre")),
     person("Steffen", "Pauws", email = "s.c.pauws@uvt.nl", role = "ctb"),
     person("Edwin", "van den Heuvel", email = "e.r.v.d.heuvel@tue.nl", role = "ctb"),

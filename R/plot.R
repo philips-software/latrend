@@ -102,8 +102,9 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     assert_that(is.data.frame(rawdata),
       has_name(rawdata, id),
       has_name(rawdata, time),
-      has_name(rawdata, response),
-      has_name(rawdata, cluster))
+      has_name(rawdata, response))
+
+    rawdata = subset(rawdata, select = c(id, time, response))
   }
 
   if (is.factor(data[[cluster]])) {
@@ -116,17 +117,14 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     data = data,
     mapping = aes_string(
       x = time,
-      y = response,
-      color = cluster,
-      shape = cluster
-    )
-  ) + scale_shape_manual(values = seq_len(nClus))
+      y = response)
+  )
 
   if (showTrajs) {
-    p = p + geom_line(data = rawdata, mapping = aes_string(group = id), color = 'black')
+    p = p + geom_line(data = rawdata, mapping = aes_string(group = id), size = .1, color = 'black')
   }
 
-  p = p + geom_line() +
+  p = p + geom_line(aes_string(color = cluster)) +
     labs(title = 'Cluster trajectories')
 
   return(p)
