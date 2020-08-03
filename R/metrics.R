@@ -78,6 +78,7 @@ getMetricDef = function(name, envir) {
 }
 
 # Internal metric definitions ####
+#' @importFrom stats AIC
 intMetricsEnv$AIC = AIC
 
 #' @importFrom matrixStats rowMaxs
@@ -87,7 +88,9 @@ intMetricsEnv$APPA = function(m) {
     mean()
 }
 
+#' @importFrom stats BIC
 intMetricsEnv$BIC = BIC
+#' @importFrom stats deviance
 intMetricsEnv$deviance = deviance
 
 intMetricsEnv$entropy = function(m) {
@@ -95,6 +98,7 @@ intMetricsEnv$entropy = function(m) {
   - sum(rowSums(pp * log(pp)))
 }
 
+#' @importFrom stats logLik
 intMetricsEnv$logLik = logLik
 
 intMetricsEnv$MAE = function(m) {

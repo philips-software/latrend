@@ -44,6 +44,7 @@ setMethod('getName', signature('lcMethodRandom'), function(object) 'random')
 
 setMethod('getShortName', signature('lcMethodRandom'), function(object) 'rand')
 
+#' @importFrom stats rgamma
 setMethod('fit', signature('lcMethodRandom'), function(method, data, envir, verbose, ...) {
   nIds = uniqueN(data[[idVariable(method)]])
 

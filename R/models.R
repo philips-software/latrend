@@ -58,7 +58,7 @@ as.lcModels = function(x) {
 
 
 #' @export
-as.list.lcModels = function(x) {
+as.list.lcModels = function(x, ...) {
   assert_that(is.lcModels(x) || is.list(x) || is.null(x))
   class(x) = 'list'
   return(x)
@@ -72,10 +72,9 @@ as.list.lcModels = function(x) {
 #' @param excludeShared Whether to exclude columns which have the same value across all methods.
 #' @param ... Arguments passed to [as.data.frame.lcMethod].
 #' @return A `data.frame`.
-as.data.frame.lcModels = function(x,
+as.data.frame.lcModels = function(x, ...,
                                   excludeShared = FALSE,
-                                  eval = TRUE,
-                                  ...) {
+                                  eval = TRUE) {
   x = as.lcModels(x)
 
   dfs = lapply(x, getLcMethod) %>%
@@ -109,6 +108,7 @@ as.data.frame.lcModels = function(x,
 
 
 #' @export
+#' @importFrom stats as.dist
 #' @rdname metric
 #' @return A named `numeric` vector containing the computed model metrics.
 #' @examples
@@ -341,7 +341,7 @@ plotMetric = function(models,
 #'
 #' subset(models, nClusters > 1 & .method == 'kml')
 #' @family lcModel list functions
-subset.lcModels = function(x, subset, drop = FALSE) {
+subset.lcModels = function(x, subset, drop = FALSE, ...) {
   x = as.lcModels(x)
 
   if (missing(subset)) {
@@ -366,6 +366,7 @@ subset.lcModels = function(x, subset, drop = FALSE) {
 #' @param summary Whether to print the complete summary per model. This may be slow for long lists!
 #' @family lcModel list functions
 print.lcModels = function(x,
+                          ...,
                           summary = FALSE,
                           excludeShared = !getOption('latrend.printSharedModelArgs')) {
   if (isTRUE(summary)) {

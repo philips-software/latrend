@@ -231,15 +231,15 @@ lcMethod.call = function(Class,
 #' # select arguments used by either kml() or parALGO()
 #' as.list(method, args=c(kml::kml, kml::parALGO))
 #' @family lcMethod functions
-as.list.lcMethod = function(object,
-                            args = names(object),
+as.list.lcMethod = function(x, ...,
+                            args = names(x),
                             eval = TRUE,
                             expand = FALSE,
                             envir = NULL) {
-  assert_that(is.lcMethod(object),
+  assert_that(is.lcMethod(x),
               is.flag(eval),
               is.flag(expand))
-  envir = lcMethod.env(object, parent.frame(), envir)
+  envir = lcMethod.env(x, parent.frame(), envir)
 
   if (is.function(args)) {
     argNames = formalArgs(args)
@@ -257,14 +257,14 @@ as.list.lcMethod = function(object,
   if (isTRUE(expand) && '...' %in% argNames) {
     selArgNames = argNames
   } else {
-    selArgNames = intersect(argNames, names(object))
+    selArgNames = intersect(argNames, names(x))
   }
 
   if (isTRUE(eval)) {
     # full evaluation
-    method = evaluate.lcMethod(object, envir = envir)
+    method = evaluate.lcMethod(x, envir = envir)
   } else {
-    method = object
+    method = x
   }
 
   as.list(method@arguments)[selArgNames]
@@ -280,7 +280,7 @@ as.list.lcMethod = function(object,
 #' @param nullValue Value to use to represent the `NULL` type. Must be of length 1.
 #' @return A single-row `data.frame` where each columns represents an argument call or evaluation.
 #' @family lcMethod functions
-as.data.frame.lcMethod = function(x,
+as.data.frame.lcMethod = function(x, ...,
                                   eval = FALSE,
                                   nullValue = NA,
                                   envir = NULL) {
@@ -468,16 +468,16 @@ setMethod('fit', signature('lcMethod'), function(method, data, envir, verbose) {
 #' m = lcMethodKML(Value ~ Time)
 #' formula(m) # Value ~ Time
 #' @family lcMethod functions
-formula.lcMethod = function(object,
+formula.lcMethod = function(x, ...,
                             what = 'mu',
                             envir = NULL) {
-  assert_that(is.lcMethod(object))
-  envir = lcMethod.env(object, parent.frame(), envir)
+  assert_that(is.lcMethod(x))
+  envir = lcMethod.env(x, parent.frame(), envir)
   assert_that(is.scalar(what), is.character(what))
   if (what == 'mu') {
-    object$formula
+    x$formula
   } else {
-    object[[paste0('formula.', what)]]
+    x[[paste0('formula.', what)]]
   }
 }
 
@@ -485,9 +485,9 @@ formula.lcMethod = function(object,
 
 #' @export
 #' @family lcMethod functions
-getCall.lcMethod = function(object) {
-  assert_that(is.lcMethod(object))
-  do.call(call, c(class(object)[1], eapply(object@arguments, enquote)))
+getCall.lcMethod = function(x, ...) {
+  assert_that(is.lcMethod(x))
+  do.call(call, c(class(x)[1], eapply(x@arguments, enquote)))
 }
 
 
@@ -625,16 +625,16 @@ setMethod('postFit', signature('lcMethod'), function(method, data, model, envir,
 
 
 #' @export
-print.lcMethod = function(object,
+print.lcMethod = function(x,
                           ...,
                           eval = FALSE,
                           width = 40,
                           envir = NULL) {
-  assert_that(is.lcMethod(object),
+  assert_that(is.lcMethod(x),
               is.flag(eval))
-  envir = lcMethod.env(object, parent.frame(), envir)
+  envir = lcMethod.env(x, parent.frame(), envir)
   if (isTRUE(eval)) {
-    object = evaluate.lcMethod(object, envir = envir)
+    x = evaluate.lcMethod(x, envir = envir)
   }
 
   arg2char = function(a) {
@@ -649,13 +649,13 @@ print.lcMethod = function(object,
     }
   }
 
-  argNames = names(object)
-  chrValues = lapply(object@arguments, arg2char) %>% unlist()
+  argNames = names(x)
+  chrValues = lapply(x@arguments, arg2char) %>% unlist()
   assert_that(all(vapply(chrValues, length, FUN.VALUE = 0) == 1))
 
   sourceMask = vapply(chrValues, nchar, FUN.VALUE = 0) > width &
-    argNames %in% names(object@sourceCalls)
-  chrSource = lapply(object@sourceCalls[argNames[sourceMask]], arg2char) %>% unlist()
+    argNames %in% names(x@sourceCalls)
+  chrSource = lapply(x@sourceCalls[argNames[sourceMask]], arg2char) %>% unlist()
   chrValues[sourceMask] = paste0('`', chrSource, '`')
 
   args = vapply(chrValues, strtrim, width = width, FUN.VALUE = '')
@@ -892,7 +892,7 @@ match.call.all = function(definition = sys.function(sys.parent()),
   if (any(dotMask)) {
     dotNames = names(call)[nameMask][dotMask]
     for (dotArg in dotNames) {
-      call[[dotArg]] = do.call(substitute, list(as.name(dotArg)), env = parent.frame())
+      call[[dotArg]] = do.call(substitute, list(as.name(dotArg)), envir = parent.frame())
     }
   }
   return (call)

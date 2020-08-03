@@ -175,9 +175,9 @@ setMethod('postprob', signature('lcModelCustom'), function(object) {
 
 
 predict.lcModelCustom = function(object,
+                                 ...,
                                  newdata = NULL,
-                                 what = 'mu',
-                                 ...) {
+                                 what = 'mu') {
   if (is.null(object@predict)) {
     NULL
   } else {
@@ -187,8 +187,8 @@ predict.lcModelCustom = function(object,
 
 
 #. predictPostprob ####
-setMethod('predictPostprob', signature('lcModelCustom'), function(object, newdata =
-                                                                    NULL, ...) {
+setMethod('predictPostprob', signature('lcModelCustom'),
+          function(object, newdata = NULL, ...) {
   pp = object@predictPostprob(object, newdata, ...)
 
   assert_that(is.matrix(pp))

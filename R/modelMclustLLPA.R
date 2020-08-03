@@ -4,6 +4,7 @@ setClass('lcModelMclustLLPA', contains = 'lcModel')
 
 #' @export
 predict.lcModelMclustLLPA = function(object,
+                                     ...,
                                      newdata = NULL,
                                      what = 'mu',
                                      approxFun = approx) {
@@ -34,7 +35,7 @@ predict.lcModelMclustLLPA = function(object,
 
 
 #' @export
-fitted.lcModelMclustLLPA = function(object, clusters = clusterAssignments(object)) {
+fitted.lcModelMclustLLPA = function(object, ..., clusters = clusterAssignments(object)) {
   times = time(object)
   newdata = data.table(Id = rep(ids(object), each = length(times)),
                        Time = times) %>%

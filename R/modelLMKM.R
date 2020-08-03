@@ -3,7 +3,7 @@ setClass('lcModelLMKM',
          representation(coefNames = 'character'),
          contains = 'lcModel')
 
-coef.lcModelLMKM = function(object, cluster = NULL) {
+coef.lcModelLMKM = function(object, ..., cluster = NULL) {
   coefmat = t(object@model$centers)
   colnames(coefmat) = clusterNames(object)
   rownames(coefmat) = object@coefNames
@@ -35,10 +35,9 @@ setMethod('postprob', signature('lcModelLMKM'), function(object) {
 
 #' @export
 #' @inheritDotParams stats::predict.lm
-predict.lcModelLMKM = function(object,
+predict.lcModelLMKM = function(object, ...,
                                newdata = NULL,
-                               what = 'mu',
-                               ...) {
+                               what = 'mu') {
   assert_that(is.newdata(newdata))
   assert_that(what == 'mu')
 

@@ -1,0 +1,8 @@
+.git
+.gitignore
+.Rhistory
+.Rprofile
+make_data.R
+osa.R
+^.*\.Rproj$
+^\.Rproj\.user$

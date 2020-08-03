@@ -26,7 +26,7 @@ setMethod('converged', signature('lcModelKML'), function(object) {
 
 
 #' @export
-logLik.lcModelKML = function(object) {
+logLik.lcModelKML = function(object, ...) {
   # A negated version of BIC is precomputed by kml package so let's use that
   bic = -getKMLPartition(object)@criterionValues['BIC'] %>% unname()
   N = nIds(object)

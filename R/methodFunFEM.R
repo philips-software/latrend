@@ -17,7 +17,7 @@ lcMethodFunFEM = function(response,
                           id = getOption('latrend.id'),
                           nClusters = 2,
                           basis = function(time)
-                            create.bspline.basis(time, nbasis = 10, norder = 3),
+                            fda::create.bspline.basis(time, nbasis = 10, norder = 3),
                           ...) {
   lcMethod.call(
     'lcMethodFunFEM',
@@ -32,9 +32,12 @@ setMethod('getName', signature('lcMethodFunFEM'), function(object) 'functional s
 setMethod('getShortName', signature('lcMethodFunFEM'), function(object) 'funfem')
 
 setMethod('preFit', signature('lcMethodFunFEM'), function(method, data, envir, verbose, ...) {
+  requireNamespace('fda')
+  requireNamespace('funFEM')
+
   e = callNextMethod()
   e$basis = method$basis(range(e$times))
-  e$fd = smooth.basis(e$times, t(e$dataMat), e$basis)$fd
+  e$fd = fda::smooth.basis(e$times, t(e$dataMat), e$basis)$fd
 
   return(e)
 })

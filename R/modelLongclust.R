@@ -3,7 +3,7 @@ setClass('lcModelLongclust', contains='lcModel')
 
 
 #' @export
-predict.lcModelLongclust = function(object, newdata=NULL, what='mu', approxFun=approx) {
+predict.lcModelLongclust = function(object, ..., newdata=NULL, what='mu', approxFun=approx) {
   assert_that(is.newdata(newdata))
   assert_that(what == 'mu')
   assert_that(is.function(approxFun))
@@ -25,7 +25,7 @@ predict.lcModelLongclust = function(object, newdata=NULL, what='mu', approxFun=a
 
 
 #' @export
-fitted.lcModelLongclust = function(object, clusters=clusterAssignments(object)) {
+fitted.lcModelLongclust = function(object, ..., clusters=clusterAssignments(object)) {
   times = time(object)
   newdata = data.table(Id=rep(ids(object), each=length(times)),
                        Time=times) %>%
@@ -49,7 +49,7 @@ setMethod('converged', signature('lcModelLongclust'), function(object) {
 
 
 #' @export
-logLik.lcModelLongclust = function(object) {
+logLik.lcModelLongclust = function(object, ...) {
   logLiks = -object@model$llres
   if(length(logLiks) == 1) {
     ll = logLiks
@@ -67,7 +67,7 @@ logLik.lcModelLongclust = function(object) {
 }
 
 #' @export
-BIC.lcModelLongclust = function(object) {
+BIC.lcModelLongclust = function(object, ...) {
   bics = -object@model$bicres
   if(length(bics) == 1) {
     bics

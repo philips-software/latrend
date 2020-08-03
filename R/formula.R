@@ -126,6 +126,7 @@ dropIntercept = function(f) {
   }
 }
 
+#' @importFrom stats drop.terms
 #' @title Drop random-effects component from a formula
 #' @description Remove the random-effects components specified by "(. | .)" from a formula
 #' @keywords internal

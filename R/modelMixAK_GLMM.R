@@ -46,11 +46,11 @@ setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, 
 })
 
 
-coef.lcModelMixAK_GLMM = function(object, stat = 'Mean') {
+coef.lcModelMixAK_GLMM = function(object, ..., stat = 'Mean') {
   coef(object@model, stat = stat)
 }
 
-coef.GLMM_MCMC = function(object, stat = 'Mean') {
+coef.GLMM_MCMC = function(object, ..., stat = 'Mean') {
   c(object$summ.b.Mean[stat, ],
     object$summ.b.SDCorr[stat, ],
     sigma_eps = unname(object$summ.sigma_eps[stat]))

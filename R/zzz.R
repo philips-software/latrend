@@ -2,8 +2,10 @@
 #' @import assertthat
 #' @import methods
 #' @import magrittr
+#' @import stats
 #' @importFrom foreach foreach %do%
 #' @import ggplot2
+#' @importFrom utils hasName capture.output combn getS3method modifyList head tail data
 #' @section Getting started:
 #' * See `vignette("demo", package="latrend")` for an introduction to conducting a longitudinal cluster analysis on a example case study.
 #' * See `vignette("customModels", package="latrend")` for examples on constructing your own cluster models.
@@ -11,7 +13,6 @@
 #' * See `vignette("modelValidation", package="latrend")`
 #' * See `vignette("simulationStudy", package="latrend")`
 "_PACKAGE"
-
 
 .onLoad = function(libname, pkgname) {
   opts = list(
@@ -26,11 +27,16 @@
   optMask = !(names(opts) %in% names(options()))
   if (any(optMask)) {
     options(opts[optMask])
+  }
+}
 
-    if (getOption('latrend.printOptions', default = FALSE)) {
-      packageStartupMessage('Default options:')
-      packageStartupMessage(paste0('\t', names(opts[optMask]), ' = ', opts[optMask], collapse =
-                                     '\n'))
+.loadPackage = function(name) {
+  if(!isNamespaceLoaded(name)) {
+    if(requireNamespace(name, quiet = TRUE)) {
+      ns = loadNamespace(name)
+      attachNamespace(ns)
+    } else {
+      stop('unable to load package "', name , '"')
     }
   }
 }

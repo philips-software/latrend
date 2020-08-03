@@ -1,7 +1,9 @@
 Package: latrend
 Type: Package
 Title: Clustering longitudinal datasets
-Version: 0.9.4
+Version: 0.9.5
+Author: Niek Den Teuling
+Maintainer: Niek Den Teuling <niek.den.teuling@philips.com>
 Authors@R: c(person("Niek", "Den Teuling", email = "niek.den.teuling@philips.com", role = c("aut", "cre")),
     person("Steffen", "Pauws", email = "s.c.pauws@uvt.nl", role = "ctb"),
     person("Edwin", "van den Heuvel", email = "e.r.v.d.heuvel@tue.nl", role = "ctb"),
@@ -15,25 +17,28 @@ LazyData: true
 Depends:
     R (>= 3.6.0)
 Imports:
-    assertthat (>= 0.2.0),
+    stats (>= 3.6.0),
     methods (>= 3.6.0),
-    magrittr (>= 1.5),
+    R.utils (>= 2.9.0),
+    assertthat (>= 0.2.0),
+    foreach (>= 1.4.7),
     data.table (>= 1.12.0),
-    matrixStats (>= 0.55.0),
+    reshape2 (>= 1.4.3),
+    longitudinalData (>= 2.4.1),
+    magrittr (>= 1.5),
     plyr (>= 1.8.4),
     ggplot2 (>= 2.2.1),
-    R.utils (>= 2.9.0),
+    matrixStats (>= 0.55.0),
     stackoverflow (>= 0.3.0),
-    splines (>= 3.5.0)
-RoxygenNote: 7.1.0
-Roxygen: list(markdown = TRUE)
+	clusterCrit (>= 1.2.8),
+	mclustcomp (>= 0.3.1),
+	caret (>= 6.0)
 Suggests: 
     testthat (>= 2.1.0),
     roxygen2 (>= 7.1.0),
     knitr (>= 1.24),
     rmarkdown (>= 1.18),
     kml (>= 2.4.1),
-    longitudinalData (>= 2.4.1),
     lcmm (>= 1.7.8),
     mclust (>= 5.4.5),
     longclust (>= 1.2.3),
@@ -47,9 +52,9 @@ Suggests:
     dtwclust (>= 5.5.6),
     mixAK (>= 5.3),
     psych (>= 1.9.12.31),
-    clusterCrit (>= 1.2.8),
-    mclustcomp (>= 0.3.1),
     lme4 (>= 1.1)
+RoxygenNote: 7.1.0
+Roxygen: list(markdown = TRUE)
 Collate: 
     'assert.R'
     'compute.R'

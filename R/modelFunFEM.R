@@ -2,7 +2,7 @@
 setClass('lcModelFunFEM', contains = 'lcModel')
 
 #' @export
-fitted.lcModelFunFEM = function(object, clusters = clusterAssignments(object)) {
+fitted.lcModelFunFEM = function(object, ..., clusters = clusterAssignments(object)) {
   times = time(object)
   newdata = data.table(Id = rep(ids(object), each = length(times)),
                        Time = times) %>%
@@ -14,7 +14,7 @@ fitted.lcModelFunFEM = function(object, clusters = clusterAssignments(object)) {
 
 
 #' @export
-predict.lcModelFunFEM = function(object,
+predict.lcModelFunFEM = function(object, ...,
                                  newdata = NULL,
                                  what = 'mu',
                                  approxFun = approx) {
@@ -45,7 +45,7 @@ setMethod('postprob', signature('lcModelFunFEM'), function(object) {
 })
 
 #' @export
-coef.lcModelFunFEM = function(object) {
+coef.lcModelFunFEM = function(object, ...) {
   coefMat = t(object@model$prms$my)
   colnames(coefMat) = clusterNames(object)
   return(coefMat)
@@ -53,7 +53,7 @@ coef.lcModelFunFEM = function(object) {
 
 
 #' @export
-logLik.lcModelFunFEM = function(object) {
+logLik.lcModelFunFEM = function(object, ...) {
   ll = object@model$ll
   attr(ll, 'nobs') = nIds(object)
   attr(ll, 'df') = object@model$nbprm / 2

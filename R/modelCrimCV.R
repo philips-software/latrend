@@ -10,7 +10,7 @@ setMethod('postprob', signature('lcModelCrimCV'), function(object) {
 
 
 #' @export
-predict.lcModelCrimCV = function(object,
+predict.lcModelCrimCV = function(object, ...,
                                  newdata = NULL,
                                  what = 'mean') {
   assert_that(is.newdata(newdata))
@@ -56,7 +56,7 @@ predict.lcModelCrimCV = function(object,
 }
 
 
-fitted.lcModelCrimCV = function(object,
+fitted.lcModelCrimCV = function(object, ...,
                                 clusters = clusterAssignments(object),
                                 what = 'mean') {
   predict(object, newdata = NULL, what = what) %>%
@@ -65,7 +65,7 @@ fitted.lcModelCrimCV = function(object,
 
 
 #' @export
-logLik.lcModelCrimCV = function(object) {
+logLik.lcModelCrimCV = function(object, ...) {
   ll = object@model$llike
   attr(ll, 'nobs') = nIds(object) #crimCV uses nIds*nTime
   attr(ll, 'df') = length(coef(object)) + 1
@@ -75,7 +75,7 @@ logLik.lcModelCrimCV = function(object) {
 
 
 #' @export
-coef.lcModelCrimCV = function(object) {
+coef.lcModelCrimCV = function(object, ...) {
   betaMat = object@model$beta
   colnames(betaMat) = clusterNames(object)
   rownames(betaMat) = paste0('beta', seq_len(nrow(betaMat)) - 1)

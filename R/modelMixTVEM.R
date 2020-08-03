@@ -3,7 +3,8 @@ setClass('lcModelMixTVEM', contains = 'lcModel')
 
 
 #' @export
-predict.lcModelMixTVEM = function(object,
+#' @importFrom stats approx
+predict.lcModelMixTVEM = function(object, ...,
                                   newdata = NULL,
                                   what = 'mu') {
   assert_that(is.newdata(newdata))
@@ -49,7 +50,7 @@ setMethod('converged', signature('lcModelMixTVEM'), function(object) {
 
 
 #' @export
-logLik.lcModelMixTVEM = function(object) {
+logLik.lcModelMixTVEM = function(object, ...) {
   ll = object@model$bestFit$logLik
   attr(ll, 'nobs') = nIds(object)
   attr(ll, 'df') = object@model$bestFit$enp
@@ -59,14 +60,14 @@ logLik.lcModelMixTVEM = function(object) {
 
 
 #' @export
-sigma.lcModelMixTVEM = function(object) {
+sigma.lcModelMixTVEM = function(object, ...) {
   sqrt(object@model$bestFit$sigsq.total) %>%
     weighted.mean(w = clusterProportions(object))
 }
 
 
 #' @export
-coef.lcModelMixTVEM = function(object) {
+coef.lcModelMixTVEM = function(object, ...) {
   thetas = object@model$bestFit$theta %>%
     setNames(paste0('theta',
                     rep(1:ncol(.), each = nrow(.)),

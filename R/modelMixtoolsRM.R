@@ -5,6 +5,7 @@ setClass('lcModelMixtoolsRM', contains = 'lcModel')
 #' @export
 #' @importFrom plyr alply
 predict.lcModelMixtoolsRM = function(object,
+                                     ...,
                                      newdata = NULL,
                                      what = 'mu',
                                      se = TRUE,
@@ -81,7 +82,7 @@ predict.lcModelMixtoolsRM = function(object,
 
 
 #' @export
-fitted.lcModelMixtoolsRM = function(object, clusters) {
+fitted.lcModelMixtoolsRM = function(object, ..., clusters) {
   predList = predict.lcModelMixtoolsRM(object,
                                        newdata = NULL,
                                        se = FALSE,
@@ -97,7 +98,7 @@ setMethod('postprob', signature('lcModelMixtoolsRM'), function(object) {
 
 
 #' @export
-logLik.lcModelMixtoolsRM = function(object) {
+logLik.lcModelMixtoolsRM = function(object, ...) {
   ll = object@model$loglik
   attr(ll, 'nobs') = nIds(object)
   attr(ll, 'df') = length(coef(object)) + 1

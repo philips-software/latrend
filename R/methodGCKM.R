@@ -29,7 +29,7 @@ lcMethodGCKM = function(formula,
                         nClusters = 2,
                         center = meanNA,
                         ...) {
-  library(lme4)
+  requireNamespace('lme4')
 
   lcMethod.call(
     'lcMethodGCKM',

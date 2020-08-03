@@ -10,7 +10,7 @@
 setClass('lcApproxModel', contains = 'lcModel')
 
 #' @export
-fitted.lcApproxModel = function(object, clusters = clusterAssignments(object)) {
+fitted.lcApproxModel = function(object, ..., clusters = clusterAssignments(object)) {
   times = time(object)
   newdata = data.table(Id = ids(object) %>% rep(each = length(times)),
                        Time = times) %>%
@@ -25,7 +25,7 @@ fitted.lcApproxModel = function(object, clusters = clusterAssignments(object)) {
 #' @rdname predict.lcModel
 #' @inheritParams predict.lcModel
 #' @param approxFun The interpolation function to use for time points not in the feature set.
-predict.lcApproxModel = function(object,
+predict.lcApproxModel = function(object, ...,
                                  newdata = NULL,
                                  what = 'mu',
                                  approxFun = approx) {

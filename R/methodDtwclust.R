@@ -14,7 +14,8 @@ lcMethodDtwclust = function(response,
                        id = getOption('latrend.id'),
                        nClusters = 2,
                        ...) {
-  library(dtwclust)
+  .loadPackage('dtwclust')
+
   m = lcMethod.call(
     'lcMethodDtwclust',
     call = stackoverflow::match.call.defaults(),

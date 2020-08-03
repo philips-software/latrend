@@ -76,6 +76,7 @@ meltRepeatedMeasures = function(data,
 }
 
 #' @export
+#' @importFrom reshape2 dcast
 #' @title Cast a longitudinal data.frame to a matrix
 #' @inheritParams meltRepeatedMeasures
 #' @return A `matrix` of the repeated measures.

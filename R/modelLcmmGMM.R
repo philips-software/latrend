@@ -2,7 +2,7 @@
 setClass('lcModelLcmmGMM', contains = 'lcModel')
 
 #' @export
-fitted.lcModelLcmmGMM = function(object, clusters = clusterAssignments(object)) {
+fitted.lcModelLcmmGMM = function(object, ..., clusters = clusterAssignments(object)) {
   predNames = paste0('pred_m', 1:nClusters(object))
   predMat = object@model$pred[predNames] %>%
     as.matrix %>%
@@ -11,7 +11,7 @@ fitted.lcModelLcmmGMM = function(object, clusters = clusterAssignments(object)) 
 }
 
 #' @export
-predict.lcModelLcmmGMM = function(object,
+predict.lcModelLcmmGMM = function(object, ...,
                                   newdata = NULL,
                                   what = 'mu') {
   assert_that(is.newdata(newdata))
@@ -43,7 +43,7 @@ predict.lcModelLcmmGMM = function(object,
 }
 
 #' @export
-model.matrix.lcModelLcmmGMM = function(object, what = 'mu') {
+model.matrix.lcModelLcmmGMM = function(object, ..., what = 'mu') {
   if (what == 'mu') {
     f = merge.formula(object@model$fixed, object@model$mixture)
     model.matrix(f, data = model.data(object))
@@ -53,7 +53,7 @@ model.matrix.lcModelLcmmGMM = function(object, what = 'mu') {
 }
 
 #' @export
-logLik.lcModelLcmmGMM = function(object) {
+logLik.lcModelLcmmGMM = function(object, ...) {
   ll = object@model$loglik
   N = nIds(object)
   df = length(coef(object))
@@ -64,7 +64,7 @@ logLik.lcModelLcmmGMM = function(object) {
 }
 
 #' @export
-sigma.lcModelLcmmGMM = function(object) {
+sigma.lcModelLcmmGMM = function(object, ...) {
   coef(object)[grepl('std err', names(coef(object@model)))] %>% unname
 }
 

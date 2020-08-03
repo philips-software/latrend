@@ -213,6 +213,7 @@ setMethod('clusterAssignments', signature('lcModel'), function(object, strategy 
 
 
 #' @export
+#' @importFrom stats coef
 #' @title Coefficients of a lcModel
 #' @return A `named numeric vector` with all coefficients, or a `matrix` with each column containing the cluster-specific coefficients.
 #' @family model-specific methods
@@ -231,14 +232,14 @@ coef.lcModel = function(object, ...) {
 
 
 #' @export
-#' @importFrom IMIFA post_conf_mat
+#' @importFrom caret confusionMatrix
 #' @title Posterior confusion matrix
 #' @examples
 #' model = latrend(method=lcMethodLcmmGMM(), data=testLongData)
 #' confusionMatrix(model)
-confusionMatrix = function(object) {
+confusionMatrix.lcModel = function(object, ...) {
   assert_that(is.lcModel(object))
-  post_conf_mat(postprob(object)) %>%
+  IMIFA::post_conf_mat(postprob(object)) %>%
     set_colnames(clusterNames(object)) %>%
     set_rownames(clusterNames(object))
 }
@@ -255,6 +256,7 @@ setMethod('converged', signature('lcModel'), function(object) {
 
 
 #' @export
+#' @importFrom stats deviance
 #' @title lcModel deviance
 #' @family model-specific methods
 deviance.lcModel = function(object, ...) {
@@ -271,6 +273,7 @@ deviance.lcModel = function(object, ...) {
 
 
 #' @export
+#' @importFrom stats df.residual
 #' @title Extract the residual degrees of freedom from a lcModel
 #' @family model-specific methods
 df.residual.lcModel = function(object, ...) {
@@ -287,11 +290,12 @@ df.residual.lcModel = function(object, ...) {
 
 
 #' @export
+#' @importFrom stats fitted
 #' @title Extract lcModel fitted values
 #' @param clusters Optional cluster assignments per id. If unspecified, a matrix is returned containing the cluster-specific predictions per column.
 #' @return A vector of the fitted values for the respective class, or a matrix of fitted values for each cluster.
 #' @family model-specific methods
-fitted.lcModel = function(object, clusters = clusterAssignments(object)) {
+fitted.lcModel = function(object, ..., clusters = clusterAssignments(object)) {
   pred = predict(object, newdata = NULL)
   transformFitted(pred = pred,
                   model = object,
@@ -300,16 +304,17 @@ fitted.lcModel = function(object, clusters = clusterAssignments(object)) {
 
 
 #' @export
+#' @importFrom stats formula
 #' @title Extract the formula of a lcModel
 #' @param what The distributional parameter
 #' @return Returns the associated `formula`, or ` ~ 0` if not specified.
-formula.lcModel = function(object, what = 'mu') {
-  method = getLcMethod(object)
+formula.lcModel = function(x, ..., what = 'mu') {
+  method = getLcMethod(x)
   if (what == 'mu') {
     if (has_name(method, 'formula')) {
       method$formula
     } else {
-      as.formula(paste(object@response, '~ 0'))
+      as.formula(paste(x@response, '~ 0'))
     }
   } else {
     formulaName = paste('formula', what, sep = '.')
@@ -323,8 +328,9 @@ formula.lcModel = function(object, what = 'mu') {
 
 
 #' @export
-getCall.lcModel = function(object) {
-  object@call
+#' @importFrom stats getCall
+getCall.lcModel = function(x, ...) {
+  x@call
 }
 
 
@@ -408,6 +414,7 @@ is.lcModel = function(object) {
 
 
 #' @export
+#' @importFrom stats logLik
 #' @title Extract the log-likelihood of a lcModel
 #' @family model-specific methods
 logLik.lcModel = function(object, ...) {
@@ -642,24 +649,25 @@ make.clusterNames = function(n) {
 
 
 #' @export
+#' @importFrom stats model.frame
 #' @title Extract model training data
 #' @family model-specific methods
-model.frame.lcModel = function(object) {
+model.frame.lcModel = function(formula, ...) {
   if (is.null(getS3method(
     'model.frame',
-    class = class(object@model),
+    class = class(formula@model),
     optional = TRUE
   ))) {
-    labs = getLcMethod(object) %>% formula %>% terms %>% labels
-    model.data(object)[, labs]
+    labs = getLcMethod(formula) %>% stats::formula %>% terms %>% labels
+    model.data(formula)[, labs]
   } else {
-    model.frame(object@model)
+    model.frame(formula@model)
   }
 }
 
 
 #' @export
-model.data = function(object) {
+model.data = function(object, ...) {
   UseMethod('model.data')
 }
 
@@ -667,7 +675,7 @@ model.data = function(object) {
 #' @title Extract the model data that was used for fitting
 #' @description Evaluates the data call in the environment that the model was trained in.
 #' @return The `data.frame` that was used for fitting the `lcModel`.
-model.data.lcModel = function(object) {
+model.data.lcModel = function(object, ...) {
   if (!is.null(object@data)) {
     object@data
     assert_that(is.data.frame(object@data), msg = 'expected data reference to be a data.frame')
@@ -680,15 +688,6 @@ model.data.lcModel = function(object) {
     assert_that(is.data.frame(data), msg = 'expected data reference to be a data.frame')
     return(data)
   }
-}
-
-
-# . model.response ####
-#' @title  Extract model response data
-#' @details Model response that was used for training
-#' @keywords internal
-model.response = function(object) {
-  model.data(object)[[responseVariable(object)]]
 }
 
 
@@ -712,6 +711,7 @@ nClusters = function(object) {
 
 
 #' @export
+#' @importFrom stats nobs
 #' @title Extract the number of observations from a lcModel
 #' @family model-specific methods
 nobs.lcModel = function(object, ...) {
@@ -720,6 +720,7 @@ nobs.lcModel = function(object, ...) {
 
 
 #' @export
+#' @importFrom stats predict
 #' @rdname predict.lcModel
 #' @title lcModel predictions
 #' @description Predicts the expected trajectory observations at the given time for each cluster, unless specified.
@@ -738,10 +739,9 @@ nobs.lcModel = function(object, ...) {
 #'
 #' predIdAll = predict(model, newdata=data.frame(Id='S1', Time=time(model))) # Prediction matrix for id S1 for all clusters
 #' @family model-specific methods
-predict.lcModel = function(object,
+predict.lcModel = function(object, ...,
                            newdata = NULL,
-                           what = 'mu',
-                           ...) {
+                           what = 'mu') {
   # special case for when no newdata is provided
   if (is.null(newdata)) {
     newdata = model.data(object)
@@ -965,8 +965,8 @@ setMethod('plotQQ', signature('lcModel'), function(object, byCluster, ...) {
   rowClusters = clusterAssignments(object)[idIndexColumn]
 
   res = residuals(object)
-  p = ggplot(data = data.frame(Cluster = rowClusters, res = res), aes(sample =
-                                                                        res)) +
+  requireNamespace('qqplotr')
+  p = ggplot(data = data.frame(Cluster = rowClusters, res = res), aes(sample = res)) +
     qqplotr::geom_qq_band(...) +
     qqplotr::stat_qq_line(...) +
     qqplotr::stat_qq_point(...) +
@@ -981,11 +981,12 @@ setMethod('plotQQ', signature('lcModel'), function(object, byCluster, ...) {
 
 
 #' @export
+#' @importFrom stats residuals
 #' @title Extract lcModel residuals
 #' @inheritParams fitted.lcModel
 #' @return A vector of residuals for the cluster assignments specified by clusters. If clusters is unspecified, a matrix of cluster-specific residuals per observations is returned.
 #' @family model-specific methods
-residuals.lcModel = function(object, clusters = clusterAssignments(object), ...) {
+residuals.lcModel = function(object, ..., clusters = clusterAssignments(object)) {
   ypred = fitted(object, clusters = clusters, ...)
   yref = model.response(object)
 
@@ -1028,6 +1029,7 @@ setMethod('show', 'lcModel', function(object) {
 
 
 #' @export
+#' @importFrom stats sigma
 #' @title Extract residual standard deviation from a lcModel
 #' @family model-specific methods
 sigma.lcModel = function(object, ...) {
@@ -1151,15 +1153,17 @@ setMethod('trajectories', signature('lcModel'), function(object, at, what, clust
 
 
 #' @export
+#' @importFrom stats time
 #' @title Sampling times of a lcModel
 #' @return The unique times at which observations occur.
 #' @family model-specific methods
-time.lcModel = function(object) {
-  model.data(object)[[timeVariable(object)]] %>% unique %>% sort
+time.lcModel = function(x, ...) {
+  model.data(x)[[timeVariable(x)]] %>% unique %>% sort
 }
 
 
 #' @export
+#' @importFrom stats update
 #' @title Update a lcModel
 #' @description Fit a new model with modified arguments from the current model.
 #' @inheritDotParams latrend

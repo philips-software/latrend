@@ -3,7 +3,7 @@ setClass('lcModelFlexmix', contains = 'lcModel')
 
 
 #' @export
-predict.lcModelFlexmix = function(object,
+predict.lcModelFlexmix = function(object, ...,
                                   newdata = NULL,
                                   what = 'mu') {
   assert_that(is.newdata(newdata))
@@ -24,7 +24,7 @@ predict.lcModelFlexmix = function(object,
 
 
 #' @export
-fitted.lcModelFlexmix = function(object, clusters = clusterAssignments(object)) {
+fitted.lcModelFlexmix = function(object, ..., clusters = clusterAssignments(object)) {
   predNames = paste0('pred_m', 1:nClusters(object))
   predMat = flexmix::fitted(object@model) %>%
     set_colnames(clusterNames(object))
@@ -40,12 +40,12 @@ setMethod('postprob', signature('lcModelFlexmix'), function(object) {
 })
 
 #' @export
-logLik.lcModelFlexmix = function(object) {
+logLik.lcModelFlexmix = function(object, ...) {
   logLik(object@model)
 }
 
 #' @export
-coef.lcModelFlexmix = function(object) {
+coef.lcModelFlexmix = function(object, ...) {
   flexmix::parameters(object@model)
 }
 

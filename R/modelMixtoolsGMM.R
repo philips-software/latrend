@@ -11,7 +11,7 @@ setMethod('postprob', signature('lcModelMixtoolsGMM'), function(object) {
 
 #' @export
 #' @importFrom plyr alply
-predict.lcModelMixtoolsGMM = function(object,
+predict.lcModelMixtoolsGMM = function(object, ...,
                                       newdata = NULL,
                                       what = 'mu') {
   assert_that(is.newdata(newdata),
@@ -59,7 +59,7 @@ predict.lcModelMixtoolsGMM = function(object,
 
 
 #' @export
-logLik.lcModelMixtoolsGMM = function(object) {
+logLik.lcModelMixtoolsGMM = function(object, ...) {
   ll = object@model$loglik
   attr(ll, 'nobs') = nIds(object)
   attr(ll, 'df') = coef(object) %>% lengths() %>% sum()
@@ -68,7 +68,7 @@ logLik.lcModelMixtoolsGMM = function(object) {
 }
 
 #' @export
-coef.lcModelMixtoolsGMM = function(object) {
+coef.lcModelMixtoolsGMM = function(object, ...) {
   return(
     list(
       alpha = object@model$alpha,
@@ -81,12 +81,12 @@ coef.lcModelMixtoolsGMM = function(object) {
 }
 
 #' @export
-sigma.lcModelMixtoolsGMM = function(object) {
+sigma.lcModelMixtoolsGMM = function(object, ...) {
   object@model$sigma
 }
 
 
-ranef.lcModelMixtoolsGMM = function(object) {
+ranef.lcModelMixtoolsGMM = function(object, ...) {
   betaNames = colnames(object@model$x[[1]])
   nBeta = length(betaNames)
 
