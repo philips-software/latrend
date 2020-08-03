@@ -77,7 +77,11 @@ setMethod('fit', signature('lcMethodMixAK_GLMM'), function(method, data, envir, 
     args$prior.b = list(Kmax = method$nClusters)
   }
 
-  model = do.call(mixAK::GLMM_MCMC, args)
+  suppressFun = ifelse(as.logical(verbose), force, capture.output)
+
+  suppressFun({
+    model = do.call(mixAK::GLMM_MCMC, args)
+  })
 
   if (is(model, 'GLMM_MCMC')) {
     Class = 'lcModelMixAK_GLMM'
