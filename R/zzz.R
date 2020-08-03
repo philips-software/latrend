@@ -32,7 +32,7 @@
 
 .loadPackage = function(name) {
   if(!isNamespaceLoaded(name)) {
-    if(requireNamespace(name, quiet = TRUE)) {
+    if(requireNamespace(name, quietly = TRUE)) {
       ns = loadNamespace(name)
       attachNamespace(ns)
     } else {
