@@ -20,7 +20,7 @@ lcMethodTestLcmmGBTM = function(...) {
 }
 
 lcMethodTestFlexmixGBTM = function(...) {
-  lcMethodFlexmixGBTM(formula = Value ~ 1, ..., control=list(iter.max=1, tolerance=1e-2), seed=1)
+  lcMethodFlexmixGBTM(formula = Value ~ Time, ..., control=list(iter.max=1, tolerance=1e-3), seed=1)
 }
 
 lcMethodTestCrimCV = function(...) {
@@ -108,11 +108,13 @@ expect_valid_lcModel = function(object) {
     expect_is(c('numeric', 'matrix', 'list', 'NULL'), label='coef')
   converged(object) %>%
     expect_is(c('logical', 'numeric', 'integer'), label='converged')
+  expect_true(converged(object) > 0)
   nClusters(object) %T>%
     {expect_true(is.count(.))}
   clusterNames(object) %>%
     expect_is('character') %>%
     expect_length(nClusters(object))
+
 
   # Posterior
   pp = postprob(object)

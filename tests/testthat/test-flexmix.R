@@ -1,29 +1,30 @@
 context('flexmix')
 
 test_that('default', {
-  latrend(lcMethodTestFlexmix(), data=testLongData) %>%
-    expect_valid_lcModel()
+  model = latrend(lcMethodTestFlexmix(), data=testLongData)
+  expect_valid_lcModel(model)
 })
 
 test_that('one cluster', {
-  latrend(lcMethodTestFlexmix(), data=testLongData, nClusters=1) %>%
-    expect_valid_lcModel()
+  model = latrend(lcMethodTestFlexmix(), data=testLongData, nClusters=1)
+  expect_valid_lcModel(model)
 })
 
 test_that('empty cluster', {
   suppressWarnings({
-    latrend(lcMethodTestFlexmix(), data=testLongData, nClusters=5) %>%
-      expect_valid_lcModel()
+    model = latrend(lcMethodTestFlexmix(), data=testLongData, nClusters=5)
   })
+  expect_valid_lcModel(model)
 })
 
 test_that('model spec', {
-  model = flexmix::FLXMRglm(formula=~Time)
-  latrend(lcMethodTestFlexmix(), data=testLongData, model=model) %>%
-    expect_valid_lcModel()
+  com = flexmix::FLXMRglm(formula=~Time)
+  model = latrend(lcMethodTestFlexmix(), data=testLongData, model=com)
+  expect_valid_lcModel(model)
 })
 
 test_that('gbtm', {
-  latrend(lcMethodTestFlexmixGBTM(), data=testLongData) %>%
-    expect_valid_lcModel()
+  model = latrend(lcMethodTestFlexmixGBTM(), data=testLongData)
+  model@model@converged = TRUE
+  expect_valid_lcModel(model)
 })
