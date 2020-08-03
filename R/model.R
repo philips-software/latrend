@@ -715,7 +715,7 @@ nClusters = function(object) {
 #' @title Extract the number of observations from a lcModel
 #' @family model-specific methods
 nobs.lcModel = function(object, ...) {
-  length(model.response(object))
+  nrow(model.data(object))
 }
 
 
@@ -988,7 +988,7 @@ setMethod('plotQQ', signature('lcModel'), function(object, byCluster, ...) {
 #' @family model-specific methods
 residuals.lcModel = function(object, ..., clusters = clusterAssignments(object)) {
   ypred = fitted(object, clusters = clusters, ...)
-  yref = model.response(object)
+  yref = model.data(object)[[responseVariable(object)]]
 
   if (is.matrix(ypred)) {
     assert_that(length(yref) == nrow(ypred))

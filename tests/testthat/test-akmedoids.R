@@ -10,14 +10,14 @@ rownames(trajMat) = traj[,1]
 
 test_that('default', {
   suppressWarnings({
-    model = latrend(lcMethodAKMedoids(response = 'Value'), trajMat) %>%
-      expect_valid_lcModel()
+    model = latrend(lcMethodAKMedoids(response = 'Value'), trajMat)
   })
+  expect_valid_lcModel(model)
 })
 
 test_that('many clusters', {
   suppressWarnings({
-    model = latrend(lcMethodAKMedoids(response = 'Value', nClusters=10), trajMat) %>%
-      expect_valid_lcModel()
+    model = latrend(lcMethodAKMedoids(response = 'Value', nClusters=10), trajMat)
   })
+  expect_valid_lcModel(model)
 })
