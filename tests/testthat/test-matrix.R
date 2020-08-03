@@ -14,14 +14,14 @@ test_that('rowColumns', {
 
 test_that('meltRepeatedMeasures', {
   m = matrix(1:12, nrow=3)
-  meltRepeatedMeasures(m, response = 'Value') %>%
-    expect_is('data.frame') %>%
-    expect_named(c('Id', 'Time', 'Value')) %T>%
-    {expect_equal(nrow(.), length(m))} %T>%
-    {expect_is(.$Id, c('integer', 'factor'))} %T>%
-    {expect_is(.$Time, 'numeric')} %T>%
-    {expect_is(.$Value, 'numeric')} %T>%
-    {expect_equal(.$Value, as.numeric(t(m)))}
+  df = meltRepeatedMeasures(m, response = 'Value')
+  expect_is(df, 'data.frame')
+  expect_named(df, c('Id', 'Time', 'Value'))
+  expect_equal(nrow(df), length(m))
+  expect_is(df$Id, c('integer', 'factor'))
+  expect_is(df$Time, 'numeric')
+  expect_is(df$Value, 'numeric')
+  expect_equal(df$Value, as.numeric(t(m)))
 })
 
 test_that('meltRepeatedMeasures with non-numeric colnames', {
@@ -29,23 +29,24 @@ test_that('meltRepeatedMeasures with non-numeric colnames', {
   colnames(m) = paste0('Obs', 1:4)
 
   suppressWarnings({
-    meltRepeatedMeasures(m, response = 'Value') %>%
-      expect_is('data.frame') %>%
-      expect_named(c('Id', 'Time', 'Value')) %T>%
-      {expect_equal(nrow(.), length(m))} %T>%
-      {expect_is(.$Id, c('integer', 'factor'))} %T>%
-      {expect_is(.$Time, 'numeric')} %T>%
-      {expect_is(.$Value, 'numeric')} %T>%
-      {expect_equal(.$Value, as.numeric(t(m)))}
+    df = meltRepeatedMeasures(m, response = 'Value')
   })
+  expect_is(df, 'data.frame')
+  expect_named(df, c('Id', 'Time', 'Value'))
+  expect_equal(nrow(df), length(m))
+  expect_is(df$Id, c('integer', 'factor'))
+  expect_is(df$Time, 'numeric')
+  expect_is(df$Value, 'numeric')
+  expect_equal(df$Value, as.numeric(t(m)))
 })
 
 test_that('dcastRepeatedMeasures', {
   m = matrix(1:12, nrow=3)
   df = meltRepeatedMeasures(m, response = 'Value')
-  dcastRepeatedMeasures(df, response = 'Value') %>%
-    expect_is('matrix') %T>%
-    {expect_equal(nrow(.), nrow(m))} %T>%
-    {expect_equal(ncol(.), ncol(m))} %T>%
-    {expect_equal(as.numeric(.), as.numeric(m))}
+  mat = dcastRepeatedMeasures(df, response = 'Value')
+
+  expect_is(mat, 'matrix')
+  expect_equal(nrow(mat), nrow(m))
+  expect_equal(ncol(mat), ncol(m))
+  expect_equal(as.numeric(mat), as.numeric(m))
 })

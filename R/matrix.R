@@ -76,24 +76,29 @@ meltRepeatedMeasures = function(data,
 }
 
 #' @export
-#' @importFrom reshape2 dcast
 #' @title Cast a longitudinal data.frame to a matrix
+#' @description Converts a longitudinal `data.frame` comprising trajectories with an equal number of observations, measured at identical moments in time, to a `matrix`. Each row of the matrix represents a trajectory.
 #' @inheritParams meltRepeatedMeasures
-#' @return A `matrix` of the repeated measures.
+#' @return A `matrix` with a trajectory per row.
 dcastRepeatedMeasures = function(data,
                                  response,
                                  id = getOption('latrend.id'),
                                  time = getOption('latrend.time')) {
   assert_that(has_name(data, c(id, time, response)))
-  df = reshape2::dcast(
-    data,
-    formula = as.formula(paste(id, time, sep = '~')),
-    value.var = response,
-    fill = NA * 0,
-    fun.aggregate = mean
-  )
-  dataMat = as.matrix(df[, -1])
-  rownames(dataMat) = df[[1]]
-  colnames(dataMat) = sort(unique(data[[time]]))
+
+  dt = as.data.table(data)
+  setkeyv(dt, c(id, time))
+
+  numIds = uniqueN(dt[[id]])
+  numTime = uniqueN(dt[[time]])
+  assert_that(all(dt[, .N, by=c(id)]$N == numTime), msg = 'trajectories do not all have the same number of observations')
+
+  dataMat = matrix(dt[[response]],
+                   byrow = TRUE,
+                   nrow = uniqueN(dt[[id]]),
+                   ncol = uniqueN(dt[[time]]))
+
+  rownames(dataMat) = unique(dt[[id]])
+  colnames(dataMat) = unique(dt[[time]])
   return(dataMat)
 }

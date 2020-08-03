@@ -23,7 +23,6 @@ Imports:
     assertthat (>= 0.2.0),
     foreach (>= 1.4.7),
     data.table (>= 1.12.0),
-    reshape2 (>= 1.4.3),
     longitudinalData (>= 2.4.1),
     magrittr (>= 1.5),
     plyr (>= 1.8.4),
