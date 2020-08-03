@@ -5,7 +5,7 @@ test_that('default', {
     expect_valid_lcModel()
 
   expect_equal(nClusters(model), 3)
-  expect_equivalent(clusterProportions(model), c(.05, .49, .46))
+  expect_equivalent(clusterProportions(model), c(.21, .45, .34))
 })
 
 test_that('uniform groups', {
@@ -13,7 +13,7 @@ test_that('uniform groups', {
     expect_valid_lcModel()
 
   expect_equal(nClusters(model), 8)
-  expect_true(all(clusterProportions(model) > .1))
+  expect_true(all(clusterProportions(model) >= .1))
 })
 
 test_that('single group', {
