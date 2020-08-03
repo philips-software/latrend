@@ -33,7 +33,7 @@ setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, 
   z = dropIntercept(method$random) %>%
     model.matrix(newdata)
 
-  pred = fitted(object@model, x, z, ...)[[1]]
+  pred = fitted(model, x, z, ...)[[1]]
   pred[, k]
 }
 
