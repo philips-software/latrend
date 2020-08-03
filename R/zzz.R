@@ -30,13 +30,13 @@
   }
 }
 
-.loadPackage = function(name) {
-  if(!isNamespaceLoaded(name)) {
+.loadOptionalPackage = function(name) {
+  if(not(name %in% .packages())) {
     if(requireNamespace(name, quietly = TRUE)) {
       ns = loadNamespace(name)
       attachNamespace(ns)
     } else {
-      stop('unable to load package "', name , '"')
+      stop('unable to load required package "', name , '". Install the package to use this method.')
     }
   }
 }

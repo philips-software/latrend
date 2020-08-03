@@ -31,7 +31,7 @@ lcMethodMclustLLPA = function(response,
                               id = getOption('latrend.id'),
                               nClusters = 2,
                               ...) {
-  .loadPackage('mclust')
+  .loadOptionalPackage('mclust')
 
   lcMethod.call(
     'lcMethodMclustLLPA',
