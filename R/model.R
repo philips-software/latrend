@@ -308,7 +308,7 @@ fitted.lcModel = function(object, ..., clusters = clusterAssignments(object)) {
 #' @title Extract the formula of a lcModel
 #' @param what The distributional parameter
 #' @return Returns the associated `formula`, or ` ~ 0` if not specified.
-formula.lcModel = function(x, ..., what = 'mu') {
+formula.lcModel = function(x, what = 'mu', ...) {
   method = getLcMethod(x)
   if (what == 'mu') {
     if (has_name(method, 'formula')) {

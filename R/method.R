@@ -468,9 +468,8 @@ setMethod('fit', signature('lcMethod'), function(method, data, envir, verbose) {
 #' m = lcMethodKML(Value ~ Time)
 #' formula(m) # Value ~ Time
 #' @family lcMethod functions
-formula.lcMethod = function(x, ...,
-                            what = 'mu',
-                            envir = NULL) {
+formula.lcMethod = function(x, what = 'mu',
+                            envir = NULL, ...) {
   assert_that(is.lcMethod(x))
   envir = lcMethod.env(x, parent.frame(), envir)
   assert_that(is.scalar(what), is.character(what))
