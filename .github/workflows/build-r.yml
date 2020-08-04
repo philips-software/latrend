@@ -6,6 +6,7 @@ name: bookdown
 jobs:
   build:
     runs-on: [self-hosted, research]
+    container: rocker/r-base:latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -18,19 +19,16 @@ jobs:
           restore-keys: r-
 
       - name: Install packages
-        uses: docker://rocker/r-base:latest
         run: |
           R -e 'install.packages("renv")'
           R -e 'renv::restore()'
           R -e 'install.packages("data.table")'
 
       - name: Check
-        uses: docker://rocker/r-base:latest
         run: |
           R -e 'CMD check latrend --ignore-vignettes --no-examples'
 
       - name: Build
-        uses: docker://rocker/r-base:latest
         run: |
           R -e 'CMD build latrend --no-build-vignettes'
 
