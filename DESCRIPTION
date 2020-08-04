@@ -1,7 +1,7 @@
 Package: latrend
 Type: Package
 Title: Clustering longitudinal datasets
-Version: 0.9.5
+Version: 0.9.6
 Author: Niek Den Teuling
 Maintainer: Niek Den Teuling <niek.den.teuling@philips.com>
 Authors@R: c(person("Niek", "Den Teuling", email = "niek.den.teuling@philips.com", role = c("aut", "cre")),

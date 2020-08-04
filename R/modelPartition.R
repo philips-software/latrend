@@ -26,7 +26,8 @@ lcModelPartition = function(data,
                             clusterNames = NULL,
                             time = getOption('latrend.time'),
                             id = getOption('latrend.id'),
-                            name = 'part') {
+                            name = 'part',
+                            envir = parent.frame()) {
   assert_that(
     is.data.frame(data),
     has_name(data, response),
@@ -93,6 +94,7 @@ lcModelPartition = function(data,
     time = time,
     response = response
   )
+  environment(model) = envir
   return(model)
 }
 

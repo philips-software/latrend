@@ -22,3 +22,15 @@ test_that('factor assignments', {
   expect_equivalent(clusterAssignments(model), clusterAssignments(refmodel))
   expect_equivalent(nClusters(model), nClusters(refmodel))
 })
+
+test_that('local data', {
+  data(testLongData)
+  {
+    a = testLongData
+    model = lcModelPartition(a,
+                             response = 'Value',
+                             clusterAssignments = clusterAssignments(refmodel))
+  }
+
+  expect_valid_lcModel(model)
+})
