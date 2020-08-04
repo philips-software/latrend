@@ -6,7 +6,7 @@ name: latrend
 jobs:
   build:
     runs-on: [self-hosted, research]
-    container: rocker/r-base:latest
+    container: rocker/r-base:3.6.3
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
