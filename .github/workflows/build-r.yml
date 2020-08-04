@@ -16,7 +16,6 @@ jobs:
           R -e 'install.packages("renv")'
           R -e 'renv::restore()'
           R -e 'install.packages("devtools")'
-          R -e 'install.packages("roxygen2")'
           R -e 'install.packages("data.table")'
 
       - name: Check
