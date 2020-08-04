@@ -15,14 +15,18 @@ jobs:
         run: |
           R -e 'install.packages("renv")'
           R -e 'renv::restore()'
+          R -e 'install.packages("devtools")'
+          R -e 'install.packages("roxygen2")'
           R -e 'install.packages("data.table")'
 
       - name: Check
         run: |
-          R -e 'CMD check latrend --ignore-vignettes --no-examples'
+          R -e 'devtools::document(roclets = c('rd', 'collate', 'namespace'))'
+          R -e 'devtools::check(build_args = c('--no-build-vignettes'))'
 
       - name: Build
         run: |
-          R -e 'CMD build latrend --no-build-vignettes'
+          R -e 'devtools::document(roclets = c('rd', 'collate', 'namespace'))'
+          R -e 'devtools::build(args = c('--no-build-vignettes'))'
 
 
