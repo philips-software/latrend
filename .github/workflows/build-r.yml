@@ -21,11 +21,10 @@ jobs:
 
       - name: Check
         run: |
-          R -e 'rcmdcheck(build_args = c('--no-build-vignettes'), args=c('--ignore-vignettes', '--no-examples'))'
+          R -e 'rcmdcheck::rcmdcheck(build_args = c('--no-build-vignettes'), args=c('--ignore-vignettes', '--no-examples'))'
 
       - name: Build
         run: |
           R -e 'pkgbuild::build(vignettes=FALSE, needs_compilation=FALSE)'
-          R -e 'devtools::build(args = c('--no-build-vignettes'))'
 
 
