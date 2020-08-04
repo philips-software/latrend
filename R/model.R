@@ -685,8 +685,17 @@ model.data.lcModel = function(object, ...) {
     data = eval(getCall(object)$data, envir = environment(object))
     assert_that(!is.null(data),
                 msg = sprintf('could not find "%s" in the model environment', deparse(data)))
-    assert_that(is.data.frame(data), msg = 'expected data reference to be a data.frame')
-    return(data)
+
+    modelData = transformLatrendData(
+      data,
+      id = idVariable(object),
+      time = timeVariable(object),
+      response = responseVariable(object),
+      envir = environment(object)
+    )
+
+    assert_that(is.data.frame(modelData), msg = 'expected data reference to be a data.frame')
+    return(modelData)
   }
 }
 
