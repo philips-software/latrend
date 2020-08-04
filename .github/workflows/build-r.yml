@@ -15,17 +15,17 @@ jobs:
         run: |
           R -e 'install.packages("renv")'
           R -e 'renv::restore()'
-          R -e 'install.packages("devtools")'
+          R -e 'install.packages("pkgbuild")'
+          R -e 'install.packages("rcmdcheck")'
           R -e 'install.packages("data.table")'
 
       - name: Check
         run: |
-          R -e 'devtools::document(roclets = c('rd', 'collate', 'namespace'))'
-          R -e 'devtools::check(build_args = c('--no-build-vignettes'))'
+          R -e 'rcmdcheck(build_args = c('--no-build-vignettes'), args=c('--ignore-vignettes', '--no-examples'))'
 
       - name: Build
         run: |
-          R -e 'devtools::document(roclets = c('rd', 'collate', 'namespace'))'
+          R -e 'pkgbuild::build(vignettes=FALSE, needs_compilation=FALSE)'
           R -e 'devtools::build(args = c('--no-build-vignettes'))'
 
 
