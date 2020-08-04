@@ -13,7 +13,7 @@ jobs:
 
       - name: Install packages
         run: |
-          R -e 'install.packages("data.table", type = "source",repo="http://Rdatatable.github.io/data.table")'
+          R -e 'install.packages("data.table", type = "binary")'
 
       - name: Check
         run: |
