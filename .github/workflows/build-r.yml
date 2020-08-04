@@ -27,11 +27,11 @@ jobs:
           R -e 'install.packages("renv")'
           R -e 'renv::restore()'
 
-     - name: Check
+      - name: Check
         run: |
           R -e 'CMD check latrend --ignore-vignettes --no-examples'
 
-    - name: Build
+      - name: Build
         run: |
           R -e 'CMD build latrend --no-build-vignettes'
 
