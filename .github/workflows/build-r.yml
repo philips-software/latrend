@@ -11,6 +11,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
+      - name: Install curl
+        if: runner.os == 'Linux'
+        run: sudo apt install libcurl4-openssl-dev
+        
       - name: Install packages
         run: |
           R -e 'install.packages("renv")'
