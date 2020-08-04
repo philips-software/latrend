@@ -1,7 +1,7 @@
 on:
   push:
 
-name: bookdown
+name: latrend 
 
 jobs:
   build:
