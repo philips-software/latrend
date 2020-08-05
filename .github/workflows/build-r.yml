@@ -20,6 +20,9 @@ jobs:
           R -e 'install.packages("renv")'
           R -e 'renv::restore()'
           R -e 'install.packages("devtools")'
+          R -e 'install.packages(c("testthat", "roxygen2", "knitr", "rmarkdown"))'
+          R -e 'install.packages(c("R.utils", "assertthat", "foreach", "data.table", "longitudinalData", "magrittr", "plyr", "ggplot2", "matrixStats", "stackoverflow", "clusterCrit", "mclustcomp", "caret"))'
+          R -e 'install.packages(c("kml", "lcmm", "mclust", "longclust", "mixtools", "flexmix", "fda", "funFEM", "IMIFA", "crimCV", "akmedoids", "dtwclust", "mixAK", "psych", "lme4"))'
 
       - name: Check
         run: |
