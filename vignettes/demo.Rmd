@@ -1,5 +1,5 @@
 ---
-title: "Demonstration of cluslong package"
+title: "Demonstration of latrend package"
 subtitle: "derp"
 author: "Niek Den Teuling"
 date: "`r Sys.Date()`"
@@ -14,7 +14,7 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-library(cluslong)
+library(latrend)
 library(ggplot2)
 knitr::opts_chunk$set(
   cache = TRUE,
@@ -26,10 +26,10 @@ update_geom_defaults('point', list(size = .5))
 ```
 
 ```{r, results='hide',message=FALSE,warning=FALSE}
-library(cluslong)
+library(latrend)
 library(ggplot2)
 library(magrittr)
-options(cluslong.verbose=TRUE)
+options(latrend.verbose=TRUE)
 ```
 
 # Loading the data
@@ -40,7 +40,7 @@ head(osaData)
 ```
 
 ```{r}
-options(cluslong.id='Patient', cluslong.time='Day')
+options(latrend.id='Patient', latrend.time='Day')
 ```
 
 ```{r}
@@ -59,7 +59,7 @@ plotTrajectories(osaData, response='HoursOfUse') +
 # KML clustering
 ```{r}
 method = clMethodKML(response='HoursOfUse')
-kmlModel = cluslong(method, osaData)
+kmlModel = latrend(method, osaData)
 ```
 
 ```{r}
@@ -71,7 +71,7 @@ metric(kmlModel, 'WMAE') #hours
 ```{r}
 methods = clMethods(clMethodKML(response='HoursOfUse', nRuns=10), nClusters=1:9)
 
-kmlModels = cluslongBatch(methods, data=osaData, verbose=FALSE)
+kmlModels = latrendBatch(methods, data=osaData, verbose=FALSE)
 
 kmlModels
 ```
@@ -119,7 +119,7 @@ plotQQ(bestKmlModel, detrend=TRUE)
 gmmRef = clMethodLcmmGMM(HoursOfUse ~ I(Day / 100) * CLUSTER + (1 | Patient), idiag=TRUE, maxIter=20, convB=1e-2, convL=1e-2, convG=1e-2)
 gbtmMethods = clMethods(gbtmRef, nClusters=1:6)
 
-gbtmModels = cluslongBatch(gbtmMethods, osaData, verbose=FALSE)
+gbtmModels = latrendBatch(gbtmMethods, osaData, verbose=FALSE)
 ```
 
 ```{r warning=FALSE, fig.width=10, fig.height=5, out.width='100%'}

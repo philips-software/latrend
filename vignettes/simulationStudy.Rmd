@@ -13,7 +13,7 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-library(cluslong)
+library(latrend)
 library(ggplot2)
 knitr::opts_chunk$set(
   cache = TRUE,
@@ -25,14 +25,14 @@ update_geom_defaults('point', list(size = .5))
 ```
 
 ```{r, results='hide',message=FALSE,warning=FALSE}
-library(cluslong)
+library(latrend)
 library(ggplot2)
 library(magrittr)
 ```
 
 For convenience, we redefine the package defaults to use the desired naming.
 ```{r}
-options(cluslong.id='Id', cluslong.time='Time')
+options(latrend.id='Id', latrend.time='Time')
 ```
 
 # Generating the datasets

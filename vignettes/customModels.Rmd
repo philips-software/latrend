@@ -37,11 +37,10 @@ In this vignette we demonstrate how to define new methods, with varying degrees 
 We will generate a dataset comprising two clusters with a different intercept and slope. Firstly, we configure the default id, time, and response variable, so that these do not need to be provided to the other function calls.
 
 ```{r}
-library(cluslong)
-options(cluslong.id = 'Traj', 
-        cluslong.time = 'Time',
-        cluslong.response = 'Y',
-        cluslong.verbose = TRUE)
+library(latrend)
+options(latrend.id = 'Traj', 
+        latrend.time = 'Time',
+        latrend.verbose = TRUE)
 ```
 
 Next, we generate the dataset, with 40 trajectories for cluster A and 60 trajectories for cluster B. Cluster A involves trajectories with a downward slope, whereas cluster B has an upward slope. We define a fixed mean of 1, such that all the cluster trajectories are shifted, placing cluster A at intercept 2, and cluster B at intercept 1.
@@ -83,7 +82,7 @@ Based on the density plot, we will assign trajectories with an intercept above 1
 
 ```{r message=TRUE}
 m = clMethodStratify(Y[1] > 1.7)
-model = cluslong(m, casedata)
+model = latrend(m, casedata)
 ```
 
 ```{r}
@@ -102,7 +101,7 @@ stratfun = function(data) {
          labels = c('Low', 'High'))
 }
 m2 = clMethodStratify(stratfun, center = mean)
-model2 = cluslong(m2, casedata)
+model2 = latrend(m2, casedata)
 
 clusterProportions(model2)
 ```
@@ -112,7 +111,7 @@ In case the linear regression step is time-intensive, a more efficient approach 
 casedata[, Intercept := coef(lm(Y ~ Time, .SD))[1], by = Traj]
 
 m3 = clMethodStratify(Intercept[1] > 1.7, clusterNames = c('Low', 'High'))
-model3 = cluslong(m3, casedata)
+model3 = latrend(m3, casedata)
 ```
 
 
@@ -150,7 +149,7 @@ m.twostep = clMethodTwoStep(representationStep = repStep, clusterStep = clusStep
 ```
 
 ```{r message=TRUE}
-model.twostep = cluslong(m.twostep, data = casedata)
+model.twostep = latrend(m.twostep, data = casedata)
 summary(model.twostep)
 ```
 
@@ -180,15 +179,15 @@ clusStep.gen = function(method, data, repMat, envir, verbose) {
 }
 ```
 
-We create a new `clMethodTwoStep` instance with the more generic functions. Defining values for `formula` and `nClusters` here makes these arguments values act as default values in a call of `cluslong`.
+We create a new `clMethodTwoStep` instance with the more generic functions. Defining values for `formula` and `nClusters` here makes these arguments values act as default values in a call of `latrend`.
 ```{r}
 m.twostepgen = clMethodTwoStep(representationStep = repStep.gen, 
                                clusterStep = clusStep.gen)
 ```
 
-However, because we omitted the specification of `formula` and `nClusters`, these need to be provided in the `cluslong` call.
+However, because we omitted the specification of `formula` and `nClusters`, these need to be provided in the `latrend` call.
 ```{r message=TRUE}
-model.twostepgen = cluslong(m.twostepgen, formula = Y ~ Time, nClusters = 2, casedata)
+model.twostepgen = latrend(m.twostepgen, formula = Y ~ Time, nClusters = 2, casedata)
 summary(model.twostepgen)
 ```
 
@@ -203,12 +202,12 @@ Firstly, we create a new method class named `clMethodSimpleGBTM`, which extends 
 setClass('clMethodSimpleGBTM', contains='clMethod')
 ```
 
-Note that a `clMethod` class has a single slot `call`, which stores all the arguments to the method. The other relevant aspects of a `clMethod` implementation are the `prepareData()` and `fit()` functions, which are called when passing a `clMethod` object to the `cluslong()` function or any other model estimation function.
+Note that a `clMethod` class has a single slot `call`, which stores all the arguments to the method. The other relevant aspects of a `clMethod` implementation are the `prepareData()` and `fit()` functions, which are called when passing a `clMethod` object to the `latrend()` function or any other model estimation function.
 
 ```{r}
 clMethodSimpleGBTM = function(formula = Value ~ Time,
-                              time = getOption('cluslong.time'),
-                              id = getOption('cluslong.id'),
+                              time = getOption('latrend.time'),
+                              id = getOption('latrend.id'),
                               nClusters = 2,
                               nwg = FALSE) {
   clMethod.call('clMethodSimpleGBTM', call = stackoverflow::match.call.defaults())
@@ -269,7 +268,7 @@ Our model inherits a couple of slots from the `clModel` class, namely:
 ```{r}
 slotNames('clModelSimpleGBTM')
 ```
-The `"model"` slot is free to be used to assign an arbitrary data structure that represents the internal model representation(s). In our implementation, this slot contains the `lcmm` model. The other slots are assigned in the constructor of the `clModel` class, or by the `cluslong()` estimation function. It is best practice to use the relevant getter functions for obtaining these values (via e.g., `idVariable()`, `getClMethod()`, `clusterNames()`).
+The `"model"` slot is free to be used to assign an arbitrary data structure that represents the internal model representation(s). In our implementation, this slot contains the `lcmm` model. The other slots are assigned in the constructor of the `clModel` class, or by the `latrend()` estimation function. It is best practice to use the relevant getter functions for obtaining these values (via e.g., `idVariable()`, `getClMethod()`, `clusterNames()`).
 
 Typically, most effort of implementing the model interface goes to the `predict()` function. While implementing the function is optional, it is used for obtaining the fitted values, fitted trajectories, residuals, and cluster trajectories. Without this function, there is little functionality from a model except for the partitioning of the fitted trajectories.
 
@@ -320,7 +319,7 @@ show(m)
 ```
 
 ```{r}
-sgbtm = cluslong(m, casedata)
+sgbtm = latrend(m, casedata)
 summary(sgbtm)
 ```
 ```{r}

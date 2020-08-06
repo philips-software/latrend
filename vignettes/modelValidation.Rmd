@@ -13,7 +13,7 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-library(cluslong)
+library(latrend)
 library(ggplot2)
 knitr::opts_chunk$set(
   cache = TRUE,
@@ -22,11 +22,11 @@ knitr::opts_chunk$set(
 )
 update_geom_defaults('line', list(size = .01))
 update_geom_defaults('point', list(size = .5))
-options(cluslong.verbose=FALSE)
+options(latrend.verbose=FALSE)
 ```
 
 ```{r, results='hide',message=FALSE,warning=FALSE}
-library(cluslong)
+library(latrend)
 library(ggplot2)
 library(magrittr)
 set.seed(1)
@@ -42,7 +42,7 @@ head(osaData)
 
 Specify the package options to adopt the respective column names of the loaded dataset, for convenience.
 ```{r}
-options(cluslong.id='Patient', cluslong.time='Day')
+options(latrend.id='Patient', latrend.time='Day')
 ```
 
 # Candidate model
@@ -53,7 +53,7 @@ kml
 
 # Evaluate stability of the estimation through repeated estimation
 ```{r}
-repModels = cluslongRep(kml, data=osaData, .rep=10)
+repModels = latrendRep(kml, data=osaData, .rep=10)
 print(repModels, excludeShared=FALSE)
 ```
 
@@ -86,7 +86,7 @@ summary(distMat)
 
 # Evaluating replicability and stability through bootstrapping
 ```{r}
-bootModels = cluslongBoot(kml, data=osaData, samples=10)
+bootModels = latrendBoot(kml, data=osaData, samples=10)
 bootModels
 ```
 
@@ -98,7 +98,7 @@ bootMetrics
 
 # Ten-fold cross validation
 ```{r}
-trainModels = cluslongCV(kml, data=osaData, folds=10, seed=1)
+trainModels = latrendCV(kml, data=osaData, folds=10, seed=1)
 trainModels
 ```
 
@@ -106,7 +106,7 @@ trainModels
 ## Manual cross validation
 ```{r}
 dataFolds = createTrainDataFolds(osaData, folds=10)
-foldModels = cluslongBatch(kml, data=dataFolds)
+foldModels = latrendBatch(kml, data=dataFolds)
 foldModels
 ```
 
