@@ -135,34 +135,6 @@
       "Repository": "CRAN",
       "Hash": "c6faf038ba4346b1de19ad7c99b8f94a"
     },
-    "RcppGSL": {
-      "Package": "RcppGSL",
-      "Version": "0.3.7",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "6399a6afd51ce68c1a336e754bec4d18"
-    },
-    "RcppParallel": {
-      "Package": "RcppParallel",
-      "Version": "5.0.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "551d50addb18c7b99637aa377a25afc8"
-    },
-    "RcppThread": {
-      "Package": "RcppThread",
-      "Version": "0.5.4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "36e1c538df6e0133891204aee0acdfc0"
-    },
-    "RcppZiggurat": {
-      "Package": "RcppZiggurat",
-      "Version": "0.1.5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "749190c58b5d13ddd82b95b8049e764e"
-    },
     "Rdpack": {
       "Package": "Rdpack",
       "Version": "0.11-1",
