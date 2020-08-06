@@ -51,6 +51,7 @@ Suggests:
     akmedoids (>= 0.1.5),
     dtwclust (>= 5.5.6),
     mixAK (>= 5.3),
+    igraph (>= 1.2.4.1),
     psych (>= 1.9.12.31),
     lme4 (>= 1.1)
 RoxygenNote: 7.1.0
