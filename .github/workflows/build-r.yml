@@ -13,7 +13,7 @@ jobs:
 
       - name: Install curl
         if: runner.os == 'Linux'
-        run: apt-get update && apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev xorg libx11-dev libglu1-mesa-dev
+        run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq libcurl4-openssl-dev libssl-dev libxml2-dev xorg libx11-dev libglu1-mesa-dev
         
       - name: Install packages
         run: |
