@@ -87,6 +87,7 @@ latrend = function(method,
     mc = mc,
     verbose = verbose
   )
+  environment(model) = envir
   popState(verbose)
 
   # done
@@ -268,13 +269,15 @@ latrendRep = function(method,
         .rep,
         as.character(iseed)))
     imethod = update(cmethod, seed = iseed, .eval = TRUE)
-    fitLatrendMethod(
+    model = fitLatrendMethod(
       imethod,
       data = modelData,
       envir = prepEnv,
       mc = mc,
       verbose = verbose
     )
+    environment(model) = envir
+    model
   }
 
   as.lcModels(models)
