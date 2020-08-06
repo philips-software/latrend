@@ -27,6 +27,7 @@ jobs:
         shell: Rscript {0}
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          options(configure.args = list(rgl = "--disable-ftgl"))
           renv::restore()
           
       - name: Check
