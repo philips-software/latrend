@@ -27,7 +27,8 @@ jobs:
         shell: Rscript {0}
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
-          options(configure.args = list(rgl = "--disable-ftgl"))
+          options(configure.args = list(rgl = "--disable-ftgl"), 
+                  configure.vars = list(curl = "LIBS='-lz -lcrypto -lssl -ldl'"))
           renv::restore()
           
       - name: Check
