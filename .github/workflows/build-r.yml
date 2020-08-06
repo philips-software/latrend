@@ -13,7 +13,7 @@ jobs:
 
       - name: Install curl
         if: runner.os == 'Linux'
-        run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq libcurl4-openssl-dev libssl-dev libxml2-dev xorg libx11-dev libglu1-mesa-dev libgsl-dev libcurl
+        run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq libcurl4-openssl-dev libssl-dev libxml2-dev xorg libx11-dev libglu1-mesa-dev libgsl-dev
         
       - name: Cache packages
         uses: actions/cache@v2
