@@ -37,6 +37,6 @@ jobs:
 
       - name: Build
         run: |
-          R -e 'cat("build")'
+          R -e 'devtools::build(vignettes=FALSE)'
 
 
