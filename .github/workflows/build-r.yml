@@ -13,17 +13,24 @@ jobs:
 
       - name: Install curl
         if: runner.os == 'Linux'
-        run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq libcurl4-openssl-dev libssl-dev libxml2-dev xorg libx11-dev libglu1-mesa-dev
+        run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq libcurl4-openssl-dev libssl-dev libxml2-dev curl xorg libx11-dev libglu1-mesa-dev libgsl-dev
         
-      - name: Install packages
+      - name: Cache packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.local/share/renv
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
+            
+      - name: Restore packages
+        shell: Rscript {0}
         run: |
-          R -e 'install.packages("renv")'
-          R -e 'renv::restore()'
-          R -e 'install.packages("devtools")'
-          R -e 'install.packages(c("testthat", "roxygen2", "knitr", "rmarkdown"))'
-          R -e 'install.packages(c("R.utils", "assertthat", "foreach", "data.table", "longitudinalData", "magrittr", "plyr", "ggplot2", "matrixStats", "stackoverflow", "clusterCrit", "mclustcomp", "caret", "qqplotr"))'
-          R -e 'install.packages(c("kml", "lcmm", "mclust", "longclust", "mixtools", "flexmix", "fda", "funFEM", "IMIFA", "crimCV", "akmedoids", "dtwclust", "mixAK", "psych", "lme4"))'
-
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          options(configure.args = list(rgl = "--disable-ftgl"), 
+                  configure.vars = list(curl = "LIBS='-lz -lcrypto -lssl -ldl'"))
+          renv::restore()
+          
       - name: Check
         run: |
           R -e 'devtools::check(document = TRUE, build_args = c('--no-build-vignettes'), args=c('--ignore-vignettes', '--no-examples'))'
