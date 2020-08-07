@@ -1,5 +1,6 @@
 library(usethis)
 library(latrend)
+library(devtools)
 source('osa.R')
 
 # Test data ####
