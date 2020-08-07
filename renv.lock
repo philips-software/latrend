@@ -396,10 +396,10 @@
     },
     "curl": {
       "Package": "curl",
-      "Version": "4.0",
+      "Version": "4.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "c39e9ce1ea015111772a1ac0aacfe981"
+      "Hash": "2b7d10581cc730804e9ed178c8374bd6"
     },
     "data.table": {
       "Package": "data.table",
