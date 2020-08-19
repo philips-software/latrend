@@ -23,7 +23,7 @@ predict.lcModelCrimCV = function(object, ...,
   assert_that(has_name(newdata, timeVariable(object)))
   newtime = (newdata[[timeVariable(object)]] - object@model$minTime) / object@model$durTime
 
-  X = bs(
+  X = splines::bs(
     x = newtime,
     degree = getLcMethod(object)$dpolyp,
     intercept = TRUE,
@@ -35,7 +35,7 @@ predict.lcModelCrimCV = function(object, ...,
   if (hasName(object@model, 'tau')) {
     nuMat = exp(-object@model$tau * t(Xmat)) %>% t
   } else {
-    Zmat = bs(
+    Zmat = splines::bs(
       x = newtime,
       degree = getLcMethod(object)$dpolyl,
       intercept = TRUE,
