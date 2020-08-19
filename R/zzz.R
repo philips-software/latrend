@@ -6,12 +6,13 @@
 #' @importFrom foreach foreach %do%
 #' @import ggplot2
 #' @importFrom utils hasName capture.output combn getS3method modifyList head tail data
+#' @aliases latrend-package
+#' @rdname latrend-package
 #' @section Getting started:
 #' * See `vignette("demo", package="latrend")` for an introduction to conducting a longitudinal cluster analysis on a example case study.
 #' * See `vignette("customModels", package="latrend")` for examples on constructing your own cluster models.
 #' * See `vignette("modelSelection", package="latrend")`
 #' * See `vignette("modelValidation", package="latrend")`
-#' * See `vignette("simulationStudy", package="latrend")`
 "_PACKAGE"
 
 .onLoad = function(libname, pkgname) {
