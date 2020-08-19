@@ -649,8 +649,9 @@ bootSample = function(data,
 #' @family validation methods
 #' @family model data filters
 trainFold = function(data, fold, id, folds, seed) {
-  assert_that(is.data.frame(data), has_name(data, id))
-  assert_that(!is.null(seed))
+  assert_that(is.data.frame(data),
+    has_name(data, id),
+    !is.null(seed))
 
   ids = unique(data[[id]])
   localRNG(seed = seed, {
@@ -671,7 +672,7 @@ trainFold = function(data, fold, id, folds, seed) {
 #' @family validation methods
 #' @family model data filters
 testFold = function(data, fold, id, folds, seed) {
-  trainData = foldsTrainData(
+  trainData = trainFold(
     data,
     id = id,
     fold = fold,
