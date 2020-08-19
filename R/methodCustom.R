@@ -5,20 +5,19 @@ setClass('lcMethodCustom', contains = 'lcMethod')
 #' @title Specify a custom method based on a model function
 #' @param fun The cluster `function` with signature `(method, data)`.
 #' @param center Optional `function` for computing the longitudinal cluster centers, with signature `(x)`.
-#' @param response The response variable name. Only a single response is supported.
-#' @param time The time variable name.
-#' @param id The trajectory identification variable name.
+#' @param response The name of the response variable.
+#' @param time The name of the time variable.
+#' @param id The name of the trajectory identification variable.
 #' @examples
+#' data(testLongData)
 #' # Stratification based on the mean response level
-#' clusfun = function(method, data) {
-#'    clusters = data[, mean(Value) > 2, by=Id] %>%
-#'        factor(levels=c(F,T), labels=c('Low', 'High'))
-#'    list(clusters=clusters)
-#'    lcModelCustom(clusters=clusters)
+#' clusfun <- function(method, data) {
+#'    clusters <- data[, mean(Value) > 2, by = Id] %>%
+#'        factor(levels = c(F,T), labels = c("Low", "High"))
+#'    lcModelCustom(clusters = clusters)
 #' }
-#' method = lcMethodCustom(fun=clusfun)
-#' model = latrend(method, testLongData)
-#' summary(model)
+#' method <- lcMethodCustom(fun = clusfun)
+#' model <- latrend(method, testLongData)
 #' @family lcMethod implementations
 lcMethodCustom = function(response,
                           fun,

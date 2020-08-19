@@ -4,15 +4,19 @@ setClass('lcMethodCrimCV', contains = 'lcMatrixMethod')
 #' @export
 #' @title Specify a zero-inflated repeated-measures GBTM method
 #' @inheritParams lcMatrixMethod
-#' @inheritDotParams crimCV::crimCV
+#' @param ... Arguments passed to [crimCV::crimCV].
+#' The following external arguments are ignored: Dat, ng.
 #' @examples
-#' method = lcMethodCrimCV(Value ~ 0, nClusters=3)
-#' model = latrend(method, testLongData)
-#'
+#' data(testLongData)
 #' library(crimCV)
+#' method <- lcMethodCrimCV("Value", nClusters = 3)
+#' model <- latrend(method, testLongData)
+#'
 #' data(TO1adj)
-#' method = lcMethodCrimCV(response = 'Offenses', time='Offense', id='Subject')
-#' model = latrend(method, TO1adj)
+#' method <- lcMethodCrimCV(response = "Offenses",
+#'     time = "Offense",
+#'     id = "Subject")
+#' model <- latrend(method, TO1adj)
 #' @family lcMethod implementations
 lcMethodCrimCV = function(response,
                           time = getOption('latrend.time'),

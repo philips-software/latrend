@@ -1,4 +1,3 @@
-# Method ####
 #' @export
 #' @name lcMethod-class
 #' @title lcMethod class

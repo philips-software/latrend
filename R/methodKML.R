@@ -2,16 +2,17 @@
 setClass('lcMethodKML', contains = 'lcMatrixMethod')
 
 #' @export
-#' @inheritDotParams kml::kml
-#' @inheritDotParams kml::parALGO
 #' @title Specify a longitudinal k-means (KML) method
-#' @param formula Formula used to specify the response variable to model. On the right-hand side, only `~ 0` is supported.
-#' @param time Time variable.
-#' @param id Strata variable.
-#' @param nClusters Number of clusters.
+#' @param response The name of the response variable.
+#' @param time The name of the time variable.
+#' @param id The name of the trajectory identifier variable.
+#' @param nClusters The number of clusters to estimate.
+#' @param ... Arguments passed to [kml::parALGO] and [kml::kml].
+#' The following external arguments are ignored: object, nbClusters, parAlgo, toPlot, saveFreq
 #' @examples
-#' method = lcMethodKML(Value ~ 0, nClusters=3)
-#' model = latrend(method, testLongData)
+#' data(testLongData)
+#' method <- lcMethodKML("Value", nClusters = 3)
+#' model <- latrend(method, testLongData)
 #' @family lcMethod implementations
 lcMethodKML = function(response,
                        time = getOption('latrend.time'),

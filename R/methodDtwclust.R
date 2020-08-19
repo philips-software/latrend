@@ -2,12 +2,17 @@
 setClass('lcMethodDtwclust', contains = 'lcMethod')
 
 #' @export
-#' @inheritDotParams dtwclust::tsclust
 #' @title Specify time series clustering via dtwclust
-#' @param response Response variable.
-#' @param time Time variable.
-#' @param id Strata variable.
+#' @param response The name of the response variable.
+#' @param time The name of the time variable.
+#' @param id The name of the trajectory identifier variable.
 #' @param nClusters Number of clusters.
+#' @param ... Arguments passed to [dtwclust::tsclust].
+#' The following arguments are ignored: series, k, trace.
+#' @examples
+#' data(testLongData)
+#' method <- lcMethodDtwclust("Value", nClusters = 3)
+#' model <- latrend(method, testLongData)
 #' @family lcMethod implementations
 lcMethodDtwclust = function(response,
                        time = getOption('latrend.time'),

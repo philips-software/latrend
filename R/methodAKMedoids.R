@@ -6,17 +6,20 @@ setClass('lcMethodAKMedoids', contains = 'lcMatrixMethod')
 #' @title Specify AKMedoids method
 #' @inheritParams lcMatrixMethod
 #' @inheritParams lcMethodCustom
-#' @param ... Arguments passed to \link[akmedoids]{akmedoids.clust}.
+#' @param ... Arguments passed to [akmedoids::akmedoids.clust].
+#' The following external arguments are ignored: traj, id_field, k
 #' @examples
-#' method = lcMethodAKMedoids(HoursOfUse ~ 0,
-#'                      time='Day',
-#'                      id='Patient', nClusters=3)
-#' latrend(method, data=OSA1y)
+#' data(testLongData)
+#' method <- lcMethodAKMedoids("Value",
+#'                      time = "Day",
+#'                      id = "Patient",
+#'                      nClusters = 3)
+#' model <- latrend(method, data = testLongData)
 #' @family lcMethod implementations
 lcMethodAKMedoids = function(response,
                              time = getOption('latrend.time'),
                              id = getOption('latrend.id'),
-                             nClusters = 3,
+                             nClusters = 2,
                              clusterCenter = median,
                              ...) {
   lcMethod.call(

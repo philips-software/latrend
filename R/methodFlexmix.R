@@ -4,9 +4,16 @@ setClass('lcMethodFlexmix', contains = 'lcMethod')
 #' @export
 #' @title Method interface to flexmix()
 #' @description Wrapper to the `flexmix()` method from the `flexmix` package.
-#' @inheritDotParams flexmix::flexmix
+#' @param formula A `formula` specifying the model.
+#' @param formula.mb A `formula` specifying the class membership model. By default, an intercept-only model is used.
+#' @param time The name of the time variable.
+#' @param id The name of the trajectory identifier variable.
+#' @param ... Arguments passed to [flexmix::flexmix].
+#' The following arguments are ignored: data, concomitant, k.
 #' @examples
-#'
+#' data(testLongData)
+#' method <- lcMethodFlexmix(Value ~ Time, nClusters = 3)
+#' model <- latrend(method, testLongData)
 #' @family lcMethod package interfaces
 lcMethodFlexmix = function(formula,
                            formula.mb =  ~ 1,

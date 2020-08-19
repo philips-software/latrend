@@ -5,13 +5,15 @@ setClass('lcMethodFlexmixGBTM', contains = 'lcMethodFlexmix')
 #' @export
 #' @title Group-based trajectory modeling using flexmix
 #' @description Fits a GBTM based on the [FLXMRglm] driver.
-#' @inheritParams lcMethodLcmmGBTM
-#' @inheritDotParams flexmix::flexmix
-#' @inheritDotParams flexmix::FLXMRglm
+#' @inheritParams lcMethodFlexmix
+#' @param ... Arguments passed to [flexmix::flexmix] or [flexmix::FLXMRglm].
+#' The following arguments are ignored: data, k, trace.
 #' @examples
-#' model = latrend(lcMethodFlexmixGBTM(), data=testLongData)
+#' data(testLongData)
+#' method <- lcMethodFlexmixGBTM()
+#' model <- latrend(method, testLongData)
 #'
-#' model = latrend(lcMethodFlexmixGBTM(Value ~ Time, family='Gamma'), data=copy(testLongData)[, Value := abs(Value)])
+#' method <- lcMethodFlexmixGBTM(Value ~ Time, family = "Gamma")
 #' @family lcMethod package interfaces
 lcMethodFlexmixGBTM = function(formula,
                                formula.mb =  ~ 1,
