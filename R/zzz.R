@@ -41,3 +41,11 @@
     }
   }
 }
+
+globalVariables(c('.', '.name', '.group', '.method', '.ROW_INDEX',
+  'i', 'iseed', 'N', 'i.N', 'g', 'fun', 'method', 'plotTrajs',
+  'Prob', 'Cluster', 'Value', 'Id', 'Time',
+  'Mu', 'Mu.cluster', 'Mu.fixed', 'Mu.random',
+  'warning.Verbose',
+  'TVEMMixNormal',
+  '.Component'))
