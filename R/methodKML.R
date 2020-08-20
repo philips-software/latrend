@@ -10,6 +10,7 @@ setClass('lcMethodKML', contains = 'lcMatrixMethod')
 #' @param ... Arguments passed to [kml::parALGO] and [kml::kml].
 #' The following external arguments are ignored: object, nbClusters, parAlgo, toPlot, saveFreq
 #' @examples
+#' library(kml)
 #' data(testLongData)
 #' method <- lcMethodKML("Value", nClusters = 3)
 #' model <- latrend(method, testLongData)

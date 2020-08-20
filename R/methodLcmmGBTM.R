@@ -21,16 +21,23 @@ setValidity('lcMethodLcmmGBTM', function(object) {
 #' @title Specify GBTM method
 #' @description Group-based trajectory modeling through fixed-effects modeling.
 #' @inheritParams lcMethodLcmmGMM
-#' @param formula Formula of form Response ~ Var1 + CLUSTER * Var2 + .
+#' @param formula A `formula` of the form `Response ~ Var1 + CLUSTER * Var2 + .`
 #' Variables specified in the model are included as fixed effects.
-#' If an interaction is specified with the CLUSTER term then these covariates are included as fixed and mixture effects.
-#' @inheritDotParams lcmm::lcmm
+#' If an interaction is specified with the `CLUSTER` term then these covariates are included as fixed and mixture effects.
 #' @examples
-#' method = lcMethodLcmmGBTM(Value ~ CLUSTER,
-#'                      time='Time',
-#'                      id='Id', nClusters=3)
-#' gmm = latrend(method, data=testLongData)
-#' summary(gmm)
+#' library(lcmm)
+#' data(testLongData)
+#' method <- lcMethodLcmmGBTM(Value ~ CLUSTER,
+#'                      time = "Time",
+#'                      id = "Id",
+#'                      nClusters = 3)
+#' gbtm <- latrend(method, data = testLongData)
+#' summary(gbtm)
+#'
+#' method <- lcMethodLcmmGBTM(Value ~ CLUSTER * Time,
+#'                      time = "Time",
+#'                      id = "Id",
+#'                      nClusters = 2)
 #' @family lcMethod implementations
 lcMethodLcmmGBTM = function(formula,
                             formula.mb =  ~ 1,

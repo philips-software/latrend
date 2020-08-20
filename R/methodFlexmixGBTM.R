@@ -9,8 +9,9 @@ setClass('lcMethodFlexmixGBTM', contains = 'lcMethodFlexmix')
 #' @param ... Arguments passed to [flexmix::flexmix] or [flexmix::FLXMRglm].
 #' The following arguments are ignored: data, k, trace.
 #' @examples
+#' library(flexmix)
 #' data(testLongData)
-#' method <- lcMethodFlexmixGBTM()
+#' method <- lcMethodFlexmixGBTM(Value ~ Time, nClusters = 3)
 #' model <- latrend(method, testLongData)
 #'
 #' method <- lcMethodFlexmixGBTM(Value ~ Time, family = "Gamma")

@@ -22,31 +22,36 @@ setValidity('lcMethodStratify', function(object) {
 #' @export
 #' @title Specify a stratification method
 #' @inheritParams lcMethodCustom
-#' @param stratify An expression returning a `number` or `factor` value per trajectory, representing the cluster assignment. Alternatively, a `function` that takes separate trajectory `data.frame` as input.
-#' @param center Method for computing the longitudinal cluster centers, used for representing the cluster trajectories.
-#' @param nClusters Number of clusters. Optional, as this is derived from the largest assignment number by default, or the number of `factor` levels.
-#' @param clusterNames Names of the clusters. If a `factor` assignment is returned, the levels are used as the cluster names.
+#' @param stratify An `expression` returning a `number` or `factor` value per trajectory, representing the cluster assignment. Alternatively, a `function` can be provided that takes separate trajectory `data.frame` as input.
+#' @param center The `function` for computing the longitudinal cluster centers, used for representing the cluster trajectories.
+#' @param nClusters The number of clusters. This is optional, as this can be derived from the largest assignment number by default, or the number of `factor` levels.
+#' @param clusterNames The names of the clusters. If a `factor` assignment is returned, the levels are used as the cluster names.
 #' @examples
+#' data(testLongData)
 #' # Stratification based on the mean response level
-#' method = lcMethodStratify(mean(Value) > 1.7, clusterNames=c('Low', 'High'))
-#' model = latrend(method, testLongData)
-#'
+#' method <- lcMethodStratify(
+#'    mean(Value) > 1.7,
+#'    clusterNames = c("Low", "High"))
+#' model <- latrend(method, testLongData)
 #' summary(model)
 #'
 #' # Stratification function
-#' stratfun = function(trajdata) {
-#'    trajmean = mean(trajdata$Y)
-#'    factor(trajmean > 1.7, levels=c(FALSE, TRUE), labels=c('Low', 'High'))
+#' stratfun <- function(trajdata) {
+#'    trajmean <- mean(trajdata$Y)
+#'    factor(trajmean > 1.7,
+#'       levels = c(FALSE, TRUE),
+#'       labels = c("Low", "High"))
 #' }
-#' method = lcMethodStratify(stratfun)
+#' method <- lcMethodStratify(stratfun)
 #'
 #' # Multiple clusters
-#' stratfun3 = function(trajdata) {
-#'    trajmean = mean(trajdata$Y)
-#'    cut(trajmean, c(-Inf, .5, 2, Inf), labels=c('Low', 'Medium', 'High'))
+#' stratfun3 <- function(trajdata) {
+#'    trajmean <- mean(trajdata$Y)
+#'    cut(trajmean,
+#'       c(-Inf, .5, 2, Inf),
+#'       labels = c("Low", "Medium", "High"))
 #' }
-#' method = lcMethodStratify(stratfun3)
-#'
+#' method <- lcMethodStratify(stratfun3)
 #' @family lcMethod implementations
 lcMethodStratify = function(response,
                             stratify,

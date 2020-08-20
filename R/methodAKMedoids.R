@@ -9,6 +9,7 @@ setClass('lcMethodAKMedoids', contains = 'lcMatrixMethod')
 #' @param ... Arguments passed to [akmedoids::akmedoids.clust].
 #' The following external arguments are ignored: traj, id_field, k
 #' @examples
+#' library(akmedoids)
 #' data(testLongData)
 #' method <- lcMethodAKMedoids("Value",
 #'                      time = "Day",

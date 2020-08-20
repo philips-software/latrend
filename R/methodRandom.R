@@ -18,17 +18,23 @@ setValidity('lcMethodRandom', function(object) {
 
 #' @export
 #' @title Specify a random-partitioning method
-#' @description Creates a model with random assignments according to the cluster proportions drawn from a Dirichlet distribution.
+#' @description Creates a model with random cluster assignments according to the random cluster proportions drawn from a Dirichlet distribution.
 #' @inheritParams lcMethodCustom
 #' @param alpha The Dirichlet parameters. Either `scalar` or of length `nClusters`. The higher alpha, the more uniform the clusters will be.
 #' @examples
-#' m = lcMethodRandom()
+#' data(testLongData)
+#' method <- lcMethodRandom()
+#' model <- latrend(method, testLongData)
 #'
 #' # uniform clusters
-#' m = lcMethodRandom(alpha=1e3, nClusters=3)
+#' method <- lcMethodRandom(
+#'   alpha = 1e3,
+#'   nClusters = 3)
 #'
 #' # single large cluster
-#' m = lcMethodRandom(alpha=c(100, 1, 1, 1), nClusters=4)
+#' method <- lcMethodRandom(
+#'   alpha = c(100, 1, 1, 1),
+#'   nClusters = 4)
 #' @family lcMethod implementations
 lcMethodRandom = function(response,
                           alpha = 10,

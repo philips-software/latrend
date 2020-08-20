@@ -3,11 +3,18 @@ setClass('lcMethodMixtoolsGMM', contains = 'lcMethod')
 
 #' @export
 #' @title Specify mixed mixture regression model using mixtools
-#' @inheritDotParams mixtools::regmixEM.mixed
+#' @inheritParams lcMethodGCKM
+#' @param ... Arguments passed to [mixtools::regmixEM.mixed].
+#' The following arguments are ignored: data, y, x, w, k, addintercept.fixed, verb.
 #' @examples
-#' method = lcMethodMixtoolsGMM(Value ~ Time + (Time | Id),
-#'                      time='Time',
-#'                      id='Id', nClusters=3)
+#' library(mixtools)
+#' data(testLongData)
+#' method <- lcMethodMixtoolsGMM(
+#'    formula = Value ~ Time + (Time | Id),
+#'    time = "Time",
+#'    id = "Id",
+#'    nClusters = 3)
+#' model <- latrend(method, testLongData)
 #' @family lcMethod implementations
 lcMethodMixtoolsGMM = function(formula,
                                time = getOption('latrend.time'),

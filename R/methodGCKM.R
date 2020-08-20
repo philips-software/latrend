@@ -12,16 +12,21 @@ setValidity('lcMethodGCKM', function(object) {
 #' @export
 #' @title Two-step clustering through linear mixed modeling and k-means
 #' @description Two-step clustering through linear mixed modeling and k-means.
-#' @param formula Formula, including a random effects component for the strata.
-#' @param time Time variable.
-#' @param id Strata variable.
-#' @param nClusters Number of clusters.
-#' @inheritParams lme4::lmer
 #' @inheritParams lcMethodTwoStep
+#' @param formula Formula, including a random effects component for the trajectory. See [lme4::lmer] formula syntax.
+#' @param time The name of the time variable..
+#' @param id The name of the trajectory identifier variable.
+#' @param nClusters The number of clusters.
+#' @param ... Arguments passed to [lme4::lmer].
+#' The following external arguments are ignored: data, centers, trace.
 #' @examples
-#' method = lcMethodGCKM(Measurement ~ Assessment + (Assessment | Subject),
-#'                      time='Assessment',
-#'                      id='Subject', nClusters=3)
+#' library(lme4)
+#' data(testLongData)
+#' method <- lcMethodGCKM(Value ~ Time + (Time | Id),
+#'                      time='Time',
+#'                      id='Id',
+#'                      nClusters = 3)
+#' model <- latrend(method, testLongData)
 #' @family lcMethod implementations
 lcMethodGCKM = function(formula,
                         time = getOption('latrend.time'),

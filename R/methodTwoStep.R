@@ -16,12 +16,12 @@ setValidity('lcMethodTwoStep', function(object) {
 
 #' @export
 #' @title Two-step clustering
-#' @description Two-step clustering.
+#' @description Feature-based clustering.
+#' @inheritParams lcMethodCustom
 #' @param representationStep A `function` with signature `function(method, data)` that computes the representation per strata, returned as a `matrix`.
 #' Alternatively, `representationStep` is a pre-computed representation `matrix`.
 #' @param clusterStep A `function` with signature `function(repdata)` that outputs a `lcModel`.
 #' @param standardize A `function` to standardize the output `matrix` of the representation step. By default, the output is shifted and rescaled to ensure zero mean and unit variance.
-#' @inheritParams lcMethodCustom
 #' @family lcMethod implementations
 lcMethodTwoStep = function(response,
                            representationStep,

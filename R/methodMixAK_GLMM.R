@@ -2,18 +2,22 @@
 setClass('lcMethodMixAK_GLMM', contains = 'lcMethod')
 
 #' @export
-#' @inheritDotParams mixAK::GLMM_MCMC
 #' @title Specify a GLMM iwht a normal mixture in the random effects
-#' @param fixed Formula specifying the fixed effects of the model, including the response. Creates the \code{y} and \code{x} arguments for \link[mixAK]{GLMM_MCMC}.
-#' @param random Formula specifying the random effects of the model, including the random intercept. Creates the \code{z} and \code{random.intercept} arguments for \link[mixAK]{GLMM_MCMC}.
-#' @param time Time variable.
-#' @param id Trajectory indicator column. Used to generate the \code{id} vector argument for the call.
-#' @param nClusters Number of clusters.
+#' @param fixed A `formula` specifying the fixed effects of the model, including the response. Creates the `y` and \code{x} arguments for the call to [mixAK::GLMM_MCMC].
+#' @param random A `formula` specifying the random effects of the model, including the random intercept. Creates the \code{z} and \code{random.intercept} arguments for the call to [mixAK::GLMM_MCMC].
+#' @param time The name of the time variable.
+#' @param id The name of the trajectory identifier variable. This is used to generate the \code{id} vector argument for the call to [mixAK::GLMM_MCMC].
+#' @param nClusters The number of clusters.
+#' @param ... Arguments passed to [mixAK::GLMM_MCMC].
+#' The following external arguments are ignored: y, x, z, random.intercept, silent.
 #' @family lcMethod implementations
 #' @examples
 #' data(testLongData)
-#' m = lcMethodMixAK_GLMM(Value ~ 1, random = ~ Time, nClusters = 2)
-#' model = latrend(m, data = testLongData)
+#' method <- lcMethodMixAK_GLMM(fixed = Value ~ Time,
+#'     random = ~ Time,
+#'     nClusters = 2)
+#' model <- latrend(method, testLongData)
+#' summary(model)
 lcMethodMixAK_GLMM = function(fixed,
                               random,
                             time = getOption('latrend.time'),

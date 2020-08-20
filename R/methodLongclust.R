@@ -3,10 +3,12 @@ setClass('lcMethodLongclust', contains = 'lcMatrixMethod')
 
 #' @export
 #' @title Specify Longclust method
-#' @param basis The basis function.
 #' @inheritParams lcMatrixMethod
-#' @inheritDotParams longclust::longclustEM
+#' @param ... Arguments passed to [longclust::longclustEM].
+#' The following external arguments are ignored: data, x, Gmin, Gmax, userseed.
 #' @examples
+#' library(longclust)
+#' data(testLongData)
 #' method = lcMethodLongclust(Value ~ 1,
 #'                      time='Time',
 #'                      id='Id', nClusters=3)

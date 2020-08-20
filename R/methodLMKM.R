@@ -10,16 +10,18 @@ setValidity('lcMethodLMKM', function(object) {
 
 
 #' @export
-#' @title Two-step clustering through linear modeling and k-means
-#' @param formula Trajectory-specific formula
-#' @param time Time variable.
-#' @param nClusters Number of clusters.
+#' @title Two-step clustering through linear regression modeling and k-means
 #' @inheritParams lcMethodTwoStep
-#' @inheritDotParams stats::lm
+#' @param formula A `formula` specifying the linear trajectory model.
+#' @param ... Arguments passed to [stats::lm].
+#' The following external arguments are ignored: x, data, control, centers, trace.
 #' @examples
-#' method = lcMethodLMKM(Measurement ~ Assessment + (Assessment | Subject),
-#'                      time='Assessment',
-#'                      id='Subject', nClusters=3)
+#' data(testLongData)
+#' method <- lcMethodLMKM(Value ~ Time,
+#'                      time = "Time",
+#'                      id = "Subject",
+#'                      nClusters = 3)
+#' model <- latrend(method, testLongData)
 #' @family lcMethod implementations
 lcMethodLMKM = function(formula,
                         time = getOption('latrend.time'),

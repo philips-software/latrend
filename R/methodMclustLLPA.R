@@ -16,15 +16,17 @@ setValidity('lcMethodMclustLLPA', function(object) {
 #' @export
 #' @title Longitudinal latent profile analysis
 #' @description Latent profile analysis or finite Gaussian mixture modeling.
-#' @param formula Formula. Covariates are not supported.
-#' @param time Time variable.
-#' @param id Strata variable.
-#' @param nClusters Number of clusters.
-#' @inheritDotParams mclust::Mclust
+#' @inheritParams lcMethodKML
+#' @param ... Arguments passed to [mclust::Mclust].
+#' The following external arguments are ignored: data, G, verbose.
 #' @examples
-#' method = lcMethodMclustLLPA(Measurement ~ 1,
-#'                      time='Assessment',
-#'                      id='Id', nClusters=3)
+#' library(mclust)
+#' data(testLongData)
+#' method <- lcMethodMclustLLPA("Value",
+#'                      time = "Time",
+#'                      id = "Id",
+#'                      nClusters = 3)
+#' model <- latrend(method, testLongData)
 #' @family lcMethod implementations
 lcMethodMclustLLPA = function(response,
                               time = getOption('latrend.time'),

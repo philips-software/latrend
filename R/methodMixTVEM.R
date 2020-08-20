@@ -60,17 +60,14 @@ setValidity('lcMethodMixTVEM', function(object) {
 })
 
 #' @export
-#' @title Specify MixTVEM method
-#' @param formula Formula excluding the time component. Covariates may be included. Time-invariant covariates are detected automatically as these are a special case in MixTVEM.
-#' @param formula.mb Formula for cluster-membership prediction. Included covariates must be time-invariant. Furthermore, the formula must contain an intercept.
-#' @param time Time variable.
-#' @param id Strata variable.
-#' @param nClusters Number of clusters.
-#' @param numInteriorKnots Number of interior knots for the spline.
-#' @param deg Degree of the local polynomials between intervals (knots).
-#' @param numStarts Number of random starts.
-#' @param maxIterations Maximum number of iterations for the EM algorithm.
-#' @param maxVarianceRatio Maximum ratio that between-cluster variances may deviate from each other.
+#' @title Specify a MixTVEM
+#' @param formula A `formula` excluding the time component. Time-invariant covariates are detected automatically as these are a special case in MixTVEM.
+#' @param formula.mb A `formula` for cluster-membership prediction. Covariates must be time-invariant. Furthermore, the formula must contain an intercept.
+#' @param time The name of the time variable.
+#' @param id The name of the trajectory identifier variable.
+#' @param nClusters The number of clusters. This replaces the `numClasses` argument of the `TVEMMixNormal` function call.
+#' @param ... Arguments passed to the `TVEMMixNormal()` function.
+#' The following optional arguments are ignored: doPlot, getSEs, numClasses.
 #' @examples
 #' method = lcMethodMixTVEM(Value ~ time(1) - 1,
 #'                      time='Assessment',

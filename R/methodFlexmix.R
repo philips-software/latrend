@@ -11,6 +11,7 @@ setClass('lcMethodFlexmix', contains = 'lcMethod')
 #' @param ... Arguments passed to [flexmix::flexmix].
 #' The following arguments are ignored: data, concomitant, k.
 #' @examples
+#' library(flexmix)
 #' data(testLongData)
 #' method <- lcMethodFlexmix(Value ~ Time, nClusters = 3)
 #' model <- latrend(method, testLongData)

@@ -1,7 +1,9 @@
 #' @include method.R
 #' @title lcMatrixMethod
 #' @name lcMatrixMethod
-#' @param id Id to use for the rownames of the matrix.
+#' @param response The name of the response variable.
+#' @param id The name of the trajectory identifier variable.
+#' @param time The name of the time variable.
 #' @keywords internal
 setClass('lcMatrixMethod', contains = 'lcMethod')
 

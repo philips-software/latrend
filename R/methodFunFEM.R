@@ -3,14 +3,23 @@ setClass('lcMethodFunFEM', contains = 'lcMatrixMethod')
 
 #' @export
 #' @title Specify a FunFEM method
-#' @param basis The basis function.
 #' @inheritParams lcMatrixMethod
-#' @inheritParams funFEM::funFEM
+#' @param basis The basis function. By default, a 3rd-order B-spline with 10 breaks is used.
+#' @param ... Arguments passed to [funFEM::funFEM].
+#' The following external arguments are ignored: fd, K, disp, graph.
 #' @examples
-#' method = lcMethodFunFEM(Value ~ 1,
-#'                      time='Time',
-#'                      id='Id', nClusters=3)
-#' latrend(method, testLongData)
+#' library(funFEM)
+#' data(testLongData)
+#' method <- lcMethodFunFEM("Value",
+#'                      time = "Time",
+#'                      id = "Id",
+#'                      nClusters = 3)
+#' model <- latrend(method, testLongData)
+#'
+#' method <- lcMethodFunFEM("Value",
+#'    basis = function(time)
+#'       fda::create.bspline.basis(time,
+#'         nbasis = 10, norder = 4)
 #' @family lcMethod implementations
 lcMethodFunFEM = function(response,
                           time = getOption('latrend.time'),

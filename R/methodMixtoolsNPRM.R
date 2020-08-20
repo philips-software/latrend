@@ -4,11 +4,17 @@ setClass('lcMethodMixtoolsNPRM', contains = 'lcMatrixMethod')
 #' @export
 #' @title Specify non-parametric estimation for independent repeated measures
 #' @inheritParams lcMatrixMethod
-#' @inheritDotParams mixtools::npEM
+#' @param ... Arguments passed to [mixtools::npEM].
+#' The following optional arguments are ignored: data, x, mu0, verb.
 #' @examples
-#' method = lcMethodMixtoolsNPRM(response = 'Measurement',
-#'                      time='Assessment',
-#'                      id='Id', nClusters=3)
+#' library(mixtools)
+#' data(testLongData)
+#' method <- lcMethodMixtoolsNPRM(
+#'     response = "Value",
+#'     time = "Time",
+#'     id = "Id",
+#'     nClusters = 3)
+#' model <- latrend(method, testLongData)
 #' @family lcMethod implementations
 lcMethodMixtoolsNPRM = function(response,
                                 time = getOption('latrend.time'),

@@ -10,6 +10,7 @@ setClass('lcMethodDtwclust', contains = 'lcMethod')
 #' @param ... Arguments passed to [dtwclust::tsclust].
 #' The following arguments are ignored: series, k, trace.
 #' @examples
+#' library(dtwclust)
 #' data(testLongData)
 #' method <- lcMethodDtwclust("Value", nClusters = 3)
 #' model <- latrend(method, testLongData)
