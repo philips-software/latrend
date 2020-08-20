@@ -1,3 +1,4 @@
+#' @noRd
 #' @title Select the specified column per row
 #' @keywords internal
 rowColumns = function(x, i) {

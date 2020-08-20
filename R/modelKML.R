@@ -20,6 +20,7 @@ setMethod('clusterTrajectories', signature('lcModelKML'), function(object, at, w
 
 
 #. converged ####
+#' @noRd
 setMethod('converged', signature('lcModelKML'), function(object) {
   TRUE
 })

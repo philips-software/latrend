@@ -1,9 +1,13 @@
 # plotTrajectories ####
 #' @export
+#' @rdname plotTrajectories
+#' @title Plot trajectories
+#' @param object The object to plot the trajectories for.
+#' @param ... Additional arguments.
 setGeneric('plotTrajectories', function(object, ...) standardGeneric('plotTrajectories'))
 
 #' @export
-#' @title Plot trajectories from a data.frame
+#' @rdname plotTrajectories
 #' @param response Response variable `character` name or a `call`.
 #' @param time Time variable name.
 #' @param id Id variable name.
@@ -19,7 +23,8 @@ setMethod('plotTrajectories', signature('data.frame'), function(object,
                                                                 time = getOption('latrend.time'),
                                                                 id = getOption('latrend.id'),
                                                                 cluster = NULL,
-                                                                facet = TRUE) {
+                                                                facet = TRUE,
+                                                                ...) {
   if (length(cluster) > 1) {
     assert_that(length(cluster) == uniqueN(object[[id]]))
     object$Cluster = cluster[rleidv(object[[id]])]
@@ -55,10 +60,14 @@ setMethod('plotTrajectories', signature('data.frame'), function(object,
 
 # plotClusterTrajectories ####
 #' @export
+#' @rdname plotClusterTrajectories
+#' @title Plot cluster trajectories
+#' @param object The object to plot the cluster trajectories for.
+#' @param ... Additional arguments.
 setGeneric('plotClusterTrajectories', function(object, ...) standardGeneric('plotClusterTrajectories'))
 
 #' @export
-#' @title Plot cluster trajectories
+#' @rdname plotClusterTrajectories
 #' @param object The (cluster) trajectory data.
 #' @param cluster The cluster assignment column
 #' @param center A function for aggregating multiple points at the same point in time
@@ -70,7 +79,8 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     time = getOption('latrend.time'),
     center = meanNA,
     showTrajs = FALSE,
-    id = getOption('latrend.id')
+    id = getOption('latrend.id'),
+    ...
   ) {
   assert_that(has_name(object, cluster),
     has_name(object, response),

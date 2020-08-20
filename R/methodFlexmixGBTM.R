@@ -4,7 +4,7 @@ setClass('lcMethodFlexmixGBTM', contains = 'lcMethodFlexmix')
 
 #' @export
 #' @title Group-based trajectory modeling using flexmix
-#' @description Fits a GBTM based on the [FLXMRglm] driver.
+#' @description Fits a GBTM based on the [flexmix::FLXMRglm] driver.
 #' @inheritParams lcMethodFlexmix
 #' @param ... Arguments passed to [flexmix::flexmix] or [flexmix::FLXMRglm].
 #' The following arguments are ignored: data, k, trace.

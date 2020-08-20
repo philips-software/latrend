@@ -3,10 +3,10 @@ setClass('lcMethodMixAK_GLMM', contains = 'lcMethod')
 
 #' @export
 #' @title Specify a GLMM iwht a normal mixture in the random effects
-#' @param fixed A `formula` specifying the fixed effects of the model, including the response. Creates the `y` and \code{x} arguments for the call to [mixAK::GLMM_MCMC].
-#' @param random A `formula` specifying the random effects of the model, including the random intercept. Creates the \code{z} and \code{random.intercept} arguments for the call to [mixAK::GLMM_MCMC].
+#' @param fixed A `formula` specifying the fixed effects of the model, including the response. Creates the `y` and `x` arguments for the call to [mixAK::GLMM_MCMC].
+#' @param random A `formula` specifying the random effects of the model, including the random intercept. Creates the `z` and `random.intercept` arguments for the call to [mixAK::GLMM_MCMC].
 #' @param time The name of the time variable.
-#' @param id The name of the trajectory identifier variable. This is used to generate the \code{id} vector argument for the call to [mixAK::GLMM_MCMC].
+#' @param id The name of the trajectory identifier variable. This is used to generate the `id` vector argument for the call to [mixAK::GLMM_MCMC].
 #' @param nClusters The number of clusters.
 #' @param ... Arguments passed to [mixAK::GLMM_MCMC].
 #' The following external arguments are ignored: y, x, z, random.intercept, silent.

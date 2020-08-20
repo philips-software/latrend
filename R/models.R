@@ -208,7 +208,9 @@ setMethod('metric', signature('lcModels'), .metric.lcModels)
 
 #' @export
 #' @title Select the lcModel with the lowest metric value
+#' @param x The `lcModels` object
 #' @param name The name of the internal metric.
+#' @param ... Additional arguments.
 #' @return The lcModel with the lowest metric value
 #' @examples
 #' kml1 = latrend(lcMethodKML(nClusters=1), testLongData)
@@ -230,6 +232,8 @@ min.lcModels = function(x, name, ...) {
 
 #' @export
 #' @title Select the lcModel with the highest metric value
+#' @param x The `lcModels` object.
+#' @param ... Additional arguments.
 #' @param name The name of the internal metric.
 #' @return The lcModel with the highest metric value
 #' @examples
@@ -363,7 +367,10 @@ subset.lcModels = function(x, subset, drop = FALSE, ...) {
 
 #' @export
 #' @title Print lcModels list concisely
+#' @param x The `lcModels` object.
+#' @param ... Not used.
 #' @param summary Whether to print the complete summary per model. This may be slow for long lists!
+#' @param excludeShared Whether to exclude model arguments which are identical across all models.
 #' @family lcModel list functions
 print.lcModels = function(x,
                           ...,

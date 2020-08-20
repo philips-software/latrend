@@ -23,7 +23,6 @@ fitted.lcApproxModel = function(object, ..., clusters = clusterAssignments(objec
 
 #' @export
 #' @rdname predict.lcModel
-#' @inheritParams predict.lcModel
 #' @param approxFun The interpolation function to use for time points not in the feature set.
 predict.lcApproxModel = function(object, ...,
                                  newdata = NULL,

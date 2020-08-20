@@ -4,7 +4,7 @@
 #' @description Base class used to define a longitudinal cluster method. It is implemented as a wrapper around a `call`.
 #' @details Because the `lcMethod` arguments may be unevaluated, evaluation functions such as `[[` accept an `envir` argument.
 #' A default `environment` can be assigned or obtained from a `lcMethod` object using the `environment()` function.
-#' @seealso \link{environment}
+#' @seealso [environment]
 #' @slot arguments A `list` representing the arguments of the `lcMethod` object. Arguments are not evaluated upon creation of the method object. Instead, arguments are stored similar to a `call` object. Do not modify or access.
 #' @slot sourceCalls A list of calls for tracking the original call after substitution. Used for printing objects which require too many characters (e.g. ,function definitions, matrices).
 #' @family lcMethod implementations
@@ -41,10 +41,11 @@ setValidity('lcMethod', function(object) {
 #. $ ####
 #' @name $,lcMethod
 #' @title Retrieve and evaluate a lcMethod argument by name
+#' @param x The `lcMethod` object.
 #' @param name Name of the argument to retrieve.
 #' @return The argument evaluation result.
 #' @examples
-#' m = lcMethodKML(nClusters = 3)
+#' m <- lcMethodKML(nClusters = 3)
 #' m$nClusters # 3
 #' @family lcMethod functions
 setMethod('$', signature('lcMethod'), function(x, name) {
@@ -55,6 +56,7 @@ setMethod('$', signature('lcMethod'), function(x, name) {
 #. [[ ####
 #' @name [[,lcMethod
 #' @title Retrieve and evaluate a lcMethod argument by name
+#' @param x The `lcMethod` object.
 #' @param i Name or index of the argument to retrieve.
 #' @param eval Whether to evaluate the call argument (enabled by default).
 #' @param envir The `environment` in which to evaluate the argument. This argument is only applicable when `eval = TRUE`.
@@ -119,8 +121,10 @@ setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL)
 #' @title Create a lcMethod object of the specified type and arguments
 #' @description Provides a mechanism for creating `lcMethod` objects for an arbitrary class.
 #' Note that it is advisable to use the class-specific constructors instead.
-#' @param Class The type of \link{lcMethod} class
+#' @param .class The type of \link{lcMethod-class} class
 #' @param ... Any arguments to assign to the method object.
+#' @param .defaults See `defaults` of [lcMethod.call].
+#' @param .excludeArgs See `excludeArgs` of [lcMethod.call].
 #' @seealso [lcMethod.call]
 lcMethod = function(.class,
                      ...,
@@ -212,6 +216,8 @@ lcMethod.call = function(Class,
 
 #' @export
 #' @title Extract the method arguments as a list
+#' @param x The `lcMethod` object.
+#' @param ... Additional arguments.
 #' @param args A `character vector` of argument names to select. Only available arguments are returned.
 #' Alternatively, a `function` or `list` of `function`s, whose formal arguments will be selected from the method.
 #' @param eval Whether to evaluate the arguments.
@@ -275,6 +281,7 @@ as.list.lcMethod = function(x, ...,
 #' @description Converts the arguments of a `lcMethod` to a named `list` of [atomic] types.
 #' @inheritParams as.list.lcMethod
 #' @param x `lcMethod` to be coerced to a `character` `vector`.
+#' @param ... Additional arguments.
 #' @param eval Whether to evaluate the arguments in order to replace expression if the resulting value is of a class specified in `evalClasses`.
 #' @param nullValue Value to use to represent the `NULL` type. Must be of length 1.
 #' @return A single-row `data.frame` where each columns represents an argument call or evaluation.
@@ -320,7 +327,7 @@ as.data.frame.lcMethod = function(x, ...,
   as.data.frame(dfList, stringsAsFactors = FALSE)
 }
 
-
+#' @noRd
 #' @title Select the preferred environment
 #' @description Returns envir if specified. Otherwise, returns environment(object) if specified. The defaultEnvir is returned when the former two are NULL.
 #' @keywords internal
@@ -417,10 +424,10 @@ lcMethods = function(method, ..., envir = NULL) {
 
 #. compose ####
 #' @export
-setGeneric('compose', function(method, ...)
-  standardGeneric('compose'))
+setGeneric('compose', function(method, ...) standardGeneric('compose'))
+
 #' @export
-#' @rdname lcMethod-interface
+#' @rdname lcMethod-class
 setMethod('compose', signature('lcMethod'), function(method, envir = NULL) {
   evaluate.lcMethod(method, try = FALSE, envir = envir)
 })
@@ -428,10 +435,10 @@ setMethod('compose', signature('lcMethod'), function(method, envir = NULL) {
 
 # . fit ####
 #' @export
-setGeneric('fit', function(method, ...)
-  standardGeneric('fit'))
+setGeneric('fit', function(method, ...) standardGeneric('fit'))
+
 #' @export
-#' @rdname lcMethod-interface
+#' @rdname lcMethod-class
 #' @title lcMethod interface
 #' @description Called by [latrend].
 #' * compose
@@ -439,7 +446,7 @@ setGeneric('fit', function(method, ...)
 #' * prepareData
 #' * preFit
 #'
-#' derpy
+#' test
 #' * fit
 #' * postFit
 setMethod('fit', signature('lcMethod'), function(method, data, envir, verbose) {
@@ -461,11 +468,14 @@ setMethod('fit', signature('lcMethod'), function(method, data, envir, verbose) {
 #' @title Extract formula
 #' @description Extracts the associated `formula` for the given distributional parameter.
 #' @inheritParams as.list.lcMethod
+#' @param x The `lcMethod` object.
+#' @param ... Additional arguments.
 #' @param what The distributional parameter to which this formula applies. By default, the formula specifies `"mu"`.
 #' @return The `formula` for the given distributional parameter.
 #' @examples
-#' m = lcMethodKML(Value ~ Time)
+#' m <- lcMethodLcmmGBTM(Value ~ Time)
 #' formula(m) # Value ~ Time
+#' formula(m, what = "mb") # ~1
 #' @family lcMethod functions
 formula.lcMethod = function(x, what = 'mu',
                             envir = NULL, ...) {
@@ -482,7 +492,6 @@ formula.lcMethod = function(x, what = 'mu',
 
 
 #' @export
-#' @family lcMethod functions
 getCall.lcMethod = function(x, ...) {
   assert_that(is.lcMethod(x))
   do.call(call, c(class(x)[1], eapply(x@arguments, enquote)))
@@ -491,10 +500,16 @@ getCall.lcMethod = function(x, ...) {
 
 #. getLabel ####
 #' @export
-setGeneric('getLabel', function(object, ...)
-  standardGeneric('getLabel'))
+#' @rdname getLabel
+#' @title Extract the object label.
+#' @description Extracts the assigned label for the given object.
+#' @param object The object to extract the label from.
+#' @param ... Additional arguments.
+#' @return The extracted label, as `character`.
+setGeneric('getLabel', function(object, ...) standardGeneric('getLabel'))
+
 #' @export
-#' @rdname lcMethod-interface
+#' @rdname getLabel
 setMethod('getLabel', signature('lcMethod'), function(object) {
   if (hasName(object, 'label')) {
     object$label
@@ -506,42 +521,66 @@ setMethod('getLabel', signature('lcMethod'), function(object) {
 
 #. getName ####
 #' @export
-setGeneric('getName', function(object, ...)
-  standardGeneric('getName'))
+#' @rdname getName
+#' @title Extract the object name
+#' @description Extracts the name of the given `object`.
+#' @param object The object to extract the name from.
+#' @param ... Additional arguments.
+#' @return A `character` containing the name.
+setGeneric('getName', function(object, ...) standardGeneric('getName'))
 
 #' @export
-#' @rdname lcMethod-interface
-setMethod('getName', signature('lcMethod'), function(object)
-  'custom')
+#' @rdname getName
+#' @examples
+#' getName(lcMethodKML()) # "longitudinal k-means"
+setMethod('getName', signature('lcMethod'), function(object) 'custom')
 
 #. getShortName ####
 #' @export
-setGeneric('getShortName', function(object, ...)
-  standardGeneric('getShortName'))
+#' @rdname getShortName
+#' @title Extract the short object name
+#' @param object The object to extract  the short name from.
+#' @param ... Additional arguments.
+#' @return A `character` containing the name.
+setGeneric('getShortName', function(object, ...) standardGeneric('getShortName'))
+
 #' @export
-#' @rdname lcMethod-interface
+#' @rdname getShortName
+#' @examples
+#' getShortName(lcMethodKML()) # "KML"
 setMethod('getShortName', signature('lcMethod'), getName)
 
 
 #. idVariable ####
 #' @export
-setGeneric('idVariable', function(object, ...)
-  standardGeneric('idVariable'))
-#' @export
-setMethod('idVariable', signature('lcMethod'), function(object)
-  object$id)
+#' @rdname idVariable
+#' @title Extract the trajectory identifier variable
+#' @description Extracts the trajectory identifier variable (i.e., column name) from the given `object`.
+#' @param object The object to extract the variable from.
+#' @param ... Additional arguments.
+#' @return The trajectory identifier name, as `character`.
+setGeneric('idVariable', function(object, ...) standardGeneric('idVariable'))
 
+#' @export
+#' @rdname idVariable
+#' @examples
+#' method <- lcMethodKML(id = "Traj")
+#' idVariable(method) # "Traj"
+#'
+setMethod('idVariable', signature('lcMethod'), function(object, ...) object$id)
 
 #' @export
 #' @title Check whether the argument of a lcMethod has a defined value.
 #' @description Determines whether the associated argument value is defined. If the argument value is of type `language`, the argument is evaluated to see if it can be resolved within its `environment`.
+#' @param object The `lcMethod` object.
 #' @param name The name of the argument.
 #' @param envir The `environment` to evaluate the arguments in. If `NULL`, the argument is not evaluated.
 #' @keywords internal
 isArgDefined = function(object, name, envir = environment(object)) {
-  assert_that(is.lcMethod(object))
-  assert_that(is.character(name), is.scalar(name))
-  assert_that(is.environment(envir) || is.null(envir))
+  assert_that(is.lcMethod(object),
+    is.character(name),
+    is.scalar(name),
+    is.environment(envir) || is.null(envir))
 
   if (!hasName(object, name)) {
     return(FALSE)
@@ -577,6 +616,7 @@ setMethod('length', signature('lcMethod'), function(x) {
 
 #. names ####
 #' @title lcMethod argument names
+#' @param x The `lcMethod` object.
 #' @return A `character vector` of argument names.
 #' @examples
 #' m = lcMethodKML()
@@ -594,9 +634,9 @@ setMethod('names', signature('lcMethod'), function(x) {
 
 # . preFit ####
 #' @export
-setGeneric('preFit', function(method, ...)
-  standardGeneric('preFit'))
-#' @rdname lcMethod-interface
+setGeneric('preFit', function(method, ...) standardGeneric('preFit'))
+
+#' @rdname lcMethod-class
 setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose) {
   return(envir)
 })
@@ -604,9 +644,9 @@ setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose
 
 # . prepareData ####
 #' @export
-setGeneric('prepareData', function(method, ...)
-  standardGeneric('prepareData'))
-#' @rdname lcMethod-interface
+setGeneric('prepareData', function(method, ...) standardGeneric('prepareData'))
+
+#' @rdname lcMethod-class
 setMethod('prepareData', signature('lcMethod'), function(method, data, verbose) {
   return(NULL)
 })
@@ -614,9 +654,9 @@ setMethod('prepareData', signature('lcMethod'), function(method, data, verbose) 
 
 # . postfit ####
 #' @export
-setGeneric('postFit', function(method, ...)
-  standardGeneric('postFit'))
-#' @rdname lcMethod-interface
+setGeneric('postFit', function(method, ...) standardGeneric('postFit'))
+
+#' @rdname lcMethod-class
 setMethod('postFit', signature('lcMethod'), function(method, data, model, envir, verbose) {
   return(model)
 })
@@ -670,6 +710,7 @@ print.lcMethod = function(x,
 #' @title Substitute the call arguments for their evaluated values
 #' @description Substitutes the call arguments if they can be evaluated without error.
 #' @inheritParams as.list.lcMethod
+#' @param object The `lcMethod` object.
 #' @param classes Substitute only arguments with specific class types. By default, all types are substituted.
 #' @param try Whether to try to evaluate arguments and ignore errors (the default), or to fail on any argument evaluation error.
 #' @param exclude Arguments to exclude from evaluation.
@@ -729,19 +770,21 @@ evaluate.lcMethod = function(object,
 #' @title Update a method specification
 #' @details Updates or adds arguments to a `lcMethod` object. The inputs are evaluated in order to determine the presence of `formula` objects, which are updated accordingly.
 #' @inheritParams as.list.lcMethod
+#' @param object The `lcMethod` object.
+#' @param ... The new or updated method argument values.
 #' @param .eval Whether to assign the evaluated argument values to the method. By default (`FALSE`), the argument expression is preserved.
 #' @param .remove Names of arguments that should be removed.
 #' @return The new `lcMethod` object with the additional or updated arguments.
 #' @examples
-#' m = lcMethodKML(Value ~ 1)
-#' m2 = update(m, formula=~ . + Time)
+#' m <- lcMethodLcmmGBTM(Value ~ 1)
+#' m2 <- update(m, formula = ~ . + Time)
 #'
-#' m3 = update(m2, start='randomAll')
+#' m3 <- update(m2, nClusters = 3)
 #'
-#' xvar = 2
-#' m4 = update(m, x=xvar) # x: xvar
+#' k <- 2
+#' m4 <- update(m, nClusters = k) # nClusters: k
 #'
-#' m5 = update(m, x=xvar, .eval=TRUE) # x: 2
+#' m5 <- update(m, nClusters = k, .eval = TRUE) # nClusters: 2
 #'
 #' @family lcMethod functions
 update.lcMethod = function(object,
@@ -804,12 +847,25 @@ update.lcMethod = function(object,
 
 #. responseVariable ####
 #' @export
+#' @rdname responseVariable
+#' @title Extract the response variable
+#' @description Extracts the response variable from the given `object`.
+#' @param object The object to extract the response variable from.
+#' @param ... Additional arguments.
+#' @return The response variable name as a `character`.
 setGeneric('responseVariable', function(object, ...) standardGeneric('responseVariable'))
 
 #' @export
-#' @title Determine the response variable
-#' @return The response variable
-setMethod('responseVariable', signature('lcMethod'), function(object) {
+#' @rdname responseVariable
+#' @details If the `lcMethod` object specifies a `formula` argument, then the response is extracted from the response term of the formula.
+#' @examples
+#' method <- lcMethodKML("Value")
+#' responseVariable(method) # "Value"
+#'
+#' method <- lcMethodLcmmGBTM(Value ~ Time)
+#' responseVariable(method) # "Value"
+#'
+setMethod('responseVariable', signature('lcMethod'), function(object, ...) {
   if (hasName(object, 'response')) {
     object$response
   } else if (hasName(object, 'formula')) {
@@ -833,6 +889,7 @@ setMethod('show', 'lcMethod', function(object) {
 
 # . strip ####
 #' @export
+#' @rdname lcMethod-class
 setGeneric('strip', function(object) standardGeneric('strip'))
 
 #' @title Strip a lcMethod for serialization
@@ -852,18 +909,30 @@ setMethod('strip', signature('lcMethod'), function(object) {
 
 #. timeVariable ####
 #' @export
+#' @rdname timeVariable
+#' @title Extract the time variable
+#' @description Extracts the time variable (i.e., column name) from the given `object`.
+#' @param object The object to extract the variable from.
+#' @param ... Additional arguments.
+#' @return The time variable name, as `character`.
 setGeneric('timeVariable', function(object, ...) standardGeneric('timeVariable'))
 
 #' @export
-setMethod('timeVariable', signature('lcMethod'), function(object) object$time)
+#' @rdname timeVariable
+#' @examples
+#' method <- lcMethodKML(time = "Assessment")
+#' timeVariable(method) # "Assessment"
+#'
+setMethod('timeVariable', signature('lcMethod'), function(object, ...) object$time)
 
 
 #. validate ####
 #' @export
+#' @rdname lcMethod-class
 setGeneric('validate', function(method, data, ...) standardGeneric('validate'))
 
 #' @export
-#' @rdname lcMethod-interface
+#' @rdname lcMethod-class
 setMethod('validate', signature('lcMethod'), function(method, data, envir = NULL) {
   validate_that(
     hasName(data, idVariable(method)),
