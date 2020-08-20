@@ -126,6 +126,7 @@ dropIntercept = function(f) {
   }
 }
 
+#' @noRd
 #' @importFrom stats drop.terms
 #' @title Drop random-effects component from a formula
 #' @description Remove the random-effects components specified by "(. | .)" from a formula
@@ -156,6 +157,7 @@ dropRE = function(f) {
 
 # CLUSTER specific ####
 
+#' @noRd
 #' @title Check for CLUSTER terms
 #' @keywords internal
 hasCLUSTER = function(f) {
@@ -165,6 +167,7 @@ hasCLUSTER = function(f) {
         vars == 'CLUSTER') # TODO: what about a:CLUSTER:b?
 }
 
+#' @noRd
 #' @title Drop CLUSTER-interactive terms
 #' @description Drop any terms that have an interaction with CLUSTER
 #' @keywords internal
@@ -191,6 +194,7 @@ dropCLUSTER = function(f) {
   }
 }
 
+#' @noRd
 #' @title Drop non-CLUSTER terms
 #' @description Keep only terms that have an interaction with CLUSTER
 #' @keywords internal
@@ -219,6 +223,7 @@ keepCLUSTER = function(f) {
   }
 }
 
+#' @noRd
 #' @title Get special terms as character vector
 #' @param f A function containing special function terms, e.g. A ~ B + time(1) + time(I(B^2))
 #' @param special The special function, e.g. time
@@ -241,6 +246,7 @@ getSpecialTerms = function(f, special) {
     vapply(deparse, FUN.VALUE = '')
 }
 
+#' @noRd
 #' @title Get special terms as formula
 #' @details An intercept is added unless the formula contains a special removing it, e.g. time(0)
 #' @keywords internal
