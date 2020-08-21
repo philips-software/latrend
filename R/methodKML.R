@@ -1,4 +1,11 @@
 #' @include method.R
+
+#' @name interface-kml
+#' @rdname interface-kml
+#' @title kml interface
+#' @seealso [lcMethodKML] \link[kml]{kml}
+NULL
+
 setClass('lcMethodKML', contains = 'lcMatrixMethod')
 
 #' @export
@@ -28,11 +35,14 @@ lcMethodKML = function(response,
   )
 }
 
+#' @rdname interface-kml
 setMethod('getName', signature('lcMethodKML'), function(object) 'longitudinal k-means (KML)')
 
+#' @rdname interface-kml
 setMethod('getShortName', signature('lcMethodKML'), function(object) 'kml')
 
-
+#' @rdname interface-kml
+#' @inheritParams preFit
 setMethod('preFit', signature('lcMethodKML'), function(method, data, envir, verbose, ...) {
   e = callNextMethod()
 
@@ -53,7 +63,8 @@ setMethod('preFit', signature('lcMethodKML'), function(method, data, envir, verb
   return(e)
 })
 
-
+#' @rdname interface-kml
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodKML'), function(method, data, envir, verbose, ...) {
   cld = envir$cld
 

@@ -433,7 +433,9 @@ lcMethods = function(method, ..., envir = NULL) {
 
 #. compose ####
 #' @export
+#' @name compose
 #' @rdname lcMethod-class
+#' @aliases compose,lcMethod-method
 #' @param method The `lcMethod` object.
 #' @param envir The `environment` in which the `lcMethod` should be evaluated
 #' @param ... Not used.
@@ -445,7 +447,9 @@ setMethod('compose', signature('lcMethod'), function(method, envir = NULL) {
 
 # . fit ####
 #' @export
+#' @name fit
 #' @rdname lcMethod-class
+#' @aliases fit,lcMethod-method
 #' @title lcMethod interface
 #' @param data The data, as a `data.frame`, on which the model will be trained.
 #' @param verbose A [R.utils::Verbose] object indicating the level of verbosity.
@@ -500,16 +504,15 @@ getCall.lcMethod = function(x, ...) {
 
 
 #. getLabel ####
-
-#' @return The extracted label, as `character`.
-
-
 #' @export
+#' @name getLabel
 #' @rdname lcMethod-class
+#' @aliases getLabel,lcMethod-method
 #' @title Extract the method label.
 #' @description Extracts the assigned label.
 #' @param object The object to extract the label from.
 #' @param ... Additional arguments.
+#' @return The extracted label, as `character`.
 setMethod('getLabel', signature('lcMethod'), function(object, ...) {
   if (hasName(object, 'label')) {
     object$label
@@ -521,7 +524,9 @@ setMethod('getLabel', signature('lcMethod'), function(object, ...) {
 
 #. getName ####
 #' @export
+#' @name getName
 #' @rdname lcMethod-class
+#' @aliases getName,lcMethod-method
 #' @description Extracts the name of the given `object`.
 #' @examples
 #' getName(lcMethodKML()) # "longitudinal k-means"
@@ -529,7 +534,9 @@ setMethod('getName', signature('lcMethod'), function(object) 'custom')
 
 #. getShortName ####
 #' @export
+#' @name getShortName
 #' @rdname lcMethod-class
+#' @aliases getShortName,lcMethod-method
 #' @title Extract the short object name
 #' @examples
 #' getShortName(lcMethodKML()) # "KML"
@@ -538,7 +545,9 @@ setMethod('getShortName', signature('lcMethod'), getName)
 
 #. idVariable ####
 #' @export
+#' @name idVariable
 #' @rdname idVariable
+#' @aliases idVariable,lcMethod-method
 #' @title Extract the trajectory identifier variable
 #' @description Extracts the trajectory identifier variable (i.e., column name) from the given `object`.
 #' @param object The object to extract the variable from.
@@ -622,7 +631,9 @@ setMethod('names', signature('lcMethod'), function(x) {
 
 
 # . preFit ####
+#' @name preFit
 #' @rdname lcMethod-class
+#' @aliases preFit,lcMethod-method
 #' @return An `environment` that will be passed to `fit()`.
 setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose) {
   return(envir)
@@ -630,7 +641,9 @@ setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose
 
 
 # . prepareData ####
+#' @name prepareData
 #' @rdname lcMethod-class
+#' @aliases prepareData,lcMethod-method
 #' @return A `data.frame` with the post-processed data.
 setMethod('prepareData', signature('lcMethod'), function(method, data, verbose) {
   return(NULL)
@@ -638,7 +651,9 @@ setMethod('prepareData', signature('lcMethod'), function(method, data, verbose) 
 
 
 # . postFit ####
+#' @name postFit
 #' @rdname lcMethod-class
+#' @aliases postFit,lcMethod-method
 #' @param model The `lcModel` object returned by `fit()`.
 #' @return The updated `lcModel` object.
 setMethod('postFit', signature('lcMethod'), function(method, data, model, envir, verbose) {
@@ -832,6 +847,7 @@ update.lcMethod = function(object,
 #. responseVariable ####
 #' @export
 #' @name responseVariable
+#' @aliases responseVariable,lcMethod-method
 #' @title Extract the response variable
 #' @description Extracts the response variable from the given `object`.
 #' @param object The object to extract the response variable from.
@@ -869,8 +885,8 @@ setMethod('show', 'lcMethod', function(object) {
 
 # . strip ####
 #' @export
-#' @title Strip a lcMethod for serialization
 #' @rdname lcMethod-class
+#' @title Strip a lcMethod for serialization
 #' @param object The `lcMethod` object.
 #' @param ... Additional arguments.
 #' @description Removes associated environments from any of the arguments. This is typically the case for arguments of type `formula`.
@@ -889,7 +905,9 @@ setMethod('strip', signature('lcMethod'), function(object, ...) {
 
 #. timeVariable ####
 #' @export
+#' @name timeVariable
 #' @rdname timeVariable
+#' @aliases timeVariable,lcMethod-method
 #' @title Extract the time variable
 #' @description Extracts the time variable (i.e., column name) from the given `object`.
 #' @param object The object to extract the variable from.
@@ -904,7 +922,9 @@ setMethod('timeVariable', signature('lcMethod'), function(object, ...) object$ti
 
 #. validate ####
 #' @export
+#' @name validate
 #' @rdname lcMethod-class
+#' @aliases validate,lcMethod-method
 #' @return Either `TRUE` if all validation checks passed,
 #' or a `character` containing a description of the failed validation checks.
 setMethod('validate', signature('lcMethod'), function(method, data, envir = NULL, ...) {

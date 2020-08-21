@@ -1,7 +1,10 @@
 #' @include modelApprox.R
+#' @rdname interface-kml
 setClass('lcModelKML', contains = 'lcApproxModel')
 
 #. clusterTrajectories ####
+#' @rdname interface-kml
+#' @inheritParams clusterTrajectories
 setMethod('clusterTrajectories', signature('lcModelKML'), function(object, at = time(object), ...) {
   if (is.null(at)) {
     trajMat = computeKMLCenters(object)
@@ -20,13 +23,14 @@ setMethod('clusterTrajectories', signature('lcModelKML'), function(object, at = 
 
 
 #. converged ####
-#' @noRd
+#' @rdname interface-kml
 setMethod('converged', signature('lcModelKML'), function(object) {
   TRUE
 })
 
 
 #' @export
+#' @rdname interface-kml
 logLik.lcModelKML = function(object, ...) {
   # A negated version of BIC is precomputed by kml package so let's use that
   bic = -getKMLPartition(object)@criterionValues['BIC'] %>% unname()
@@ -41,6 +45,7 @@ logLik.lcModelKML = function(object, ...) {
 
 
 #. postprob ####
+#' @rdname interface-kml
 setMethod('postprob', signature('lcModelKML'), function(object) {
   if (nClusters(object) == 1) {
     pp = matrix(1, nrow = nIds(object), ncol = 1)
@@ -53,6 +58,8 @@ setMethod('postprob', signature('lcModelKML'), function(object) {
 
 
 #. predictPostprob
+#' @rdname interface-kml
+#' @inheritParams predictPostprob
 setMethod('predictPostprob', signature('lcModelKML'), function(object, newdata, ...) {
   assert_that(has_name(newdata, idVariable(object)),
               has_name(newdata, timeVariable(object)),

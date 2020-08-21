@@ -1,5 +1,12 @@
 #' @include method.R
 #' @include methodMatrix.R
+
+#' @name interface-akmedoids
+#' @rdname interface-akmedoids
+#' @title akmedoids interface
+#' @seealso [lcMethodAKMedoids] \link[akmedoids]{akmedoids.clust}
+NULL
+
 setClass('lcMethodAKMedoids', contains = 'lcMatrixMethod')
 
 #' @export
@@ -33,11 +40,14 @@ lcMethodAKMedoids = function(response,
   )
 }
 
+#' @rdname interface-akmedoids
 setMethod('getName', signature('lcMethodAKMedoids'), function(object) 'anchored k-medoids')
 
+#' @rdname interface-akmedoids
 setMethod('getShortName', signature('lcMethodAKMedoids'), function(object) 'akm')
 
-
+#' @rdname interface-akmedoids
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodAKMedoids'), function(method, data, envir, verbose, ...) {
   args = as.list(method, args = akmedoids::akmedoids.clust)
   args$traj = envir$dataMat
