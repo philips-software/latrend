@@ -26,6 +26,7 @@ lcModels = function(...) {
 }
 
 #' @export
+#' @rdname is
 is.lcModels = function(x) {
   is(x, 'lcModels')
 }
@@ -151,6 +152,7 @@ setMethod('externalMetric', signature('lcModels', 'missing'), function(object, o
   }
 }
 
+#. metric ####
 #' @export
 #' @rdname metric
 #' @return A named `numeric` vector containing the computed model metrics.
@@ -160,6 +162,7 @@ setMethod('externalMetric', signature('lcModels', 'lcModel'), .externalMetric.lc
 
 #' @export
 #' @rdname metric
+#' @param drop Whether to drop the matrix dimensions in case of a single model output.
 #' @return A named `numeric` vector containing the computed model metrics.
 #' @examples
 #' lcModel metric example here
@@ -265,7 +268,6 @@ max.lcModels = function(x, name, ...) {
 #' Specifying group=character() disables grouping.
 #' Specifying a single argument for grouping uses that specific column as the grouping column.
 #' In all other cases, groupings are represented by a number.
-#' @param facet Whether to facet the plot if multiple model groups are identified.
 #' @return `ggplot2` object.
 #' @examples
 #' plotMetric(models, 'BIC', by='nClusters', group='.name')
@@ -334,6 +336,7 @@ plotMetric = function(models,
 #' @title Subsetting a lcModels list based on method arguments
 #' @param x The `lcModels` or list of `lcModel` to be subsetted.
 #' @param subset Logical expression based on the `lcModel` method arguments, indicating which `lcModel` objects to keep.
+#' @param ... Not used.
 #' @param drop Whether to return a `lcModel` object if the result is length 1.
 #' @return A `lcModels` list with the subset of `lcModel` objects.
 #' @examples

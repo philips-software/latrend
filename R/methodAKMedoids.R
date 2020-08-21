@@ -6,6 +6,8 @@ setClass('lcMethodAKMedoids', contains = 'lcMatrixMethod')
 #' @title Specify AKMedoids method
 #' @inheritParams lcMatrixMethod
 #' @inheritParams lcMethodCustom
+#' @inheritParams lcMethodKML
+#' @param clusterCenter A function for computing the cluster center representation.
 #' @param ... Arguments passed to [akmedoids::akmedoids.clust].
 #' The following external arguments are ignored: traj, id_field, k
 #' @examples

@@ -12,6 +12,7 @@ setValidity('lcMethodLMKM', function(object) {
 #' @export
 #' @title Two-step clustering through linear regression modeling and k-means
 #' @inheritParams lcMethodTwoStep
+#' @inheritParams lcMethodKML
 #' @param formula A `formula` specifying the linear trajectory model.
 #' @param ... Arguments passed to [stats::lm].
 #' The following external arguments are ignored: x, data, control, centers, trace.

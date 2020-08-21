@@ -6,6 +6,7 @@
 #' @param cluster Cluster effects formula.
 #' @param id Name of the strata.
 #' @param data Data with covariates to use for generation. Stratified data may be specified by adding a grouping column.
+#' @param clusterNames A `character` vector denoting the names of the generated clusters.
 #' @param fixedCoefs Coefficients matrix for the fixed effects.
 #' @param clusterCoefs Coefficients matrix for the cluster effects.
 #' @param randomScales Standard deviations matrix for the size of the variance components (random effects).

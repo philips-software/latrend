@@ -8,11 +8,11 @@ setGeneric('plotTrajectories', function(object, ...) standardGeneric('plotTrajec
 
 #' @export
 #' @rdname plotTrajectories
+#' @inheritParams trajectories
+#' @inheritParams transformLatrendData
 #' @param response Response variable `character` name or a `call`.
-#' @param time Time variable name.
-#' @param id Id variable name.
 #' @param cluster Cluster variable name. If unspecified, trajectories are not grouped. Alternatively, cluster is a vector indicating cluster membership per id.
-#' @param facet Whether to facet by cluster
+#' @param facet Whether to facet by cluster.
 #' @examples
 #' data(testLongData)
 #' plotTrajectories(testLongData, response = 'Value')
@@ -68,6 +68,8 @@ setGeneric('plotClusterTrajectories', function(object, ...) standardGeneric('plo
 
 #' @export
 #' @rdname plotClusterTrajectories
+#' @inheritParams transformLatrendData
+#' @inheritParams clusterTrajectories
 #' @param object The (cluster) trajectory data.
 #' @param cluster The cluster assignment column
 #' @param center A function for aggregating multiple points at the same point in time

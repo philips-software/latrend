@@ -22,6 +22,7 @@ setValidity('lcMethodTwoStep', function(object) {
 #' Alternatively, `representationStep` is a pre-computed representation `matrix`.
 #' @param clusterStep A `function` with signature `function(repdata)` that outputs a `lcModel`.
 #' @param standardize A `function` to standardize the output `matrix` of the representation step. By default, the output is shifted and rescaled to ensure zero mean and unit variance.
+#' @param ... Additional arguments.
 #' @family lcMethod implementations
 lcMethodTwoStep = function(response,
                            representationStep,
@@ -106,7 +107,7 @@ setMethod('fit', signature('lcMethodTwoStep'), function(method, data, envir, ver
   return(newmodel)
 })
 
-#' @export
+
 standardizeTrajectoryCoefMatrix = function(x, fun) {
   assert_that(is.matrix(x))
 

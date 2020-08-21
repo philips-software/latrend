@@ -4,6 +4,10 @@ setClass('lcMethodMixtoolsNPRM', contains = 'lcMatrixMethod')
 #' @export
 #' @title Specify non-parametric estimation for independent repeated measures
 #' @inheritParams lcMatrixMethod
+#' @inheritParams lcMethodKML
+#' @param blockid See [mixtools::npEM].
+#' @param bw See [mixtools::npEM].
+#' @param h See [mixtools::npEM].
 #' @param ... Arguments passed to [mixtools::npEM].
 #' The following optional arguments are ignored: data, x, mu0, verb.
 #' @examples

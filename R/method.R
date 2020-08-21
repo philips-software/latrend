@@ -2,6 +2,14 @@
 #' @name lcMethod-class
 #' @title lcMethod class
 #' @description Base class used to define a longitudinal cluster method. It is implemented as a wrapper around a `call`.
+#'
+#' Model estimation is handled through a series of calls implement by the `lcMethod` object. The calls are made by [latrend], in the following order:
+#' * compose
+#' * validate
+#' * prepareData
+#' * preFit
+#' * fit
+#' * postFit
 #' @details Because the `lcMethod` arguments may be unevaluated, evaluation functions such as `[[` accept an `envir` argument.
 #' A default `environment` can be assigned or obtained from a `lcMethod` object using the `environment()` function.
 #' @seealso [environment]
@@ -39,7 +47,8 @@ setValidity('lcMethod', function(object) {
 })
 
 #. $ ####
-#' @name $,lcMethod
+#' @export
+#' @rdname lcMethod-class
 #' @title Retrieve and evaluate a lcMethod argument by name
 #' @param x The `lcMethod` object.
 #' @param name Name of the argument to retrieve.
@@ -47,7 +56,6 @@ setValidity('lcMethod', function(object) {
 #' @examples
 #' m <- lcMethodKML(nClusters = 3)
 #' m$nClusters # 3
-#' @family lcMethod functions
 setMethod('$', signature('lcMethod'), function(x, name) {
   x[[name]]
 })
@@ -424,31 +432,31 @@ lcMethods = function(method, ..., envir = NULL) {
 
 #. compose ####
 #' @export
+#' @rdname latrend-generics
 setGeneric('compose', function(method, ...) standardGeneric('compose'))
 
 #' @export
 #' @rdname lcMethod-class
-setMethod('compose', signature('lcMethod'), function(method, envir = NULL) {
+#' @param method The `lcMethod` object.
+#' @param envir The `environment` in which the `lcMethod` should be evaluated
+#' @param ... Not used.
+#' @return The updated `lcMethod` object.
+setMethod('compose', signature('lcMethod'), function(method, envir = NULL, ...) {
   evaluate.lcMethod(method, try = FALSE, envir = envir)
 })
 
 
 # . fit ####
 #' @export
+#' @rdname latrend-generics
 setGeneric('fit', function(method, ...) standardGeneric('fit'))
 
 #' @export
 #' @rdname lcMethod-class
 #' @title lcMethod interface
-#' @description Called by [latrend].
-#' * compose
-#' * validate
-#' * prepareData
-#' * preFit
-#'
-#' test
-#' * fit
-#' * postFit
+#' @param data The data, as a `data.frame`, on which the model will be trained.
+#' @param verbose A [R.utils::Verbose] object indicating the level of verbosity.
+#' @return An `lcModel` object.
 setMethod('fit', signature('lcMethod'), function(method, data, envir, verbose) {
   stop(
     sprintf(
@@ -500,7 +508,7 @@ getCall.lcMethod = function(x, ...) {
 
 #. getLabel ####
 #' @export
-#' @rdname getLabel
+#' @rdname latrend-generics
 #' @title Extract the object label.
 #' @description Extracts the assigned label for the given object.
 #' @param object The object to extract the label from.
@@ -521,7 +529,7 @@ setMethod('getLabel', signature('lcMethod'), function(object) {
 
 #. getName ####
 #' @export
-#' @rdname getName
+#' @rdname latrend-generics
 #' @title Extract the object name
 #' @description Extracts the name of the given `object`.
 #' @param object The object to extract the name from.
@@ -537,7 +545,7 @@ setMethod('getName', signature('lcMethod'), function(object) 'custom')
 
 #. getShortName ####
 #' @export
-#' @rdname getShortName
+#' @rdname latrend-generics
 #' @title Extract the short object name
 #' @param object The object to extract  the short name from.
 #' @param ... Additional arguments.
@@ -553,7 +561,7 @@ setMethod('getShortName', signature('lcMethod'), getName)
 
 #. idVariable ####
 #' @export
-#' @rdname idVariable
+#' @rdname latrend-generics
 #' @title Extract the trajectory identifier variable
 #' @description Extracts the trajectory identifier variable (i.e., column name) from the given `object`.
 #' @param object The object to extract the variable from.
@@ -602,13 +610,20 @@ isArgDefined = function(object, name, envir = environment(object)) {
 
 
 #' @export
-is.lcMethod = function(object) {
-  isS4(object) && is(object, 'lcMethod')
+#' @name latrend-is
+#' @rdname is
+#' @title Check if object is of Class
+#' @param x The object to check the class of.
+#' @keywords internal
+is.lcMethod = function(x) {
+  isS4(x) && is(object, 'lcMethod')
 }
 
 
 #. length ####
 #' @export
+#' @rdname lcMethod-class
+#' @param x The `lcMethod` object.
 setMethod('length', signature('lcMethod'), function(x) {
   length(x@arguments)
 })
@@ -634,9 +649,11 @@ setMethod('names', signature('lcMethod'), function(x) {
 
 # . preFit ####
 #' @export
+#' @rdname latrend-generics
 setGeneric('preFit', function(method, ...) standardGeneric('preFit'))
 
 #' @rdname lcMethod-class
+#' @return An `environment` that will be passed to `fit()`.
 setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose) {
   return(envir)
 })
@@ -644,19 +661,24 @@ setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose
 
 # . prepareData ####
 #' @export
+#' @rdname latrend-generics
 setGeneric('prepareData', function(method, ...) standardGeneric('prepareData'))
 
 #' @rdname lcMethod-class
+#' @return A `data.frame` with the post-processed data.
 setMethod('prepareData', signature('lcMethod'), function(method, data, verbose) {
   return(NULL)
 })
 
 
-# . postfit ####
+# . postFit ####
 #' @export
+#' @rdname latrend-generics
 setGeneric('postFit', function(method, ...) standardGeneric('postFit'))
 
 #' @rdname lcMethod-class
+#' @param model The `lcModel` object returned by `fit()`.
+#' @return The updated `lcModel` object.
 setMethod('postFit', signature('lcMethod'), function(method, data, model, envir, verbose) {
   return(model)
 })
@@ -847,7 +869,7 @@ update.lcMethod = function(object,
 
 #. responseVariable ####
 #' @export
-#' @rdname responseVariable
+#' @rdname latrend-generics
 #' @title Extract the response variable
 #' @description Extracts the response variable from the given `object`.
 #' @param object The object to extract the response variable from.
@@ -889,12 +911,20 @@ setMethod('show', 'lcMethod', function(object) {
 
 # . strip ####
 #' @export
-#' @rdname lcMethod-class
-setGeneric('strip', function(object) standardGeneric('strip'))
+#' @rdname latrend-generics
+#' @description Reduce the (serialized) memory footprint of an object.
+#' @details Serializing references to environments results in the serialization of the object together with any associated environments and references. This method removes those environments and references, greatly reducing the serialized object size.
+#' @param object The object to strip.
+#' @param ... Additional arguments.
+#' @return The stripped (i.e., updated) object.
+setGeneric('strip', function(object, ...) standardGeneric('strip'))
 
 #' @title Strip a lcMethod for serialization
-#' @description Removes associated environments from any of the arguments. This typically is the case for formulas.
-setMethod('strip', signature('lcMethod'), function(object) {
+#' @rdname lcMethod-class
+#' @param object The `lcMethod` object.
+#' @param ... Additional arguments.
+#' @description Removes associated environments from any of the arguments. This is typically the case for arguments of type `formula`.
+setMethod('strip', signature('lcMethod'), function(object, ...) {
   newObject = object
 
   environment(newObject) = NULL
@@ -909,7 +939,7 @@ setMethod('strip', signature('lcMethod'), function(object) {
 
 #. timeVariable ####
 #' @export
-#' @rdname timeVariable
+#' @rdname latrend-generics
 #' @title Extract the time variable
 #' @description Extracts the time variable (i.e., column name) from the given `object`.
 #' @param object The object to extract the variable from.
@@ -928,11 +958,13 @@ setMethod('timeVariable', signature('lcMethod'), function(object, ...) object$ti
 
 #. validate ####
 #' @export
-#' @rdname lcMethod-class
+#' @rdname latrend-generics
 setGeneric('validate', function(method, data, ...) standardGeneric('validate'))
 
 #' @export
 #' @rdname lcMethod-class
+#' @return Either `TRUE` if all validation checks passed,
+#' or a `character` containing a description of the failed validation checks.
 setMethod('validate', signature('lcMethod'), function(method, data, envir = NULL) {
   validate_that(
     hasName(data, idVariable(method)),
@@ -944,6 +976,13 @@ setMethod('validate', signature('lcMethod'), function(method, data, envir = NULL
 
 
 #' @export
+#' @title Argument matching with defaults and parent ellipsis expansion
+#' @param definition A `function`. By default, the calling function is used.
+#' @param call A `call`. By default, the parent call is used.
+#' @param expand.dots Whether arguments specified in ellipsis should be included, or ellipses be kept as-is.
+#' @param envir The `environment` in which the ellipsis and parent ellipsis are evaluated.
+#' @seealso [stackoverflow::match.call.defaults]
+#' @keywords internal
 match.call.all = function(definition = sys.function(sys.parent()),
                            call = sys.call(sys.parent()),
                            expand.dots = TRUE,

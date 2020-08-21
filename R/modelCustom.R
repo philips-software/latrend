@@ -20,10 +20,13 @@ setClassUnion('functionOrNULL', members = c('function', 'NULL'))
 #' @param data The data on which the cluster result is based, a data.frame.
 #' @param clusterAssignments A vector indicating cluster membership per strata. Either a `numeric` vector with range `1:numClus`, or a `factor`.
 #' @param clusterTrajectories The cluster trajectories as a data.frame, or a function computing the center trajectory based on the strata of the respective cluster.
+#' @param clusterNames The names of the clusters. Optional.
+#' @param model An optional object representing the internal model.
 #' @param trajectories The fitted trajectories.
 #' @param response The response variable.
 #' @param time The time variable.
 #' @param id The id variable.
+#' @param name The name of the model.
 #' @param converged Convergence state of the model. TRUE by default.
 #' @param postprob Optional posterior probability matrix.
 #' @param predict Predict function for the response.
@@ -154,8 +157,9 @@ lcModelCustom = function(data,
 }
 
 #' @export
-is.lcModelCustom = function(object) {
-  is.lcModel(object) && is(object, 'lcModelCustom')
+#' @rdname is
+is.lcModelCustom = function(x) {
+  is.lcModel(x) && is(x, 'lcModelCustom')
 }
 
 setMethod('getName', signature('lcModelCustom'), function(object)

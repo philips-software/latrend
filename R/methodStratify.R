@@ -197,6 +197,10 @@ stratifyTrajectories = function(strat, data, id, envir = parent.frame()) {
 
 
 #' @export
+#' @title Create a posterior probability matrix from a vector of cluster assignments.
+#' @description For each trajectory, the probability of the assigned cluster is 1.
+#' @param assignments Integer vector indicating cluster assignment per trajectory
+#' @param k The number of clusters.
 postprobFromAssignments = function(assignments, k) {
   assert_that(
     is.count(k),
@@ -213,6 +217,8 @@ postprobFromAssignments = function(assignments, k) {
 }
 
 #' @export
-weighted.meanNA = function(x, w) {
-  weighted.mean(x, w = w, na.rm = TRUE)
+#' @inheritParams stats::weighted.mean
+#' @keywords internal
+weighted.meanNA = function(x, w, ...) {
+  weighted.mean(x, w = w, ..., na.rm = TRUE)
 }

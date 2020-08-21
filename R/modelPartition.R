@@ -15,9 +15,11 @@ setClass(
 #' @description Represents an arbitrary partitioning of a set of trajectories.
 #' As such, this model has no predictive capabilities. The cluster trajectories are represented by the specified center function (mean by default).
 #' @inheritParams lcMethodStratify
+#' @param data A `data.frame` representing the trajectory data.
 #' @param clusterAssignments A `vector` of cluster membership per trajectory, either `factor`, or `integer` (`1` to `nClusters`).
 #' @param nClusters The number of clusters. Optional for `factor` assignments.
 #' @param clusterNames The names of the clusters, or a function with input `n` outputting a `character vector` of names.
+#' @param envir The `environment` associated with the model. Used for evaluating the assigned `data` object by [model.data]().
 lcModelPartition = function(data,
                             response,
                             clusterAssignments,
@@ -136,7 +138,6 @@ setMethod('postprob', signature('lcModelPartition'), function(object) {
 
 
 
-#' @export
 computeCenterClusterTrajectories = function(data,
                                             assignments,
                                             nClusters,

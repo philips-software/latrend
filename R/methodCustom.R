@@ -8,6 +8,7 @@ setClass('lcMethodCustom', contains = 'lcMethod')
 #' @param response The name of the response variable.
 #' @param time The name of the time variable.
 #' @param id The name of the trajectory identification variable.
+#' @param name The name of the method.
 #' @examples
 #' data(testLongData)
 #' # Stratification based on the mean response level

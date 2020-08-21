@@ -43,6 +43,13 @@ attr(has_same_modelData, 'fail') = function(call, env) {
 
 
 #' @export
+#' @name latrend-assert
+#' @rdname assert
+#' @title latrend-specific assertions
+#' @description Assertions and checks that may be of use for custom model implementations.
+#' @param object The object to test.
+#' @param which The argument names. Ellipsis (`...`) will be ignored.
+#' @keywords internal
 has_lcMethod_args = function(object, which) {
   assert_that(is.lcMethod(object))
 
@@ -64,6 +71,10 @@ attr(has_lcMethod_args, 'fail') = function(call, env) {
 
 
 #' @export
+#' @rdname assert
+#' @description Check whether the input is a valid posterior probability matrix for the given model.
+#' @param pp The posterior probability `matrix`.
+#' @param model The `lcModel` object.
 is_valid_postprob = function(pp, model) {
   assert_that(is.lcModel(model))
   is.matrix(pp) &&

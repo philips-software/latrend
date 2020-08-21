@@ -4,10 +4,9 @@ setClass('lcMethodFlexmix', contains = 'lcMethod')
 #' @export
 #' @title Method interface to flexmix()
 #' @description Wrapper to the `flexmix()` method from the `flexmix` package.
+#' @inheritParams lcMethodKML
 #' @param formula A `formula` specifying the model.
 #' @param formula.mb A `formula` specifying the class membership model. By default, an intercept-only model is used.
-#' @param time The name of the time variable.
-#' @param id The name of the trajectory identifier variable.
 #' @param ... Arguments passed to [flexmix::flexmix].
 #' The following arguments are ignored: data, concomitant, k.
 #' @examples

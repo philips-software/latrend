@@ -4,6 +4,7 @@ setClass('lcMethodCrimCV', contains = 'lcMatrixMethod')
 #' @export
 #' @title Specify a zero-inflated repeated-measures GBTM method
 #' @inheritParams lcMatrixMethod
+#' @inheritParams lcMethodKML
 #' @param ... Arguments passed to [crimCV::crimCV].
 #' The following external arguments are ignored: Dat, ng.
 #' @examples

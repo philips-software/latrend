@@ -15,6 +15,11 @@
 #' * See `vignette("modelValidation", package="latrend")`
 "_PACKAGE"
 
+#' @name latrend-generics
+#' @rdname latrend-generics
+#' @title Generics used by latrend for different classes
+NULL
+
 .onLoad = function(libname, pkgname) {
   opts = list(
     latrend.verbose = R.utils::Verbose(threshold = -1),

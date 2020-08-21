@@ -289,6 +289,7 @@ latrendRep = function(method,
 #' @title Cluster longitudinal data for a list of model specifications
 #' @description Fit a list of longitudinal cluster methods.
 #' @inheritParams latrend
+#' @param methods A `list` of `lcMethod` objects.
 #' @param data A `data.frame`, `matrix`, or a `list` thereof to which to apply to the respective `lcMethod`. Multiple datasets can be supplied by encapsulating the datasets using `data=.(df1, df2, ..., dfN)`.
 #' @param cartesian Whether to fit the provided methods on each of the datasets. If `cartesian=FALSE`, only a single dataset may be provided or a list of data matching the length of `methods`.
 #' @param envir The `environment` in which to evaluate the `lcMethod` arguments.
@@ -380,6 +381,7 @@ latrendBatch = function(methods,
 #' @inheritParams latrend
 #' @param data A `data.frame`.
 #' @param samples The number of bootstrap samples to evaluate.
+#' @param seed The seed to use. Optional.
 #' @return A `lcModels` object of length `samples`.
 #' @examples
 #' model = latrendBoot(lcMethodKML(), testLongData, samples=10)
@@ -450,12 +452,12 @@ latrendBoot = function(method,
 
 
 # Cross validation ####
-
 #' @export
 #' @title Cluster longitudinal data over k folds
 #' @description Apply k-fold cross validation for internal cluster validation.
 #' Creates k random subsets ("folds") from the data, estimating a model for each of the k-1 combined folds.
 #' @inheritParams latrend
+#' @inheritParams latrendBoot
 #' @param data A `data.frame`.
 #' @param folds The number of folds. Ten folds by default.
 #' @return A `lcModels` object of containing the `folds` training models.
@@ -517,6 +519,10 @@ latrendCV = function(method,
 #' @export
 #' @importFrom caret createFolds
 #' @title Create the training data for each of the k models in k-fold cross validation evaluation
+#' @param data A `data.frame` representing the complete dataset.
+#' @param folds The number of folds. By default, a 10-fold scheme is used.
+#' @param id The trajectory identifier variable.
+#' @param seed The seed to use, in order to ensure reproducible fold generation at a later moment.
 #' @return A `list` of `data.frame` of the `folds` training datasets.
 #' @family validation methods
 #' @examples
@@ -552,6 +558,8 @@ createTrainDataFolds = function(data,
 
 #' @export
 #' @title Create the test fold data for validation
+#' @inheritParams createTrainDataFolds
+#' @param trainData A `data.frame` representing the training data, which should be a subset of `data`.
 #' @seealso createTrainDataFolds
 #' @family validation methods
 #' @examples
@@ -569,6 +577,9 @@ createTestDataFold = function(data, trainData, id = getOption('latrend.id')) {
 
 #' @export
 #' @title Create all k test folds from the training data
+#' @inheritParams createTestDataFold
+#' @param trainDataList A `list` of `data.frame` representing each of the data training folds. These should be derived from `data`.
+#' @param ... Arguments passed to [createTestDataFold].
 #' @family validation methods
 #' @examples
 #' trainDataList = createTrainDataFolds(testLongData, folds=10)
@@ -583,11 +594,16 @@ createTestDataFolds = function(data, trainDataList, ...) {
 # Data helper functions ####
 #. transformLatrendData ####
 #' @export
+#' @rdname transformLatrendData
 #' @title Transform latrend input data into the right format
 #' @description This function is also responsible for checking whether the input data is valid, such that the fitting process can fail early.
+#' @param object The data object to transform.
+#' @param envir The `environment` used to evaluate the data object in (e.g., in case `object` is of type `call`).
+#' @inheritParams lcMethodKML
 #' @return A `data.frame` with an id, time, and measurement columns.
-setGeneric('transformLatrendData', function(object, id, time, response, envir)
-  standardGeneric('transformLatrendData'))
+setGeneric('transformLatrendData', function(object, id, time, response, envir) standardGeneric('transformLatrendData'))
+
+#' @rdname transformLatrendData
 setMethod('transformLatrendData', signature('data.frame'), function(object, id, time, response, envir) {
   assert_that(
     is.data.frame(object),
@@ -601,6 +617,7 @@ setMethod('transformLatrendData', signature('data.frame'), function(object, id, 
   object
 })
 
+#' @rdname transformLatrendData
 setMethod('transformLatrendData', signature('matrix'), function(object, id, time, response, envir) {
   data = meltRepeatedMeasures(object,
                               id = id,
@@ -615,6 +632,7 @@ setMethod('transformLatrendData', signature('matrix'), function(object, id, time
   )
 })
 
+#' @rdname transformLatrendData
 setMethod('transformLatrendData', signature('call'), function(object, id, time, response, envir) {
   data = eval(object, envir = envir)
   transformLatrendData(
@@ -627,11 +645,15 @@ setMethod('transformLatrendData', signature('call'), function(object, id, time, 
 })
 
 #' @export
+#' @name lcModel-data-filters
+#' @rdname lcModel-data-filters
+#' @title Data filters for lcModel
+#' @description The data filters are applied by [latrend] prior to model estimation. These filters are used in [latrendBoot] and [latrendCV].
+#' @inheritParams transformLatrendData
+#' @param data The `data.frame` representing the model dataset.
+#' @param seed Optional seed for ensuring reproducibility.
 #' @family validation methods
-#' @family model data filters
-bootSample = function(data,
-                      id = getOption('latrend.id'),
-                      seed = NULL) {
+bootSample = function(data, id, seed = NULL) {
   assert_that(is.data.frame(data), has_name(data, id))
   ids = unique(data[[id]])
 
@@ -645,9 +667,12 @@ bootSample = function(data,
 
 
 #' @export
+#' @rdname lcModel-data-filters
 #' @importFrom caret createFolds
+#' @param fold The fold to select.
+#' @param folds Total number of folds to create.
 #' @family validation methods
-#' @family model data filters
+#' @keywords internal
 trainFold = function(data, fold, id, folds, seed) {
   assert_that(is.data.frame(data),
     has_name(data, id),
@@ -669,8 +694,8 @@ trainFold = function(data, fold, id, folds, seed) {
 
 
 #' @export
+#' @rdname lcModel-data-filters
 #' @family validation methods
-#' @family model data filters
 testFold = function(data, fold, id, folds, seed) {
   trainData = trainFold(
     data,

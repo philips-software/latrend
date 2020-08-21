@@ -16,6 +16,7 @@
 #' @slot method The \link{lcMethod-class} object specifying the arguments under which the model was fitted.
 #' @slot call The `call` that was used to create this `lcModel` object. Typically, this is the call to `latrend()` or any of the other fitting functions.
 #' @slot model An arbitrary underlying model representation.
+#' @slot data A `data.frame` object, or an expression to resolves to the `data.frame` object.
 #' @slot id The name of the trajectory identifier column.
 #' @slot time The name of the time variable.
 #' @slot response The name of the response variable.
@@ -272,7 +273,7 @@ confusionMatrix.lcModel = function(object, ...) {
 
 # . converged ####
 #' @export
-#' @rdname converged
+#' @rdname latrend-generics
 #' @title Whether the model converged
 #' @description Check convergence of the fitted model.
 #' @param object The model to check for convergence.
@@ -460,8 +461,9 @@ setMethod('idVariable', signature('lcModel'), function(object)
 
 
 #' @export
-is.lcModel = function(object) {
-  isS4(object) && is(object, 'lcModel')
+#' @rdname is
+is.lcModel = function(x) {
+  isS4(x) && is(x, 'lcModel')
 }
 
 
@@ -476,12 +478,14 @@ logLik.lcModel = function(object, ...) {
 }
 
 
+#. metric ####
 #' @export
-#' @rdname metric
+#' @rdname latrend-generics
 #' @title Compute internal model metric(s)
 #' @description Internal metric.
 #' @param object The `lcModel`, `lcModels`, or `list` of `lcModel` objects to compute the metrics for.
 #' @param name The name(s) of the metric(s) to compute. All defined metrics are computed by default.
+#' @param ... Additional arguments.
 #' @examples
 #' data(testLongData)
 #' model = latrend(lcMethodLcmmGMM(), testLongData)
@@ -530,10 +534,10 @@ setMethod('metric', signature('lcModel'), function(object, name) {
 })
 
 
+#. externalMetric ####
 #' @export
-#' @rdname metric
+#' @rdname latrend-generics
 #' @title Compute external comparison metric(s) based on a reference lcModel.
-#' @inheritParams metric
 #' @param object2 The other lcModel to compare with.
 #' @examples
 #' data(testLongData)
@@ -581,8 +585,11 @@ setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, ob
 })
 
 
-#' @noRd
-#' @title Ensures a proper cluster assignments factor vector
+#' @export
+#' @name lcModel-make
+#' @rdname lcModel-make
+#' @title Cluster-handling functions for lcModel implementations.
+#' @description Ensures a proper cluster assignments factor vector
 #' @param object The `lcModel` object.
 #' @param clusters The unprocessed trajectory cluster assignment vector.
 #' @param finite Whether to check for missing or non-finite values.
@@ -635,12 +642,10 @@ make.clusterAssignments = function(object, clusters, finite = TRUE) {
   }
 }
 
-
-#' @noRd
-#' @title Ensure a proper cluster index vector
-#' @inheritParams make.clusterAssignments
-#' @seealso make.clusterAssignments
-#' @keywords internal
+#' @export
+#' @rdname lcModel-make
+#' @title Ensures a proper cluster index vector
+#' @return A cluster assignments index vector of type `integer`.
 make.clusterIndices = function(object, clusters, finite = TRUE) {
   clusNames = clusterNames(object)
   nClusters = nClusters(object)
@@ -682,6 +687,10 @@ make.clusterIndices = function(object, clusters, finite = TRUE) {
 }
 
 #' @export
+#' @rdname lcModel-make
+#' @title Generate cluster names
+#' @param n The number of clusters.
+#' @return A `character` vector length `n` with the cluster names.
 make.clusterNames = function(n) {
   assert_that(is.count(n))
 
@@ -886,7 +895,7 @@ predict.lcModel = function(object, ...,
 
 # . predictForCluster ####
 #' @export
-#' @rdname predictForCluster
+#' @rdname latrend-generics
 #' @title lcModel prediction for a specific cluster
 #' @description Predicts the expected trajectory observations at the given time under the assumption that the trajectory belongs to the specified cluster.
 #' @inheritParams predict.lcModel
@@ -913,7 +922,7 @@ setMethod('predictForCluster', signature('lcModel'), function(object, cluster, n
 
 # . predictPostprob ####
 #' @export
-#' @rdname predictPostprob
+#' @rdname latrend-generics
 #' @title lcModel posterior probability prediction
 #' @details The default implementation returns a uniform probability matrix.
 #' @param object The model to predict the posterior probabilities with.
@@ -948,10 +957,11 @@ setMethod('predictPostprob', signature('lcModel'), function(object, newdata, ...
 
 #. predictAssignments ####
 #' @export
-#' @rdname preditAssignments
+#' @rdname latrend-generics
 #' @title Predict the cluster assignments
-#' @param object The model.
+#' @inheritParams predictPostprob
 #' @param ... Additional arguments.
+#' @seealso [predictPostprob]
 setGeneric('predictAssignments', function(object, newdata = NULL, ...) standardGeneric('predictAssignments'))
 
 #' @export
@@ -973,13 +983,15 @@ setMethod('predictAssignments', signature('lcModel'), function(object, newdata, 
 })
 
 
+#. plot ####
 #' @export
 #' @title Plot a lcModel
 #' @description Plot a lcModel. By default, the cluster trajectories of the model solution are plotted.
 #' @param x The `lcModel` object.
+#' @param y Not used.
 #' @param ... Arguments passed to [plotClusterTrajectories].
 #' @return A `ggplot` object.
-setMethod('plot', signature('lcModel'), function(x, ...) {
+setMethod('plot', signature('lcModel'), function(x, y, ...) {
   plotClusterTrajectories(x, ...)
 })
 
@@ -1035,7 +1047,7 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
 
 #. postprob ####
 #' @export
-#' @rdname postprob
+#' @rdname latrend-generics
 #' @title Posterior probability per fitted id
 #' @param object The model.
 #' @param ... Additional arguments.
@@ -1060,7 +1072,7 @@ setMethod('postprob', signature('lcModel'), function(object) {
 
 # . QQ plot ####
 #' @export
-#' @rdname plotQQ
+#' @rdname latrend-generics
 #' @title Quantile-quantile plot
 #' @param object The model.
 setGeneric('plotQQ', function(object, ...) standardGeneric('plotQQ'))
@@ -1144,11 +1156,7 @@ setMethod('show', 'lcModel', function(object) {
 #' @param ... Additional arguments.
 #' @family model-specific methods
 sigma.lcModel = function(object, ...) {
-  if (is.null(getS3method(
-    'sigma',
-    class = class(object@model),
-    optional = TRUE
-  ))) {
+  if (is.null(getS3method('sigma', class = class(object@model), optional = TRUE))) {
     residuals(object) %>% sd
   } else {
     sigma(object@model)
@@ -1156,7 +1164,7 @@ sigma.lcModel = function(object, ...) {
 }
 
 #. strip ####
-setMethod('strip', signature('lcModel'), function(object) {
+setMethod('strip', signature('lcModel'), function(object, ...) {
   newObject = object
 
   environment(newObject) = NULL
@@ -1164,7 +1172,7 @@ setMethod('strip', signature('lcModel'), function(object) {
 
   # recursively strip elements (for calls in calls)
   rstrip = function(x) {
-    if(is.list(x) || is(x, 'call')) { # is.call is TRUE for formulas
+    if (is.list(x) || is(x, 'call')) { # is.call is TRUE for formulas
       replace(x, seq_along(x), lapply(x, rstrip))
     } else {
       environment(x) = NULL
@@ -1222,6 +1230,7 @@ setMethod('timeVariable', signature('lcModel'), function(object) object@time)
 #' @param at The time points at which to compute the id-specific trajectories.
 #' @param what The distributional parameter to compute the response for.
 #' @param clusters The cluster assignments for the strata to base the trajectories on.
+#' @param ... Additional arguments.
 #' @examples
 #' model = latrend(method=lcMethodKML(), data=testLongData)
 #' trajectories(model)
@@ -1235,7 +1244,7 @@ setGeneric('trajectories', function(object,
                                     ...) standardGeneric('trajectories'))
 
 #' @rdname trajectories
-setMethod('trajectories', signature('lcModel'), function(object, at, what, clusters) {
+setMethod('trajectories', signature('lcModel'), function(object, at, what, clusters, ...) {
   ids = ids(object)
   assert_that(length(clusters) == nIds(object))
 

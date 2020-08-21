@@ -3,8 +3,9 @@ setClass('lcModelWeightedPartition', contains = 'lcModelPartition')
 
 #' @export
 #' @title Create a lcModel with pre-defined weighted partitioning
+#' @inheritParams lcMethodStratify
+#' @inheritParams lcModelCustom
 #' @param weights A `numIds` x `numClusters` matrix of partition probabilities.
-#' @param nClusters The number of clusters
 #' @param clusterNames The names of the clusters, or a function with input `n` outputting a `character vector` of names.
 lcModelWeightedPartition = function(data,
                                     response,
@@ -62,7 +63,7 @@ lcModelWeightedPartition = function(data,
   )
 }
 
-#' @export
+
 computeWeightedCenterClusterTrajectories = function(data, postprob, fun =
                                                       weighted.mean, id, time, response) {
   assert_that(
