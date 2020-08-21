@@ -2,7 +2,7 @@
 setClass('lcModelKML', contains = 'lcApproxModel')
 
 #. clusterTrajectories ####
-setMethod('clusterTrajectories', signature('lcModelKML'), function(object, at, what, ...) {
+setMethod('clusterTrajectories', signature('lcModelKML'), function(object, at = time(object), ...) {
   if (is.null(at)) {
     trajMat = computeKMLCenters(object)
 

@@ -191,8 +191,7 @@ predict.lcModelCustom = function(object,
 
 
 #. predictPostprob ####
-setMethod('predictPostprob', signature('lcModelCustom'),
-          function(object, newdata = NULL, ...) {
+setMethod('predictPostprob', signature('lcModelCustom'), function(object, newdata = NULL, ...) {
   pp = object@predictPostprob(object, newdata, ...)
 
   assert_that(is.matrix(pp))
@@ -206,8 +205,8 @@ setMethod('predictPostprob', signature('lcModelCustom'),
   return(pp)
 })
 
-
-setMethod('clusterTrajectories', signature('lcModelCustom'), function(object, at, what, ...) {
+setMethod('clusterTrajectories', signature('lcModelCustom'),
+  function(object, at = time(object), ...) {
   if (all(at %in% time(object))) {
     dt_traj = object@clusterTrajectories %>%
       as.data.table %>%

@@ -85,7 +85,7 @@ setGeneric('predictPostprob', function(object, ...) standardGeneric('predictPost
 
 #' @export
 #' @rdname latrend-generics
-setGeneric('postFit', function(...) standardGeneric('postFit'))
+setGeneric('postFit', function(method, ...) standardGeneric('postFit'))
 
 #' @export
 #' @rdname latrend-generics

@@ -105,7 +105,7 @@ setValidity('lcModel', function(object) {
 #'
 #' clusterTrajectories(model, at=c(0, .5, 1))
 #' @family model-specific methods
-setMethod('clusterTrajectories', signature('lcModel'), function(object, at, what, ...) {
+setMethod('clusterTrajectories', signature('lcModel'), function(object, at = time(object), what = 'mu', ...) {
   if (is.numeric(at)) {
     newdata = data.table(
       Cluster = rep(clusterNames(object, factor = TRUE), each = length(at)),

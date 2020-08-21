@@ -9,7 +9,8 @@
   contains = 'lcApproxModel'
 )
 
-setMethod('clusterTrajectories', signature('lcModelStratify'), function(object, at, what, ...) {
+setMethod('clusterTrajectories', signature('lcModelStratify'),
+  function(object, at = time(object), ...) {
   if (is.null(at)) {
     clusTrajs = copy(object@clusterTrajectories)
     clusTrajs[, Cluster := factor(Cluster,
@@ -35,8 +36,7 @@ setMethod('postprob', signature('lcModelStratify'), function(object) {
 })
 
 #. predictPostprob ####
-setMethod('predictPostprob', signature('lcModelStratify'), function(object, newdata =
-                                                                      NULL, ...) {
+setMethod('predictPostprob', signature('lcModelStratify'), function(object, newdata = NULL, ...) {
   if (is.null(newdata)) {
     return(postprob(object))
   }

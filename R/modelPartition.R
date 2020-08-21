@@ -101,7 +101,7 @@ lcModelPartition = function(data,
 }
 
 
-setMethod('clusterTrajectories', signature('lcModelPartition'), function(object, at, what, ...) {
+setMethod('clusterTrajectories', signature('lcModelPartition'), function(object, at = time(object), ...) {
   if (is.null(at)) {
     clusTrajs = as.data.table(object@clusterTrajectories)
     clusTrajs[, Cluster := factor(Cluster,

@@ -623,7 +623,7 @@ setMethod('names', signature('lcMethod'), function(x) {
 # . preFit ####
 #' @rdname lcMethod-class
 #' @return An `environment` that will be passed to `fit()`.
-setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose) {
+setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose, ...) {
   return(envir)
 })
 
@@ -631,7 +631,7 @@ setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose
 # . prepareData ####
 #' @rdname lcMethod-class
 #' @return A `data.frame` with the post-processed data.
-setMethod('prepareData', signature('lcMethod'), function(method, data, verbose) {
+setMethod('prepareData', signature('lcMethod'), function(method, data, verbose, ...) {
   return(NULL)
 })
 
@@ -640,7 +640,7 @@ setMethod('prepareData', signature('lcMethod'), function(method, data, verbose) 
 #' @rdname lcMethod-class
 #' @param model The `lcModel` object returned by `fit()`.
 #' @return The updated `lcModel` object.
-setMethod('postFit', signature('lcMethod'), function(method, data, model, envir, verbose) {
+setMethod('postFit', signature('lcMethod'), function(method, data, model, envir, verbose, ...) {
   return(model)
 })
 
