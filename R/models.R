@@ -47,7 +47,8 @@ as.lcModels = function(x) {
     x = list(x)
   }
   else if (is.list(x)) {
-    assert_that(all(vapply(x, is.lcModel, FUN.VALUE = FALSE)), msg = 'object cannot be converted to lcModels; not a list of only lcModels objects')
+    assert_that(all(vapply(x, is.lcModel, FUN.VALUE = FALSE)),
+      msg = 'object cannot be converted to lcModels; not a list of only lcModels objects')
   }
   else {
     stop('cannot convert this type of input to lcModels')
@@ -107,29 +108,9 @@ as.data.frame.lcModels = function(x, ...,
   as.data.frame(dt)
 }
 
-
-#' @export
-#' @importFrom stats as.dist
-#' @name externalMetric
-#' @return A named `numeric` vector containing the computed model metrics.
-#' @examples
-#' lcModel metric example here
-setMethod('externalMetric', signature('lcModels', 'missing'), function(object, object2, name = 'adjustedRand') {
-  assert_that(is.character(name), length(name) == 1)
-
-  pairs = combn(seq_along(object), m = 2, simplify = FALSE)
-
-  result = lapply(pairs, function(idx)
-    externalMetric(object[[idx[1]]], object[[idx[2]]], name = name) %>% unname())
-
-  m = matrix(NaN, nrow = length(object), ncol = length(object))
-  m[do.call(rbind, pairs)] = unlist(result)
-  as.dist(t(m), diag = FALSE, upper = FALSE)
-})
-
 .externalMetric.lcModels = function(object, object2, name, drop = TRUE) {
   assert_that(is.character(name),
-              is.flag(drop))
+    is.flag(drop))
 
   if (length(object) == 0) {
     if (drop) {
@@ -152,21 +133,40 @@ setMethod('externalMetric', signature('lcModels', 'missing'), function(object, o
   }
 }
 
-#. metric ####
 #' @export
-#' @name externalMetric
-#' @return A named `numeric` vector containing the computed model metrics.
-#' @examples
-#' lcModel metric example here
-setMethod('externalMetric', signature('lcModels', 'lcModel'), .externalMetric.lcModels)
+#' @importFrom stats as.dist
+#' @rdname externalMetric
+#' @return For `externalMetric(lcModels)`: A distance matrix of class [dist] representing
+#' the pairwise comparisons.
+setMethod('externalMetric',
+  signature('lcModels', 'missing'), function(object, object2, name = 'adjustedRand') {
+  assert_that(is.character(name), length(name) == 1)
+
+  pairs = combn(seq_along(object), m = 2, simplify = FALSE)
+
+  result = lapply(pairs, function(idx)
+    externalMetric(object[[idx[1]]], object[[idx[2]]], name = name) %>% unname())
+
+  m = matrix(NaN, nrow = length(object), ncol = length(object))
+  m[do.call(rbind, pairs)] = unlist(result)
+  as.dist(t(m), diag = FALSE, upper = FALSE)
+})
+
 
 #' @export
-#' @name externalMetric
-#' @param drop Whether to drop the matrix dimensions in case of a single model output.
-#' @return A named `numeric` vector containing the computed model metrics.
-#' @examples
-#' lcModel metric example here
-setMethod('externalMetric', signature('list', 'lcModel'), function(object, object2, name, drop = TRUE) {
+#' @rdname externalMetric
+#' @return For `externalMetric(lcModels, lcModel)`: A named `numeric` vector or `matrix`
+#' containing the computed model metrics.
+setMethod('externalMetric', signature('lcModels', 'lcModel'), .externalMetric.lcModels)
+
+
+#' @export
+#' @rdname externalMetric
+#' @inheritParams metric
+#' @return For `externalMetric(list, lcModel)`: A named `numeric` vector or `matrix`
+#' containing the computed model metrics.
+setMethod('externalMetric',
+  signature('list', 'lcModel'), function(object, object2, name, drop = TRUE) {
   assert_that(is.lcModels(object))
   .externalMetric.lcModels(object, object2, name, drop = drop)
 })
@@ -199,14 +199,15 @@ setMethod('externalMetric', signature('list', 'lcModel'), function(object, objec
 }
 
 #' @export
-#' @name metric
+#' @rdname metric
+#' @param drop Whether to drop the matrix dimensions in case of a single model output.
 #' @return For `metric(list)`: A `data.frame` with a metric per column.
 setMethod('metric', signature('list'), function(object, name, drop = TRUE) {
   .metric.lcModels(as.lcModels(object), name, drop = drop)
 })
 
 #' @export
-#' @name metric
+#' @rdname metric
 #' @return For `metric(lcModels)`: A `data.frame` with a metric per column.
 setMethod('metric', signature('lcModels'), .metric.lcModels)
 
@@ -267,13 +268,14 @@ max.lcModels = function(x, name, ...) {
 #' @inheritParams metric
 #' @inheritParams subset.lcModels
 #' @param by The argument name along which methods are plotted.
-#' @param group The argument names to use for determining groups of different models. By default, all arguments are included.
-#' Specifying group=character() disables grouping.
+#' @param group The argument names to use for determining groups of different models. By default,
+#' all arguments are included.
+#' Specifying `group = character()` disables grouping.
 #' Specifying a single argument for grouping uses that specific column as the grouping column.
 #' In all other cases, groupings are represented by a number.
 #' @return `ggplot2` object.
 #' @examples
-#' plotMetric(models, 'BIC', by='nClusters', group='.name')
+#' plotMetric(models, "BIC", by = "nClusters", group = ".name")
 plotMetric = function(models,
                       name,
                       by = 'nClusters',
@@ -338,7 +340,8 @@ plotMetric = function(models,
 #' @export
 #' @title Subsetting a lcModels list based on method arguments
 #' @param x The `lcModels` or list of `lcModel` to be subsetted.
-#' @param subset Logical expression based on the `lcModel` method arguments, indicating which `lcModel` objects to keep.
+#' @param subset Logical expression based on the `lcModel` method arguments, indicating
+#' which `lcModel` objects to keep.
 #' @param ... Not used.
 #' @param drop Whether to return a `lcModel` object if the result is length 1.
 #' @return A `lcModels` list with the subset of `lcModel` objects.

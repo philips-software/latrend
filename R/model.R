@@ -312,13 +312,54 @@ df.residual.lcModel = function(object, ...) {
 }
 
 
+#. externalMetric ####
+#' @export
+#' @rdname externalMetric
+#' @examples
+#' data(testLongData)
+#' model1 <- latrend(lcMethodKML(), testLongData)
+#' model2 <- latrend(lcMethodLcmmGMM(), testLongData)
+#' ari <- externalMetric(model1, model2, 'adjustedRand')
+#' @return For `externalMetric(lcModel, lcModel)`: A `numeric` vector of the computed metrics.
+#' @family metric functions
+setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, object2, name, ...) {
+  assert_that(is.character(name))
+
+  funMask = name %in% getExternalMetricNames()
+  if (!all(funMask)) {
+    warning(
+      'External metric(s) ',
+      paste0('"', name[!funMask], '"', collapse = ', '),
+      ' are not defined. Returning NA.'
+    )
+  }
+  metricFuns = lapply(name[funMask], getExternalMetricDefinition)
+  metricValues = mapply(function(fun, name) {
+    value = fun(object, object2)
+    assert_that(
+      is.scalar(value) && (is.numeric(value) || is.logical(value)),
+      msg = sprintf(
+        'invalid output for metric "%s"; expected scalar number or logical value',
+        name
+      )
+    )
+    return(value)
+  }, metricFuns, name[funMask])
+
+  allMetrics = rep(NA * 0, length(name))
+  allMetrics[funMask] = unlist(metricValues)
+  names(allMetrics) = name
+  return(allMetrics)
+})
+
+
 #' @export
 #' @importFrom stats fitted
 #' @title Extract lcModel fitted values
 #' @param object The `lcModel` object.
 #' @param ... Additional arguments.
-#' @param clusters Optional cluster assignments per id. If unspecified, a matrix is returned containing the cluster-specific predictions per column.
-#' @return A vector of the fitted values for the respective class, or a matrix of fitted values for each cluster.
+#' @param clusters Optional cluster assignments per id. If unspecified, a `matrix` is returned containing the cluster-specific predictions per column.
+#' @return A `numeric` vector of the fitted values for the respective class, or a `matrix` of fitted values for each cluster.
 #' @family model-specific methods
 fitted.lcModel = function(object, ..., clusters = clusterAssignments(object)) {
   pred = predict(object, newdata = NULL)
@@ -356,6 +397,10 @@ formula.lcModel = function(x, what = 'mu', ...) {
 
 #' @export
 #' @importFrom stats getCall
+#' @title Get the model call
+#' @param x The `lcModel` object.
+#' @param ... Not used.
+#' @keywords internal
 getCall.lcModel = function(x, ...) {
   x@call
 }
@@ -465,7 +510,7 @@ logLik.lcModel = function(object, ...) {
 
 #. metric ####
 #' @export
-#' @name metric
+#' @rdname metric
 #' @examples
 #' data(testLongData)
 #' model = latrend(lcMethodLcmmGMM(), testLongData)
@@ -488,46 +533,6 @@ setMethod('metric', signature('lcModel'), function(object, name = c('AIC', 'BIC'
   metricFuns = lapply(name[funMask], getInternalMetricDefinition)
   metricValues = mapply(function(fun, name) {
     value = fun(object)
-    assert_that(
-      is.scalar(value) && (is.numeric(value) || is.logical(value)),
-      msg = sprintf(
-        'invalid output for metric "%s"; expected scalar number or logical value',
-        name
-      )
-    )
-    return(value)
-  }, metricFuns, name[funMask])
-
-  allMetrics = rep(NA * 0, length(name))
-  allMetrics[funMask] = unlist(metricValues)
-  names(allMetrics) = name
-  return(allMetrics)
-})
-
-
-#. externalMetric ####
-#' @export
-#' @name externalMetric
-#' @examples
-#' data(testLongData)
-#' model1 = latrend(lcMethodKML(), testLongData)
-#' model2 = latrend(lcMethodLcmmGMM(), testLongData)
-#' ari = externalMetric(model1, model2, 'adjustedRand')
-#' @family metric functions
-setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, object2, name, ...) {
-  assert_that(is.character(name))
-
-  funMask = name %in% getExternalMetricNames()
-  if (!all(funMask)) {
-    warning(
-      'External metric(s) ',
-      paste0('"', name[!funMask], '"', collapse = ', '),
-      ' are not defined. Returning NA.'
-    )
-  }
-  metricFuns = lapply(name[funMask], getExternalMetricDefinition)
-  metricValues = mapply(function(fun, name) {
-    value = fun(object, object2)
     assert_that(
       is.scalar(value) && (is.numeric(value) || is.logical(value)),
       msg = sprintf(

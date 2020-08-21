@@ -6,9 +6,9 @@
 #' @rdname metric
 #' @title Compute internal model metric(s)
 #' @param object The `lcModel`, `lcModels`, or `list` of `lcModel` objects to compute the metrics for.
-#' @param name The name(s) of the metric(s) to compute. All defined metrics are computed by default.
+#' @param name The name(s) of the metric(s) to compute.
 #' @param ... Additional arguments.
-#' @return A named `numeric` vector containing the computed model metrics.
+#' @return For `metric(lcModel)`: A named `numeric` vector with the computed model metrics.
 #' @seealso [externalMetric] [min.lcModels] [max.lcModels]
 NULL
 
