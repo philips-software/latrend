@@ -32,8 +32,7 @@ latrend = function(method,
   newmethod = do.call(update, c(object = method, argList))
   environment(newmethod) = envir
 
-  header(verbose,
-         sprintf('Longitudinal clustering using "%s"', getName(newmethod)))
+  header(verbose, sprintf('Longitudinal clustering using "%s"', getName(newmethod)))
   cat(verbose, 'Method arguments:')
   print(verbose, newmethod)
   ruler(verbose)
@@ -44,16 +43,9 @@ latrend = function(method,
 
   # compose
   cmethod = compose(newmethod, envir = envir)
-  assert_that(is.lcMethod(cmethod), msg=paste0('invalid lcMethod output from compose(', class(newmethod), ')'))
-
   id = idVariable(cmethod)
   time = timeVariable(cmethod)
   response = responseVariable(cmethod)
-  assert_that(
-    is.character(idVariable(cmethod)),
-    is.character(timeVariable(cmethod)),
-    is.character(responseVariable(cmethod))
-  )
 
   # transform data
   modelData = transformLatrendData(
@@ -63,19 +55,13 @@ latrend = function(method,
     response = response,
     envir = envir
   )
-  assert_that(is.data.frame(modelData))
 
-  validationResult = validate(cmethod, modelData)
-  if (!isTRUE(validationResult)) {
-    stop('method validation failed: ', validationResult)
-  }
+  validate(cmethod, modelData)
 
   # prepare
   modelEnv = prepareData(method = cmethod,
                          data = modelData,
                          verbose = verbose)
-  assert_that(is.null(modelEnv) ||
-                is.environment(modelEnv), msg = 'prepareData(lcMethod, ...) returned an unexpected object. Should be environment or NULL')
 
   cat(verbose, 'Fitting model')
   pushState(verbose)
@@ -118,21 +104,15 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
     envir = envir,
     verbose = verbose
   )
-  assert_that(is.null(modelEnv) ||
-                is.environment(modelEnv), msg = 'preFit(lcMethod, ...) returned an unexpected object. Should be environment or NULL')
 
   # fit
-  start = Sys.time()
   model = fit(
     method = method,
     data = data,
     envir = modelEnv,
     verbose = verbose
   )
-  estimationTime = Sys.time() - start
-  assert_that(is.lcModel(model), msg = 'fit(lcMethod, ...) returned an unexpected object. Should be of type lcModel.')
 
-  model@method = method
   model@call = do.call(call,
                        c(
                          'latrend',
@@ -140,11 +120,6 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
                          data = quote(mc$data)
                        ))
   model@call['envir'] = list(mc$envir)
-  model@id = idVariable(method)
-  model@time = timeVariable(method)
-  model@response = responseVariable(method)
-  model@label = getLabel(method)
-  model@estimationTime = as.numeric(estimationTime, 'secs')
 
   # postFit
   model = postFit(
@@ -154,7 +129,6 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
     envir = modelEnv,
     verbose = verbose
   )
-  assert_that(inherits(model, 'lcModel'), msg = 'postFit(lcMethod, ...) returned an unexpected object. Should be of type lcModel.')
 
   return(model)
 }
@@ -244,12 +218,8 @@ latrendRep = function(method,
     response = response,
     envir = envir
   )
-  assert_that(is.data.frame(modelData))
 
-  validationResult = validate(cmethod, modelData)
-  if (!isTRUE(validationResult)) {
-    stop('lcMethod validation failed: ', validationResult)
-  }
+  validate(cmethod, modelData)
 
   enter(verbose, 'Preparing...')
   prepEnv = prepareData(method = method,
@@ -601,7 +571,11 @@ createTestDataFolds = function(data, trainDataList, ...) {
 #' @param envir The `environment` used to evaluate the data object in (e.g., in case `object` is of type `call`).
 #' @inheritParams lcMethodKML
 #' @return A `data.frame` with an id, time, and measurement columns.
-setGeneric('transformLatrendData', function(object, id, time, response, envir) standardGeneric('transformLatrendData'))
+setGeneric('transformLatrendData', function(object, id, time, response, envir) {
+  data = standardGeneric('transformLatrendData')
+  assert_that(is.data.frame(data))
+  return(data)
+})
 
 #' @rdname transformLatrendData
 setMethod('transformLatrendData', signature('data.frame'), function(object, id, time, response, envir) {
