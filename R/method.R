@@ -48,7 +48,7 @@ setValidity('lcMethod', function(object) {
 
 #. $ ####
 #' @export
-#' @rdname lcMethod-class
+#' @rdname cash
 #' @title Retrieve and evaluate a lcMethod argument by name
 #' @param x The `lcMethod` object.
 #' @param name Name of the argument to retrieve.
@@ -63,6 +63,7 @@ setMethod('$', signature('lcMethod'), function(x, name) {
 
 #. [[ ####
 #' @name [[,lcMethod
+#' @rdname index-lcMethod
 #' @title Retrieve and evaluate a lcMethod argument by name
 #' @param x The `lcMethod` object.
 #' @param i Name or index of the argument to retrieve.
@@ -437,7 +438,7 @@ lcMethods = function(method, ..., envir = NULL) {
 #' @param envir The `environment` in which the `lcMethod` should be evaluated
 #' @param ... Not used.
 #' @return The updated `lcMethod` object.
-setMethod('compose', signature('lcMethod'), function(method, envir = NULL, ...) {
+setMethod('compose', signature('lcMethod'), function(method, envir = NULL) {
   evaluate.lcMethod(method, try = FALSE, envir = envir)
 })
 
@@ -623,7 +624,7 @@ setMethod('names', signature('lcMethod'), function(x) {
 # . preFit ####
 #' @rdname lcMethod-class
 #' @return An `environment` that will be passed to `fit()`.
-setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose, ...) {
+setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose) {
   return(envir)
 })
 
@@ -631,7 +632,7 @@ setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose
 # . prepareData ####
 #' @rdname lcMethod-class
 #' @return A `data.frame` with the post-processed data.
-setMethod('prepareData', signature('lcMethod'), function(method, data, verbose, ...) {
+setMethod('prepareData', signature('lcMethod'), function(method, data, verbose) {
   return(NULL)
 })
 
@@ -640,7 +641,7 @@ setMethod('prepareData', signature('lcMethod'), function(method, data, verbose, 
 #' @rdname lcMethod-class
 #' @param model The `lcModel` object returned by `fit()`.
 #' @return The updated `lcModel` object.
-setMethod('postFit', signature('lcMethod'), function(method, data, model, envir, verbose, ...) {
+setMethod('postFit', signature('lcMethod'), function(method, data, model, envir, verbose) {
   return(model)
 })
 

@@ -875,7 +875,7 @@ predict.lcModel = function(object, ...,
 #' @return A `vector` with the predictions per `newdata` observation, or a `data.frame` with the predictions and newdata alongside.
 #' @seealso [predict.lcModel]
 #' @family model-specific methods
-setMethod('predictForCluster', signature('lcModel'), function(object, cluster, newdata, what = 'mu', ...) {
+setMethod('predictForCluster', signature('lcModel'), function(object, newdata = NULL, cluster, ..., what = 'mu') {
   assert_that(is.newdata(newdata), !is.null(newdata))
   warning(
     'predictForCluster() not implemented for ',

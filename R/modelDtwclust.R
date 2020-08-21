@@ -19,7 +19,7 @@ setMethod('postprob', signature('lcModelDtwclust'), function(object) {
 })
 
 #. predictForCluster ####
-setMethod('predictForCluster', signature('lcModelDtwclust'), function(object, cluster, newdata, what = 'mu', ...) {
+setMethod('predictForCluster', signature('lcModelDtwclust'), function(object, newdata, cluster, what = 'mu', ...) {
   assert_that(cluster %in% clusterNames(object))
 
   k = match(cluster, clusterNames(object))

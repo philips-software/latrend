@@ -9,7 +9,7 @@ setMethod('postprob', signature('lcModelMixAK_GLMMlist'), function(object) {
 })
 
 
-setMethod('predictForCluster', signature('lcModelMixAK_GLMMlist'), function(object, cluster, newdata, what = 'mu', ...) {
+setMethod('predictForCluster', signature('lcModelMixAK_GLMMlist'), function(object, newdata, cluster, what = 'mu', ...) {
   models = getGLMM_MCMCs(object)
   k = match(cluster, clusterNames(object))
 

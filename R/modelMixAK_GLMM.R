@@ -15,7 +15,7 @@ setMethod('postprob', signature('lcModelMixAK_GLMM'), function(object) {
 
 
 #. predictForCluster ####
-setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, cluster, newdata, what = 'mu', ...) {
+setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, newdata, cluster, what = 'mu', ...) {
   predictForCluster(object@model, cluster = cluster, newdata = newdata, what = what, ...)
 })
 
@@ -37,7 +37,7 @@ setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, 
   pred[, k]
 }
 
-setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, cluster, newdata, what = 'mu', ...) {
+setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, newdata, cluster, what = 'mu', ...) {
   .predictForCluster_GLMM_MCMC(object@model,
                                method = getLcMethod(object),
                                k = match(cluster, clusterNames(object)),
