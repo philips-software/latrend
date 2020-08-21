@@ -105,10 +105,6 @@ setValidity('lcModel', function(object) {
 #'
 #' clusterTrajectories(model, at=c(0, .5, 1))
 #' @family model-specific methods
-setGeneric('clusterTrajectories', function(object,
-                                           at = time(object),
-                                           what = 'mu',
-                                           ...) standardGeneric('clusterTrajectories'))
 setMethod('clusterTrajectories', signature('lcModel'), function(object, at, what, ...) {
   if (is.numeric(at)) {
     newdata = data.table(
@@ -183,14 +179,10 @@ clusterSizes = function(object) {
 
 #. clusterProportions ####
 #' @export
+#' @rdname clusterProportions
 #' @title Proportional size of each cluster
-#' @rdname clusterProportions
-#' @param object The object to obtain the proportions from.
-#' @param ... Additional arguments.
-setGeneric('clusterProportions', function(object, ...) standardGeneric('clusterProportions'))
-
-#' @export
-#' @rdname clusterProportions
+#' @param object The `lcModel` to obtain the proportions from.
+#' @param ... Not used.
 #' @examples
 #' data(testLongData)
 #' model <- latrend(lcMethodKML(), testLongData)
@@ -204,16 +196,11 @@ setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
 
 #. clusterAssignments ####
 #' @export
+#' @rdname clusterAssignments
 #' @title Get the cluster membership of each trajectory
-#' @rdname clusterAssignments
-#' @param object The object to obtain the cluster assignments from.
-#' @param ... Additional arguments.
-setGeneric('clusterAssignments', function(object, ...) standardGeneric('clusterAssignments'))
-
-#' @export
-#' @rdname clusterAssignments
 #' @details While the default strategy is [which.max], it is recommended to use \link[nnet]{which.is.max} instead, as this function breaks ties randomly.
 #' Another strategy to consider is the function [which.weight], which enables weighted sampling of cluster assignments.
+#' @param object The `lcModel` to obtain the cluster assignments from.
 #' @param strategy A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.
 #' @param ... Any additional arguments passed to the strategy function.
 #' @examples
@@ -273,16 +260,13 @@ confusionMatrix.lcModel = function(object, ...) {
 
 # . converged ####
 #' @export
-#' @rdname latrend-generics
-#' @title Whether the model converged
+#' @rdname converged
+#' @title Check model convergence
 #' @description Check convergence of the fitted model.
-#' @param object The model to check for convergence.
+#' @param object The `lcModel` to check for convergence.
 #' @param ... Additional arguments.
 #' @return Either `logical` indicating convergence, or a `numeric` status code.
 #' @family model-specific methods
-setGeneric('converged', function(object, ...) standardGeneric('converged'))
-
-#' @rdname converged
 setMethod('converged', signature('lcModel'), function(object, ...) {
   TRUE
 })
@@ -375,8 +359,8 @@ getCall.lcModel = function(x, ...) {
 }
 
 #' @export
-#' @rdname getLabel
-setMethod('getLabel', signature('lcModel'), function(object) {
+#' @rdname lcModel-class
+setMethod('getLabel', signature('lcModel'), function(object, ...) {
   object@label
 })
 
@@ -395,7 +379,7 @@ getLcMethod = function(object) {
 
 # . getName ####
 #' @export
-#' @rdname getName
+#' @rdname lcModel-class
 #' @description Extracts the name of the `lcModel` object. The name is comprised of the underlying `lcMethod` name, and the assigned label (if any).
 setMethod('getName', signature('lcModel'), function(object) {
   basename = getLcMethod(object) %>% getName()
@@ -409,7 +393,7 @@ setMethod('getName', signature('lcModel'), function(object) {
 
 # . getShortName ####
 #' @export
-#' @rdname getShortName
+#' @rdname lcModel-class
 setMethod('getShortName', signature('lcModel'), function(object)
   getLcMethod(object) %>% getShortName())
 
@@ -456,8 +440,7 @@ ids = function(object) {
 #' idVariable(model) # "Id"
 #'
 #' @family lcModel variables
-setMethod('idVariable', signature('lcModel'), function(object)
-  object@id)
+setMethod('idVariable', signature('lcModel'), function(object) object@id)
 
 
 #' @export
@@ -480,29 +463,23 @@ logLik.lcModel = function(object, ...) {
 
 #. metric ####
 #' @export
-#' @rdname latrend-generics
+#' @rdname metric
 #' @title Compute internal model metric(s)
 #' @description Internal metric.
 #' @param object The `lcModel`, `lcModels`, or `list` of `lcModel` objects to compute the metrics for.
 #' @param name The name(s) of the metric(s) to compute. All defined metrics are computed by default.
 #' @param ... Additional arguments.
+#' @return A named `numeric` vector containing the computed model metrics.
 #' @examples
 #' data(testLongData)
 #' model = latrend(lcMethodLcmmGMM(), testLongData)
 #' bic = metric(model, 'BIC')
 #'
 #' ic = metric(model, c('AIC', 'BIC'))
-#' @family metric functions
-setGeneric('metric', function(object,
-                              name = c('logLik', 'AIC', 'BIC', 'WRSS', 'APPA'),
-                              ...) standardGeneric('metric'))
-
-#' @export
-#' @rdname metric
-#' @return A named `numeric` vector containing the computed model metrics.
 #' @examples
 #' lcModel metric example here
-setMethod('metric', signature('lcModel'), function(object, name) {
+#' @family metric functions
+setMethod('metric', signature('lcModel'), function(object, name = c('logLik', 'AIC', 'BIC', 'WRSS', 'APPA'), ...) {
   assert_that(is.lcModel(object),
               is.character(name))
 
@@ -536,23 +513,17 @@ setMethod('metric', signature('lcModel'), function(object, name) {
 
 #. externalMetric ####
 #' @export
-#' @rdname latrend-generics
+#' @rdname metric
 #' @title Compute external comparison metric(s) based on a reference lcModel.
-#' @param object2 The other lcModel to compare with.
+#' @param object2 The other `lcModel` to compare with.
+#' @return A named `numeric` vector containing the computed model metrics.
 #' @examples
 #' data(testLongData)
 #' model1 = latrend(lcMethodKML(), testLongData)
 #' model2 = latrend(lcMethodLcmmGMM(), testLongData)
 #' bic = externalMetric(model1, model2, 'Rand')
 #' @family metric functions
-setGeneric('externalMetric', function(object, object2, name = 'adjustedRand', ...) standardGeneric('externalMetric'))
-
-#' @export
-#' @rdname metric
-#' @return A named `numeric` vector containing the computed model metrics.
-#' @examples
-#' lcModel metric example here
-setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, object2, name) {
+setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, object2, name, ...) {
   assert_that(is.lcModel(object))
   assert_that(is.lcModel(object2))
   assert_that(is.character(name))
@@ -895,7 +866,7 @@ predict.lcModel = function(object, ...,
 
 # . predictForCluster ####
 #' @export
-#' @rdname latrend-generics
+#' @rdname predictForCluster
 #' @title lcModel prediction for a specific cluster
 #' @description Predicts the expected trajectory observations at the given time under the assumption that the trajectory belongs to the specified cluster.
 #' @inheritParams predict.lcModel
@@ -904,9 +875,6 @@ predict.lcModel = function(object, ...,
 #' @return A `vector` with the predictions per `newdata` observation, or a `data.frame` with the predictions and newdata alongside.
 #' @seealso [predict.lcModel]
 #' @family model-specific methods
-setGeneric('predictForCluster', function(object, cluster, newdata, what = 'mu', ...) standardGeneric('predictForCluster'))
-
-#' @rdname predictForCluster
 setMethod('predictForCluster', signature('lcModel'), function(object, cluster, newdata, what = 'mu', ...) {
   assert_that(is.newdata(newdata), !is.null(newdata))
   warning(
@@ -922,17 +890,14 @@ setMethod('predictForCluster', signature('lcModel'), function(object, cluster, n
 
 # . predictPostprob ####
 #' @export
-#' @rdname latrend-generics
+#' @rdname predictPostprob
 #' @title lcModel posterior probability prediction
 #' @details The default implementation returns a uniform probability matrix.
-#' @param object The model to predict the posterior probabilities with.
+#' @param object The `lcModel` to predict the posterior probabilities with.
 #' @param newdata Optional data frame for which to compute the posterior probability. If omitted, the model training data is used.
 #' @param ... Additional arguments.
 #' @return A `matrix` indicating the posterior probability per trajectory per measurement on each row, for each cluster (the columns).
 #' @family model-specific methods
-setGeneric('predictPostprob', function(object, newdata = NULL, ...) standardGeneric('predictPostprob'))
-
-#' @rdname predictPostprob
 setMethod('predictPostprob', signature('lcModel'), function(object, newdata, ...) {
   warning(
     'predictPostprob() not implemented for ',
@@ -957,20 +922,13 @@ setMethod('predictPostprob', signature('lcModel'), function(object, newdata, ...
 
 #. predictAssignments ####
 #' @export
-#' @rdname latrend-generics
-#' @title Predict the cluster assignments
-#' @inheritParams predictPostprob
-#' @param ... Additional arguments.
-#' @seealso [predictPostprob]
-setGeneric('predictAssignments', function(object, newdata = NULL, ...) standardGeneric('predictAssignments'))
-
-#' @export
 #' @rdname predictAssignments
 #' @title Predict the cluster assignments for new trajectories
 #' @description Computes the posterior probability based on the provided (observed) data.
 #' @param strategy A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.
 #' @details The default implementation uses [predictPostprob] to determine the cluster membership.
 #' @return A `factor` with length `nrow(newdata)` that indicates the posterior probability per trajectory per observation.
+#' @seealso [predictPostprob]
 #' @family model-specific methods
 setMethod('predictAssignments', signature('lcModel'), function(object, newdata, strategy = which.max, ...) {
   pp = predictPostprob(object, newdata = newdata)
@@ -1047,18 +1005,15 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
 
 #. postprob ####
 #' @export
-#' @rdname latrend-generics
+#' @rdname postprob
 #' @title Posterior probability per fitted id
-#' @param object The model.
+#' @param object The `lcModel`.
 #' @param ... Additional arguments.
 #' @examples
 #' model = latrend(lcMethodLcmmGMM(), data=testLongData)
 #' postprob(model)
 #' @family model-specific methods
-setGeneric('postprob', function(object, ...) standardGeneric('postprob'))
-
-#' @rdname postprob
-setMethod('postprob', signature('lcModel'), function(object) {
+setMethod('postprob', signature('lcModel'), function(object, ...) {
   warning('postprob() not implemented for ', class(object)[1],
     '. Returning uniform posterior probability matrix.')
 
@@ -1072,12 +1027,9 @@ setMethod('postprob', signature('lcModel'), function(object) {
 
 # . QQ plot ####
 #' @export
-#' @rdname latrend-generics
+#' @rdname plotQQ
 #' @title Quantile-quantile plot
 #' @param object The model.
-setGeneric('plotQQ', function(object, ...) standardGeneric('plotQQ'))
-
-#' @rdname plotQQ
 #' @param byCluster Whether to plot the Q-Q line per cluster
 #' @param ... Other arguments passed to qqplotr::geom_qq_band, qqplotr::stat_qq_line, and qqplotr::stat_qq_point.
 setMethod('plotQQ', signature('lcModel'), function(object, byCluster = FALSE, ...) {

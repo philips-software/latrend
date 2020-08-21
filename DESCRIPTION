@@ -60,6 +60,7 @@ Collate:
     'compute.R'
     'data.R'
     'formula.R'
+    'generics.R'
     'latrend.R'
     'matrix.R'
     'method.R'

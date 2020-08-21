@@ -2,17 +2,12 @@
 #' @export
 #' @rdname plotTrajectories
 #' @title Plot trajectories
-#' @param object The object to plot the trajectories for.
-#' @param ... Additional arguments.
-setGeneric('plotTrajectories', function(object, ...) standardGeneric('plotTrajectories'))
-
-#' @export
-#' @rdname plotTrajectories
 #' @inheritParams trajectories
 #' @inheritParams transformLatrendData
 #' @param response Response variable `character` name or a `call`.
 #' @param cluster Cluster variable name. If unspecified, trajectories are not grouped. Alternatively, cluster is a vector indicating cluster membership per id.
 #' @param facet Whether to facet by cluster.
+#' @param ... Additional arguments.
 #' @examples
 #' data(testLongData)
 #' plotTrajectories(testLongData, response = 'Value')
@@ -62,12 +57,6 @@ setMethod('plotTrajectories', signature('data.frame'), function(object,
 #' @export
 #' @rdname plotClusterTrajectories
 #' @title Plot cluster trajectories
-#' @param object The object to plot the cluster trajectories for.
-#' @param ... Additional arguments.
-setGeneric('plotClusterTrajectories', function(object, ...) standardGeneric('plotClusterTrajectories'))
-
-#' @export
-#' @rdname plotClusterTrajectories
 #' @inheritParams transformLatrendData
 #' @inheritParams clusterTrajectories
 #' @param object The (cluster) trajectory data.
@@ -75,6 +64,7 @@ setGeneric('plotClusterTrajectories', function(object, ...) standardGeneric('plo
 #' @param center A function for aggregating multiple points at the same point in time
 #' @param showTrajs Whether to plot the original data in addition to the cluster (i.e., center) trajectories
 #' @param id Id column. Only needed when `showTrajs = TRUE`.
+#' @param ... Additional arguments.
 setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     response,
     cluster = 'Cluster',

@@ -432,10 +432,6 @@ lcMethods = function(method, ..., envir = NULL) {
 
 #. compose ####
 #' @export
-#' @rdname latrend-generics
-setGeneric('compose', function(method, ...) standardGeneric('compose'))
-
-#' @export
 #' @rdname lcMethod-class
 #' @param method The `lcMethod` object.
 #' @param envir The `environment` in which the `lcMethod` should be evaluated
@@ -447,10 +443,6 @@ setMethod('compose', signature('lcMethod'), function(method, envir = NULL, ...) 
 
 
 # . fit ####
-#' @export
-#' @rdname latrend-generics
-setGeneric('fit', function(method, ...) standardGeneric('fit'))
-
 #' @export
 #' @rdname lcMethod-class
 #' @title lcMethod interface
@@ -507,18 +499,17 @@ getCall.lcMethod = function(x, ...) {
 
 
 #. getLabel ####
-#' @export
-#' @rdname latrend-generics
-#' @title Extract the object label.
-#' @description Extracts the assigned label for the given object.
-#' @param object The object to extract the label from.
-#' @param ... Additional arguments.
+
 #' @return The extracted label, as `character`.
-setGeneric('getLabel', function(object, ...) standardGeneric('getLabel'))
+
 
 #' @export
-#' @rdname getLabel
-setMethod('getLabel', signature('lcMethod'), function(object) {
+#' @rdname lcMethod-class
+#' @title Extract the method label.
+#' @description Extracts the assigned label.
+#' @param object The object to extract the label from.
+#' @param ... Additional arguments.
+setMethod('getLabel', signature('lcMethod'), function(object, ...) {
   if (hasName(object, 'label')) {
     object$label
   } else {
@@ -529,31 +520,16 @@ setMethod('getLabel', signature('lcMethod'), function(object) {
 
 #. getName ####
 #' @export
-#' @rdname latrend-generics
-#' @title Extract the object name
+#' @rdname lcMethod-class
 #' @description Extracts the name of the given `object`.
-#' @param object The object to extract the name from.
-#' @param ... Additional arguments.
-#' @return A `character` containing the name.
-setGeneric('getName', function(object, ...) standardGeneric('getName'))
-
-#' @export
-#' @rdname getName
 #' @examples
 #' getName(lcMethodKML()) # "longitudinal k-means"
 setMethod('getName', signature('lcMethod'), function(object) 'custom')
 
 #. getShortName ####
 #' @export
-#' @rdname latrend-generics
+#' @rdname lcMethod-class
 #' @title Extract the short object name
-#' @param object The object to extract  the short name from.
-#' @param ... Additional arguments.
-#' @return A `character` containing the name.
-setGeneric('getShortName', function(object, ...) standardGeneric('getShortName'))
-
-#' @export
-#' @rdname getShortName
 #' @examples
 #' getShortName(lcMethodKML()) # "KML"
 setMethod('getShortName', signature('lcMethod'), getName)
@@ -561,16 +537,12 @@ setMethod('getShortName', signature('lcMethod'), getName)
 
 #. idVariable ####
 #' @export
-#' @rdname latrend-generics
+#' @rdname idVariable
 #' @title Extract the trajectory identifier variable
 #' @description Extracts the trajectory identifier variable (i.e., column name) from the given `object`.
 #' @param object The object to extract the variable from.
-#' @param ... Additional arguments.
+#' @param ... Not used.
 #' @return The trajectory identifier name, as `character`.
-setGeneric('idVariable', function(object, ...) standardGeneric('idVariable'))
-
-#' @export
-#' @rdname idVariable
 #' @examples
 #' method <- lcMethodKML(id = "Traj")
 #' idVariable(method) # "Traj"
@@ -616,7 +588,7 @@ isArgDefined = function(object, name, envir = environment(object)) {
 #' @param x The object to check the class of.
 #' @keywords internal
 is.lcMethod = function(x) {
-  isS4(x) && is(object, 'lcMethod')
+  isS4(x) && is(x, 'lcMethod')
 }
 
 
@@ -631,6 +603,7 @@ setMethod('length', signature('lcMethod'), function(x) {
 
 #. names ####
 #' @title lcMethod argument names
+#' @rdname lcMethod-class
 #' @param x The `lcMethod` object.
 #' @return A `character vector` of argument names.
 #' @examples
@@ -648,10 +621,6 @@ setMethod('names', signature('lcMethod'), function(x) {
 
 
 # . preFit ####
-#' @export
-#' @rdname latrend-generics
-setGeneric('preFit', function(method, ...) standardGeneric('preFit'))
-
 #' @rdname lcMethod-class
 #' @return An `environment` that will be passed to `fit()`.
 setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose) {
@@ -660,10 +629,6 @@ setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose
 
 
 # . prepareData ####
-#' @export
-#' @rdname latrend-generics
-setGeneric('prepareData', function(method, ...) standardGeneric('prepareData'))
-
 #' @rdname lcMethod-class
 #' @return A `data.frame` with the post-processed data.
 setMethod('prepareData', signature('lcMethod'), function(method, data, verbose) {
@@ -672,10 +637,6 @@ setMethod('prepareData', signature('lcMethod'), function(method, data, verbose) 
 
 
 # . postFit ####
-#' @export
-#' @rdname latrend-generics
-setGeneric('postFit', function(method, ...) standardGeneric('postFit'))
-
 #' @rdname lcMethod-class
 #' @param model The `lcModel` object returned by `fit()`.
 #' @return The updated `lcModel` object.
@@ -869,16 +830,12 @@ update.lcMethod = function(object,
 
 #. responseVariable ####
 #' @export
-#' @rdname latrend-generics
+#' @rdname responseVariable
 #' @title Extract the response variable
 #' @description Extracts the response variable from the given `object`.
 #' @param object The object to extract the response variable from.
 #' @param ... Additional arguments.
 #' @return The response variable name as a `character`.
-setGeneric('responseVariable', function(object, ...) standardGeneric('responseVariable'))
-
-#' @export
-#' @rdname responseVariable
 #' @details If the `lcMethod` object specifies a `formula` argument, then the response is extracted from the response term of the formula.
 #' @examples
 #' method <- lcMethodKML("Value")
@@ -911,14 +868,6 @@ setMethod('show', 'lcMethod', function(object) {
 
 # . strip ####
 #' @export
-#' @rdname latrend-generics
-#' @description Reduce the (serialized) memory footprint of an object.
-#' @details Serializing references to environments results in the serialization of the object together with any associated environments and references. This method removes those environments and references, greatly reducing the serialized object size.
-#' @param object The object to strip.
-#' @param ... Additional arguments.
-#' @return The stripped (i.e., updated) object.
-setGeneric('strip', function(object, ...) standardGeneric('strip'))
-
 #' @title Strip a lcMethod for serialization
 #' @rdname lcMethod-class
 #' @param object The `lcMethod` object.
@@ -939,16 +888,12 @@ setMethod('strip', signature('lcMethod'), function(object, ...) {
 
 #. timeVariable ####
 #' @export
-#' @rdname latrend-generics
+#' @rdname timeVariable
 #' @title Extract the time variable
 #' @description Extracts the time variable (i.e., column name) from the given `object`.
 #' @param object The object to extract the variable from.
 #' @param ... Additional arguments.
 #' @return The time variable name, as `character`.
-setGeneric('timeVariable', function(object, ...) standardGeneric('timeVariable'))
-
-#' @export
-#' @rdname timeVariable
 #' @examples
 #' method <- lcMethodKML(time = "Assessment")
 #' timeVariable(method) # "Assessment"
@@ -958,14 +903,10 @@ setMethod('timeVariable', signature('lcMethod'), function(object, ...) object$ti
 
 #. validate ####
 #' @export
-#' @rdname latrend-generics
-setGeneric('validate', function(method, data, ...) standardGeneric('validate'))
-
-#' @export
 #' @rdname lcMethod-class
 #' @return Either `TRUE` if all validation checks passed,
 #' or a `character` containing a description of the failed validation checks.
-setMethod('validate', signature('lcMethod'), function(method, data, envir = NULL) {
+setMethod('validate', signature('lcMethod'), function(method, data, envir = NULL, ...) {
   validate_that(
     hasName(data, idVariable(method)),
     hasName(data, timeVariable(method)),
