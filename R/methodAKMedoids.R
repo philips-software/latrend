@@ -22,7 +22,7 @@ setClass('lcMethodAKMedoids', contains = 'lcMatrixMethod')
 lcMethodAKMedoids = function(response,
                              time = getOption('latrend.time'),
                              id = getOption('latrend.id'),
-                             nClusters = 2,
+                             nClusters = 3, # must be > 2
                              clusterCenter = median,
                              ...) {
   lcMethod.call(
