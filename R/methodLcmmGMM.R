@@ -73,9 +73,10 @@ lcMethodLcmmGMM = function(formula,
   )
 }
 
-
+#' @rdname interface-lcmm
 setMethod('getName', signature('lcMethodLcmmGMM'), function(object) 'growth mixture model')
 
+#' @rdname interface-lcmm
 setMethod('getShortName', signature('lcMethodLcmmGMM'), function(object) 'gmm')
 
 gmm_prepare = function(method, data, envir, verbose, ...) {
@@ -118,6 +119,7 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
 
   return(e)
 }
+#' @rdname interface-lcmm
 setMethod('preFit', signature('lcMethodLcmmGMM'), gmm_prepare)
 
 ##
@@ -152,6 +154,7 @@ gmm_fit = function(method, data, envir, verbose, ...) {
   return(model)
 }
 
+#' @rdname interface-lcmm
 setMethod('fit', signature('lcMethodLcmmGMM'), function(method, data, envir, verbose, ...) {
   model = gmm_fit(method, data, envir, verbose, ...)
 

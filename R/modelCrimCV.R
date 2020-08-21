@@ -1,7 +1,7 @@
 #' @include model.R
 setClass('lcModelCrimCV', contains = 'lcModel')
 
-
+#' @rdname interface-crimCV
 setMethod('postprob', signature('lcModelCrimCV'), function(object) {
   pp = object@model$gwt
   colnames(pp) = clusterNames(object)
@@ -10,6 +10,8 @@ setMethod('postprob', signature('lcModelCrimCV'), function(object) {
 
 
 #' @export
+#' @rdname interface-crimCV
+#' @inheritParams predict.lcModel
 predict.lcModelCrimCV = function(object, ...,
                                  newdata = NULL,
                                  what = 'mean') {
@@ -55,7 +57,8 @@ predict.lcModelCrimCV = function(object, ...,
                    newdata = newdata)
 }
 
-
+#' @rdname interface-crimCV
+#' @inheritParams fitted.lcModel
 fitted.lcModelCrimCV = function(object, ...,
                                 clusters = clusterAssignments(object),
                                 what = 'mean') {
@@ -65,6 +68,7 @@ fitted.lcModelCrimCV = function(object, ...,
 
 
 #' @export
+#' @rdname interface-crimCV
 logLik.lcModelCrimCV = function(object, ...) {
   ll = object@model$llike
   attr(ll, 'nobs') = nIds(object) #crimCV uses nIds*nTime
@@ -75,6 +79,7 @@ logLik.lcModelCrimCV = function(object, ...) {
 
 
 #' @export
+#' @rdname interface-crimCV
 coef.lcModelCrimCV = function(object, ...) {
   betaMat = object@model$beta
   colnames(betaMat) = clusterNames(object)
@@ -93,7 +98,7 @@ coef.lcModelCrimCV = function(object, ...) {
   return(coefMat)
 }
 
-
+#' @rdname interface-crimCV
 setMethod('converged', signature('lcModelCrimCV'), function(object) {
   TRUE
 })

@@ -2,6 +2,8 @@
 setClass('lcModelFunFEM', contains = 'lcModel')
 
 #' @export
+#' @rdname interface-funFEM
+#' @inheritParams fitted.lcModel
 fitted.lcModelFunFEM = function(object, ..., clusters = clusterAssignments(object)) {
   times = time(object)
   newdata = data.table(Id = rep(ids(object), each = length(times)),
@@ -14,6 +16,8 @@ fitted.lcModelFunFEM = function(object, ..., clusters = clusterAssignments(objec
 
 
 #' @export
+#' @rdname interface-funFEM
+#' @inheritParams predict.lcModel
 predict.lcModelFunFEM = function(object, ...,
                                  newdata = NULL,
                                  what = 'mu',
@@ -37,14 +41,15 @@ predict.lcModelFunFEM = function(object, ...,
                    newdata = newdata)
 }
 
-
-setMethod('postprob', signature('lcModelFunFEM'), function(object) {
+#' @rdname interface-funFEM
+setMethod('postprob', signature('lcModelFunFEM'), function(object, ...) {
   pp = object@model$P
   colnames(pp) = clusterNames(object)
   return(pp)
 })
 
 #' @export
+#' @rdname interface-funFEM
 coef.lcModelFunFEM = function(object, ...) {
   coefMat = t(object@model$prms$my)
   colnames(coefMat) = clusterNames(object)
@@ -53,6 +58,7 @@ coef.lcModelFunFEM = function(object, ...) {
 
 
 #' @export
+#' @rdname interface-funFEM
 logLik.lcModelFunFEM = function(object, ...) {
   ll = object@model$ll
   attr(ll, 'nobs') = nIds(object)
@@ -61,6 +67,7 @@ logLik.lcModelFunFEM = function(object, ...) {
   return(ll)
 }
 
-setMethod('converged', signature('lcModelFunFEM'), function(object) {
+#' @rdname interface-funFEM
+setMethod('converged', signature('lcModelFunFEM'), function(object, ...) {
   TRUE
 })

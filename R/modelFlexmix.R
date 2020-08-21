@@ -3,6 +3,8 @@ setClass('lcModelFlexmix', contains = 'lcModel')
 
 
 #' @export
+#' @rdname interface-flexmix
+#' @inheritParams predict.lcModel
 predict.lcModelFlexmix = function(object, ...,
                                   newdata = NULL,
                                   what = 'mu') {
@@ -24,6 +26,8 @@ predict.lcModelFlexmix = function(object, ...,
 
 
 #' @export
+#' @rdname interface-flexmix
+#' @inheritParams fitted.lcModel
 fitted.lcModelFlexmix = function(object, ..., clusters = clusterAssignments(object)) {
   predNames = paste0('pred_m', 1:nClusters(object))
   predMat = flexmix::fitted(object@model) %>%
@@ -33,22 +37,26 @@ fitted.lcModelFlexmix = function(object, ..., clusters = clusterAssignments(obje
                   clusters = clusters)
 }
 
-setMethod('postprob', signature('lcModelFlexmix'), function(object) {
+#' @rdname interface-flexmix
+setMethod('postprob', signature('lcModelFlexmix'), function(object, ...) {
   pp = postProbFromObs(object@model@posterior$scaled, genIdRowIndices(object))
   colnames(pp) = clusterNames(object)
   return(pp)
 })
 
 #' @export
+#' @rdname interface-flexmix
 logLik.lcModelFlexmix = function(object, ...) {
   logLik(object@model)
 }
 
 #' @export
+#' @rdname interface-flexmix
 coef.lcModelFlexmix = function(object, ...) {
   flexmix::parameters(object@model)
 }
 
-setMethod('converged', signature('lcModelFlexmix'), function(object) {
+#' @rdname interface-flexmix
+setMethod('converged', signature('lcModelFlexmix'), function(object, ...) {
   object@model@converged
 })

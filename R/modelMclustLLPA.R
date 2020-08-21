@@ -3,6 +3,8 @@ setClass('lcModelMclustLLPA', contains = 'lcModel')
 
 
 #' @export
+#' @rdname interface-mclust
+#' @inheritParams predict.lcModel
 predict.lcModelMclustLLPA = function(object,
                                      ...,
                                      newdata = NULL,
@@ -35,6 +37,8 @@ predict.lcModelMclustLLPA = function(object,
 
 
 #' @export
+#' @rdname interface-mclust
+#' @inheritParams fitted.lcModel
 fitted.lcModelMclustLLPA = function(object, ..., clusters = clusterAssignments(object)) {
   times = time(object)
   newdata = data.table(Id = rep(ids(object), each = length(times)),
@@ -47,7 +51,8 @@ fitted.lcModelMclustLLPA = function(object, ..., clusters = clusterAssignments(o
 
 
 # . postprob ####
-setMethod('postprob', signature('lcModelMclustLLPA'), function(object) {
+#' @rdname interface-mclust
+setMethod('postprob', signature('lcModelMclustLLPA'), function(object, ...) {
   pp = object@model$z
   colnames(pp) = clusterNames(object)
   return(pp)
@@ -55,8 +60,9 @@ setMethod('postprob', signature('lcModelMclustLLPA'), function(object) {
 
 
 #. predictPostprob ####
-setMethod('predictPostprob', signature('lcModelMclustLLPA'), function(object, newdata =
-                                                                        NULL) {
+#' @rdname interface-mclust
+setMethod('predictPostprob',
+  signature('lcModelMclustLLPA'), function(object, newdata = NULL, ...) {
   if (is.null(newdata)) {
     postprob(object)
   } else {
@@ -67,6 +73,7 @@ setMethod('predictPostprob', signature('lcModelMclustLLPA'), function(object, ne
 
 
 # . converged ####
-setMethod('converged', signature('lcModelMclustLLPA'), function(object) {
+#' @rdname interface-mclust
+setMethod('converged', signature('lcModelMclustLLPA'), function(object, ...) {
   TRUE
 })

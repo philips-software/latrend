@@ -1,5 +1,12 @@
 #' @include method.R
 #' @include methodLcmmGMM.R
+
+#' @name interface-lcmm
+#' @rdname interface-lcmm
+#' @title lcmm interface
+#' @seealso [lcMethodLcmmGBTM] [lcMethodLcmmGMM] \link[lcmm]{lcmm-package}
+NULL
+
 setClass('lcMethodLcmmGBTM', contains = 'lcMethod')
 
 setValidity('lcMethodLcmmGBTM', function(object) {
@@ -63,13 +70,18 @@ lcMethodLcmmGBTM = function(formula,
   )
 }
 
-
+#' @rdname interface-lcmm
+#' @inheritParams getName
 setMethod('getName', signature('lcMethodLcmmGBTM'), function(object) 'group-based trajectory modeling using lcmm')
 
+#' @rdname interface-lcmm
 setMethod('getShortName', signature('lcMethodLcmmGBTM'), function(object) 'gbtm')
 
+#' @rdname interface-lcmm
 setMethod('preFit', signature('lcMethodLcmmGBTM'), gmm_prepare)
 
+#' @rdname interface-lcmm
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodLcmmGBTM'), function(method, data, envir, verbose, ...) {
   model = gmm_fit(method, data, envir, verbose, ...)
 

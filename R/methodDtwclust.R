@@ -1,4 +1,11 @@
 #' @include method.R
+
+#' @name interface-dtwclust
+#' @rdname interface-dtwclust
+#' @title dtwclust interface
+#' @seealso [lcMethodDtwclust] \link[dtwclust]{dtwclust-package}
+NULL
+
 setClass('lcMethodDtwclust', contains = 'lcMethod')
 
 #' @export
@@ -31,10 +38,14 @@ lcMethodDtwclust = function(response,
   return(m)
 }
 
+#' @rdname interface-dtwclust
+#' @inheritParams getName
 setMethod('getName', signature('lcMethodDtwclust'), function(object) paste0('time series clustering with ', object$distance, '-dissimilarity'))
 
+#' @rdname interface-dtwclust
 setMethod('getShortName', signature('lcMethodDtwclust'), function(object) paste0('diss-', object$distance))
 
+#' @rdname interface-dtwclust
 setMethod('preFit', signature('lcMethodDtwclust'), function(method, data, envir, verbose, ...) {
   e = new.env()
   # convert data to list format
@@ -43,6 +54,8 @@ setMethod('preFit', signature('lcMethodDtwclust'), function(method, data, envir,
   return(e)
 })
 
+#' @rdname interface-dtwclust
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodDtwclust'), function(method, data, envir, verbose, ...) {
   args = as.list(method)
   args$series = envir$seriesList

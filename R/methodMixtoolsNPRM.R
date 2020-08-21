@@ -36,10 +36,13 @@ lcMethodMixtoolsNPRM = function(response,
   )
 }
 
+#' @rdname interface-mixtools
 setMethod('getName', signature('lcMethodMixtoolsNPRM'), function(object) 'non-parametric estimation for independent repeated measurements using mixtools')
 
+#' @rdname interface-mixtools
 setMethod('getShortName', signature('lcMethodMixtoolsNPRM'), function(object) 'nprm')
 
+#' @rdname interface-mixtools
 setMethod('fit', signature('lcMethodMixtoolsNPRM'), function(method, data, envir, verbose, ...) {
   args = as.list(method, args = mixtools::npEM)
   args$x = envir$dataMat

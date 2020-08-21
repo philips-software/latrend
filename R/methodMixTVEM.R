@@ -1,4 +1,11 @@
 #' @include method.R
+
+#' @name interface-mixtvem
+#' @rdname interface-mixtvem
+#' @title mixtvem interface
+#' @seealso [lcMethodMixTVEM]
+NULL
+
 setClass('lcMethodMixTVEM', contains = 'lcMethod')
 
 setValidity('lcMethodMixTVEM', function(object) {
@@ -86,12 +93,14 @@ lcMethodMixTVEM = function(formula,
   )
 }
 
-
+#' @rdname interface-mixtvem
+#' @inheritParams getName
 setMethod('getName', signature('lcMethodMixTVEM'), function(object) 'mixture of time-varying effect models')
 
+#' @rdname interface-mixtvem
 setMethod('getShortName', signature('lcMethodMixTVEM'), function(object) 'mixtvem')
 
-
+#' @rdname interface-mixtvem
 setMethod('preFit', signature('lcMethodMixTVEM'), function(method, data, envir, verbose, ...) {
   e = new.env()
   f.t = getSpecialFormula(method$formula, special = 'time')
@@ -118,6 +127,8 @@ setMethod('preFit', signature('lcMethodMixTVEM'), function(method, data, envir, 
   return(e)
 })
 
+#' @rdname interface-mixtvem
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodMixTVEM'), function(method, data, envir, verbose, ...) {
   args = c(as.list(envir), as.list(method))
   args$id = data[[idVariable(method)]]

@@ -30,10 +30,13 @@ lcMethodFlexmixGBTM = function(formula,
   )
 }
 
+#' @rdname interface-flexmix
 setMethod('getName', signature('lcMethodFlexmixGBTM'), function(object) 'group-based trajectory model')
 
+#' @rdname interface-flexmix
 setMethod('getShortName', signature('lcMethodFlexmixGBTM'), function(object) 'gbtm')
 
+#' @rdname interface-flexmix
 setMethod('preFit', signature('lcMethodFlexmixGBTM'), function(method, data, envir, verbose) {
   e = callNextMethod()
   e$model = flexmix::FLXMRglm(family = method$family)

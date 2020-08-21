@@ -1,4 +1,11 @@
 #' @include method.R
+
+#' @name interface-mixtools
+#' @rdname interface-mixtools
+#' @title mixtools interface
+#' @seealso [lcModelMixtoolsGMM] [lcModelMixtoolsNPRM] \link[mixtools]{regmixEM.mixed} \link[mixtools]{npEM}
+NULL
+
 setClass('lcMethodMixtoolsGMM', contains = 'lcMethod')
 
 #' @export
@@ -29,11 +36,14 @@ lcMethodMixtoolsGMM = function(formula,
   )
 }
 
+#' @rdname interface-mixtools
+#' @inheritParams getName
 setMethod('getName', signature('lcMethodMixtoolsGMM'), function(object) 'growth mixture modeling using mixtools')
 
+#' @rdname interface-mixtools
 setMethod('getShortName', signature('lcMethodMixtoolsGMM'), function(object) 'gmm')
 
-
+#' @rdname interface-mixtools
 setMethod('preFit', signature('lcMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
   e = new.env()
 
@@ -68,6 +78,8 @@ setMethod('preFit', signature('lcMethodMixtoolsGMM'), function(method, data, env
   return(e)
 })
 
+#' @rdname interface-mixtools
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
   args = as.list(method, args = mixtools::regmixEM.mixed)
   args$y = envir$y

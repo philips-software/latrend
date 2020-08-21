@@ -1,4 +1,11 @@
 #' @include method.R
+
+#' @name interface-longclust
+#' @rdname interface-longclust
+#' @title longclust interface
+#' @seealso [lcMethodLongclust] \link[longclust]{longclust-package}
+NULL
+
 setClass('lcMethodLongclust', contains = 'lcMatrixMethod')
 
 #' @export
@@ -28,10 +35,15 @@ lcMethodLongclust = function(response,
   )
 }
 
+#' @rdname interface-longclust
+#' @inheritParams getName
 setMethod('getName', signature('lcMethodLongclust'), function(object) 'longclust')
 
+#' @rdname interface-longclust
 setMethod('getShortName', signature('lcMethodLongclust'), function(object) 'longclust')
 
+#' @rdname interface-longclust
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodLongclust'), function(method, data, envir, verbose, ...) {
   args = as.list(method, args = longclust::longclustEM)
   args$x = envir$dataMat

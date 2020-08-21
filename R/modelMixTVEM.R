@@ -4,6 +4,8 @@ setClass('lcModelMixTVEM', contains = 'lcModel')
 
 #' @export
 #' @importFrom stats approx
+#' @rdname interface-mixtvem
+#' @inheritParams predict.lcModel
 predict.lcModelMixTVEM = function(object, ...,
                                   newdata = NULL,
                                   what = 'mu') {
@@ -36,20 +38,21 @@ predict.lcModelMixTVEM = function(object, ...,
                    newdata = newdata)
 }
 
-
-setMethod('postprob', signature('lcModelMixTVEM'), function(object) {
+#' @rdname interface-mixtvem
+setMethod('postprob', signature('lcModelMixTVEM'), function(object, ...) {
   pp = object@model$bestFit$postProbsBySub
   colnames(pp) = clusterNames(object)
   return(pp)
 })
 
-
-setMethod('converged', signature('lcModelMixTVEM'), function(object) {
+#' @rdname interface-mixtvem
+setMethod('converged', signature('lcModelMixTVEM'), function(object, ...) {
   object@model$bestFit$converged
 })
 
 
 #' @export
+#' @rdname interface-mixtvem
 logLik.lcModelMixTVEM = function(object, ...) {
   ll = object@model$bestFit$logLik
   attr(ll, 'nobs') = nIds(object)
@@ -60,6 +63,7 @@ logLik.lcModelMixTVEM = function(object, ...) {
 
 
 #' @export
+#' @rdname interface-mixtvem
 sigma.lcModelMixTVEM = function(object, ...) {
   sqrt(object@model$bestFit$sigsq.total) %>%
     weighted.mean(w = clusterProportions(object))
@@ -67,6 +71,7 @@ sigma.lcModelMixTVEM = function(object, ...) {
 
 
 #' @export
+#' @rdname interface-mixtvem
 coef.lcModelMixTVEM = function(object, ...) {
   thetas = object@model$bestFit$theta %>%
     setNames(paste0('theta',

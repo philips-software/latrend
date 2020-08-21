@@ -1,4 +1,11 @@
 #' @include method.R
+
+#' @name interface-mixAK
+#' @rdname interface-mixAK
+#' @title mixAK interface
+#' @seealso [lcMethodMixAK_GLMM] \link[mixAK]{GLMM_MCMC}
+NULL
+
 setClass('lcMethodMixAK_GLMM', contains = 'lcMethod')
 
 #' @export
@@ -32,15 +39,19 @@ lcMethodMixAK_GLMM = function(fixed,
   )
 }
 
+#' @rdname interface-mixAK
+#' @inheritParams getName
 setMethod('getName', signature('lcMethodMixAK_GLMM'), function(object) 'generalized linear mixed model with normal random effects mixture')
 
+#' @rdname interface-mixAK
 setMethod('getShortName', signature('lcMethodMixAK_GLMM'), function(object) 'GLMMmix')
 
+#' @rdname interface-mixAK
 setMethod('responseVariable', signature('lcMethodMixAK_GLMM'), function(object) {
   getResponse(object$fixed)
 })
 
-
+#' @rdname interface-mixAK
 setMethod('preFit', signature('lcMethodMixAK_GLMM'), function(method, data, envir, verbose, ...) {
   e = new.env()
 
@@ -65,7 +76,8 @@ setMethod('preFit', signature('lcMethodMixAK_GLMM'), function(method, data, envi
   return(e)
 })
 
-
+#' @rdname interface-mixAK
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodMixAK_GLMM'), function(method, data, envir, verbose, ...) {
   args = as.list(method, args = mixAK::GLMM_MCMC)
   args$y = data[[responseVariable(method)]]

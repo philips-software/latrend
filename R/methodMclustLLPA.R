@@ -1,4 +1,11 @@
 #' @include method.R
+
+#' @name interface-mclust
+#' @rdname interface-mclust
+#' @title mclust interface
+#' @seealso [lcMethodMclustLLPA] \link[mclust]{mclust-package}
+NULL
+
 setClass('lcMethodMclustLLPA', contains = 'lcMethod')
 
 setValidity('lcMethodMclustLLPA', function(object) {
@@ -43,10 +50,14 @@ lcMethodMclustLLPA = function(response,
   )
 }
 
+#' @rdname interface-mclust
+#' @inheritParams getName
 setMethod('getName', signature('lcMethodMclustLLPA'), function(object) 'longitudinal latent profile analysis')
 
+#' @rdname interface-mclust
 setMethod('getShortName', signature('lcMethodMclustLLPA'), function(object) 'llpa')
 
+#' @rdname interface-mclust
 setMethod('prepareData', signature('lcMethodMclustLLPA'), function(method, data, verbose, ...) {
   e = new.env()
 
@@ -62,10 +73,13 @@ setMethod('prepareData', signature('lcMethodMclustLLPA'), function(method, data,
   return(e)
 })
 
+#' @rdname interface-mclust
 setMethod('compose', signature('lcMethodMclustLLPA'), function(method, envir = NULL) {
   evaluate.lcMethod(method, try = TRUE, envir = envir)
 })
 
+#' @rdname interface-mclust
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodMclustLLPA'), function(method, data, envir, verbose, ...) {
   args = as.list(method, args = mclust::Mclust)
   args$data = envir$data

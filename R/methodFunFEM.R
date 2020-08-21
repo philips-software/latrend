@@ -1,4 +1,11 @@
 #' @include method.R
+
+#' @name interface-funFEM
+#' @rdname interface-funFEM
+#' @title funFEM interface
+#' @seealso [lcMethodFunFEM] \link[funFEM]{funFEM-package}
+NULL
+
 setClass('lcMethodFunFEM', contains = 'lcMatrixMethod')
 
 #' @export
@@ -37,10 +44,13 @@ lcMethodFunFEM = function(response,
   )
 }
 
+#' @rdname interface-funFEM
 setMethod('getName', signature('lcMethodFunFEM'), function(object) 'functional subspace clustering with FunFEM')
 
+#' @rdname interface-funFEM
 setMethod('getShortName', signature('lcMethodFunFEM'), function(object) 'funfem')
 
+#' @rdname interface-funFEM
 setMethod('preFit', signature('lcMethodFunFEM'), function(method, data, envir, verbose, ...) {
   requireNamespace('fda')
   requireNamespace('funFEM')
@@ -52,7 +62,8 @@ setMethod('preFit', signature('lcMethodFunFEM'), function(method, data, envir, v
   return(e)
 })
 
-
+#' @rdname interface-funFEM
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodFunFEM'), function(method, data, envir, verbose, ...) {
   args = as.list(method, args = funFEM::funFEM)
   args$fd = envir$fd

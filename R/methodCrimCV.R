@@ -1,4 +1,11 @@
 #' @include methodMatrix.R
+
+#' @name interface-crimCV
+#' @rdname interface-crimCV
+#' @title crimCV interface
+#' @seealso [lcMethodCrimCV] \link[crimCV]{crimCV}
+NULL
+
 setClass('lcMethodCrimCV', contains = 'lcMatrixMethod')
 
 #' @export
@@ -32,11 +39,14 @@ lcMethodCrimCV = function(response,
   )
 }
 
-
+#' @rdname interface-crimCV
+#' @inheritParams getName
 setMethod('getName', signature('lcMethodCrimCV'), function(object) 'zero-inflated GBTM using crimcv')
 
+#' @rdname interface-crimCV
 setMethod('getShortName', signature('lcMethodCrimCV'), function(object) 'crimcv')
 
+#' @rdname interface-crimCV
 setMethod('prepareData', signature('lcMethodCrimCV'), function(method, data, verbose, ...) {
   times = sort(unique(data[[timeVariable(method)]]))
 
@@ -46,6 +56,8 @@ setMethod('prepareData', signature('lcMethodCrimCV'), function(method, data, ver
   callNextMethod()
 })
 
+#' @rdname interface-crimCV
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodCrimCV'), function(method, data, envir, verbose, ...) {
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
   time = timeVariable(method)

@@ -1,4 +1,11 @@
 #' @include method.R
+
+#' @name interface-flexmix
+#' @rdname interface-flexmix
+#' @title flexmix interface
+#' @seealso [lcMethodFlexmix] \link[flexmix]{flexmix}
+NULL
+
 setClass('lcMethodFlexmix', contains = 'lcMethod')
 
 #' @export
@@ -29,11 +36,13 @@ lcMethodFlexmix = function(formula,
   )
 }
 
+#' @rdname interface-flexmix
 setMethod('getName', signature('lcMethodFlexmix'), function(object) 'flexmix')
 
+#' @rdname interface-flexmix
 setMethod('getShortName', signature('lcMethodFlexmix'), function(object) 'flx')
 
-
+#' @rdname interface-flexmix
 setMethod('preFit', signature('lcMethodFlexmix'), function(method, data, envir, verbose, ...) {
   e = new.env()
 
@@ -55,7 +64,8 @@ setMethod('preFit', signature('lcMethodFlexmix'), function(method, data, envir, 
   return(e)
 })
 
-
+#' @rdname interface-flexmix
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodFlexmix'), function(method, data, envir, verbose, ...) {
   args = as.list(method, args = flexmix::flexmix)
   args$data = data

@@ -1,14 +1,15 @@
 #' @include model.R
 setClass('lcModelMixAK_GLMMlist', contains = 'lcModel')
 
-setMethod('postprob', signature('lcModelMixAK_GLMMlist'), function(object) {
+#' @rdname interface-mixAK
+setMethod('postprob', signature('lcModelMixAK_GLMMlist'), function(object, ...) {
   models = getGLMM_MCMCs(object)
   pp = Reduce('+', lapply(models, .postprob_GLMM_MCMC)) / length(models)
   colnames(pp) = clusterNames(object)
   pp
 })
 
-
+#' @rdname interface-mixAK
 setMethod('predictForCluster', signature('lcModelMixAK_GLMMlist'), function(object, newdata, cluster, what = 'mu', ...) {
   models = getGLMM_MCMCs(object)
   k = match(cluster, clusterNames(object))
