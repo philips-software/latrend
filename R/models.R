@@ -110,7 +110,7 @@ as.data.frame.lcModels = function(x, ...,
 
 #' @export
 #' @importFrom stats as.dist
-#' @rdname metric
+#' @name externalMetric
 #' @return A named `numeric` vector containing the computed model metrics.
 #' @examples
 #' lcModel metric example here
@@ -154,14 +154,14 @@ setMethod('externalMetric', signature('lcModels', 'missing'), function(object, o
 
 #. metric ####
 #' @export
-#' @rdname metric
+#' @name externalMetric
 #' @return A named `numeric` vector containing the computed model metrics.
 #' @examples
 #' lcModel metric example here
 setMethod('externalMetric', signature('lcModels', 'lcModel'), .externalMetric.lcModels)
 
 #' @export
-#' @rdname metric
+#' @name externalMetric
 #' @param drop Whether to drop the matrix dimensions in case of a single model output.
 #' @return A named `numeric` vector containing the computed model metrics.
 #' @examples
@@ -199,14 +199,15 @@ setMethod('externalMetric', signature('list', 'lcModel'), function(object, objec
 }
 
 #' @export
-#' @rdname metric
+#' @name metric
+#' @return For `metric(list)`: A `data.frame` with a metric per column.
 setMethod('metric', signature('list'), function(object, name, drop = TRUE) {
   .metric.lcModels(as.lcModels(object), name, drop = drop)
 })
 
 #' @export
-#' @rdname metric
-#' @return For metric(lcModels) or metric(list): A data.frame with a metric per column.
+#' @name metric
+#' @return For `metric(lcModels)`: A `data.frame` with a metric per column.
 setMethod('metric', signature('lcModels'), .metric.lcModels)
 
 #' @export
@@ -222,6 +223,7 @@ setMethod('metric', signature('lcModels'), .metric.lcModels)
 
 #' models = lcModels(kml1, kml2, kml3)
 #' min(models, 'WRSS')
+#' @seealso [max.lcModels] [externalMetric]
 min.lcModels = function(x, name, ...) {
   x = as.lcModels(x)
   values = metric(x, name)
@@ -246,6 +248,7 @@ min.lcModels = function(x, name, ...) {
 
 #' models = lcModels(kml1, kml2, kml3)
 #' max(models, 'WRSS')
+#' @seealso [min.lcModels] [externalMetric]
 max.lcModels = function(x, name, ...) {
   x = as.lcModels(x)
   values = metric(x, name)

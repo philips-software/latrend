@@ -13,6 +13,8 @@
 #'
 #' For predicting the posterior probability for unseen data, the `predictPostprob()` should be implemented.
 #'
+#' @param object The `lcModel` object.
+#' @param ... Any additional arguments.
 #' @slot method The \link{lcMethod-class} object specifying the arguments under which the model was fitted.
 #' @slot call The `call` that was used to create this `lcModel` object. Typically, this is the call to `latrend()` or any of the other fitting functions.
 #' @slot model An arbitrary underlying model representation.
@@ -463,23 +465,15 @@ logLik.lcModel = function(object, ...) {
 
 #. metric ####
 #' @export
-#' @rdname metric
-#' @title Compute internal model metric(s)
-#' @description Internal metric.
-#' @param object The `lcModel`, `lcModels`, or `list` of `lcModel` objects to compute the metrics for.
-#' @param name The name(s) of the metric(s) to compute. All defined metrics are computed by default.
-#' @param ... Additional arguments.
-#' @return A named `numeric` vector containing the computed model metrics.
+#' @name metric
 #' @examples
 #' data(testLongData)
 #' model = latrend(lcMethodLcmmGMM(), testLongData)
 #' bic = metric(model, 'BIC')
 #'
 #' ic = metric(model, c('AIC', 'BIC'))
-#' @examples
-#' lcModel metric example here
 #' @family metric functions
-setMethod('metric', signature('lcModel'), function(object, name = c('logLik', 'AIC', 'BIC', 'WRSS', 'APPA'), ...) {
+setMethod('metric', signature('lcModel'), function(object, name = c('AIC', 'BIC', 'WRSS', 'APPA'), ...) {
   assert_that(is.lcModel(object),
               is.character(name))
 
@@ -513,19 +507,14 @@ setMethod('metric', signature('lcModel'), function(object, name = c('logLik', 'A
 
 #. externalMetric ####
 #' @export
-#' @rdname metric
-#' @title Compute external comparison metric(s) based on a reference lcModel.
-#' @param object2 The other `lcModel` to compare with.
-#' @return A named `numeric` vector containing the computed model metrics.
+#' @name externalMetric
 #' @examples
 #' data(testLongData)
 #' model1 = latrend(lcMethodKML(), testLongData)
 #' model2 = latrend(lcMethodLcmmGMM(), testLongData)
-#' bic = externalMetric(model1, model2, 'Rand')
+#' ari = externalMetric(model1, model2, 'adjustedRand')
 #' @family metric functions
 setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, object2, name, ...) {
-  assert_that(is.lcModel(object))
-  assert_that(is.lcModel(object2))
   assert_that(is.character(name))
 
   funMask = name %in% getExternalMetricNames()
@@ -925,6 +914,7 @@ setMethod('predictPostprob', signature('lcModel'), function(object, newdata, ...
 #' @rdname predictAssignments
 #' @title Predict the cluster assignments for new trajectories
 #' @description Computes the posterior probability based on the provided (observed) data.
+#' @inheritParams predict.lcModel
 #' @param strategy A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.
 #' @details The default implementation uses [predictPostprob] to determine the cluster membership.
 #' @return A `factor` with length `nrow(newdata)` that indicates the posterior probability per trajectory per observation.
@@ -975,6 +965,7 @@ setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
 #' @export
 #' @rdname plotClusterTrajectories
 #' @title Plot the cluster trajectories of a lcModel
+#' @inheritParams clusterTrajectories
 #' @inheritDotParams clusterTrajectories
 #' @param clusterLabels Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.
 #' @param ... Arguments passed to [clusterTrajectories].
@@ -1079,7 +1070,7 @@ residuals.lcModel = function(object, ..., clusters = clusterAssignments(object))
 
 #. responseVariable ####
 #' @export
-#' @rdname responseVariable
+#' @name responseVariable
 #' @examples
 #' model <- latrend(lcMethodKML(), testLongData)
 #' responseVariable(model) # "Value"

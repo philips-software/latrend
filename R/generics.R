@@ -8,24 +8,27 @@
 #' @param newdata `data.frame` of newdata.
 #' @param name Metric name.
 #' @param envir `environment`.
+#' @param what Parameter.
+#' @param cluster Cluster name.
 #' @param verbose [R.utils::Verbose].
 #' @param ... Arguments.
+#' @keywords internal
 NULL
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('clusterAssignments', function(object, ...) standardGeneric('clusterAssignments'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('clusterProportions', function(object, ...) standardGeneric('clusterProportions'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('clusterTrajectories', function(object, ...) standardGeneric('clusterTrajectories'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('compose', function(method, envir, ...) {
   newmethod = standardGeneric('compose')
   assert_that(is.lcMethod(newmethod),
@@ -41,17 +44,17 @@ setGeneric('compose', function(method, envir, ...) {
 })
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('converged', function(object, ...) standardGeneric('converged'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 #' @param object2 The model to compare with.
 setGeneric('externalMetric',
   function(object, object2, name, ...) standardGeneric('externalMetric'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('fit', function(method, data, envir, verbose, ...) {
   start = Sys.time()
   model = standardGeneric('fit')
@@ -71,60 +74,60 @@ setGeneric('fit', function(method, data, envir, verbose, ...) {
 })
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('getLabel', function(object, ...) standardGeneric('getLabel'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('getName', function(object, ...) standardGeneric('getName'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('getShortName', function(object, ...) standardGeneric('getShortName'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('idVariable', function(object, ...) standardGeneric('idVariable'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('metric', function(object, name, ...) standardGeneric('metric'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('plotClusterTrajectories',
   function(object, ...) standardGeneric('plotClusterTrajectories'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 #' @title Quantile-quantile plot
 setGeneric('plotQQ', function(object, ...) standardGeneric('plotQQ'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('plotTrajectories', function(object, ...) standardGeneric('plotTrajectories'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('postprob', function(object, ...) standardGeneric('postprob'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('predictAssignments',
   function(object, newdata = NULL, ...) standardGeneric('predictAssignments'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('predictForCluster',
   function(object, newdata = NULL, cluster, ...) standardGeneric('predictForCluster'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('predictPostprob',
   function(object, newdata = NULL, ...) standardGeneric('predictPostprob'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
   model = standardGeneric('postFit')
   assert_that(inherits(model, 'lcModel'),
@@ -133,7 +136,7 @@ setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
 })
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('preFit', function(method, data, envir, verbose, ...) {
   modelEnv = standardGeneric('preFit')
   assert_that(is.null(modelEnv) ||
@@ -143,7 +146,7 @@ setGeneric('preFit', function(method, data, envir, verbose, ...) {
 })
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('prepareData', function(method, data, verbose, ...) {
   envir = standardGeneric('prepareData')
   assert_that(is.null(envir) ||
@@ -153,11 +156,11 @@ setGeneric('prepareData', function(method, data, verbose, ...) {
 })
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('responseVariable', function(object, ...) standardGeneric('responseVariable'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 #' @description Reduce the (serialized) memory footprint of an object.
 #' @details Serializing references to environments results in the serialization of the object
 #' together with any associated environments and references. This method removes those environments
@@ -166,11 +169,11 @@ setGeneric('responseVariable', function(object, ...) standardGeneric('responseVa
 setGeneric('strip', function(object, ...) standardGeneric('strip'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('timeVariable', function(object, ...) standardGeneric('timeVariable'))
 
 #' @export
-#' @rdname latrend-generics
+#' @name latrend-generics
 setGeneric('validate', function(method, data, envir, ...) {
   validationResult = standardGeneric('validate')
   if (!isTRUE(validationResult)) {

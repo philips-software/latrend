@@ -59,6 +59,7 @@ setMethod('plotTrajectories', signature('data.frame'), function(object,
 #' @title Plot cluster trajectories
 #' @inheritParams transformLatrendData
 #' @inheritParams clusterTrajectories
+#' @inheritParams predict.lcModel
 #' @param object The (cluster) trajectory data.
 #' @param cluster The cluster assignment column
 #' @param center A function for aggregating multiple points at the same point in time

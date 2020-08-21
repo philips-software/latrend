@@ -2,6 +2,25 @@
 #' @importFrom clusterCrit intCriteria extCriteria
 #' @importFrom mclustcomp mclustcomp
 
+#' @name metric
+#' @rdname metric
+#' @title Compute internal model metric(s)
+#' @param object The `lcModel`, `lcModels`, or `list` of `lcModel` objects to compute the metrics for.
+#' @param name The name(s) of the metric(s) to compute. All defined metrics are computed by default.
+#' @param ... Additional arguments.
+#' @return A named `numeric` vector containing the computed model metrics.
+#' @seealso [externalMetric] [min.lcModels] [max.lcModels]
+NULL
+
+#' @name externalMetric
+#' @rdname externalMetric
+#' @title Compute external model metric(s)
+#' @inheritParams metric
+#' @param object2 The other `lcModel` to compare with.
+#' @return A named `numeric` vector containing the computed model metrics.
+#' @seealso [metric]
+NULL
+
 intMetricsEnv = new.env()
 extMetricsEnv = new.env()
 

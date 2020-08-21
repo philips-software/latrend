@@ -62,8 +62,8 @@ setMethod('$', signature('lcMethod'), function(x, name) {
 
 
 #. [[ ####
-#' @name [[,lcMethod
-#' @rdname index-lcMethod
+#' @export
+#' @rdname indexy
 #' @title Retrieve and evaluate a lcMethod argument by name
 #' @param x The `lcMethod` object.
 #' @param i Name or index of the argument to retrieve.
@@ -831,7 +831,7 @@ update.lcMethod = function(object,
 
 #. responseVariable ####
 #' @export
-#' @rdname responseVariable
+#' @name responseVariable
 #' @title Extract the response variable
 #' @description Extracts the response variable from the given `object`.
 #' @param object The object to extract the response variable from.
