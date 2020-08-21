@@ -953,6 +953,7 @@ setMethod('plot', signature('lcModel'), function(x, y, ...) {
   plotClusterTrajectories(x, ...)
 })
 
+
 #. plotTrajectories ####
 #' @export
 #' @rdname plotTrajectories
@@ -961,7 +962,7 @@ setMethod('plot', signature('lcModel'), function(x, y, ...) {
 #' @inheritDotParams trajectories
 setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
   data = trajectories(object, ...)
-  plotTrajs(
+  .plotTrajs(
     data,
     response = responseVariable(object),
     time = timeVariable(object),
