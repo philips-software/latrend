@@ -1,4 +1,11 @@
 #' @include method.R
+
+#' @name interface-custom
+#' @rdname interface-custom
+#' @title custom interface
+#' @seealso [lcMethodCustom] [lcModelCustom] [lcMethodRandom] [lcMethodStratify] [lcModelPartition] [lcModelWeightedPartition]
+NULL
+
 setClass('lcMethodCustom', contains = 'lcMethod')
 
 #' @export
@@ -41,6 +48,8 @@ setValidity('lcMethodCustom', function(object) {
   }
 })
 
+#' @rdname interface-custom
+#' @inheritParams getName
 setMethod('getName', signature('lcMethodCustom'), function(object) {
   if (isArgDefined(object, 'name') && !is.null(object$name)) {
     return(object$name)
@@ -56,14 +65,17 @@ setMethod('getName', signature('lcMethodCustom'), function(object) {
   return('custom function')
 })
 
+#' @rdname interface-custom
 setMethod('getShortName', signature('lcMethodCustom'), function(object) 'custom')
 
-
+#' @rdname interface-custom
 setMethod('prepareData', signature('lcMethodCustom'), function(method, data, verbose) {
   assert_that(has_name(data, responseVariable(method)))
   return(NULL)
 })
 
+#' @rdname interface-custom
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodCustom'), function(method, data, envir, verbose) {
   args = as.list(method)
   args$data = data

@@ -162,22 +162,24 @@ is.lcModelCustom = function(x) {
   is.lcModel(x) && is(x, 'lcModelCustom')
 }
 
-setMethod('getName', signature('lcModelCustom'), function(object)
-  object@name)
+#' @rdname interface-custom
+setMethod('getName', signature('lcModelCustom'), function(object, ...) object@name)
 
-setMethod('getShortName', signature('lcModelCustom'), function(object)
-  'custom')
+#' @rdname interface-custom
+setMethod('getShortName', signature('lcModelCustom'), function(object, ...) 'custom')
 
-setMethod('converged', signature('lcModelCustom'), function(object)
-  object@converged)
+#' @rdname interface-custom
+setMethod('converged', signature('lcModelCustom'), function(object, ...) object@converged)
 
-setMethod('postprob', signature('lcModelCustom'), function(object) {
+#' @rdname interface-custom
+setMethod('postprob', signature('lcModelCustom'), function(object, ...) {
   pp = object@postprob
   colnames(pp) = clusterNames(object)
   return(pp)
 })
 
-
+#' @export
+#' @rdname interface-custom
 predict.lcModelCustom = function(object,
                                  ...,
                                  newdata = NULL,
@@ -191,6 +193,7 @@ predict.lcModelCustom = function(object,
 
 
 #. predictPostprob ####
+#' @rdname interface-custom
 setMethod('predictPostprob', signature('lcModelCustom'), function(object, newdata = NULL, ...) {
   pp = object@predictPostprob(object, newdata, ...)
 
@@ -205,8 +208,9 @@ setMethod('predictPostprob', signature('lcModelCustom'), function(object, newdat
   return(pp)
 })
 
-setMethod('clusterTrajectories', signature('lcModelCustom'),
-  function(object, at = time(object), ...) {
+#' @rdname interface-custom
+setMethod('clusterTrajectories',
+  signature('lcModelCustom'), function(object, at = time(object), ...) {
   if (all(at %in% time(object))) {
     dt_traj = object@clusterTrajectories %>%
       as.data.table %>%
@@ -221,6 +225,7 @@ setMethod('clusterTrajectories', signature('lcModelCustom'),
   return(dt_traj[])
 })
 
+#' @rdname interface-custom
 setMethod('trajectories', signature('lcModelCustom'), function(object, at, what, ...) {
   if (all(at %in% time(object))) {
     object@trajectories

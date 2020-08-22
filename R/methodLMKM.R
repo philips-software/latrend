@@ -38,12 +38,13 @@ lcMethodLMKM = function(formula,
   )
 }
 
-
+#' @rdname interface-featureBased
 setMethod('getName', signature('lcMethodLMKM'), function(object) 'glm-kmeans')
 
+#' @rdname interface-featureBased
 setMethod('getShortName', signature('lcMethodLMKM'), function(object) 'glmkm')
 
-
+#' @rdname interface-featureBased
 setMethod('prepareData', signature('lcMethodLMKM'), function(method, data, verbose) {
   cat(verbose, 'Representation step...')
   lmArgs = as.list(method, args = lm)
@@ -59,7 +60,7 @@ setMethod('prepareData', signature('lcMethodLMKM'), function(method, data, verbo
   return(e)
 })
 
-
+#' @rdname interface-featureBased
 setMethod('fit', signature('lcMethodLMKM'), function(method, data, envir, verbose, ...) {
   cat(verbose, 'Cluster step...')
   km = kmeans(envir$x,

@@ -1,16 +1,20 @@
 #' @include method.R
 #' @title lcMatrixMethod
-#' @name lcMatrixMethod
-#' @param response The name of the response variable.
-#' @param id The name of the trajectory identifier variable.
-#' @param time The name of the time variable.
+#' @name lcMatrixMethod-class
+#' @rdname lcMatrixMethod-class
+#' @inheritParams transformLatrendData
 #' @keywords internal
 setClass('lcMatrixMethod', contains = 'lcMethod')
 
-setMethod('getName', signature('lcMatrixMethod'), function(object) 'repeated measures model')
+#' @rdname lcMatrixMethod-class
+#' @inheritParams getName
+setMethod('getName', signature('lcMatrixMethod'), function(object, ...) 'repeated measures model')
 
-setMethod('getShortName', signature('lcMatrixMethod'), function(object) 'rm')
+#' @rdname lcMatrixMethod-class
+setMethod('getShortName', signature('lcMatrixMethod'), function(object, ...) 'rm')
 
+#' @rdname lcMatrixMethod-class
+#' @inheritParams prepareData
 setMethod('prepareData', signature('lcMatrixMethod'), function(method, data, verbose, ...) {
   e = new.env()
 

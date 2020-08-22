@@ -10,7 +10,7 @@ setClass('lcMethodLongclust', contains = 'lcMatrixMethod')
 
 #' @export
 #' @title Specify Longclust method
-#' @inheritParams lcMatrixMethod
+#' @inheritParams lcMatrixMethod-class
 #' @inheritParams lcMethodKML
 #' @param ... Arguments passed to [longclust::longclustEM].
 #' The following external arguments are ignored: data, x, Gmin, Gmax, userseed.

@@ -10,7 +10,7 @@ setClass('lcMethodFunFEM', contains = 'lcMatrixMethod')
 
 #' @export
 #' @title Specify a FunFEM method
-#' @inheritParams lcMatrixMethod
+#' @inheritParams lcMatrixMethod-class
 #' @inheritParams lcMethodKML
 #' @param basis The basis function. By default, a 3rd-order B-spline with 10 breaks is used.
 #' @param ... Arguments passed to [funFEM::funFEM].

@@ -44,8 +44,10 @@ lcMethodGCKM = function(formula,
   )
 }
 
+#' @rdname interface-featureBased
 setMethod('getName', signature('lcMethodGCKM'), function(object) 'two-step using LME and k-means')
 
+#' @rdname interface-featureBased
 setMethod('getShortName', signature('lcMethodGCKM'), function(object) 'gckm')
 
 lcMethodGCKM_as_twostep = function(method) {
@@ -57,10 +59,12 @@ lcMethodGCKM_as_twostep = function(method) {
   lcMethod.call('lcMethodTwoStep', call = call)
 }
 
+#' @rdname interface-featureBased
 setMethod('compose', signature('lcMethodGCKM'), function(method, envir = NULL) {
   evaluate.lcMethod(method, try = TRUE, envir = envir)
 })
 
+#' @rdname interface-featureBased
 setMethod('preFit', signature('lcMethodGCKM'), function(method, data, envir, verbose) {
   method = lcMethodGCKM_as_twostep(method)
   preFit(method,
@@ -69,6 +73,7 @@ setMethod('preFit', signature('lcMethodGCKM'), function(method, data, envir, ver
          verbose = verbose)
 })
 
+#' @rdname interface-featureBased
 setMethod('fit', signature('lcMethodGCKM'), function(method, data, envir, verbose, ...) {
   method = lcMethodGCKM_as_twostep(method)
   fit(method,

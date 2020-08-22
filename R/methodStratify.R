@@ -64,6 +64,7 @@ lcMethodStratify = function(response,
   lcMethod.call('lcMethodStratify', call = match.call.all())
 }
 
+#' @rdname interface-featureBased
 setMethod('getName', signature('lcMethodStratify'), function(object) {
   if (isArgDefined(object, 'name') && !is.null(object$name)) {
     return(object$name)
@@ -79,10 +80,11 @@ setMethod('getName', signature('lcMethodStratify'), function(object) {
   return('stratify')
 })
 
+#' @rdname interface-featureBased
 setMethod('getShortName', signature('lcMethodStratify'), function(object) 'strat')
 
-
-setMethod('compose', signature('lcMethodStratify'), function(method, envir = NULL) {
+#' @rdname interface-featureBased
+setMethod('compose', signature('lcMethodStratify'), function(method, envir = NULL, ...) {
   evaluate.lcMethod(method,
                       try = FALSE,
                       exclude = 'stratify',
@@ -90,7 +92,8 @@ setMethod('compose', signature('lcMethodStratify'), function(method, envir = NUL
 })
 
 
-setMethod('fit', signature('lcMethodStratify'), function(method, data, envir, verbose) {
+#' @rdname interface-featureBased
+setMethod('fit', signature('lcMethodStratify'), function(method, data, envir, verbose, ...) {
   data = as.data.table(data)
   id = idVariable(method)
 

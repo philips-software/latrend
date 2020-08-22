@@ -100,7 +100,7 @@ lcModelPartition = function(data,
   return(model)
 }
 
-
+#' @rdname interface-custom
 setMethod('clusterTrajectories', signature('lcModelPartition'), function(object, at = time(object), ...) {
   if (is.null(at)) {
     clusTrajs = as.data.table(object@clusterTrajectories)
@@ -115,22 +115,25 @@ setMethod('clusterTrajectories', signature('lcModelPartition'), function(object,
 
 
 #. converged ####
-setMethod('converged', signature('lcModelPartition'), function(object) {
+#' @rdname interface-custom
+setMethod('converged', signature('lcModelPartition'), function(object, ...) {
   TRUE
 })
 
 
 # . getName ####
-setMethod('getName', signature('lcModelPartition'), function(object)
-  object@name)
+#' @rdname interface-custom
+setMethod('getName', signature('lcModelPartition'), function(object, ...) object@name)
 
 # . getShortName ####
-setMethod('getShortName', signature('lcModelPartition'), function(object)
+#' @rdname interface-custom
+setMethod('getShortName', signature('lcModelPartition'), function(object, ...)
   object@name)
 
 
 #. postprob ####
-setMethod('postprob', signature('lcModelPartition'), function(object) {
+#' @rdname interface-custom
+setMethod('postprob', signature('lcModelPartition'), function(object, ...) {
   pp = object@postprob
   colnames(pp) = clusterNames(object)
   return(pp)

@@ -3,6 +3,8 @@ setClass('lcModelLMKM',
          representation(coefNames = 'character'),
          contains = 'lcModel')
 
+#' @export
+#' @rdname interface-featureBased
 coef.lcModelLMKM = function(object, ..., cluster = NULL) {
   coefmat = t(object@model$centers)
   colnames(coefmat) = clusterNames(object)
@@ -18,7 +20,8 @@ coef.lcModelLMKM = function(object, ..., cluster = NULL) {
 }
 
 #. converged ####
-setMethod('converged', signature('lcModelLMKM'), function(object) {
+#' @rdname interface-featureBased
+setMethod('converged', signature('lcModelLMKM'), function(object, ...) {
   if (nClusters(object) == 1) {
     TRUE
   }
@@ -28,12 +31,15 @@ setMethod('converged', signature('lcModelLMKM'), function(object) {
 })
 
 #. postprob ####
-setMethod('postprob', signature('lcModelLMKM'), function(object) {
+#' @rdname interface-featureBased
+setMethod('postprob', signature('lcModelLMKM'), function(object, ...) {
   k = nrow(object@model$centers)
   postprobFromAssignments(object@model$cluster, k)
 })
 
 #' @export
+#' @rdname interface-featureBased
+#' @inheritParams predict.lcModel
 #' @inheritDotParams stats::predict.lm
 predict.lcModelLMKM = function(object, ...,
                                newdata = NULL,

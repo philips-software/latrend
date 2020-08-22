@@ -47,10 +47,13 @@ lcMethodRandom = function(response,
   lcMethod.call('lcMethodRandom', call = match.call.defaults())
 }
 
+#' @rdname interface-custom
 setMethod('getName', signature('lcMethodRandom'), function(object) 'random')
 
+#' @rdname interface-custom
 setMethod('getShortName', signature('lcMethodRandom'), function(object) 'rand')
 
+#' @rdname interface-custom
 #' @importFrom stats rgamma
 setMethod('fit', signature('lcMethodRandom'), function(method, data, envir, verbose, ...) {
   nIds = uniqueN(data[[idVariable(method)]])

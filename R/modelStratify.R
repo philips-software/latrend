@@ -9,6 +9,8 @@
   contains = 'lcApproxModel'
 )
 
+#' @rdname interface-custom
+#' @inheritParams clusterTrajectories
 setMethod('clusterTrajectories', signature('lcModelStratify'),
   function(object, at = time(object), ...) {
   if (is.null(at)) {
@@ -23,19 +25,23 @@ setMethod('clusterTrajectories', signature('lcModelStratify'),
 })
 
 #. converged ####
-setMethod('converged', signature('lcModelStratify'), function(object) {
+#' @rdname interface-custom
+setMethod('converged', signature('lcModelStratify'), function(object, ...) {
   TRUE
 })
 
 
 #. postprob ####
-setMethod('postprob', signature('lcModelStratify'), function(object) {
+#' @rdname interface-custom
+setMethod('postprob', signature('lcModelStratify'), function(object, ...) {
   pp = object@postprob
   colnames(pp) = clusterNames(object)
   return(pp)
 })
 
 #. predictPostprob ####
+#' @rdname interface-custom
+#' @inheritParams predictPostprob
 setMethod('predictPostprob', signature('lcModelStratify'), function(object, newdata = NULL, ...) {
   if (is.null(newdata)) {
     return(postprob(object))

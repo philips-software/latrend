@@ -1124,7 +1124,7 @@ estimationTime = function(object) {
 
 # . show ####
 setMethod('show', 'lcModel', function(object) {
-  summary(object) %>% show
+  summary(object) %>% show()
 })
 
 

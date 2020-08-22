@@ -1,4 +1,11 @@
 #' @include modelCustom.R
+
+#' @name interface-featureBased
+#' @rdname interface-featureBased
+#' @title featureBased interface
+#' @seealso [lcMethodTwoStep] [lcMethodGCKM] [lcMethodLMKM]
+NULL
+
 setClass('lcMethodTwoStep', contains = 'lcMethod')
 
 setValidity('lcMethodTwoStep', function(object) {
@@ -37,19 +44,21 @@ lcMethodTwoStep = function(response,
                  excludeArgs = c('verbose'))
 }
 
-
+#' @rdname interface-featureBased
+#' @inheritParams getName
 setMethod('getName', signature('lcMethodTwoStep'), function(object) 'two-step clustering')
 
-
+#' @rdname interface-featureBased
 setMethod('getShortName', signature('lcMethodTwoStep'), function(object) 'twostep')
 
-
+#' @rdname interface-featureBased
 setMethod('prepareData', signature('lcMethodTwoStep'), function(method, data, verbose, ...) {
   assert_that(has_name(data, responseVariable(method)))
   return(NULL)
 })
 
-
+#' @rdname interface-featureBased
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodTwoStep'), function(method, data, envir, verbose, ...) {
   nIds = uniqueN(data[[idVariable(method)]])
 

@@ -1,15 +1,17 @@
 #' @include model.R
 #' @export
 #' @name lcApproxModel-class
+#' @rdname lcApproxModel-class
 #' @aliases lcApproxModel
 #' @title lcApproxModel class
 #' @description approx models have defined cluster trajectories at fixed moments in time, which should be interpolated
 #' For a correct implementation, lcApproxModel requires the extending class to implement clusterTrajectories(at=NULL)
 #' to return the fixed cluster trajectories
-#' @keywords internal
 setClass('lcApproxModel', contains = 'lcModel')
 
 #' @export
+#' @rdname lcApproxModel-class
+#' @inheritParams fitted.lcModel
 fitted.lcApproxModel = function(object, ..., clusters = clusterAssignments(object)) {
   times = time(object)
   newdata = data.table(Id = ids(object) %>% rep(each = length(times)),
@@ -22,7 +24,8 @@ fitted.lcApproxModel = function(object, ..., clusters = clusterAssignments(objec
 }
 
 #' @export
-#' @rdname predict.lcModel
+#' @rdname lcApproxModel-class
+#' @inheritParams predict.lcModel
 #' @param approxFun The interpolation function to use for time points not in the feature set.
 predict.lcApproxModel = function(object, ...,
                                  newdata = NULL,
