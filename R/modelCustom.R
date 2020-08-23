@@ -1,6 +1,6 @@
 #' @include model.R
 setClassUnion('functionOrNULL', members = c('function', 'NULL'))
-.lcModelCustom = setClass(
+setClass(
   'lcModelCustom',
   representation(
     clusterAssignments = 'integer',
@@ -14,6 +14,8 @@ setClassUnion('functionOrNULL', members = c('function', 'NULL'))
   ),
   contains = 'lcModel'
 )
+
+.lcModelCustom = function(...) new('lcModelCustom', ...)
 
 #' @export
 #' @title Specify a model based on a pre-computed result.
@@ -209,6 +211,7 @@ setMethod('predictPostprob', signature('lcModelCustom'), function(object, newdat
 })
 
 #' @rdname interface-custom
+#' @inheritParams clusterTrajectories
 setMethod('clusterTrajectories',
   signature('lcModelCustom'), function(object, at = time(object), ...) {
   if (all(at %in% time(object))) {
@@ -226,6 +229,7 @@ setMethod('clusterTrajectories',
 })
 
 #' @rdname interface-custom
+#' @inheritParams trajectories
 setMethod('trajectories', signature('lcModelCustom'), function(object, at, what, ...) {
   if (all(at %in% time(object))) {
     object@trajectories

@@ -5,6 +5,7 @@ setClass('lcModelLMKM',
 
 #' @export
 #' @rdname interface-featureBased
+#' @param cluster The cluster name.
 coef.lcModelLMKM = function(object, ..., cluster = NULL) {
   coefmat = t(object@model$centers)
   colnames(coefmat) = clusterNames(object)

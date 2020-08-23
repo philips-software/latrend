@@ -51,6 +51,7 @@ setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, 
 
 #' @export
 #' @rdname interface-mixAK
+#' @param stat The aggregate statistic to extract. The mean is used by default.
 coef.lcModelMixAK_GLMM = function(object, ..., stat = 'Mean') {
   coef(object@model, stat = stat)
 }

@@ -4,7 +4,7 @@ setClass('lcModelLongclust', contains='lcModel')
 
 #' @export
 #' @rdname interface-longclust
-#' @inheritParams predict.lcModel
+#' @inheritParams predict.lcApproxModel
 predict.lcModelLongclust = function(object, ..., newdata=NULL, what='mu', approxFun=approx) {
   assert_that(is.newdata(newdata))
   assert_that(what == 'mu')
@@ -28,7 +28,7 @@ predict.lcModelLongclust = function(object, ..., newdata=NULL, what='mu', approx
 
 #' @export
 #' @rdname interface-longclust
-#' @inheritParams fitted.lcModel
+#' @inheritParams fitted.lcApproxModel
 fitted.lcModelLongclust = function(object, ..., clusters=clusterAssignments(object)) {
   times = time(object)
   newdata = data.table(Id=rep(ids(object), each=length(times)),

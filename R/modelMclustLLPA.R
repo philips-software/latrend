@@ -4,15 +4,15 @@ setClass('lcModelMclustLLPA', contains = 'lcModel')
 
 #' @export
 #' @rdname interface-mclust
-#' @inheritParams predict.lcModel
+#' @inheritParams predict.lcApproxModel
 predict.lcModelMclustLLPA = function(object,
                                      ...,
                                      newdata = NULL,
                                      what = 'mu',
                                      approxFun = approx) {
-  assert_that(is.newdata(newdata))
+  assert_that(is.newdata(newdata),
+    is.function(approxFun))
   assert_that(what == 'mu', msg = 'only what="mu" is supported')
-  assert_that(is.function(approxFun))
 
   # compute cluster trajectories
   trajMat = object@model$parameters$mean
@@ -38,7 +38,7 @@ predict.lcModelMclustLLPA = function(object,
 
 #' @export
 #' @rdname interface-mclust
-#' @inheritParams fitted.lcModel
+#' @inheritParams fitted.lcApproxModel
 fitted.lcModelMclustLLPA = function(object, ..., clusters = clusterAssignments(object)) {
   times = time(object)
   newdata = data.table(Id = rep(ids(object), each = length(times)),

@@ -593,17 +593,8 @@ setMethod('transformLatrendData', signature('data.frame'), function(object, id, 
 
 #' @rdname transformLatrendData
 setMethod('transformLatrendData', signature('matrix'), function(object, id, time, response, envir) {
-  data = meltRepeatedMeasures(object,
-                              id = id,
-                              time = time,
-                              response = response)
-  transformLatrendData(
-    data,
-    id = id,
-    time = time,
-    response = response,
-    envir = envir
-  )
+  data = meltRepeatedMeasures(object, id = id, time = time, response = response)
+  transformLatrendData(data, id = id, time = time, response = response, envir = envir)
 })
 
 #' @rdname transformLatrendData

@@ -290,11 +290,7 @@ setMethod('converged', signature('lcModel'), function(object, ...) {
 #' @param ... Additional arguments.
 #' @family model-specific methods
 deviance.lcModel = function(object, ...) {
-  if (is.null(getS3method(
-    'deviance',
-    class = class(object@model),
-    optional = TRUE
-  ))) {
+  if (is.null(getS3method('deviance', class = class(object@model), optional = TRUE))) {
     as.numeric(NA)
   } else {
     deviance(object@model)
@@ -372,9 +368,7 @@ setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, ob
 #' @family model-specific methods
 fitted.lcModel = function(object, ..., clusters = clusterAssignments(object)) {
   pred = predict(object, newdata = NULL)
-  transformFitted(pred = pred,
-                  model = object,
-                  clusters = clusters)
+  transformFitted(pred = pred, model = object, clusters = clusters)
 }
 
 
@@ -414,8 +408,8 @@ getCall.lcModel = function(x, ...) {
   x@call
 }
 
+#. getLabel ####
 #' @export
-#' @name getLabel
 #' @rdname lcModel-class
 #' @aliases getLabel,lcModel-method
 setMethod('getLabel', signature('lcModel'), function(object, ...) {
@@ -437,10 +431,10 @@ getLcMethod = function(object) {
 
 # . getName ####
 #' @export
-#' @name getName
 #' @rdname lcModel-class
 #' @aliases getName,lcModel-method
-#' @description Extracts the name of the `lcModel` object. The name is comprised of the underlying `lcMethod` name, and the assigned label (if any).
+#' @description Extracts the name of the `lcModel` object.
+#' The name is comprised of the underlying `lcMethod` name, and the assigned label (if any).
 setMethod('getName', signature('lcModel'), function(object) {
   basename = getLcMethod(object) %>% getName()
   lbl = getLabel(object)
@@ -453,11 +447,10 @@ setMethod('getName', signature('lcModel'), function(object) {
 
 # . getShortName ####
 #' @export
-#' @name getShortName
 #' @rdname lcModel-class
 #' @aliases getShortName,lcModel-method
-setMethod('getShortName', signature('lcModel'), function(object)
-  getLcMethod(object) %>% getShortName())
+setMethod('getShortName',
+  signature('lcModel'), function(object) getLcMethod(object) %>% getShortName())
 
 
 #' @noRd

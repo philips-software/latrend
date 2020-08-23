@@ -220,6 +220,7 @@ postprobFromAssignments = function(assignments, k) {
 }
 
 #' @export
+#' @title Weighted arithmetic mean ignoring NAs
 #' @inheritParams stats::weighted.mean
 #' @keywords internal
 weighted.meanNA = function(x, w, ...) {

@@ -662,11 +662,7 @@ setMethod('postFit', signature('lcMethod'), function(method, data, model, envir,
 
 
 #' @export
-print.lcMethod = function(x,
-                          ...,
-                          eval = FALSE,
-                          width = 40,
-                          envir = NULL) {
+print.lcMethod = function(x, ..., eval = FALSE, width = 40, envir = NULL) {
   assert_that(is.lcMethod(x),
               is.flag(eval))
   envir = lcMethod.env(x, parent.frame(), envir)

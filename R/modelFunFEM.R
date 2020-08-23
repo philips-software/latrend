@@ -3,7 +3,7 @@ setClass('lcModelFunFEM', contains = 'lcModel')
 
 #' @export
 #' @rdname interface-funFEM
-#' @inheritParams fitted.lcModel
+#' @inheritParams fitted.lcApproxModel
 fitted.lcModelFunFEM = function(object, ..., clusters = clusterAssignments(object)) {
   times = time(object)
   newdata = data.table(Id = rep(ids(object), each = length(times)),
@@ -17,7 +17,7 @@ fitted.lcModelFunFEM = function(object, ..., clusters = clusterAssignments(objec
 
 #' @export
 #' @rdname interface-funFEM
-#' @inheritParams predict.lcModel
+#' @inheritParams predict.lcApproxModel
 predict.lcModelFunFEM = function(object, ...,
                                  newdata = NULL,
                                  what = 'mu',

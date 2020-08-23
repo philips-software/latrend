@@ -1,5 +1,5 @@
 #' @include modelApprox.R
-.lcModelStratify = setClass(
+setClass(
   'lcModelStratify',
   representation(
     clusterTrajectories = 'data.table',
@@ -8,6 +8,8 @@
   ),
   contains = 'lcApproxModel'
 )
+
+.lcModelStratify = function(...) new('lcModelStratify', ...)
 
 #' @rdname interface-custom
 #' @inheritParams clusterTrajectories

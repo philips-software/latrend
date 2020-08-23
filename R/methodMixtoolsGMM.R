@@ -3,7 +3,7 @@
 #' @name interface-mixtools
 #' @rdname interface-mixtools
 #' @title mixtools interface
-#' @seealso [lcModelMixtoolsGMM] [lcModelMixtoolsNPRM] \link[mixtools]{regmixEM.mixed} \link[mixtools]{npEM}
+#' @seealso [lcMethodMixtoolsGMM] [lcMethodMixtoolsNPRM] \link[mixtools]{regmixEM.mixed} \link[mixtools]{npEM}
 NULL
 
 setClass('lcMethodMixtoolsGMM', contains = 'lcMethod')
