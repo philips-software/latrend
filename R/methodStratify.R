@@ -150,8 +150,7 @@ setMethod('fit', signature('lcMethodStratify'), function(method, data, envir, ve
     response = responseVariable(method)
   )
 
-  setkey(clusTrajs, Cluster, Time)
-  setnames(clusTrajs, c('Cluster', timeVariable(method), responseVariable(method)))
+  setkeyv(clusTrajs, c('Cluster', timeVariable(method)))
 
   assert_that(uniqueN(clusTrajs$Cluster) == numClus)
 
