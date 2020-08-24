@@ -4,6 +4,11 @@ options(latrend.id = 'Traj')
 options(latrend.time = 'Assessment')
 options(latrend.verbose = R.utils::Verbose())
 
+# one of the cluster methods is altering the RNG kind, so reset it for each context
+rngReset = function() {
+  RNGkind('Mersenne-Twister', 'Inversion', 'Rejection')
+}
+
 mixt_file = file.path('..', '..', 'MixTVEM.R')
 if(file.exists(mixt_file)) {
   source(mixt_file)

@@ -1,4 +1,5 @@
 context('longclust')
+rngReset()
 
 test_that('default', {
   model = latrend(lcMethodTestLongclust(), testLongData)

@@ -1,4 +1,5 @@
 context('metrics')
+rngReset()
 
 internalMetrics = getInternalMetricNames() %>% setdiff('deviance')
 

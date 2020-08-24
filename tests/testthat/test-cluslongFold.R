@@ -1,4 +1,5 @@
 context('latrendFold')
+rngReset()
 
 test_that('2 folds', {
   latrendCV(lcMethodTestKML(), testLongData, folds=2, seed=1) %>%

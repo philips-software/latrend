@@ -1,4 +1,5 @@
 context('matrix')
+rngReset()
 
 test_that('rowColumns', {
   m = matrix(1:12, ncol=3)

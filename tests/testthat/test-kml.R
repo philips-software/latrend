@@ -1,4 +1,5 @@
 context('KML model')
+rngReset()
 
 test_that('method', {
   kml = lcMethodTestKML()

@@ -1,4 +1,5 @@
 context('crimcv')
+rngReset()
 
 library(crimCV)
 data(TO1adj)

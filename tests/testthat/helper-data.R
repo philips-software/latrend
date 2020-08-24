@@ -1,5 +1,4 @@
 set.seed(1)
-
 testLongData = generateLongData(
   sizes = c(20, 30),
   fixed = Value ~ 1 + Assessment,

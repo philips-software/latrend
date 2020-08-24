@@ -1,4 +1,5 @@
 context('akmedoids')
+rngReset()
 
 library(akmedoids)
 data(traj)

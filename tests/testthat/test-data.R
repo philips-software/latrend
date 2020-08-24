@@ -1,4 +1,5 @@
 context('data')
+rngReset()
 
 test_that('generateLongData without fixed and random effects', {
   dt = generateLongData(sizes=c(1, 2), fixed=Value ~ 0, cluster=~1, random=~0, id='Id',

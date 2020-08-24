@@ -1,4 +1,5 @@
 context('twostep models')
+rngReset()
 
 test_that('specify', {
   repfun = function(method, data, ...) {

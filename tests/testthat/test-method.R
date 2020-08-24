@@ -1,4 +1,5 @@
 context('lcMethod')
+rngReset()
 setClass('lcMethodTest', contains='lcMethod')
 
 test_that('new clmethod', {

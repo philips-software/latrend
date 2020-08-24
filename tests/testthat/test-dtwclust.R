@@ -1,4 +1,5 @@
 context('dtwclust')
+rngReset()
 
 test_that('default', {
   m = lcMethodDtwclust(response = 'Value')

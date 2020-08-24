@@ -1,4 +1,5 @@
 context('latrendBatch')
+rngReset()
 
 test_that('single method and data, cartesian=TRUE', {
   models = latrendBatch(lcMethodTestKML(), testLongData, cartesian=TRUE) %>%

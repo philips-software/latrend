@@ -1,4 +1,5 @@
 context('custom model')
+rngReset()
 
 test_that('default', {
   clusfun = function(data, ...) {

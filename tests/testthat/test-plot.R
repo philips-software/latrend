@@ -1,4 +1,5 @@
 context('plot')
+rngReset()
 
 test_that('plotTrajectories.data.frame', {
   p = plotTrajectories(testLongData, response = 'Value')

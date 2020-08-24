@@ -1,4 +1,5 @@
 context('lcModel')
+rngReset()
 
 model = latrend(lcMethodTestKML(), data=testLongData)
 

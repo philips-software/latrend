@@ -1,4 +1,5 @@
 context('latrend')
+rngReset()
 
 test_that('default', {
   model = latrend(lcMethodTestKML(), data=testLongData) %>%

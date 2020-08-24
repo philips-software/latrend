@@ -1,4 +1,5 @@
 context('stratify')
+rngReset()
 
 test_that('expression', {
   m = lcMethodTestStratify(stratify = mean(Value) > 1)

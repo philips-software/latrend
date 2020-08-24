@@ -1,4 +1,5 @@
 context('flexmix')
+rngReset()
 
 test_that('default', {
   model = latrend(lcMethodTestFlexmix(), data=testLongData)

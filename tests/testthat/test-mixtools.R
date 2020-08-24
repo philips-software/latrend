@@ -1,4 +1,5 @@
 context('mixtools')
+rngReset()
 
 test_that('default np', {
   model = latrend(lcMethodTestMixtoolsNPRM(), testLongData) %>%

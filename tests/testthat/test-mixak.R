@@ -1,4 +1,5 @@
 context('mixAK')
+rngReset()
 
 test_that('default', {
   m = lcMethodTestMixAK_GLMM(PED = FALSE)
