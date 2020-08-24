@@ -61,7 +61,9 @@ test_that('logical cluster assignment with empty cluster', {
 
 test_that('multiple cluster factor expression', {
   m = lcMethodTestStratify(stratify = cut(mean(Value), c(-Inf, -.5, 0, Inf), labels=c('C', 'B', 'A')))
-  model = latrend(m, data=testLongData)
+  expect_warning({
+    model = latrend(m, data=testLongData)
+  })
   expect_valid_lcModel(model)
   expect_equal(nClusters(model), 3)
   expect_equivalent(clusterNames(model), c('C', 'B', 'A'))
@@ -69,7 +71,9 @@ test_that('multiple cluster factor expression', {
 
 test_that('multiple cluster numeric expression', {
   m = lcMethodTestStratify(stratify = as.numeric(cut(mean(Value), c(-Inf, -.5, 0, Inf))))
-  model = latrend(m, data=testLongData)
+  expect_warning({
+    model = latrend(m, data=testLongData)
+  })
   expect_valid_lcModel(model)
   expect_equal(nClusters(model), 3)
   expect_equivalent(clusterNames(model), c('A', 'B', 'C'))
@@ -78,7 +82,9 @@ test_that('multiple cluster numeric expression', {
 test_that('multiple cluster expression with cluster names', {
   m = lcMethodTestStratify(stratify = as.numeric(cut(mean(Value), c(-Inf, -.5, 0, Inf))),
                        clusterNames=LETTERS[3:1])
-  model = latrend(m, data=testLongData)
+  expect_warning({
+    model = latrend(m, data=testLongData)
+  })
   expect_valid_lcModel(model)
   expect_equal(nClusters(model), 3)
   expect_equivalent(clusterNames(model), c('C', 'B', 'A'))
