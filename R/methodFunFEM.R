@@ -17,6 +17,7 @@ setClass('lcMethodFunFEM', contains = 'lcMatrixMethod')
 #' The following external arguments are ignored: fd, K, disp, graph.
 #' @examples
 #' library(funFEM)
+#' library(fda)
 #' data(testLongData)
 #' method <- lcMethodFunFEM("Value",
 #'                      time = "Time",
@@ -25,16 +26,17 @@ setClass('lcMethodFunFEM', contains = 'lcMatrixMethod')
 #' model <- latrend(method, testLongData)
 #'
 #' method <- lcMethodFunFEM("Value",
-#'    basis = function(time)
-#'       fda::create.bspline.basis(time,
+#'    basis = function(time) {
+#'       create.bspline.basis(time,
 #'         nbasis = 10, norder = 4)
+#'    }
+#' )
 #' @family lcMethod implementations
 lcMethodFunFEM = function(response,
                           time = getOption('latrend.time'),
                           id = getOption('latrend.id'),
                           nClusters = 2,
-                          basis = function(time)
-                            fda::create.bspline.basis(time, nbasis = 10, norder = 3),
+                          basis = fda::create.bspline.basis(time, nbasis = 10, norder = 4),
                           ...) {
   lcMethod.call(
     'lcMethodFunFEM',
