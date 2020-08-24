@@ -29,8 +29,8 @@ setGeneric('clusterTrajectories', function(object, ...) standardGeneric('cluster
 
 #' @export
 #' @name latrend-generics
-setGeneric('compose', function(method, envir, ...) {
-  newmethod = standardGeneric('compose')
+setGeneric('compose', def = function(method, envir, ...) {
+  newmethod <- standardGeneric('compose')
   assert_that(is.lcMethod(newmethod),
     msg = paste0('invalid method output from compose(', class(newmethod), ')')
   )
@@ -57,7 +57,7 @@ setGeneric('externalMetric',
 #' @name latrend-generics
 setGeneric('fit', function(method, data, envir, verbose, ...) {
   start = Sys.time()
-  model = standardGeneric('fit')
+  model <- standardGeneric('fit')
   estimationTime = Sys.time() - start
 
   assert_that(is.lcModel(model),
@@ -69,7 +69,6 @@ setGeneric('fit', function(method, data, envir, verbose, ...) {
   model@response = responseVariable(method)
   model@label = getLabel(method)
   model@estimationTime = as.numeric(estimationTime, 'secs')
-
   return(model)
 })
 
@@ -129,7 +128,7 @@ setGeneric('predictPostprob',
 #' @export
 #' @name latrend-generics
 setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
-  model = standardGeneric('postFit')
+  model <- standardGeneric('postFit')
   assert_that(inherits(model, 'lcModel'),
     msg = 'postFit(lcMethod, ...) returned an unexpected object. Should be of type lcModel.')
   return(model)
@@ -138,7 +137,7 @@ setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
 #' @export
 #' @name latrend-generics
 setGeneric('preFit', function(method, data, envir, verbose, ...) {
-  modelEnv = standardGeneric('preFit')
+  modelEnv <- standardGeneric('preFit')
   assert_that(is.null(modelEnv) ||
       is.environment(modelEnv),
     msg = 'preFit(method, ...) returned an unexpected object. Should be environment or NULL')
@@ -148,7 +147,7 @@ setGeneric('preFit', function(method, data, envir, verbose, ...) {
 #' @export
 #' @name latrend-generics
 setGeneric('prepareData', function(method, data, verbose, ...) {
-  envir = standardGeneric('prepareData')
+  envir <- standardGeneric('prepareData')
   assert_that(is.null(envir) ||
       is.environment(envir),
     msg = 'prepareData(method, ...) returned an unexpected object. Should be environment or NULL')
@@ -175,7 +174,7 @@ setGeneric('timeVariable', function(object, ...) standardGeneric('timeVariable')
 #' @export
 #' @name latrend-generics
 setGeneric('validate', function(method, data, envir, ...) {
-  validationResult = standardGeneric('validate')
+  validationResult <- standardGeneric('validate')
   if (!isTRUE(validationResult)) {
     stop('method validation failed: ', validationResult)
   }
