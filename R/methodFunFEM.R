@@ -36,7 +36,7 @@ lcMethodFunFEM = function(response,
                           time = getOption('latrend.time'),
                           id = getOption('latrend.id'),
                           nClusters = 2,
-                          basis = fda::create.bspline.basis(time, nbasis = 10, norder = 4),
+                          basis = function(time) fda::create.bspline.basis(time, nbasis = 10, norder = 4),
                           ...) {
   lcMethod.call(
     'lcMethodFunFEM',
