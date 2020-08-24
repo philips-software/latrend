@@ -1,3 +1,16 @@
+#' Synthetic longitudinal dataset comprising three classes
+#' @format A `data.frame` describing 250 trajectories originating from one of three classes,
+#' each with a different cluster trajectory. Trajectories randomly deviate in intercept and slope from the reference cluster.
+#' \describe{
+#'   \item{Id}{trajectory identifier, `factor`.}
+#'   \item{Time}{measurement time, `numeric` [0, 2].}
+#'   \item{Y}{observed variable, `numeric`.}
+#'   \item{Class}{the reference class, `factor`.}
+#' }
+#' @source This dataset was generated using [generateLongData].
+#' @seealso [generateLongData]
+"latrendData"
+
 #' @export
 #' @title Generate longitudinal test data
 #' @param sizes Number of strata per cluster.

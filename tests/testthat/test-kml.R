@@ -22,7 +22,7 @@ test_that('nclusters', {
 
 test_that('predictPostprob', {
   model = latrend(lcMethodTestKML(), testLongData)
-  testData = testLongData[Id %in% unique(Id)[1:3]]
+  testData = testLongData[Traj %in% unique(Traj)[1:3]]
   pp = predictPostprob(model, newdata = testData)
   expect_true(is_valid_postprob(pp, model))
 })

@@ -38,10 +38,10 @@ test_that('new method arguments', {
 })
 
 test_that('subset', {
-  model = latrend(lcMethodTestKML(), data=testLongData[Time < .5]) %>%
+  model = latrend(lcMethodTestKML(), data=testLongData[Assessment < .5]) %>%
     expect_is('lcModel')
 
-  expect_equal(deparse(getCall(model)$data), 'testLongData[Time < 0.5]')
+  expect_equal(deparse(getCall(model)$data), 'testLongData[Assessment < 0.5]')
 })
 
 test_that('data call', {
@@ -83,7 +83,7 @@ test_that('matrix input', {
 
 test_that('custom id and time', {
   nameData = copy(testLongData) %>%
-    setnames(c('Id', 'Time'), c('Device', 'Observation'))
+    setnames(c('Traj', 'Assessment'), c('Device', 'Observation'))
   model = latrend(lcMethodTestKML(), id='Device', time='Observation', data=nameData) %>%
     expect_is('lcModel')
 
@@ -93,34 +93,34 @@ test_that('custom id and time', {
 test_that('id with NA', {
   set.seed(1)
   naData = copy(testLongData) %>%
-    .[sample(.N, 10), Id := NA]
+    .[sample(.N, 10), Traj := NA]
 
   expect_error(latrend(lcMethodTestKML(), data=naData))
 })
 
 test_that('factor id', {
   facData = copy(testLongData) %>%
-    .[, Id := factor(Id)]
+    .[, Traj := factor(Traj)]
 
   model = latrend(lcMethodTestKML(), data=facData) %>%
     expect_is('lcModel')
 
-  expect_equal(ids(model), levels(facData$Id))
+  expect_equal(ids(model), levels(facData$Traj))
 })
 
 test_that('factor id, out of order', {
   facData = copy(testLongData) %>%
-    .[, Id := factor(Id, levels=rev(unique(Id)))]
+    .[, Traj := factor(Traj, levels=rev(unique(Traj)))]
 
   model = latrend(lcMethodTestKML(), data=facData) %>%
     expect_is('lcModel')
 
-  expect_equal(ids(model), levels(facData$Id))
+  expect_equal(ids(model), levels(facData$Traj))
 })
 
 test_that('factor id with empty levels', {
   facData = copy(testLongData) %>%
-    .[, Id := factor(Id, levels=seq(0, uniqueN(Id) + 1))]
+    .[, Traj := factor(Traj, levels=seq(0, uniqueN(Traj) + 1))]
 
   model = latrend(lcMethodTestKML(), data=facData) %>%
     expect_is('lcModel')
@@ -128,7 +128,7 @@ test_that('factor id with empty levels', {
 
 test_that('id with NA', {
   naData = copy(testLongData) %>%
-    .[Id == 1, Id := NA]
+    .[Traj == 1, Traj := NA]
 
   expect_error(latrend(lcMethodTestKML(), data=naData))
 })

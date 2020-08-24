@@ -5,7 +5,7 @@ test_that('default', {
     expect_valid_lcModel()
 
   expect_equal(nClusters(model), 3)
-  expect_equivalent(clusterProportions(model), c(.21, .45, .34))
+  expect_equivalent(clusterProportions(model), c(.06, .48, .46))
 })
 
 test_that('uniform groups', {

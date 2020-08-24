@@ -1,21 +1,26 @@
 library(usethis)
 library(latrend)
-source('osa.R')
 
-# Test data ####
-testLongData = generateLongData() %>%
-  .[, .(Id, Time, Value, Cluster)]
+# Example data ####
+set.seed(1)
+latrendData = generateLongData(
+  sizes = c(90, 80, 30),
+  fixed = Y ~ 1,
+  cluster = ~ Time + I(Time^2),
+  random = ~ Time,
+  id = 'Id',
+  data = data.frame(Time = seq(0, 2, length.out = 10)),
+  fixedCoefs = 0,
+  clusterCoefs = cbind(c(-1, 1.5, -.4), c(0, 0, 0), c(.25, .25, -.4)),
+  randomScales = cbind(c(.3, .05), c(.2, .1), c(.1, .1)), #cbind(c(0,0), c(0,0), c(0,0)),
+  noiseScales = c(.1, .1, .1),
+  clusterNames = paste('Class', 1:3),
+  shuffle = FALSE) %>%
+  setnames('Cluster', 'Class') %>%
+  .[, .(Id, Time, Y, Class)]
 
-use_data(testLongData, overwrite=TRUE)
+plotTrajectories(latrendData, response = 'Y')
+plotTrajectories(latrendData, response = 'Y', cluster = 'Class', facet = FALSE)
+plotTrajectories(latrendData, response = 'Y', cluster = 'Class', facet = TRUE)
 
-# OSA case study data ####
-osaData = generate_osa_data()
-OSA1y = osaData[, .(Patient=Id, Day=Time, HoursOfUse=Usage, Profile=Group)]
-
-OSA1y14 = transformToAverage(osaData, binSize=14) %>%
-  .[, .(Patient=Id, Day=Time, HoursOfUse=Usage, Profile=Group)]
-
-OSA1y30 = transformToAverage(osaData, binSize=30) %>%
-  .[, .(Patient=Id, Day=Time, HoursOfUse=Usage, Profile=Group)]
-
-use_data(OSA1y, OSA1y14, OSA1y30, overwrite=TRUE)
+use_data(latrendData, overwrite = TRUE)

@@ -2,7 +2,7 @@ context('custom model')
 
 test_that('default', {
   clusfun = function(data, ...) {
-       clusters = data[, mean(Value) > 0, by = Id]$V1 %>%
+       clusters = data[, mean(Value) > 0, by = Traj]$V1 %>%
            factor(levels = c(F,T), labels = c('Low', 'High'))
        list(clusters = clusters)
        lcModelCustom(data = data, response = 'Value', clusterAssignments = clusters)

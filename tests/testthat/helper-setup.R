@@ -1,90 +1,12 @@
+options(deparse.max.lines=5)
+
+options(latrend.id = 'Traj')
+options(latrend.time = 'Assessment')
+options(latrend.verbose = R.utils::Verbose())
+
 mixt_file = file.path('..', '..', 'MixTVEM.R')
 if(file.exists(mixt_file)) {
   source(mixt_file)
-}
-
-options(latrend.id='Id',
-        latrend.time='Time',
-        latrend.verbose=R.utils::Verbose())
-
-lcMethodTestKML = function(...) {
-  lcMethodKML(response = 'Value', nbRedrawing=1, maxIt=10, ..., seed=1)
-}
-
-lcMethodTestLcmmGMM = function(...) {
-  lcMethodLcmmGMM(formula = Value ~ 1 + CLUSTER + (1 | ID), maxiter=10, ..., seed=1)
-}
-
-lcMethodTestLcmmGBTM = function(...) {
-  lcMethodLcmmGBTM(formula = Value ~ CLUSTER, maxiter=10, ..., seed=1)
-}
-
-lcMethodTestFlexmixGBTM = function(...) {
-  lcMethodFlexmixGBTM(formula = Value ~ Time, ..., control=list(iter.max=1, tolerance=1e-3), seed=1)
-}
-
-lcMethodTestCrimCV = function(...) {
-  lcMethodCrimCV(response = 'Value', ..., model='ZIP', dpolyp=2, dpolyl=1, init=2, seed=1)
-}
-
-lcMethodTestFunFEM = function(...) {
-  lcMethodFunFEM(response = 'Value', ...)
-}
-
-lcMethodTestMclustLLPA = function(...) {
-  lcMethodMclustLLPA(response = 'Value', ...)
-}
-
-lcMethodTestRandom = function(...) {
-  lcMethodRandom(response = 'Value', ...)
-}
-
-lcMethodTestStratify = function(...) {
-  lcMethodStratify(response = 'Value', ...)
-}
-
-lcMethodTestFlexmix = function(...) {
-  lcMethodFlexmix(formula = Value ~ 0, ...)
-}
-
-lcMethodTestGCKM = function(...) {
-  lcMethodGCKM(formula = Value ~ Time, ...)
-}
-
-lcMethodTestLMKM = function(...) {
-  lcMethodLMKM(formula = Value ~ Time, ...)
-}
-
-lcMethodTestTwoStep = function(...) {
-  lcMethodTwoStep(response = 'Value', ...)
-}
-
-lcMethodTestMixTVEM = function(...) {
-  lcMethodMixTVEM(formula = Value ~ time(1) - 1, ...)
-}
-
-lcMethodTestCrimCVt = function(...) {
-  lcMethodCrimCV(response = 'Value', ..., model='ZIPt', dpolyp=2, init=2, seed=1)
-}
-
-lcMethodTestLongclust = function(...) {
-  lcMethodLongclust(response = 'Value', modelSubset='VVA', gaussian=TRUE, ..., seed=1)
-}
-
-lcMethodTestLongclustT = function(...) {
-  lcMethodLongclust(response = 'Value', modelSubset='VEI', gaussian=FALSE, ..., seed=1)
-}
-
-lcMethodTestMixtoolsNPRM = function(...) {
-  lcMethodMixtoolsNPRM(response = 'Value', maxiter=10, eps=1e-04, seed=1)
-}
-
-lcMethodTestMixtoolsGMM = function(...) {
-  lcMethodMixtoolsGMM(formula = Value ~ Time + (Time | Id), epsilon=1e-02, ..., seed=1)
-}
-
-lcMethodTestMixAK_GLMM = function(...) {
-  lcMethodMixAK_GLMM(fixed = Value ~ 1, random = ~ Time, ..., seed=1)
 }
 
 expect_valid_lcModel = function(object) {
@@ -134,28 +56,28 @@ expect_valid_lcModel = function(object) {
   # Predict
   if(!is(object, 'lcModelCustom')) {
     # cluster-specific prediction
-    pred = predict(object, newdata=data.frame(Cluster='A', Time=time(object)[c(1,3)]))
+    pred = predict(object, newdata=data.frame(Cluster='A', Assessment=time(object)[c(1,3)]))
     expect_is(pred, 'data.frame', info='predictClusterTime')
     expect_true('Fit' %in% names(pred), info='predictClusterTime')
     expect_equal(nrow(pred), 2, info='predictClusterTime')
 
     # prediction for all clusters; list of data.frames
-    pred2 = predict(object, newdata=data.frame(Time=time(object)[c(1,3)]))
+    pred2 = predict(object, newdata=data.frame(Assessment=time(object)[c(1,3)]))
     expect_is(pred2, 'list', info='predictTime')
     expect_length(pred2, nClusters(object))
     expect_true('Fit' %in% names(pred2$A), info='predictTime')
 
     # id-specific prediction for a specific cluster; data.frame
     pred3 = predict(object, newdata=data.frame(Cluster=rep('A', 4),
-                                       Id=c(ids(object)[c(1,1,2)], tail(ids(object), 1)),
-                                       Time=c(time(object)[c(1,3,1,1)])))
+                                       Traj=c(ids(object)[c(1,1,2)], tail(ids(object), 1)),
+                                       Assessment=c(time(object)[c(1,3,1,1)])))
     expect_is(pred3, 'data.frame', info='predictClusterIdTime')
     expect_true('Fit' %in% names(pred3), info='predictClusterIdTime')
     expect_equal(nrow(pred3), 4, info='predictClusterIdTime')
 
     # id-specific prediction for all clusters; list of data.frames
-    pred4 = predict(object, newdata=data.frame(Id=c(ids(object)[c(1,1,2)], tail(ids(object), 1)),
-                                       Time=c(time(object)[c(1,3,1,1)])))
+    pred4 = predict(object, newdata=data.frame(Traj=c(ids(object)[c(1,1,2)], tail(ids(object), 1)),
+                                       Assessment=c(time(object)[c(1,3,1,1)])))
     expect_is(pred4, 'list', info='predictIdTime')
     expect_length(pred4, nClusters(object))
     expect_true('Fit' %in% names(pred4$A), info='predictIdTime')

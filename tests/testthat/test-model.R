@@ -7,7 +7,7 @@ test_that('default predict', {
     setClass('lcModelTest', contains='lcModel')
     testModel = model
     class(testModel) = 'lcModelTest'
-    dfpred = predict(testModel, newdata=data.frame(Time=1))
+    dfpred = predict(testModel, newdata=data.frame(Assessment=1))
     expect_is(dfpred, 'list')
     expect_is(dfpred$A$Fit, 'numeric')
     expect_equivalent(nrow(dfpred$A), 1)
