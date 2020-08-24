@@ -4,3 +4,5 @@ NAMESPACE
 man
 .Rhistory
 cld.Rdata
+.Rprofile
+*.txt
