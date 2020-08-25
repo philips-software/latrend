@@ -93,7 +93,7 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
   if (length(getCovariates(e$mixture)) == 0 &&
       !hasIntercept(e$mixture)) {
     if (method$nClusters > 1) {
-      warning.Verbose(
+      warnings.Verbose(
         verbose,
         'no cluster-specific terms specified in formula. Defaulting to intercept.'
       )
