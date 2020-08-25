@@ -21,12 +21,9 @@ setValidity('lcMethodGCKM', function(object) {
 #' The following external arguments are ignored: data, centers, trace.
 #' @examples
 #' library(lme4)
-#' data(testLongData)
-#' method <- lcMethodGCKM(Value ~ Time + (Time | Id),
-#'                      time='Time',
-#'                      id='Id',
-#'                      nClusters = 3)
-#' model <- latrend(method, testLongData)
+#' data(latrendData)
+#' method <- lcMethodGCKM(Y ~ Time + (Time | Id), time='Time', id='Id', nClusters = 3)
+#' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodGCKM = function(formula,
                         time = getOption('latrend.time'),

@@ -105,10 +105,10 @@ setValidity('lcModel', function(object) {
 #' If a vector is specified, this is assumed to be the time covariate. Otherwise, a named list or data frame must be provided.
 #' @return A data.frame of the estimated values at the given times
 #' @examples
-#' model = latrend(method=lcMethodLcmmGMM(), data=testLongData)
+#' model <- latrend(method=lcMethodLcmmGMM(Y ~ Time + (1 | Id)), data = latrendData)
 #' clusterTrajectories(model)
 #'
-#' clusterTrajectories(model, at=c(0, .5, 1))
+#' clusterTrajectories(model, at = c(0, .5, 1))
 #' @family model-specific methods
 setMethod('clusterTrajectories', signature('lcModel'), function(object, at = time(object), what = 'mu', ...) {
   if (is.numeric(at)) {
@@ -139,8 +139,8 @@ setMethod('clusterTrajectories', signature('lcModel'), function(object, at = tim
 #' @param factor Whether to return the cluster names as a factor.
 #' @return A `character` of the cluster names.
 #' @examples
-#' data(testLongData)
-#' model <- latrend(lcMethodKML(), testLongData)
+#' data(latrendData)
+#' model <- latrend(lcMethodKML("Y"), latrendData)
 #' clusterNames(model) # A, B
 clusterNames = function(object, factor = FALSE) {
   assert_that(is.lcModel(object))
@@ -157,8 +157,8 @@ clusterNames = function(object, factor = FALSE) {
 #' @param value The `character` with the new names.
 #' @return The updated `lcModel` object.
 #' @examples
-#' data(testLongData)
-#' model <- latrend(lcMethodKML(), testLongData)
+#' data(latrendData)
+#' model <- latrend(lcMethodKML("Y"), latrendData)
 #' clusterNames(model) <- c("Group 1", "Group 2")
 `clusterNames<-` = function(object, value) {
   assert_that(is.lcModel(object),
@@ -172,7 +172,7 @@ clusterNames = function(object, factor = FALSE) {
 #' @title Number of strata per cluster
 #' @param object The `lcModel` object.
 #' @examples
-#' model <- latrend(lcMethodKML(), testLongData)
+#' model <- latrend(lcMethodKML("Y"), latrendData)
 #' clusterSizes(model)
 clusterSizes = function(object) {
   assert_that(is.lcModel(object))
@@ -191,8 +191,8 @@ clusterSizes = function(object) {
 #' @param object The `lcModel` to obtain the proportions from.
 #' @param ... Not used.
 #' @examples
-#' data(testLongData)
-#' model <- latrend(lcMethodKML(), testLongData)
+#' data(latrendData)
+#' model <- latrend(lcMethodKML("Y"), latrendData)
 #' clusterProportions(model)
 setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
   pp = postprob(object)
@@ -213,8 +213,8 @@ setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
 #' @param strategy A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.
 #' @param ... Any additional arguments passed to the strategy function.
 #' @examples
-#' data(testLongData)
-#' model <- latrend(method = lcMethodKML(), testLongData)
+#' data(latrendData)
+#' model <- latrend(method = lcMethodKML("Y"), latrendData)
 #' clusterAssignments(model)
 #'
 #' # only assign ids with a probability over 0.9
@@ -257,7 +257,7 @@ coef.lcModel = function(object, ...) {
 #' @param object The `lcModel` object.
 #' @param ... Additional arguments.
 #' @examples
-#' model = latrend(method=lcMethodLcmmGMM(), data=testLongData)
+#' model = latrend(method=lcMethodLcmmGMM(Y ~ Time + (1 | Id)), data=latrendData)
 #' confusionMatrix(model)
 confusionMatrix.lcModel = function(object, ...) {
   assert_that(is.lcModel(object))
@@ -321,9 +321,9 @@ df.residual.lcModel = function(object, ...) {
 #' @export
 #' @rdname externalMetric
 #' @examples
-#' data(testLongData)
-#' model1 <- latrend(lcMethodKML(), testLongData)
-#' model2 <- latrend(lcMethodLcmmGMM(), testLongData)
+#' data(latrendData)
+#' model1 <- latrend(lcMethodKML("Y"), latrendData)
+#' model2 <- latrend(lcMethodLcmmGMM(Y ~ Time + (1 | Id)), latrendData)
 #' ari <- externalMetric(model1, model2, 'adjustedRand')
 #' @return For `externalMetric(lcModel, lcModel)`: A `numeric` vector of the computed metrics.
 #' @family metric functions
@@ -421,7 +421,7 @@ setMethod('getLabel', signature('lcModel'), function(object, ...) {
 #' @title Get the method specification of a lcModel
 #' @param object The `lcModel` object.
 #' @examples
-#' model = latrend(method=lcMethodKML(), data=testLongData)
+#' model = latrend(method=lcMethodKML("Y"), data=latrendData)
 #' getLcMethod(model)
 getLcMethod = function(object) {
   assert_that(is.lcModel(object))
@@ -471,7 +471,7 @@ genIdRowIndices = function(object) {
 #' @details The order returned by ids(lcModel) determines the id order for any output involving id-specific values, such as in clusterAssignments() or postprob()
 #' @param object The `lcModel` object.
 #' @examples
-#' model = latrend(lcMethodKML(), testLongData)
+#' model = latrend(lcMethodKML("Y"), latrendData)
 #' ids(model) # S1, S2, ..., S500
 ids = function(object) {
   if (length(object@ids) == 0) {
@@ -493,7 +493,7 @@ ids = function(object) {
 #' @rdname idVariable
 #' @aliases idVariable,lcModel-method
 #' @examples
-#' model <- latrend(lcMethodKML(), testLongData)
+#' model <- latrend(lcMethodKML("Y"), latrendData)
 #' idVariable(model) # "Id"
 #'
 #' @family lcModel variables
@@ -522,11 +522,11 @@ logLik.lcModel = function(object, ...) {
 #' @export
 #' @rdname metric
 #' @examples
-#' data(testLongData)
-#' model = latrend(lcMethodLcmmGMM(), testLongData)
-#' bic = metric(model, 'BIC')
+#' data(latrendData)
+#' model <- latrend(lcMethodLcmmGMM(Y ~ Time + (1 | Id)), latrendData)
+#' bic <- metric(model, "BIC")
 #'
-#' ic = metric(model, c('AIC', 'BIC'))
+#' ic <- metric(model, c("AIC", "BIC"))
 #' @family metric functions
 setMethod('metric', signature('lcModel'), function(object, name = c('AIC', 'BIC', 'WRSS', 'APPA'), ...) {
   assert_that(is.lcModel(object),
@@ -796,8 +796,8 @@ nobs.lcModel = function(object, ...) {
 #' @return If newdata specifies the cluster membership; a vector of cluster-specific predictions. Otherwise, a matrix of predictions is returned corresponding to each cluster.
 #' @param ... Additional arguments.
 #' @examples
-#' data(testLongData)
-#' model <- latrend(lcMethodLcmmGMM(), testLongData)
+#' data(latrendData)
+#' model <- latrend(lcMethodLcmmGMM(Y ~ Time + (1 | Id)), latrendData)
 #' predFitted <- predict(model) # same result as fitted(model)
 #'
 #' # Cluster trajectory of cluster A
@@ -1029,7 +1029,8 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
 #' @param object The `lcModel`.
 #' @param ... Additional arguments.
 #' @examples
-#' model = latrend(lcMethodLcmmGMM(), data=testLongData)
+#' data(latrendData)
+#' model <- latrend(lcMethodLcmmGMM(Y ~ Time + (1 | Id)), data = latrendData)
 #' postprob(model)
 #' @family model-specific methods
 setMethod('postprob', signature('lcModel'), function(object, ...) {
@@ -1100,7 +1101,8 @@ residuals.lcModel = function(object, ..., clusters = clusterAssignments(object))
 #' @name responseVariable
 #' @aliases responseVariable,lcModel-method
 #' @examples
-#' model <- latrend(lcMethodKML(), testLongData)
+#' data(latrendData)
+#' model <- latrend(lcMethodKML("Y"), latrendData)
 #' responseVariable(model) # "Value"
 #' @family lcModel variables
 setMethod('responseVariable', signature('lcModel'), function(object, ...) object@response)
@@ -1199,7 +1201,8 @@ summary.lcModel = function(object, ...) {
 #' @rdname timeVariable
 #' @aliases timeVariable,lcModel-method
 #' @examples
-#' model <- latrend(lcMethodKML(), testLongData)
+#' data(latrendData)
+#' model <- latrend(lcMethodKML("Y"), latrendData)
 #' idVariable(model) # "Id"
 #' @family lcModel variables
 setMethod('timeVariable', signature('lcModel'), function(object) object@time)
@@ -1217,10 +1220,11 @@ setMethod('timeVariable', signature('lcModel'), function(object) object@time)
 #' @param clusters The cluster assignments for the strata to base the trajectories on.
 #' @param ... Additional arguments.
 #' @examples
-#' model = latrend(method=lcMethodKML(), data=testLongData)
+#' data(latrendData)
+#' model <- latrend(method = lcMethodKML("Y"), data = latrendData)
 #' trajectories(model)
 #'
-#' trajectories(model, at=c(0, .5, 1))
+#' trajectories(model, at = c(0, .5, 1))
 #' @family model-specific methods
 setGeneric('trajectories', function(object,
                                     at = time(object),

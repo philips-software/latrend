@@ -166,13 +166,13 @@ lcMethod = function(.class,
 #' @param excludeArgs The names of the arguments to exclude from the defaults, provided as a `character vector`.
 #' @return An object of class `Class` that extends `lcMethod`.
 #' @examples
-#' lcMethodKML2 = function(formula=Value ~ 0, time='Id', id='Id', nClusters=2, ...) {
-#'   lcMethod.call('lcMethodKML', call=stackoverflow::match.call.defaults(),
-#'     defaults=c(kml::kml, kml::parALGO),
-#'     excludeArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq'))
+#' lcMethodKML2 <- function(formula = Value ~ 0, time = "Id", id = "Id", nClusters = 2, ...) {
+#'   lcMethod.call("lcMethodKML", call = stackoverflow::match.call.defaults(),
+#'     defaults = c(kml::kml, kml::parALGO),
+#'     excludeArgs = c("object", "nbClusters", "parAlgo", "toPlot", "saveFreq"))
 #' }
-#' m = lcMethodKML2(nClusters=3)
-#' latrend(m, testLongData)
+#' method <- lcMethodKML2(nClusters = 3)
+#' latrend(method, data = latrendData)
 #' @seealso [lcMethod]
 lcMethod.call = function(Class,
                           call,
@@ -234,16 +234,17 @@ lcMethod.call = function(Class,
 #' @param envir The `environment` in which to evaluate the arguments. If `NULL`, the environment associated with the object is used. If not available, the `parent.frame()` is used.
 #' @return A `list` with the argument `call`s or evaluated results depending on the value for `eval`.
 #' @examples
-#' method = lcMethodKML()
+#' data(latrendData)
+#' method <- lcMethodKML("Y")
 #' as.list(method)
 #'
-#' as.list(method, args=c('id', 'time'))
+#' as.list(method, args = c('id', 'time'))
 #'
 #' # select arguments used by kml()
-#' as.list(method, args=kml::kml)
+#' as.list(method, args = kml::kml)
 #'
 #' # select arguments used by either kml() or parALGO()
-#' as.list(method, args=c(kml::kml, kml::parALGO))
+#' as.list(method, args = c(kml::kml, kml::parALGO))
 #' @family lcMethod functions
 as.list.lcMethod = function(x, ...,
                             args = names(x),
@@ -368,13 +369,14 @@ lcMethod.env = function(object, defaultEnvir, envir) {
 #' @param envir The `environment` in which to evaluate the method arguments.
 #' @return A `list` of `lcMethod` objects.
 #' @examples
-#' kml = lcMethodKML()
-#' methods = lcMethods(kml, nClusters=1:6)
+#' data(latrendData)
+#' kml <- lcMethodKML("Y")
+#' methods <- lcMethods(kml, nClusters = 1:6)
 #'
-#' nclus = 1:6
-#' methods = lcMethods(kml, nClusters=nclus)
+#' nclus <- 1:6
+#' methods <- lcMethods(kml, nClusters = nclus)
 #'
-#' methods = lcMethods(kml, nClusters=3, center=.(meanNA, meanNA, median))
+#' methods <- lcMethods(kml, nClusters = 3, center = .(meanNA, meanNA, median))
 lcMethods = function(method, ..., envir = NULL) {
   assert_that(is.lcMethod(method))
 
@@ -529,7 +531,7 @@ setMethod('getLabel', signature('lcMethod'), function(object, ...) {
 #' @aliases getName,lcMethod-method
 #' @description Extracts the name of the given `object`.
 #' @examples
-#' getName(lcMethodKML()) # "longitudinal k-means"
+#' getName(lcMethodKML("Y")) # "longitudinal k-means"
 setMethod('getName', signature('lcMethod'), function(object) 'custom')
 
 #. getShortName ####
@@ -539,7 +541,7 @@ setMethod('getName', signature('lcMethod'), function(object) 'custom')
 #' @aliases getShortName,lcMethod-method
 #' @title Extract the short object name
 #' @examples
-#' getShortName(lcMethodKML()) # "KML"
+#' getShortName(lcMethodKML("Y")) # "KML"
 setMethod('getShortName', signature('lcMethod'), getName)
 
 
@@ -617,7 +619,7 @@ setMethod('length', signature('lcMethod'), function(x) {
 #' @param x The `lcMethod` object.
 #' @return A `character vector` of argument names.
 #' @examples
-#' m = lcMethodKML()
+#' m = lcMethodKML("Y")
 #' names(m)
 #' @family lcMethod functions
 setMethod('names', signature('lcMethod'), function(x) {

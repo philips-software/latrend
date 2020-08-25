@@ -9,10 +9,10 @@
 #' @param facet Whether to facet by cluster.
 #' @param ... Additional arguments.
 #' @examples
-#' data(testLongData)
-#' plotTrajectories(testLongData, response = 'Value')
+#' data(latrendData)
+#' plotTrajectories(latrendData, response = 'Y')
 #'
-#' plotTrajectories(testLongData, response = quote(exp(Value)))
+#' plotTrajectories(latrendData, response = quote(exp(Y)))
 setMethod('plotTrajectories', signature('data.frame'), function(object,
                                                                 response,
                                                                 time = getOption('latrend.time'),

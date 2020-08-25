@@ -17,12 +17,9 @@ setValidity('lcMethodLMKM', function(object) {
 #' @param ... Arguments passed to [stats::lm].
 #' The following external arguments are ignored: x, data, control, centers, trace.
 #' @examples
-#' data(testLongData)
-#' method <- lcMethodLMKM(Value ~ Time,
-#'                      time = "Time",
-#'                      id = "Subject",
-#'                      nClusters = 3)
-#' model <- latrend(method, testLongData)
+#' data(latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, time = "Time", id = "Id", nClusters = 3)
+#' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodLMKM = function(formula,
                         time = getOption('latrend.time'),

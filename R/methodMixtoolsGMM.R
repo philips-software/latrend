@@ -15,13 +15,11 @@ setClass('lcMethodMixtoolsGMM', contains = 'lcMethod')
 #' The following arguments are ignored: data, y, x, w, k, addintercept.fixed, verb.
 #' @examples
 #' library(mixtools)
-#' data(testLongData)
+#' data(latrendData)
 #' method <- lcMethodMixtoolsGMM(
-#'    formula = Value ~ Time + (Time | Id),
-#'    time = "Time",
-#'    id = "Id",
-#'    nClusters = 3)
-#' model <- latrend(method, testLongData)
+#'    formula = Y ~ Time + (Time | Id),
+#'    time = "Time", id = "Id", nClusters = 3)
+#' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodMixtoolsGMM = function(formula,
                                time = getOption('latrend.time'),

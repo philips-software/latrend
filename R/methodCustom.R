@@ -17,15 +17,15 @@ setClass('lcMethodCustom', contains = 'lcMethod')
 #' @param id The name of the trajectory identification variable.
 #' @param name The name of the method.
 #' @examples
-#' data(testLongData)
+#' data(latrendData)
 #' # Stratification based on the mean response level
 #' clusfun <- function(method, data) {
-#'    clusters <- data[, mean(Value) > 2, by = Id] %>%
+#'    clusters <- data[, mean(Y) > 2, by = Id] %>%
 #'        factor(levels = c(F,T), labels = c("Low", "High"))
 #'    lcModelCustom(clusters = clusters)
 #' }
 #' method <- lcMethodCustom(fun = clusfun)
-#' model <- latrend(method, testLongData)
+#' model <- latrend(method, data = latrendData)
 #' @family lcMethod implementations
 lcMethodCustom = function(response,
                           fun,

@@ -16,11 +16,9 @@ setClass('lcMethodLongclust', contains = 'lcMatrixMethod')
 #' The following external arguments are ignored: data, x, Gmin, Gmax, userseed.
 #' @examples
 #' library(longclust)
-#' data(testLongData)
-#' method = lcMethodLongclust(Value ~ 1,
-#'                      time='Time',
-#'                      id='Id', nClusters=3)
-#' latrend(method, testLongData)
+#' data(latrendData)
+#' method <- lcMethodLongclust(Y ~ 1, time = "Time", id = "Id", nClusters = 3)
+#' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodLongclust = function(response,
                              time = getOption('latrend.time'),

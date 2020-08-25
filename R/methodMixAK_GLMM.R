@@ -19,11 +19,9 @@ setClass('lcMethodMixAK_GLMM', contains = 'lcMethod')
 #' The following external arguments are ignored: y, x, z, random.intercept, silent.
 #' @family lcMethod implementations
 #' @examples
-#' data(testLongData)
-#' method <- lcMethodMixAK_GLMM(fixed = Value ~ Time,
-#'     random = ~ Time,
-#'     nClusters = 2)
-#' model <- latrend(method, testLongData)
+#' data(latrendData)
+#' method <- lcMethodMixAK_GLMM(fixed = Y ~ Time, random = ~ Time, nClusters = 3)
+#' model <- latrend(method, latrendData)
 #' summary(model)
 lcMethodMixAK_GLMM = function(fixed,
                               random,

@@ -19,12 +19,9 @@ setClass('lcMethodAKMedoids', contains = 'lcMatrixMethod')
 #' The following external arguments are ignored: traj, id_field, k
 #' @examples
 #' library(akmedoids)
-#' data(testLongData)
-#' method <- lcMethodAKMedoids("Value",
-#'                      time = "Day",
-#'                      id = "Patient",
-#'                      nClusters = 3)
-#' model <- latrend(method, data = testLongData)
+#' data(latrendData)
+#' method <- lcMethodAKMedoids(response = "Y", time = "Time", id = "Id", nClusters = 3)
+#' model <- latrend(method, data = latrendData)
 #' @family lcMethod implementations
 lcMethodAKMedoids = function(response,
                              time = getOption('latrend.time'),

@@ -18,19 +18,15 @@ setClass('lcMethodFunFEM', contains = 'lcMatrixMethod')
 #' @examples
 #' library(funFEM)
 #' library(fda)
-#' data(testLongData)
-#' method <- lcMethodFunFEM("Value",
-#'                      time = "Time",
-#'                      id = "Id",
-#'                      nClusters = 3)
-#' model <- latrend(method, testLongData)
+#' data(latrendData)
+#' method <- lcMethodFunFEM("Y", nClusters = 3)
+#' model <- latrend(method, latrendData)
 #'
-#' method <- lcMethodFunFEM("Value",
+#' method <- lcMethodFunFEM("Y",
 #'    basis = function(time) {
 #'       create.bspline.basis(time,
 #'         nbasis = 10, norder = 4)
-#'    }
-#' )
+#' })
 #' @family lcMethod implementations
 lcMethodFunFEM = function(response,
                           time = getOption('latrend.time'),

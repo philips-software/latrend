@@ -12,13 +12,9 @@ setClass('lcMethodMixtoolsNPRM', contains = 'lcMatrixMethod')
 #' The following optional arguments are ignored: data, x, mu0, verb.
 #' @examples
 #' library(mixtools)
-#' data(testLongData)
-#' method <- lcMethodMixtoolsNPRM(
-#'     response = "Value",
-#'     time = "Time",
-#'     id = "Id",
-#'     nClusters = 3)
-#' model <- latrend(method, testLongData)
+#' data(latrendData)
+#' method <- lcMethodMixtoolsNPRM("Y", time = "Time", id = "Id", nClusters = 3)
+#' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodMixtoolsNPRM = function(response,
                                 time = getOption('latrend.time'),

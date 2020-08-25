@@ -35,18 +35,14 @@ setValidity('lcMethodLcmmGMM', function(object) {
 #' @details The `formula` argument is used to generate the `fixed`, `random`, and `mixture` arguments for [lcmm::lcmm].
 #' @examples
 #' library(lcmm)
-#' data(testLongData)
-#' method <- lcMethodLcmmGMM(Value ~ Time * CLUSTER + (1 | Id),
-#'                      time = "Time",
-#'                      id = "Id",
-#'                      nClusters = 3)
-#' gmm <- latrend(method, data = testLongData)
+#' data(latrendData)
+#' method <- lcMethodLcmmGMM(Y ~ Time * CLUSTER + (1 | Id),
+#'                      time = "Time", id = "Id", nClusters = 3)
+#' gmm <- latrend(method, data = latrendData)
 #' summary(gmm)
 #'
-#' method <- lcMethodLcmmGMM(Value ~ Time * CLUSTER + (Time | Id),
-#'                      time = "Time",
-#'                      id = "Id",
-#'                      nClusters = 3)
+#' method <- lcMethodLcmmGMM(Y ~ Time * CLUSTER + (Time | Id),
+#'                      time = "Time", id = "Id", nClusters = 3)
 #' @family lcMethod implementations
 lcMethodLcmmGMM = function(formula,
                            formula.mb =  ~ 1,

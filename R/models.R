@@ -7,11 +7,12 @@ setOldClass('lcModels')
 #' @param ... `lcModel`, `lcModels`, or a recursive `list` of `lcModel` objects. Arguments may be named.
 #' @return A `lcModels` object containing all specified `lcModel` objects.
 #' @examples
-#' kml = latrend(lcMethodKML(), testLongData)
-#' gmm = latrend(lcMethodLcmmGMM(), testLongData)
+#' data(latrendData)
+#' kml <- latrend(lcMethodKML("Y"), latrendData)
+#' gmm <- latrend(lcMethodLcmmGMM(Y ~ Time + (1 | Id)), latrendData)
 #' lcModels(kml, gmm)
 #'
-#' lcModels(defaults=c(kml, gmm))
+#' lcModels(defaults = c(kml, gmm))
 #' @family lcModel list functions
 lcModels = function(...) {
   list(...) %>%
@@ -218,11 +219,11 @@ setMethod('metric', signature('lcModels'), .metric.lcModels)
 #' @param ... Additional arguments.
 #' @return The lcModel with the lowest metric value
 #' @examples
-#' kml1 = latrend(lcMethodKML(nClusters=1), testLongData)
-#' kml2 = latrend(lcMethodKML(nClusters=2), testLongData)
-#' kml3 = latrend(lcMethodKML(nClusters=3), testLongData)
-
-#' models = lcModels(kml1, kml2, kml3)
+#' data(latrendData)
+#' kml1 <- latrend(lcMethodKML(nClusters = 1), latrendData)
+#' kml2 <- latrend(lcMethodKML(nClusters = 2), latrendData)
+#' kml3 <- latrend(lcMethodKML(nClusters = 3), latrendData)
+#' models <- lcModels(kml1, kml2, kml3)
 #' min(models, 'WRSS')
 #' @seealso [max.lcModels] [externalMetric]
 min.lcModels = function(x, name, ...) {
@@ -243,11 +244,11 @@ min.lcModels = function(x, name, ...) {
 #' @param name The name of the internal metric.
 #' @return The lcModel with the highest metric value
 #' @examples
-#' kml1 = latrend(lcMethodKML(nClusters=1), testLongData)
-#' kml2 = latrend(lcMethodKML(nClusters=2), testLongData)
-#' kml3 = latrend(lcMethodKML(nClusters=3), testLongData)
-
-#' models = lcModels(kml1, kml2, kml3)
+#' data(latrendData)
+#' kml1 <- latrend(lcMethodKML(nClusters = 1), latrendData)
+#' kml2 <- latrend(lcMethodKML(nClusters = 2), latrendData)
+#' kml3 <- latrend(lcMethodKML(nClusters = 3), latrendData)
+#' models <- lcModels(kml1, kml2, kml3)
 #' max(models, 'WRSS')
 #' @seealso [min.lcModels] [externalMetric]
 max.lcModels = function(x, name, ...) {
@@ -275,6 +276,11 @@ max.lcModels = function(x, name, ...) {
 #' In all other cases, groupings are represented by a number.
 #' @return `ggplot2` object.
 #' @examples
+#' data(latrendData)
+#' kml1 <- latrend(lcMethodKML(nClusters = 1), latrendData)
+#' kml2 <- latrend(lcMethodKML(nClusters = 2), latrendData)
+#' kml3 <- latrend(lcMethodKML(nClusters = 3), latrendData)
+#' models <- lcModels(kml1, kml2, kml3)
 #' plotMetric(models, "BIC", by = "nClusters", group = ".name")
 plotMetric = function(models,
                       name,
@@ -346,11 +352,12 @@ plotMetric = function(models,
 #' @param drop Whether to return a `lcModel` object if the result is length 1.
 #' @return A `lcModels` list with the subset of `lcModel` objects.
 #' @examples
-#' kml1 = latrend(lcMethodKML(nClusters=1), testLongData)
-#' kml2 = latrend(lcMethodKML(nClusters=2), testLongData)
-#' kml3 = latrend(lcMethodKML(nClusters=3), testLongData)
-#' gmm = latrend(lcMethodLcmmGMM(), testLongData)
-#' models = lcModels(kml1, kml2, kml3, gmm)
+#' data(latrendData)
+#' kml1 <- latrend(lcMethodKML(nClusters = 1), latrendData)
+#' kml2 <- latrend(lcMethodKML(nClusters = 2), latrendData)
+#' kml3 <- latrend(lcMethodKML(nClusters = 3), latrendData)
+#' gmm <- latrend(lcMethodLcmmGMM(Y ~ Time + (1 | Id)), latrendData)
+#' models <- lcModels(kml1, kml2, kml3, gmm)
 #'
 #' subset(models, nClusters > 1 & .method == 'kml')
 #' @family lcModel list functions

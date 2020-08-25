@@ -27,12 +27,12 @@ setValidity('lcMethodStratify', function(object) {
 #' @param nClusters The number of clusters. This is optional, as this can be derived from the largest assignment number by default, or the number of `factor` levels.
 #' @param clusterNames The names of the clusters. If a `factor` assignment is returned, the levels are used as the cluster names.
 #' @examples
-#' data(testLongData)
+#' data(latrendData)
 #' # Stratification based on the mean response level
 #' method <- lcMethodStratify(
-#'    mean(Value) > 1.7,
+#'    mean(Y) > 1.7,
 #'    clusterNames = c("Low", "High"))
-#' model <- latrend(method, testLongData)
+#' model <- latrend(method, latrendData)
 #' summary(model)
 #'
 #' # Stratification function

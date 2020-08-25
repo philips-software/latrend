@@ -33,18 +33,12 @@ setValidity('lcMethodLcmmGBTM', function(object) {
 #' If an interaction is specified with the `CLUSTER` term then these covariates are included as fixed and mixture effects.
 #' @examples
 #' library(lcmm)
-#' data(testLongData)
-#' method <- lcMethodLcmmGBTM(Value ~ CLUSTER,
-#'                      time = "Time",
-#'                      id = "Id",
-#'                      nClusters = 3)
-#' gbtm <- latrend(method, data = testLongData)
+#' data(latrendData)
+#' method <- lcMethodLcmmGBTM(Y ~ CLUSTER, time = "Time", id = "Id", nClusters = 3)
+#' gbtm <- latrend(method, data = latrendData)
 #' summary(gbtm)
 #'
-#' method <- lcMethodLcmmGBTM(Value ~ CLUSTER * Time,
-#'                      time = "Time",
-#'                      id = "Id",
-#'                      nClusters = 2)
+#' method <- lcMethodLcmmGBTM(Y ~ CLUSTER * Time, time = "Time", id = "Id", nClusters = 3)
 #' @family lcMethod implementations
 lcMethodLcmmGBTM = function(formula,
                             formula.mb =  ~ 1,

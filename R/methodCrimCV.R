@@ -16,15 +16,13 @@ setClass('lcMethodCrimCV', contains = 'lcMatrixMethod')
 #' The following external arguments are ignored: Dat, ng.
 #' @examples
 #' library(crimCV)
-#' data(testLongData)
-#' method <- lcMethodCrimCV("Value", nClusters = 3)
-#' model <- latrend(method, testLongData)
+#' data(latrendData)
+#' method <- lcMethodCrimCV("Y", nClusters = 3)
+#' model <- latrend(method, latrendData)
 #'
 #' data(TO1adj)
-#' method <- lcMethodCrimCV(response = "Offenses",
-#'     time = "Offense",
-#'     id = "Subject")
-#' model <- latrend(method, TO1adj)
+#' method <- lcMethodCrimCV(response = "Offenses", time = "Offense", id = "Subject")
+#' model <- latrend(method, data = TO1adj)
 #' @family lcMethod implementations
 lcMethodCrimCV = function(response,
                           time = getOption('latrend.time'),

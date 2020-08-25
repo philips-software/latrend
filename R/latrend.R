@@ -12,11 +12,12 @@
 #' @details If a seed value is specified in the `lcMethod` object or arguments to `latrend`, this seed is set using `set.seed` prior to the cluster preparation step.
 #' @return A `lcModel` object representing the fitted model.
 #' @examples
-#' model = latrend(lcMethodKML(), data=testLongData)
+#' data(latrendData)
+#' model <- latrend(lcMethodKML("Y"), data = latrendData)
 #'
-#' model = latrend(lcMethodKML(), data=testLongData, nClusters=3)
+#' model <- latrend(lcMethodKML("Y"), data = latrendData, nClusters = 3)
 #'
-#' model = latrend(lcMethodKML(), data=testLongData, nClusters=3, seed=1)
+#' model <- latrend(lcMethodKML("Y"), data = latrendData, nClusters = 3, seed = 1)
 #' @family longitudinal cluster fit functions
 latrend = function(method,
                     data,
@@ -147,9 +148,10 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
 #' @details This method is faster than repeatedly calling [latrend]() as it only prepares the data via `prepareData()` once.
 #' @return A `lcModels` object containing the resulting models.
 #' @examples
-#' models = latrendRep(lcMethodKML(), data=testLongData, .rep=5) # 5 repeated runs
+#' data(latrendData)
+#' models <- latrendRep(lcMethodKML("Y"), data = latrendData, .rep = 5) # 5 repeated runs
 #'
-#' models = latrendRep(lcMethodKML(), data=testLongData, seed=1, .rep=3)
+#' models <- latrendRep(lcMethodKML("Y"), data = latrendData, seed = 1, .rep = 3)
 #' @family longitudinal cluster fit functions
 latrendRep = function(method,
                        data,
@@ -265,11 +267,13 @@ latrendRep = function(method,
 #' @param envir The `environment` in which to evaluate the `lcMethod` arguments.
 #' @return A `lcModels` object.
 #' @examples
-#' methods = lcMethods(lcMethodKML(), nClusters=1:3)
-#' models = latrendBatch(methods, data=testLongData)
+#' data(latrendData)
+#' methods <- lcMethods(lcMethodKML("Y"), nClusters = 1:3)
+#' models <- latrendBatch(methods, data = latrendData)
 #'
-#' models = latrendBatch(lcMethods(lcMethodKML(), nClusters=1:2),
-#'    data=.(testLongData[Time > .5,], testLongData[Time < .5,])) # different data per method
+#' models <- latrendBatch(lcMethods(lcMethodKML("Y"), nClusters = 1:2),
+#'    data = .(latrendData[Time > .5,],
+#'             latrendData[Time < .5,])) # different data per method
 #'
 #' @seealso lcMethods
 #' @family longitudinal cluster fit functions
@@ -354,7 +358,8 @@ latrendBatch = function(methods,
 #' @param seed The seed to use. Optional.
 #' @return A `lcModels` object of length `samples`.
 #' @examples
-#' model = latrendBoot(lcMethodKML(), testLongData, samples=10)
+#' data(latrendData)
+#' model <- latrendBoot(lcMethodKML("Y"), latrendData, samples = 10)
 #' @family longitudinal cluster fit functions
 #' @family validation methods
 latrendBoot = function(method,
@@ -363,7 +368,7 @@ latrendBoot = function(method,
                         seed = NULL,
                         envir = NULL,
                         verbose = getOption('latrend.verbose')) {
-  assert_that(is.lcMethod(method), msg = 'method must be lcMethod object (e.g., lcMethodKML() )')
+  assert_that(is.lcMethod(method), msg = 'method must be lcMethod object (e.g., lcMethodKML("Y") )')
   assert_that(!missing(data), msg = 'data must be specified')
   assert_that(is.data.frame(data), msg = 'data must be data.frame')
   assert_that(is.count(samples))
@@ -432,9 +437,10 @@ latrendBoot = function(method,
 #' @param folds The number of folds. Ten folds by default.
 #' @return A `lcModels` object of containing the `folds` training models.
 #' @examples
-#' model = latrendCV(lcMethodKML(), testLongData, folds=10)
+#' data(latrendData)
+#' model <- latrendCV(lcMethodKML("Y"), latrendData, folds = 10)
 #'
-#' model = latrendCV(lcMethodKML(), testLongData[, Time < .5], folds=10, seed=1)
+#' model <- latrendCV(lcMethodKML("Y"), latrendData[, Time < .5], folds = 10, seed = 1)
 #' @family longitudinal cluster fit functions
 #' @family validation methods
 latrendCV = function(method,
@@ -496,15 +502,18 @@ latrendCV = function(method,
 #' @return A `list` of `data.frame` of the `folds` training datasets.
 #' @family validation methods
 #' @examples
-#' createTrainDataFolds(testLongData, folds=10)
+#' data(latrendData)
+#' trainFolds <- createTrainDataFolds(latrendData, folds = 10)
 #'
-#' createTrainDataFolds(testLongData, folds=10, seed=1)
+#' trainFolds <- createTrainDataFolds(latrendData, folds = 10, seed = 1)
 createTrainDataFolds = function(data,
                                 folds = 10,
                                 id = getOption('latrend.id'),
                                 seed = NULL) {
-  assert_that(is.count(folds), folds > 1)
-  assert_that(is.data.frame(data), has_name(data, id))
+  assert_that(is.count(folds),
+    folds > 1,
+    is.data.frame(data),
+    has_name(data, id))
 
   ids = unique(data[[id]])
 
@@ -533,8 +542,9 @@ createTrainDataFolds = function(data,
 #' @seealso createTrainDataFolds
 #' @family validation methods
 #' @examples
-#' trainDataList = createTrainDataFolds(testLongData, folds=10)
-#' testData1 = createTestDataFold(testLongData, trainDataList[[1]])
+#' data(latrendData)
+#' trainDataList <- createTrainDataFolds(latrendData, folds = 10)
+#' testData1 <- createTestDataFold(latrendData, trainDataList[[1]])
 createTestDataFold = function(data, trainData, id = getOption('latrend.id')) {
   assert_that(is.data.frame(trainData))
   trainIds = unique(trainData[[id]])
@@ -552,8 +562,9 @@ createTestDataFold = function(data, trainData, id = getOption('latrend.id')) {
 #' @param ... Arguments passed to [createTestDataFold].
 #' @family validation methods
 #' @examples
-#' trainDataList = createTrainDataFolds(testLongData, folds=10)
-#' testDataList = createTestDataFolds(testLongData, trainDataList)
+#' data(latrendData)
+#' trainDataList <- createTrainDataFolds(latrendData, folds = 10)
+#' testDataList <- createTestDataFolds(latrendData, trainDataList)
 createTestDataFolds = function(data, trainDataList, ...) {
   lapply(trainDataList, function(trainData)
     createTestDataFold(data = data, trainData = trainData, ...))

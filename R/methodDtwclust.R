@@ -18,9 +18,9 @@ setClass('lcMethodDtwclust', contains = 'lcMethod')
 #' The following arguments are ignored: series, k, trace.
 #' @examples
 #' library(dtwclust)
-#' data(testLongData)
-#' method <- lcMethodDtwclust("Value", nClusters = 3)
-#' model <- latrend(method, testLongData)
+#' data(latrendData)
+#' method <- lcMethodDtwclust("Y", nClusters = 3)
+#' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodDtwclust = function(response,
                        time = getOption('latrend.time'),

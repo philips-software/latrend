@@ -28,12 +28,9 @@ setValidity('lcMethodMclustLLPA', function(object) {
 #' The following external arguments are ignored: data, G, verbose.
 #' @examples
 #' library(mclust)
-#' data(testLongData)
-#' method <- lcMethodMclustLLPA("Value",
-#'                      time = "Time",
-#'                      id = "Id",
-#'                      nClusters = 3)
-#' model <- latrend(method, testLongData)
+#' data(latrendData)
+#' method <- lcMethodMclustLLPA("Y", time = "Time", id = "Id", nClusters = 3)
+#' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodMclustLLPA = function(response,
                               time = getOption('latrend.time'),
