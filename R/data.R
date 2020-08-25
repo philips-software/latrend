@@ -3,7 +3,7 @@
 #' each with a different cluster trajectory. Trajectories randomly deviate in intercept and slope from the reference cluster.
 #' \describe{
 #'   \item{Id}{trajectory identifier, `factor`.}
-#'   \item{Time}{measurement time, `numeric` [0, 2].}
+#'   \item{Time}{measurement time, `numeric` between 0 and 2.}
 #'   \item{Y}{observed variable, `numeric`.}
 #'   \item{Class}{the reference class, `factor`.}
 #' }
