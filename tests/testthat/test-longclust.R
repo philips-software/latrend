@@ -12,6 +12,6 @@ test_that('t', {
 })
 
 test_that('many clusters', {
-  model = latrend(lcMethodTestLongclust(nClusters=5), testLongData)
+  model = latrend(lcMethodTestLongclust(nClusters=3), testLongData)
   expect_valid_lcModel(model)
 })
