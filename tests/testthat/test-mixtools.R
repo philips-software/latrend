@@ -13,8 +13,7 @@ test_that('default np single cluster', {
 
 
 test_that('default np many clusters', {
-  skip('disabled')
-  model = latrend(lcMethodTestMixtoolsNPRM(nClusters=5), testLongData) %>%
+  model = latrend(lcMethodTestMixtoolsNPRM(nClusters=3), testLongData) %>%
     expect_valid_lcModel()
 })
 
