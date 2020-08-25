@@ -1056,12 +1056,15 @@ setMethod('postprob', signature('lcModel'), function(object, ...) {
 
 # . QQ plot ####
 #' @export
-#' @rdname plotQQ
+#' @name qqPlot
+#' @rdname qqPlot
+#' @aliases qqPlot,lcModel-method
 #' @title Quantile-quantile plot
 #' @param object The model.
 #' @param byCluster Whether to plot the Q-Q line per cluster
 #' @param ... Other arguments passed to qqplotr::geom_qq_band, qqplotr::stat_qq_line, and qqplotr::stat_qq_point.
-setMethod('plotQQ', signature('lcModel'), function(object, byCluster = FALSE, ...) {
+#' @seealso [residuals.lcModel] [metric] [plotClusterTrajectories]
+setMethod('qqPlot', signature('lcModel'), function(object, byCluster = FALSE, ...) {
   assert_that(is.lcModel(object))
   idIndexColumn = factor(model.data(object)[[idVariable(object)]], levels = ids(object)) %>% as.integer()
   rowClusters = clusterAssignments(object)[idIndexColumn]

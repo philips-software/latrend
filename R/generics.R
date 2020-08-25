@@ -100,7 +100,7 @@ setGeneric('plotClusterTrajectories',
 #' @export
 #' @name latrend-generics
 #' @title Quantile-quantile plot
-setGeneric('plotQQ', function(object, ...) standardGeneric('plotQQ'))
+setGeneric('qqPlot', function(object, ...) standardGeneric('qqPlot'))
 
 #' @export
 #' @name latrend-generics
