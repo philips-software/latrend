@@ -260,18 +260,19 @@ NULL
 #' @export
 #' @rdname confusionMatrix
 #' @title Posterior confusion matrix
-#' @param object The `lcModel` object.
-#' @param ... Additional arguments.
+#' @param data The `lcModel` object.
+#' @param ... Not used.
 #' @examples
 #' data(latrendData)
 #' model = latrend(method=lcMethodLcmmGMM(Y ~ Time + (1 | Id), id = "Id", time = "Time"),
 #'   data=latrendData)
 #' confusionMatrix(model)
-confusionMatrix.lcModel = function(object, ...) {
-  assert_that(is.lcModel(object))
-  IMIFA::post_conf_mat(postprob(object)) %>%
-    set_colnames(clusterNames(object)) %>%
-    set_rownames(clusterNames(object))
+#' @seealso [caret::confusionMatrix]
+confusionMatrix.lcModel = function(data, ...) {
+  assert_that(is.lcModel(data))
+  IMIFA::post_conf_mat(postprob(data)) %>%
+    set_colnames(clusterNames(data)) %>%
+    set_rownames(clusterNames(data))
 }
 
 
