@@ -10,4 +10,5 @@ test_that('default', {
 test_that('fuzzy default', {
   m = lcMethodDtwclust(response = 'Value', type = 'fuzzy')
   model = latrend(m, testLongData)
+  expect_valid_lcModel(model)
 })
