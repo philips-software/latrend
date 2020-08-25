@@ -219,14 +219,19 @@ setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
 #' clusterAssignments(model)
 #'
 #' # only assign ids with a probability over 0.9
-#' clusterAssignments(model, strategy = function(x) which(x > .9))
+#' clusterAssignments(model, strategy = function(x) which(x > .9)[1])
 setMethod('clusterAssignments', signature('lcModel'), function(object, strategy = which.max, ...) {
   pp = postprob(object)
   assert_that(is_valid_postprob(pp, object))
 
-  apply(pp, 1, strategy, ...) %>%
-    factor(levels = 1:nClusters(object),
-           labels = clusterNames(object))
+  result = apply(pp, 1, strategy, ...)
+  assert_that(is.numeric(result),
+    length(result) == nrow(pp),
+    all(sapply(result, is.count) | sapply(result, is.na)),
+    min(result, na.rm = TRUE) >= 1,
+    max(result, na.rm = TRUE) <= nClusters(object))
+
+  factor(result, levels = 1:nClusters(object), labels = clusterNames(object))
 })
 
 
