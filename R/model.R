@@ -251,14 +251,21 @@ coef.lcModel = function(object, ...) {
 }
 
 
+#' @importFrom caret confusionMatrix
+#' @export confusionMatrix
+#' @name confusionMatrix
+#' @rdname confusionMatrix
+NULL
 
 #' @export
-#' @importFrom caret confusionMatrix
+#' @rdname confusionMatrix
 #' @title Posterior confusion matrix
 #' @param object The `lcModel` object.
 #' @param ... Additional arguments.
 #' @examples
-#' model = latrend(method=lcMethodLcmmGMM(Y ~ Time + (1 | Id)), data=latrendData)
+#' data(latrendData)
+#' model = latrend(method=lcMethodLcmmGMM(Y ~ Time + (1 | Id), id = "Id", time = "Time"),
+#'   data=latrendData)
 #' confusionMatrix(model)
 confusionMatrix.lcModel = function(object, ...) {
   assert_that(is.lcModel(object))
