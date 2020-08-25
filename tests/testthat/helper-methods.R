@@ -15,7 +15,7 @@ lcMethodTestFlexmixGBTM = function(...) {
 }
 
 lcMethodTestCrimCV = function(...) {
-  lcMethodCrimCV(response = 'Value', ..., model='ZIP', dpolyp=2, dpolyl=1, init=2, seed=1)
+  lcMethodCrimCV(response = 'Value', ..., model='ZIP', dpolyp=2, dpolyl=1, init=5, seed=1)
 }
 
 lcMethodTestFunFEM = function(...) {
@@ -55,7 +55,7 @@ lcMethodTestMixTVEM = function(...) {
 }
 
 lcMethodTestCrimCVt = function(...) {
-  lcMethodCrimCV(response = 'Value', ..., model='ZIPt', dpolyp=2, init=2, seed=1)
+  lcMethodCrimCV(response = 'Value', ..., model='ZIPt', dpolyp=2, init=5, seed=1)
 }
 
 lcMethodTestLongclust = function(...) {

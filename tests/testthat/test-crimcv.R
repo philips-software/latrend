@@ -27,7 +27,7 @@ test_that('default', {
 
 test_that('many clusters', {
   suppressWarnings({
-    model = latrend(lcMethodTestCrimCVt(nClusters=4), subTO1adj) %>%
+    model = latrend(lcMethodTestCrimCVt(nClusters=3), subTO1adj) %>%
       expect_valid_lcModel()
   })
 })
