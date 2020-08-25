@@ -2,13 +2,17 @@ context('mixAK')
 rngReset()
 
 test_that('default', {
-  m = lcMethodTestMixAK_GLMM(PED = FALSE)
-  model = latrend(m, testLongData)
-  expect_valid_lcModel(model)
+  suppressWarnings({
+    m = lcMethodTestMixAK_GLMM(PED = FALSE, nClusters = 2)
+    model = latrend(m, testLongData)
+    expect_valid_lcModel(model)
+  })
 })
 
 test_that('multichain', {
-  m = lcMethodTestMixAK_GLMM(PED = TRUE)
-  model = latrend(m, testLongData)
-  expect_valid_lcModel(model)
+  suppressWarnings({
+    m = lcMethodTestMixAK_GLMM(PED = TRUE, nClusters = 2)
+    model = latrend(m, testLongData)
+    expect_valid_lcModel(model)
+  })
 })
