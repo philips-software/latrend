@@ -72,23 +72,27 @@ test_that('make.clusterIndices', {
 test_that('metrics', {
   expect_length(metric(model, character()), 0)
 
-  metric(model, 'BIC') %>%
-    expect_is('numeric') %>%
-    expect_named('BIC')
+  value = metric(model, 'BIC')
+  expect_is(value, 'numeric')
+  expect_named(value, 'BIC')
 
-  metric(model, '@undefined') %>%
-    expect_is('numeric') %>%
-    expect_named('@undefined') %>%
-    expect_equal(c('@undefined'=NA*0))
+  expect_warning({
+    value = metric(model, '@undefined')
+  })
+  expect_is(value, 'numeric')
+  expect_named(value, '@undefined')
+  expect_equal(value, c('@undefined'=NA*0))
 
-  metric(model, c('AIC', '@undefined', 'BIC')) %>%
-    expect_is('numeric') %>%
-    expect_named(c('AIC', '@undefined', 'BIC')) %T>%
-    {expect_equal(unname(.[2]), NA*0)}
+  expect_warning({
+    value = metric(model, c('AIC', '@undefined', 'BIC'))
+  })
+  expect_is(value, 'numeric')
+  expect_named(value, c('AIC', '@undefined', 'BIC'))
+  expect_equal(unname(value[2]), NA*0)
 
-  externalMetric(model, model, 'Jaccard') %>%
-    expect_is('numeric') %>%
-    expect_named('Jaccard')
+  value = externalMetric(model, model, 'Jaccard')
+  expect_is(value, 'numeric')
+  expect_named(value, 'Jaccard')
 })
 
 test_that('update', {
