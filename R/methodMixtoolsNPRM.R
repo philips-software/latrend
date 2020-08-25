@@ -13,7 +13,7 @@ setClass('lcMethodMixtoolsNPRM', contains = 'lcMatrixMethod')
 #' @examples
 #' library(mixtools)
 #' data(latrendData)
-#' method <- lcMethodMixtoolsNPRM("Y", time = "Time", id = "Id", nClusters = 3)
+#' method <- lcMethodMixtoolsNPRM("Y", id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodMixtoolsNPRM = function(response,

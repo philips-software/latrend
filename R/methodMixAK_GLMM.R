@@ -20,7 +20,8 @@ setClass('lcMethodMixAK_GLMM', contains = 'lcMethod')
 #' @family lcMethod implementations
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodMixAK_GLMM(fixed = Y ~ Time, random = ~ Time, nClusters = 3)
+#' method <- lcMethodMixAK_GLMM(fixed = Y ~ Time, random = ~ Time,
+#'   id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' summary(model)
 lcMethodMixAK_GLMM = function(fixed,

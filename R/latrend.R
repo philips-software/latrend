@@ -13,11 +13,12 @@
 #' @return A `lcModel` object representing the fitted model.
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodKML("Y"), data = latrendData)
+#' model <- latrend(lcMethodKML("Y"), data = latrendData, id = "Id", time = "Time")
 #'
-#' model <- latrend(lcMethodKML("Y"), data = latrendData, nClusters = 3)
+#' method <- lcMethodKML("Y", id = "Id", time = "Time")
+#' model <- latrend(method, data = latrendData, nClusters = 3)
 #'
-#' model <- latrend(lcMethodKML("Y"), data = latrendData, nClusters = 3, seed = 1)
+#' model <- latrend(method, data = latrendData, nClusters = 3, seed = 1)
 #' @family longitudinal cluster fit functions
 latrend = function(method,
                     data,
@@ -149,9 +150,10 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
 #' @return A `lcModels` object containing the resulting models.
 #' @examples
 #' data(latrendData)
-#' models <- latrendRep(lcMethodKML("Y"), data = latrendData, .rep = 5) # 5 repeated runs
+#' method <- lcMethodKML("Y", id = "Id", time = "Time")
+#' models <- latrendRep(method, data = latrendData, .rep = 5) # 5 repeated runs
 #'
-#' models <- latrendRep(lcMethodKML("Y"), data = latrendData, seed = 1, .rep = 3)
+#' models <- latrendRep(method, data = latrendData, seed = 1, .rep = 3)
 #' @family longitudinal cluster fit functions
 latrendRep = function(method,
                        data,
@@ -268,7 +270,7 @@ latrendRep = function(method,
 #' @return A `lcModels` object.
 #' @examples
 #' data(latrendData)
-#' methods <- lcMethods(lcMethodKML("Y"), nClusters = 1:3)
+#' methods <- lcMethods(lcMethodKML("Y", id = "Id", time = "Time"), nClusters = 1:3)
 #' models <- latrendBatch(methods, data = latrendData)
 #'
 #' models <- latrendBatch(lcMethods(lcMethodKML("Y"), nClusters = 1:2),
@@ -359,7 +361,8 @@ latrendBatch = function(methods,
 #' @return A `lcModels` object of length `samples`.
 #' @examples
 #' data(latrendData)
-#' model <- latrendBoot(lcMethodKML("Y"), latrendData, samples = 10)
+#' method <- lcMethodKML("Y", id = "Id", time = "Time")
+#' model <- latrendBoot(method, latrendData, samples = 10)
 #' @family longitudinal cluster fit functions
 #' @family validation methods
 latrendBoot = function(method,
@@ -438,9 +441,10 @@ latrendBoot = function(method,
 #' @return A `lcModels` object of containing the `folds` training models.
 #' @examples
 #' data(latrendData)
-#' model <- latrendCV(lcMethodKML("Y"), latrendData, folds = 10)
+#' method <- lcMethodKML("Y", id = "Id", time = "Time")
+#' model <- latrendCV(method, latrendData, folds = 10)
 #'
-#' model <- latrendCV(lcMethodKML("Y"), latrendData[, Time < .5], folds = 10, seed = 1)
+#' model <- latrendCV(method, latrendData[, Time < .5], folds = 10, seed = 1)
 #' @family longitudinal cluster fit functions
 #' @family validation methods
 latrendCV = function(method,

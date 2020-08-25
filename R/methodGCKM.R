@@ -22,7 +22,7 @@ setValidity('lcMethodGCKM', function(object) {
 #' @examples
 #' library(lme4)
 #' data(latrendData)
-#' method <- lcMethodGCKM(Y ~ Time + (Time | Id), time='Time', id='Id', nClusters = 3)
+#' method <- lcMethodGCKM(Y ~ Time + (Time | Id), id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodGCKM = function(formula,

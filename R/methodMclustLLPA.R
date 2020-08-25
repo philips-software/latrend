@@ -29,7 +29,7 @@ setValidity('lcMethodMclustLLPA', function(object) {
 #' @examples
 #' library(mclust)
 #' data(latrendData)
-#' method <- lcMethodMclustLLPA("Y", time = "Time", id = "Id", nClusters = 3)
+#' method <- lcMethodMclustLLPA("Y", id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodMclustLLPA = function(response,

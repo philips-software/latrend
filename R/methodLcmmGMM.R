@@ -37,12 +37,12 @@ setValidity('lcMethodLcmmGMM', function(object) {
 #' library(lcmm)
 #' data(latrendData)
 #' method <- lcMethodLcmmGMM(Y ~ Time * CLUSTER + (1 | Id),
-#'                      time = "Time", id = "Id", nClusters = 3)
+#'                      id = "Id", time = "Time", , nClusters = 3)
 #' gmm <- latrend(method, data = latrendData)
 #' summary(gmm)
 #'
 #' method <- lcMethodLcmmGMM(Y ~ Time * CLUSTER + (Time | Id),
-#'                      time = "Time", id = "Id", nClusters = 3)
+#'                      id = "Id", time = "Time", nClusters = 3)
 #' @family lcMethod implementations
 lcMethodLcmmGMM = function(formula,
                            formula.mb =  ~ 1,

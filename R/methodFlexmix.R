@@ -19,7 +19,7 @@ setClass('lcMethodFlexmix', contains = 'lcMethod')
 #' @examples
 #' library(flexmix)
 #' data(latrendData)
-#' method <- lcMethodFlexmix(Y ~ Time, nClusters = 3)
+#' method <- lcMethodFlexmix(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' @family lcMethod package interfaces
 lcMethodFlexmix = function(formula,

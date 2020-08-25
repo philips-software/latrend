@@ -17,8 +17,8 @@ setClass('lcMethodCrimCV', contains = 'lcMatrixMethod')
 #' @examples
 #' library(crimCV)
 #' data(latrendData)
-#' method <- lcMethodCrimCV("Y", nClusters = 3)
-#' model <- latrend(method, latrendData)
+#' method <- lcMethodCrimCV("Y", id = "Id", time = "Time", nClusters = 3)
+#' model <- latrend(method, data = latrendData)
 #'
 #' data(TO1adj)
 #' method <- lcMethodCrimCV(response = "Offenses", time = "Offense", id = "Subject")

@@ -19,7 +19,7 @@ setClass('lcMethodFunFEM', contains = 'lcMatrixMethod')
 #' library(funFEM)
 #' library(fda)
 #' data(latrendData)
-#' method <- lcMethodFunFEM("Y", nClusters = 3)
+#' method <- lcMethodFunFEM("Y", id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #'
 #' method <- lcMethodFunFEM("Y",

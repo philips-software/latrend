@@ -24,7 +24,7 @@ setClass('lcMethodCustom', contains = 'lcMethod')
 #'        factor(levels = c(F,T), labels = c("Low", "High"))
 #'    lcModelCustom(clusters = clusters)
 #' }
-#' method <- lcMethodCustom(fun = clusfun)
+#' method <- lcMethodCustom(fun = clusfun, id = "Id", time = "Time")
 #' model <- latrend(method, data = latrendData)
 #' @family lcMethod implementations
 lcMethodCustom = function(response,

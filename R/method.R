@@ -235,7 +235,7 @@ lcMethod.call = function(Class,
 #' @return A `list` with the argument `call`s or evaluated results depending on the value for `eval`.
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodKML("Y")
+#' method <- lcMethodKML("Y", id = "Id", time = "Time")
 #' as.list(method)
 #'
 #' as.list(method, args = c('id', 'time'))
@@ -370,13 +370,13 @@ lcMethod.env = function(object, defaultEnvir, envir) {
 #' @return A `list` of `lcMethod` objects.
 #' @examples
 #' data(latrendData)
-#' kml <- lcMethodKML("Y")
-#' methods <- lcMethods(kml, nClusters = 1:6)
+#' baseMethod <- lcMethodKML("Y", id = "Id", time = "Time")
+#' methods <- lcMethods(baseMethod, nClusters = 1:6)
 #'
 #' nclus <- 1:6
-#' methods <- lcMethods(kml, nClusters = nclus)
+#' methods <- lcMethods(baseMethod, nClusters = nclus)
 #'
-#' methods <- lcMethods(kml, nClusters = 3, center = .(meanNA, meanNA, median))
+#' methods <- lcMethods(baseMethod, nClusters = 3, center = .(meanNA, meanNA, median))
 lcMethods = function(method, ..., envir = NULL) {
   assert_that(is.lcMethod(method))
 

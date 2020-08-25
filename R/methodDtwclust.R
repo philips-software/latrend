@@ -19,7 +19,7 @@ setClass('lcMethodDtwclust', contains = 'lcMethod')
 #' @examples
 #' library(dtwclust)
 #' data(latrendData)
-#' method <- lcMethodDtwclust("Y", nClusters = 3)
+#' method <- lcMethodDtwclust("Y", id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodDtwclust = function(response,

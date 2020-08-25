@@ -11,7 +11,7 @@ setClass('lcMethodFlexmixGBTM', contains = 'lcMethodFlexmix')
 #' @examples
 #' library(flexmix)
 #' data(latrendData)
-#' method <- lcMethodFlexmixGBTM(Y ~ Time, nClusters = 3)
+#' method <- lcMethodFlexmixGBTM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' @family lcMethod package interfaces
 lcMethodFlexmixGBTM = function(formula,

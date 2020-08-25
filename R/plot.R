@@ -10,7 +10,7 @@
 #' @param ... Additional arguments.
 #' @examples
 #' data(latrendData)
-#' plotTrajectories(latrendData, response = 'Y')
+#' plotTrajectories(latrendData, response = "Y")
 #'
 #' plotTrajectories(latrendData, response = quote(exp(Y)))
 setMethod('plotTrajectories', signature('data.frame'), function(object,

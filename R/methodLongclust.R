@@ -17,7 +17,7 @@ setClass('lcMethodLongclust', contains = 'lcMatrixMethod')
 #' @examples
 #' library(longclust)
 #' data(latrendData)
-#' method <- lcMethodLongclust(Y ~ 1, time = "Time", id = "Id", nClusters = 3)
+#' method <- lcMethodLongclust(Y ~ 1, id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodLongclust = function(response,

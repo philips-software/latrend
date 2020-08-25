@@ -29,9 +29,8 @@ setValidity('lcMethodStratify', function(object) {
 #' @examples
 #' data(latrendData)
 #' # Stratification based on the mean response level
-#' method <- lcMethodStratify(
-#'    mean(Y) > 1.7,
-#'    clusterNames = c("Low", "High"))
+#' method <- lcMethodStratify("Y", mean(Y) > 1.7,
+#'    clusterNames = c("Low", "High"), id = "Id", time = "Time")
 #' model <- latrend(method, latrendData)
 #' summary(model)
 #'
@@ -42,7 +41,7 @@ setValidity('lcMethodStratify', function(object) {
 #'       levels = c(FALSE, TRUE),
 #'       labels = c("Low", "High"))
 #' }
-#' method <- lcMethodStratify(stratfun)
+#' method <- lcMethodStratify("Y", stratfun, id = "Id", time = "Time")
 #'
 #' # Multiple clusters
 #' stratfun3 <- function(trajdata) {
@@ -51,7 +50,7 @@ setValidity('lcMethodStratify', function(object) {
 #'       c(-Inf, .5, 2, Inf),
 #'       labels = c("Low", "Medium", "High"))
 #' }
-#' method <- lcMethodStratify(stratfun3)
+#' method <- lcMethodStratify("Y", stratfun3, id = "Id", time = "Time")
 #' @family lcMethod implementations
 lcMethodStratify = function(response,
                             stratify,

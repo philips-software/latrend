@@ -34,11 +34,11 @@ setValidity('lcMethodLcmmGBTM', function(object) {
 #' @examples
 #' library(lcmm)
 #' data(latrendData)
-#' method <- lcMethodLcmmGBTM(Y ~ CLUSTER, time = "Time", id = "Id", nClusters = 3)
+#' method <- lcMethodLcmmGBTM(Y ~ CLUSTER, id = "Id", time = "Time", nClusters = 3)
 #' gbtm <- latrend(method, data = latrendData)
 #' summary(gbtm)
 #'
-#' method <- lcMethodLcmmGBTM(Y ~ CLUSTER * Time, time = "Time", id = "Id", nClusters = 3)
+#' method <- lcMethodLcmmGBTM(Y ~ CLUSTER * Time, id = "Id", time = "Time", nClusters = 3)
 #' @family lcMethod implementations
 lcMethodLcmmGBTM = function(formula,
                             formula.mb =  ~ 1,

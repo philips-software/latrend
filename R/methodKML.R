@@ -19,7 +19,7 @@ setClass('lcMethodKML', contains = 'lcMatrixMethod')
 #' @examples
 #' library(kml)
 #' data(latrendData)
-#' method <- lcMethodKML("Y", nClusters = 3)
+#' method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodKML = function(response,
