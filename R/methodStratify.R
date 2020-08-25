@@ -29,7 +29,7 @@ setValidity('lcMethodStratify', function(object) {
 #' @examples
 #' data(latrendData)
 #' # Stratification based on the mean response level
-#' method <- lcMethodStratify("Y", mean(Y) > 1.7,
+#' method <- lcMethodStratify("Y", mean(Y) > 0,
 #'    clusterNames = c("Low", "High"), id = "Id", time = "Time")
 #' model <- latrend(method, latrendData)
 #' summary(model)

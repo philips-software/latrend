@@ -22,7 +22,7 @@ setValidity('lcMethodGCKM', function(object) {
 #' @examples
 #' library(lme4)
 #' data(latrendData)
-#' method <- lcMethodGCKM(Y ~ Time + (Time | Id), id = "Id", time = "Time", nClusters = 3)
+#' method <- lcMethodGCKM(Y ~ (Time | Id), id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodGCKM = function(formula,
@@ -81,17 +81,10 @@ setMethod('fit', signature('lcMethodGCKM'), function(method, data, envir, verbos
 })
 
 
-
 representationStepGCKM = function(method, data, verbose, ...) {
   cat(verbose, 'Representation step...')
-  fixedStr = deparse(method$formula)
-  randomStr = dropResponse(method$formula) %>%
-    deparse %>%
-    substring(2)
-  lmmFormula = paste0(fixedStr, ' + (', randomStr, '|', idVariable(method), ')') %>% as.formula(env =
-                                                                                                  NULL)
   lmm = lme4::lmer(
-    formula = lmmFormula,
+    formula = method$formula,
     data = data,
     REML = method$REML,
     control = method$control,
@@ -113,6 +106,8 @@ clusterStepGCKM = function(method, data, repMat, envir, verbose, ...) {
   lcModelCustom(
     method = method,
     response = responseVariable(method),
+    id = idVariable(method),
+    time = timeVariable(method),
     data = data,
     clusterAssignments = km$cluster,
     clusterTrajectories = method$center,

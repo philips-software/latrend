@@ -19,12 +19,15 @@ setClass('lcMethodCustom', contains = 'lcMethod')
 #' @examples
 #' data(latrendData)
 #' # Stratification based on the mean response level
-#' clusfun <- function(method, data) {
-#'    clusters <- data[, mean(Y) > 2, by = Id] %>%
-#'        factor(levels = c(F,T), labels = c("Low", "High"))
-#'    lcModelCustom(clusters = clusters)
+#' clusfun <- function(data, response, id, time, ...) {
+#'    clusters <- data[, mean(Y) > 0, by = Id]$V1
+#'    lcModelCustom(data = data,
+#'      clusterAssignments = factor(clusters, levels = c(F,T), labels = c("Low", "High")),
+#'      response = response,
+#'      time = time,
+#'      id = id)
 #' }
-#' method <- lcMethodCustom(fun = clusfun, id = "Id", time = "Time")
+#' method <- lcMethodCustom(response = "Y", fun = clusfun, id = "Id", time = "Time")
 #' model <- latrend(method, data = latrendData)
 #' @family lcMethod implementations
 lcMethodCustom = function(response,

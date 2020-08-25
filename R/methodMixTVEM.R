@@ -76,9 +76,12 @@ setValidity('lcMethodMixTVEM', function(object) {
 #' @param ... Arguments passed to the `TVEMMixNormal()` function.
 #' The following optional arguments are ignored: doPlot, getSEs, numClasses.
 #' @examples
+#' \donttest{
+#' source('MixTVEM.R')
 #' method = lcMethodMixTVEM(Value ~ time(1) - 1,
 #'                      time='Assessment',
 #'                      id='Id', nClusters=3)
+#' }
 lcMethodMixTVEM = function(formula,
                            formula.mb =  ~ 1,
                            time = getOption('latrend.time'),

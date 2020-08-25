@@ -28,10 +28,10 @@
 #' @param rnoise Random sampler for generating noise at location 0 with the respective scale.
 #' @param shuffle Whether to randomly reorder the strata in which they appear in the data.frame.
 #' @examples
-#' longdata = generateLongData(sizes=c(40, 70), id='Id',
-#'                             cluster=~poly(Time, 2, raw=TRUE),
-#'                             clusterCoefs=cbind(c(1, 2, 5), c(-3, 4, .2)))
-#' plotTrajectories(longdata)
+#' longdata <- generateLongData(sizes = c(40, 70), id = "Id",
+#'                             cluster = ~poly(Time, 2, raw = TRUE),
+#'                             clusterCoefs = cbind(c(1, 2, 5), c(-3, 4, .2)))
+#' plotTrajectories(longdata, response = "Value", id = "Id", time = "Time")
 generateLongData = function(sizes = c(40, 60),
                             fixed = Value ~ 1 + Time,
                             cluster = ~ 1 + Time,

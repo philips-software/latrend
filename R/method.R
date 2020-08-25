@@ -72,12 +72,11 @@ setMethod('$', signature('lcMethod'), function(x, name) {
 #' @return The argument `call` or evaluation result.
 #' @examples
 #' m = lcMethodKML(nClusters = 5)
-#' m[['nClusters']] # 5
+#' m[["nClusters"]] # 5
 #'
 #' k = 2
 #' m = lcMethodKML(nClusters = k)
-#' m[['nClusters']] # 2
-#' m[['nClusters', eval=FALSE]] # k
+#' m[["nClusters", eval=FALSE]] # k
 #' @family lcMethod functions
 setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL) {
   envir = lcMethod.env(x, parent.frame(3), envir)
@@ -166,7 +165,8 @@ lcMethod = function(.class,
 #' @param excludeArgs The names of the arguments to exclude from the defaults, provided as a `character vector`.
 #' @return An object of class `Class` that extends `lcMethod`.
 #' @examples
-#' lcMethodKML2 <- function(formula = Value ~ 0, time = "Id", id = "Id", nClusters = 2, ...) {
+#' data(latrendData)
+#' lcMethodKML2 <- function(response = "Y", id = "Id", time = "Time", nClusters = 2, ...) {
 #'   lcMethod.call("lcMethodKML", call = stackoverflow::match.call.defaults(),
 #'     defaults = c(kml::kml, kml::parALGO),
 #'     excludeArgs = c("object", "nbClusters", "parAlgo", "toPlot", "saveFreq"))

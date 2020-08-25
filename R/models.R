@@ -312,7 +312,7 @@ plotMetric = function(models,
   if (length(group) == 0) {
     dtModelMetrics[, .group := 'All']
   } else {
-    dtModelMetrics[, .group := do.call(interaction, subset(dtModelMetrics, select =
+    dtModelMetrics[, .group := do.call(interaction, base::subset(dtModelMetrics, select =
                                                              group))]
   }
   assert_that(has_name(dtModelMetrics, by))

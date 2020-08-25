@@ -173,7 +173,7 @@ clusterNames = function(object, factor = FALSE) {
 #' @title Number of strata per cluster
 #' @param object The `lcModel` object.
 #' @examples
-#' model <- latrend(lcMethodKML("Y"), latrendData)
+#' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' clusterSizes(model)
 clusterSizes = function(object) {
   assert_that(is.lcModel(object))
@@ -435,7 +435,7 @@ setMethod('getLabel', signature('lcModel'), function(object, ...) {
 #' @title Get the method specification of a lcModel
 #' @param object The `lcModel` object.
 #' @examples
-#' model = latrend(method=lcMethodKML("Y"), data=latrendData)
+#' model = latrend(method=lcMethodKML("Y", id = "Id", time = "Time"), data=latrendData)
 #' getLcMethod(model)
 getLcMethod = function(object) {
   assert_that(is.lcModel(object))
@@ -485,7 +485,7 @@ genIdRowIndices = function(object) {
 #' @details The order returned by ids(lcModel) determines the id order for any output involving id-specific values, such as in clusterAssignments() or postprob()
 #' @param object The `lcModel` object.
 #' @examples
-#' model = latrend(lcMethodKML("Y"), latrendData)
+#' model = latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' ids(model) # S1, S2, ..., S500
 ids = function(object) {
   if (length(object@ids) == 0) {
@@ -507,7 +507,7 @@ ids = function(object) {
 #' @rdname idVariable
 #' @aliases idVariable,lcModel-method
 #' @examples
-#' model <- latrend(lcMethodKML("Y"), latrendData)
+#' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' idVariable(model) # "Id"
 #'
 #' @family lcModel variables

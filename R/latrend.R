@@ -13,7 +13,7 @@
 #' @return A `lcModel` object representing the fitted model.
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodKML("Y"), data = latrendData, id = "Id", time = "Time")
+#' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), data = latrendData)
 #'
 #' method <- lcMethodKML("Y", id = "Id", time = "Time")
 #' model <- latrend(method, data = latrendData, nClusters = 3)
@@ -153,7 +153,7 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
 #' method <- lcMethodKML("Y", id = "Id", time = "Time")
 #' models <- latrendRep(method, data = latrendData, .rep = 5) # 5 repeated runs
 #'
-#' models <- latrendRep(method, data = latrendData, seed = 1, .rep = 3)
+#' models <- latrendRep(method, data = latrendData, .seed = 1, .rep = 3)
 #' @family longitudinal cluster fit functions
 latrendRep = function(method,
                        data,
@@ -273,7 +273,7 @@ latrendRep = function(method,
 #' methods <- lcMethods(lcMethodKML("Y", id = "Id", time = "Time"), nClusters = 1:3)
 #' models <- latrendBatch(methods, data = latrendData)
 #'
-#' models <- latrendBatch(lcMethods(lcMethodKML("Y"), nClusters = 1:2),
+#' models <- latrendBatch(lcMethods(lcMethodKML("Y", id = "Id", time = "Time"), nClusters = 1:2),
 #'    data = .(latrendData[Time > .5,],
 #'             latrendData[Time < .5,])) # different data per method
 #'
@@ -444,7 +444,7 @@ latrendBoot = function(method,
 #' method <- lcMethodKML("Y", id = "Id", time = "Time")
 #' model <- latrendCV(method, latrendData, folds = 10)
 #'
-#' model <- latrendCV(method, latrendData[, Time < .5], folds = 10, seed = 1)
+#' model <- latrendCV(method, latrendData[Time < .5], folds = 10, seed = 1)
 #' @family longitudinal cluster fit functions
 #' @family validation methods
 latrendCV = function(method,
@@ -507,9 +507,9 @@ latrendCV = function(method,
 #' @family validation methods
 #' @examples
 #' data(latrendData)
-#' trainFolds <- createTrainDataFolds(latrendData, folds = 10)
+#' trainFolds <- createTrainDataFolds(latrendData, folds = 10, id = "Id")
 #'
-#' trainFolds <- createTrainDataFolds(latrendData, folds = 10, seed = 1)
+#' trainFolds <- createTrainDataFolds(latrendData, folds = 10, id = "Id", seed = 1)
 createTrainDataFolds = function(data,
                                 folds = 10,
                                 id = getOption('latrend.id'),
@@ -547,8 +547,8 @@ createTrainDataFolds = function(data,
 #' @family validation methods
 #' @examples
 #' data(latrendData)
-#' trainDataList <- createTrainDataFolds(latrendData, folds = 10)
-#' testData1 <- createTestDataFold(latrendData, trainDataList[[1]])
+#' trainDataList <- createTrainDataFolds(latrendData, id = "Id", folds = 10)
+#' testData1 <- createTestDataFold(latrendData, trainDataList[[1]], id = "Id")
 createTestDataFold = function(data, trainData, id = getOption('latrend.id')) {
   assert_that(is.data.frame(trainData))
   trainIds = unique(trainData[[id]])
@@ -567,7 +567,7 @@ createTestDataFold = function(data, trainData, id = getOption('latrend.id')) {
 #' @family validation methods
 #' @examples
 #' data(latrendData)
-#' trainDataList <- createTrainDataFolds(latrendData, folds = 10)
+#' trainDataList <- createTrainDataFolds(latrendData, folds = 10, id = "Id")
 #' testDataList <- createTestDataFolds(latrendData, trainDataList)
 createTestDataFolds = function(data, trainDataList, ...) {
   lapply(trainDataList, function(trainData)

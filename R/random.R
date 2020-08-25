@@ -17,7 +17,7 @@ localRNG = function(seed = NULL, expr) {
 #' @return An `integer` giving the index of the sampled element.
 #' @examples
 #' x = c(.01, .69, .3)
-#' which.weighted(x) #1, 2, or 3
+#' which.weight(x) #1, 2, or 3
 which.weight = function(x) {
   sample.int(length(x), size = 1, prob = x)
 }

@@ -10,9 +10,9 @@
 #' @param ... Additional arguments.
 #' @examples
 #' data(latrendData)
-#' plotTrajectories(latrendData, response = "Y")
+#' plotTrajectories(latrendData, response = "Y", id = "Id", time = "Time")
 #'
-#' plotTrajectories(latrendData, response = quote(exp(Y)))
+#' plotTrajectories(latrendData, response = quote(exp(Y)), id = "Id", time = "Time")
 setMethod('plotTrajectories', signature('data.frame'), function(object,
                                                                 response,
                                                                 time = getOption('latrend.time'),
