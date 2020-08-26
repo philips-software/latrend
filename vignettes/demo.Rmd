@@ -1,6 +1,5 @@
 ---
-title: "Demonstration of cluslong package"
-subtitle: "derp"
+title: "Demonstration of latrend package"
 author: "Niek Den Teuling"
 date: "`r Sys.Date()`"
 output: 
@@ -14,7 +13,7 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-library(cluslong)
+library(latrend)
 library(ggplot2)
 knitr::opts_chunk$set(
   cache = TRUE,
@@ -26,52 +25,40 @@ update_geom_defaults('point', list(size = .5))
 ```
 
 ```{r, results='hide',message=FALSE,warning=FALSE}
-library(cluslong)
+library(latrend)
 library(ggplot2)
 library(magrittr)
-options(cluslong.verbose=TRUE)
+options(latrend.verbose=TRUE)
 ```
 
 # Loading the data
 ```{r}
-data(OSA1y30)
-osaData = OSA1y30
-head(osaData)
+data(latrendData)
+head(latrendData)
 ```
 
 ```{r}
-options(cluslong.id='Patient', cluslong.time='Day')
+options(latrend.id='Id', latrend.time='Time')
 ```
 
 ```{r}
-ggplot(osaData, aes(x=HoursOfUse)) +
-  geom_histogram(breaks=seq(0, 12, by=.5), color='black') +
-  scale_x_continuous(breaks=seq(0, 12, by=2))
-```
-
-
-# Reference profiles
-```{r, fig.width=10, fig.height=6, out.width='100%'}
-plotTrajectories(osaData, response='HoursOfUse') +
-  facet_wrap(~Profile, nrow=1)
+plotTrajectories(latrendData, response = "Y")
 ```
 
 # KML clustering
 ```{r}
-method = clMethodKML(response='HoursOfUse')
-kmlModel = cluslong(method, osaData)
+method = lcMethodKML(response = "Y")
+kmlModel = latrend(method, latrendData)
 ```
 
 ```{r}
-metric(kmlModel, c('logLik', 'BIC', 'WRSS'))
-
-metric(kmlModel, 'WMAE') #hours
+metric(kmlModel, c('logLik', 'BIC', 'WRSS', 'WMAE'))
 ```
 
 ```{r}
-methods = clMethods(clMethodKML(response='HoursOfUse', nRuns=10), nClusters=1:9)
+methods = lcMethods(lcMethodKML(response="Y", nRuns=10), nClusters=1:9)
 
-kmlModels = cluslongBatch(methods, data=osaData, verbose=FALSE)
+kmlModels = latrendBatch(methods, data = latrendData, verbose = FALSE)
 
 kmlModels
 ```
@@ -95,11 +82,11 @@ plot(kmlModel4)
 
 ## Model adequacy
 ```{r}
-plotQQ(kmlModel4, detrend=TRUE)
+qqPlot(kmlModel4, detrend=FALSE)
 ```
 
 ```{r}
-plotQQ(kmlModel4, byCluster=TRUE, detrend=TRUE)
+qqPlot(kmlModel4, byCluster=TRUE, detrend=TRUE)
 ```
 
 
@@ -111,25 +98,25 @@ plot(bestKmlModel)
 ```
 
 ```{r}
-plotQQ(bestKmlModel, detrend=TRUE)
+qqPlot(bestKmlModel, detrend=TRUE)
 ```
 
 # Clustering using group-based trajectory modeling
 ```{r}
-gmmRef = clMethodLcmmGMM(HoursOfUse ~ I(Day / 100) * CLUSTER + (1 | Patient), idiag=TRUE, maxIter=20, convB=1e-2, convL=1e-2, convG=1e-2)
-gbtmMethods = clMethods(gbtmRef, nClusters=1:6)
+gmmRef = lcMethodLcmmGMM(Y ~ Time * CLUSTER + (1 | Patient), idiag=TRUE, maxIter=20, convB=1e-2, convL=1e-2, convG=1e-2)
+gmmMethods = lcMethods(gmmRef, nClusters=1:6)
 
-gbtmModels = cluslongBatch(gbtmMethods, osaData, verbose=FALSE)
+gmmModels = latrendBatch(gmmMethods, latrendData, verbose=FALSE)
 ```
 
 ```{r warning=FALSE, fig.width=10, fig.height=5, out.width='100%'}
-p = plotMetric(gbtmModels, c('logLik', 'BIC', 'WMAE')) +
+p = plotMetric(gmmModels, c('logLik', 'BIC', 'WMAE')) +
   scale_x_continuous(breaks=seq(1, 12, by=2))
 print(p)
 ```
 
 ```{r}
-bestGbtmModel = subset(gbtmModels, nClusters == 3, drop=TRUE)
-plotQQ(bestGbtmModel, detrend=TRUE)
+bestGmmModel = subset(gmmModels, nClusters == 3, drop=TRUE)
+qqPlot(bestGmmModel, detrend=TRUE)
 ```
 

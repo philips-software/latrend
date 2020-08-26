@@ -13,7 +13,7 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-library(cluslong)
+library(latrend)
 library(ggplot2)
 knitr::opts_chunk$set(
   cache = TRUE,
@@ -22,13 +22,13 @@ knitr::opts_chunk$set(
 )
 update_geom_defaults('line', list(size = .01))
 update_geom_defaults('point', list(size = .5))
-options(cluslong.verbose=TRUE)
+options(latrend.verbose=TRUE)
 ```
 
 We will demonstrate how the exploration of the most appropriate method and model can be done in a more systematic way. This vignette is a follow-up on the demonstration vignette. As such, the data exploration step is skipped.
 
 ```{r, results='hide',message=FALSE,warning=FALSE}
-library(cluslong)
+library(latrend)
 library(ggplot2)
 library(magrittr)
 ```
@@ -36,26 +36,25 @@ library(magrittr)
 # Loading the data
 We explore the `OSA1y30` dataset. This is a synthetic dataset for which the reference group of each trajectory is available. However, in this vignette we will assume that the group specification and number of groups are unknown.
 ```{r}
-data(OSA1y30)
-osaData = OSA1y30
-head(osaData)
+data(latrendData)
+head(latrendData)
 ```
 
 Specify the package options to adopt the respective column names of the loaded dataset, for convenience.
 ```{r}
-options(cluslong.id='Patient', cluslong.time='Day')
+options(latrend.id = "Id", latrend.time = "Time")
 ```
 
 Specify KML models for a varying number of clusters.
 ```{r}
-methods = clMethods(clMethodKML(HoursOfUse ~ 1, nRuns=10), nClusters=1:9)
+methods = lcMethods(lcMethodKML("Y", nRuns=10), nClusters=1:9)
 
-kmlModels = cluslongBatch(methods, data=osaData, verbose=FALSE)
+kmlModels = latrendBatch(methods, data=latrendData, verbose=FALSE)
 ```
 
 Specify two-step cluster models for a varying number of clusters.
 ```{r}
-methods = clMethods(clMethodKML(HoursOfUse ~ 1, nRuns=10), nClusters=1:9)
+methods = lcMethods(lcMethodKML("Y", nRuns = 10), nClusters = 1:9)
 
-kmlModels = cluslongBatch(methods, data=osaData, verbose=FALSE)
+kmlModels = latrendBatch(methods, data = latrendData, verbose = FALSE)
 ```
