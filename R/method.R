@@ -376,7 +376,7 @@ lcMethod.env = function(object, defaultEnvir, envir) {
 #' nclus <- 1:6
 #' methods <- lcMethods(baseMethod, nClusters = nclus)
 #'
-#' methods <- lcMethods(baseMethod, nClusters = 3, center = .(meanNA, meanNA, median))
+#' methods <- lcMethods(baseMethod, nClusters = 3, center = .(mean, mean, median))
 lcMethods = function(method, ..., envir = NULL) {
   assert_that(is.lcMethod(method))
 
