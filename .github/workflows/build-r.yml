@@ -34,7 +34,7 @@ jobs:
           
       - name: Check
         run: |
-          R -e 'cat("check")'
+          R -e 'devtools::check(document = TRUE, build_args = c('--no-build-vignettes'), args=c('--ignore-vignettes', '--no-examples'))'
 
       - name: Build
         run: |
