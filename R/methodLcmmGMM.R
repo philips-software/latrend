@@ -34,7 +34,6 @@ setValidity('lcMethodLcmmGMM', function(object) {
 #' The following arguments are ignored: data, fixed, random, mixture, subject, classmb, returndata, ng, verbose, subset.
 #' @details The `formula` argument is used to generate the `fixed`, `random`, and `mixture` arguments for [lcmm::lcmm].
 #' @examples
-#' library(lcmm)
 #' data(latrendData)
 #' method <- lcMethodLcmmGMM(Y ~ Time * CLUSTER + (1 | Id),
 #'                      id = "Id", time = "Time", , nClusters = 3)
