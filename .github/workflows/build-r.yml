@@ -34,10 +34,10 @@ jobs:
           
       - name: Check
         run: |
-          R -e 'devtools::check(document = TRUE, build_args = c('--no-build-vignettes'), args=c('--ignore-vignettes', '--no-examples'))'
+          R -e 'devtools::check(document = TRUE, cran = FALSE, error_on = "error", args = c("--timings", "--no-examples", "--no-manual", "--no-tests"))'
 
       - name: Build
         run: |
-          R -e 'devtools::build(vignettes=FALSE)'
+          R -e 'devtools::build()'
 
 
