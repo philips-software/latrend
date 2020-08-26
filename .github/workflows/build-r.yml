@@ -18,7 +18,7 @@ jobs:
       - name: Cache packages
         uses: actions/cache@v2
         with:
-          path: ~/.local/share/renv
+          path: /usr/local/lib/R/site-library
           key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
           restore-keys: |
             ${{ runner.os }}-renv-
@@ -29,6 +29,7 @@ jobs:
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           options(configure.args = list(rgl = "--disable-ftgl"), 
                   configure.vars = list(curl = "LIBS='-lz -lcrypto -lssl -ldl'"))
+          renv::consent(provided = TRUE)
           renv::restore()
           
       - name: Check
