@@ -25,11 +25,11 @@ meltRepeatedMeasures = function(data,
                                 ids = rownames(data),
                                 times = colnames(data),
                                 as.data.table = FALSE) {
-  assert_that(is.matrix(data))
-  assert_that(is.character(id),
-              is.character(time),
-              is.character(response))
   assert_that(
+    is.matrix(data),
+    is.character(id),
+    is.character(time),
+    is.character(response),
     length(times) == 0 || length(times) == ncol(data),
     length(ids) == 0 || length(ids) == nrow(data),
     !anyNA(ids),
@@ -39,23 +39,29 @@ meltRepeatedMeasures = function(data,
   if (is.character(ids)) {
     ids = factor(ids, levels = ids)
   }
-  if (is.character(times)) {
+  if (length(ids) == 0) {
+    ids = seq_len(nrow(data))
+  }
+
+  if (length(times) == 0) {
+    times = seq(0, 1, length.out = ncol(data))
+  }
+  else if (is.factor(times)) {
+    suppressWarnings({
+      times = as.numeric(as.character(times))
+    })
+  }
+  else if (is.character(times)) {
     suppressWarnings({
       times = as.numeric(times)
     })
   }
 
-  if (length(ids) == 0) {
-    ids = seq_len(nrow(data))
-  }
-  if (length(times) == 0) {
-    times = seq(0, 1, length.out = ncol(data))
-  }
   if (anyNA(times)) {
     if (all(!is.finite(times))) {
       times = seq_along(times)
       warning(
-        'provided times were parsed to numeric NA; resorting to times = seq_along(times) instead.'
+        'supplied "times" argument failed to parse to numeric values; falling back to times = seq_along(times) instead.'
       )
     } else {
       stop('some time values are non-finite (possible failed to parse to numeric?)')
@@ -64,7 +70,7 @@ meltRepeatedMeasures = function(data,
 
   dt = data.table(
     Id = rep(ids, each = ncol(data)),
-    Time = rep(as.numeric(times), nrow(data)),
+    Time = rep(times, nrow(data)),
     Response = as.numeric(t(data))
   )
   setnames(dt, c('Id', 'Time', 'Response'), c(id, time, response))
