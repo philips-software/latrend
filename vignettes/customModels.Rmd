@@ -37,11 +37,10 @@ In this vignette we demonstrate how to define new methods, with varying degrees 
 We will generate a dataset comprising two clusters with a different intercept and slope. Firstly, we configure the default id, time, and response variable, so that these do not need to be provided to the other function calls.
 
 ```{r}
-library(cluslong)
-options(cluslong.id = 'Traj', 
-        cluslong.time = 'Time',
-        cluslong.response = 'Y',
-        cluslong.verbose = TRUE)
+library(latrend)
+options(latrend.id = 'Traj', 
+        latrend.time = 'Time',
+        latrend.verbose = TRUE)
 ```
 
 Next, we generate the dataset, with 40 trajectories for cluster A and 60 trajectories for cluster B. Cluster A involves trajectories with a downward slope, whereas cluster B has an upward slope. We define a fixed mean of 1, such that all the cluster trajectories are shifted, placing cluster A at intercept 2, and cluster B at intercept 1.
@@ -61,13 +60,12 @@ casedata = generateLongData(sizes = c(40, 60),
 
 We plot the data to get a sense of different trajectories that have been generated. Visually, there is little group separation.
 ```{r}
-plotTrajectories(casedata)
+plotTrajectories(casedata, response = "Y")
 ```
 
 Since we generated the data, we have the luxury of looking at reference cluster trajectories, as stored in the `Mu.cluster` column. Note that `Mu.fixed` must be added to obtain the correct values.
 ```{r}
-plotTrajectories(casedata) +
-  geom_line(aes(y = Mu.fixed + Mu.cluster, color = Cluster), size = 2)
+plotClusterTrajectories(casedata, response = "Y", cluster = "Class")
 ```
 
 # Stratification
@@ -79,11 +77,11 @@ ggplot(casedata[Time == 0], aes(x = Mu)) +
   geom_density(fill = 'gray', adjust = .3)
 ```
 
-Based on the density plot, we will assign trajectories with an intercept above 1.7 to cluster A, and the remainder to cluster B. 
+Based on the density plot, we will assign trajectories with an intercept above 1.6 to cluster A, and the remainder to cluster B. 
 
 ```{r message=TRUE}
-m = clMethodStratify(Y[1] > 1.7)
-model = cluslong(m, casedata)
+m = lcMethodStratify(response = "Y", Y[1] > 1.6)
+model = latrend(m, casedata)
 ```
 
 ```{r}
@@ -101,8 +99,8 @@ stratfun = function(data) {
          levels = c(FALSE, TRUE), 
          labels = c('Low', 'High'))
 }
-m2 = clMethodStratify(stratfun, center = mean)
-model2 = cluslong(m2, casedata)
+m2 = lcMethodStratify(response = "Y", stratify = stratfun, center = mean)
+model2 = latrend(m2, casedata)
 
 clusterProportions(model2)
 ```
@@ -111,8 +109,9 @@ In case the linear regression step is time-intensive, a more efficient approach 
 ```{r message=TRUE}
 casedata[, Intercept := coef(lm(Y ~ Time, .SD))[1], by = Traj]
 
-m3 = clMethodStratify(Intercept[1] > 1.7, clusterNames = c('Low', 'High'))
-model3 = cluslong(m3, casedata)
+m3 = lcMethodStratify(response = "Y", stratify = Intercept[1] > 1.7, 
+  clusterNames = c('Low', 'High'))
+model3 = latrend(m3, casedata)
 ```
 
 
@@ -129,14 +128,15 @@ repStep = function(method, data, verbose) {
 }
 ```
 
-The cluster step takes the coefficient matrix as input. A cross-sectional cluster algorithm can then be applied to the matrix. In this example, we apply $k$-means. The cluster step should output a `clModel` object.
+The cluster step takes the coefficient matrix as input. A cross-sectional cluster algorithm can then be applied to the matrix. In this example, we apply $k$-means. The cluster step should output a `lcModel` object.
 
-The `clModelCustom` function creates a `clModel` object for a given vector of cluster assignments. 
+The `lcModelCustom` function creates a `lcModel` object for a given vector of cluster assignments. 
 ```{r}
 clusStep = function(method, data, repMat, envir, verbose) {
   km = kmeans(repMat, centers = 3)
 
-  clModelCustom(method = method,
+  lcModelCustom(response = method$response, 
+                method = method,
                 data = data, 
                 clusterAssignments = km$cluster,
                 clusterTrajectories = method$center,
@@ -144,22 +144,22 @@ clusStep = function(method, data, repMat, envir, verbose) {
 }
 ```
 
-We are now ready to create the `clMethodTwoStep` method.
+We are now ready to create the `lcMethodTwoStep` method.
 ```{r}
-m.twostep = clMethodTwoStep(representationStep = repStep, clusterStep = clusStep)
+m.twostep = lcMethodTwoStep(response = "Y", representationStep = repStep, clusterStep = clusStep)
 ```
 
 ```{r message=TRUE}
-model.twostep = cluslong(m.twostep, data = casedata)
+model.twostep = latrend(m.twostep, data = casedata)
 summary(model.twostep)
 ```
 
 
 ## General approach
-The two-step model defined above is hard-coded for a given formula and a fixed number of clusters. In an exploratory setting, it is convenient to define a parameterized method. Here, we change the two functions to take arguments through the `clMethod` object in the `method` variable.
+The two-step model defined above is hard-coded for a given formula and a fixed number of clusters. In an exploratory setting, it is convenient to define a parameterized method. Here, we change the two functions to take arguments through the `lcMethod` object in the `method` variable.
 
 
-Note that we can introduce new arguments which are not originally part of `clMethodTwoStep` (e.g., `nClusters`) to enable the specification of the number of clusters in our method.
+Note that we can introduce new arguments which are not originally part of `lcMethodTwoStep` (e.g., `nClusters`) to enable the specification of the number of clusters in our method.
 ```{r}
 repStep.gen = function(method, data, verbose) {
   coefdata = data[, lm(method$formula, .SD) %>% coef() %>% as.list(), keyby = c(method$id)]
@@ -172,61 +172,64 @@ repStep.gen = function(method, data, verbose) {
 clusStep.gen = function(method, data, repMat, envir, verbose) {
   km = kmeans(repMat, centers = method$nClusters)
 
-  clModelCustom(method = method,
-                data = data, 
-                clusterAssignments = km$cluster,
-                clusterTrajectories = method$center,
-                model = km)
+  lcModelCustom(response = "Y",
+    method = method,
+    data = data, 
+    clusterAssignments = km$cluster,
+    clusterTrajectories = method$center,
+    model = km)
 }
 ```
 
-We create a new `clMethodTwoStep` instance with the more generic functions. Defining values for `formula` and `nClusters` here makes these arguments values act as default values in a call of `cluslong`.
+We create a new `lcMethodTwoStep` instance with the more generic functions. Defining values for `formula` and `nClusters` here makes these arguments values act as default values in a call of `latrend`.
 ```{r}
-m.twostepgen = clMethodTwoStep(representationStep = repStep.gen, 
-                               clusterStep = clusStep.gen)
+m.twostepgen = lcMethodTwoStep(response = "Y",
+  representationStep = repStep.gen, 
+  clusterStep = clusStep.gen)
 ```
 
-However, because we omitted the specification of `formula` and `nClusters`, these need to be provided in the `cluslong` call.
+However, because we omitted the specification of `formula` and `nClusters`, these need to be provided in the `latrend` call.
 ```{r message=TRUE}
-model.twostepgen = cluslong(m.twostepgen, formula = Y ~ Time, nClusters = 2, casedata)
+model.twostepgen = latrend(m.twostepgen, formula = Y ~ Time, nClusters = 2, casedata)
 summary(model.twostepgen)
 ```
 
 # Implementing a new method
-The use of `clMethodStratify` and `clMethodTwostep` enables rapid prototyping. Once the desired model has been identified, it may be worthwhile to implement it as a standalone method in the framework. This way the model can be extended to output more representative cluster trajectories, or to extend the model with predictive capabilities such that it can be validated on external data.
+The use of `lcMethodStratify` and `lcMethodTwostep` enables rapid prototyping. Once the desired model has been identified, it may be worthwhile to implement it as a standalone method in the framework. This way the model can be extended to output more representative cluster trajectories, or to extend the model with predictive capabilities such that it can be validated on external data.
 
 To illustrate this, we will implement a basic group-based trajectory model (GBTM), also known as latent-class growth analysis.  We make use of the implementation available in the `lcmm` package through the `lcmm()` function, which allows for a relatively concise illustration.
 
-## Extending the `clMethod` class
-Firstly, we create a new method class named `clMethodSimpleGBTM`, which extends the `clMethod` class.
+## Extending the `lcMethod` class
+Firstly, we create a new method class named `lcMethodSimpleGBTM`, which extends the `lcMethod` class.
 ```{r}
-setClass('clMethodSimpleGBTM', contains='clMethod')
+setClass('lcMethodSimpleGBTM', contains='lcMethod')
 ```
 
-Note that a `clMethod` class has a single slot `call`, which stores all the arguments to the method. The other relevant aspects of a `clMethod` implementation are the `prepareData()` and `fit()` functions, which are called when passing a `clMethod` object to the `cluslong()` function or any other model estimation function.
+Note that a `lcMethod` class has a single slot `call`, which stores all the arguments to the method. The other relevant aspects of a `lcMethod` implementation are the `prepareData()` and `fit()` functions, which are called when passing a `lcMethod` object to the `latrend()` function or any other model estimation function.
 
 ```{r}
-clMethodSimpleGBTM = function(formula = Value ~ Time,
-                              time = getOption('cluslong.time'),
-                              id = getOption('cluslong.id'),
+lcMethodSimpleGBTM = function(formula = Value ~ Time,
+                              time = getOption('latrend.time'),
+                              id = getOption('latrend.id'),
                               nClusters = 2,
                               nwg = FALSE) {
-  clMethod.call('clMethodSimpleGBTM', call = stackoverflow::match.call.defaults())
+  lcMethod.call('lcMethodSimpleGBTM', call = stackoverflow::match.call.defaults())
 }
 ```
 
 Next, we override the `getName()` and `getShortName()` functions in our method class to ensure that the model is easily distinguishable from other methods in the summary output. While we return a simple constant character sequence, the naming functions could be improved by generating a more detailed description of the model based on the arguments of the method object.
 ```{r}
-setMethod('getName', signature('clMethodSimpleGBTM'), function(object) 'simple group-based trajectory model')
+setMethod('getName', 
+  signature('lcMethodSimpleGBTM'), function(object, ...) 'simple group-based trajectory model')
 
-setMethod('getShortName', signature('clMethodSimpleGBTM'), function(object) 'sgbtm')
+setMethod('getShortName', signature('lcMethodSimpleGBTM'), function(object, ...) 'sgbtm')
 ```
 
-Implementing the `prepareData()` function enables the `clMethod` to do data processing or transforming the data or other arguments in a structure which is suitable for the model fitting procedure. The prepare function takes a `clMethod`, the data as a `data.frame`, and the verbosity level as inputs. The processing is passed onto the `fit` function by returning an `environment` with the relevant variables.
+Implementing the `prepareData()` function enables the `lcMethod` to do data processing or transforming the data or other arguments in a structure which is suitable for the model fitting procedure. The prepare function takes a `lcMethod`, the data as a `data.frame`, and the verbosity level as inputs. The processing is passed onto the `fit` function by returning an `environment` with the relevant variables.
 
 In this example, we need to ensure that the `Id` column is an integer.
 ```{r}
-setMethod('prepareData', signature('clMethodSimpleGBTM'), function(method, data, verbose) {
+setMethod('prepareData', signature('lcMethodSimpleGBTM'), function(method, data, verbose, ...) {
   envir = new.env()
   envir$data = as.data.frame(data)
   envir$data[[method$id]] = factor(data[[method$id]]) %>% as.integer()
@@ -234,9 +237,9 @@ setMethod('prepareData', signature('clMethodSimpleGBTM'), function(method, data,
 })
 ```
 
-The `fit()` function estimates the model and should return an object that extends the `clModel` class. In our implementation, we call the `lcmm()` with the appropriate arguments, and we construct a `clModelSimpleGBTM` instance. The class is defined in the subsection below. The `envir` argument contains the return value of the `prepare()` function, which would be `NULL` here.
+The `fit()` function estimates the model and should return an object that extends the `lcModel` class. In our implementation, we call the `lcmm()` with the appropriate arguments, and we construct a `lcModelSimpleGBTM` instance. The class is defined in the subsection below. The `envir` argument contains the return value of the `prepare()` function, which would be `NULL` here.
 ```{r}
-setMethod('fit', signature('clMethodSimpleGBTM'), function(method, data, envir, verbose, ...) {
+setMethod('fit', signature('lcMethodSimpleGBTM'), function(method, data, envir, verbose, ...) {
   args = as.list(method, args=lcmm::lcmm)
   args$data = envir$data
   args$fixed = method$formula
@@ -251,7 +254,7 @@ setMethod('fit', signature('clMethodSimpleGBTM'), function(method, data, envir, 
   
   model = do.call(lcmm::lcmm, args)
   
-  new('clModelSimpleGBTM', 
+  new('lcModelSimpleGBTM', 
       method = method,
       data = data,
       model = model,
@@ -259,23 +262,23 @@ setMethod('fit', signature('clMethodSimpleGBTM'), function(method, data, envir, 
 })
 ```
 
-## Extending the `clModel` class
-We start off by defining the `clModelSimpleGBTM` as an extension of the `clModel` class. Extending the base class also enables the addition of new fields to the class, although there is no need for this in the present model.
+## Extending the `lcModel` class
+We start off by defining the `lcModelSimpleGBTM` as an extension of the `lcModel` class. Extending the base class also enables the addition of new fields to the class, although there is no need for this in the present model.
 ```{r}
-setClass('clModelSimpleGBTM', contains='clModel')
+setClass('lcModelSimpleGBTM', contains='lcModel')
 ```
 
-Our model inherits a couple of slots from the `clModel` class, namely:
+Our model inherits a couple of slots from the `lcModel` class, namely:
 ```{r}
-slotNames('clModelSimpleGBTM')
+slotNames('lcModelSimpleGBTM')
 ```
-The `"model"` slot is free to be used to assign an arbitrary data structure that represents the internal model representation(s). In our implementation, this slot contains the `lcmm` model. The other slots are assigned in the constructor of the `clModel` class, or by the `cluslong()` estimation function. It is best practice to use the relevant getter functions for obtaining these values (via e.g., `idVariable()`, `getClMethod()`, `clusterNames()`).
+The `"model"` slot is free to be used to assign an arbitrary data structure that represents the internal model representation(s). In our implementation, this slot contains the `lcmm` model. The other slots are assigned in the constructor of the `lcModel` class, or by the `latrend()` estimation function. It is best practice to use the relevant getter functions for obtaining these values (via e.g., `idVariable()`, `getLcMethod()`, `clusterNames()`).
 
 Typically, most effort of implementing the model interface goes to the `predict()` function. While implementing the function is optional, it is used for obtaining the fitted values, fitted trajectories, residuals, and cluster trajectories. Without this function, there is little functionality from a model except for the partitioning of the fitted trajectories.
 
-The default `fitted.clModel()` function returns the output from `predict(model, newdata=NULL)`. As such, it is advisable to implement this special case. Here, we move the logic to the custom `fitted.clModelSimpleGBTM` function, as defined below.
+The default `fitted.lcModel()` function returns the output from `predict(model, newdata=NULL)`. As such, it is advisable to implement this special case. Here, we move the logic to the custom `fitted.lcModelSimpleGBTM` function, as defined below.
 ```{r}
-predict.clModelSimpleGBTM = function(object, newdata=NULL, what='mu') {
+predict.lcModelSimpleGBTM = function(object, newdata=NULL, what='mu', ...) {
   if(is.null(newdata)) {
     predMat = fitted(object, clusters=NULL)
   } else {
@@ -289,7 +292,7 @@ predict.clModelSimpleGBTM = function(object, newdata=NULL, what='mu') {
 
 The `fitted()` function should return the fitted values per trajectory per (requested) cluster. If not clusters are provided, the function is expected to return a matrix with the fitted values for each cluster. This logic is handled in the `transformFitted()` function, which is available in the package.
 ```{r}
-fitted.clModelSimpleGBTM = function(object, clusters=clusterAssignments(object)) {
+fitted.lcModelSimpleGBTM = function(object, clusters=clusterAssignments(object)) {
   predNames = paste0('pred_m', 1:nClusters(object))
   predMat = as.matrix(object@model$pred[predNames])
   colnames(predMat) = clusterNames(object)
@@ -299,7 +302,7 @@ fitted.clModelSimpleGBTM = function(object, clusters=clusterAssignments(object))
 
 In order for the model implementation to return cluster assignments through the `clusterAssignments()` function, we need to implement the `postprob()` function to return the posterior probability matrix for the fitted data.
 ```{r}
-setMethod('postprob', signature('clModelSimpleGBTM'), function(object) {
+setMethod('postprob', signature('lcModelSimpleGBTM'), function(object) {
   pp = as.matrix(object@model$pprob)[, c(-1, -2), drop=FALSE]
   colnames(pp) = clusterNames(object)
   return(pp)
@@ -308,19 +311,19 @@ setMethod('postprob', signature('clModelSimpleGBTM'), function(object) {
 
 Lastly, we override the `converged()` function to return the convergence code of the internal model.
 ```{r}
-setMethod('converged', signature('clModelSimpleGBTM'), function(object) {
+setMethod('converged', signature('lcModelSimpleGBTM'), function(object, ...) {
   object@model$conv
 })
 ```
 
 ## Applying the new method
 ```{r}
-m = clMethodSimpleGBTM(formula = Y ~ Time)
+m = lcMethodSimpleGBTM(formula = Y ~ Time)
 show(m)
 ```
 
 ```{r}
-sgbtm = cluslong(m, casedata)
+sgbtm = latrend(m, casedata)
 summary(sgbtm)
 ```
 ```{r}
