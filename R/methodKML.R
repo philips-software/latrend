@@ -1,17 +1,26 @@
 #' @include method.R
+
+#' @name interface-kml
+#' @rdname interface-kml
+#' @title kml interface
+#' @seealso [lcMethodKML] \link[kml]{kml}
+NULL
+
 setClass('lcMethodKML', contains = 'lcMatrixMethod')
 
 #' @export
-#' @inheritDotParams kml::kml
-#' @inheritDotParams kml::parALGO
 #' @title Specify a longitudinal k-means (KML) method
-#' @param formula Formula used to specify the response variable to model. On the right-hand side, only `~ 0` is supported.
-#' @param time Time variable.
-#' @param id Strata variable.
-#' @param nClusters Number of clusters.
+#' @param response The name of the response variable.
+#' @param time The name of the time variable.
+#' @param id The name of the trajectory identifier variable.
+#' @param nClusters The number of clusters to estimate.
+#' @param ... Arguments passed to [kml::parALGO] and [kml::kml].
+#' The following external arguments are ignored: object, nbClusters, parAlgo, toPlot, saveFreq
 #' @examples
-#' method = lcMethodKML(Value ~ 0, nClusters=3)
-#' model = latrend(method, testLongData)
+#' library(kml)
+#' data(latrendData)
+#' method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
+#' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodKML = function(response,
                        time = getOption('latrend.time'),
@@ -26,11 +35,14 @@ lcMethodKML = function(response,
   )
 }
 
+#' @rdname interface-kml
 setMethod('getName', signature('lcMethodKML'), function(object) 'longitudinal k-means (KML)')
 
+#' @rdname interface-kml
 setMethod('getShortName', signature('lcMethodKML'), function(object) 'kml')
 
-
+#' @rdname interface-kml
+#' @inheritParams preFit
 setMethod('preFit', signature('lcMethodKML'), function(method, data, envir, verbose, ...) {
   e = callNextMethod()
 
@@ -51,7 +63,8 @@ setMethod('preFit', signature('lcMethodKML'), function(method, data, envir, verb
   return(e)
 })
 
-
+#' @rdname interface-kml
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodKML'), function(method, data, envir, verbose, ...) {
   cld = envir$cld
 

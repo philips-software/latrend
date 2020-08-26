@@ -1,8 +1,8 @@
 #' @include model.R
 setClass('lcModelMixtoolsGMM', contains = 'lcModel')
 
-
-setMethod('postprob', signature('lcModelMixtoolsGMM'), function(object) {
+#' @rdname interface-mixtools
+setMethod('postprob', signature('lcModelMixtoolsGMM'), function(object, ...) {
   pp = object@model$posterior.z
   colnames(pp) = clusterNames(object)
   return(pp)
@@ -11,9 +11,9 @@ setMethod('postprob', signature('lcModelMixtoolsGMM'), function(object) {
 
 #' @export
 #' @importFrom plyr alply
-predict.lcModelMixtoolsGMM = function(object, ...,
-                                      newdata = NULL,
-                                      what = 'mu') {
+#' @rdname interface-mixtools
+#' @inheritParams predict.lcModel
+predict.lcModelMixtoolsGMM = function(object, ..., newdata = NULL, what = 'mu') {
   assert_that(is.newdata(newdata),
               what %in% c('mu'))
 
@@ -59,6 +59,7 @@ predict.lcModelMixtoolsGMM = function(object, ...,
 
 
 #' @export
+#' @rdname interface-mixtools
 logLik.lcModelMixtoolsGMM = function(object, ...) {
   ll = object@model$loglik
   attr(ll, 'nobs') = nIds(object)
@@ -68,6 +69,7 @@ logLik.lcModelMixtoolsGMM = function(object, ...) {
 }
 
 #' @export
+#' @rdname interface-mixtools
 coef.lcModelMixtoolsGMM = function(object, ...) {
   return(
     list(
@@ -81,10 +83,10 @@ coef.lcModelMixtoolsGMM = function(object, ...) {
 }
 
 #' @export
+#' @rdname interface-mixtools
 sigma.lcModelMixtoolsGMM = function(object, ...) {
   object@model$sigma
 }
-
 
 ranef.lcModelMixtoolsGMM = function(object, ...) {
   betaNames = colnames(object@model$x[[1]])

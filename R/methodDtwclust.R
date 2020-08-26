@@ -1,13 +1,26 @@
 #' @include method.R
+
+#' @name interface-dtwclust
+#' @rdname interface-dtwclust
+#' @title dtwclust interface
+#' @seealso [lcMethodDtwclust] \link[dtwclust]{dtwclust-package}
+NULL
+
 setClass('lcMethodDtwclust', contains = 'lcMethod')
 
 #' @export
-#' @inheritDotParams dtwclust::tsclust
 #' @title Specify time series clustering via dtwclust
-#' @param response Response variable.
-#' @param time Time variable.
-#' @param id Strata variable.
+#' @param response The name of the response variable.
+#' @param time The name of the time variable.
+#' @param id The name of the trajectory identifier variable.
 #' @param nClusters Number of clusters.
+#' @param ... Arguments passed to [dtwclust::tsclust].
+#' The following arguments are ignored: series, k, trace.
+#' @examples
+#' library(dtwclust)
+#' data(latrendData)
+#' method <- lcMethodDtwclust("Y", id = "Id", time = "Time", nClusters = 3)
+#' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodDtwclust = function(response,
                        time = getOption('latrend.time'),
@@ -25,10 +38,14 @@ lcMethodDtwclust = function(response,
   return(m)
 }
 
+#' @rdname interface-dtwclust
+#' @inheritParams getName
 setMethod('getName', signature('lcMethodDtwclust'), function(object) paste0('time series clustering with ', object$distance, '-dissimilarity'))
 
+#' @rdname interface-dtwclust
 setMethod('getShortName', signature('lcMethodDtwclust'), function(object) paste0('diss-', object$distance))
 
+#' @rdname interface-dtwclust
 setMethod('preFit', signature('lcMethodDtwclust'), function(method, data, envir, verbose, ...) {
   e = new.env()
   # convert data to list format
@@ -37,6 +54,8 @@ setMethod('preFit', signature('lcMethodDtwclust'), function(method, data, envir,
   return(e)
 })
 
+#' @rdname interface-dtwclust
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodDtwclust'), function(method, data, envir, verbose, ...) {
   args = as.list(method)
   args$series = envir$seriesList

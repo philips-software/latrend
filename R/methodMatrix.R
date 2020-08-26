@@ -1,14 +1,20 @@
 #' @include method.R
 #' @title lcMatrixMethod
-#' @name lcMatrixMethod
-#' @param id Id to use for the rownames of the matrix.
+#' @name lcMatrixMethod-class
+#' @rdname lcMatrixMethod-class
+#' @inheritParams transformLatrendData
 #' @keywords internal
 setClass('lcMatrixMethod', contains = 'lcMethod')
 
-setMethod('getName', signature('lcMatrixMethod'), function(object) 'repeated measures model')
+#' @rdname lcMatrixMethod-class
+#' @inheritParams getName
+setMethod('getName', signature('lcMatrixMethod'), function(object, ...) 'repeated measures model')
 
-setMethod('getShortName', signature('lcMatrixMethod'), function(object) 'rm')
+#' @rdname lcMatrixMethod-class
+setMethod('getShortName', signature('lcMatrixMethod'), function(object, ...) 'rm')
 
+#' @rdname lcMatrixMethod-class
+#' @inheritParams prepareData
 setMethod('prepareData', signature('lcMatrixMethod'), function(method, data, verbose, ...) {
   e = new.env()
 

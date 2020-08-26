@@ -1,4 +1,5 @@
 context('LM-KM')
+rngReset()
 
 test_that('default', {
   set.seed(1)

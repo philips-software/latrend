@@ -1,13 +1,27 @@
 #' @include method.R
+
+#' @name interface-mixtools
+#' @rdname interface-mixtools
+#' @title mixtools interface
+#' @seealso [lcMethodMixtoolsGMM] [lcMethodMixtoolsNPRM] \link[mixtools]{regmixEM.mixed} \link[mixtools]{npEM}
+NULL
+
 setClass('lcMethodMixtoolsGMM', contains = 'lcMethod')
 
 #' @export
 #' @title Specify mixed mixture regression model using mixtools
-#' @inheritDotParams mixtools::regmixEM.mixed
+#' @inheritParams lcMethodGCKM
+#' @param ... Arguments passed to [mixtools::regmixEM.mixed].
+#' The following arguments are ignored: data, y, x, w, k, addintercept.fixed, verb.
 #' @examples
-#' method = lcMethodMixtoolsGMM(Value ~ Time + (Time | Id),
-#'                      time='Time',
-#'                      id='Id', nClusters=3)
+#' \donttest{
+#' library(mixtools)
+#' data(latrendData)
+#' method <- lcMethodMixtoolsGMM(
+#'    formula = Y ~ Time + (1 | Id),
+#'    id = "Id", time = "Time", nClusters = 3)
+#' model <- latrend(method, latrendData)
+#' }
 #' @family lcMethod implementations
 lcMethodMixtoolsGMM = function(formula,
                                time = getOption('latrend.time'),
@@ -22,11 +36,14 @@ lcMethodMixtoolsGMM = function(formula,
   )
 }
 
+#' @rdname interface-mixtools
+#' @inheritParams getName
 setMethod('getName', signature('lcMethodMixtoolsGMM'), function(object) 'growth mixture modeling using mixtools')
 
+#' @rdname interface-mixtools
 setMethod('getShortName', signature('lcMethodMixtoolsGMM'), function(object) 'gmm')
 
-
+#' @rdname interface-mixtools
 setMethod('preFit', signature('lcMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
   e = new.env()
 
@@ -61,6 +78,8 @@ setMethod('preFit', signature('lcMethodMixtoolsGMM'), function(method, data, env
   return(e)
 })
 
+#' @rdname interface-mixtools
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
   args = as.list(method, args = mixtools::regmixEM.mixed)
   args$y = envir$y

@@ -10,16 +10,16 @@ setValidity('lcMethodLMKM', function(object) {
 
 
 #' @export
-#' @title Two-step clustering through linear modeling and k-means
-#' @param formula Trajectory-specific formula
-#' @param time Time variable.
-#' @param nClusters Number of clusters.
+#' @title Two-step clustering through linear regression modeling and k-means
 #' @inheritParams lcMethodTwoStep
-#' @inheritDotParams stats::lm
+#' @inheritParams lcMethodKML
+#' @param formula A `formula` specifying the linear trajectory model.
+#' @param ... Arguments passed to [stats::lm].
+#' The following external arguments are ignored: x, data, control, centers, trace.
 #' @examples
-#' method = lcMethodLMKM(Measurement ~ Assessment + (Assessment | Subject),
-#'                      time='Assessment',
-#'                      id='Subject', nClusters=3)
+#' data(latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
+#' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodLMKM = function(formula,
                         time = getOption('latrend.time'),
@@ -35,12 +35,13 @@ lcMethodLMKM = function(formula,
   )
 }
 
-
+#' @rdname interface-featureBased
 setMethod('getName', signature('lcMethodLMKM'), function(object) 'glm-kmeans')
 
+#' @rdname interface-featureBased
 setMethod('getShortName', signature('lcMethodLMKM'), function(object) 'glmkm')
 
-
+#' @rdname interface-featureBased
 setMethod('prepareData', signature('lcMethodLMKM'), function(method, data, verbose) {
   cat(verbose, 'Representation step...')
   lmArgs = as.list(method, args = lm)
@@ -56,7 +57,7 @@ setMethod('prepareData', signature('lcMethodLMKM'), function(method, data, verbo
   return(e)
 })
 
-
+#' @rdname interface-featureBased
 setMethod('fit', signature('lcMethodLMKM'), function(method, data, envir, verbose, ...) {
   cat(verbose, 'Cluster step...')
   km = kmeans(envir$x,

@@ -7,11 +7,12 @@ setOldClass('lcModels')
 #' @param ... `lcModel`, `lcModels`, or a recursive `list` of `lcModel` objects. Arguments may be named.
 #' @return A `lcModels` object containing all specified `lcModel` objects.
 #' @examples
-#' kml = latrend(lcMethodKML(), testLongData)
-#' gmm = latrend(lcMethodLcmmGMM(), testLongData)
+#' data(latrendData)
+#' kml <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+#' gmm <- latrend(lcMethodLcmmGMM(Y ~ Time + (1 | Id), id = "Id", time = "Time"), latrendData)
 #' lcModels(kml, gmm)
 #'
-#' lcModels(defaults=c(kml, gmm))
+#' lcModels(defaults = c(kml, gmm))
 #' @family lcModel list functions
 lcModels = function(...) {
   list(...) %>%
@@ -26,6 +27,7 @@ lcModels = function(...) {
 }
 
 #' @export
+#' @rdname is
 is.lcModels = function(x) {
   is(x, 'lcModels')
 }
@@ -46,7 +48,8 @@ as.lcModels = function(x) {
     x = list(x)
   }
   else if (is.list(x)) {
-    assert_that(all(vapply(x, is.lcModel, FUN.VALUE = FALSE)), msg = 'object cannot be converted to lcModels; not a list of only lcModels objects')
+    assert_that(all(vapply(x, is.lcModel, FUN.VALUE = FALSE)),
+      msg = 'object cannot be converted to lcModels; not a list of only lcModels objects')
   }
   else {
     stop('cannot convert this type of input to lcModels')
@@ -106,29 +109,9 @@ as.data.frame.lcModels = function(x, ...,
   as.data.frame(dt)
 }
 
-
-#' @export
-#' @importFrom stats as.dist
-#' @rdname metric
-#' @return A named `numeric` vector containing the computed model metrics.
-#' @examples
-#' lcModel metric example here
-setMethod('externalMetric', signature('lcModels', 'missing'), function(object, object2, name = 'adjustedRand') {
-  assert_that(is.character(name), length(name) == 1)
-
-  pairs = combn(seq_along(object), m = 2, simplify = FALSE)
-
-  result = lapply(pairs, function(idx)
-    externalMetric(object[[idx[1]]], object[[idx[2]]], name = name) %>% unname())
-
-  m = matrix(NaN, nrow = length(object), ncol = length(object))
-  m[do.call(rbind, pairs)] = unlist(result)
-  as.dist(t(m), diag = FALSE, upper = FALSE)
-})
-
 .externalMetric.lcModels = function(object, object2, name, drop = TRUE) {
   assert_that(is.character(name),
-              is.flag(drop))
+    is.flag(drop))
 
   if (length(object) == 0) {
     if (drop) {
@@ -152,18 +135,39 @@ setMethod('externalMetric', signature('lcModels', 'missing'), function(object, o
 }
 
 #' @export
-#' @rdname metric
-#' @return A named `numeric` vector containing the computed model metrics.
-#' @examples
-#' lcModel metric example here
-setMethod('externalMetric', signature('lcModels', 'lcModel'), .externalMetric.lcModels)
+#' @importFrom stats as.dist
+#' @rdname externalMetric
+#' @return For `externalMetric(lcModels)`: A distance matrix of class [dist] representing
+#' the pairwise comparisons.
+setMethod('externalMetric',
+  signature('lcModels', 'missing'), function(object, object2, name = 'adjustedRand') {
+  assert_that(is.character(name), length(name) == 1)
+
+  pairs = combn(seq_along(object), m = 2, simplify = FALSE)
+
+  result = lapply(pairs, function(idx)
+    externalMetric(object[[idx[1]]], object[[idx[2]]], name = name) %>% unname())
+
+  m = matrix(NaN, nrow = length(object), ncol = length(object))
+  m[do.call(rbind, pairs)] = unlist(result)
+  as.dist(t(m), diag = FALSE, upper = FALSE)
+})
+
 
 #' @export
-#' @rdname metric
-#' @return A named `numeric` vector containing the computed model metrics.
-#' @examples
-#' lcModel metric example here
-setMethod('externalMetric', signature('list', 'lcModel'), function(object, object2, name, drop = TRUE) {
+#' @rdname externalMetric
+#' @return For `externalMetric(lcModels, lcModel)`: A named `numeric` vector or `matrix`
+#' containing the computed model metrics.
+setMethod('externalMetric', signature('lcModels', 'lcModel'), .externalMetric.lcModels)
+
+
+#' @export
+#' @rdname externalMetric
+#' @inheritParams metric
+#' @return For `externalMetric(list, lcModel)`: A named `numeric` vector or `matrix`
+#' containing the computed model metrics.
+setMethod('externalMetric',
+  signature('list', 'lcModel'), function(object, object2, name, drop = TRUE) {
   assert_that(is.lcModels(object))
   .externalMetric.lcModels(object, object2, name, drop = drop)
 })
@@ -197,26 +201,32 @@ setMethod('externalMetric', signature('list', 'lcModel'), function(object, objec
 
 #' @export
 #' @rdname metric
+#' @param drop Whether to drop the matrix dimensions in case of a single model output.
+#' @return For `metric(list)`: A `data.frame` with a metric per column.
 setMethod('metric', signature('list'), function(object, name, drop = TRUE) {
   .metric.lcModels(as.lcModels(object), name, drop = drop)
 })
 
 #' @export
 #' @rdname metric
-#' @return For metric(lcModels) or metric(list): A data.frame with a metric per column.
+#' @return For `metric(lcModels)`: A `data.frame` with a metric per column.
 setMethod('metric', signature('lcModels'), .metric.lcModels)
 
 #' @export
 #' @title Select the lcModel with the lowest metric value
+#' @param x The `lcModels` object
 #' @param name The name of the internal metric.
+#' @param ... Additional arguments.
 #' @return The lcModel with the lowest metric value
 #' @examples
-#' kml1 = latrend(lcMethodKML(nClusters=1), testLongData)
-#' kml2 = latrend(lcMethodKML(nClusters=2), testLongData)
-#' kml3 = latrend(lcMethodKML(nClusters=3), testLongData)
-
-#' models = lcModels(kml1, kml2, kml3)
+#' data(latrendData)
+#' baseMethod <- lcMethodKML(response = "Y", id = "Id", time = "Time")
+#' kml1 <- latrend(baseMethod, nClusters = 1, latrendData)
+#' kml2 <- latrend(baseMethod, nClusters = 2, latrendData)
+#' kml3 <- latrend(baseMethod, nClusters = 3, latrendData)
+#' models <- lcModels(kml1, kml2, kml3)
 #' min(models, 'WRSS')
+#' @seealso [max.lcModels] [externalMetric]
 min.lcModels = function(x, name, ...) {
   x = as.lcModels(x)
   values = metric(x, name)
@@ -230,15 +240,19 @@ min.lcModels = function(x, name, ...) {
 
 #' @export
 #' @title Select the lcModel with the highest metric value
+#' @param x The `lcModels` object.
+#' @param ... Additional arguments.
 #' @param name The name of the internal metric.
 #' @return The lcModel with the highest metric value
 #' @examples
-#' kml1 = latrend(lcMethodKML(nClusters=1), testLongData)
-#' kml2 = latrend(lcMethodKML(nClusters=2), testLongData)
-#' kml3 = latrend(lcMethodKML(nClusters=3), testLongData)
-
-#' models = lcModels(kml1, kml2, kml3)
+#' data(latrendData)
+#' baseMethod <- lcMethodKML(response = "Y", id = "Id", time = "Time")
+#' kml1 <- latrend(baseMethod, nClusters = 1, latrendData)
+#' kml2 <- latrend(baseMethod, nClusters = 2, latrendData)
+#' kml3 <- latrend(baseMethod, nClusters = 3, latrendData)
+#' models <- lcModels(kml1, kml2, kml3)
 #' max(models, 'WRSS')
+#' @seealso [min.lcModels] [externalMetric]
 max.lcModels = function(x, name, ...) {
   x = as.lcModels(x)
   values = metric(x, name)
@@ -257,14 +271,20 @@ max.lcModels = function(x, name, ...) {
 #' @inheritParams metric
 #' @inheritParams subset.lcModels
 #' @param by The argument name along which methods are plotted.
-#' @param group The argument names to use for determining groups of different models. By default, all arguments are included.
-#' Specifying group=character() disables grouping.
+#' @param group The argument names to use for determining groups of different models. By default,
+#' all arguments are included.
+#' Specifying `group = character()` disables grouping.
 #' Specifying a single argument for grouping uses that specific column as the grouping column.
 #' In all other cases, groupings are represented by a number.
-#' @param facet Whether to facet the plot if multiple model groups are identified.
 #' @return `ggplot2` object.
 #' @examples
-#' plotMetric(models, 'BIC', by='nClusters', group='.name')
+#' data(latrendData)
+#' baseMethod <- lcMethodKML(response = "Y", id = "Id", time = "Time")
+#' kml1 <- latrend(baseMethod, nClusters = 1, latrendData)
+#' kml2 <- latrend(baseMethod, nClusters = 2, latrendData)
+#' kml3 <- latrend(baseMethod, nClusters = 3, latrendData)
+#' models <- lcModels(kml1, kml2, kml3)
+#' plotMetric(models, "BIC", by = "nClusters", group = ".name")
 plotMetric = function(models,
                       name,
                       by = 'nClusters',
@@ -292,7 +312,7 @@ plotMetric = function(models,
   if (length(group) == 0) {
     dtModelMetrics[, .group := 'All']
   } else {
-    dtModelMetrics[, .group := do.call(interaction, subset(dtModelMetrics, select =
+    dtModelMetrics[, .group := do.call(interaction, base::subset(dtModelMetrics, select =
                                                              group))]
   }
   assert_that(has_name(dtModelMetrics, by))
@@ -329,15 +349,19 @@ plotMetric = function(models,
 #' @export
 #' @title Subsetting a lcModels list based on method arguments
 #' @param x The `lcModels` or list of `lcModel` to be subsetted.
-#' @param subset Logical expression based on the `lcModel` method arguments, indicating which `lcModel` objects to keep.
+#' @param subset Logical expression based on the `lcModel` method arguments, indicating
+#' which `lcModel` objects to keep.
+#' @param ... Not used.
 #' @param drop Whether to return a `lcModel` object if the result is length 1.
 #' @return A `lcModels` list with the subset of `lcModel` objects.
 #' @examples
-#' kml1 = latrend(lcMethodKML(nClusters=1), testLongData)
-#' kml2 = latrend(lcMethodKML(nClusters=2), testLongData)
-#' kml3 = latrend(lcMethodKML(nClusters=3), testLongData)
-#' gmm = latrend(lcMethodLcmmGMM(), testLongData)
-#' models = lcModels(kml1, kml2, kml3, gmm)
+#' data(latrendData)
+#' mKML <- lcMethodKML(response = "Y", id = "Id", time = "Time")
+#' kml1 <- latrend(mKML, nClusters = 1, latrendData)
+#' kml2 <- latrend(mKML, nClusters = 2, latrendData)
+#' kml3 <- latrend(mKML, nClusters = 3, latrendData)
+#' gmm <- latrend(lcMethodLcmmGMM(Y ~ Time + (1 | Id), id = "Id", time = "Time"), latrendData)
+#' models <- lcModels(kml1, kml2, kml3, gmm)
 #'
 #' subset(models, nClusters > 1 & .method == 'kml')
 #' @family lcModel list functions
@@ -363,7 +387,10 @@ subset.lcModels = function(x, subset, drop = FALSE, ...) {
 
 #' @export
 #' @title Print lcModels list concisely
+#' @param x The `lcModels` object.
+#' @param ... Not used.
 #' @param summary Whether to print the complete summary per model. This may be slow for long lists!
+#' @param excludeShared Whether to exclude model arguments which are identical across all models.
 #' @family lcModel list functions
 print.lcModels = function(x,
                           ...,

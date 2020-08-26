@@ -1,4 +1,5 @@
 context('funfem')
+rngReset()
 
 library(funFEM)
 data(CanadianWeather)

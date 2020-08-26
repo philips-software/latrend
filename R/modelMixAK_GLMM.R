@@ -3,7 +3,8 @@ setClass('lcModelMixAK_GLMM', contains = 'lcModel')
 
 
 #. postprob ####
-setMethod('postprob', signature('lcModelMixAK_GLMM'), function(object) {
+#' @rdname interface-mixAK
+setMethod('postprob', signature('lcModelMixAK_GLMM'), function(object, ...) {
   pp = .postprob_GLMM_MCMC(object@model)
   colnames(pp) = clusterNames(object)
   pp
@@ -15,7 +16,9 @@ setMethod('postprob', signature('lcModelMixAK_GLMM'), function(object) {
 
 
 #. predictForCluster ####
-setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, cluster, newdata, what = 'mu', ...) {
+#' @rdname interface-mixAK
+#' @inheritParams predictForCluster
+setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, newdata, cluster, what = 'mu', ...) {
   predictForCluster(object@model, cluster = cluster, newdata = newdata, what = what, ...)
 })
 
@@ -37,7 +40,8 @@ setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, 
   pred[, k]
 }
 
-setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, cluster, newdata, what = 'mu', ...) {
+#' @rdname interface-mixAK
+setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, newdata, cluster, what = 'mu', ...) {
   .predictForCluster_GLMM_MCMC(object@model,
                                method = getLcMethod(object),
                                k = match(cluster, clusterNames(object)),
@@ -45,7 +49,9 @@ setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, 
                                ...)
 })
 
-
+#' @export
+#' @rdname interface-mixAK
+#' @param stat The aggregate statistic to extract. The mean is used by default.
 coef.lcModelMixAK_GLMM = function(object, ..., stat = 'Mean') {
   coef(object@model, stat = stat)
 }
@@ -56,6 +62,8 @@ coef.GLMM_MCMC = function(object, ..., stat = 'Mean') {
     sigma_eps = unname(object$summ.sigma_eps[stat]))
 }
 
+#' @export
+#' @rdname interface-mixAK
 deviance.lcModelMixAK_GLMM = function(object, ...) {
   deviance(object@model)
 }

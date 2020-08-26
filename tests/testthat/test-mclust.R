@@ -1,4 +1,5 @@
 context('mclust models')
+rngReset()
 
 test_that('default llpa', {
   m = lcMethodTestMclustLLPA()

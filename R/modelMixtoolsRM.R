@@ -4,6 +4,10 @@ setClass('lcModelMixtoolsRM', contains = 'lcModel')
 
 #' @export
 #' @importFrom plyr alply
+#' @rdname interface-mixtools
+#' @inheritParams predict.lcApproxModel
+#' @param se Whether to compute the standard error of the prediction.
+#' @param ci The confidence interval to compute.
 predict.lcModelMixtoolsRM = function(object,
                                      ...,
                                      newdata = NULL,
@@ -82,6 +86,7 @@ predict.lcModelMixtoolsRM = function(object,
 
 
 #' @export
+#' @rdname interface-mixtools
 fitted.lcModelMixtoolsRM = function(object, ..., clusters) {
   predList = predict.lcModelMixtoolsRM(object,
                                        newdata = NULL,
@@ -90,7 +95,8 @@ fitted.lcModelMixtoolsRM = function(object, ..., clusters) {
   transformFitted(predList, model = object, clusters = clusters)
 }
 
-setMethod('postprob', signature('lcModelMixtoolsRM'), function(object) {
+#' @rdname interface-mixtools
+setMethod('postprob', signature('lcModelMixtoolsRM'), function(object, ...) {
   pp = object@model$posteriors
   colnames(pp) = clusterNames(object)
   return(pp)
@@ -98,6 +104,7 @@ setMethod('postprob', signature('lcModelMixtoolsRM'), function(object) {
 
 
 #' @export
+#' @rdname interface-mixtools
 logLik.lcModelMixtoolsRM = function(object, ...) {
   ll = object@model$loglik
   attr(ll, 'nobs') = nIds(object)
@@ -106,7 +113,7 @@ logLik.lcModelMixtoolsRM = function(object, ...) {
   return(ll)
 }
 
-
-setMethod('converged', signature('lcModelMixtoolsRM'), function(object) {
+#' @rdname interface-mixtools
+setMethod('converged', signature('lcModelMixtoolsRM'), function(object, ...) {
   TRUE
 })

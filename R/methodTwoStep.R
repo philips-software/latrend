@@ -1,4 +1,11 @@
 #' @include modelCustom.R
+
+#' @name interface-featureBased
+#' @rdname interface-featureBased
+#' @title featureBased interface
+#' @seealso [lcMethodTwoStep] [lcMethodGCKM] [lcMethodLMKM]
+NULL
+
 setClass('lcMethodTwoStep', contains = 'lcMethod')
 
 setValidity('lcMethodTwoStep', function(object) {
@@ -16,12 +23,13 @@ setValidity('lcMethodTwoStep', function(object) {
 
 #' @export
 #' @title Two-step clustering
-#' @description Two-step clustering.
+#' @description Feature-based clustering.
+#' @inheritParams lcMethodCustom
 #' @param representationStep A `function` with signature `function(method, data)` that computes the representation per strata, returned as a `matrix`.
 #' Alternatively, `representationStep` is a pre-computed representation `matrix`.
 #' @param clusterStep A `function` with signature `function(repdata)` that outputs a `lcModel`.
 #' @param standardize A `function` to standardize the output `matrix` of the representation step. By default, the output is shifted and rescaled to ensure zero mean and unit variance.
-#' @inheritParams lcMethodCustom
+#' @param ... Additional arguments.
 #' @family lcMethod implementations
 lcMethodTwoStep = function(response,
                            representationStep,
@@ -36,19 +44,21 @@ lcMethodTwoStep = function(response,
                  excludeArgs = c('verbose'))
 }
 
-
+#' @rdname interface-featureBased
+#' @inheritParams getName
 setMethod('getName', signature('lcMethodTwoStep'), function(object) 'two-step clustering')
 
-
+#' @rdname interface-featureBased
 setMethod('getShortName', signature('lcMethodTwoStep'), function(object) 'twostep')
 
-
+#' @rdname interface-featureBased
 setMethod('prepareData', signature('lcMethodTwoStep'), function(method, data, verbose, ...) {
   assert_that(has_name(data, responseVariable(method)))
   return(NULL)
 })
 
-
+#' @rdname interface-featureBased
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodTwoStep'), function(method, data, envir, verbose, ...) {
   nIds = uniqueN(data[[idVariable(method)]])
 
@@ -106,7 +116,7 @@ setMethod('fit', signature('lcMethodTwoStep'), function(method, data, envir, ver
   return(newmodel)
 })
 
-#' @export
+
 standardizeTrajectoryCoefMatrix = function(x, fun) {
   assert_that(is.matrix(x))
 

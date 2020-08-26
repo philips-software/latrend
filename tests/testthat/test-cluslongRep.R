@@ -1,4 +1,5 @@
 context('latrendRep')
+rngReset()
 
 m = lcMethodKML(response = 'Value', nbRedrawing=1, maxIt=10)
 test_that('default', {

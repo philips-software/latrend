@@ -1,4 +1,5 @@
 context('flexmix')
+rngReset()
 
 test_that('default', {
   model = latrend(lcMethodTestFlexmix(), data=testLongData)
@@ -18,7 +19,7 @@ test_that('empty cluster', {
 })
 
 test_that('model spec', {
-  com = flexmix::FLXMRglm(formula=~Time)
+  com = flexmix::FLXMRglm(formula=~Assessment)
   model = latrend(lcMethodTestFlexmix(), data=testLongData, model=com)
   expect_valid_lcModel(model)
 })

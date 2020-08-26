@@ -1,4 +1,5 @@
 context('partition')
+rngReset()
 
 refmodel = latrend(lcMethodTestKML(), testLongData)
 
@@ -24,7 +25,6 @@ test_that('factor assignments', {
 })
 
 test_that('local data', {
-  data(testLongData)
   {
     a = testLongData
     model = lcModelPartition(a,

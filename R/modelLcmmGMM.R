@@ -2,6 +2,8 @@
 setClass('lcModelLcmmGMM', contains = 'lcModel')
 
 #' @export
+#' @rdname interface-lcmm
+#' @inheritParams fitted.lcModel
 fitted.lcModelLcmmGMM = function(object, ..., clusters = clusterAssignments(object)) {
   predNames = paste0('pred_m', 1:nClusters(object))
   predMat = object@model$pred[predNames] %>%
@@ -11,6 +13,8 @@ fitted.lcModelLcmmGMM = function(object, ..., clusters = clusterAssignments(obje
 }
 
 #' @export
+#' @rdname interface-lcmm
+#' @inheritParams predict.lcModel
 predict.lcModelLcmmGMM = function(object, ...,
                                   newdata = NULL,
                                   what = 'mu') {
@@ -43,6 +47,7 @@ predict.lcModelLcmmGMM = function(object, ...,
 }
 
 #' @export
+#' @rdname interface-lcmm
 model.matrix.lcModelLcmmGMM = function(object, ..., what = 'mu') {
   if (what == 'mu') {
     f = merge.formula(object@model$fixed, object@model$mixture)
@@ -53,6 +58,7 @@ model.matrix.lcModelLcmmGMM = function(object, ..., what = 'mu') {
 }
 
 #' @export
+#' @rdname interface-lcmm
 logLik.lcModelLcmmGMM = function(object, ...) {
   ll = object@model$loglik
   N = nIds(object)
@@ -64,11 +70,13 @@ logLik.lcModelLcmmGMM = function(object, ...) {
 }
 
 #' @export
+#' @rdname interface-lcmm
 sigma.lcModelLcmmGMM = function(object, ...) {
   coef(object)[grepl('std err', names(coef(object@model)))] %>% unname
 }
 
-setMethod('postprob', signature('lcModelLcmmGMM'), function(object) {
+#' @rdname interface-lcmm
+setMethod('postprob', signature('lcModelLcmmGMM'), function(object, ...) {
   pp = object@model$pprob %>%
     as.matrix %>%
     .[, c(-1, -2), drop = FALSE]
@@ -76,6 +84,7 @@ setMethod('postprob', signature('lcModelLcmmGMM'), function(object) {
   return(pp)
 })
 
-setMethod('converged', signature('lcModelLcmmGMM'), function(object) {
+#' @rdname interface-lcmm
+setMethod('converged', signature('lcModelLcmmGMM'), function(object, ...) {
   object@model$conv
 })

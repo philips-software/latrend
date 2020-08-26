@@ -8,3 +8,5 @@ make_data.R
 osa.R
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^doc$
+^Meta$

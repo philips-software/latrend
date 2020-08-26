@@ -5,7 +5,7 @@ verboseLevels = list(
   debug = -100
 )
 
-#' @importFrom R.utils Verbose cat cat.Verbose print.Verbose header ruler pushState popState enter exit warnings getThreshold
+#' @importFrom R.utils Verbose cat cat.Verbose print.Verbose warnings.Verbose header ruler pushState popState enter exit warnings getThreshold
 as.Verbose = function(x) {
   if (inherits(x, 'Verbose')) {
     return(x)

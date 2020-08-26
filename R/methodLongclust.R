@@ -1,16 +1,24 @@
 #' @include method.R
+
+#' @name interface-longclust
+#' @rdname interface-longclust
+#' @title longclust interface
+#' @seealso [lcMethodLongclust] \link[longclust]{longclust-package}
+NULL
+
 setClass('lcMethodLongclust', contains = 'lcMatrixMethod')
 
 #' @export
 #' @title Specify Longclust method
-#' @param basis The basis function.
-#' @inheritParams lcMatrixMethod
-#' @inheritDotParams longclust::longclustEM
+#' @inheritParams lcMatrixMethod-class
+#' @inheritParams lcMethodKML
+#' @param ... Arguments passed to [longclust::longclustEM].
+#' The following external arguments are ignored: data, x, Gmin, Gmax, userseed.
 #' @examples
-#' method = lcMethodLongclust(Value ~ 1,
-#'                      time='Time',
-#'                      id='Id', nClusters=3)
-#' latrend(method, testLongData)
+#' library(longclust)
+#' data(latrendData)
+#' method <- lcMethodLongclust("Y", id = "Id", time = "Time", nClusters = 3)
+#' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodLongclust = function(response,
                              time = getOption('latrend.time'),
@@ -25,10 +33,15 @@ lcMethodLongclust = function(response,
   )
 }
 
+#' @rdname interface-longclust
+#' @inheritParams getName
 setMethod('getName', signature('lcMethodLongclust'), function(object) 'longclust')
 
+#' @rdname interface-longclust
 setMethod('getShortName', signature('lcMethodLongclust'), function(object) 'longclust')
 
+#' @rdname interface-longclust
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodLongclust'), function(method, data, envir, verbose, ...) {
   args = as.list(method, args = longclust::longclustEM)
   args$x = envir$dataMat

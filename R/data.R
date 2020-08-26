@@ -1,3 +1,16 @@
+#' Synthetic longitudinal dataset comprising three classes
+#' @format A `data.frame` describing 250 trajectories originating from one of three classes,
+#' each with a different cluster trajectory. Trajectories randomly deviate in intercept and slope from the reference cluster.
+#' \describe{
+#'   \item{Id}{trajectory identifier, `factor`.}
+#'   \item{Time}{measurement time, `numeric` between 0 and 2.}
+#'   \item{Y}{observed variable, `numeric`.}
+#'   \item{Class}{the reference class, `factor`.}
+#' }
+#' @source This dataset was generated using [generateLongData].
+#' @seealso [generateLongData]
+"latrendData"
+
 #' @export
 #' @title Generate longitudinal test data
 #' @param sizes Number of strata per cluster.
@@ -6,6 +19,7 @@
 #' @param cluster Cluster effects formula.
 #' @param id Name of the strata.
 #' @param data Data with covariates to use for generation. Stratified data may be specified by adding a grouping column.
+#' @param clusterNames A `character` vector denoting the names of the generated clusters.
 #' @param fixedCoefs Coefficients matrix for the fixed effects.
 #' @param clusterCoefs Coefficients matrix for the cluster effects.
 #' @param randomScales Standard deviations matrix for the size of the variance components (random effects).
@@ -14,10 +28,10 @@
 #' @param rnoise Random sampler for generating noise at location 0 with the respective scale.
 #' @param shuffle Whether to randomly reorder the strata in which they appear in the data.frame.
 #' @examples
-#' longdata = generateLongData(sizes=c(40, 70), id='Id',
-#'                             cluster=~poly(Time, 2, raw=TRUE),
-#'                             clusterCoefs=cbind(c(1, 2, 5), c(-3, 4, .2)))
-#' plotTrajectories(longdata)
+#' longdata <- generateLongData(sizes = c(40, 70), id = "Id",
+#'                             cluster = ~poly(Time, 2, raw = TRUE),
+#'                             clusterCoefs = cbind(c(1, 2, 5), c(-3, 4, .2)))
+#' plotTrajectories(longdata, response = "Value", id = "Id", time = "Time")
 generateLongData = function(sizes = c(40, 60),
                             fixed = Value ~ 1 + Time,
                             cluster = ~ 1 + Time,
@@ -59,7 +73,7 @@ generateLongData = function(sizes = c(40, 60),
     fixedValues = Xf %*% fixedCoefs
     alldata = data.table(
       Id = rowIds,
-      Cluster = as.integer(clusters)[rowIds],
+      Class = as.integer(clusters)[rowIds],
       Mu.fixed = fixedValues[rep(seq_len(nObs), nIds)],
       Xfi[rep(seq_len(nObs), nIds), , drop = FALSE],
       data[, setdiff(names(data), colnames(Xfi)), drop =
@@ -68,7 +82,7 @@ generateLongData = function(sizes = c(40, 60),
   } else {
     alldata = data.table(
       Id = rowIds,
-      Cluster = as.integer(clusters)[rowIds],
+      Class = as.integer(clusters)[rowIds],
       Mu.fixed = 0,
       data
     )
@@ -86,7 +100,7 @@ generateLongData = function(sizes = c(40, 60),
   assert_that(ncol(clusterCoefs) == nClus)
   Xc = model.matrix(cluster, alldata)
   assert_that(ncol(Xc) == nrow(clusterCoefs), msg = 'Missing or too many coefficients specified for cluster effects.')
-  alldata[, Mu.cluster := rowSums(Xc * t(clusterCoefs)[Cluster, ])]
+  alldata[, Mu.class := rowSums(Xc * t(clusterCoefs)[Class, ])]
 
   ## Random effects
   assert_that(is.formula(random), !hasResponse(random))
@@ -111,9 +125,9 @@ generateLongData = function(sizes = c(40, 60),
     assert_that(nrow(idCoefs) == nIds)
     alldata[, Mu.random := rowSums(Xr * idCoefs[Id, ])]
 
-    alldata[, Mu := Mu.fixed + Mu.cluster + Mu.random]
+    alldata[, Mu := Mu.fixed + Mu.class + Mu.random]
   } else {
-    alldata[, Mu := Mu.fixed + Mu.cluster]
+    alldata[, Mu := Mu.fixed + Mu.class]
   }
 
 
@@ -123,7 +137,7 @@ generateLongData = function(sizes = c(40, 60),
     noiseScales = rep(noiseScales, nClus)
   }
   assert_that(length(noiseScales) == nClus)
-  alldata[, Value := Mu + rnoise(.N, 0, noiseScales[Cluster])]
+  alldata[, Value := Mu + rnoise(.N, 0, noiseScales[Class])]
 
   ## Finalize
   if (shuffle) {
@@ -132,7 +146,7 @@ generateLongData = function(sizes = c(40, 60),
   }
   setnames(alldata, 'Value', response)
   setnames(alldata, 'Id', id)
-  setcolorder(alldata, c(id, 'Cluster', setdiff(colnames(Xf), '(Intercept)'), response))
-  alldata[, Cluster := factor(clusterNames[Cluster], levels = clusterNames)]
+  setcolorder(alldata, c(id, 'Class', setdiff(colnames(Xf), '(Intercept)'), response))
+  alldata[, Class := factor(clusterNames[Class], levels = clusterNames)]
   return(alldata[])
 }

@@ -4,3 +4,8 @@ NAMESPACE
 man
 .Rhistory
 cld.Rdata
+.Rprofile
+*.txt
+doc
+Meta
+vignettes/*_cache

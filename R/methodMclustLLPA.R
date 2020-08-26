@@ -1,4 +1,11 @@
 #' @include method.R
+
+#' @name interface-mclust
+#' @rdname interface-mclust
+#' @title mclust interface
+#' @seealso [lcMethodMclustLLPA] \link[mclust]{mclust-package}
+NULL
+
 setClass('lcMethodMclustLLPA', contains = 'lcMethod')
 
 setValidity('lcMethodMclustLLPA', function(object) {
@@ -16,15 +23,14 @@ setValidity('lcMethodMclustLLPA', function(object) {
 #' @export
 #' @title Longitudinal latent profile analysis
 #' @description Latent profile analysis or finite Gaussian mixture modeling.
-#' @param formula Formula. Covariates are not supported.
-#' @param time Time variable.
-#' @param id Strata variable.
-#' @param nClusters Number of clusters.
-#' @inheritDotParams mclust::Mclust
+#' @inheritParams lcMethodKML
+#' @param ... Arguments passed to [mclust::Mclust].
+#' The following external arguments are ignored: data, G, verbose.
 #' @examples
-#' method = lcMethodMclustLLPA(Measurement ~ 1,
-#'                      time='Assessment',
-#'                      id='Id', nClusters=3)
+#' library(mclust)
+#' data(latrendData)
+#' method <- lcMethodMclustLLPA("Y", id = "Id", time = "Time", nClusters = 3)
+#' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodMclustLLPA = function(response,
                               time = getOption('latrend.time'),
@@ -41,10 +47,14 @@ lcMethodMclustLLPA = function(response,
   )
 }
 
+#' @rdname interface-mclust
+#' @inheritParams getName
 setMethod('getName', signature('lcMethodMclustLLPA'), function(object) 'longitudinal latent profile analysis')
 
+#' @rdname interface-mclust
 setMethod('getShortName', signature('lcMethodMclustLLPA'), function(object) 'llpa')
 
+#' @rdname interface-mclust
 setMethod('prepareData', signature('lcMethodMclustLLPA'), function(method, data, verbose, ...) {
   e = new.env()
 
@@ -60,10 +70,13 @@ setMethod('prepareData', signature('lcMethodMclustLLPA'), function(method, data,
   return(e)
 })
 
+#' @rdname interface-mclust
 setMethod('compose', signature('lcMethodMclustLLPA'), function(method, envir = NULL) {
   evaluate.lcMethod(method, try = TRUE, envir = envir)
 })
 
+#' @rdname interface-mclust
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodMclustLLPA'), function(method, data, envir, verbose, ...) {
   args = as.list(method, args = mclust::Mclust)
   args$data = envir$data

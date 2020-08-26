@@ -1,4 +1,5 @@
 context('lcMethod')
+rngReset()
 setClass('lcMethodTest', contains='lcMethod')
 
 test_that('new clmethod', {
@@ -248,7 +249,7 @@ test_that('negative nClusters error', {
 })
 
 test_that('lcMethod function', {
-  lcMethodTestKML2 = function(time='Id', id='Id', response = 'Value', nClusters=2) {
+  lcMethodTestKML2 = function(time='Traj', id='Traj', response = 'Value', nClusters=2) {
     lcMethod.call('lcMethodKML', call=match.call.defaults(),
              defaults=c(kml::kml, kml::parALGO),
              excludeArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq'))
@@ -259,7 +260,7 @@ test_that('lcMethod function', {
 })
 
 test_that('lcMethod function with default NULL argument', {
-  lcMethodTestKML2 = function(time=NULL, id='Id', response = 'Value', nClusters=2) {
+  lcMethodTestKML2 = function(time=NULL, id='Traj', response = 'Value', nClusters=2) {
     lcMethod.call('lcMethodKML', call=match.call.defaults(),
              defaults=c(kml::kml, kml::parALGO),
              excludeArgs=c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq'))

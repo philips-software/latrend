@@ -2,12 +2,14 @@
 setClass('lcModelDtwclust', contains = 'lcModel')
 
 #. converged ####
-setMethod('converged', signature('lcModelDtwclust'), function(object) {
+#' @rdname interface-dtwclust
+setMethod('converged', signature('lcModelDtwclust'), function(object, ...) {
   object@model@converged
 })
 
 #. postprob ####
-setMethod('postprob', signature('lcModelDtwclust'), function(object) {
+#' @rdname interface-dtwclust
+setMethod('postprob', signature('lcModelDtwclust'), function(object, ...) {
   if('fcluster' %in% slotNames(object@model)) {
     pp = object@model@fcluster
   } else {
@@ -19,7 +21,9 @@ setMethod('postprob', signature('lcModelDtwclust'), function(object) {
 })
 
 #. predictForCluster ####
-setMethod('predictForCluster', signature('lcModelDtwclust'), function(object, cluster, newdata, what = 'mu', ...) {
+#' @rdname interface-dtwclust
+#' @inheritParams predictForCluster
+setMethod('predictForCluster', signature('lcModelDtwclust'), function(object, newdata, cluster, what = 'mu', ...) {
   assert_that(cluster %in% clusterNames(object))
 
   k = match(cluster, clusterNames(object))

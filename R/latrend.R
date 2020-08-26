@@ -12,11 +12,13 @@
 #' @details If a seed value is specified in the `lcMethod` object or arguments to `latrend`, this seed is set using `set.seed` prior to the cluster preparation step.
 #' @return A `lcModel` object representing the fitted model.
 #' @examples
-#' model = latrend(lcMethodKML(), data=testLongData)
+#' data(latrendData)
+#' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), data = latrendData)
 #'
-#' model = latrend(lcMethodKML(), data=testLongData, nClusters=3)
+#' method <- lcMethodKML("Y", id = "Id", time = "Time")
+#' model <- latrend(method, data = latrendData, nClusters = 3)
 #'
-#' model = latrend(lcMethodKML(), data=testLongData, nClusters=3, seed=1)
+#' model <- latrend(method, data = latrendData, nClusters = 3, seed = 1)
 #' @family longitudinal cluster fit functions
 latrend = function(method,
                     data,
@@ -32,8 +34,7 @@ latrend = function(method,
   newmethod = do.call(update, c(object = method, argList))
   environment(newmethod) = envir
 
-  header(verbose,
-         sprintf('Longitudinal clustering using "%s"', getName(newmethod)))
+  header(verbose, sprintf('Longitudinal clustering using "%s"', getName(newmethod)))
   cat(verbose, 'Method arguments:')
   print(verbose, newmethod)
   ruler(verbose)
@@ -44,16 +45,9 @@ latrend = function(method,
 
   # compose
   cmethod = compose(newmethod, envir = envir)
-  assert_that(is.lcMethod(cmethod), msg=paste0('invalid lcMethod output from compose(', class(newmethod), ')'))
-
   id = idVariable(cmethod)
   time = timeVariable(cmethod)
   response = responseVariable(cmethod)
-  assert_that(
-    is.character(idVariable(cmethod)),
-    is.character(timeVariable(cmethod)),
-    is.character(responseVariable(cmethod))
-  )
 
   # transform data
   modelData = transformLatrendData(
@@ -63,19 +57,13 @@ latrend = function(method,
     response = response,
     envir = envir
   )
-  assert_that(is.data.frame(modelData))
 
-  validationResult = validate(cmethod, modelData)
-  if (!isTRUE(validationResult)) {
-    stop('method validation failed: ', validationResult)
-  }
+  validate(cmethod, modelData)
 
   # prepare
   modelEnv = prepareData(method = cmethod,
                          data = modelData,
                          verbose = verbose)
-  assert_that(is.null(modelEnv) ||
-                is.environment(modelEnv), msg = 'prepareData(lcMethod, ...) returned an unexpected object. Should be environment or NULL')
 
   cat(verbose, 'Fitting model')
   pushState(verbose)
@@ -118,21 +106,15 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
     envir = envir,
     verbose = verbose
   )
-  assert_that(is.null(modelEnv) ||
-                is.environment(modelEnv), msg = 'preFit(lcMethod, ...) returned an unexpected object. Should be environment or NULL')
 
   # fit
-  start = Sys.time()
   model = fit(
     method = method,
     data = data,
     envir = modelEnv,
     verbose = verbose
   )
-  estimationTime = Sys.time() - start
-  assert_that(is.lcModel(model), msg = 'fit(lcMethod, ...) returned an unexpected object. Should be of type lcModel.')
 
-  model@method = method
   model@call = do.call(call,
                        c(
                          'latrend',
@@ -140,11 +122,6 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
                          data = quote(mc$data)
                        ))
   model@call['envir'] = list(mc$envir)
-  model@id = idVariable(method)
-  model@time = timeVariable(method)
-  model@response = responseVariable(method)
-  model@label = getLabel(method)
-  model@estimationTime = as.numeric(estimationTime, 'secs')
 
   # postFit
   model = postFit(
@@ -154,7 +131,6 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
     envir = modelEnv,
     verbose = verbose
   )
-  assert_that(inherits(model, 'lcModel'), msg = 'postFit(lcMethod, ...) returned an unexpected object. Should be of type lcModel.')
 
   return(model)
 }
@@ -173,9 +149,11 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
 #' @details This method is faster than repeatedly calling [latrend]() as it only prepares the data via `prepareData()` once.
 #' @return A `lcModels` object containing the resulting models.
 #' @examples
-#' models = latrendRep(lcMethodKML(), data=testLongData, .rep=5) # 5 repeated runs
+#' data(latrendData)
+#' method <- lcMethodKML("Y", id = "Id", time = "Time")
+#' models <- latrendRep(method, data = latrendData, .rep = 5) # 5 repeated runs
 #'
-#' models = latrendRep(lcMethodKML(), data=testLongData, seed=1, .rep=3)
+#' models <- latrendRep(method, data = latrendData, .seed = 1, .rep = 3)
 #' @family longitudinal cluster fit functions
 latrendRep = function(method,
                        data,
@@ -244,12 +222,8 @@ latrendRep = function(method,
     response = response,
     envir = envir
   )
-  assert_that(is.data.frame(modelData))
 
-  validationResult = validate(cmethod, modelData)
-  if (!isTRUE(validationResult)) {
-    stop('lcMethod validation failed: ', validationResult)
-  }
+  validate(cmethod, modelData)
 
   enter(verbose, 'Preparing...')
   prepEnv = prepareData(method = method,
@@ -289,16 +263,19 @@ latrendRep = function(method,
 #' @title Cluster longitudinal data for a list of model specifications
 #' @description Fit a list of longitudinal cluster methods.
 #' @inheritParams latrend
+#' @param methods A `list` of `lcMethod` objects.
 #' @param data A `data.frame`, `matrix`, or a `list` thereof to which to apply to the respective `lcMethod`. Multiple datasets can be supplied by encapsulating the datasets using `data=.(df1, df2, ..., dfN)`.
 #' @param cartesian Whether to fit the provided methods on each of the datasets. If `cartesian=FALSE`, only a single dataset may be provided or a list of data matching the length of `methods`.
 #' @param envir The `environment` in which to evaluate the `lcMethod` arguments.
 #' @return A `lcModels` object.
 #' @examples
-#' methods = lcMethods(lcMethodKML(), nClusters=1:3)
-#' models = latrendBatch(methods, data=testLongData)
+#' data(latrendData)
+#' methods <- lcMethods(lcMethodKML("Y", id = "Id", time = "Time"), nClusters = 1:3)
+#' models <- latrendBatch(methods, data = latrendData)
 #'
-#' models = latrendBatch(lcMethods(lcMethodKML(), nClusters=1:2),
-#'    data=.(testLongData[Time > .5,], testLongData[Time < .5,])) # different data per method
+#' models <- latrendBatch(lcMethods(lcMethodKML("Y", id = "Id", time = "Time"), nClusters = 1:2),
+#'    data = .(latrendData[Time > .5,],
+#'             latrendData[Time < .5,])) # different data per method
 #'
 #' @seealso lcMethods
 #' @family longitudinal cluster fit functions
@@ -380,9 +357,12 @@ latrendBatch = function(methods,
 #' @inheritParams latrend
 #' @param data A `data.frame`.
 #' @param samples The number of bootstrap samples to evaluate.
+#' @param seed The seed to use. Optional.
 #' @return A `lcModels` object of length `samples`.
 #' @examples
-#' model = latrendBoot(lcMethodKML(), testLongData, samples=10)
+#' data(latrendData)
+#' method <- lcMethodKML("Y", id = "Id", time = "Time")
+#' model <- latrendBoot(method, latrendData, samples = 10)
 #' @family longitudinal cluster fit functions
 #' @family validation methods
 latrendBoot = function(method,
@@ -391,7 +371,7 @@ latrendBoot = function(method,
                         seed = NULL,
                         envir = NULL,
                         verbose = getOption('latrend.verbose')) {
-  assert_that(is.lcMethod(method), msg = 'method must be lcMethod object (e.g., lcMethodKML() )')
+  assert_that(is.lcMethod(method), msg = 'method must be lcMethod object (e.g., lcMethodKML("Y") )')
   assert_that(!missing(data), msg = 'data must be specified')
   assert_that(is.data.frame(data), msg = 'data must be data.frame')
   assert_that(is.count(samples))
@@ -450,19 +430,21 @@ latrendBoot = function(method,
 
 
 # Cross validation ####
-
 #' @export
 #' @title Cluster longitudinal data over k folds
 #' @description Apply k-fold cross validation for internal cluster validation.
 #' Creates k random subsets ("folds") from the data, estimating a model for each of the k-1 combined folds.
 #' @inheritParams latrend
+#' @inheritParams latrendBoot
 #' @param data A `data.frame`.
 #' @param folds The number of folds. Ten folds by default.
 #' @return A `lcModels` object of containing the `folds` training models.
 #' @examples
-#' model = latrendCV(lcMethodKML(), testLongData, folds=10)
+#' data(latrendData)
+#' method <- lcMethodKML("Y", id = "Id", time = "Time")
+#' model <- latrendCV(method, latrendData, folds = 5)
 #'
-#' model = latrendCV(lcMethodKML(), testLongData[, Time < .5], folds=10, seed=1)
+#' model <- latrendCV(method, latrendData[Time < .5], folds = 5, seed = 1)
 #' @family longitudinal cluster fit functions
 #' @family validation methods
 latrendCV = function(method,
@@ -517,18 +499,25 @@ latrendCV = function(method,
 #' @export
 #' @importFrom caret createFolds
 #' @title Create the training data for each of the k models in k-fold cross validation evaluation
+#' @param data A `data.frame` representing the complete dataset.
+#' @param folds The number of folds. By default, a 10-fold scheme is used.
+#' @param id The trajectory identifier variable.
+#' @param seed The seed to use, in order to ensure reproducible fold generation at a later moment.
 #' @return A `list` of `data.frame` of the `folds` training datasets.
 #' @family validation methods
 #' @examples
-#' createTrainDataFolds(testLongData, folds=10)
+#' data(latrendData)
+#' trainFolds <- createTrainDataFolds(latrendData, folds = 10, id = "Id")
 #'
-#' createTrainDataFolds(testLongData, folds=10, seed=1)
+#' trainFolds <- createTrainDataFolds(latrendData, folds = 10, id = "Id", seed = 1)
 createTrainDataFolds = function(data,
                                 folds = 10,
                                 id = getOption('latrend.id'),
                                 seed = NULL) {
-  assert_that(is.count(folds), folds > 1)
-  assert_that(is.data.frame(data), has_name(data, id))
+  assert_that(is.count(folds),
+    folds > 1,
+    is.data.frame(data),
+    has_name(data, id))
 
   ids = unique(data[[id]])
 
@@ -552,11 +541,14 @@ createTrainDataFolds = function(data,
 
 #' @export
 #' @title Create the test fold data for validation
+#' @inheritParams createTrainDataFolds
+#' @param trainData A `data.frame` representing the training data, which should be a subset of `data`.
 #' @seealso createTrainDataFolds
 #' @family validation methods
 #' @examples
-#' trainDataList = createTrainDataFolds(testLongData, folds=10)
-#' testData1 = createTestDataFold(testLongData, trainDataList[[1]])
+#' data(latrendData)
+#' trainDataList <- createTrainDataFolds(latrendData, id = "Id", folds = 10)
+#' testData1 <- createTestDataFold(latrendData, trainDataList[[1]], id = "Id")
 createTestDataFold = function(data, trainData, id = getOption('latrend.id')) {
   assert_that(is.data.frame(trainData))
   trainIds = unique(trainData[[id]])
@@ -569,10 +561,14 @@ createTestDataFold = function(data, trainData, id = getOption('latrend.id')) {
 
 #' @export
 #' @title Create all k test folds from the training data
+#' @inheritParams createTestDataFold
+#' @param trainDataList A `list` of `data.frame` representing each of the data training folds. These should be derived from `data`.
+#' @param ... Arguments passed to [createTestDataFold].
 #' @family validation methods
 #' @examples
-#' trainDataList = createTrainDataFolds(testLongData, folds=10)
-#' testDataList = createTestDataFolds(testLongData, trainDataList)
+#' data(latrendData)
+#' trainDataList <- createTrainDataFolds(latrendData, folds = 10, id = "Id")
+#' testDataList <- createTestDataFolds(latrendData, trainDataList)
 createTestDataFolds = function(data, trainDataList, ...) {
   lapply(trainDataList, function(trainData)
     createTestDataFold(data = data, trainData = trainData, ...))
@@ -583,11 +579,20 @@ createTestDataFolds = function(data, trainDataList, ...) {
 # Data helper functions ####
 #. transformLatrendData ####
 #' @export
+#' @rdname transformLatrendData
 #' @title Transform latrend input data into the right format
 #' @description This function is also responsible for checking whether the input data is valid, such that the fitting process can fail early.
+#' @param object The data object to transform.
+#' @param envir The `environment` used to evaluate the data object in (e.g., in case `object` is of type `call`).
+#' @inheritParams lcMethodKML
 #' @return A `data.frame` with an id, time, and measurement columns.
-setGeneric('transformLatrendData', function(object, id, time, response, envir)
-  standardGeneric('transformLatrendData'))
+setGeneric('transformLatrendData', function(object, id, time, response, envir) {
+  data = standardGeneric('transformLatrendData')
+  assert_that(is.data.frame(data))
+  return(data)
+})
+
+#' @rdname transformLatrendData
 setMethod('transformLatrendData', signature('data.frame'), function(object, id, time, response, envir) {
   assert_that(
     is.data.frame(object),
@@ -601,20 +606,13 @@ setMethod('transformLatrendData', signature('data.frame'), function(object, id, 
   object
 })
 
+#' @rdname transformLatrendData
 setMethod('transformLatrendData', signature('matrix'), function(object, id, time, response, envir) {
-  data = meltRepeatedMeasures(object,
-                              id = id,
-                              time = time,
-                              response = response)
-  transformLatrendData(
-    data,
-    id = id,
-    time = time,
-    response = response,
-    envir = envir
-  )
+  data = meltRepeatedMeasures(object, id = id, time = time, response = response)
+  transformLatrendData(data, id = id, time = time, response = response, envir = envir)
 })
 
+#' @rdname transformLatrendData
 setMethod('transformLatrendData', signature('call'), function(object, id, time, response, envir) {
   data = eval(object, envir = envir)
   transformLatrendData(
@@ -627,11 +625,15 @@ setMethod('transformLatrendData', signature('call'), function(object, id, time, 
 })
 
 #' @export
+#' @name lcModel-data-filters
+#' @rdname lcModel-data-filters
+#' @title Data filters for lcModel
+#' @description The data filters are applied by [latrend] prior to model estimation. These filters are used in [latrendBoot] and [latrendCV].
+#' @inheritParams transformLatrendData
+#' @param data The `data.frame` representing the model dataset.
+#' @param seed Optional seed for ensuring reproducibility.
 #' @family validation methods
-#' @family model data filters
-bootSample = function(data,
-                      id = getOption('latrend.id'),
-                      seed = NULL) {
+bootSample = function(data, id, seed = NULL) {
   assert_that(is.data.frame(data), has_name(data, id))
   ids = unique(data[[id]])
 
@@ -645,12 +647,16 @@ bootSample = function(data,
 
 
 #' @export
+#' @rdname lcModel-data-filters
 #' @importFrom caret createFolds
+#' @param fold The fold to select.
+#' @param folds Total number of folds to create.
 #' @family validation methods
-#' @family model data filters
+#' @keywords internal
 trainFold = function(data, fold, id, folds, seed) {
-  assert_that(is.data.frame(data), has_name(data, id))
-  assert_that(!is.null(seed))
+  assert_that(is.data.frame(data),
+    has_name(data, id),
+    !is.null(seed))
 
   ids = unique(data[[id]])
   localRNG(seed = seed, {
@@ -668,10 +674,10 @@ trainFold = function(data, fold, id, folds, seed) {
 
 
 #' @export
+#' @rdname lcModel-data-filters
 #' @family validation methods
-#' @family model data filters
 testFold = function(data, fold, id, folds, seed) {
-  trainData = foldsTrainData(
+  trainData = trainFold(
     data,
     id = id,
     fold = fold,

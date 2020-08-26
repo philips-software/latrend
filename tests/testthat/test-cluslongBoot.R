@@ -1,4 +1,5 @@
 context('latrendBoot')
+rngReset()
 
 test_that('latrendBoot', {
   models = latrendBoot(lcMethodTestKML(), data=testLongData, samples=3, seed=1) %>%
@@ -6,9 +7,9 @@ test_that('latrendBoot', {
     expect_length(3)
 
   # test if data bootstrap sample calls are correct
-  expect_equal(deparse(getCall(models[[1]])$data), 'bootSample(testLongData, "Id", 1140350788L)')
-  expect_equal(deparse(getCall(models[[2]])$data), 'bootSample(testLongData, "Id", 312928385L)')
-  expect_equal(deparse(getCall(models[[3]])$data), 'bootSample(testLongData, "Id", 866248189L)')
+  expect_equal(deparse(getCall(models[[1]])$data), 'bootSample(testLongData, "Traj", 1140350788L)')
+  expect_equal(deparse(getCall(models[[2]])$data), 'bootSample(testLongData, "Traj", 312928385L)')
+  expect_equal(deparse(getCall(models[[3]])$data), 'bootSample(testLongData, "Traj", 866248189L)')
 })
 
 test_that('latrendBoot without seed', {

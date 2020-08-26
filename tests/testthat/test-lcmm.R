@@ -1,4 +1,5 @@
 context('LCMM models')
+rngReset()
 
 test_that('default gmm', {
   m = lcMethodTestLcmmGMM()

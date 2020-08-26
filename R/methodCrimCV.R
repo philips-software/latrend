@@ -1,18 +1,29 @@
 #' @include methodMatrix.R
+
+#' @name interface-crimCV
+#' @rdname interface-crimCV
+#' @title crimCV interface
+#' @seealso [lcMethodCrimCV] \link[crimCV]{crimCV}
+NULL
+
 setClass('lcMethodCrimCV', contains = 'lcMatrixMethod')
 
 #' @export
 #' @title Specify a zero-inflated repeated-measures GBTM method
-#' @inheritParams lcMatrixMethod
-#' @inheritDotParams crimCV::crimCV
+#' @inheritParams lcMatrixMethod-class
+#' @inheritParams lcMethodKML
+#' @param ... Arguments passed to [crimCV::crimCV].
+#' The following external arguments are ignored: Dat, ng.
 #' @examples
-#' method = lcMethodCrimCV(Value ~ 0, nClusters=3)
-#' model = latrend(method, testLongData)
-#'
 #' library(crimCV)
+#' data(latrendData)
+#' method <- lcMethodCrimCV("Y", id = "Id", time = "Time", nClusters = 3, dpolyp = 1, init = 2)
+#' model <- latrend(method, data = latrendData[Time > .5])
+#'
 #' data(TO1adj)
-#' method = lcMethodCrimCV(response = 'Offenses', time='Offense', id='Subject')
-#' model = latrend(method, TO1adj)
+#' method <- lcMethodCrimCV(response = "Offenses", time = "Offense", id = "Subject",
+#'   nClusters = 2, dpolyp = 1, init = 2)
+#' model <- latrend(method, data = TO1adj[1:200, ])
 #' @family lcMethod implementations
 lcMethodCrimCV = function(response,
                           time = getOption('latrend.time'),
@@ -27,11 +38,14 @@ lcMethodCrimCV = function(response,
   )
 }
 
-
+#' @rdname interface-crimCV
+#' @inheritParams getName
 setMethod('getName', signature('lcMethodCrimCV'), function(object) 'zero-inflated GBTM using crimcv')
 
+#' @rdname interface-crimCV
 setMethod('getShortName', signature('lcMethodCrimCV'), function(object) 'crimcv')
 
+#' @rdname interface-crimCV
 setMethod('prepareData', signature('lcMethodCrimCV'), function(method, data, verbose, ...) {
   times = sort(unique(data[[timeVariable(method)]]))
 
@@ -41,6 +55,8 @@ setMethod('prepareData', signature('lcMethodCrimCV'), function(method, data, ver
   callNextMethod()
 })
 
+#' @rdname interface-crimCV
+#' @inheritParams fit
 setMethod('fit', signature('lcMethodCrimCV'), function(method, data, envir, verbose, ...) {
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
   time = timeVariable(method)

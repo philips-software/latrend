@@ -1,25 +1,25 @@
 # plotTrajectories ####
 #' @export
-setGeneric('plotTrajectories', function(object, ...) standardGeneric('plotTrajectories'))
-
-#' @export
-#' @title Plot trajectories from a data.frame
+#' @rdname plotTrajectories
+#' @title Plot trajectories
+#' @inheritParams trajectories
+#' @inheritParams transformLatrendData
 #' @param response Response variable `character` name or a `call`.
-#' @param time Time variable name.
-#' @param id Id variable name.
 #' @param cluster Cluster variable name. If unspecified, trajectories are not grouped. Alternatively, cluster is a vector indicating cluster membership per id.
-#' @param facet Whether to facet by cluster
+#' @param facet Whether to facet by cluster.
+#' @param ... Additional arguments.
 #' @examples
-#' data(testLongData)
-#' plotTrajectories(testLongData, response = 'Value')
+#' data(latrendData)
+#' plotTrajectories(latrendData, response = "Y", id = "Id", time = "Time")
 #'
-#' plotTrajectories(testLongData, response = quote(exp(Value)))
+#' plotTrajectories(latrendData, response = quote(exp(Y)), id = "Id", time = "Time")
 setMethod('plotTrajectories', signature('data.frame'), function(object,
                                                                 response,
                                                                 time = getOption('latrend.time'),
                                                                 id = getOption('latrend.id'),
                                                                 cluster = NULL,
-                                                                facet = TRUE) {
+                                                                facet = TRUE,
+                                                                ...) {
   if (length(cluster) > 1) {
     assert_that(length(cluster) == uniqueN(object[[id]]))
     object$Cluster = cluster[rleidv(object[[id]])]
@@ -55,22 +55,25 @@ setMethod('plotTrajectories', signature('data.frame'), function(object,
 
 # plotClusterTrajectories ####
 #' @export
-setGeneric('plotClusterTrajectories', function(object, ...) standardGeneric('plotClusterTrajectories'))
-
-#' @export
+#' @rdname plotClusterTrajectories
 #' @title Plot cluster trajectories
+#' @inheritParams transformLatrendData
+#' @inheritParams clusterTrajectories
+#' @inheritParams predict.lcModel
 #' @param object The (cluster) trajectory data.
 #' @param cluster The cluster assignment column
 #' @param center A function for aggregating multiple points at the same point in time
 #' @param showTrajs Whether to plot the original data in addition to the cluster (i.e., center) trajectories
 #' @param id Id column. Only needed when `showTrajs = TRUE`.
+#' @param ... Additional arguments.
 setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     response,
     cluster = 'Cluster',
     time = getOption('latrend.time'),
     center = meanNA,
     showTrajs = FALSE,
-    id = getOption('latrend.id')
+    id = getOption('latrend.id'),
+    ...
   ) {
   assert_that(has_name(object, cluster),
     has_name(object, response),

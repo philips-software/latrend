@@ -12,16 +12,18 @@ setValidity('lcMethodGCKM', function(object) {
 #' @export
 #' @title Two-step clustering through linear mixed modeling and k-means
 #' @description Two-step clustering through linear mixed modeling and k-means.
-#' @param formula Formula, including a random effects component for the strata.
-#' @param time Time variable.
-#' @param id Strata variable.
-#' @param nClusters Number of clusters.
-#' @inheritParams lme4::lmer
 #' @inheritParams lcMethodTwoStep
+#' @param formula Formula, including a random effects component for the trajectory. See [lme4::lmer] formula syntax.
+#' @param time The name of the time variable..
+#' @param id The name of the trajectory identifier variable.
+#' @param nClusters The number of clusters.
+#' @param ... Arguments passed to [lme4::lmer].
+#' The following external arguments are ignored: data, centers, trace.
 #' @examples
-#' method = lcMethodGCKM(Measurement ~ Assessment + (Assessment | Subject),
-#'                      time='Assessment',
-#'                      id='Subject', nClusters=3)
+#' library(lme4)
+#' data(latrendData)
+#' method <- lcMethodGCKM(Y ~ (Time | Id), id = "Id", time = "Time", nClusters = 3)
+#' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
 lcMethodGCKM = function(formula,
                         time = getOption('latrend.time'),
@@ -39,8 +41,10 @@ lcMethodGCKM = function(formula,
   )
 }
 
+#' @rdname interface-featureBased
 setMethod('getName', signature('lcMethodGCKM'), function(object) 'two-step using LME and k-means')
 
+#' @rdname interface-featureBased
 setMethod('getShortName', signature('lcMethodGCKM'), function(object) 'gckm')
 
 lcMethodGCKM_as_twostep = function(method) {
@@ -52,10 +56,12 @@ lcMethodGCKM_as_twostep = function(method) {
   lcMethod.call('lcMethodTwoStep', call = call)
 }
 
+#' @rdname interface-featureBased
 setMethod('compose', signature('lcMethodGCKM'), function(method, envir = NULL) {
   evaluate.lcMethod(method, try = TRUE, envir = envir)
 })
 
+#' @rdname interface-featureBased
 setMethod('preFit', signature('lcMethodGCKM'), function(method, data, envir, verbose) {
   method = lcMethodGCKM_as_twostep(method)
   preFit(method,
@@ -64,6 +70,7 @@ setMethod('preFit', signature('lcMethodGCKM'), function(method, data, envir, ver
          verbose = verbose)
 })
 
+#' @rdname interface-featureBased
 setMethod('fit', signature('lcMethodGCKM'), function(method, data, envir, verbose, ...) {
   method = lcMethodGCKM_as_twostep(method)
   fit(method,
@@ -74,17 +81,10 @@ setMethod('fit', signature('lcMethodGCKM'), function(method, data, envir, verbos
 })
 
 
-
 representationStepGCKM = function(method, data, verbose, ...) {
   cat(verbose, 'Representation step...')
-  fixedStr = deparse(method$formula)
-  randomStr = dropResponse(method$formula) %>%
-    deparse %>%
-    substring(2)
-  lmmFormula = paste0(fixedStr, ' + (', randomStr, '|', idVariable(method), ')') %>% as.formula(env =
-                                                                                                  NULL)
   lmm = lme4::lmer(
-    formula = lmmFormula,
+    formula = method$formula,
     data = data,
     REML = method$REML,
     control = method$control,
@@ -106,6 +106,8 @@ clusterStepGCKM = function(method, data, repMat, envir, verbose, ...) {
   lcModelCustom(
     method = method,
     response = responseVariable(method),
+    id = idVariable(method),
+    time = timeVariable(method),
     data = data,
     clusterAssignments = km$cluster,
     clusterTrajectories = method$center,

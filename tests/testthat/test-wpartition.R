@@ -1,4 +1,5 @@
 context('weighted partition')
+rngReset()
 
 refmodel = latrend(lcMethodTestKML(), testLongData)
 

@@ -1,6 +1,6 @@
 #' @include model.R
 setClassUnion('functionOrNULL', members = c('function', 'NULL'))
-.lcModelCustom = setClass(
+setClass(
   'lcModelCustom',
   representation(
     clusterAssignments = 'integer',
@@ -15,15 +15,20 @@ setClassUnion('functionOrNULL', members = c('function', 'NULL'))
   contains = 'lcModel'
 )
 
+.lcModelCustom = function(...) new('lcModelCustom', ...)
+
 #' @export
 #' @title Specify a model based on a pre-computed result.
 #' @param data The data on which the cluster result is based, a data.frame.
 #' @param clusterAssignments A vector indicating cluster membership per strata. Either a `numeric` vector with range `1:numClus`, or a `factor`.
 #' @param clusterTrajectories The cluster trajectories as a data.frame, or a function computing the center trajectory based on the strata of the respective cluster.
+#' @param clusterNames The names of the clusters. Optional.
+#' @param model An optional object representing the internal model.
 #' @param trajectories The fitted trajectories.
 #' @param response The response variable.
 #' @param time The time variable.
 #' @param id The id variable.
+#' @param name The name of the model.
 #' @param converged Convergence state of the model. TRUE by default.
 #' @param postprob Optional posterior probability matrix.
 #' @param predict Predict function for the response.
@@ -77,7 +82,7 @@ lcModelCustom = function(data,
   } else {
     assert_that(
       is.factor(clusterAssignments) ||
-        vapply(clusterAssignments, is.count, FUN.VALUE = FALSE)
+        all(vapply(clusterAssignments, is.count, FUN.VALUE = FALSE))
     )
     assert_that(!anyNA(clusterAssignments))
     assert_that(length(clusterAssignments) == nIds)
@@ -154,26 +159,29 @@ lcModelCustom = function(data,
 }
 
 #' @export
-is.lcModelCustom = function(object) {
-  is.lcModel(object) && is(object, 'lcModelCustom')
+#' @rdname is
+is.lcModelCustom = function(x) {
+  is.lcModel(x) && is(x, 'lcModelCustom')
 }
 
-setMethod('getName', signature('lcModelCustom'), function(object)
-  object@name)
+#' @rdname interface-custom
+setMethod('getName', signature('lcModelCustom'), function(object, ...) object@name)
 
-setMethod('getShortName', signature('lcModelCustom'), function(object)
-  'custom')
+#' @rdname interface-custom
+setMethod('getShortName', signature('lcModelCustom'), function(object, ...) 'custom')
 
-setMethod('converged', signature('lcModelCustom'), function(object)
-  object@converged)
+#' @rdname interface-custom
+setMethod('converged', signature('lcModelCustom'), function(object, ...) object@converged)
 
-setMethod('postprob', signature('lcModelCustom'), function(object) {
+#' @rdname interface-custom
+setMethod('postprob', signature('lcModelCustom'), function(object, ...) {
   pp = object@postprob
   colnames(pp) = clusterNames(object)
   return(pp)
 })
 
-
+#' @export
+#' @rdname interface-custom
 predict.lcModelCustom = function(object,
                                  ...,
                                  newdata = NULL,
@@ -187,8 +195,8 @@ predict.lcModelCustom = function(object,
 
 
 #. predictPostprob ####
-setMethod('predictPostprob', signature('lcModelCustom'),
-          function(object, newdata = NULL, ...) {
+#' @rdname interface-custom
+setMethod('predictPostprob', signature('lcModelCustom'), function(object, newdata = NULL, ...) {
   pp = object@predictPostprob(object, newdata, ...)
 
   assert_that(is.matrix(pp))
@@ -202,8 +210,10 @@ setMethod('predictPostprob', signature('lcModelCustom'),
   return(pp)
 })
 
-
-setMethod('clusterTrajectories', signature('lcModelCustom'), function(object, at, what, ...) {
+#' @rdname interface-custom
+#' @inheritParams clusterTrajectories
+setMethod('clusterTrajectories',
+  signature('lcModelCustom'), function(object, at = time(object), ...) {
   if (all(at %in% time(object))) {
     dt_traj = object@clusterTrajectories %>%
       as.data.table %>%
@@ -218,6 +228,8 @@ setMethod('clusterTrajectories', signature('lcModelCustom'), function(object, at
   return(dt_traj[])
 })
 
+#' @rdname interface-custom
+#' @inheritParams trajectories
 setMethod('trajectories', signature('lcModelCustom'), function(object, at, what, ...) {
   if (all(at %in% time(object))) {
     object@trajectories

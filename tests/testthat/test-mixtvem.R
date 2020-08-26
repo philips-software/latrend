@@ -1,4 +1,5 @@
 context('MixTVEM')
+rngReset()
 
 test_that('default', {
   skip('disabled')

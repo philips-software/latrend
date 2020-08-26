@@ -21,19 +21,27 @@ setValidity('lcMethodLcmmGMM', function(object) {
 #' @export
 #' @title Specify GMM method using lcmm
 #' @description Growth mixture modeling through latent-class linear mixed modeling.
-#' @inheritParams lcMethodKML
-#' @param formula Formula of form Response ~ Var1 + CLUSTER * Var2 + . + (Random1 + Random2 + . | Id).
+#' @param formula A `formula` of the form `Response ~ Var1 + CLUSTER * Var2 + . + (Random1 + Random2 + . | Id)`.
 #' Variables specified in the model are included as fixed effects.
-#' If an interaction is specified with the CLUSTER term then these covariates are included as fixed and mixture effects.
-#' The formula must contain a single random-effects component of the form  (. | Id), where Id matches the name specified in id, or in case of 'ID' is replaced by the id argument.
-#' Random effects are cluster-specific.
-#' @inheritDotParams lcmm::lcmm
+#' If an interaction is specified with the `CLUSTER` term, then these covariates are included as fixed and mixture effects.
+#' The formula must contain a single random-effects component of the form  `(. | Id)`, where `Id` matches the name specified in the `id` argument, or `ID` (which will be substituted by the `id` argument).
+#' The random effects are cluster-specific.
+#' @param formula.mb A `formula` specifying the class membership model. By default, an intercept-only model is used. This is a replacement of the internal `classmb` argument in [lcmm::lcmm].
+#' @param time The name of the time variable.
+#' @param id The name of the trajectory identifier variable. This replaces the `subject` argument of [lcmm::lcmm].
+#' @param nClusters The number of clusters to fit. This replaces the `ng` argument of [lcmm::lcmm].
+#' @param ... Arguments passed to [lcmm::lcmm].
+#' The following arguments are ignored: data, fixed, random, mixture, subject, classmb, returndata, ng, verbose, subset.
+#' @details The `formula` argument is used to generate the `fixed`, `random`, and `mixture` arguments for [lcmm::lcmm].
 #' @examples
-#' method = lcMethodLcmmGMM(Value ~ Time * CLUSTER + (1 | Id),
-#'                      time='Time',
-#'                      id='Id', nClusters=3)
-#' gmm = latrend(method, data=testLongData)
+#' data(latrendData)
+#' method <- lcMethodLcmmGMM(Y ~ Time * CLUSTER + (1 | Id),
+#'                      id = "Id", time = "Time", , nClusters = 3)
+#' gmm <- latrend(method, data = latrendData)
 #' summary(gmm)
+#'
+#' method <- lcMethodLcmmGMM(Y ~ Time * CLUSTER + (Time | Id),
+#'                      id = "Id", time = "Time", nClusters = 3)
 #' @family lcMethod implementations
 lcMethodLcmmGMM = function(formula,
                            formula.mb =  ~ 1,
@@ -60,9 +68,10 @@ lcMethodLcmmGMM = function(formula,
   )
 }
 
-
+#' @rdname interface-lcmm
 setMethod('getName', signature('lcMethodLcmmGMM'), function(object) 'growth mixture model')
 
+#' @rdname interface-lcmm
 setMethod('getShortName', signature('lcMethodLcmmGMM'), function(object) 'gmm')
 
 gmm_prepare = function(method, data, envir, verbose, ...) {
@@ -83,7 +92,7 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
   if (length(getCovariates(e$mixture)) == 0 &&
       !hasIntercept(e$mixture)) {
     if (method$nClusters > 1) {
-      warning.Verbose(
+      warnings.Verbose(
         verbose,
         'no cluster-specific terms specified in formula. Defaulting to intercept.'
       )
@@ -105,6 +114,7 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
 
   return(e)
 }
+#' @rdname interface-lcmm
 setMethod('preFit', signature('lcMethodLcmmGMM'), gmm_prepare)
 
 ##
@@ -139,6 +149,7 @@ gmm_fit = function(method, data, envir, verbose, ...) {
   return(model)
 }
 
+#' @rdname interface-lcmm
 setMethod('fit', signature('lcMethodLcmmGMM'), function(method, data, envir, verbose, ...) {
   model = gmm_fit(method, data, envir, verbose, ...)
 
