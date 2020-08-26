@@ -12,5 +12,4 @@ testLongData = generateLongData(
   noiseScales = c(.1, .1),
   clusterNames = c('A', 'B'),
   shuffle = TRUE) %>%
-  setnames('Cluster', 'Class') %>%
   .[, .(Traj, Assessment, Value, Class)]

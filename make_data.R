@@ -16,7 +16,6 @@ latrendData = generateLongData(
   noiseScales = c(.1, .1, .1),
   clusterNames = paste('Class', 1:3),
   shuffle = FALSE) %>%
-  setnames('Cluster', 'Class') %>%
   .[, .(Id, Time, Y, Class)]
 
 plotTrajectories(latrendData, response = 'Y')
