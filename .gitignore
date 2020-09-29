@@ -1,7 +1,5 @@
 /.Rproj.user
 *.bat
-NAMESPACE
-man
 .Rhistory
 cld.Rdata
 .Rprofile
