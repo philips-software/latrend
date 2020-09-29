@@ -9,3 +9,5 @@ cld.Rdata
 doc
 Meta
 vignettes/*_cache
+vignettes/*.R
+vignettes/*.html
