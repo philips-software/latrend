@@ -1,16 +1,29 @@
 Package: latrend
 Type: Package
-Title: Clustering longitudinal datasets
-Version: 0.9.7
+Version: 0.9.8
+Date: 2020-09-29
+Title: Framework for clustering longitudinal data
+Description: A framework for clustering longitudinal datasets with univariate trajectories using commonly applied methods. Facilitates reproducible and transparent cluster analyses with internal and external validation, and simulation studies.
 Author: Niek Den Teuling
 Maintainer: Niek Den Teuling <niek.den.teuling@philips.com>
-Authors@R: c(person("Niek", "Den Teuling", email = "niek.den.teuling@philips.com", role = c("aut", "cre")),
-    person("Steffen", "Pauws", email = "s.c.pauws@uvt.nl", role = "ctb"),
-    person("Edwin", "van den Heuvel", email = "e.r.v.d.heuvel@tue.nl", role = "ctb"),
-    person("Philips", role = "cph"))
+Authors@R: 
+    c(person(given = "Niek",
+             family = "Den Teuling",
+             role = c("aut", "cre"),
+             email = "niek.den.teuling@philips.com",
+             comment = c(ORCID = "https://orcid.org/0000-0003-1026-5080")),
+      person(given = "Steffen",
+             family = "Pauws",
+             role = "ctb",
+             email = "s.c.pauws@uvt.nl"),
+      person(given = "Edwin",
+             family = "van den Heuvel",
+             role = "ctb",
+             email = "e.r.v.d.heuvel@tue.nl"),
+      person(given = "Philips",
+             role = "cph"))
 URL: http://example.com
 BugReports: http://example.com
-Description: A framework for clustering longitudinal datasets with univariate trajectories using commonly applied methods. Facilitates reproducible and transparent cluster analyses with internal and external validation, and simulation studies.
 License: TBD
 Encoding: UTF-8
 LazyData: true
