@@ -39,7 +39,7 @@ lcMethodTestFlexmix = function(...) {
 }
 
 lcMethodTestGCKM = function(...) {
-  lcMethodGCKM(formula = Value ~ Assessment, ...)
+  lcMethodGCKM(formula = Value ~ (1 | Traj), ...)
 }
 
 lcMethodTestLMKM = function(...) {
