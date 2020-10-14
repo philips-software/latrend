@@ -13,6 +13,7 @@
   time = getOption("latrend.time"),
   center = meanNA,
   showTrajs = FALSE,
+  facet = showTrajs,
   id = getOption("latrend.id"),
   ...
 )
@@ -21,9 +22,11 @@
   object,
   what = "mu",
   at = time(object),
-  clusterLabels = sprintf("\%s (\%g\%\%)", clusterNames(object),
-    round(clusterProportions(object) * 100)),
+  clusterLabels = sprintf("\%s (\%s)", clusterNames(object),
+    percent(clusterProportions(object))),
   showTrajs = FALSE,
+  facet = showTrajs,
+  trajAssignments = clusterAssignments(object),
   ...
 )
 }
@@ -40,6 +43,8 @@
 
 \item{showTrajs}{Whether to plot the original data in addition to the cluster (i.e., center) trajectories}
 
+\item{facet}{Whether to facet by cluster. This is done by default when \code{showTrajs} is enabled.}
+
 \item{id}{Id column. Only needed when \code{showTrajs = TRUE}.}
 
 \item{...}{
@@ -54,6 +59,8 @@
 If a vector is specified, this is assumed to be the time covariate. Otherwise, a named list or data frame must be provided.}
 
 \item{clusterLabels}{Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.}
+
+\item{trajAssignments}{The cluster assignments for the fitted trajectories. Only used when \code{showTrajs = TRUE} and \code{facet = TRUE}. See \link{clusterAssignments}.}
 }
 \value{
 A \code{ggplot} object.

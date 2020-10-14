@@ -22,6 +22,7 @@ A framework for clustering longitudinal datasets with univariate trajectories us
 Useful links:
 \itemize{
   \item \url{https://github.com/philips-software/latrend}
+  \item Report bugs at \url{https://github.com/philips-software/latrend/issues}
 }
 
 }

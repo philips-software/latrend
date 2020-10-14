@@ -998,7 +998,7 @@ setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
   )
 })
 
-#. plotClusterTrajectories
+#. plotClusterTrajectories ####
 #' @export
 #' @name plotClusterTrajectories
 #' @rdname plotClusterTrajectories
@@ -1007,30 +1007,44 @@ setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
 #' @inheritParams clusterTrajectories
 #' @inheritDotParams clusterTrajectories
 #' @param clusterLabels Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.
+#' @param trajAssignments The cluster assignments for the fitted trajectories. Only used when `showTrajs = TRUE` and `facet = TRUE`. See [clusterAssignments].
 #' @param ... Arguments passed to [clusterTrajectories].
 #' @return A `ggplot` object.
 setMethod('plotClusterTrajectories', signature('lcModel'),
   function(object,
     what = 'mu',
     at = time(object),
-    clusterLabels = sprintf('%s (%g%%)',
+    clusterLabels = sprintf('%s (%s)',
       clusterNames(object),
-      round(clusterProportions(object) * 100)),
+      percent(clusterProportions(object))),
     showTrajs = FALSE,
+    facet = showTrajs,
+    trajAssignments = clusterAssignments(object),
     ...
   ) {
   assert_that(length(clusterLabels) == nClusters(object))
 
-  cdata = clusterTrajectories(object, at = at, what = what, ...) %>%
+  clusdata = clusterTrajectories(object, at = at, what = what, ...) %>%
     as.data.table() %>%
     .[, Cluster := factor(Cluster, levels = levels(Cluster), labels = clusterLabels)]
 
-  .plotClusterTrajs(cdata,
+  rawdata = model.data(object)
+  if (!is.null(trajAssignments)) {
+    assert_that(
+      length(trajAssignments) == nIds(object),
+      all(trajAssignments %in% clusterNames(object))
+    )
+    trajAssignments = factor(trajAssignments, levels = clusterNames(object), labels = clusterLabels)
+    rawdata[, Cluster := trajAssignments[genIdRowIndices(object)]]
+  }
+
+  .plotClusterTrajs(clusdata,
     response = responseVariable(object, what = what),
     time = timeVariable(object),
     id = idVariable(object),
     showTrajs = showTrajs,
-    rawdata = model.data(object))
+    facet = facet,
+    rawdata = rawdata)
 })
 
 

@@ -42,10 +42,11 @@ Imports:
     ggplot2 (>= 2.2.1),
     matrixStats (>= 0.55.0),
     stackoverflow (>= 0.3.0),
-	clusterCrit (>= 1.2.8),
-	mclustcomp (>= 0.3.1),
-	caret (>= 6.0),
-	qqplotr (>= 0.0.4)
+    clusterCrit (>= 1.2.8),
+    mclustcomp (>= 0.3.1),
+    caret (>= 6.0),
+    qqplotr (>= 0.0.4),
+    scales (>= 1.1.0)
 Suggests: 
     testthat (>= 2.1.0),
     roxygen2 (>= 7.1.0),
