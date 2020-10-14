@@ -21,8 +21,7 @@ A framework for clustering longitudinal datasets with univariate trajectories us
 \seealso{
 Useful links:
 \itemize{
-  \item \url{http://example.com}
-  \item Report bugs at \url{http://example.com}
+  \item \url{https://github.com/philips-software/latrend}
 }
 
 }
@@ -33,7 +32,7 @@ Other contributors:
 \itemize{
   \item Steffen Pauws \email{s.c.pauws@uvt.nl} [contributor]
   \item Edwin van den Heuvel \email{e.r.v.d.heuvel@tue.nl} [contributor]
-  \item Philips [copyright holder]
+  \item Copyright © 2020 Koninklijke Philips N.V. [copyright holder]
 }
 
 }

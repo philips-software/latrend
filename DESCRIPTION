@@ -1,7 +1,7 @@
 Package: latrend
 Type: Package
-Version: 0.9.8
-Date: 2020-09-29
+Version: 0.9.9
+Date: 2020-10-14
 Title: Framework for clustering longitudinal data
 Description: A framework for clustering longitudinal datasets with univariate trajectories using commonly applied methods. Facilitates reproducible and transparent cluster analyses with internal and external validation, and simulation studies.
 Author: Niek Den Teuling
@@ -20,11 +20,11 @@ Authors@R:
              family = "van den Heuvel",
              role = "ctb",
              email = "e.r.v.d.heuvel@tue.nl"),
-      person(given = "Philips",
+      person(given = "Copyright © 2020 Koninklijke Philips N.V.",
              role = "cph"))
-URL: http://example.com
-BugReports: http://example.com
-License: TBD
+URL: https://github.com/philips-software/latrend
+BugReports: https://github.com/philips-software/latrend/issues
+License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 Depends:
