@@ -16,13 +16,13 @@ setClass(
 #' As such, this model has no predictive capabilities. The cluster trajectories are represented by the specified center function (mean by default).
 #' @inheritParams lcMethodStratify
 #' @param data A `data.frame` representing the trajectory data.
-#' @param clusterAssignments A `vector` of cluster membership per trajectory, either `factor`, or `integer` (`1` to `nClusters`).
+#' @param trajectoryAssignments A `vector` of cluster membership per trajectory, either `factor`, or `integer` (`1` to `nClusters`).
 #' @param nClusters The number of clusters. Optional for `factor` assignments.
 #' @param clusterNames The names of the clusters, or a function with input `n` outputting a `character vector` of names.
 #' @param envir The `environment` associated with the model. Used for evaluating the assigned `data` object by [model.data]().
 lcModelPartition = function(data,
                             response,
-                            clusterAssignments,
+                            trajectoryAssignments,
                             nClusters = NA,
                             center = meanNA,
                             clusterNames = NULL,
@@ -43,22 +43,22 @@ lcModelPartition = function(data,
   assert_that(is.function(center))
   assert_that(
     all(vapply(
-      clusterAssignments, is.count, FUN.VALUE = TRUE
-    )) || is.factor(clusterAssignments),
-    length(clusterAssignments) == uniqueN(data[[id]])
+      trajectoryAssignments, is.count, FUN.VALUE = TRUE
+    )) || is.factor(trajectoryAssignments),
+    length(trajectoryAssignments) == uniqueN(data[[id]])
   )
 
-  if (is.factor(clusterAssignments)) {
+  if (is.factor(trajectoryAssignments)) {
     assert_that(is.na(nClusters) ||
-                  nlevels(clusterAssignments) == nClusters)
+                  nlevels(trajectoryAssignments) == nClusters)
   }
-  intAssignments = as.integer(clusterAssignments)
+  intAssignments = as.integer(trajectoryAssignments)
   assert_that(is.na(nClusters) || max(intAssignments) <= nClusters)
 
   # Determine number of clusters
   if (is.na(nClusters)) {
-    if (is.factor(clusterAssignments)) {
-      numClus = nlevels(clusterAssignments)
+    if (is.factor(trajectoryAssignments)) {
+      numClus = nlevels(trajectoryAssignments)
     } else {
       numClus = max(intAssignments)
     }

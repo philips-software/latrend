@@ -24,33 +24,33 @@ test_that('default fitted', {
   })
 })
 
-test_that('clusterAssignments', {
-  clusterAssignments(model) %>%
+test_that('trajectoryAssignments', {
+  trajectoryAssignments(model) %>%
     expect_is('factor') %T>%
     {expect_equal(nlevels(.), nClusters(model))}
 })
 
-test_that('make.clusterAssignments', {
-  refFac = clusterAssignments(model)
+test_that('make.trajectoryAssignments', {
+  refFac = trajectoryAssignments(model)
 
-  make.clusterAssignments(model, refFac) %>%
+  make.trajectoryAssignments(model, refFac) %>%
     expect_equal(refFac)
 
-  make.clusterAssignments(model, as.integer(refFac)) %>%
+  make.trajectoryAssignments(model, as.integer(refFac)) %>%
     expect_equal(refFac)
 
-  make.clusterAssignments(model, as.numeric(refFac)) %>%
+  make.trajectoryAssignments(model, as.numeric(refFac)) %>%
     expect_equal(refFac)
 
-  make.clusterAssignments(model, as.character(refFac)) %>%
+  make.trajectoryAssignments(model, as.character(refFac)) %>%
     expect_equal(refFac)
 
-  make.clusterAssignments(model, factor(refFac, levels=rev(levels(refFac)))) %>%
+  make.trajectoryAssignments(model, factor(refFac, levels=rev(levels(refFac)))) %>%
     expect_equal(refFac)
 })
 
 test_that('make.clusterIndices', {
-  refFac = clusterAssignments(model)
+  refFac = trajectoryAssignments(model)
   refIdx = as.integer(refFac)
 
   make.clusterIndices(model, refFac) %>%

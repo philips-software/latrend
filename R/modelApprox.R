@@ -12,7 +12,7 @@ setClass('lcApproxModel', contains = 'lcModel')
 #' @export
 #' @rdname lcApproxModel-class
 #' @inheritParams fitted.lcModel
-fitted.lcApproxModel = function(object, ..., clusters = clusterAssignments(object)) {
+fitted.lcApproxModel = function(object, ..., clusters = trajectoryAssignments(object)) {
   times = time(object)
   newdata = data.table(Id = ids(object) %>% rep(each = length(times)),
                        Time = times) %>%

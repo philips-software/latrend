@@ -60,7 +60,7 @@ predict.lcModelCrimCV = function(object, ...,
 #' @rdname interface-crimCV
 #' @inheritParams fitted.lcModel
 fitted.lcModelCrimCV = function(object, ...,
-                                clusters = clusterAssignments(object),
+                                clusters = trajectoryAssignments(object),
                                 what = 'mean') {
   predict(object, newdata = NULL, what = what) %>%
     transformFitted(model = object, clusters = clusters)

@@ -64,7 +64,7 @@ setMethod('fit', signature('lcMethodAKMedoids'), function(method, data, envir, v
 
   lcModelCustom(
     data,
-    clusterAssignments = factor(model$membership, levels = LETTERS[1:method$nClusters], labels =
+    trajectoryAssignments = factor(model$membership, levels = LETTERS[1:method$nClusters], labels =
                                   clusNames),
     clusterTrajectories = method$clusterCenter,
     response = responseVariable(method),

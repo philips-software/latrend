@@ -52,7 +52,7 @@ expect_valid_lcModel = function(object) {
   expect_gte(min(pp), 0)
   expect_lte(max(pp), 1)
 
-  clus = clusterAssignments(object)
+  clus = trajectoryAssignments(object)
   expect_is(clus, 'factor')
   expect_length(clus, nIds(object))
   expect_gte(min(as.integer(clus)), 1)
@@ -87,7 +87,7 @@ expect_valid_lcModel = function(object) {
     expect_length(pred4, nClusters(object))
     expect_true('Fit' %in% names(pred4$A), info='predictIdTime')
 
-    fitted(object, clusters=clusterAssignments(object)) %>%
+    fitted(object, clusters=trajectoryAssignments(object)) %>%
       expect_is(c('NULL', 'numeric'), info='fittedClusters')
     fitted(object, clusters=NULL) %>%
       expect_is(c('NULL', 'matrix'), info='fittedNull')
@@ -97,7 +97,7 @@ expect_valid_lcModel = function(object) {
     expect_length(predNul, nClusters(object))
     expect_true('Fit' %in% names(predNul$A), info='predictNull')
 
-    residuals(object, clusters=clusterAssignments(object)) %>%
+    residuals(object, clusters=trajectoryAssignments(object)) %>%
       expect_is(c('NULL', 'numeric'), label='residuals')
     residuals(object, clusters=NULL) %>%
       expect_is(c('NULL', 'matrix'), label='residuals')

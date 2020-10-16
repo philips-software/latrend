@@ -26,7 +26,7 @@
     percent(clusterProportions(object))),
   showTrajs = FALSE,
   facet = showTrajs,
-  trajAssignments = clusterAssignments(object),
+  trajAssignments = trajectoryAssignments(object),
   ...
 )
 }
@@ -60,7 +60,7 @@ If a vector is specified, this is assumed to be the time covariate. Otherwise, a
 
 \item{clusterLabels}{Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.}
 
-\item{trajAssignments}{The cluster assignments for the fitted trajectories. Only used when \code{showTrajs = TRUE} and \code{facet = TRUE}. See \link{clusterAssignments}.}
+\item{trajAssignments}{The cluster assignments for the fitted trajectories. Only used when \code{showTrajs = TRUE} and \code{facet = TRUE}. See \link{trajectoryAssignments}.}
 }
 \value{
 A \code{ggplot} object.

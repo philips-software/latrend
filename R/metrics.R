@@ -165,16 +165,16 @@ intMetricsEnv$WRSS = function(m) {
 # External metric definitions ####
 extMetricsEnv$adjustedRand = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
-  mclust::adjustedRandIndex(clusterAssignments(m1) %>% as.integer,
-                            clusterAssignments(m2) %>% as.integer)
+  mclust::adjustedRandIndex(trajectoryAssignments(m1) %>% as.integer,
+                            trajectoryAssignments(m2) %>% as.integer)
 }
 
 extMetricsEnv$CohensKappa = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   psych::cohen.kappa(
     cbind(
-      clusterAssignments(m1) %>% as.integer,
-      clusterAssignments(m2) %>% as.integer
+      trajectoryAssignments(m1) %>% as.integer,
+      trajectoryAssignments(m2) %>% as.integer
     ),
     alpha = 1
   )$kappa
@@ -183,8 +183,8 @@ extMetricsEnv$CohensKappa = function(m1, m2) {
 extMetricsEnv$`F` = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   mclustcomp::mclustcomp(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     types = 'f'
   )$scores
 }
@@ -192,8 +192,8 @@ extMetricsEnv$`F` = function(m1, m2) {
 extMetricsEnv$F1 = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   mclustcomp::mclustcomp(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     types = 'sdc'
   )$scores
 }
@@ -201,8 +201,8 @@ extMetricsEnv$F1 = function(m1, m2) {
 extMetricsEnv$FolkesMallows = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   clusterCrit::extCriteria(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     'Folkes_Mallows'
   )[[1]]
 }
@@ -210,8 +210,8 @@ extMetricsEnv$FolkesMallows = function(m1, m2) {
 extMetricsEnv$Hubert = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   clusterCrit::extCriteria(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     'Hubert'
   )[[1]]
 }
@@ -219,8 +219,8 @@ extMetricsEnv$Hubert = function(m1, m2) {
 extMetricsEnv$Jaccard = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   clusterCrit::extCriteria(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     'Jaccard'
   )[[1]]
 }
@@ -228,8 +228,8 @@ extMetricsEnv$Jaccard = function(m1, m2) {
 extMetricsEnv$jointEntropy = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   mclustcomp::mclustcomp(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     types = 'jent'
   )$scores
 }
@@ -237,8 +237,8 @@ extMetricsEnv$jointEntropy = function(m1, m2) {
 extMetricsEnv$Kulczynski = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   clusterCrit::extCriteria(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     'Kulczynski'
   )[[1]]
 }
@@ -246,8 +246,8 @@ extMetricsEnv$Kulczynski = function(m1, m2) {
 extMetricsEnv$MaximumMatch = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   mclustcomp::mclustcomp(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     types = 'mmm'
   )$scores
 }
@@ -255,8 +255,8 @@ extMetricsEnv$MaximumMatch = function(m1, m2) {
 extMetricsEnv$McNemar = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   clusterCrit::extCriteria(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     'McNemar'
   )[[1]]
 }
@@ -264,8 +264,8 @@ extMetricsEnv$McNemar = function(m1, m2) {
 extMetricsEnv$MeilaHeckerman = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   mclustcomp::mclustcomp(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     types = 'mhm'
   )$scores
 }
@@ -273,8 +273,8 @@ extMetricsEnv$MeilaHeckerman = function(m1, m2) {
 extMetricsEnv$Mirkin = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   mclustcomp::mclustcomp(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     types = 'mirkin'
   )$scores
 }
@@ -282,8 +282,8 @@ extMetricsEnv$Mirkin = function(m1, m2) {
 extMetricsEnv$MI = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   mclustcomp::mclustcomp(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     types = 'mi'
   )$scores
 }
@@ -291,8 +291,8 @@ extMetricsEnv$MI = function(m1, m2) {
 extMetricsEnv$NMI = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   igraph::compare(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     method = 'nmi'
   )
 }
@@ -304,8 +304,8 @@ extMetricsEnv$NSJ = function(m1, m2) {
 extMetricsEnv$NVI = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   mclustcomp::mclustcomp(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     types = 'nvi'
   )$scores
 }
@@ -313,8 +313,8 @@ extMetricsEnv$NVI = function(m1, m2) {
 extMetricsEnv$Overlap = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   mclustcomp::mclustcomp(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     types = 'overlap'
   )$scores
 }
@@ -322,8 +322,8 @@ extMetricsEnv$Overlap = function(m1, m2) {
 extMetricsEnv$PD = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   mclustcomp::mclustcomp(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     types = 'pd'
   )$scores
 }
@@ -332,8 +332,8 @@ extMetricsEnv$PD = function(m1, m2) {
 extMetricsEnv$Phi = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   clusterCrit::extCriteria(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     'Phi'
   )[[1]]
 }
@@ -341,8 +341,8 @@ extMetricsEnv$Phi = function(m1, m2) {
 extMetricsEnv$precision = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   clusterCrit::extCriteria(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     'Precision'
   )[[1]]
 }
@@ -350,8 +350,8 @@ extMetricsEnv$precision = function(m1, m2) {
 extMetricsEnv$Rand = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   clusterCrit::extCriteria(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     'Rand'
   )[[1]]
 }
@@ -359,8 +359,8 @@ extMetricsEnv$Rand = function(m1, m2) {
 extMetricsEnv$recall = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   clusterCrit::extCriteria(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     'Recall'
   )[[1]]
 }
@@ -368,8 +368,8 @@ extMetricsEnv$recall = function(m1, m2) {
 extMetricsEnv$RogersTanimoto = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   clusterCrit::extCriteria(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     'Rogers_Tanimoto'
   )[[1]]
 }
@@ -377,8 +377,8 @@ extMetricsEnv$RogersTanimoto = function(m1, m2) {
 extMetricsEnv$RusselRao = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   clusterCrit::extCriteria(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     'Russel_Rao'
   )[[1]]
 }
@@ -386,29 +386,29 @@ extMetricsEnv$RusselRao = function(m1, m2) {
 extMetricsEnv$SMC = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   mclustcomp::mclustcomp(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     types = 'smc'
   )$scores
 }
 
 extMetricsEnv$splitJoin = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
-  igraph::split_join_distance(clusterAssignments(m1) %>% as.integer,
-                              clusterAssignments(m2) %>% as.integer) %>% sum
+  igraph::split_join_distance(trajectoryAssignments(m1) %>% as.integer,
+                              trajectoryAssignments(m2) %>% as.integer) %>% sum
 }
 
 extMetricsEnv$splitJoin_ref = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
-  igraph::split_join_distance(clusterAssignments(m1) %>% as.integer,
-                              clusterAssignments(m2) %>% as.integer)[1]
+  igraph::split_join_distance(trajectoryAssignments(m1) %>% as.integer,
+                              trajectoryAssignments(m2) %>% as.integer)[1]
 }
 
 extMetricsEnv$SokalSneath1 = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   clusterCrit::extCriteria(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     'Sokal_Sneath1'
   )[[1]]
 }
@@ -416,8 +416,8 @@ extMetricsEnv$SokalSneath1 = function(m1, m2) {
 extMetricsEnv$SokalSneath2 = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   clusterCrit::extCriteria(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     'Sokal_Sneath2'
   )[[1]]
 }
@@ -425,8 +425,8 @@ extMetricsEnv$SokalSneath2 = function(m1, m2) {
 extMetricsEnv$VI = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   igraph::compare(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     method = 'vi'
   )
 }
@@ -434,8 +434,8 @@ extMetricsEnv$VI = function(m1, m2) {
 extMetricsEnv$Wallace1 = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   mclustcomp::mclustcomp(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     types = 'wallace1'
   )$scores
 }
@@ -443,8 +443,8 @@ extMetricsEnv$Wallace1 = function(m1, m2) {
 extMetricsEnv$Wallace2 = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   mclustcomp::mclustcomp(
-    clusterAssignments(m1) %>% as.integer,
-    clusterAssignments(m2) %>% as.integer,
+    trajectoryAssignments(m1) %>% as.integer,
+    trajectoryAssignments(m2) %>% as.integer,
     types = 'wallace2'
   )$scores
 }

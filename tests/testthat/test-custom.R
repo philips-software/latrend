@@ -6,7 +6,7 @@ test_that('default', {
        clusters = data[, mean(Value) > 0, by = Traj]$V1 %>%
            factor(levels = c(F,T), labels = c('Low', 'High'))
        list(clusters = clusters)
-       lcModelCustom(data = data, response = 'Value', clusterAssignments = clusters)
+       lcModelCustom(data = data, response = 'Value', trajectoryAssignments = clusters)
   }
   method = lcMethodCustom(response = 'Value', fun = clusfun)
 

@@ -39,7 +39,7 @@ predict.lcModelMclustLLPA = function(object,
 #' @export
 #' @rdname interface-mclust
 #' @inheritParams fitted.lcApproxModel
-fitted.lcModelMclustLLPA = function(object, ..., clusters = clusterAssignments(object)) {
+fitted.lcModelMclustLLPA = function(object, ..., clusters = trajectoryAssignments(object)) {
   times = time(object)
   newdata = data.table(Id = rep(ids(object), each = length(times)),
                        Time = times) %>%

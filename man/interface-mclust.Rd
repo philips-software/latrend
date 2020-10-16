@@ -26,7 +26,7 @@
 
 \method{predict}{lcModelMclustLLPA}(object, ..., newdata = NULL, what = "mu", approxFun = approx)
 
-\method{fitted}{lcModelMclustLLPA}(object, ..., clusters = clusterAssignments(object))
+\method{fitted}{lcModelMclustLLPA}(object, ..., clusters = trajectoryAssignments(object))
 
 \S4method{postprob}{lcModelMclustLLPA}(object, ...)
 

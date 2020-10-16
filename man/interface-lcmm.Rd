@@ -36,7 +36,7 @@
 
 \S4method{fit}{lcMethodLcmmGBTM}(method, data, envir, verbose, ...)
 
-\method{fitted}{lcModelLcmmGMM}(object, ..., clusters = clusterAssignments(object))
+\method{fitted}{lcModelLcmmGMM}(object, ..., clusters = trajectoryAssignments(object))
 
 \method{predict}{lcModelLcmmGMM}(object, ..., newdata = NULL, what = "mu")
 

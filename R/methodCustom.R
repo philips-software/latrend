@@ -22,7 +22,7 @@ setClass('lcMethodCustom', contains = 'lcMethod')
 #' clusfun <- function(data, response, id, time, ...) {
 #'    clusters <- data[, mean(Y) > 0, by = Id]$V1
 #'    lcModelCustom(data = data,
-#'      clusterAssignments = factor(clusters, levels = c(FALSE, TRUE), labels = c("Low", "High")),
+#'      trajectoryAssignments = factor(clusters, levels = c(FALSE, TRUE), labels = c("Low", "High")),
 #'      response = response,
 #'      time = time,
 #'      id = id)

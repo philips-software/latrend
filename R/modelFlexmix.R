@@ -28,7 +28,7 @@ predict.lcModelFlexmix = function(object, ...,
 #' @export
 #' @rdname interface-flexmix
 #' @inheritParams fitted.lcModel
-fitted.lcModelFlexmix = function(object, ..., clusters = clusterAssignments(object)) {
+fitted.lcModelFlexmix = function(object, ..., clusters = trajectoryAssignments(object)) {
   predNames = paste0('pred_m', 1:nClusters(object))
   predMat = flexmix::fitted(object@model) %>%
     set_colnames(clusterNames(object))

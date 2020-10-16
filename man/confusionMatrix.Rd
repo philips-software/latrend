@@ -5,7 +5,7 @@
 \alias{confusionMatrix.lcModel}
 \title{Posterior confusion matrix}
 \usage{
-\method{confusionMatrix}{lcModel}(data, ...)
+confusionMatrix.lcModel(data, ...)
 }
 \arguments{
 \item{data}{The \code{lcModel} object.}

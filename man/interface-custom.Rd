@@ -55,7 +55,7 @@
   object,
   at = time(object),
   what = "mu",
-  clusters = clusterAssignments(object),
+  clusters = trajectoryAssignments(object),
   ...
 )
 

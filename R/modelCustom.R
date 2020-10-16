@@ -3,7 +3,7 @@ setClassUnion('functionOrNULL', members = c('function', 'NULL'))
 setClass(
   'lcModelCustom',
   representation(
-    clusterAssignments = 'integer',
+    trajectoryAssignments = 'integer',
     clusterTrajectories = 'data.frame',
     trajectories = 'data.frame',
     converged = 'numeric',
@@ -20,7 +20,7 @@ setClass(
 #' @export
 #' @title Specify a model based on a pre-computed result.
 #' @param data The data on which the cluster result is based, a data.frame.
-#' @param clusterAssignments A vector indicating cluster membership per strata. Either a `numeric` vector with range `1:numClus`, or a `factor`.
+#' @param trajectoryAssignments A vector indicating cluster membership per strata. Either a `numeric` vector with range `1:numClus`, or a `factor`.
 #' @param clusterTrajectories The cluster trajectories as a data.frame, or a function computing the center trajectory based on the strata of the respective cluster.
 #' @param clusterNames The names of the clusters. Optional.
 #' @param model An optional object representing the internal model.
@@ -36,7 +36,7 @@ setClass(
 #' @param method The method used to create this lcModelCustom instance. Optional.
 lcModelCustom = function(data,
                          response,
-                         clusterAssignments = NULL,
+                         trajectoryAssignments = NULL,
                          clusterTrajectories = mean,
                          trajectories = data,
                          time = getOption('latrend.time'),
@@ -72,32 +72,32 @@ lcModelCustom = function(data,
   }
 
   # Cluster assignments
-  if (is.null(clusterAssignments)) {
-    assert_that(!is.null(postprob), msg = 'postprob must be specified when clusterAssignments is null')
-    clusterAssignments = apply(postprob, 1, which.max)
+  if (is.null(trajectoryAssignments)) {
+    assert_that(!is.null(postprob), msg = 'postprob must be specified when trajectoryAssignments is null')
+    trajectoryAssignments = apply(postprob, 1, which.max)
     nClusters = ncol(postprob)
     if (is.null(clusterNames)) {
       clusterNames = colnames(postprob)
     }
   } else {
     assert_that(
-      is.factor(clusterAssignments) ||
-        all(vapply(clusterAssignments, is.count, FUN.VALUE = FALSE))
+      is.factor(trajectoryAssignments) ||
+        all(vapply(trajectoryAssignments, is.count, FUN.VALUE = FALSE))
     )
-    assert_that(!anyNA(clusterAssignments))
-    assert_that(length(clusterAssignments) == nIds)
-    if (is.null(clusterNames) && is.factor(clusterAssignments)) {
-      clusterNames = levels(clusterAssignments)
+    assert_that(!anyNA(trajectoryAssignments))
+    assert_that(length(trajectoryAssignments) == nIds)
+    if (is.null(clusterNames) && is.factor(trajectoryAssignments)) {
+      clusterNames = levels(trajectoryAssignments)
     }
-    clusterAssignments = as.integer(clusterAssignments)
-    nClusters = max(clusterAssignments)
+    trajectoryAssignments = as.integer(trajectoryAssignments)
+    nClusters = max(trajectoryAssignments)
   }
   assert_that(nClusters >= 1)
 
   # postprob generation
   if (is.null(postprob)) {
     postprob = matrix(0, nrow = nIds, ncol = nClusters)
-    idxMat = cbind(1:nIds, clusterAssignments)
+    idxMat = cbind(1:nIds, trajectoryAssignments)
     postprob[idxMat] = 1
     colnames(postprob) = clusterNames
   }
@@ -118,7 +118,7 @@ lcModelCustom = function(data,
   if (is.function(clusterTrajectories)) {
     # compute cluster trajectories
     center = clusterTrajectories
-    rowClusters = clusterAssignments[rleidv(data[[id]])]
+    rowClusters = trajectoryAssignments[rleidv(data[[id]])]
     clusterTrajectories = as.data.table(data) %>%
       .[, center(get(response)), by = .(rowClusters, get(time))] %>%
       setnames(c('Cluster', time, response))
@@ -147,7 +147,7 @@ lcModelCustom = function(data,
     time = time,
     id = id,
     clusterNames = clusterNames,
-    clusterAssignments = clusterAssignments,
+    trajectoryAssignments = trajectoryAssignments,
     clusterTrajectories = clusterTrajectories,
     converged = as.numeric(converged),
     name = name,

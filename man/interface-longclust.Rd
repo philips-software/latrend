@@ -21,7 +21,7 @@
 
 \method{predict}{lcModelLongclust}(object, ..., newdata = NULL, what = "mu", approxFun = approx)
 
-\method{fitted}{lcModelLongclust}(object, ..., clusters = clusterAssignments(object))
+\method{fitted}{lcModelLongclust}(object, ..., clusters = trajectoryAssignments(object))
 
 \S4method{postprob}{lcModelLongclust}(object, ...)
 

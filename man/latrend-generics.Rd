@@ -4,7 +4,7 @@
 \alias{latrend-generics}
 \title{Method- and model-specific generics defined by the latrend package}
 \usage{
-clusterAssignments(object, ...)
+trajectoryAssignments(object, ...)
 
 clusterProportions(object, ...)
 

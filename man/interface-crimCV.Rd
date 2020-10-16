@@ -26,7 +26,7 @@
 
 \method{predict}{lcModelCrimCV}(object, ..., newdata = NULL, what = "mean")
 
-\method{fitted}{lcModelCrimCV}(object, ..., clusters = clusterAssignments(object), what = "mean")
+\method{fitted}{lcModelCrimCV}(object, ..., clusters = trajectoryAssignments(object), what = "mean")
 
 \method{logLik}{lcModelCrimCV}(object, ...)
 

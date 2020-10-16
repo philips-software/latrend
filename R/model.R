@@ -177,7 +177,7 @@ clusterNames = function(object, factor = FALSE) {
 #' clusterSizes(model)
 clusterSizes = function(object) {
   assert_that(is.lcModel(object))
-  clusterAssignments(object) %>%
+  trajectoryAssignments(object) %>%
     table() %>%
     as.numeric() %>%
     setNames(clusterNames(object))
@@ -202,11 +202,11 @@ setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
   colMeans(pp)
 })
 
-#. clusterAssignments ####
+#. trajectoryAssignments ####
 #' @export
-#' @name clusterAssignments
-#' @rdname clusterAssignments
-#' @aliases clusterAssignments,lcModel-method
+#' @name trajectoryAssignments
+#' @rdname trajectoryAssignments
+#' @aliases trajectoryAssignments,lcModel-method
 #' @title Get the cluster membership of each trajectory
 #' @details While the default strategy is [which.max], it is recommended to use \link[nnet]{which.is.max} instead, as this function breaks ties randomly.
 #' Another strategy to consider is the function [which.weight], which enables weighted sampling of cluster assignments.
@@ -216,11 +216,11 @@ setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
 #' @examples
 #' data(latrendData)
 #' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-#' clusterAssignments(model)
+#' trajectoryAssignments(model)
 #'
 #' # only assign ids with a probability over 0.9
-#' clusterAssignments(model, strategy = function(x) which(x > .9)[1])
-setMethod('clusterAssignments', signature('lcModel'), function(object, strategy = which.max, ...) {
+#' trajectoryAssignments(model, strategy = function(x) which(x > .9)[1])
+setMethod('trajectoryAssignments', signature('lcModel'), function(object, strategy = which.max, ...) {
   pp = postprob(object)
   assert_that(is_valid_postprob(pp, object))
 
@@ -380,7 +380,7 @@ setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, ob
 #' @param clusters Optional cluster assignments per id. If unspecified, a `matrix` is returned containing the cluster-specific predictions per column.
 #' @return A `numeric` vector of the fitted values for the respective class, or a `matrix` of fitted values for each cluster.
 #' @family model-specific methods
-fitted.lcModel = function(object, ..., clusters = clusterAssignments(object)) {
+fitted.lcModel = function(object, ..., clusters = trajectoryAssignments(object)) {
   pred = predict(object, newdata = NULL)
   transformFitted(pred = pred, model = object, clusters = clusters)
 }
@@ -482,7 +482,7 @@ genIdRowIndices = function(object) {
 # . ids ####
 #' @export
 #' @title Get the unique ids included in this model
-#' @details The order returned by ids(lcModel) determines the id order for any output involving id-specific values, such as in clusterAssignments() or postprob()
+#' @details The order returned by ids(lcModel) determines the id order for any output involving id-specific values, such as in trajectoryAssignments() or postprob()
 #' @param object The `lcModel` object.
 #' @examples
 #' model = latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
@@ -584,7 +584,7 @@ setMethod('metric', signature('lcModel'), function(object, name = c('AIC', 'BIC'
 #' @param finite Whether to check for missing or non-finite values.
 #' @return Factor cluster assignments.
 #' @keywords internal
-make.clusterAssignments = function(object, clusters, finite = TRUE) {
+make.trajectoryAssignments = function(object, clusters, finite = TRUE) {
   clusNames = clusterNames(object)
   nClusters = nClusters(object)
 
@@ -1007,7 +1007,7 @@ setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
 #' @inheritParams clusterTrajectories
 #' @inheritDotParams clusterTrajectories
 #' @param clusterLabels Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.
-#' @param trajAssignments The cluster assignments for the fitted trajectories. Only used when `showTrajs = TRUE` and `facet = TRUE`. See [clusterAssignments].
+#' @param trajAssignments The cluster assignments for the fitted trajectories. Only used when `showTrajs = TRUE` and `facet = TRUE`. See [trajectoryAssignments].
 #' @param ... Arguments passed to [clusterTrajectories].
 #' @return A `ggplot` object.
 setMethod('plotClusterTrajectories', signature('lcModel'),
@@ -1019,7 +1019,7 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
       percent(clusterProportions(object))),
     showTrajs = FALSE,
     facet = showTrajs,
-    trajAssignments = clusterAssignments(object),
+    trajAssignments = trajectoryAssignments(object),
     ...
   ) {
   assert_that(length(clusterLabels) == nClusters(object))
@@ -1086,7 +1086,7 @@ setMethod('postprob', signature('lcModel'), function(object, ...) {
 setMethod('qqPlot', signature('lcModel'), function(object, byCluster = FALSE, ...) {
   assert_that(is.lcModel(object))
   idIndexColumn = factor(model.data(object)[[idVariable(object)]], levels = ids(object)) %>% as.integer()
-  rowClusters = clusterAssignments(object)[idIndexColumn]
+  rowClusters = trajectoryAssignments(object)[idIndexColumn]
 
   res = residuals(object)
   requireNamespace('qqplotr')
@@ -1110,7 +1110,7 @@ setMethod('qqPlot', signature('lcModel'), function(object, byCluster = FALSE, ..
 #' @inheritParams fitted.lcModel
 #' @return A vector of residuals for the cluster assignments specified by clusters. If clusters is unspecified, a matrix of cluster-specific residuals per observations is returned.
 #' @family model-specific methods
-residuals.lcModel = function(object, ..., clusters = clusterAssignments(object)) {
+residuals.lcModel = function(object, ..., clusters = trajectoryAssignments(object)) {
   ypred = fitted(object, clusters = clusters, ...)
   yref = model.data(object)[[responseVariable(object)]]
 
@@ -1219,7 +1219,7 @@ summary.lcModel = function(object, ...) {
     coefficients = coef(object),
     residuals = res,
     clusterNames = clusterNames(object),
-    clusterAssignments = clusterAssignments(object),
+    trajectoryAssignments = trajectoryAssignments(object),
     clusterSizes = clusterSizes(object),
     clusterProportions = clusterProportions(object)
   )
@@ -1260,7 +1260,7 @@ setMethod('timeVariable', signature('lcModel'), function(object) object@time)
 setGeneric('trajectories', function(object,
                                     at = time(object),
                                     what = 'mu',
-                                    clusters = clusterAssignments(object),
+                                    clusters = trajectoryAssignments(object),
                                     ...) standardGeneric('trajectories'))
 
 #' @rdname trajectories
@@ -1346,7 +1346,7 @@ setClass(
     #TODO
     residuals = 'numeric',
     clusterNames = 'character',
-    clusterAssignments = 'factor',
+    trajectoryAssignments = 'factor',
     clusterSizes = 'numeric',
     clusterProportions = 'numeric',
     metrics = 'numeric'
@@ -1371,7 +1371,7 @@ setMethod('show', 'clSummary',
               'Number of obs: %d, strata (%s): %d\n',
               object@nObs,
               object@id,
-              length(object@clusterAssignments)
+              length(object@trajectoryAssignments)
             ) %>% cat
             cat('\n')
             cat('Scaled residuals:\n')

@@ -69,7 +69,7 @@ setMethod('fit', signature('lcMethodRandom'), function(method, data, envir, verb
     id = method$id,
     time = method$time,
     data = data,
-    clusterAssignments = clusAssign,
+    trajectoryAssignments = clusAssign,
     clusterTrajectories = method$center,
     converged = TRUE
   )

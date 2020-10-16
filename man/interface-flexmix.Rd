@@ -34,7 +34,7 @@
 
 \method{predict}{lcModelFlexmix}(object, ..., newdata = NULL, what = "mu")
 
-\method{fitted}{lcModelFlexmix}(object, ..., clusters = clusterAssignments(object))
+\method{fitted}{lcModelFlexmix}(object, ..., clusters = trajectoryAssignments(object))
 
 \S4method{postprob}{lcModelFlexmix}(object, ...)
 

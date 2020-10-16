@@ -7,7 +7,7 @@ test_that('specify', {
   }
   clusfun = function(method, data, repMat, ...) {
     clusters = factor(repMat[,1] > 0, levels=c(F,T), labels=c('Low', 'High'))
-    lcModelCustom(response = method$response, data=data, clusterAssignments=clusters)
+    lcModelCustom(response = method$response, data=data, trajectoryAssignments=clusters)
   }
   method = lcMethodTestTwoStep(representationStep=repfun, clusterStep=clusfun, standardize=scale)
 

@@ -13,7 +13,7 @@ ids(object)
 Get the unique ids included in this model
 }
 \details{
-The order returned by ids(lcModel) determines the id order for any output involving id-specific values, such as in clusterAssignments() or postprob()
+The order returned by ids(lcModel) determines the id order for any output involving id-specific values, such as in trajectoryAssignments() or postprob()
 }
 \examples{
 model = latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)

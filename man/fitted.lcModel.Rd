@@ -4,7 +4,7 @@
 \alias{fitted.lcModel}
 \title{Extract lcModel fitted values}
 \usage{
-\method{fitted}{lcModel}(object, ..., clusters = clusterAssignments(object))
+\method{fitted}{lcModel}(object, ..., clusters = trajectoryAssignments(object))
 }
 \arguments{
 \item{object}{The \code{lcModel} object.}

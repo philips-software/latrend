@@ -4,7 +4,7 @@ setClass('lcModelLcmmGMM', contains = 'lcModel')
 #' @export
 #' @rdname interface-lcmm
 #' @inheritParams fitted.lcModel
-fitted.lcModelLcmmGMM = function(object, ..., clusters = clusterAssignments(object)) {
+fitted.lcModelLcmmGMM = function(object, ..., clusters = trajectoryAssignments(object)) {
   predNames = paste0('pred_m', 1:nClusters(object))
   predMat = object@model$pred[predNames] %>%
     as.matrix %>%

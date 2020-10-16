@@ -8,7 +8,7 @@
 \alias{predict.lcApproxModel}
 \title{lcApproxModel class}
 \usage{
-\method{fitted}{lcApproxModel}(object, ..., clusters = clusterAssignments(object))
+\method{fitted}{lcApproxModel}(object, ..., clusters = trajectoryAssignments(object))
 
 \method{predict}{lcApproxModel}(object, ..., newdata = NULL, what = "mu", approxFun = approx)
 }

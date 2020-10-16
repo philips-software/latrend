@@ -29,7 +29,7 @@ predict.lcModelLongclust = function(object, ..., newdata=NULL, what='mu', approx
 #' @export
 #' @rdname interface-longclust
 #' @inheritParams fitted.lcApproxModel
-fitted.lcModelLongclust = function(object, ..., clusters=clusterAssignments(object)) {
+fitted.lcModelLongclust = function(object, ..., clusters=trajectoryAssignments(object)) {
   times = time(object)
   newdata = data.table(Id=rep(ids(object), each=length(times)),
                        Time=times) %>%

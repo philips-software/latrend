@@ -17,7 +17,7 @@ NULL
 
 #' @export
 #' @name latrend-generics
-setGeneric('clusterAssignments', function(object, ...) standardGeneric('clusterAssignments'))
+setGeneric('trajectoryAssignments', function(object, ...) standardGeneric('trajectoryAssignments'))
 
 #' @export
 #' @name latrend-generics

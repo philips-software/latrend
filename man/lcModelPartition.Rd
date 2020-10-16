@@ -7,7 +7,7 @@
 lcModelPartition(
   data,
   response,
-  clusterAssignments,
+  trajectoryAssignments,
   nClusters = NA,
   center = meanNA,
   clusterNames = NULL,
@@ -22,7 +22,7 @@ lcModelPartition(
 
 \item{response}{The name of the response variable.}
 
-\item{clusterAssignments}{A \code{vector} of cluster membership per trajectory, either \code{factor}, or \code{integer} (\code{1} to \code{nClusters}).}
+\item{trajectoryAssignments}{A \code{vector} of cluster membership per trajectory, either \code{factor}, or \code{integer} (\code{1} to \code{nClusters}).}
 
 \item{nClusters}{The number of clusters. Optional for \code{factor} assignments.}
 

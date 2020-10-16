@@ -8,7 +8,7 @@ test_that('default', {
 
   expect_valid_lcModel(model)
   expect_equivalent(nClusters(model), nClusters(refmodel))
-  expect_equivalent(clusterAssignments(model), clusterAssignments(refmodel))
+  expect_equivalent(trajectoryAssignments(model), trajectoryAssignments(refmodel))
   expect_equivalent(postprob(model), postprob(refmodel))
 })
 
@@ -17,6 +17,6 @@ test_that('non-unit weights', {
 
   expect_valid_lcModel(model)
   expect_equivalent(nClusters(model), nClusters(refmodel))
-  expect_equivalent(clusterAssignments(model), clusterAssignments(refmodel))
+  expect_equivalent(trajectoryAssignments(model), trajectoryAssignments(refmodel))
   expect_equivalent(postprob(model), postprob(refmodel))
 })

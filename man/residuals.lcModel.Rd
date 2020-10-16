@@ -4,7 +4,7 @@
 \alias{residuals.lcModel}
 \title{Extract lcModel residuals}
 \usage{
-\method{residuals}{lcModel}(object, ..., clusters = clusterAssignments(object))
+\method{residuals}{lcModel}(object, ..., clusters = trajectoryAssignments(object))
 }
 \arguments{
 \item{object}{The \code{lcModel} object.}

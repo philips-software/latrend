@@ -22,7 +22,7 @@
 
 \S4method{fit}{lcMethodFunFEM}(method, data, envir, verbose, ...)
 
-\method{fitted}{lcModelFunFEM}(object, ..., clusters = clusterAssignments(object))
+\method{fitted}{lcModelFunFEM}(object, ..., clusters = trajectoryAssignments(object))
 
 \method{predict}{lcModelFunFEM}(object, ..., newdata = NULL, what = "mu", approxFun = approx)
 

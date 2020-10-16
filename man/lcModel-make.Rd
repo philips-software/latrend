@@ -2,12 +2,12 @@
 % Please edit documentation in R/model.R
 \name{lcModel-make}
 \alias{lcModel-make}
-\alias{make.clusterAssignments}
+\alias{make.trajectoryAssignments}
 \alias{make.clusterIndices}
 \alias{make.clusterNames}
 \title{Cluster-handling functions for lcModel implementations.}
 \usage{
-make.clusterAssignments(object, clusters, finite = TRUE)
+make.trajectoryAssignments(object, clusters, finite = TRUE)
 
 make.clusterIndices(object, clusters, finite = TRUE)
 

@@ -7,7 +7,7 @@
 lcModelCustom(
   data,
   response,
-  clusterAssignments = NULL,
+  trajectoryAssignments = NULL,
   clusterTrajectories = mean,
   trajectories = data,
   time = getOption("latrend.time"),
@@ -27,7 +27,7 @@ lcModelCustom(
 
 \item{response}{The response variable.}
 
-\item{clusterAssignments}{A vector indicating cluster membership per strata. Either a \code{numeric} vector with range \code{1:numClus}, or a \code{factor}.}
+\item{trajectoryAssignments}{A vector indicating cluster membership per strata. Either a \code{numeric} vector with range \code{1:numClus}, or a \code{factor}.}
 
 \item{clusterTrajectories}{The cluster trajectories as a data.frame, or a function computing the center trajectory based on the strata of the respective cluster.}
 
