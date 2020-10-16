@@ -104,6 +104,7 @@ Collate:
     'methodRandom.R'
     'methodStratify.R'
     'metrics.R'
+    'model-summary.R'
     'model-transform.R'
     'modelApprox.R'
     'modelCrimCV.R'
