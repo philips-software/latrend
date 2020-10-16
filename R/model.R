@@ -895,14 +895,21 @@ predict.lcModel = function(object, ...,
 #' @seealso [predict.lcModel]
 #' @family model-specific methods
 setMethod('predictForCluster', signature('lcModel'), function(object, newdata = NULL, cluster, ..., what = 'mu') {
-  assert_that(is.newdata(newdata), !is.null(newdata))
+  assert_that(is.newdata(newdata))
+
   warning(
     'predictForCluster() not implemented for ',
     class(object)[1],
     '. Returning NA predictions.'
   )
 
-  rep(as.numeric(NA), nrow(newdata))
+  if(is.null(newdata)) {
+    N = nrow(model.data(object))
+  } else {
+    N = nrow(newdata)
+  }
+
+  rep(as.numeric(NA), N)
 })
 
 
