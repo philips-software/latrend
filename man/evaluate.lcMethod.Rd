@@ -4,7 +4,7 @@
 \alias{evaluate.lcMethod}
 \title{Substitute the call arguments for their evaluated values}
 \usage{
-evaluate.lcMethod(
+\method{evaluate}{lcMethod}(
   object,
   classes = "ANY",
   try = TRUE,

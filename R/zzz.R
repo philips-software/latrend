@@ -3,6 +3,7 @@
 #' @import methods
 #' @import magrittr
 #' @import stats
+#' @importFrom scales percent
 #' @importFrom foreach foreach %do%
 #' @import ggplot2
 #' @importFrom utils hasName capture.output combn getS3method modifyList head tail data
