@@ -198,7 +198,6 @@ clusterSizes = function(object) {
 setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
   pp = postprob(object)
   assert_that(!is.null(pp), msg = 'cannot determine cluster assignments because postprob() returned NULL')
-  assert_that(is.matrix(pp))
   colMeans(pp)
 })
 
@@ -920,25 +919,26 @@ setMethod('predictForCluster', signature('lcModel'), function(object, newdata = 
 #' @param ... Additional arguments.
 #' @return A `matrix` indicating the posterior probability per trajectory per measurement on each row, for each cluster (the columns).
 #' @family model-specific methods
-setMethod('predictPostprob', signature('lcModel'), function(object, newdata, ...) {
-  warning(
-    'predictPostprob() not implemented for ',
-    class(object)[1],
-    '. Returning uniform probability matrix.'
-  )
-
+setMethod('predictPostprob', signature('lcModel'), function(object, newdata = NULL, ...) {
   if (is.null(newdata)) {
     N = nrow(model.data(object))
+    pp = postprob(object, ...)
+    rownames(pp) = NULL
+    pp[genIdRowIndices(object), ]
   }
   else {
-    N = nrow(newdata)
-  }
+    warning(
+      'predictPostprob() not implemented for ',
+      class(object)[1],
+      '. Returning uniform probability matrix.'
+    )
 
-  pp = matrix(1 / nClusters(object),
-              nrow = N,
-              ncol = nClusters(object))
-  colnames(pp) = clusterNames(object)
-  pp
+    N = nrow(newdata)
+
+    matrix(1 / nClusters(object),
+      nrow = N,
+      ncol = nClusters(object))
+  }
 })
 
 
@@ -955,8 +955,13 @@ setMethod('predictPostprob', signature('lcModel'), function(object, newdata, ...
 #' @return A `factor` with length `nrow(newdata)` that indicates the posterior probability per trajectory per observation.
 #' @seealso [predictPostprob]
 #' @family model-specific methods
-setMethod('predictAssignments', signature('lcModel'), function(object, newdata, strategy = which.max, ...) {
+setMethod('predictAssignments', signature('lcModel'), function(object, newdata = NULL, strategy = which.max, ...) {
   pp = predictPostprob(object, newdata = newdata)
+
+  if(is.null(newdata)) {
+    newdata = model.data(object)
+  }
+
   assert_that(is_valid_postprob(pp, object),
               nrow(pp) == nrow(newdata))
 
@@ -1065,11 +1070,9 @@ setMethod('postprob', signature('lcModel'), function(object, ...) {
   warning('postprob() not implemented for ', class(object)[1],
     '. Returning uniform posterior probability matrix.')
 
-  pp = matrix(1 / nClusters(object),
-              nrow = nIds(object),
-              ncol = nClusters(object))
-  colnames(pp) = clusterNames(object)
-  pp
+  matrix(1 / nClusters(object),
+    nrow = nIds(object),
+    ncol = nClusters(object))
 })
 
 

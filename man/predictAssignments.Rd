@@ -5,7 +5,7 @@
 \alias{predictAssignments,lcModel-method}
 \title{Predict the cluster assignments for new trajectories}
 \usage{
-\S4method{predictAssignments}{lcModel}(object, newdata, strategy = which.max, ...)
+\S4method{predictAssignments}{lcModel}(object, newdata = NULL, strategy = which.max, ...)
 }
 \arguments{
 \item{object}{The \code{lcModel} object.}

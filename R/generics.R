@@ -17,11 +17,32 @@ NULL
 
 #' @export
 #' @name latrend-generics
-setGeneric('trajectoryAssignments', function(object, ...) standardGeneric('trajectoryAssignments'))
+setGeneric('trajectoryAssignments', function(object, ...) {
+  assignments <- standardGeneric('trajectoryAssignments')
+
+  assert_that(
+    length(assignments) == nIds(object)
+  )
+
+  make.trajectoryAssignments(object, assignments)
+})
 
 #' @export
 #' @name latrend-generics
-setGeneric('clusterProportions', function(object, ...) standardGeneric('clusterProportions'))
+setGeneric('clusterProportions', function(object, ...) {
+  props <- standardGeneric('clusterProportions')
+
+  assert_that(
+    is.numeric(props),
+    length(props) == nClusters(object),
+    !anyNA(props),
+    all(is.finite(props)),
+    min(props) >= 0
+  )
+
+  names(props) = clusterNames(object)
+  props
+})
 
 #' @export
 #' @name latrend-generics
@@ -69,6 +90,7 @@ setGeneric('fit', function(method, data, envir, verbose, ...) {
   model@response = responseVariable(method)
   model@label = getLabel(method)
   model@estimationTime = as.numeric(estimationTime, 'secs')
+
   return(model)
 })
 
@@ -108,12 +130,30 @@ setGeneric('plotTrajectories', function(object, ...) standardGeneric('plotTrajec
 
 #' @export
 #' @name latrend-generics
-setGeneric('postprob', function(object, ...) standardGeneric('postprob'))
+setGeneric('postprob', function(object, ...) {
+  pp <- standardGeneric('postprob')
+
+  assert_that(
+    ncol(pp) == nClusters(object),
+    nrow(pp) == nIds(object),
+    is_valid_postprob(pp, object)
+  )
+
+  colnames(pp) = clusterNames(object)
+  pp
+})
 
 #' @export
 #' @name latrend-generics
-setGeneric('predictAssignments',
-  function(object, newdata = NULL, ...) standardGeneric('predictAssignments'))
+setGeneric('predictAssignments', function(object, newdata = NULL, ...) {
+    assignments <- standardGeneric('predictAssignments')
+
+    assert_that(
+      is.null(newdata) || length(assignments) == nrow(newdata)
+    )
+
+    make.trajectoryAssignments(object, assignments)
+})
 
 #' @export
 #' @name latrend-generics
@@ -122,15 +162,26 @@ setGeneric('predictForCluster',
 
 #' @export
 #' @name latrend-generics
-setGeneric('predictPostprob',
-  function(object, newdata = NULL, ...) standardGeneric('predictPostprob'))
+setGeneric('predictPostprob', function(object, newdata = NULL, ...) {
+  pp <- standardGeneric('predictPostprob')
+
+  assert_that(
+    is.null(newdata) || nrow(pp) == nrow(newdata),
+    is_valid_postprob(pp, object)
+  )
+
+  colnames(pp) = clusterNames(object)
+  pp
+})
 
 #' @export
 #' @name latrend-generics
 setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
   model <- standardGeneric('postFit')
-  assert_that(inherits(model, 'lcModel'),
+  assert_that(
+    inherits(model, 'lcModel'),
     msg = 'postFit(lcMethod, ...) returned an unexpected object. Should be of type lcModel.')
+
   return(model)
 })
 
@@ -138,9 +189,10 @@ setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
 #' @name latrend-generics
 setGeneric('preFit', function(method, data, envir, verbose, ...) {
   modelEnv <- standardGeneric('preFit')
-  assert_that(is.null(modelEnv) ||
-      is.environment(modelEnv),
+  assert_that(
+    is.null(modelEnv) || is.environment(modelEnv),
     msg = 'preFit(method, ...) returned an unexpected object. Should be environment or NULL')
+
   return(modelEnv)
 })
 

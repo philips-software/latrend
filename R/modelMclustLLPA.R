@@ -61,13 +61,12 @@ setMethod('postprob', signature('lcModelMclustLLPA'), function(object, ...) {
 
 #. predictPostprob ####
 #' @rdname interface-mclust
-setMethod('predictPostprob',
-  signature('lcModelMclustLLPA'), function(object, newdata = NULL, ...) {
+setMethod('predictPostprob', signature('lcModelMclustLLPA'),
+  function(object, newdata = NULL, ...) {
   if (is.null(newdata)) {
-    postprob(object)
+    callNextMethod()
   } else {
-    stop('not implemented')
-    pp = predict(object@model, newdata = newdata)$z
+    predict(object@model, newdata = newdata)$z
   }
 })
 
