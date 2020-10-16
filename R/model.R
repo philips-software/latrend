@@ -1028,7 +1028,7 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
     as.data.table() %>%
     .[, Cluster := factor(Cluster, levels = levels(Cluster), labels = clusterLabels)]
 
-  rawdata = model.data(object)
+  rawdata = model.data(object) %>% as.data.table()
   if (!is.null(trajAssignments)) {
     assert_that(
       length(trajAssignments) == nIds(object),
