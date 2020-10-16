@@ -22,7 +22,7 @@ test_that('plotClusterTrajectories.data.frame', {
   expect_true(is.ggplot(p))
 })
 
-test_that('plotClusterTrajectories.data.frame with showTrajs', {
-  p = plotClusterTrajectories(testLongData, response = 'Value', cluster = 'Class', showTrajs = TRUE)
+test_that('plotClusterTrajectories.data.frame with trajectories', {
+  p = plotClusterTrajectories(testLongData, response = 'Value', cluster = 'Class', trajectories = TRUE)
   expect_true(is.ggplot(p))
 })

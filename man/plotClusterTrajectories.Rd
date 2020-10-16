@@ -12,8 +12,8 @@
   cluster = "Cluster",
   time = getOption("latrend.time"),
   center = meanNA,
-  showTrajs = FALSE,
-  facet = showTrajs,
+  trajectories = FALSE,
+  facet = trajectories,
   id = getOption("latrend.id"),
   ...
 )
@@ -24,8 +24,8 @@
   at = time(object),
   clusterLabels = sprintf("\%s (\%s)", clusterNames(object),
     percent(clusterProportions(object))),
-  showTrajs = FALSE,
-  facet = showTrajs,
+  trajectories = FALSE,
+  facet = trajectories,
   trajAssignments = trajectoryAssignments(object),
   ...
 )
@@ -41,11 +41,11 @@
 
 \item{center}{A function for aggregating multiple points at the same point in time}
 
-\item{showTrajs}{Whether to plot the original data in addition to the cluster (i.e., center) trajectories}
+\item{trajectories}{Whether to plot the original data in addition to the cluster (i.e., center) trajectories}
 
-\item{facet}{Whether to facet by cluster. This is done by default when \code{showTrajs} is enabled.}
+\item{facet}{Whether to facet by cluster. This is done by default when \code{trajectories} is enabled.}
 
-\item{id}{Id column. Only needed when \code{showTrajs = TRUE}.}
+\item{id}{Id column. Only needed when \code{trajectories = TRUE}.}
 
 \item{...}{
   Arguments passed on to \code{\link[=clusterTrajectories]{clusterTrajectories}}
@@ -60,7 +60,7 @@ If a vector is specified, this is assumed to be the time covariate. Otherwise, a
 
 \item{clusterLabels}{Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.}
 
-\item{trajAssignments}{The cluster assignments for the fitted trajectories. Only used when \code{showTrajs = TRUE} and \code{facet = TRUE}. See \link{trajectoryAssignments}.}
+\item{trajAssignments}{The cluster assignments for the fitted trajectories. Only used when \code{trajectories = TRUE} and \code{facet = TRUE}. See \link{trajectoryAssignments}.}
 }
 \value{
 A \code{ggplot} object.

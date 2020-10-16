@@ -63,24 +63,24 @@ setMethod('plotTrajectories', signature('data.frame'), function(object,
 #' @param object The (cluster) trajectory data.
 #' @param cluster The cluster assignment column
 #' @param center A function for aggregating multiple points at the same point in time
-#' @param showTrajs Whether to plot the original data in addition to the cluster (i.e., center) trajectories
-#' @param facet Whether to facet by cluster. This is done by default when `showTrajs` is enabled.
-#' @param id Id column. Only needed when `showTrajs = TRUE`.
+#' @param trajectories Whether to plot the original data in addition to the cluster (i.e., center) trajectories
+#' @param facet Whether to facet by cluster. This is done by default when `trajectories` is enabled.
+#' @param id Id column. Only needed when `trajectories = TRUE`.
 #' @param ... Additional arguments.
 setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     response,
     cluster = 'Cluster',
     time = getOption('latrend.time'),
     center = meanNA,
-    showTrajs = FALSE,
-    facet = showTrajs,
+    trajectories = FALSE,
+    facet = trajectories,
     id = getOption('latrend.id'),
     ...
   ) {
   assert_that(has_name(object, cluster),
     has_name(object, response),
     is.function(center),
-    is.flag(showTrajs))
+    is.flag(trajectories))
 
   cdata = as.data.table(object) %>%
     .[, .(Value = center(get(response))), keyby=c(cluster, time)] %>%
@@ -90,24 +90,24 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     response = response,
     time = time,
     cluster = cluster,
-    showTrajs = showTrajs,
+    trajectories = trajectories,
     facet = facet,
     id = id,
     rawdata = object)
 })
 
 
-.plotClusterTrajs = function(data, response, time, cluster = 'Cluster', showTrajs = FALSE, facet = FALSE, id, rawdata = NULL) {
+.plotClusterTrajs = function(data, response, time, cluster = 'Cluster', trajectories = FALSE, facet = FALSE, id, rawdata = NULL) {
   assert_that(
     is.data.frame(data),
     has_name(data, response),
     has_name(data, time),
     has_name(data, cluster),
-    is.flag(showTrajs),
+    is.flag(trajectories),
     is.flag(facet)
   )
 
-  if (showTrajs) {
+  if (trajectories) {
     assert_that(
       is.data.frame(rawdata),
       has_name(rawdata, id),
@@ -135,7 +135,7 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
       y = response)
   )
 
-  if (showTrajs) {
+  if (trajectories) {
     p = p + geom_line(data = rawdata, mapping = aes_string(group = id), size = .1, color = 'black')
   }
 
