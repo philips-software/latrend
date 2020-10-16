@@ -114,7 +114,7 @@ expect_valid_lcModel = function(object) {
 
   # Misc
   summary(object) %>%
-    expect_is('clSummary')
+    expect_is('lcSummary')
   expect_output(print(object))
 
   return(object)

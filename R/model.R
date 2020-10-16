@@ -1213,7 +1213,7 @@ summary.lcModel = function(object, ...) {
   }
 
   new(
-    'clSummary',
+    'lcSummary',
     method = getLcMethod(object),
     name = getName(object),
     nClusters = nClusters(object),
@@ -1338,7 +1338,7 @@ update.lcModel = function(object, ...) {
 
 # Model summary ####
 setClass(
-  'clSummary',
+  'lcSummary',
   representation(
     method = 'lcMethod',
     name = 'character',
@@ -1357,7 +1357,7 @@ setClass(
 )
 
 # . show ####
-setMethod('show', 'clSummary',
+setMethod('show', 'lcSummary',
           function(object) {
             cat('Longitudinal cluster model using ', object@name, '\n', sep = '')
             print(object@method)
