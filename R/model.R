@@ -580,15 +580,13 @@ setMethod('metric', signature('lcModel'), function(object, name = c('AIC', 'BIC'
 #' @description Ensures a proper cluster assignments factor vector
 #' @param object The `lcModel` object.
 #' @param clusters The unprocessed trajectory cluster assignment vector.
-#' @param finite Whether to check for missing or non-finite values.
 #' @return Factor cluster assignments.
 #' @keywords internal
-make.trajectoryAssignments = function(object, clusters, finite = TRUE) {
+make.trajectoryAssignments = function(object, clusters) {
   clusNames = clusterNames(object)
   nClusters = nClusters(object)
 
-  assert_that(!finite ||
-                !anyNA(clusters), msg = 'cluster assignments should be finite values')
+  assert_that(!anyNA(clusters))
 
   if (is.null(clusters)) {
     NULL
@@ -634,12 +632,11 @@ make.trajectoryAssignments = function(object, clusters, finite = TRUE) {
 #' @rdname lcModel-make
 #' @title Ensures a proper cluster index vector
 #' @return A cluster assignments index vector of type `integer`.
-make.clusterIndices = function(object, clusters, finite = TRUE) {
+make.clusterIndices = function(object, clusters) {
   clusNames = clusterNames(object)
   nClusters = nClusters(object)
 
-  assert_that(!finite ||
-                !anyNA(clusters), msg = 'cluster assignments should be finite values')
+  assert_that(!anyNA(clusters), msg = 'each trajectory should be assigned to a cluster')
 
   if (is.null(clusters)) {
     NULL

@@ -7,9 +7,9 @@
 \alias{make.clusterNames}
 \title{Cluster-handling functions for lcModel implementations.}
 \usage{
-make.trajectoryAssignments(object, clusters, finite = TRUE)
+make.trajectoryAssignments(object, clusters)
 
-make.clusterIndices(object, clusters, finite = TRUE)
+make.clusterIndices(object, clusters)
 
 make.clusterNames(n)
 }
@@ -17,8 +17,6 @@ make.clusterNames(n)
 \item{object}{The \code{lcModel} object.}
 
 \item{clusters}{The unprocessed trajectory cluster assignment vector.}
-
-\item{finite}{Whether to check for missing or non-finite values.}
 
 \item{n}{The number of clusters.}
 }
