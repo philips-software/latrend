@@ -66,7 +66,15 @@ setGeneric('compose', def = function(method, envir, ...) {
 
 #' @export
 #' @name latrend-generics
-setGeneric('converged', function(object, ...) standardGeneric('converged'))
+setGeneric('converged', function(object, ...) {
+  state <- standardGeneric('converged')
+  assert_that(
+    is.logical(state) || is.numeric(state),
+    length(state) == 1,
+    is.finite(state)
+  )
+  state
+})
 
 #' @export
 #' @name latrend-generics
@@ -96,19 +104,50 @@ setGeneric('fit', function(method, data, envir, verbose, ...) {
 
 #' @export
 #' @name latrend-generics
-setGeneric('getLabel', function(object, ...) standardGeneric('getLabel'))
+setGeneric('getLabel', function(object, ...) {
+  label <- standardGeneric('getLabel')
+  assert_that(
+    is.character(label),
+    length(label) == 1
+  )
+  label
+})
 
 #' @export
 #' @name latrend-generics
-setGeneric('getName', function(object, ...) standardGeneric('getName'))
+setGeneric('getName', function(object, ...) {
+  name <- standardGeneric('getName')
+  assert_that(
+    is.character(name),
+    length(name) == 1,
+    nchar(name) > 0
+  )
+  name
+})
 
 #' @export
 #' @name latrend-generics
-setGeneric('getShortName', function(object, ...) standardGeneric('getShortName'))
+setGeneric('getShortName', function(object, ...) {
+  name <- standardGeneric('getShortName')
+  assert_that(
+    is.character(name),
+    length(name) == 1,
+    nchar(name) > 0
+  )
+  name
+})
 
 #' @export
 #' @name latrend-generics
-setGeneric('idVariable', function(object, ...) standardGeneric('idVariable'))
+setGeneric('idVariable', function(object, ...) {
+  id <- standardGeneric('idVariable')
+  assert_that(
+    is.character(id),
+    length(id) == 1,
+    nchar(id) > 0
+  )
+  id
+})
 
 #' @export
 #' @name latrend-generics
@@ -208,7 +247,15 @@ setGeneric('prepareData', function(method, data, verbose, ...) {
 
 #' @export
 #' @name latrend-generics
-setGeneric('responseVariable', function(object, ...) standardGeneric('responseVariable'))
+setGeneric('responseVariable', function(object, ...) {
+  response <- standardGeneric('responseVariable')
+  assert_that(
+    is.character(response),
+    length(response) == 1,
+    nchar(response) > 0
+  )
+  response
+})
 
 #' @export
 #' @name latrend-generics
@@ -221,7 +268,15 @@ setGeneric('strip', function(object, ...) standardGeneric('strip'))
 
 #' @export
 #' @name latrend-generics
-setGeneric('timeVariable', function(object, ...) standardGeneric('timeVariable'))
+setGeneric('timeVariable', function(object, ...) {
+  time <- standardGeneric('timeVariable')
+  assert_that(
+    is.character(time),
+    length(time) == 1,
+    nchar(time) > 0
+  )
+  time
+})
 
 #' @export
 #' @name latrend-generics
