@@ -70,6 +70,7 @@ test_that('multiple cluster factor expression', {
 })
 
 test_that('multiple cluster numeric expression', {
+  skip_on_cran()
   m = lcMethodTestStratify(stratify = as.numeric(cut(mean(Value), c(-Inf, -.5, 0, Inf))))
   expect_warning({
     model = latrend(m, data=testLongData)
@@ -80,6 +81,7 @@ test_that('multiple cluster numeric expression', {
 })
 
 test_that('multiple cluster expression with cluster names', {
+  skip_on_cran()
   m = lcMethodTestStratify(stratify = as.numeric(cut(mean(Value), c(-Inf, -.5, 0, Inf))),
                        clusterNames=LETTERS[3:1])
   expect_warning({

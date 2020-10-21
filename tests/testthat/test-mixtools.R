@@ -1,4 +1,5 @@
 context('mixtools')
+skip_if_not_installed('mixtools')
 rngReset()
 
 test_that('default np', {
@@ -18,6 +19,7 @@ test_that('default np many clusters', {
 })
 
 test_that('default gmm', {
+  skip_on_cran()
   model = latrend(lcMethodTestMixtoolsGMM(), testLongData) %>%
     expect_valid_lcModel()
 })

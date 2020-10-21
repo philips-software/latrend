@@ -1,4 +1,5 @@
 context('LCMM models')
+skip_if_not_installed('lcmm')
 rngReset()
 
 test_that('default gmm', {

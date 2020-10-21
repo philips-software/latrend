@@ -1,4 +1,5 @@
 context('twostep models')
+skip_if_not_installed('lme4')
 rngReset()
 
 test_that('specify', {

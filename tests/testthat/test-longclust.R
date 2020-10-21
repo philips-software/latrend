@@ -1,4 +1,5 @@
 context('longclust')
+skip_if_not_installed('longclust')
 rngReset()
 
 test_that('default', {

@@ -1,4 +1,5 @@
 context('akmedoids')
+skip_if_not_installed('akmedoids')
 rngReset()
 
 library(akmedoids)

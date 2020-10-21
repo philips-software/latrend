@@ -1,4 +1,5 @@
 context('funfem')
+skip_if_not_installed('funFEM')
 rngReset()
 
 library(funFEM)

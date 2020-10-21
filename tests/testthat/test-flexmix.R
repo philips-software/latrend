@@ -1,4 +1,5 @@
 context('flexmix')
+skip_if_not_installed('flexmix')
 rngReset()
 
 test_that('default', {

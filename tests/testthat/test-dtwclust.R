@@ -1,4 +1,5 @@
 context('dtwclust')
+skip_if_not_installed('dtwclust')
 rngReset()
 
 test_that('default', {

@@ -1,4 +1,5 @@
 context('crimcv')
+skip_if_not_installed('crimCV')
 rngReset()
 
 library(crimCV)
@@ -26,6 +27,7 @@ test_that('default', {
 })
 
 test_that('many clusters', {
+  skip_on_cran()
   suppressWarnings({
     model = latrend(lcMethodTestCrimCVt(nClusters=3), subTO1adj) %>%
       expect_valid_lcModel()

@@ -1,4 +1,5 @@
 context('KML model')
+skip_if_not_installed('kml')
 rngReset()
 
 test_that('method', {
