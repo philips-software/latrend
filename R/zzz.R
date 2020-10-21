@@ -10,10 +10,9 @@
 #' @aliases latrend-package
 #' @rdname latrend-package
 #' @section Getting started:
-#' * See `vignette("demo", package="latrend")` for an introduction to conducting a longitudinal cluster analysis on a example case study.
-#' * See `vignette("customModels", package="latrend")` for examples on constructing your own cluster models.
-#' * See `vignette("modelSelection", package="latrend")`
-#' * See `vignette("modelValidation", package="latrend")`
+#' * See `vignette("demo", package = "latrend")` for an introduction to conducting a longitudinal cluster analysis on a example case study.
+#' * See `vignette("custom", package = "latrend")` for examples on constructing your own cluster models.
+#' * See `vignette("validation", package = "latrend")` for examples on applying internal cluster validation.
 "_PACKAGE"
 
 #' @name latrend-generics
