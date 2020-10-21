@@ -1,5 +1,5 @@
 ---
-title: "How to validate cluster models"
+title: "Validating cluster models"
 author: "Niek Den Teuling"
 date: "`r Sys.Date()`"
 output: 
@@ -7,7 +7,7 @@ output:
     toc: true # table of content true
     toc_depth : 2  
 vignette: >
-  %\VignetteIndexEntry{How to validate cluster models}
+  %\VignetteIndexEntry{Validating cluster models}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -20,8 +20,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-update_geom_defaults('line', list(size = .01))
-update_geom_defaults('point', list(size = .5))
 options(latrend.verbose = FALSE)
 ```
 
@@ -33,7 +31,7 @@ set.seed(1)
 ```
 
 # Loading the data
-We explore the `OSA1y30` dataset. This is a synthetic dataset for which the reference group of each trajectory is available. However, in this vignette we will assume that the true group specification and number of groups are unknown. Instead, we have a candidate model which we wish to validate internally.
+We explore the `latrendData` dataset. This is a synthetic dataset for which the reference group of each trajectory is available, indicated by the `Class` column. However, in this vignette we will assume that the true group specification and number of groups are unknown. Instead, we have a candidate model which we wish to validate internally.
 ```{r}
 data(latrendData)
 head(latrendData)
@@ -41,23 +39,23 @@ head(latrendData)
 
 Specify the package options to adopt the respective column names of the loaded dataset, for convenience.
 ```{r}
-options(latrend.id='Id', latrend.time='Time')
+options(latrend.id = "Id", latrend.time = "Time")
 ```
 
 # Candidate model
 ```{r}
-kml = lcMethodKML("Y", nClusters = 7, nbRedrawing = 5)
+kml <- lcMethodKML("Y", nClusters = 3, nbRedrawing = 5)
 kml
 ```
 
 # Evaluate stability of the estimation through repeated estimation
 ```{r}
-repModels = latrendRep(kml, data=latrendData, .rep=10)
-print(repModels, excludeShared=FALSE)
+repModels <- latrendRep(kml, data = latrendData, .rep=10)
+print(repModels, excludeShared = FALSE)
 ```
 
 ```{r}
-repSelfMetrics = metric(repModels, name = c("BIC", "WMAE", "APPA"))
+repSelfMetrics <- metric(repModels, name = c("BIC", "WMAE", "APPA"))
 head(repSelfMetrics)
 ```
 
@@ -72,12 +70,12 @@ repSelfMetrics[, "APPA"] %>% summary()
 ## Comparison between fits
 Select the model with the best fit, compare the other fits against this model.
 ```{r}
-bestRepModel = min(repModels, "BIC")
-externalMetric(repModels, bestRepModel, name='adjustedRand')
+bestRepModel <- min(repModels, "BIC")
+externalMetric(repModels, bestRepModel, name = "adjustedRand")
 ```
 
 ```{r}
-distMat = externalMetric(repModels, name='adjustedRand')
+distMat <- externalMetric(repModels, name = "adjustedRand")
 distMat
 summary(distMat)
 ```
@@ -85,31 +83,31 @@ summary(distMat)
 
 # Evaluating replicability and stability through bootstrapping
 ```{r}
-bootModels = latrendBoot(kml, data=latrendData, samples=10)
+bootModels <- latrendBoot(kml, data = latrendData, samples = 10)
 bootModels
 ```
 
 ```{r}
-bootMetrics = metric(bootModels, name = c("BIC", "WMAE", "APPA"))
+bootMetrics <- metric(bootModels, name = c("BIC", "WMAE", "APPA"))
 bootMetrics
 ```
 
 
 # Ten-fold cross validation
 ```{r}
-trainModels = latrendCV(kml, data=latrendData, folds=10, seed=1)
+trainModels <- latrendCV(kml, data = latrendData, folds = 10, seed = 1)
 trainModels
 ```
 
 
 ## Manual cross validation
 ```{r}
-dataFolds = createTrainDataFolds(latrendData, folds=10)
-foldModels = latrendBatch(kml, data=dataFolds)
+dataFolds <- createTrainDataFolds(latrendData, folds = 10)
+foldModels <- latrendBatch(kml, data = dataFolds)
 foldModels
 ```
 
 ```{r}
-testDataFolds = createTestDataFolds(latrendData, dataFolds)
+testDataFolds <- createTestDataFolds(latrendData, dataFolds)
 ```
 
