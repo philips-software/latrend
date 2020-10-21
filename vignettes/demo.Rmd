@@ -20,25 +20,27 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-update_geom_defaults('line', list(size = .01))
-update_geom_defaults('point', list(size = .5))
 ```
 
 ```{r, results='hide',message=FALSE,warning=FALSE}
 library(latrend)
 library(ggplot2)
 library(magrittr)
-options(latrend.verbose=TRUE)
+options(latrend.verbose = TRUE)
 ```
 
+We will demonstrate how the exploration for the most appropriate method and model can be done in a more systematic way. This vignette is a follow-up on the demonstration vignette. As such, the data exploration step is skipped.
+
 # Loading the data
+We explore the `latrendData` dataset. This is a synthetic dataset for which the reference group of each trajectory is available, indicated by the `Class` column. However, in this vignette we will assume that the group specification and number of groups are unknown.
 ```{r}
 data(latrendData)
 head(latrendData)
 ```
 
+Specify the package options to adopt the respective column names of the loaded dataset, for convenience.
 ```{r}
-options(latrend.id='Id', latrend.time='Time')
+options(latrend.id = "Id", latrend.time = "Time")
 ```
 
 ```{r}
@@ -47,32 +49,30 @@ plotTrajectories(latrendData, response = "Y")
 
 # KML clustering
 ```{r}
-method = lcMethodKML(response = "Y")
-kmlModel = latrend(method, latrendData)
+method <- lcMethodKML(response = "Y")
+kmlModel <- latrend(method, latrendData)
 ```
 
 ```{r}
-metric(kmlModel, c('logLik', 'BIC', 'WRSS', 'WMAE'))
+metric(kmlModel, c("logLik", "BIC", "WRSS", "WMAE"))
 ```
-
+Specify KML models for a varying number of clusters.
 ```{r}
-methods = lcMethods(lcMethodKML(response="Y", nRuns=10), nClusters=1:9)
+methods <- lcMethods(lcMethodKML(response = "Y", nRuns = 5), nClusters = 1:8)
 
-kmlModels = latrendBatch(methods, data = latrendData, verbose = FALSE)
+kmlModels <- latrendBatch(methods, data = latrendData, verbose = FALSE)
 
 kmlModels
 ```
 
 # Identifying the number of clusters
 ```{r warning=FALSE, fig.width=10, fig.height=5, out.width='100%'}
-p = plotMetric(kmlModels, c('logLik', 'BIC', 'WMAE')) +
-  scale_x_continuous(breaks=seq(1, 12, by=2))
-print(p)
+plotMetric(kmlModels, c("logLik", "BIC", "WMAE"))
 ```
 
 # Assessing the preferred model
 ```{r}
-kmlModel4 = subset(kmlModels, nClusters == 4, drop=TRUE)
+kmlModel4 <- subset(kmlModels, nClusters == 4, drop = TRUE)
 
 kmlModel4
 ```
@@ -82,41 +82,27 @@ plot(kmlModel4)
 
 ## Model adequacy
 ```{r}
-qqPlot(kmlModel4, detrend=FALSE)
+qqPlot(kmlModel4, detrend = FALSE)
 ```
 
 ```{r}
-qqPlot(kmlModel4, byCluster=TRUE, detrend=TRUE)
-```
-
-
-```{r}
-bestKmlModel = subset(kmlModels, nClusters == 7, drop=TRUE)
-bestKmlModel
-
-plot(bestKmlModel)
-```
-
-```{r}
-qqPlot(bestKmlModel, detrend=TRUE)
+qqPlot(kmlModel4, byCluster = TRUE, detrend = TRUE)
 ```
 
 # Clustering using group-based trajectory modeling
 ```{r}
-gmmRef = lcMethodLcmmGMM(Y ~ Time * CLUSTER + (1 | Patient), idiag=TRUE, maxIter=20, convB=1e-2, convL=1e-2, convG=1e-2)
-gmmMethods = lcMethods(gmmRef, nClusters=1:6)
+gmmRef <- lcMethodLcmmGMM(Y ~ Time * CLUSTER + (1 | Patient), idiag = TRUE, maxIter = 20, convB = 1e-2, convL = 1e-2, convG = 1e-2)
+gmmMethods <- lcMethods(gmmRef, nClusters = 1:6)
 
-gmmModels = latrendBatch(gmmMethods, latrendData, verbose=FALSE)
+gmmModels <- latrendBatch(gmmMethods, latrendData, verbose = FALSE)
 ```
 
 ```{r warning=FALSE, fig.width=10, fig.height=5, out.width='100%'}
-p = plotMetric(gmmModels, c('logLik', 'BIC', 'WMAE')) +
-  scale_x_continuous(breaks=seq(1, 12, by=2))
-print(p)
+plotMetric(gmmModels, c("logLik", "BIC", "WMAE"))
 ```
 
 ```{r}
-bestGmmModel = subset(gmmModels, nClusters == 3, drop=TRUE)
+bestGmmModel <- subset(gmmModels, nClusters == 3, drop=TRUE)
 qqPlot(bestGmmModel, detrend=TRUE)
 ```
 
