@@ -11,10 +11,9 @@ A framework for clustering longitudinal datasets with univariate trajectories us
 \section{Getting started}{
 
 \itemize{
-\item See \code{vignette("demo", package="latrend")} for an introduction to conducting a longitudinal cluster analysis on a example case study.
-\item See \code{vignette("customModels", package="latrend")} for examples on constructing your own cluster models.
-\item See \code{vignette("modelSelection", package="latrend")}
-\item See \code{vignette("modelValidation", package="latrend")}
+\item See \code{vignette("demo", package = "latrend")} for an introduction to conducting a longitudinal cluster analysis on a example case study.
+\item See \code{vignette("custom", package = "latrend")} for examples on constructing your own cluster models.
+\item See \code{vignette("validation", package = "latrend")} for examples on applying internal cluster validation.
 }
 }
 
