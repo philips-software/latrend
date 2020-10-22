@@ -31,7 +31,9 @@ m[["nClusters", eval=FALSE]] # k
 }
 \seealso{
 Other lcMethod functions: 
+\code{\link{as.data.frame.lcMethods}()},
 \code{\link{as.data.frame.lcMethod}()},
+\code{\link{as.lcMethods}()},
 \code{\link{as.list.lcMethod}()},
 \code{\link{evaluate.lcMethod}()},
 \code{\link{formula.lcMethod}()},

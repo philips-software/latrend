@@ -1,4 +1,5 @@
 #' @include model.R
+
 setOldClass('lcModels')
 
 #' @export

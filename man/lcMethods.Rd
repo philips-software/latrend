@@ -24,9 +24,6 @@ A \code{list} of \code{lcMethod} objects.
 \description{
 Generates a list of \code{lcMethod} objects for all combinations of the provided argument values.
 }
-\details{
-@include method.R
-}
 \examples{
 data(latrendData)
 baseMethod <- lcMethodKML("Y", id = "Id", time = "Time")

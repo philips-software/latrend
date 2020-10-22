@@ -41,7 +41,9 @@ m5 <- update(m, nClusters = k, .eval = TRUE) # nClusters: 2
 \seealso{
 Other lcMethod functions: 
 \code{\link{[[,lcMethod-method}},
+\code{\link{as.data.frame.lcMethods}()},
 \code{\link{as.data.frame.lcMethod}()},
+\code{\link{as.lcMethods}()},
 \code{\link{as.list.lcMethod}()},
 \code{\link{evaluate.lcMethod}()},
 \code{\link{formula.lcMethod}()},

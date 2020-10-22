@@ -1,6 +1,6 @@
 Package: latrend
 Type: Package
-Version: 0.9.9
+Version: 0.9.10
 Date: 2020-10-14
 Title: Framework for clustering longitudinal data
 Description: A framework for clustering longitudinal datasets with univariate trajectories using commonly applied methods. Facilitates reproducible and transparent cluster analyses with internal and external validation, and simulation studies.

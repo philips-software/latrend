@@ -1,4 +1,36 @@
-#'  @include method.R
+#' @include method.R
+
+setOldClass('lcMethods')
+
+#' @export
+#' @title Convert a list of lcMethod objects to a data.frame
+#' @description Converts a list of `lcMethod` objects to a `data.frame`.
+#' @inheritParams as.data.frame.lcMethod
+#' @param x the `lcMethods` or `list` to be coerced to a `data.frame`.
+#' @param ... Additional arguments.
+#' @return A `data.frame` with each row containing the argument values of a method object.
+#' @family lcMethod functions
+as.data.frame.lcMethods = function(x, ..., eval = FALSE, nullValue = NA, envir = NULL) {
+  df = lapply(x, as.data.frame) %>%
+    rbindlist(fill = TRUE) %>%
+    as.data.frame()
+
+  cbind(.class = vapply(x, class, FUN.VALUE = ''), df)
+}
+
+#' @export
+#' @title Convert a list of lcMethod objects to a lcMethods list
+#' @param x A `list` of `lcMethod` objects.
+#' @return A `lcMethods` object.
+#' @family lcMethod functions
+as.lcMethods = function(x) {
+  if (!is.list(x)) {
+    x = list(x)
+  }
+
+  class(x) = c('lcMethods', 'list')
+  x
+}
 
 #' @export
 #' @title Generate a list of lcMethod objects
@@ -62,12 +94,14 @@ lcMethods = function(method, ..., envir = NULL) {
 
   # generate method list
   if (nrow(combIdx) == 0) {
-    list(method)
+    methodList = list(method)
   }
   else {
-    apply(combIdx, 1, function(idx) {
+    methodList = apply(combIdx, 1, function(idx) {
       methodArgs = mapply('[[', allArgs, idx)
       do.call(update, c(object = method, methodArgs, envir = envir))
     })
   }
+
+  as.lcMethods(methodList)
 }
