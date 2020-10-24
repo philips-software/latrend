@@ -5,9 +5,9 @@ setClass('lcModelLcmmGMM', contains = 'lcModel')
 #' @rdname interface-lcmm
 #' @inheritParams fitted.lcModel
 fitted.lcModelLcmmGMM = function(object, ..., clusters = trajectoryAssignments(object)) {
-  predNames = paste0('pred_m', 1:nClusters(object))
+  predNames = paste0('pred_ss', 1:nClusters(object))
   predMat = object@model$pred[predNames] %>%
-    as.matrix %>%
+    as.matrix() %>%
     set_colnames(clusterNames(object))
   transformFitted(predMat, model = object, clusters = clusters)
 }
@@ -72,13 +72,13 @@ logLik.lcModelLcmmGMM = function(object, ...) {
 #' @export
 #' @rdname interface-lcmm
 sigma.lcModelLcmmGMM = function(object, ...) {
-  coef(object)[grepl('std err', names(coef(object@model)))] %>% unname
+  coef(object)['stderr'] %>% unname()
 }
 
 #' @rdname interface-lcmm
 setMethod('postprob', signature('lcModelLcmmGMM'), function(object, ...) {
   pp = object@model$pprob %>%
-    as.matrix %>%
+    as.matrix() %>%
     .[, c(-1, -2), drop = FALSE]
   colnames(pp) = clusterNames(object)
   return(pp)

@@ -48,7 +48,7 @@ lcMethodLcmmGBTM = function(formula,
   lcMethod.call(
     'lcMethodLcmmGBTM',
     call = match.call.defaults(),
-    defaults = lcmm::lcmm,
+    defaults = lcmm::hlme,
     excludeArgs = c(
       'data',
       'fixed',
