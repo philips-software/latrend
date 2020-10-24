@@ -33,7 +33,7 @@ Imports:
     stats (>= 3.6.0),
     methods (>= 3.6.0),
     R.utils (>= 2.9.0),
-    assertthat (>= 0.2.0),
+    assertthat (>= 0.2.1),
     foreach (>= 1.4.7),
     data.table (>= 1.12.0),
     longitudinalData (>= 2.4.1),

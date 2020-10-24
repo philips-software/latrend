@@ -2,7 +2,7 @@ is.named = function(x) {
   !is.null(names(x))
 }
 
-attr(is.named, 'fail') = function(call, env) {
+on_failure(is.named) = function(call, env) {
   paste0(deparse(call$x), ' is not named')
 }
 
@@ -10,7 +10,7 @@ is.newdata = function(x) {
   is.null(x) || is.list(x) && is.named(x)
 }
 
-attr(is.newdata, 'fail') = function(call, env) {
+on_failure(is.newdata) = function(call, env) {
   paste0(deparse(call$x), ' is not valid newdata (list and named, or null)')
 }
 
@@ -20,7 +20,7 @@ has_same_ids = function(m1, m2) {
   all.equal(ids(m1), ids(m2)) %>% isTRUE()
 }
 
-attr(has_same_ids, 'fail') = function(call, env) {
+on_failure(has_same_ids) = function(call, env) {
   m1 = eval(call$m1, env)
   m2 = eval(call$m2, env)
   paste0('models were not trained on the same ids, or in a different order: ',
@@ -33,7 +33,7 @@ has_same_modelData = function(m1, m2) {
     isTRUE()
 }
 
-attr(has_same_modelData, 'fail') = function(call, env) {
+on_failure(has_same_modelData) = function(call, env) {
   m1 = eval(call$m1, env)
   m2 = eval(call$m2, env)
   paste0('models were not trained on the same dataset: ',
@@ -57,7 +57,7 @@ has_lcMethod_args = function(object, which) {
   all(has_name(object, argNames))
 }
 
-attr(has_lcMethod_args, 'fail') = function(call, env) {
+on_failure(has_lcMethod_args) = function(call, env) {
   object = eval(call$object, env)
   argNames = setdiff(eval(call$which, env), '...')
   missingNames = setdiff(argNames, names(object))
@@ -89,7 +89,7 @@ is_valid_postprob = function(pp, model) {
     ))
 }
 
-attr(is_valid_postprob, 'fail') = function(call, env) {
+on_failure(is_valid_postprob) = function(call, env) {
   pp = eval(call$pp, env)
   model = eval(call$model, env)
   validate_that(is.matrix(pp) &&
