@@ -4,8 +4,8 @@ author: "Niek Den Teuling"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
-    toc: true # table of content true
-    toc_depth : 2  
+    toc: true
+    toc_depth: 2
 vignette: >
   %\VignetteIndexEntry{Demonstration of latrend package}
   %\VignetteEngine{knitr::rmarkdown}
@@ -18,91 +18,224 @@ library(ggplot2)
 knitr::opts_chunk$set(
   cache = TRUE,
   collapse = TRUE,
+  fig.width = 7,
+  fig.align = "center",
+  fig.topcaption = TRUE,
   comment = "#>"
 )
 ```
 
+This vignette describes the core functionality of the package by identifying common trends in the longitudinal dataset that is included with the package. We begin by loading the required package and the `latrendData` dataset.
+
 ```{r, results='hide',message=FALSE,warning=FALSE}
 library(latrend)
-library(ggplot2)
-library(magrittr)
-options(latrend.verbose = TRUE)
+data(latrendData)
 ```
 
-We will demonstrate how the exploration for the most appropriate method and model can be done in a more systematic way. This vignette is a follow-up on the demonstration vignette. As such, the data exploration step is skipped.
+# Initial data exploration
+The `latrendData` is a synthetic dataset for which the reference group of each trajectory is available, as indicated by the `Class` column. We will use this column at the end of this vignette to validate the identified model.
 
-# Loading the data
-We explore the `latrendData` dataset. This is a synthetic dataset for which the reference group of each trajectory is available, indicated by the `Class` column. However, in this vignette we will assume that the group specification and number of groups are unknown.
 ```{r}
-data(latrendData)
 head(latrendData)
 ```
 
-Specify the package options to adopt the respective column names of the loaded dataset, for convenience.
+Many of the functions of the package require the specification of the trajectory identifier variable (named `Id`) and the time variable (named `Time`). For convenience, we specify these variables as package options.
 ```{r}
 options(latrend.id = "Id", latrend.time = "Time")
 ```
 
-```{r}
+Prior to attempting to model the data, it is worthwhile to visually inspect it.
+```{r, fig.asp = .6, fig.cap='Visualizing the trajectories of the `latrend` dataset.'}
 plotTrajectories(latrendData, response = "Y")
 ```
 
-# KML clustering
+The presence of clusters is not apparent from the plot. With any longitudinal analysis, one should first consider whether clustering brings any benefit to the representation of heterogeneity of the data over a single common trend representation, or a multilevel model. In this demonstration, we omit this step under the prior knowledge that the data was generated via distinct mechanisms.
+
+# Non-parametric trajectory clustering
+Assuming the appropriate (cluster) trajectory model is not known in advance, non-parametric longitudinal cluster models can provide a suitable starting point. 
+
+As an example, we apply longitudinal $k$-means (KML). First, we need to define the method. At the very least we need to indicate the response variable the method should operate on. Secondly, we should indicate how many clusters we expect. We do not need to define the `id` and `time` arguments as we have set these as package options.
 ```{r}
-method <- lcMethodKML(response = "Y")
-kmlModel <- latrend(method, latrendData)
+kmlMethod <- lcMethodKML(response = "Y", nClusters = 2)
+
+kmlMethod
 ```
 
-```{r}
-metric(kmlModel, c("logLik", "BIC", "WRSS", "WMAE"))
-```
-Specify KML models for a varying number of clusters.
-```{r}
-methods <- lcMethods(lcMethodKML(response = "Y", nRuns = 5), nClusters = 1:8)
+As seen in the output from the `lcMethodKML` object, the KML method is defined by additional arguments. These are specific to the `kml` package.
 
-kmlModels <- latrendBatch(methods, data = latrendData, verbose = FALSE)
+The KML model is estimated on the dataset via the `latrend` function.
+
+```{r}
+kmlModel <- latrend(kmlMethod, data = latrendData)
+```
+Now that we have fitted the KML model with 2 clusters, we can print a summary by calling:
+
+```{r}
+kmlModel
+```
+## Identifying the number of clusters
+As we do not know the best number of clusters needed to represent the data, we should consider fitting the KML model for a range of clusters. We can then select the best representation by comparing the solutions by one or more cluster metrics.
+
+We can specify a range of `lcMethodKML` methods based on a prototype method using the `lcMethods` function. This method outputs a list of `lcMethod` objects. A structured summary is obtained by calling `as.data.frame`.
+```{r}
+kmlMethods <- lcMethods(kmlMethod, nClusters = 1:8)
+
+as.data.frame(kmlMethods)
+```
+
+The list of `lcMethod` objects can be fitted using the `latrendBatch` function, returning a list of `lcModel` objects.
+
+```{r}
+kmlModels <- latrendBatch(kmlMethods, data = latrendData, verbose = FALSE)
 
 kmlModels
 ```
 
-# Identifying the number of clusters
-```{r warning=FALSE, fig.width=10, fig.height=5, out.width='100%'}
+We can compare each of the solutions via one or more cluster metrics. Considering the consistent improvements achieved by KML for an increasing number of clusters, identifying the best solution by minimizing a metric would lead to an overestimation. Instead, we perform the selection via a manual elbow method, using the `plotMetric` function.
+```{r warning=FALSE, fig.cap = 'Elbow plots of three relevant cluster metrics across the fitted models.'}
 plotMetric(kmlModels, c("logLik", "BIC", "WMAE"))
 ```
 
-# Assessing the preferred model
+## Investigating the preferred model
+We have selected the 4-cluster model as the preferred representation. We will now inspect this solution in more detail. Before we can start, we first obtain the fitted `lcModel` object from the list of fitted models.
 ```{r}
 kmlModel4 <- subset(kmlModels, nClusters == 4, drop = TRUE)
 
 kmlModel4
 ```
-```{r}
+The `plot` function shows the estimated cluster trajectories of the model.
+```{r, fig.cap = 'Cluster trajectories for KML model with 4 clusters.'}
 plot(kmlModel4)
+```
+We can get a better sense of the representation of the cluster trajectories when plotted against the trajectories that have been assigned to the respective cluster.
+```{r, fig.asp = .8, fig.cap = 'Cluster trajectories for KML model with 4 clusters, along with the assigned trajectories.'}
+plot(kmlModel4, trajectories = TRUE)
 ```
 
 ## Model adequacy
+The list of currently supported internal model metrics can be obtained by calling the `getInternalMetricNames` function.
 ```{r}
-qqPlot(kmlModel4, detrend = FALSE)
+getInternalMetricNames()
 ```
-
+As an example, we will compute the APPA (a measure of cluster separation), and the WRSS and WMAE metrics (measures of model error).
 ```{r}
+metric(kmlModel, c("APPA", "WRSS", "WMAE"))
+```
+The quantile-quantile (QQ) plot can be used to assess the model for structural deviations.
+```{r, fig.width = 5, fig.cap = 'QQ-plot of the selected KML model.'}
+qqPlot(kmlModel4)
+```
+Overall, the unexplained errors closely follow a normal distribution. In situations where structural deviations from the expected distribution are apparent, it may be fruitful to investigate the QQ plot on a per-cluster basis.
+```{r, fig.asp = .8, fig.cap = 'Cluster-specific detrended QQ-plot for the selected KML model.'}
 qqPlot(kmlModel4, byCluster = TRUE, detrend = TRUE)
 ```
 
-# Clustering using group-based trajectory modeling
+# Parametric trajectory clustering
+## Group-based trajectory modeling
+The KML analysis has provided us with clues on an appropriate model for the cluster trajectories. We can use these insights to define a parametric group-based trajectory model (GBTM) with cluster trajectories represented by polynomials of order 2. We will use the GBTM implementation available from the `lcmm` package, using a B-spline trajectory of degree 3 from the `splines` package.
+
 ```{r}
-gmmRef <- lcMethodLcmmGMM(Y ~ Time * CLUSTER + (1 | Patient), idiag = TRUE, maxIter = 20, convB = 1e-2, convL = 1e-2, convG = 1e-2)
-gmmMethods <- lcMethods(gmmRef, nClusters = 1:6)
+library(splines)
+gbtmMethod <- lcMethodLcmmGBTM(Y ~ bs(Time) * CLUSTER + (1 | Id))
+
+gbtmMethod
+```
+
+We fit the GBTM for 1 to 5 clusters.
+```{r}
+gbtmMethods <- lcMethods(gbtmMethod, nClusters = 1:5)
+
+gbtmModels <- latrendBatch(gbtmMethods, data = latrendData, verbose = FALSE)
+```
+
+```{r warning=FALSE, fig.cap = 'Three cluster metrics for each of the GBTMs.'}
+plotMetric(gbtmModels, c("logLik", "BIC", "WMAE"))
+```
+All metrics clearly point to the 3-cluster solution.
+
+```{r}
+bestGbtmModel <- subset(gbtmModels, nClusters == 3, drop=TRUE)
+plot(bestGbtmModel, trajectories = TRUE)
+```
+
+## Growth mixture modeling
+We have identified 3 apparent clusters via GBTM. However, we may wish to obtain a model that betters explains the within-cluster heterogeneity (as seen in the cluster trajectories plot above). We apply a growth mixture model (GMM) using trajectories represented by a second-order polynomial.
+
+```{r}
+gmmMethod <- lcMethodLcmmGMM(Y ~ poly(Time, 2, raw = TRUE) * CLUSTER + (1 | Id), idiag = TRUE)
+
+gmmMethod
+```
+We fit the GMM for 1 to 5 clusters.
+```{r}
+gmmMethods <- lcMethods(gmmMethod, nClusters = 1:5)
 
 gmmModels <- latrendBatch(gmmMethods, latrendData, verbose = FALSE)
 ```
 
-```{r warning=FALSE, fig.width=10, fig.height=5, out.width='100%'}
+```{r warning=FALSE, fig.cap = 'Three cluster metrics for each of the GMMs.'}
 plotMetric(gmmModels, c("logLik", "BIC", "WMAE"))
 ```
-
+Similar to the GBTM analysis, the metrics clearly point to the 3-cluster solution.
 ```{r}
 bestGmmModel <- subset(gmmModels, nClusters == 3, drop=TRUE)
-qqPlot(bestGmmModel, detrend=TRUE)
 ```
 
+```{r, fig.cap = 'Cluster trajectories of the selected GMM, including the assigned trajectories.'}
+plot(bestGmmModel, trajectories = TRUE)
+```
+```{r, fig.width = 5, fig.cap = 'Detrended QQ plot for the best GMM.'}
+qqPlot(bestGmmModel, detrend = TRUE)
+```
+As can be seen by the scale of the y-axis of the QQ plot, the deviations from the expected normal distributions are negligibly small.
+
+## Comparing models
+Both the GBTM and GMM analysis indicated the data was best represented using 3 clusters. We are interested in identifying the best representation for the data. After all, despite the matching number of clusters, there may be differences between the models in terms of trajectory assignments are shape of the cluster trajectories.
+
+Firstly, we compare the fit to the data by comparing the BIC, which indicates that the GMM model is marginally better than the GBTM model.
+```{r}
+BIC(bestGbtmModel, bestGmmModel)
+```
+
+Secondly, we compare the model fit errors, showing an identical error between models.
+```{r}
+metric(list(bestGbtmModel, bestGmmModel), 'WMAE')
+```
+Thirdly, we can compare the weighted minimum MAE between the cluster trajectories of the models, as a measure of agreement in cluster trajectory shapes.
+```{r}
+externalMetric(bestGbtmModel, bestGmmModel, 'WMMAE')
+```
+Lastly, we evaluate the agreement in trajectory assignments to the clusters using the adjusted Rand index (ARI). This intuitive index considers the co-assignments of trajectories, and corrects for agreements between the partitionings by random chance. A score of zero indicates a match no better than chance, whereas a score of 1 indicates a perfect agreement.
+
+```{r}
+externalMetric(bestGbtmModel, bestGmmModel, 'adjustedRand')
+```
+The ARI of 1.0 demonstrates that the cluster assignments of the models are identical.
+
+# Comparison to the reference
+Since we have established a preferred clustered representation of the data heterogeneity, we can now compare the resulting cluster assignments to the ground truth from which the `latrendData` data was generated.
+
+Using the reference assignments, we can also plot a non-parametric estimate of the cluster trajectories. Note how it looks similar to the cluster trajectories found by our model.
+```{r, fig.width = 5, fig.cap = 'Non-parametric estimates of the cluster trajectories based on the reference assignments.'}
+plotClusterTrajectories(latrendData, response = "Y", cluster = "Class")
+```
+In order to compare the reference assignments to the trajectory assignments generated by our model, we can create a `lcModel` object based on the reference assignments using the `lcModelPartition` function.
+
+```{r}
+refTrajAssigns <- aggregate(Class ~ Id, data = latrendData, FUN = first)
+refModel <- lcModelPartition(data = latrendData, response = "Y", trajectoryAssignments = refTrajAssigns$Class)
+refModel
+```
+```{r, fig.cap = 'Cluster trajectories of the reference model.'}
+plot(refModel, trajectories = TRUE)
+```
+By constructing a reference model, we can make use of the standardized way in which `lcModel` objects can be compared. A list of supported comparison metrics can be obtained via the `getExternalMetricNames` function.
+```{r}
+getExternalMetricNames()
+```
+
+Lastly, we compare the agreement in trajectory assignments via the adjusted Rand index.
+```{r}
+externalMetric(bestGmmModel, refModel, "adjustedRand")
+```
+With a score of `externalMetric(bestGmmModel, refModel, "adjustedRand")`, we have a near-perfect match. This result is expected, as the dataset was generated using a growth mixture model.
