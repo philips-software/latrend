@@ -4,7 +4,7 @@ author: "Niek Den Teuling"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
-    toc: true # table of content true
+    toc: true
     toc_depth : 2  
 vignette: >
   %\VignetteIndexEntry{Validating cluster models}
@@ -15,22 +15,24 @@ vignette: >
 ```{r setup, include = FALSE}
 library(latrend)
 library(ggplot2)
+set.seed(1)
 knitr::opts_chunk$set(
   cache = TRUE,
   collapse = TRUE,
+  fig.width = 7,
+  fig.align = "center",
+  fig.topcaption = TRUE,
   comment = "#>"
 )
 options(latrend.verbose = FALSE)
 ```
 
+In this vignette we demonstrate different ways in which longitudinal cluster models can be internally validated. 
 ```{r, results='hide',message=FALSE,warning=FALSE}
 library(latrend)
-library(ggplot2)
-library(magrittr)
-set.seed(1)
 ```
 
-# Loading the data
+# Demonstration
 We explore the `latrendData` dataset. This is a synthetic dataset for which the reference group of each trajectory is available, indicated by the `Class` column. However, in this vignette we will assume that the true group specification and number of groups are unknown. Instead, we have a candidate model which we wish to validate internally.
 ```{r}
 data(latrendData)
@@ -42,18 +44,22 @@ Specify the package options to adopt the respective column names of the loaded d
 options(latrend.id = "Id", latrend.time = "Time")
 ```
 
-# Candidate model
+## The candidate model
+We consider a KML model with 3 clusters to be our candidate model that we will validate. We defined the method with a reduced number of repeated random starts (as indicated by the `nbRedrawing` argument) in order to reduce the computation time needed in the repeated evaluations below. This is only done for demonstration purposes.
 ```{r}
 kml <- lcMethodKML("Y", nClusters = 3, nbRedrawing = 5)
 kml
 ```
 
 # Evaluate stability of the estimation through repeated estimation
+The purpose of model validation is essentially to identify that the model is robust and generalizes well to unseen data. A necessary condition for these aspects is that the model is reproducible on the original training data. This evaluation helps to ensure that the model estimation procedure is robust, i.e., does not yield spurious model solutions.
+
+We can fit a method repeatedly using the `latrendRep` data.
 ```{r}
 repModels <- latrendRep(kml, data = latrendData, .rep=10)
 print(repModels, excludeShared = FALSE)
 ```
-
+A convenient way to assess the stability across repeated runs is to compare the models on one or more internal model metrics. Similar solutions should yield similar metric scores.
 ```{r}
 repSelfMetrics <- metric(repModels, name = c("BIC", "WMAE", "APPA"))
 head(repSelfMetrics)
@@ -62,22 +68,23 @@ head(repSelfMetrics)
 ```{r}
 repSelfMetrics[, "WMAE"] %>% summary()
 ```
-
-```{r}
-repSelfMetrics[, "APPA"] %>% summary()
-```
+As can be seen from the numbers, the models are (practically) identical in terms of model fit, measurement error, and cluster separation.
 
 ## Comparison between fits
-Select the model with the best fit, compare the other fits against this model.
+Alternatively, we can select the model with the best fit, and compare it against the other fitted models.
 ```{r}
 bestRepModel <- min(repModels, "BIC")
 externalMetric(repModels, bestRepModel, name = "adjustedRand")
 ```
+As indicated by the adjusted Rand index, the methods are highly similar (a score of 1 indicates a perfect agreement). Note however that there are some discrepancies among the repeated runs on one or two trajectories.
 
+Similarly, we can compute the pairwise adjusted Rand indices, resulting in a similarity matrix
 ```{r}
-distMat <- externalMetric(repModels, name = "adjustedRand")
-distMat
-summary(distMat)
+simMat <- externalMetric(repModels, name = "adjustedRand")
+round(simMat, 2)
+```
+```{r}
+summary(simMat)
 ```
 
 
