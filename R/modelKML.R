@@ -33,10 +33,23 @@ setMethod('converged', signature('lcModelKML'), function(object) {
 #' @rdname interface-kml
 logLik.lcModelKML = function(object, ...) {
   # A negated version of BIC is precomputed by kml package so let's use that
-  bic = -getKMLPartition(object)@criterionValues['BIC'] %>% unname()
+  bic = -1 * getKMLPartition(object)@criterionValues['BIC'] %>% unname()
   N = nIds(object)
   df = nClusters(object) * length(time(object)) + 1
-  ll = .5 * (bic - df * log(N))
+
+  if (is.na(bic) && nClusters(object) == 1) {
+    resp = responseVariable(object)
+    # fix for kml not computing a BIC for k = 1
+    alldata = cbind(model.data(object), .Mean = fitted(object)) %>%
+      as.data.table()
+    sigma = alldata[, sd(get(resp) - .Mean, na.rm = TRUE) * sqrt((.N - 1) / .N)]
+    ll = dnorm(alldata[[resp]], alldata$.Mean, sigma, log = TRUE) %>% sum()
+  }
+  else {
+    # recompute ll from the provided BIC
+    ll = -.5 * (bic - df * log(N))
+  }
+
   attr(ll, 'nobs') = N
   attr(ll, 'df') = df
   class(ll) = 'logLik'

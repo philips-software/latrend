@@ -14,6 +14,14 @@ test_that('default', {
   expect_valid_lcModel(model)
 })
 
+test_that('BIC', {
+  methods = lcMethods(lcMethodTestKML(), nClusters=c(1, 5))
+  models = latrendBatch(methods, testLongData)
+
+  expect_is(BIC(models[[1]]), 'numeric')
+  expect_is(BIC(models[[2]]), 'numeric')
+})
+
 test_that('nclusters', {
   methods = lcMethods(lcMethodTestKML(), nClusters=c(1, 5))
   models = latrendBatch(methods, testLongData)
