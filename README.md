@@ -1,10 +1,10 @@
 # latrend
-The `latrend` package facilitates the clustering of longitudinal datasets using various methods in a standardized way.
+The `latrend` package provides a framework for clustering longitudinal datasets in a standardized way. It provides interfaces to various R packages for longitudinal clustering.
 
 # Features
 * **Unified cluster analysis**, independent of the underlying algorithms used. Enabling users to compare the performance of various longitudinal cluster methods on the case study at hand.
 * Supports many different methods for longitudinal clustering out of the box (see the list of supported packages below).
-* Framework of extensible `S4` methods, enabling **rapid prototyping** of new cluster methods or model specifications.
+* The framework consists of extensible `S4` methods based on an abstract model class, enabling **rapid prototyping** of new cluster methods or model specifications.
 * Standard **plotting** tools for model evaluation across methods (e.g., trajectories, cluster trajectories, model fit, metrics)
 * Support for many **cluster metrics** through the packages [clusterCrit](https://CRAN.R-project.org/package=clusterCrit), [mclustcomp](https://CRAN.R-project.org/package=mclustcomp), and [igraph](https://CRAN.R-project.org/package=igraph).
 * The structured and unified analysis approach enables **simulation studies** for comparing methods.
