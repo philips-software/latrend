@@ -21,20 +21,26 @@ lcModelWeightedPartition = function(data,
     has_name(data, time),
     has_name(data, id)
   )
+
   assert_that(
     is.matrix(weights),
     all(is.finite(weights)),
     all(weights >= 0),
     nrow(weights) == uniqueN(data[[id]])
   )
+
   if (is.null(clusterNames)) {
     clusterNames = make.clusterNames(ncol(weights))
-  } else if (is.function(clusterNames)) {
+  }
+  else if (is.function(clusterNames)) {
     clusterNames = clusterNames(ncol(weights))
   }
-  assert_that(is.character(clusterNames),
-              length(clusterNames) == ncol(weights))
-  assert_that(is.function(center))
+
+  assert_that(
+    is.character(clusterNames),
+    length(clusterNames) == ncol(weights),
+    is.function(center)
+  )
 
   # normalize weights
   pp = apply(weights, 2, '/', rowSums(weights))
@@ -52,6 +58,7 @@ lcModelWeightedPartition = function(data,
   new(
     'lcModelWeightedPartition',
     call = mc,
+    data = data,
     center = center,
     clusterTrajectories = clusTrajs,
     postprob = pp,

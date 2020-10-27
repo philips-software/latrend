@@ -34,13 +34,12 @@ lcModelPartition = function(data,
     is.data.frame(data),
     has_name(data, response),
     has_name(data, time),
-    has_name(data, id)
-  )
-  assert_that(
+    has_name(data, id),
     is.character(clusterNames) || is.null(clusterNames),
-    length(clusterNames) %in% c(0, nClusters)
+    length(clusterNames) %in% c(0, nClusters),
+    is.function(center)
   )
-  assert_that(is.function(center))
+
   assert_that(
     all(vapply(
       trajectoryAssignments, is.count, FUN.VALUE = TRUE
@@ -49,9 +48,9 @@ lcModelPartition = function(data,
   )
 
   if (is.factor(trajectoryAssignments)) {
-    assert_that(is.na(nClusters) ||
-                  nlevels(trajectoryAssignments) == nClusters)
+    assert_that(is.na(nClusters) || nlevels(trajectoryAssignments) == nClusters)
   }
+
   intAssignments = as.integer(trajectoryAssignments)
   assert_that(is.na(nClusters) || max(intAssignments) <= nClusters)
 
@@ -87,6 +86,7 @@ lcModelPartition = function(data,
   model = new(
     'lcModelPartition',
     call = mc,
+    data = data,
     center = center,
     clusterTrajectories = clusTrajs,
     postprob = pp,
