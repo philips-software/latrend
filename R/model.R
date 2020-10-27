@@ -746,6 +746,7 @@ model.data.lcModel = function(object, ...) {
     data = eval(getCall(object)$data, envir = environment(object))
     assert_that(!is.null(data),
                 msg = sprintf('could not find "%s" in the model environment', deparse(data)))
+    assert_that(!is.function(data), msg = sprintf('The data object was not found in the model environment. The data object currently evaluates to a function, indicating the original training data is not loaded.'))
 
     modelData = transformLatrendData(
       data,
