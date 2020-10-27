@@ -587,22 +587,22 @@ createTestDataFolds = function(data, trainDataList, ...) {
 #' @inheritParams lcMethodKML
 #' @return A `data.frame` with an id, time, and measurement columns.
 setGeneric('transformLatrendData', function(object, id, time, response, envir) {
-  data = standardGeneric('transformLatrendData')
-  assert_that(is.data.frame(data))
+  data <- standardGeneric('transformLatrendData')
+
+  assert_that(
+    is.data.frame(data),
+    has_name(data, id),
+    has_name(data, time),
+    is.numeric(data[[id]]) || is.factor(data[[id]]) || is.character(data[[id]]),
+    noNA(data[[id]]),
+    noNA(data[[time]])
+  )
+
   return(data)
 })
 
 #' @rdname transformLatrendData
 setMethod('transformLatrendData', signature('data.frame'), function(object, id, time, response, envir) {
-  assert_that(
-    is.data.frame(object),
-    has_name(object, id),
-    has_name(object, time),
-    is.numeric(object[[id]]) ||
-      is.factor(object[[id]]) || is.character(object[[id]]),
-    noNA(object[[id]]),
-    noNA(object[[time]])
-  )
   object
 })
 
