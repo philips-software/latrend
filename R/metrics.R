@@ -89,7 +89,7 @@ getExternalMetricDefinition = function(name) {
 }
 
 getMetricDef = function(name, envir) {
-  if (exists(name, envir = envir)) {
+  if (exists(name, envir = envir, inherits = FALSE)) {
     get(name, envir = envir)
   } else {
     NULL
@@ -450,8 +450,8 @@ extMetricsEnv$Wallace2 = function(m1, m2) {
 }
 
 wmsse = function(m1, m2, newdata = union(time(m1), time(m2))) {
-  resp1 = getResponse(formula(m1))
-  resp2 = getResponse(formula(m2))
+  resp1 = responseVariable(m1)
+  resp2 = responseVariable(m2)
 
   trajmat1 = clusterTrajectories(m1, at = newdata)[[resp1]] %>%
     matrix(ncol = nClusters(m1))
@@ -503,8 +503,8 @@ extMetricsEnv$WMMSE_ref = function(m1, m2, newdata = union(time(m1), time(m2))) 
 }
 
 wmmae = function(m1, m2, newdata = union(time(m1), time(m2))) {
-  resp1 = getResponse(formula(m1))
-  resp2 = getResponse(formula(m2))
+  resp1 = responseVariable(m1)
+  resp2 = responseVariable(m2)
 
   trajmat1 = clusterTrajectories(m1, at = newdata)[[resp1]] %>%
     matrix(ncol = nClusters(m1))
