@@ -63,6 +63,15 @@ test_that('scalar argument', {
 })
 
 
+test_that('char argument', {
+  methods = lcMethods(lcMethodTestKML(), nClusters=2, test = 'a')
+  expect_is(methods, 'list')
+  expect_length(methods, 1)
+  expect_equal(methods[[1]]$nClusters, 2)
+  expect_equal(methods[[1]]$test, 'a')
+})
+
+
 test_that('var with vector argument', {
   kml = lcMethodTestKML()
   methods = lcMethods(kml, nClusters=1:3)
@@ -81,6 +90,7 @@ test_that('.() argument', {
   expect_equal(deparse(methods[[2]][['nClusters', eval=FALSE]]), 'b')
 })
 
+
 test_that('cartesian', {
   a = 1
   b = 2
@@ -92,6 +102,13 @@ test_that('cartesian', {
   expect_true(all(df$maxIt == 10))
   expect_equal(df$seed, rep(c('a', 'b'), each = 3))
   expect_equal(df$nClusters, rep(1:3, 2))
+})
+
+test_that('do.call', {
+  m = lcMethodTestKML() %>% evaluate()
+  methods = do.call(lcMethods, list(m, maxIt = 10, seed = 1:3, nClusters=2))
+  expect_is(methods, 'list')
+  expect_length(methods, 1 * 3 * 1)
 })
 
 test_that('unnamed argument', {
