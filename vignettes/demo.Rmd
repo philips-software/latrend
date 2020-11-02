@@ -55,9 +55,9 @@ The presence of clusters is not apparent from the plot. With any longitudinal an
 # Non-parametric trajectory clustering
 Assuming the appropriate (cluster) trajectory model is not known in advance, non-parametric longitudinal cluster models can provide a suitable starting point. 
 
-As an example, we apply longitudinal $k$-means (KML). First, we need to define the method. At the very least we need to indicate the response variable the method should operate on. Secondly, we should indicate how many clusters we expect. We do not need to define the `id` and `time` arguments as we have set these as package options.
+As an example, we apply longitudinal $k$-means (KML). First, we need to define the method. At the very least we need to indicate the response variable the method should operate on. Secondly, we should indicate how many clusters we expect. We do not need to define the `id` and `time` arguments as we have set these as package options. We use the `nbRedrawing` argument provided by the KML package for reducing the number of repeated random starts to only a single model estimation, in order to reduce the run-time of this example.
 ```{r}
-kmlMethod <- lcMethodKML(response = "Y", nClusters = 2)
+kmlMethod <- lcMethodKML(response = "Y", nClusters = 2, nbRedrawing = 1)
 
 kmlMethod
 ```
