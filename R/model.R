@@ -217,8 +217,8 @@ setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
 #' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' trajectoryAssignments(model)
 #'
-#' # only assign ids with a probability over 0.9
-#' trajectoryAssignments(model, strategy = function(x) which(x > .9)[1])
+#' # assign ids at random using weighted sampling
+#' trajectoryAssignments(model, strategy = which.weight)
 setMethod('trajectoryAssignments', signature('lcModel'), function(object, strategy = which.max, ...) {
   pp = postprob(object)
   assert_that(is_valid_postprob(pp, object))
