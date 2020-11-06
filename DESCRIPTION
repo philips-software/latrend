@@ -47,7 +47,7 @@ Imports:
     qqplotr (>= 0.0.4),
     scales (>= 1.0.0)
 Suggests: 
-    testthat (>= 2.1.0),
+    testthat (>= 3.0.0),
     roxygen2 (>= 7.1.0),
     knitr (>= 1.24),
     rmarkdown (>= 1.18),
@@ -60,6 +60,7 @@ Suggests:
     fda (>= 2.4.8),
     funFEM (>= 1.1),
     IMIFA (>= 2.1.1),
+    igraph (>= 1.2.4),
     crimCV (>= 0.9.6),
     akmedoids (>= 0.1.5),
     dtwclust (>= 5.5.6),
