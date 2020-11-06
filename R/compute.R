@@ -4,8 +4,12 @@
 #' @param rowIds The row trajectory identifier `integer` vector.
 #' @keywords internal
 postProbFromObs = function(mat, rowIds) {
-  assert_that(is.matrix(mat), !anyNA(mat))
-  assert_that(nrow(mat) == length(rowIds), !anyNA(rowIds))
+  assert_that(
+    is.matrix(mat),
+    noNA(mat),
+    nrow(mat) == length(rowIds),
+    noNA(rowIds)
+  )
 
   logPp = log(mat) %>%
     rowsum(rowIds)

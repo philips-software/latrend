@@ -11,7 +11,7 @@ make.trajectoryAssignments = function(object, clusters) {
   clusNames = clusterNames(object)
   nClusters = nClusters(object)
 
-  assert_that(!anyNA(clusters))
+  assert_that(noNA(clusters))
 
   if (is.null(clusters)) {
     NULL
@@ -62,7 +62,7 @@ make.clusterIndices = function(object, clusters) {
   clusNames = clusterNames(object)
   nClusters = nClusters(object)
 
-  assert_that(!anyNA(clusters), msg = 'each trajectory should be assigned to a cluster')
+  assert_that(noNA(clusters), msg = 'each trajectory should be assigned to a cluster')
 
   if (is.null(clusters)) {
     NULL
@@ -141,6 +141,6 @@ make.idRowIndices = function(object, data = model.data(object)) {
     factor(levels = ids(object)) %>%
     as.integer()
 
-  assert_that(!anyNA(idx), msg = 'data id column contains Ids which are not in ids(model). Index cannot be defined.')
+  assert_that(noNA(idx), msg = 'data id column contains Ids which are not in ids(model). Index cannot be defined.')
   idx
 }

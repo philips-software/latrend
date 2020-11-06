@@ -138,7 +138,7 @@ dropRE = function(f) {
   } else {
     labs = labels(terms(f))
     reIdx = match(reStrings, labs)
-    assert_that(!anyNA(reIdx))
+    assert_that(noNA(reIdx))
 
     if (length(reIdx) == length(labs)) {
       if (hasIntercept(f)) {

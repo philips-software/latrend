@@ -35,7 +35,7 @@ setGeneric('clusterProportions', function(object, ...) {
   assert_that(
     is.numeric(props),
     length(props) == nClusters(object),
-    !anyNA(props),
+    noNA(props),
     all(is.finite(props)),
     min(props) >= 0
   )

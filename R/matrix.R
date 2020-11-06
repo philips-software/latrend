@@ -32,8 +32,8 @@ meltRepeatedMeasures = function(data,
     is.character(response),
     length(times) == 0 || length(times) == ncol(data),
     length(ids) == 0 || length(ids) == nrow(data),
-    !anyNA(ids),
-    !anyNA(times)
+    noNA(ids),
+    noNA(times)
   )
 
   if (is.character(ids)) {

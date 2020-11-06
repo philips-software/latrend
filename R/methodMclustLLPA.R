@@ -60,7 +60,7 @@ setMethod('prepareData', signature('lcMethodMclustLLPA'), function(method, data,
   e = new.env()
 
   valueColumn = responseVariable(method)
-  assert_that(!anyNA(data[[valueColumn]]), msg = 'data contains missing values')
+  assert_that(noNA(data[[valueColumn]]), msg = 'data contains missing values')
 
   # Data
   wideFrame = data.table::dcast(data, get(idVariable(method)) ~ get(timeVariable(method)), value.var =

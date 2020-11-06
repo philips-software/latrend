@@ -63,12 +63,14 @@ lcModelCustom = function(data,
 
   # postprob
   if (!is.null(postprob)) {
-    assert_that(is.matrix(postprob))
-    assert_that(nrow(postprob) == nIds)
-    assert_that(!anyNA(postprob))
-    assert_that(min(postprob) >= 0)
-    assert_that(max(postprob) <= 1)
-    assert_that(all(rowSums(postprob) == 1))
+    assert_that(
+      is.matrix(postprob),
+      nrow(postprob) == nIds,
+      noNA(postprob),
+      min(postprob) >= 0,
+      max(postprob) <= 1,
+      all(rowSums(postprob) == 1)
+    )
   }
 
   # Cluster assignments
@@ -84,8 +86,10 @@ lcModelCustom = function(data,
       is.factor(trajectoryAssignments) ||
         all(vapply(trajectoryAssignments, is.count, FUN.VALUE = FALSE))
     )
-    assert_that(!anyNA(trajectoryAssignments))
-    assert_that(length(trajectoryAssignments) == nIds)
+    assert_that(
+      noNA(trajectoryAssignments),
+      length(trajectoryAssignments) == nIds
+    )
     if (is.null(clusterNames) && is.factor(trajectoryAssignments)) {
       clusterNames = levels(trajectoryAssignments)
     }
@@ -199,12 +203,14 @@ predict.lcModelCustom = function(object,
 setMethod('predictPostprob', signature('lcModelCustom'), function(object, newdata = NULL, ...) {
   pp = object@predictPostprob(object, newdata, ...)
 
-  assert_that(is.matrix(pp))
-  assert_that(nrow(pp) == nIds(object))
-  assert_that(!anyNA(pp))
-  assert_that(min(pp) >= 0)
-  assert_that(max(pp) <= 1)
-  assert_that(all(rowSums(pp) == 1))
+  assert_that(
+    is.matrix(pp),
+    nrow(pp) == nIds(object),
+    noNA(pp),
+    min(pp) >= 0,
+    max(pp) <= 1,
+    all(rowSums(pp) == 1)
+  )
 
   colnames(pp) = clusterNames(object)
   return(pp)
