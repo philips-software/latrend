@@ -63,8 +63,8 @@ setMethod('prepareData', signature('lcMethodMclustLLPA'), function(method, data,
   assert_that(noNA(data[[valueColumn]]), msg = 'data contains missing values')
 
   # Data
-  wideFrame = data.table::dcast(data, get(idVariable(method)) ~ get(timeVariable(method)), value.var =
-                      valueColumn)
+  wideFrame = as.data.table(data) %>%
+    data.table::dcast(get(idVariable(method)) ~ get(timeVariable(method)), value.var = valueColumn)
   e$data = as.matrix(wideFrame[, -'method']) %>%
     set_rownames(wideFrame$method)
 
