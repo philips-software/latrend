@@ -2,8 +2,9 @@
 .gitignore
 .Rhistory
 .Rprofile
+cld.Rdata
 make_data.R
-osa.R
+^.*bat$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^doc$
