@@ -32,7 +32,7 @@
 \method{BIC}{lcModelLongclust}(object, ...)
 }
 \arguments{
-\item{object}{The \code{lcMethod} object.}
+\item{object}{The object to extract the label from.}
 
 \item{method}{The \code{lcMethod} object.}
 
@@ -59,3 +59,4 @@ longclust interface
 \seealso{
 \link{lcMethodLongclust} \link[longclust]{longclust-package}
 }
+\keyword{internal}

@@ -1,4 +1,4 @@
-#' @include method.R
+#' @include method.R latrend.R
 #' @title lcMatrixMethod
 #' @name lcMatrixMethod-class
 #' @rdname lcMatrixMethod-class

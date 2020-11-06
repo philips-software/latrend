@@ -4,6 +4,7 @@
 #' @rdname interface-mclust
 #' @title mclust interface
 #' @seealso [lcMethodMclustLLPA] \link[mclust]{mclust-package}
+#' @keywords internal
 NULL
 
 setClass('lcMethodMclustLLPA', contains = 'lcMethod')

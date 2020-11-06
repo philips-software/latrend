@@ -23,6 +23,6 @@ Other metric functions:
 \code{\link{getExternalMetricNames}()},
 \code{\link{getInternalMetricDefinition}()},
 \code{\link{getInternalMetricNames}()},
-\code{\link{metric,lcModel-method}}
+\code{\link{metric}()}
 }
 \concept{metric functions}

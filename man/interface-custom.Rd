@@ -84,7 +84,7 @@
 \S4method{predictPostprob}{lcModelStratify}(object, newdata = NULL, ...)
 }
 \arguments{
-\item{object}{The \code{lcMethod} object.}
+\item{object}{The object to extract the label from.}
 
 \item{method}{The \code{lcMethod} object.}
 
@@ -111,3 +111,4 @@ custom interface
 \seealso{
 \link{lcMethodCustom} \link{lcModelCustom} \link{lcMethodRandom} \link{lcMethodStratify} \link{lcModelPartition} \link{lcModelWeightedPartition}
 }
+\keyword{internal}

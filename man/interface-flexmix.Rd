@@ -45,7 +45,7 @@
 \S4method{converged}{lcModelFlexmix}(object, ...)
 }
 \arguments{
-\item{object}{The \code{lcMethod} object.}
+\item{object}{The object to extract the label from.}
 
 \item{method}{The \code{lcMethod} object.}
 
@@ -70,3 +70,4 @@ flexmix interface
 \seealso{
 \link{lcMethodFlexmix} \link[flexmix]{flexmix}
 }
+\keyword{internal}

@@ -13,7 +13,7 @@ which.weight(x)
 An \code{integer} giving the index of the sampled element.
 }
 \description{
-Returns a random index, weighted by the element magnitudes. This function is intended to be used as an optional strategy for \link{trajectoryAssignments,lcModel-method}, resulting in randomly sampled cluster membership.
+Returns a random index, weighted by the element magnitudes. This function is intended to be used as an optional strategy for \link{trajectoryAssignments}, resulting in randomly sampled cluster membership.
 }
 \examples{
 x = c(.01, .69, .3)

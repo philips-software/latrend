@@ -51,7 +51,7 @@
 \S4method{converged}{lcModelLcmmGMM}(object, ...)
 }
 \arguments{
-\item{object}{The \code{lcMethod} object.}
+\item{object}{The object to extract the label from.}
 
 \item{method}{The \code{lcMethod} object.}
 
@@ -76,3 +76,4 @@ lcmm interface
 \seealso{
 \link{lcMethodLcmmGBTM} \link{lcMethodLcmmGMM} \link[lcmm]{lcmm-package}
 }
+\keyword{internal}

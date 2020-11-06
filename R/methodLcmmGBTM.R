@@ -5,6 +5,7 @@
 #' @rdname interface-lcmm
 #' @title lcmm interface
 #' @seealso [lcMethodLcmmGBTM] [lcMethodLcmmGMM] \link[lcmm]{lcmm-package}
+#' @keywords internal
 NULL
 
 setClass('lcMethodLcmmGBTM', contains = 'lcMethod')

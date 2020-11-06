@@ -2,6 +2,7 @@
 
 #' @export
 #' @rdname transformFitted
+#' @usage transformFitted(pred, model, clusters)
 #' @title Helper function for ensuring the right fitted() output
 #' @description This function is also responsible for checking whether the input data is valid, such that the fitting process can fail early.
 #' @param pred Prediction object
@@ -11,11 +12,13 @@
 setGeneric('transformFitted', function(pred, model, clusters) standardGeneric('transformFitted'))
 
 #' @rdname transformFitted
+#' @aliases transformFitted,NULL,lcModel-method
 setMethod('transformFitted', signature('NULL', 'lcModel'), function(pred, model, clusters) {
   NULL
 })
 
 #' @rdname transformFitted
+#' @aliases transformFitted,matrix,lcModel-method
 setMethod('transformFitted', signature('matrix', 'lcModel'), function(pred, model, clusters) {
   assert_that(is.matrix(pred),
               ncol(pred) == nClusters(model),
@@ -32,6 +35,7 @@ setMethod('transformFitted', signature('matrix', 'lcModel'), function(pred, mode
 })
 
 #' @rdname transformFitted
+#' @aliases transformFitted,list,lcModel-method
 setMethod('transformFitted', signature('list', 'lcModel'), function(pred, model, clusters) {
   assert_that(length(pred) == nClusters(model))
   newpred = lapply(pred, '[[', 'Fit') %>%
@@ -40,6 +44,7 @@ setMethod('transformFitted', signature('list', 'lcModel'), function(pred, model,
 })
 
 #' @rdname transformFitted
+#' @aliases transformFitted,data.frame,lcModel-method
 setMethod('transformFitted', signature('data.frame', 'lcModel'), function(pred, model, clusters) {
   assert_that(has_name(pred, c('Fit', 'Cluster')))
   newpred = matrix(pred$Fit, ncol = nClusters(model))
@@ -50,6 +55,7 @@ setMethod('transformFitted', signature('data.frame', 'lcModel'), function(pred, 
 
 #' @export
 #' @rdname transformPredict
+#' @usage transformPredict(pred, model, newdata)
 #' @title Helper function that matches the output to the specified newdata
 #' @description If Cluster is not provided, the prediction is outputted in long format per cluster,
 #' resulting in a longer data.frame than the newdata input
@@ -57,10 +63,10 @@ setMethod('transformFitted', signature('data.frame', 'lcModel'), function(pred, 
 #' @param model The model for which the prediction is made.
 #' @param newdata A `data.frame` containing the input data to predict for.
 #' @return A data.frame with the predictions, or a list of cluster-specific prediction frames
-setGeneric('transformPredict', function(pred, model, newdata)
-  standardGeneric('transformPredict'))
+setGeneric('transformPredict', function(pred, model, newdata) standardGeneric('transformPredict'))
 
 #' @rdname transformPredict
+#' @aliases transformPredict,NULL,lcModel-method
 setMethod('transformPredict', signature('NULL', 'lcModel'), function(pred, model, newdata) {
   assert_that(is.newdata(newdata),
               nrow(newdata) == 0)
@@ -74,6 +80,7 @@ setMethod('transformPredict', signature('NULL', 'lcModel'), function(pred, model
 })
 
 #' @rdname transformPredict
+#' @aliases transformPredict,vector,lcModel-method
 setMethod('transformPredict', signature('vector', 'lcModel'), function(pred, model, newdata) {
   assert_that(is.newdata(newdata),
               is.null(newdata) || length(pred) == nrow(newdata))
@@ -83,6 +90,7 @@ setMethod('transformPredict', signature('vector', 'lcModel'), function(pred, mod
 })
 
 #' @rdname transformPredict
+#' @aliases transformPredict,matrix,lcModel-method
 setMethod('transformPredict', signature('matrix', 'lcModel'), function(pred, model, newdata) {
   # format where multiple cluster-specific predictions are given per newdata entry (per row)
   assert_that(
@@ -103,6 +111,7 @@ setMethod('transformPredict', signature('matrix', 'lcModel'), function(pred, mod
 })
 
 #' @rdname transformPredict
+#' @aliases transformPredict,data.frame,lcModel-method
 setMethod('transformPredict', signature('data.frame', 'lcModel'), function(pred, model, newdata) {
   assert_that(is.newdata(newdata),
               !is.null(newdata))

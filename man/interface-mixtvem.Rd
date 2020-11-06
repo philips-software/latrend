@@ -35,7 +35,7 @@
 \method{coef}{lcModelMixTVEM}(object, ...)
 }
 \arguments{
-\item{object}{The \code{lcMethod} object.}
+\item{object}{The object to extract the label from.}
 
 \item{method}{The \code{lcMethod} object.}
 
@@ -58,3 +58,4 @@ mixtvem interface
 \seealso{
 \link{lcMethodMixTVEM}
 }
+\keyword{internal}

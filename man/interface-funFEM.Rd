@@ -35,7 +35,7 @@
 \S4method{converged}{lcModelFunFEM}(object, ...)
 }
 \arguments{
-\item{object}{The \code{lcMethod} object.}
+\item{object}{The object to extract the label from.}
 
 \item{method}{The \code{lcMethod} object.}
 
@@ -62,3 +62,4 @@ funFEM interface
 \seealso{
 \link{lcMethodFunFEM} \link[funFEM]{funFEM-package}
 }
+\keyword{internal}

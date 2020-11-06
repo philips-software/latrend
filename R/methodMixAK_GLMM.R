@@ -4,6 +4,7 @@
 #' @rdname interface-mixAK
 #' @title mixAK interface
 #' @seealso [lcMethodMixAK_GLMM] \link[mixAK]{GLMM_MCMC}
+#' @keywords internal
 NULL
 
 setClass('lcMethodMixAK_GLMM', contains = 'lcMethod')

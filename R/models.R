@@ -138,6 +138,7 @@ as.data.frame.lcModels = function(x, ...,
 #' @export
 #' @importFrom stats as.dist
 #' @rdname externalMetric
+#' @aliases externalMetric,lcModels,missing-method
 #' @return For `externalMetric(lcModels)`: A distance matrix of class [dist] representing
 #' the pairwise comparisons.
 setMethod('externalMetric',
@@ -157,6 +158,7 @@ setMethod('externalMetric',
 
 #' @export
 #' @rdname externalMetric
+#' @aliases externalMetric,lcModels,lcModels-method
 #' @return For `externalMetric(lcModels, lcModel)`: A named `numeric` vector or `matrix`
 #' containing the computed model metrics.
 setMethod('externalMetric', signature('lcModels', 'lcModel'), .externalMetric.lcModels)
@@ -164,6 +166,7 @@ setMethod('externalMetric', signature('lcModels', 'lcModel'), .externalMetric.lc
 
 #' @export
 #' @rdname externalMetric
+#' @aliases externalMetric,list,lcModel-method
 #' @inheritParams metric
 #' @return For `externalMetric(list, lcModel)`: A named `numeric` vector or `matrix`
 #' containing the computed model metrics.

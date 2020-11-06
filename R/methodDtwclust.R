@@ -4,6 +4,7 @@
 #' @rdname interface-dtwclust
 #' @title dtwclust interface
 #' @seealso [lcMethodDtwclust] \link[dtwclust]{dtwclust-package}
+#' @keywords internal
 NULL
 
 setClass('lcMethodDtwclust', contains = 'lcMethod')

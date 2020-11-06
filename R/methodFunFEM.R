@@ -4,6 +4,7 @@
 #' @rdname interface-funFEM
 #' @title funFEM interface
 #' @seealso [lcMethodFunFEM] \link[funFEM]{funFEM-package}
+#' @keywords internal
 NULL
 
 setClass('lcMethodFunFEM', contains = 'lcMatrixMethod')

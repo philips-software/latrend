@@ -4,6 +4,7 @@
 #' @rdname interface-mixtools
 #' @title mixtools interface
 #' @seealso [lcMethodMixtoolsGMM] [lcMethodMixtoolsNPRM] \link[mixtools]{regmixEM.mixed} \link[mixtools]{npEM}
+#' @keywords internal
 NULL
 
 setClass('lcMethodMixtoolsGMM', contains = 'lcMethod')

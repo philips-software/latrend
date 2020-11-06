@@ -4,6 +4,7 @@
 #' @rdname interface-crimCV
 #' @title crimCV interface
 #' @seealso [lcMethodCrimCV] \link[crimCV]{crimCV}
+#' @keywords internal
 NULL
 
 setClass('lcMethodCrimCV', contains = 'lcMatrixMethod')

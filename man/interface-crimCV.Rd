@@ -35,7 +35,7 @@
 \S4method{converged}{lcModelCrimCV}(object)
 }
 \arguments{
-\item{object}{The \code{lcMethod} object.}
+\item{object}{The object to extract the label from.}
 
 \item{method}{The \code{lcMethod} object.}
 
@@ -60,3 +60,4 @@ crimCV interface
 \seealso{
 \link{lcMethodCrimCV} \link[crimCV]{crimCV}
 }
+\keyword{internal}

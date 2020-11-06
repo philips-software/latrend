@@ -4,6 +4,7 @@
 #' @rdname interface-flexmix
 #' @title flexmix interface
 #' @seealso [lcMethodFlexmix] \link[flexmix]{flexmix}
+#' @keywords internal
 NULL
 
 setClass('lcMethodFlexmix', contains = 'lcMethod')

@@ -2,6 +2,7 @@
 setClass('lcModelCrimCV', contains = 'lcModel')
 
 #' @rdname interface-crimCV
+#' @keywords internal
 setMethod('postprob', signature('lcModelCrimCV'), function(object) {
   pp = object@model$gwt
   colnames(pp) = clusterNames(object)

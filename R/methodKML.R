@@ -4,6 +4,7 @@
 #' @rdname interface-kml
 #' @title kml interface
 #' @seealso [lcMethodKML] \link[kml]{kml}
+#' @keywords internal
 NULL
 
 setClass('lcMethodKML', contains = 'lcMatrixMethod')

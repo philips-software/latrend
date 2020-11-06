@@ -34,7 +34,7 @@
 \S4method{predictPostprob}{lcModelKML}(object, newdata = NULL, ...)
 }
 \arguments{
-\item{object}{The \code{lcMethod} object.}
+\item{object}{The object to extract the label from.}
 
 \item{method}{The \code{lcMethod} object.}
 
@@ -57,3 +57,4 @@ kml interface
 \seealso{
 \link{lcMethodKML} \link[kml]{kml}
 }
+\keyword{internal}

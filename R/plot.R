@@ -1,6 +1,10 @@
+#' @include latrend.R
+
 # plotTrajectories ####
 #' @export
+#' @name plotTrajectories
 #' @rdname plotTrajectories
+#' @aliases plotTrajectories,data.frame-method
 #' @title Plot trajectories
 #' @inheritParams trajectories
 #' @inheritParams transformLatrendData
@@ -55,7 +59,9 @@ setMethod('plotTrajectories', signature('data.frame'), function(object,
 
 # plotClusterTrajectories ####
 #' @export
+#' @name plotClusterTrajectories
 #' @rdname plotClusterTrajectories
+#' @aliases plotClusterTrajectories,data.frame-method
 #' @title Plot cluster trajectories
 #' @inheritParams transformLatrendData
 #' @inheritParams clusterTrajectories

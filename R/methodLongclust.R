@@ -4,6 +4,7 @@
 #' @rdname interface-longclust
 #' @title longclust interface
 #' @seealso [lcMethodLongclust] \link[longclust]{longclust-package}
+#' @keywords internal
 NULL
 
 setClass('lcMethodLongclust', contains = 'lcMatrixMethod')

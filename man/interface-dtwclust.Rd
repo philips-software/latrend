@@ -26,7 +26,7 @@
 \S4method{predictForCluster}{lcModelDtwclust}(object, newdata, cluster, what = "mu", ...)
 }
 \arguments{
-\item{object}{The \code{lcMethod} object.}
+\item{object}{The object to extract the label from.}
 
 \item{method}{The \code{lcMethod} object.}
 
@@ -51,3 +51,4 @@ dtwclust interface
 \seealso{
 \link{lcMethodDtwclust} \link[dtwclust]{dtwclust-package}
 }
+\keyword{internal}

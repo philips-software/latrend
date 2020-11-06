@@ -4,6 +4,7 @@
 #' @rdname interface-featureBased
 #' @title featureBased interface
 #' @seealso [lcMethodTwoStep] [lcMethodGCKM] [lcMethodLMKM]
+#' @keywords internal
 NULL
 
 setClass('lcMethodTwoStep', contains = 'lcMethod')

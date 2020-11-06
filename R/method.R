@@ -125,6 +125,7 @@ setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL)
   return(value)
 })
 
+
 #' @export
 #' @title Create a lcMethod object of the specified type and arguments
 #' @description Provides a mechanism for creating `lcMethod` objects for an arbitrary class.
@@ -154,6 +155,7 @@ lcMethod = function(.class,
     )
   )
 }
+
 
 #' @export
 #' @title Create a lcMethod object from a call
@@ -587,6 +589,11 @@ setMethod('postFit', signature('lcMethod'), function(method, data, model, envir,
 
 
 #' @export
+#' @title Print the arguments of an lcMethod object
+#' @param eval Whether to print the evaluated argument values.
+#' @param envir The environment in which to evaluate the arguments when `eval = TRUE`.
+#' @param ... Additional arguments.
+#' @inheritParams base::print
 print.lcMethod = function(x, ..., eval = FALSE, width = 40, envir = NULL) {
   assert_that(is.lcMethod(x),
               is.flag(eval))
@@ -624,6 +631,7 @@ print.lcMethod = function(x, ..., eval = FALSE, width = 40, envir = NULL) {
     cat(' no arguments\n')
   }
 }
+
 
 #' @importFrom R.utils evaluate
 #' @export
@@ -768,6 +776,7 @@ update.lcMethod = function(object,
 #. responseVariable ####
 #' @export
 #' @name responseVariable
+#' @rdname responseVariable
 #' @aliases responseVariable,lcMethod-method
 #' @title Extract the response variable
 #' @description Extracts the response variable from the given `object`.
@@ -806,8 +815,10 @@ setMethod('show', 'lcMethod', function(object) {
 
 # . strip ####
 #' @export
-#' @rdname lcMethod-class
-#' @title Strip a lcMethod for serialization
+#' @name strip
+#' @rdname strip
+#' @aliases strip,lcMethod-method
+#' @title Strip a lcModel for serialization
 #' @param object The `lcMethod` object.
 #' @param ... Additional arguments.
 #' @description Removes associated environments from any of the arguments. This is typically the case for arguments of type `formula`.

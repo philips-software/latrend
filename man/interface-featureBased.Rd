@@ -75,7 +75,7 @@
 \S4method{getShortName}{lcModelTwoStep}(object, ...)
 }
 \arguments{
-\item{object}{The \code{lcMethod} object.}
+\item{object}{The object to extract the label from.}
 
 \item{method}{The \code{lcMethod} object.}
 
@@ -118,3 +118,4 @@ featureBased interface
 \seealso{
 \link{lcMethodTwoStep} \link{lcMethodGCKM} \link{lcMethodLMKM}
 }
+\keyword{internal}

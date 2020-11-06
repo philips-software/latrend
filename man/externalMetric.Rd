@@ -5,6 +5,7 @@
 \alias{externalMetric}
 \alias{externalMetric,lcModels,missing-method}
 \alias{externalMetric,lcModels,lcModel-method}
+\alias{externalMetric,lcModels,lcModels-method}
 \alias{externalMetric,list,lcModel-method}
 \title{Compute external model metric(s)}
 \usage{
@@ -60,6 +61,6 @@ Other metric functions:
 \code{\link{getExternalMetricNames}()},
 \code{\link{getInternalMetricDefinition}()},
 \code{\link{getInternalMetricNames}()},
-\code{\link{metric,lcModel-method}}
+\code{\link{metric}()}
 }
 \concept{metric functions}

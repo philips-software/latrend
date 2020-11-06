@@ -4,6 +4,7 @@
 #' @rdname interface-custom
 #' @title custom interface
 #' @seealso [lcMethodCustom] [lcModelCustom] [lcMethodRandom] [lcMethodStratify] [lcModelPartition] [lcModelWeightedPartition]
+#' @keywords internal
 NULL
 
 setClass('lcMethodCustom', contains = 'lcMethod')

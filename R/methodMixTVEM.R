@@ -4,6 +4,7 @@
 #' @rdname interface-mixtvem
 #' @title mixtvem interface
 #' @seealso [lcMethodMixTVEM]
+#' @keywords internal
 NULL
 
 setClass('lcMethodMixTVEM', contains = 'lcMethod')

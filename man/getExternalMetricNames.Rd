@@ -17,6 +17,6 @@ Other metric functions:
 \code{\link{getExternalMetricDefinition}()},
 \code{\link{getInternalMetricDefinition}()},
 \code{\link{getInternalMetricNames}()},
-\code{\link{metric,lcModel-method}}
+\code{\link{metric}()}
 }
 \concept{metric functions}

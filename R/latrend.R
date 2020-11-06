@@ -602,17 +602,20 @@ setGeneric('transformLatrendData', function(object, id, time, response, envir) {
 })
 
 #' @rdname transformLatrendData
+#' @aliases transformLatrendData,data.frame-method
 setMethod('transformLatrendData', signature('data.frame'), function(object, id, time, response, envir) {
   object
 })
 
 #' @rdname transformLatrendData
+#' @aliases transformLatrendData,matrix-method
 setMethod('transformLatrendData', signature('matrix'), function(object, id, time, response, envir) {
   data = meltRepeatedMeasures(object, id = id, time = time, response = response)
   transformLatrendData(data, id = id, time = time, response = response, envir = envir)
 })
 
 #' @rdname transformLatrendData
+#' @aliases transformLatrendData,call-method
 setMethod('transformLatrendData', signature('call'), function(object, id, time, response, envir) {
   data = eval(object, envir = envir)
   transformLatrendData(

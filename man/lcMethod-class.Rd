@@ -21,7 +21,6 @@
 \alias{prepareData,lcMethod-method}
 \alias{postFit}
 \alias{postFit,lcMethod-method}
-\alias{strip,lcMethod-method}
 \alias{validate}
 \alias{validate,lcMethod-method}
 \title{lcMethod class}
@@ -46,8 +45,6 @@
 
 \S4method{postFit}{lcMethod}(method, data, model, envir, verbose)
 
-\S4method{strip}{lcMethod}(object, ...)
-
 \S4method{validate}{lcMethod}(method, data, envir = NULL, ...)
 }
 \arguments{
@@ -59,7 +56,7 @@
 
 \item{verbose}{A \link[R.utils:Verbose]{R.utils::Verbose} object indicating the level of verbosity.}
 
-\item{object}{The \code{lcMethod} object.}
+\item{object}{The object to extract the label from.}
 
 \item{...}{Additional arguments.}
 
@@ -101,8 +98,6 @@ Model estimation is handled through a series of calls implement by the \code{lcM
 Extracts the assigned label.
 
 Extracts the name of the given \code{object}.
-
-Removes associated environments from any of the arguments. This is typically the case for arguments of type \code{formula}.
 }
 \details{
 Because the \code{lcMethod} arguments may be unevaluated, evaluation functions such as \code{[[} accept an \code{envir} argument.

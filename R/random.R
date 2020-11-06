@@ -12,7 +12,7 @@ localRNG = function(seed = NULL, expr) {
 
 #' @export
 #' @title Sample an index of a vector weighted by the elements
-#' @description Returns a random index, weighted by the element magnitudes. This function is intended to be used as an optional strategy for \link{trajectoryAssignments,lcModel-method}, resulting in randomly sampled cluster membership.
+#' @description Returns a random index, weighted by the element magnitudes. This function is intended to be used as an optional strategy for [trajectoryAssignments], resulting in randomly sampled cluster membership.
 #' @param x A positive `numeric vector`.
 #' @return An `integer` giving the index of the sampled element.
 #' @examples

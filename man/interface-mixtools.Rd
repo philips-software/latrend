@@ -65,7 +65,7 @@
 \S4method{converged}{lcModelMixtoolsRM}(object, ...)
 }
 \arguments{
-\item{object}{The \code{lcMethod} object.}
+\item{object}{The object to extract the label from.}
 
 \item{method}{The \code{lcMethod} object.}
 
@@ -96,3 +96,4 @@ mixtools interface
 \seealso{
 \link{lcMethodMixtoolsGMM} \link{lcMethodMixtoolsNPRM} \link[mixtools]{regmixEM.mixed} \link[mixtools]{npEM}
 }
+\keyword{internal}

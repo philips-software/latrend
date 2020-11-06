@@ -1,4 +1,4 @@
-#' @include method.R plot.R
+#' @include method.R plot.R latrend.R
 #' @importFrom stats coef deviance df.residual getCall logLik model.frame model.matrix predict residuals sigma time update
 
 
@@ -186,7 +186,6 @@ clusterSizes = function(object) {
 #. clusterProportions ####
 #' @export
 #' @name clusterProportions
-#' @rdname clusterProportions
 #' @aliases clusterProportions,lcModel-method
 #' @title Proportional size of each cluster
 #' @param object The `lcModel` to obtain the proportions from.
@@ -204,7 +203,6 @@ setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
 #. trajectoryAssignments ####
 #' @export
 #' @name trajectoryAssignments
-#' @rdname trajectoryAssignments
 #' @aliases trajectoryAssignments,lcModel-method
 #' @title Get the cluster membership of each trajectory
 #' @details While the default strategy is [which.max], it is recommended to use \link[nnet]{which.is.max} instead, as this function breaks ties randomly.
@@ -258,12 +256,13 @@ coef.lcModel = function(object, ...) {
 #' @importFrom caret confusionMatrix
 #' @export confusionMatrix
 #' @name confusionMatrix
-#' @rdname confusionMatrix
+#' @rdname confusionMatrix.lcModel
 NULL
 
 #' @export
-#' @rdname confusionMatrix
-#' @title Posterior confusion matrix
+#' @title Compute the posterior confusion matrix
+#' @name confusionMatrix.lcModel
+#' @rdname confusionMatrix.lcModel
 #' @param data The `lcModel` object.
 #' @param ... Not used.
 #' @examples
@@ -271,7 +270,6 @@ NULL
 #' model = latrend(method=lcMethodLcmmGMM(Y ~ Time + (1 | Id), id = "Id", time = "Time"),
 #'   data=latrendData)
 #' confusionMatrix(model)
-#' @seealso [caret::confusionMatrix]
 confusionMatrix.lcModel = function(data, ...) {
   assert_that(is.lcModel(data))
   IMIFA::post_conf_mat(postprob(data)) %>%
@@ -283,7 +281,6 @@ confusionMatrix.lcModel = function(data, ...) {
 # . converged ####
 #' @export
 #' @name converged
-#' @rdname converged
 #' @aliases converged,lcModel-method
 #' @title Check model convergence
 #' @description Check convergence of the fitted model.
@@ -333,6 +330,7 @@ df.residual.lcModel = function(object, ...) {
 #. externalMetric ####
 #' @export
 #' @rdname externalMetric
+#' @aliases externalMetric,lcModel,lcModel-method
 #' @examples
 #' data(latrendData)
 #' model1 <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
@@ -462,8 +460,8 @@ setMethod('getName', signature('lcModel'), function(object) {
 #' @export
 #' @rdname lcModel-class
 #' @aliases getShortName,lcModel-method
-setMethod('getShortName',
-  signature('lcModel'), function(object) getLcMethod(object) %>% getShortName())
+setMethod('getShortName',  signature('lcModel'),
+  function(object) getLcMethod(object) %>% getShortName())
 
 
 #' @noRd
@@ -533,7 +531,9 @@ logLik.lcModel = function(object, ...) {
 
 #. metric ####
 #' @export
+#' @name metric
 #' @rdname metric
+#' @aliases metric,lcModel-method
 #' @examples
 #' data(latrendData)
 #' model <- latrend(lcMethodLcmmGMM(Y ~ Time + (1 | Id), id = "Id", time = "Time"), latrendData)
@@ -1009,13 +1009,13 @@ setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
 })
 
 #. plotClusterTrajectories ####
+# NOTE: Cannot include @inheritDotParams clusterTrajectories-method because the name is not supported by Roxygen
 #' @export
 #' @name plotClusterTrajectories
 #' @rdname plotClusterTrajectories
 #' @aliases plotClusterTrajectories,lcModel-method
 #' @title Plot the cluster trajectories of a lcModel
 #' @inheritParams clusterTrajectories
-#' @inheritDotParams clusterTrajectories
 #' @param clusterLabels Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.
 #' @param trajAssignments The cluster assignments for the fitted trajectories. Only used when `trajectories = TRUE` and `facet = TRUE`. See [trajectoryAssignments].
 #' @param ... Arguments passed to [clusterTrajectories].
@@ -1138,7 +1138,9 @@ residuals.lcModel = function(object, ..., clusters = trajectoryAssignments(objec
 #. responseVariable ####
 #' @export
 #' @name responseVariable
+#' @rdname responseVariable
 #' @aliases responseVariable,lcModel-method
+#' @title Get the response variable
 #' @examples
 #' data(latrendData)
 #' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
@@ -1176,15 +1178,16 @@ sigma.lcModel = function(object, ...) {
   }
 }
 
+
 #. strip ####
 #' @export
 #' @name strip
+#' @rdname strip
 #' @aliases strip,lcModel-method
-#' @title Strip a lcModel for serialization
-#' @description Removes associated environments from any of the slots.
+#' @title Reduce the lcModel memory footprint for serialization
+#' @description Strip a lcModel of non-essential variables and environments in order to reduce the model size for serialization.
 #' @param object The `lcModel`.
 #' @param ... Additional arguments.
-#' @aliases strip,lcModel-method
 setMethod('strip', signature('lcModel'), function(object, ...) {
   newObject = object
 
@@ -1222,9 +1225,7 @@ setMethod('timeVariable', signature('lcModel'), function(object) object@time)
 
 # . trajectories ####
 #' @export
-#' @name trajectories
 #' @rdname trajectories
-#' @aliases trajectories,lcModel-method
 #' @title Extract the fitted trajectories for all strata
 #' @param object The model.
 #' @param at The time points at which to compute the id-specific trajectories.
@@ -1245,6 +1246,7 @@ setGeneric('trajectories', function(object,
                                     ...) standardGeneric('trajectories'))
 
 #' @rdname trajectories
+#' @aliases trajectories,lcModel-method
 setMethod('trajectories', signature('lcModel'), function(object, at, what, clusters, ...) {
   ids = ids(object)
   assert_that(length(clusters) == nIds(object))

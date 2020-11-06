@@ -5,6 +5,7 @@
 #' @rdname interface-akmedoids
 #' @title akmedoids interface
 #' @seealso [lcMethodAKMedoids] \link[akmedoids]{akmedoids.clust}
+#' @keywords internal
 NULL
 
 setClass('lcMethodAKMedoids', contains = 'lcMatrixMethod')

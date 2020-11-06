@@ -14,7 +14,7 @@
 \S4method{fit}{lcMethodAKMedoids}(method, data, envir, verbose, ...)
 }
 \arguments{
-\item{object}{The \code{lcMethod} object.}
+\item{object}{The object to extract the label from.}
 
 \item{method}{The \code{lcMethod} object.}
 
@@ -32,3 +32,4 @@ akmedoids interface
 \seealso{
 \link{lcMethodAKMedoids} \link[akmedoids]{akmedoids.clust}
 }
+\keyword{internal}

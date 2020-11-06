@@ -3,7 +3,7 @@
 \name{confusionMatrix}
 \alias{confusionMatrix}
 \alias{confusionMatrix.lcModel}
-\title{Posterior confusion matrix}
+\title{Compute the posterior confusion matrix}
 \usage{
 \method{confusionMatrix}{lcModel}(data, ...)
 }
@@ -13,14 +13,11 @@
 \item{...}{Not used.}
 }
 \description{
-Posterior confusion matrix
+Compute the posterior confusion matrix
 }
 \examples{
 data(latrendData)
 model = latrend(method=lcMethodLcmmGMM(Y ~ Time + (1 | Id), id = "Id", time = "Time"),
   data=latrendData)
 confusionMatrix(model)
-}
-\seealso{
-\link[caret:confusionMatrix]{caret::confusionMatrix}
 }

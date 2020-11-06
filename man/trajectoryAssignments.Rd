@@ -26,6 +26,6 @@ data(latrendData)
 model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 trajectoryAssignments(model)
 
-# only assign ids with a probability over 0.9
-trajectoryAssignments(model, strategy = function(x) which(x > .9)[1])
+# assign ids at random using weighted sampling
+trajectoryAssignments(model, strategy = which.weight)
 }
