@@ -17,5 +17,5 @@
 A \code{ggplot} object.
 }
 \description{
-Plot a lcModel. By default, the cluster trajectories of the model solution are plotted.
+Plot a lcModel. By default, this plots the cluster trajectories of the model, along with the training data.
 }

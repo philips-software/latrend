@@ -5,10 +5,10 @@
 \alias{latrendData}
 \title{Synthetic longitudinal dataset comprising three classes}
 \format{
-A \code{data.frame} describing 250 trajectories originating from one of three classes,
+A \code{data.frame} describing 200 trajectories originating from one of three classes,
 each with a different cluster trajectory. Trajectories randomly deviate in intercept and slope from the reference cluster.
 \describe{
-\item{Id}{trajectory identifier, \code{factor}.}
+\item{Id}{trajectory identifier, \code{integer}.}
 \item{Time}{measurement time, \code{numeric} between 0 and 2.}
 \item{Y}{observed variable, \code{numeric}.}
 \item{Class}{the reference class, \code{factor}.}
