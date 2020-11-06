@@ -66,3 +66,7 @@ Plot cluster trajectories
 
 Plot the cluster trajectories of a lcModel
 }
+\details{
+The line size of the cluster trajectories can be manipulated by changing the default for ggplot2.
+For example: \code{update_geom_defaults("line", list(size = 1.5))}
+}

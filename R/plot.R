@@ -73,6 +73,8 @@ setMethod('plotTrajectories', signature('data.frame'), function(object,
 #' @param facet Whether to facet by cluster. This is done by default when `trajectories` is enabled.
 #' @param id Id column. Only needed when `trajectories = TRUE`.
 #' @param ... Additional arguments.
+#' @details The line size of the cluster trajectories can be manipulated by changing the default for ggplot2.
+#' For example: `update_geom_defaults("line", list(size = 1.5))`
 setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     response,
     cluster = 'Cluster',
@@ -142,7 +144,7 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
   )
 
   if (trajectories) {
-    p = p + geom_line(data = rawdata, mapping = aes_string(group = id), size = .1, color = 'black')
+    p = p + geom_line(data = rawdata, mapping = aes_string(group = id), size = .01, color = 'black')
   }
 
   if (facet) {
