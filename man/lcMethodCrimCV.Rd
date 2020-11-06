@@ -28,6 +28,7 @@ The following external arguments are ignored: Dat, ng.}
 Specify a zero-inflated repeated-measures GBTM method
 }
 \examples{
+\donttest{
 library(crimCV)
 data(latrendData)
 method <- lcMethodCrimCV("Y", id = "Id", time = "Time", nClusters = 3, dpolyp = 1, init = 2)
@@ -38,6 +39,7 @@ data(TO1adj)
 method <- lcMethodCrimCV(response = "Offenses", time = "Offense", id = "Subject",
   nClusters = 2, dpolyp = 1, init = 2)
 model <- latrend(method, data = TO1adj[1:100, ])
+}
 }
 \seealso{
 Other lcMethod implementations: 
