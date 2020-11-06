@@ -76,6 +76,7 @@ Collate:
     'formula.R'
     'generics.R'
     'latrend.R'
+    'make.R'
     'matrix.R'
     'method.R'
     'methodMatrix.R'
