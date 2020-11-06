@@ -1172,5 +1172,5 @@ update.lcModel = function(object, ...) {
 
   clCall = replace(modelCall, updateNames, updateCall[updateNames])
 
-  eval(clCall)
+  eval(clCall, envir = parent.frame())
 }
