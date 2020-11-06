@@ -101,6 +101,8 @@ make.clusterIndices = function(object, clusters) {
 #' @export
 #' @rdname lcModel-make
 #' @title Generate cluster names
+#' @description Generates the requested number of cluster names. Uses the vector returned by `getOption("latrend.clusterNames")`, which returns the alphabet by default.
+#' @details The `latrend.clusterNames` option may also return a function with signature `(n)`, returning a vector of names of the correct length.
 #' @param n The number of clusters.
 #' @return A `character` vector length `n` with the cluster names.
 make.clusterNames = function(n) {
@@ -125,4 +127,20 @@ make.clusterNames = function(n) {
   } else {
     clusNames[seq_len(n)]
   }
+}
+
+
+#' @noRd
+#' @title Generate a vector indicating the id-number (between 1 and numIds()) per row
+#' @details The id order is determined by the output of ids()
+#' @param object The `lcModel` object.
+#' @keywords internal
+make.idRowIndices = function(object, data = model.data(object)) {
+  idvar = idVariable(object)
+  idx = data[[idvar]] %>%
+    factor(levels = ids(object)) %>%
+    as.integer()
+
+  assert_that(!anyNA(idx), msg = 'data id column contains Ids which are not in ids(model). Index cannot be defined.')
+  idx
 }

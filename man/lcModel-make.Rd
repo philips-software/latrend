@@ -29,5 +29,10 @@ A \code{character} vector length \code{n} with the cluster names.
 }
 \description{
 Ensures a proper cluster assignments factor vector
+
+Generates the requested number of cluster names. Uses the vector returned by \code{getOption("latrend.clusterNames")}, which returns the alphabet by default.
+}
+\details{
+The \code{latrend.clusterNames} option may also return a function with signature \code{(n)}, returning a vector of names of the correct length.
 }
 \keyword{internal}

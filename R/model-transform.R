@@ -29,7 +29,7 @@ setMethod('transformFitted', signature('matrix', 'lcModel'), function(pred, mode
     pred
   } else {
     clusters = make.clusterIndices(model, clusters)
-    rowClusters = clusters[genIdRowIndices(model)]
+    rowClusters = clusters[make.idRowIndices(model)]
     rowColumns(pred, rowClusters)
   }
 })

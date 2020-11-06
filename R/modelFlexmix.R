@@ -39,7 +39,7 @@ fitted.lcModelFlexmix = function(object, ..., clusters = trajectoryAssignments(o
 
 #' @rdname interface-flexmix
 setMethod('postprob', signature('lcModelFlexmix'), function(object, ...) {
-  pp = postProbFromObs(object@model@posterior$scaled, genIdRowIndices(object))
+  pp = postProbFromObs(object@model@posterior$scaled, make.idRowIndices(object))
   colnames(pp) = clusterNames(object)
   return(pp)
 })

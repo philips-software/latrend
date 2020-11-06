@@ -464,18 +464,6 @@ setMethod('getShortName',  signature('lcModel'),
   function(object) getLcMethod(object) %>% getShortName())
 
 
-#' @noRd
-#' @title Generate a vector indicating the id-number (between 1 and numIds()) per row
-#' @details The id order is determined by the output of ids()
-#' @param object The `lcModel` object.
-#' @keywords internal
-genIdRowIndices = function(object) {
-  model.data(object)[[idVariable(object)]] %>%
-    factor(levels = ids(object)) %>%
-    as.integer()
-}
-
-
 # . ids ####
 #' @export
 #' @title Get the unique ids included in this model
@@ -801,7 +789,7 @@ setMethod('predictPostprob', signature('lcModel'), function(object, newdata = NU
     N = nrow(model.data(object))
     pp = postprob(object, ...)
     rownames(pp) = NULL
-    pp[genIdRowIndices(object), ]
+    pp[make.idRowIndices(object), ]
   }
   else {
     warning(
@@ -917,7 +905,7 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
       all(trajAssignments %in% clusterNames(object))
     )
     trajAssignments = factor(trajAssignments, levels = clusterNames(object), labels = clusterLabels)
-    rawdata[, Cluster := trajAssignments[genIdRowIndices(object)]]
+    rawdata[, Cluster := trajAssignments[make.idRowIndices(object)]]
   }
 
   .plotClusterTrajs(clusdata,
