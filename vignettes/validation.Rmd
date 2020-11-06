@@ -98,9 +98,18 @@ bootModels
 bootMetrics <- metric(bootModels, name = c("BIC", "WMAE", "APPA"))
 bootMetrics
 ```
+```{r}
+colMeans(bootMetrics)
+```
+
+```{r}
+apply(bootMetrics, 2, sd)
+```
 
 
 # Ten-fold cross validation
+Lastly, we can fit models using $k$-fold cross-validation to validate the models on previously unseen data from the test folds.
+
 ```{r}
 trainModels <- latrendCV(kml, data = latrendData, folds = 10, seed = 1)
 trainModels
@@ -108,12 +117,13 @@ trainModels
 
 
 ## Manual cross validation
+Alternatively, we can generate the training data folds ourselves, and fit models using `latrendBatch`.
 ```{r}
 dataFolds <- createTrainDataFolds(latrendData, folds = 10)
 foldModels <- latrendBatch(kml, data = dataFolds)
 foldModels
 ```
-
+The test data folds are obtained using
 ```{r}
 testDataFolds <- createTestDataFolds(latrendData, dataFolds)
 ```
