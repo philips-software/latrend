@@ -14,3 +14,4 @@ make_data.R
 ^vignettes/*.html$
 ^Meta$
 LICENSE
+README.md
