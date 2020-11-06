@@ -4,7 +4,6 @@ Version: 1.0.0
 Date: 2020-11-06
 Title: Framework for Clustering Longitudinal Data
 Description: A framework for clustering longitudinal datasets with univariate trajectories using commonly applied methods. Facilitates reproducible and transparent cluster analyses with internal and external validation, and simulation studies.
-Author: Niek Den Teuling
 Maintainer: Niek Den Teuling <niek.den.teuling@philips.com>
 Authors@R: 
     c(person(given = "Niek",

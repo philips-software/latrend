@@ -4,7 +4,7 @@
 \name{latrend-package}
 \alias{latrend-package}
 \alias{_PACKAGE}
-\title{latrend: Framework for clustering longitudinal data}
+\title{latrend: Framework for Clustering Longitudinal Data}
 \description{
 A framework for clustering longitudinal datasets with univariate trajectories using commonly applied methods. Facilitates reproducible and transparent cluster analyses with internal and external validation, and simulation studies.
 }
