@@ -47,7 +47,8 @@ setMethod('prepareData', signature('lcMethodLMKM'), function(method, data, verbo
   lmArgs = as.list(method, args = lm)
 
   id = idVariable(method)
-  coefdata = data[, do.call(lm, c(lmArgs, data = list(.SD))) %>% coef() %>% as.list(), keyby = c(id)]
+  coefdata = as.data.table(data) %>%
+    .[, do.call(lm, c(lmArgs, data = list(.SD))) %>% coef() %>% as.list(), keyby = c(id)]
   # construct the coefficient matrix
   coefmat = subset(coefdata, select = -1) %>% as.matrix()
   assert_that(nrow(coefmat) == uniqueN(data[[id]]))

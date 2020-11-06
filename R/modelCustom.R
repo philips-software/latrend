@@ -52,12 +52,14 @@ lcModelCustom = function(data,
   call = match.call()
 
   # Data
-  assert_that(is.data.frame(data))
-  assert_that(is.scalar(time))
-  assert_that(is.scalar(id))
-  assert_that(has_name(data, response))
-  assert_that(has_name(data, id))
-  assert_that(has_name(data, time))
+  assert_that(
+    is.data.frame(data),
+    is.scalar(time),
+    is.scalar(id),
+    has_name(data, response),
+    has_name(data, id),
+    has_name(data, time)
+  )
   nIds = uniqueN(data[[id]])
   times = unique(data[[time]]) %>% sort
 
@@ -75,7 +77,10 @@ lcModelCustom = function(data,
 
   # Cluster assignments
   if (is.null(trajectoryAssignments)) {
-    assert_that(!is.null(postprob), msg = 'postprob must be specified when trajectoryAssignments is null')
+    assert_that(
+      !is.null(postprob),
+      msg = 'postprob must be specified when trajectoryAssignments is null'
+    )
     trajectoryAssignments = apply(postprob, 1, which.max)
     nClusters = ncol(postprob)
     if (is.null(clusterNames)) {
@@ -117,8 +122,7 @@ lcModelCustom = function(data,
   assert_that(is.null(trajectories) || is.data.frame(trajectories))
 
   # Cluster trajectories
-  assert_that(is.data.frame(clusterTrajectories) ||
-                is.function(clusterTrajectories))
+  assert_that(is.data.frame(clusterTrajectories) || is.function(clusterTrajectories))
   if (is.function(clusterTrajectories)) {
     # compute cluster trajectories
     center = clusterTrajectories

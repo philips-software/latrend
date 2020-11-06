@@ -168,7 +168,11 @@ setMethod('fit', signature('lcMethodStratify'), function(method, data, envir, ve
 
 
 stratifyTrajectories = function(strat, data, id, envir = parent.frame()) {
-  assert_that(is.data.table(data), is.call(strat) || is.name(strat))
+  assert_that(
+    is.data.table(data),
+    is.call(strat) || is.name(strat)
+  )
+
   numIds = uniqueN(data[[id]])
 
   if (is.name(strat) ||

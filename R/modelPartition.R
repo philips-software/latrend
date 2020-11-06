@@ -166,8 +166,8 @@ computeCenterClusterTrajectories = function(data,
   assert_that(is.function(fun))
 
   rowClusters = assignments[rleidv(data[[id]])]
-  clusTrajs = data[, .(Value = fun(get(response))), by = .(Cluster = rowClusters, Time =
-                                                             get(time))]
+  clusTrajs = as.data.table(data) %>%
+    .[, .(Value = fun(get(response))), by = .(Cluster = rowClusters, Time = get(time))]
 
   if (uniqueN(assignments) < nClusters) {
     warning(
