@@ -289,7 +289,7 @@ confusionMatrix.lcModel = function(data, ...) {
 #' @return Either `logical` indicating convergence, or a `numeric` status code.
 #' @family model-specific methods
 setMethod('converged', signature('lcModel'), function(object, ...) {
-  TRUE
+  NA
 })
 
 

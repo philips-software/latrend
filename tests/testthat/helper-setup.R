@@ -35,7 +35,6 @@ expect_valid_lcModel = function(object) {
     expect_is(c('numeric', 'matrix', 'list', 'NULL'), label='coef')
   converged(object) %>%
     expect_is(c('logical', 'numeric', 'integer'), label='converged')
-  expect_true(converged(object) > 0)
   nClusters(object) %T>%
     {expect_true(is.count(.))}
   clusterNames(object) %>%

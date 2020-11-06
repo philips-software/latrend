@@ -71,7 +71,7 @@ setGeneric('converged', function(object, ...) {
   assert_that(
     is.logical(state) || is.numeric(state),
     length(state) == 1,
-    is.finite(state)
+    msg = 'output of converged() must be either logical or numeric, and of length 1'
   )
   state
 })
