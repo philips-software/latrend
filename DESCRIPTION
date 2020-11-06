@@ -24,7 +24,7 @@ Authors@R:
              role = "cph"))
 URL: https://github.com/philips-software/latrend
 BugReports: https://github.com/philips-software/latrend/issues
-License: GPL (>= 2) + file LICENSE
+License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 Depends:
