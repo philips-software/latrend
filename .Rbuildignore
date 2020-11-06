@@ -7,6 +7,10 @@ make_data.R
 ^.*bat$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.github
 ^doc$
+^vignettes/.*_cache$
+^vignettes/*.R$
+^vignettes/*.html$
 ^Meta$
 LICENSE
