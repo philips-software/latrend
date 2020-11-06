@@ -1,4 +1,5 @@
 library(usethis)
+library(magrittr)
 library(latrend)
 
 # Example data ####
@@ -16,7 +17,8 @@ latrendData = generateLongData(
   noiseScales = c(.1, .1, .1),
   clusterNames = paste('Class', 1:3),
   shuffle = FALSE) %>%
-  .[, .(Id, Time, Y, Class)]
+  .[, .(Id, Time, Y, Class)] %>%
+  as.data.frame()
 
 plotTrajectories(latrendData, response = 'Y')
 plotTrajectories(latrendData, response = 'Y', cluster = 'Class', facet = FALSE)

@@ -274,8 +274,8 @@ latrendRep = function(method,
 #' models <- latrendBatch(methods, data = latrendData)
 #'
 #' models <- latrendBatch(lcMethods(lcMethodKML("Y", id = "Id", time = "Time"), nClusters = 1:2),
-#'    data = .(latrendData[Time > .5,],
-#'             latrendData[Time < .5,])) # different data per method
+#'    data = .(subset(latrendData, Time > .5),
+#'             subset(latrendData, Time < .5))) # different data per method
 #'
 #' @seealso lcMethods
 #' @family longitudinal cluster fit functions
