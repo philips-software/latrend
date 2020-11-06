@@ -555,7 +555,7 @@ createTestDataFold = function(data, trainData, id = getOption('latrend.id')) {
   allIds = unique(data[[id]])
   assert_that(all(trainIds %in% allIds))
   testIds = setdiff(allIds, trainIds)
-  data[data[[id]] %in% testIds]
+  data[data[[id]] %in% testIds, ]
 }
 
 
