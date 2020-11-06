@@ -287,11 +287,16 @@ latrendBatch = function(methods,
   if (!is.list(methods)) {
     methods = list(methods)
   }
+
   assert_that(is.list(methods), all(vapply(
     methods, inherits, 'lcMethod', FUN.VALUE = FALSE
   )), msg = 'methods argument must be a list of lcMethod objects')
-  assert_that(!missing(data))
-  assert_that(is.logical(cartesian), is.scalar(cartesian))
+  assert_that(
+    !missing(data),
+    is.logical(cartesian),
+    is.scalar(cartesian)
+  )
+
   envir = lcMethod.env(methods[[1]], parent.frame(), envir)
 
   verbose = as.Verbose(verbose)
@@ -317,8 +322,10 @@ latrendBatch = function(methods,
     stop('unsupported data input')
   }
   nData = length(dataList)
-  assert_that(cartesian ||
-                nData %in% c(1, nModels), msg = 'number of datasets must be 1 or match the number of specified methods')
+  assert_that(
+    cartesian || nData %in% c(1, nModels),
+    msg = 'number of datasets must be 1 or match the number of specified methods'
+  )
 
   # latrend
   cat(verbose, 'Calling latrend for each method...')
@@ -341,7 +348,7 @@ latrendBatch = function(methods,
                      envir = quote(envir),
                      verbose = quote(verbose)
                    ))
-      models[[(m - 1) * length(dOpts) + ifelse(cartesian, d, 1)]] = eval(cl)
+      models[[(m - 1) * length(dOpts) + ifelse(cartesian, d, 1)]] = eval(cl, envir = parent.frame())
     }
   }
 
@@ -423,7 +430,7 @@ latrendBoot = function(method,
       verbose = verbose
     )
   )
-  models = eval(cl)
+  models = eval(cl, envir = parent.frame())
 
   return(models)
 }
@@ -489,7 +496,7 @@ latrendCV = function(method,
                      method = method,
                      data = dataCall,
                      verbose = verbose
-                   ))
+                   ), envir = parent.frame())
 
   return(models)
 }
