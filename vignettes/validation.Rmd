@@ -66,7 +66,7 @@ head(repSelfMetrics)
 ```
 
 ```{r}
-repSelfMetrics[, "WMAE"] %>% summary()
+summary(repSelfMetrics[, "WMAE"])
 ```
 As can be seen from the numbers, the models are (practically) identical in terms of model fit, measurement error, and cluster separation.
 
@@ -123,7 +123,7 @@ dataFolds <- createTrainDataFolds(latrendData, folds = 10)
 foldModels <- latrendBatch(kml, data = dataFolds)
 foldModels
 ```
-The test data folds are obtained using
+The list of test data folds is obtained using
 ```{r}
 testDataFolds <- createTestDataFolds(latrendData, dataFolds)
 ```

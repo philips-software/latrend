@@ -41,7 +41,7 @@ data(latrendData)
 method <- lcMethodKML("Y", id = "Id", time = "Time")
 model <- latrendCV(method, latrendData, folds = 5)
 
-model <- latrendCV(method, latrendData[Time < .5], folds = 5, seed = 1)
+model <- latrendCV(method, subset(latrendData, Time < .5), folds = 5, seed = 1)
 }
 \seealso{
 Other longitudinal cluster fit functions: 

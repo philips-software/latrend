@@ -51,8 +51,7 @@ generateLongData = function(sizes = c(40, 60),
   assert_that(is.character(id) && nchar(id) > 0)
   assert_that(is.character(clusterNames), length(clusterNames) == nClus)
   assert_that(is.logical(shuffle))
-  assert_that(is.data.frame(data), all(vapply(data, is.numeric, FUN.VALUE =
-                                                FALSE)))
+  assert_that(is.data.frame(data), all(vapply(data, is.numeric, FUN.VALUE = FALSE)))
 
   ## Fixed effects
   assert_that(is.formula(fixed), hasSingleResponse(fixed))
@@ -66,18 +65,19 @@ generateLongData = function(sizes = c(40, 60),
 
   Xf = model.matrix(dropResponse(fixed), data)
   if (ncol(Xf) > 0) {
-    assert_that(is.null(fixedCoefs) ||
-                  is.numeric(fixedCoefs) && is.null(dim(fixedCoefs)))
+    assert_that(is.null(fixedCoefs) || is.numeric(fixedCoefs) && is.null(dim(fixedCoefs)))
     Xfi = model.matrix(update(fixed, NULL ~ . - 1), data) #design matrix without intercept
-    assert_that(ncol(Xf) == length(fixedCoefs), msg = 'Missing or too many coefficients specified for fixed effects.')
+    assert_that(
+      ncol(Xf) == length(fixedCoefs),
+      msg = 'Missing or too many coefficients specified for fixed effects.'
+    )
     fixedValues = Xf %*% fixedCoefs
     alldata = data.table(
       Id = rowIds,
       Class = as.integer(clusters)[rowIds],
       Mu.fixed = fixedValues[rep(seq_len(nObs), nIds)],
       Xfi[rep(seq_len(nObs), nIds), , drop = FALSE],
-      data[, setdiff(names(data), colnames(Xfi)), drop =
-             FALSE]
+      data[, setdiff(names(data), colnames(Xfi)), drop = FALSE]
     )
   } else {
     alldata = data.table(

@@ -324,6 +324,6 @@ sgbtm <- latrend(m, casedata)
 summary(sgbtm)
 ```
 ```{r}
-plot(sgbtm, trajectories = TRUE)
+plot(sgbtm)
 ```
 
