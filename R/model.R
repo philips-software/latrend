@@ -253,28 +253,51 @@ coef.lcModel = function(object, ...) {
 }
 
 
-#' @importFrom caret confusionMatrix
-#' @export confusionMatrix
-#' @name confusionMatrix
-#' @rdname confusionMatrix.lcModel
-NULL
-
 #' @export
 #' @title Compute the posterior confusion matrix
-#' @name confusionMatrix.lcModel
-#' @rdname confusionMatrix.lcModel
-#' @param data The `lcModel` object.
-#' @param ... Not used.
+#' @description Compute a `nClusters x nClusters` posterior confusion matrix (PCM). The entry (i,j) represents the probability of a trajectory belonging to class i is assigned to class j under a given assignment strategy.
+#' @param object The object.
+#' @param strategy The [trajectoryAssignments] strategy to compute the PCM under.
+#' If `strategy = NULL`, weighted random assignment is assumed (analogous to a repeated [[which.weight]] strategy evaluation).
+#' @param scale Whether to express the confusion in probabilities (`scale = TRUE`), or in the number of trajectories.
 #' @examples
 #' data(latrendData)
-#' model = latrend(method=lcMethodLcmmGMM(Y ~ Time + (1 | Id), id = "Id", time = "Time"),
+#' model = latrend(method=lcMethodLcmmGMM(Y ~ CLUSTER * Time + (1 | Id), id = "Id", time = "Time"),
 #'   data=latrendData)
 #' confusionMatrix(model)
-confusionMatrix.lcModel = function(data, ...) {
-  assert_that(is.lcModel(data))
-  IMIFA::post_conf_mat(postprob(data)) %>%
-    set_colnames(clusterNames(data)) %>%
-    set_rownames(clusterNames(data))
+confusionMatrix = function(object, strategy = which.max, scale = TRUE) {
+  assert_that(is.lcModel(object))
+
+  I = nIds(object)
+  K = nClusters(object)
+  pp_it = postprob(object)
+  props = clusterProportions(object)
+
+  if (is.null(strategy)) {
+    w_is = pp_it
+  } else {
+    trajLabels = trajectoryAssignments(object, strategy = strategy)
+    idxMat = cbind(seq_len(I), as.integer(trajLabels))
+    w_is = matrix(0, nrow = I, ncol = K)
+    w_is[idxMat] = 1
+  }
+
+  cfMat = matrix(nrow = K, ncol = K)
+  for (s in 1:K) {
+    for (t in 1:K) {
+      cfMat[s,t] = sum(pp_it[, t] * w_is[, s])
+    }
+  }
+
+  if (scale) {
+    cfMat = cfMat / rowSums(cfMat)
+  }
+
+  clusNames = clusterNames(object)
+  rownames(cfMat) = clusNames
+  colnames(cfMat) = clusNames
+
+  cfMat
 }
 
 

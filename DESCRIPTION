@@ -59,7 +59,6 @@ Suggests:
     flexmix (>= 2.3),
     fda (>= 2.4.8),
     funFEM (>= 1.1),
-    IMIFA (>= 2.1.1),
     igraph (>= 1.2.4),
     crimCV (>= 0.9.6),
     akmedoids (>= 0.1.5),
