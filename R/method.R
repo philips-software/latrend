@@ -590,9 +590,11 @@ setMethod('postFit', signature('lcMethod'), function(method, data, model, envir,
 
 #' @export
 #' @title Print the arguments of an lcMethod object
+#' @param x The `lcMethod` object.
 #' @param eval Whether to print the evaluated argument values.
+#' @param width Maximum number of characters per argument.
 #' @param envir The environment in which to evaluate the arguments when `eval = TRUE`.
-#' @param ... Additional arguments passed to [base::print].
+#' @param ... Not used.
 print.lcMethod = function(x, ..., eval = FALSE, width = 40, envir = NULL) {
   assert_that(is.lcMethod(x),
               is.flag(eval))
