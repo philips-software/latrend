@@ -326,7 +326,7 @@ as.data.frame.lcMethod = function(x, ...,
       nullValue
     } else if (is.atomic(a)) {
       if (length(a) > 1) {
-        dput(a)
+        deparse(a) %>% as.character()
       } else {
         a
       }
