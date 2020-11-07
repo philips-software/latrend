@@ -24,11 +24,11 @@ lcMethodFlexmixGBTM(
 
 \item{nClusters}{The number of clusters to estimate.}
 
-\item{...}{Arguments passed to \link[flexmix:flexmix]{flexmix::flexmix} or \link[flexmix:FLXMRglm]{flexmix::FLXMRglm}.
+\item{...}{Arguments passed to \link[flexmix:flexmix]{flexmix::flexmix} or \link[flexmix:FLXglm]{flexmix::FLXMRglm}.
 The following arguments are ignored: data, k, trace.}
 }
 \description{
-Fits a GBTM based on the \link[flexmix:FLXMRglm]{flexmix::FLXMRglm} driver.
+Fits a GBTM based on the \link[flexmix:FLXglm]{flexmix::FLXMRglm} driver.
 }
 \examples{
 library(flexmix)

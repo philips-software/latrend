@@ -36,7 +36,7 @@ lcModelPartition(
 
 \item{name}{The name of the method.}
 
-\item{envir}{The \code{environment} associated with the model. Used for evaluating the assigned \code{data} object by \url{model.data}.}
+\item{envir}{The \code{environment} associated with the model. Used for evaluating the assigned \code{data} object by \link{model.data.lcModel}.}
 }
 \description{
 Represents an arbitrary partitioning of a set of trajectories.

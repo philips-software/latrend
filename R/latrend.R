@@ -146,7 +146,7 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
 #' If `"remove"`, errors are ignored and the respective repetition is exempt from the returned model list.
 #' If `"stop"`, errors are not caught, ensuring that the function halts on the first error.
 #' @param .seed Set the seed for generating the respective seed for each of the repeated fits.
-#' @details This method is faster than repeatedly calling [latrend]() as it only prepares the data via `prepareData()` once.
+#' @details This method is faster than repeatedly calling [latrend] as it only prepares the data via `prepareData()` once.
 #' @return A `lcModels` object containing the resulting models.
 #' @examples
 #' data(latrendData)

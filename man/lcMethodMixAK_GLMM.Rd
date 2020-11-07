@@ -14,17 +14,17 @@ lcMethodMixAK_GLMM(
 )
 }
 \arguments{
-\item{fixed}{A \code{formula} specifying the fixed effects of the model, including the response. Creates the \code{y} and \code{x} arguments for the call to \link[mixAK:GLMM_MCMC]{mixAK::GLMM_MCMC}.}
+\item{fixed}{A \code{formula} specifying the fixed effects of the model, including the response. Creates the \code{y} and \code{x} arguments for the call to \link[mixAK:GLMMMCMC]{mixAK::GLMM_MCMC}.}
 
-\item{random}{A \code{formula} specifying the random effects of the model, including the random intercept. Creates the \code{z} and \code{random.intercept} arguments for the call to \link[mixAK:GLMM_MCMC]{mixAK::GLMM_MCMC}.}
+\item{random}{A \code{formula} specifying the random effects of the model, including the random intercept. Creates the \code{z} and \code{random.intercept} arguments for the call to \link[mixAK:GLMMMCMC]{mixAK::GLMM_MCMC}.}
 
 \item{time}{The name of the time variable.}
 
-\item{id}{The name of the trajectory identifier variable. This is used to generate the \code{id} vector argument for the call to \link[mixAK:GLMM_MCMC]{mixAK::GLMM_MCMC}.}
+\item{id}{The name of the trajectory identifier variable. This is used to generate the \code{id} vector argument for the call to \link[mixAK:GLMMMCMC]{mixAK::GLMM_MCMC}.}
 
 \item{nClusters}{The number of clusters.}
 
-\item{...}{Arguments passed to \link[mixAK:GLMM_MCMC]{mixAK::GLMM_MCMC}.
+\item{...}{Arguments passed to \link[mixAK:GLMMMCMC]{mixAK::GLMM_MCMC}.
 The following external arguments are ignored: y, x, z, random.intercept, silent.}
 }
 \description{

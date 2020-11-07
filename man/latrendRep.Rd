@@ -44,7 +44,7 @@ A \code{lcModels} object containing the resulting models.
 Performs a repeated fit of the specified latrend model on the given data.
 }
 \details{
-This method is faster than repeatedly calling \url{latrend} as it only prepares the data via \code{prepareData()} once.
+This method is faster than repeatedly calling \link{latrend} as it only prepares the data via \code{prepareData()} once.
 }
 \examples{
 data(latrendData)

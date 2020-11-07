@@ -19,7 +19,7 @@ setClass(
 #' @param trajectoryAssignments A `vector` of cluster membership per trajectory, either `factor`, or `integer` (`1` to `nClusters`).
 #' @param nClusters The number of clusters. Optional for `factor` assignments.
 #' @param clusterNames The names of the clusters, or a function with input `n` outputting a `character vector` of names.
-#' @param envir The `environment` associated with the model. Used for evaluating the assigned `data` object by [model.data]().
+#' @param envir The `environment` associated with the model. Used for evaluating the assigned `data` object by [model.data.lcModel].
 lcModelPartition = function(data,
                             response,
                             trajectoryAssignments,
