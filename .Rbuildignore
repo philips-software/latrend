@@ -3,7 +3,7 @@
 .Rhistory
 .Rprofile
 cld.Rdata
-MixTVEM.r
+^MixTVEM.r$
 ^.*bat$
 ^.*\.Rproj$
 ^\.Rproj\.user$
