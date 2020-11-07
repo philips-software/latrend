@@ -7,13 +7,9 @@
 \method{print}{lcMethod}(x, ..., eval = FALSE, width = 40, envir = NULL)
 }
 \arguments{
-\item{x}{an object used to select a method.}
-
-\item{...}{Additional arguments.}
+\item{...}{Additional arguments passed to \link[base:print]{base::print}.}
 
 \item{eval}{Whether to print the evaluated argument values.}
-
-\item{width}{only used when \code{max.levels} is NULL, see above.}
 
 \item{envir}{The environment in which to evaluate the arguments when \code{eval = TRUE}.}
 }
