@@ -7,7 +7,7 @@ test_that('as.lcMethods non-list', {
 })
 
 test_that('as.lcMethods', {
-  methods = list(lcMethodTestCrimCV(), lcMethodTestKML())
+  methods = list(lcMethodTestLMKM(), lcMethodTestKML())
   out = as.lcMethods(methods)
   expect_is(out, 'lcMethods')
   expect_length(out, 2)
@@ -29,7 +29,7 @@ test_that('as.data.frame multi-row', {
 })
 
 test_that('as.data.frame multi-row different classes', {
-  methods = as.lcMethods(list(lcMethodTestCrimCV(), lcMethodTestKML()))
+  methods = as.lcMethods(list(lcMethodTestLMKM(), lcMethodTestKML()))
   df = as.data.frame(methods)
   expect_is(df, 'data.frame')
   expect_equal(nrow(df), 2)

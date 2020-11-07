@@ -1,4 +1,5 @@
 context('mclust models')
+skip_if_not_installed('mclust')
 rngReset()
 
 test_that('default llpa', {

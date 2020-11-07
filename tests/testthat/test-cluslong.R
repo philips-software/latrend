@@ -165,7 +165,7 @@ test_that('data with missing observations', {
   naData = copy(testLongData) %>%
     .[sample(.N, 100)]
 
-  latrend(lcMethodTestLcmmGBTM(), data=naData) %>%
+  latrend(lcMethodTestGCKM(), data=naData) %>%
     expect_is('lcModel')
 
   expect_error(latrend(lcMethodTestKML(), data=naData))

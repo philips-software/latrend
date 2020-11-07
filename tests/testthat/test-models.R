@@ -3,7 +3,7 @@ context('lcModels')
 kml2 = m1 = latrend(lcMethodTestKML(nClusters=2), testLongData)
 kml3 = latrend(lcMethodTestKML(nClusters=3), testLongData)
 kml4 = latrend(lcMethodTestKML(nClusters=4), testLongData)
-gmm = m2 = latrend(lcMethodTestLcmmGMM(nClusters=2), testLongData)
+gmm = m2 = latrend(lcMethodTestLMKM(nClusters=2), testLongData)
 models = lcModels(group=c(kml2, gmm), kml3, kml4)
 
 test_that('as', {
@@ -93,11 +93,11 @@ test_that('subset', {
     expect_is('lcModels') %>%
     expect_length(4)
 
-  subset(models, .method == 'gmm') %>%
+  subset(models, .method == 'glmkm') %>%
     expect_is('lcModels') %>%
     expect_length(1)
 
-  subset(models, .method == 'gmm') %>%
+  subset(models, .method == 'glmkm') %>%
     expect_length(1)
 
   subset(models, .method == 'kml') %>%
