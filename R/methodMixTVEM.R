@@ -69,6 +69,7 @@ setValidity('lcMethodMixTVEM', function(object) {
 
 #' @export
 #' @title Specify a MixTVEM
+#' @note In order to use this method, you must download and source MixTVEM.R. See the reference below.
 #' @param formula A `formula` excluding the time component. Time-invariant covariates are detected automatically as these are a special case in MixTVEM.
 #' @param formula.mb A `formula` for cluster-membership prediction. Covariates must be time-invariant. Furthermore, the formula must contain an intercept.
 #' @param time The name of the time variable.
@@ -76,6 +77,7 @@ setValidity('lcMethodMixTVEM', function(object) {
 #' @param nClusters The number of clusters. This replaces the `numClasses` argument of the `TVEMMixNormal` function call.
 #' @param ... Arguments passed to the `TVEMMixNormal()` function.
 #' The following optional arguments are ignored: doPlot, getSEs, numClasses.
+#' @references \url{https://github.com/dziakj1/MixTVEM}
 #' @examples
 #' \donttest{
 #' source('MixTVEM.R')

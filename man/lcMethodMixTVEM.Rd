@@ -30,6 +30,9 @@ The following optional arguments are ignored: doPlot, getSEs, numClasses.}
 \description{
 Specify a MixTVEM
 }
+\note{
+In order to use this method, you must download and source MixTVEM.R. See the reference below.
+}
 \examples{
 \donttest{
 source('MixTVEM.R')
@@ -37,4 +40,7 @@ method = lcMethodMixTVEM(Value ~ time(1) - 1,
                      time='Assessment',
                      id='Id', nClusters=3)
 }
+}
+\references{
+\url{https://github.com/dziakj1/MixTVEM}
 }
