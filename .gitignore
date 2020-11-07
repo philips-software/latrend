@@ -9,3 +9,4 @@ Meta
 vignettes/*_cache
 vignettes/*.R
 vignettes/*.html
+tests/testthat/*.rds
