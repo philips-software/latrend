@@ -1,9 +1,9 @@
 Package: latrend
 Type: Package
 Version: 1.0.0
-Date: 2020-11-06
+Date: 2020-11-07
 Title: Framework for Clustering Longitudinal Data
-Description: A framework for clustering longitudinal datasets with univariate trajectories using commonly applied methods. Facilitates reproducible and transparent cluster analyses with internal and external validation, and simulation studies.
+Description: A framework for clustering longitudinal datasets in a standardized way. Provides an interface to existing R packages for clustering longitudinal univariate trajectories, facilitating reproducible and transparent analyses. Additionally, standard tools are provided to support cluster analyses, including repeated estimation, model validation, and model assessment. The interface enables users to compare results between methods, and to implement and evaluate new methods with ease. 
 Maintainer: Niek Den Teuling <niek.den.teuling@philips.com>
 Authors@R: 
     c(person(given = "Niek",
@@ -68,6 +68,7 @@ Suggests:
     lme4 (>= 1.1)
 RoxygenNote: 7.1.0
 Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr
 Collate: 
     'assert.R'
     'compute.R'
@@ -131,4 +132,3 @@ Collate:
     'random.R'
     'verbose.R'
     'zzz.R'
-VignetteBuilder: knitr
