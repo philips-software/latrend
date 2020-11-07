@@ -44,7 +44,9 @@ Imports:
     clusterCrit (>= 1.2.8),
     mclustcomp (>= 0.3.1),
     scales (>= 1.0.0),
-    caret (>= 6.0)
+    caret (>= 6.0),
+    lme4 (>= 1.1),
+    mclust (>= 5.4.5)
 Suggests: 
     testthat (>= 3.0.0),
     roxygen2 (>= 7.1.0),
@@ -52,7 +54,6 @@ Suggests:
     rmarkdown (>= 1.18),
     kml (>= 2.4.1),
     lcmm (>= 1.7.8),
-    mclust (>= 5.4.5),
     longclust (>= 1.2.3),
     mixtools (>= 1.1.0),
     flexmix (>= 2.3),
@@ -64,8 +65,7 @@ Suggests:
     dtwclust (>= 5.5.6),
     mixAK (>= 5.3),
     psych (>= 1.9.12.31),
-    qqplotr (>= 0.0.4),
-    lme4 (>= 1.1)
+    qqplotr (>= 0.0.4)
 RoxygenNote: 7.1.0
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
