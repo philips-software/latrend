@@ -9,9 +9,10 @@ make_data.R
 ^\.Rproj\.user$
 ^\.github
 ^doc$
-^vignettes/.*_cache$
-^vignettes/*.R$
-^vignettes/*.html$
+^vignettes\.*_cache$
+^vignettes\*.R$
+^vignettes\*.html$
+^tests\testthat\_snaps$
 ^Meta$
 LICENSE
 README.md
