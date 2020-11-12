@@ -2,7 +2,7 @@ lcMethodTestKML = function(...) {
   lcMethodKML(response = 'Value', nbRedrawing=1, maxIt=10, ..., seed=1)
 }
 
-if ('lcmm' %in% installed.packages()) {
+if (requireNamespace('lcmm')) {
   lcMethodTestLcmmGMM = function(...) {
     lcMethodLcmmGMM(formula = Value ~ 1 + CLUSTER + (1 | ID), maxiter=10, ..., seed=1)
   }
@@ -12,7 +12,7 @@ if ('lcmm' %in% installed.packages()) {
   }
 }
 
-if ('flexmix' %in% installed.packages()) {
+if (requireNamespace('flexmix')) {
   lcMethodTestFlexmixGBTM = function(...) {
     lcMethodFlexmixGBTM(formula = Value ~ Assessment, ..., control=list(iter.max=1, tolerance=1e-3), seed=1)
   }
@@ -22,19 +22,19 @@ if ('flexmix' %in% installed.packages()) {
   }
 }
 
-if ('crimCV' %in% installed.packages()) {
+if (requireNamespace('crimCV')) {
   lcMethodTestCrimCV = function(...) {
     lcMethodCrimCV(response = 'Value', ..., model='ZIP', dpolyp=2, dpolyl=1, init=5, seed=1)
   }
 }
 
-if ('funFEM' %in% installed.packages()) {
+if (requireNamespace('funFEM')) {
   lcMethodTestFunFEM = function(...) {
     lcMethodFunFEM(response = 'Value', ...)
   }
 }
 
-if ('mclust' %in% installed.packages()) {
+if (requireNamespace('mclust')) {
   lcMethodTestMclustLLPA = function(...) {
     lcMethodMclustLLPA(response = 'Value', ...)
   }
@@ -48,7 +48,7 @@ lcMethodTestStratify = function(...) {
   lcMethodStratify(response = 'Value', ...)
 }
 
-if ('lme4' %in% installed.packages()) {
+if (requireNamespace('lme4')) {
   lcMethodTestGCKM = function(...) {
     lcMethodGCKM(formula = Value ~ (1 | Traj), ...)
   }
@@ -70,7 +70,7 @@ lcMethodTestCrimCVt = function(...) {
   lcMethodCrimCV(response = 'Value', ..., model='ZIPt', dpolyp=2, init=5, seed=1)
 }
 
-if ('longclust' %in% installed.packages()) {
+if (requireNamespace('longclust')) {
   lcMethodTestLongclust = function(...) {
     lcMethodLongclust(response = 'Value', modelSubset='VVA', gaussian=TRUE, ..., seed=1)
   }
@@ -80,7 +80,7 @@ if ('longclust' %in% installed.packages()) {
   }
 }
 
-if ('mixtools' %in% installed.packages()) {
+if (requireNamespace('mixtools')) {
   lcMethodTestMixtoolsNPRM = function(...) {
     lcMethodMixtoolsNPRM(response = 'Value', maxiter=10, eps=1e-04, seed=1)
   }
@@ -90,7 +90,7 @@ if ('mixtools' %in% installed.packages()) {
   }
 }
 
-if ('mixAK' %in% installed.packages()) {
+if (requireNamespace('mixAK')) {
   lcMethodTestMixAK_GLMM = function(...) {
     lcMethodMixAK_GLMM(fixed = Value ~ 1, random = ~ Assessment, ..., seed=1)
   }
