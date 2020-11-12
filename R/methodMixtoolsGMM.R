@@ -20,8 +20,9 @@ setClass('lcMethodMixtoolsGMM', contains = 'lcMethod')
 #' data(latrendData)
 #' method <- lcMethodMixtoolsGMM(
 #'    formula = Y ~ Time + (1 | Id),
-#'    id = "Id", time = "Time", nClusters = 3)
-#' model <- latrend(method, latrendData)
+#'    id = "Id", time = "Time",
+#'    nClusters = 3,
+#'    arb.R = FALSE)
 #' }
 #' @family lcMethod implementations
 lcMethodMixtoolsGMM = function(formula,
