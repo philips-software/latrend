@@ -79,8 +79,7 @@ setGeneric('converged', function(object, ...) {
 #' @export
 #' @name latrend-generics
 #' @param object2 The model to compare with.
-setGeneric('externalMetric',
-  function(object, object2, name, ...) standardGeneric('externalMetric'))
+setGeneric('externalMetric', function(object, object2, name, ...) standardGeneric('externalMetric'))
 
 #' @export
 #' @name latrend-generics
@@ -173,12 +172,18 @@ setGeneric('postprob', function(object, ...) {
   pp <- standardGeneric('postprob')
 
   assert_that(
+    is.numeric(pp),
     ncol(pp) == nClusters(object),
-    nrow(pp) == nIds(object),
-    is_valid_postprob(pp, object)
+    nrow(pp) == nIds(object)
   )
 
   colnames(pp) = clusterNames(object)
+
+  msg = validate_that(is_valid_postprob(pp, object))
+  if(!isTRUE(msg)) {
+    warning('Output returned by postprob() of ', class(object), ' was not valid: ', msg)
+  }
+
   pp
 })
 

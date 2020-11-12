@@ -77,7 +77,10 @@ assertthat::on_failure(has_lcMethod_args) = function(call, env) {
 #' @param model The `lcModel` object.
 is_valid_postprob = function(pp, model) {
   assert_that(is.lcModel(model))
+
   is.matrix(pp) &&
+    is.numeric(pp) &&
+    ncol(pp) == nClusters(model) &&
     noNA(pp) &&
     min(pp) >= 0 &&
     max(pp) <= 1 &&
@@ -93,8 +96,10 @@ assertthat::on_failure(is_valid_postprob) = function(call, env) {
   pp = eval(call$pp, env)
   model = eval(call$model, env)
   validate_that(is.matrix(pp) &&
-                  noNA(pp) &&
-                  min(pp) >= 0 &&
-                  max(pp) <= 1 &&
-                  isTRUE(all.equal(rowSums(pp), rep(1, nrow(pp)))))
+      is.numeric(pp) &&
+      ncol(pp) == nClusters(model) &&
+      noNA(pp) &&
+      min(pp) >= 0 &&
+      max(pp) <= 1 &&
+      isTRUE(all.equal(rowSums(pp), rep(1, nrow(pp)))))
 }

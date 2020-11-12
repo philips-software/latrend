@@ -44,12 +44,7 @@ expect_valid_lcModel = function(object) {
 
   # Posterior
   pp = postprob(object)
-  expect_is(pp, 'matrix', label='postprob')
-  expect_true(all(is.finite(pp)))
-  expect_equal(ncol(pp), nClusters(object))
-  expect_equal(nrow(pp), nIds(object))
-  expect_gte(min(pp), 0)
-  expect_lte(max(pp), 1)
+  expect_true(is_valid_postprob(pp, object))
 
   clus = trajectoryAssignments(object)
   expect_is(clus, 'factor')
