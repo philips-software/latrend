@@ -1,7 +1,7 @@
 Package: latrend
 Type: Package
-Version: 1.0.0
-Date: 2020-11-07
+Version: 1.0.1
+Date: 2020-11-12
 Title: Framework for Clustering Longitudinal Data
 Description: A framework for clustering longitudinal datasets in a standardized way. Provides an interface to existing R packages for clustering longitudinal univariate trajectories, facilitating reproducible and transparent analyses. Additionally, standard tools are provided to support cluster analyses, including repeated estimation, model validation, and model assessment. The interface enables users to compare results between methods, and to implement and evaluate new methods with ease. 
 Maintainer: Niek Den Teuling <niek.den.teuling@philips.com>

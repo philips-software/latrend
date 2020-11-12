@@ -3,7 +3,7 @@ skip_if(!exists('TVEMMixNormal'), message = 'skipping MixTVEM tests because the 
 rngReset()
 
 test_that('default', {
-  method = lcMethodTestMixTVEM(convergenceCriterion = 1, maxIterations=3)
+  method = lcMethodTestMixTVEM()
   model = latrend(method, testLongData)
   expect_valid_lcModel(model)
 })

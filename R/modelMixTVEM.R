@@ -24,10 +24,11 @@ predict.lcModelMixTVEM = function(object, ...,
     predMat = apply(trajMat, 2, function(x)
       approx(times, x, newtimes)$y) %>%
       set_colnames(clusterNames(object))
+
     pred = data.table(Time = newtimes, G = predMat) %>%
       setnames(c(timeVariable(object), clusterNames(object))) %>%
       melt(
-        id.vars = 'Time',
+        id.vars = timeVariable(object),
         value.name = 'Fit',
         variable.name = 'Cluster'
       )

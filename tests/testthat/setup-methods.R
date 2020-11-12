@@ -63,7 +63,7 @@ lcMethodTestTwoStep = function(...) {
 }
 
 lcMethodTestMixTVEM = function(...) {
-  lcMethodMixTVEM(formula = Value ~ time(1) - 1, ...)
+  lcMethodMixTVEM(formula = Value ~ time(1) - 1, ..., convergenceCriterion = 1e-6, numStarts = 10, maxIterations = 1e3, numInteriorKnots = 6, seed=2L)
 }
 
 lcMethodTestCrimCVt = function(...) {
