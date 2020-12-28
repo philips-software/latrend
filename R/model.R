@@ -906,7 +906,7 @@ setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
 #' @inheritParams clusterTrajectories
 #' @param clusterLabels Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.
 #' @param trajAssignments The cluster assignments for the fitted trajectories. Only used when `trajectories = TRUE` and `facet = TRUE`. See [trajectoryAssignments].
-#' @param ... Arguments passed to [clusterTrajectories].
+#' @param ... Arguments passed to [clusterTrajectories], or [ggplot2::geom_line] for plotting the cluster trajectory lines.
 #' @return A `ggplot` object.
 setMethod('plotClusterTrajectories', signature('lcModel'),
   function(object,
@@ -942,7 +942,8 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
     id = idVariable(object),
     trajectories = trajectories,
     facet = facet,
-    rawdata = rawdata)
+    rawdata = rawdata,
+    ...)
 })
 
 

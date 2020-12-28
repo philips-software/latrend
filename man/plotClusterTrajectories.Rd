@@ -47,7 +47,7 @@
 
 \item{id}{Id column. Only needed when \code{trajectories = TRUE}.}
 
-\item{...}{Arguments passed to \link{clusterTrajectories}.}
+\item{...}{Arguments passed to \link{clusterTrajectories}, or \link[ggplot2:geom_path]{ggplot2::geom_line} for plotting the cluster trajectory lines.}
 
 \item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying what='mb'.}
 
@@ -67,6 +67,6 @@ Plot cluster trajectories
 Plot the cluster trajectories of a lcModel
 }
 \details{
-The line size of the cluster trajectories can be manipulated by changing the default for ggplot2.
-For example: \code{update_geom_defaults("line", list(size = 1.5))}
+Instead of passing the plotting arguments through \code{...}, consider modifying the ggplot2 defaults.
+For example, changing the default line size: \code{update_geom_defaults("line", list(size = 1.5))}
 }

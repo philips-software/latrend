@@ -11,7 +11,6 @@
 #' @param response Response variable `character` name or a `call`.
 #' @param cluster Cluster variable name. If unspecified, trajectories are not grouped. Alternatively, cluster is a vector indicating cluster membership per id.
 #' @param facet Whether to facet by cluster.
-#' @param ... Additional arguments.
 #' @examples
 #' data(latrendData)
 #' plotTrajectories(latrendData, response = "Y", id = "Id", time = "Time")
@@ -72,9 +71,8 @@ setMethod('plotTrajectories', signature('data.frame'), function(object,
 #' @param trajectories Whether to plot the original data in addition to the cluster (i.e., center) trajectories
 #' @param facet Whether to facet by cluster. This is done by default when `trajectories` is enabled.
 #' @param id Id column. Only needed when `trajectories = TRUE`.
-#' @param ... Additional arguments.
-#' @details The line size of the cluster trajectories can be manipulated by changing the default for ggplot2.
-#' For example: `update_geom_defaults("line", list(size = 1.5))`
+#' @details Instead of passing the plotting arguments through `...`, consider modifying the ggplot2 defaults.
+#' For example, changing the default line size: `update_geom_defaults("line", list(size = 1.5))`
 setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     response,
     cluster = 'Cluster',
@@ -101,11 +99,12 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     trajectories = trajectories,
     facet = facet,
     id = id,
-    rawdata = object)
+    rawdata = object,
+    ...)
 })
 
 
-.plotClusterTrajs = function(data, response, time, cluster = 'Cluster', trajectories = FALSE, facet = FALSE, id, rawdata = NULL) {
+.plotClusterTrajs = function(data, response, time, cluster = 'Cluster', trajectories = FALSE, facet = FALSE, id, rawdata = NULL, ...) {
   assert_that(
     is.data.frame(data),
     has_name(data, response),
@@ -151,7 +150,7 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     p = p + facet_wrap(~ Cluster)
   }
 
-  p = p + geom_line(aes_string(color = cluster)) +
+  p = p + geom_line(aes_string(color = cluster), ...) +
     labs(title = 'Cluster trajectories')
 
   return(p)
