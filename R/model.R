@@ -868,7 +868,12 @@ setMethod('predictAssignments', signature('lcModel'), function(object, newdata =
 #' @param ... Arguments passed to [plotClusterTrajectories].
 #' @return A `ggplot` object.
 setMethod('plot', signature('lcModel'), function(x, y, ...) {
-  plotClusterTrajectories(x, ..., trajectories = TRUE)
+  args = list(...)
+  if(!has_name(args, 'trajectories')) {
+    args$trajectories = TRUE
+  }
+
+  do.call(plotClusterTrajectories, c(x, args))
 })
 
 
