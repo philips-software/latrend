@@ -144,7 +144,7 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
   )
 
   if (trajectories) {
-    p = p + geom_line(data = rawdata, mapping = aes_string(group = id), size = .01, color = 'black')
+    p = p + geom_line(data = rawdata, mapping = aes_string(group = id), color = 'black')
   }
 
   if (facet) {
