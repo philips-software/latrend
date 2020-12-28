@@ -916,7 +916,7 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
       clusterNames(object),
       percent(clusterProportions(object))),
     trajectories = FALSE,
-    facet = trajectories,
+    facet = isTRUE(trajectories),
     trajAssignments = trajectoryAssignments(object),
     ...
   ) {

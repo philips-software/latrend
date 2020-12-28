@@ -79,14 +79,13 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     time = getOption('latrend.time'),
     center = meanNA,
     trajectories = FALSE,
-    facet = trajectories,
+    facet = isTRUE(trajectories),
     id = getOption('latrend.id'),
     ...
   ) {
   assert_that(has_name(object, cluster),
     has_name(object, response),
-    is.function(center),
-    is.flag(trajectories))
+    is.function(center))
 
   cdata = as.data.table(object) %>%
     .[, .(Value = center(get(response))), keyby=c(cluster, time)] %>%
@@ -110,24 +109,9 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     has_name(data, response),
     has_name(data, time),
     has_name(data, cluster),
-    is.flag(trajectories),
+    is.flag(trajectories) || is.list(trajectories),
     is.flag(facet)
   )
-
-  if (trajectories) {
-    assert_that(
-      is.data.frame(rawdata),
-      has_name(rawdata, id),
-      has_name(rawdata, time),
-      has_name(rawdata, response)
-    )
-
-    cols = c(id, time, response)
-    if (facet) {
-      cols = c(cols, cluster)
-    }
-    rawdata = subset(rawdata, select = cols)
-  }
 
   if (is.factor(data[[cluster]])) {
     nClus = nlevels(data[[cluster]])
@@ -142,8 +126,30 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
       y = response)
   )
 
-  if (trajectories) {
-    p = p + geom_line(data = rawdata, mapping = aes_string(group = id), color = 'black')
+  if (isTRUE(trajectories) || is.list(trajectories)) {
+    assert_that(
+      is.data.frame(rawdata),
+      has_name(rawdata, id),
+      has_name(rawdata, time),
+      has_name(rawdata, response)
+    )
+
+    cols = c(id, time, response)
+    if (facet) {
+      cols = c(cols, cluster)
+    }
+
+    lineArgs = list(
+      data = subset(rawdata, select = cols),
+      mapping = aes_string(group = id),
+      color = 'black'
+    )
+
+    if(is.list(trajectories)) {
+      lineArgs = modifyList(lineArgs, trajectories)
+    }
+
+    p = p + do.call(geom_line, lineArgs)
   }
 
   if (facet) {

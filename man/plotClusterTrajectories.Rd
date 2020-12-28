@@ -13,7 +13,7 @@
   time = getOption("latrend.time"),
   center = meanNA,
   trajectories = FALSE,
-  facet = trajectories,
+  facet = isTRUE(trajectories),
   id = getOption("latrend.id"),
   ...
 )
@@ -25,7 +25,7 @@
   clusterLabels = sprintf("\%s (\%s)", clusterNames(object),
     percent(clusterProportions(object))),
   trajectories = FALSE,
-  facet = trajectories,
+  facet = isTRUE(trajectories),
   trajAssignments = trajectoryAssignments(object),
   ...
 )
