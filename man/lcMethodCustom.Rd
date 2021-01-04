@@ -46,7 +46,7 @@ model <- latrend(method, data = latrendData)
 \seealso{
 Other lcMethod implementations: 
 \code{\link{lcMethod-class}},
-\code{\link{lcMethodAKMedoids}},
+\code{\link{lcMethodAkmedoids}},
 \code{\link{lcMethodCrimCV}},
 \code{\link{lcMethodDtwclust}},
 \code{\link{lcMethodFunFEM}},

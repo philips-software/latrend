@@ -121,7 +121,7 @@ names(m)
 \link{environment}
 
 Other lcMethod implementations: 
-\code{\link{lcMethodAKMedoids}},
+\code{\link{lcMethodAkmedoids}},
 \code{\link{lcMethodCrimCV}},
 \code{\link{lcMethodCustom}},
 \code{\link{lcMethodDtwclust}},

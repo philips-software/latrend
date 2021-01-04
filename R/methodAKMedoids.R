@@ -4,11 +4,11 @@
 #' @name interface-akmedoids
 #' @rdname interface-akmedoids
 #' @title akmedoids interface
-#' @seealso [lcMethodAKMedoids] \link[akmedoids]{akmedoids.clust}
+#' @seealso [lcMethodAkmedoids] \link[akmedoids]{akmedoids.clust}
 #' @keywords internal
 NULL
 
-setClass('lcMethodAKMedoids', contains = 'lcMatrixMethod')
+setClass('lcMethodAkmedoids', contains = 'lcMatrixMethod')
 
 #' @export
 #' @title Specify AKMedoids method
@@ -21,17 +21,17 @@ setClass('lcMethodAKMedoids', contains = 'lcMatrixMethod')
 #' @examples
 #' library(akmedoids)
 #' data(latrendData)
-#' method <- lcMethodAKMedoids(response = "Y", time = "Time", id = "Id", nClusters = 3)
+#' method <- lcMethodAkmedoids(response = "Y", time = "Time", id = "Id", nClusters = 3)
 #' model <- latrend(method, data = latrendData)
 #' @family lcMethod implementations
-lcMethodAKMedoids = function(response,
+lcMethodAkmedoids = function(response,
                              time = getOption('latrend.time'),
                              id = getOption('latrend.id'),
                              nClusters = 3, # must be > 2
                              clusterCenter = median,
                              ...) {
   lcMethod.call(
-    'lcMethodAKMedoids',
+    'lcMethodAkmedoids',
     call = match.call.defaults(),
     defaults = akmedoids::akmedoids.clust,
     excludeArgs = c('traj', 'id_field', 'k')
@@ -39,14 +39,14 @@ lcMethodAKMedoids = function(response,
 }
 
 #' @rdname interface-akmedoids
-setMethod('getName', signature('lcMethodAKMedoids'), function(object) 'anchored k-medoids')
+setMethod('getName', signature('lcMethodAkmedoids'), function(object) 'anchored k-medoids')
 
 #' @rdname interface-akmedoids
-setMethod('getShortName', signature('lcMethodAKMedoids'), function(object) 'akm')
+setMethod('getShortName', signature('lcMethodAkmedoids'), function(object) 'akm')
 
 #' @rdname interface-akmedoids
 #' @inheritParams fit
-setMethod('fit', signature('lcMethodAKMedoids'), function(method, data, envir, verbose, ...) {
+setMethod('fit', signature('lcMethodAkmedoids'), function(method, data, envir, verbose, ...) {
   args = as.list(method, args = akmedoids::akmedoids.clust)
   args$traj = envir$dataMat
   args$k = method$nClusters

@@ -2,16 +2,16 @@
 % Please edit documentation in R/methodAKMedoids.R
 \name{interface-akmedoids}
 \alias{interface-akmedoids}
-\alias{getName,lcMethodAKMedoids-method}
-\alias{getShortName,lcMethodAKMedoids-method}
-\alias{fit,lcMethodAKMedoids-method}
+\alias{getName,lcMethodAkmedoids-method}
+\alias{getShortName,lcMethodAkmedoids-method}
+\alias{fit,lcMethodAkmedoids-method}
 \title{akmedoids interface}
 \usage{
-\S4method{getName}{lcMethodAKMedoids}(object)
+\S4method{getName}{lcMethodAkmedoids}(object)
 
-\S4method{getShortName}{lcMethodAKMedoids}(object)
+\S4method{getShortName}{lcMethodAkmedoids}(object)
 
-\S4method{fit}{lcMethodAKMedoids}(method, data, envir, verbose, ...)
+\S4method{fit}{lcMethodAkmedoids}(method, data, envir, verbose, ...)
 }
 \arguments{
 \item{object}{The object to extract the label from.}
@@ -30,6 +30,6 @@
 akmedoids interface
 }
 \seealso{
-\link{lcMethodAKMedoids} \link[akmedoids]{akmedoids.clust}
+\link{lcMethodAkmedoids} \link[akmedoids]{akmedoids.clust}
 }
 \keyword{internal}

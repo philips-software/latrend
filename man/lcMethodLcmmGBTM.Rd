@@ -43,7 +43,7 @@ method <- lcMethodLcmmGBTM(Y ~ CLUSTER * Time, id = "Id", time = "Time", nCluste
 \seealso{
 Other lcMethod implementations: 
 \code{\link{lcMethod-class}},
-\code{\link{lcMethodAKMedoids}},
+\code{\link{lcMethodAkmedoids}},
 \code{\link{lcMethodCrimCV}},
 \code{\link{lcMethodCustom}},
 \code{\link{lcMethodDtwclust}},
