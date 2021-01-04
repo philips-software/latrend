@@ -135,15 +135,11 @@ as.data.frame.lcModels = function(x, ...,
   }
 }
 
-#' @export
-#' @importFrom stats as.dist
-#' @rdname externalMetric
-#' @aliases externalMetric,lcModels,missing-method
-#' @return For `externalMetric(lcModels)`: A distance matrix of class [dist] representing
-#' the pairwise comparisons.
-setMethod('externalMetric',
-  signature('lcModels', 'missing'), function(object, object2, name = 'adjustedRand') {
-  assert_that(is.character(name), length(name) == 1)
+.externalMetricDist.lcModels = function(object, name) {
+  assert_that(
+    is.character(name),
+    length(name) == 1
+  )
 
   pairs = combn(seq_along(object), m = 2, simplify = FALSE)
 
@@ -153,6 +149,29 @@ setMethod('externalMetric',
   m = matrix(NaN, nrow = length(object), ncol = length(object))
   m[do.call(rbind, pairs)] = unlist(result)
   as.dist(t(m), diag = FALSE, upper = FALSE)
+}
+
+# externalMetric ####
+#' @export
+#' @importFrom stats as.dist
+#' @rdname externalMetric
+#' @aliases externalMetric,lcModels,missing-method
+#' @return For `externalMetric(lcModels)`: A distance matrix of class [dist] representing
+#' the pairwise comparisons.
+setMethod('externalMetric', signature('lcModels', 'missing'),
+  function(object, object2, name = 'adjustedRand') {
+    .externalMetricDist.lcModels(object, name = name)
+})
+
+#' @export
+#' @importFrom stats as.dist
+#' @rdname externalMetric
+#' @aliases externalMetric,lcModels,character-method
+#' @return For `externalMetric(lcModels, name)`: A distance matrix of class [dist] representing
+#' the pairwise comparisons.
+setMethod('externalMetric', signature('lcModels', 'character'),
+  function(object, object2 = 'adjustedRand') {
+    .externalMetricDist.lcModels(object, name = object2)
 })
 
 
@@ -170,8 +189,9 @@ setMethod('externalMetric', signature('lcModels', 'lcModel'), .externalMetric.lc
 #' @inheritParams metric
 #' @return For `externalMetric(list, lcModel)`: A named `numeric` vector or `matrix`
 #' containing the computed model metrics.
-setMethod('externalMetric',
-  signature('list', 'lcModel'), function(object, object2, name, drop = TRUE) {
+setMethod('externalMetric', signature('list', 'lcModel'),
+  function(object, object2, name, drop = TRUE)
+  {
   assert_that(is.lcModels(object))
   .externalMetric.lcModels(object, object2, name, drop = drop)
 })
@@ -203,6 +223,7 @@ setMethod('externalMetric',
   }
 }
 
+# metric ####
 #' @export
 #' @rdname metric
 #' @param drop Whether to drop the matrix dimensions in case of a single model output.

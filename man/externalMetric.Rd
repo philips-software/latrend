@@ -4,6 +4,7 @@
 \alias{externalMetric,lcModel,lcModel-method}
 \alias{externalMetric}
 \alias{externalMetric,lcModels,missing-method}
+\alias{externalMetric,lcModels,character-method}
 \alias{externalMetric,lcModels,lcModel-method}
 \alias{externalMetric,lcModels,lcModels-method}
 \alias{externalMetric,list,lcModel-method}
@@ -12,6 +13,8 @@
 \S4method{externalMetric}{lcModel,lcModel}(object, object2, name, ...)
 
 \S4method{externalMetric}{lcModels,missing}(object, object2, name = "adjustedRand")
+
+\S4method{externalMetric}{lcModels,character}(object, object2 = "adjustedRand")
 
 \S4method{externalMetric}{lcModels,lcModel}(object, object2, name, drop = TRUE)
 
@@ -34,6 +37,9 @@ For \code{externalMetric(lcModel, lcModel)}: A \code{numeric} vector of the comp
 A named \code{numeric} vector containing the computed model metrics.
 
 For \code{externalMetric(lcModels)}: A distance matrix of class \link{dist} representing
+the pairwise comparisons.
+
+For \code{externalMetric(lcModels, name)}: A distance matrix of class \link{dist} representing
 the pairwise comparisons.
 
 For \code{externalMetric(lcModels, lcModel)}: A named \code{numeric} vector or \code{matrix}
