@@ -122,9 +122,9 @@ test_that('single metric', {
     expect_is('numeric')
 
   x = metric(models, 'BIC', drop = FALSE)
-  expect_is(x, 'matrix')
-  expect_true(ncol(x) == 1)
-  expect_true(colnames(x) == 'BIC')
+  expect_is(x, 'data.frame')
+  expect_true(length(x) == 1)
+  expect_true(names(x) == 'BIC')
 })
 
 test_that('multiple metrics', {
@@ -133,12 +133,12 @@ test_that('multiple metrics', {
     expect_length(0)
 
   x = metric(models, c('AIC', 'BIC'))
-  expect_is(x, 'matrix')
-  expect_equivalent(colnames(x), c('AIC', 'BIC'))
+  expect_is(x, 'data.frame')
+  expect_equivalent(names(x), c('AIC', 'BIC'))
 
   as.list(models) %>%
     metric(c('AIC', 'BIC')) %>%
-    expect_is('matrix')
+    expect_is('data.frame')
 })
 
 test_that('min', {

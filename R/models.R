@@ -110,6 +110,7 @@ as.data.frame.lcModels = function(x, ...,
   as.data.frame(dt)
 }
 
+# externalMetric ####
 .externalMetric.lcModels = function(object, object2, name, drop = TRUE) {
   assert_that(is.character(name),
     is.flag(drop))
@@ -119,7 +120,8 @@ as.data.frame.lcModels = function(x, ...,
       numeric()
     } else {
       matrix(nrow=0, ncol=length(name)) %>%
-        set_colnames(name)
+        set_colnames(name) %>%
+        as.data.frame()
     }
   }
   else {
@@ -130,7 +132,7 @@ as.data.frame.lcModels = function(x, ...,
     if(drop && ncol(metMat) == 1) {
       as.numeric(metMat)
     } else {
-      metMat
+      as.data.frame(metMat)
     }
   }
 }
@@ -151,7 +153,6 @@ as.data.frame.lcModels = function(x, ...,
   as.dist(t(m), diag = FALSE, upper = FALSE)
 }
 
-# externalMetric ####
 #' @export
 #' @importFrom stats as.dist
 #' @rdname externalMetric
@@ -178,7 +179,7 @@ setMethod('externalMetric', signature('lcModels', 'character'),
 #' @export
 #' @rdname externalMetric
 #' @aliases externalMetric,lcModels,lcModels-method
-#' @return For `externalMetric(lcModels, lcModel)`: A named `numeric` vector or `matrix`
+#' @return For `externalMetric(lcModels, lcModel)`: A named `numeric` vector or `data.frame`
 #' containing the computed model metrics.
 setMethod('externalMetric', signature('lcModels', 'lcModel'), .externalMetric.lcModels)
 
@@ -187,7 +188,7 @@ setMethod('externalMetric', signature('lcModels', 'lcModel'), .externalMetric.lc
 #' @rdname externalMetric
 #' @aliases externalMetric,list,lcModel-method
 #' @inheritParams metric
-#' @return For `externalMetric(list, lcModel)`: A named `numeric` vector or `matrix`
+#' @return For `externalMetric(list, lcModel)`: A named `numeric` vector or `data.frame`
 #' containing the computed model metrics.
 setMethod('externalMetric', signature('list', 'lcModel'),
   function(object, object2, name, drop = TRUE)
@@ -197,17 +198,19 @@ setMethod('externalMetric', signature('list', 'lcModel'),
 })
 
 
+# metric ####
 .metric.lcModels = function(object, name, drop = TRUE) {
   assert_that(is.lcModels(object),
-              is.character(name),
-              is.flag(drop))
+    is.character(name),
+    is.flag(drop))
 
   if (length(object) == 0) {
     if (drop) {
       numeric()
     } else {
-      matrix(nrow=0, ncol=length(name)) %>%
-        set_colnames(name)
+      matrix(nrow = 0, ncol = length(name)) %>%
+        set_colnames(name) %>%
+        as.data.frame()
     }
   }
   else {
@@ -218,15 +221,15 @@ setMethod('externalMetric', signature('list', 'lcModel'),
     if(drop && ncol(metMat) == 1) {
       as.numeric(metMat)
     } else {
-      metMat
+      as.data.frame(metMat)
     }
   }
 }
 
-# metric ####
 #' @export
 #' @rdname metric
-#' @param drop Whether to drop the matrix dimensions in case of a single model output.
+#' @param drop Whether to return a `numeric vector` instead of a `data.frame`
+#' in case of a single metric.
 #' @return For `metric(list)`: A `data.frame` with a metric per column.
 setMethod('metric', signature('list'), function(object, name, drop = TRUE) {
   .metric.lcModels(as.lcModels(object), name, drop = drop)

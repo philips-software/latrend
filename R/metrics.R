@@ -109,6 +109,11 @@ intMetricsEnv$APPA = function(m) {
 
 #' @importFrom stats BIC
 intMetricsEnv$BIC = BIC
+
+intMetricsEnv$converged = function(m) {
+  converged(m) > 0
+}
+
 #' @importFrom stats deviance
 intMetricsEnv$deviance = deviance
 

@@ -29,7 +29,8 @@
 
 \item{...}{Additional arguments.}
 
-\item{drop}{Whether to drop the matrix dimensions in case of a single model output.}
+\item{drop}{Whether to return a \verb{numeric vector} instead of a \code{data.frame}
+in case of a single metric.}
 }
 \value{
 For \code{externalMetric(lcModel, lcModel)}: A \code{numeric} vector of the computed metrics.
@@ -42,10 +43,10 @@ the pairwise comparisons.
 For \code{externalMetric(lcModels, name)}: A distance matrix of class \link{dist} representing
 the pairwise comparisons.
 
-For \code{externalMetric(lcModels, lcModel)}: A named \code{numeric} vector or \code{matrix}
+For \code{externalMetric(lcModels, lcModel)}: A named \code{numeric} vector or \code{data.frame}
 containing the computed model metrics.
 
-For \code{externalMetric(list, lcModel)}: A named \code{numeric} vector or \code{matrix}
+For \code{externalMetric(list, lcModel)}: A named \code{numeric} vector or \code{data.frame}
 containing the computed model metrics.
 }
 \description{
