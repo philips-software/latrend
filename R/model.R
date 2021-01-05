@@ -715,6 +715,12 @@ predict.lcModel = function(object, ...,
   }
 
   if (hasName(newdata, 'Cluster')) {
+    assert_that(noNA(newdata$Cluster) &
+        all(unique(newdata$Cluster) %in% clusterNames(object)),
+      msg = paste0('The provided newdata "Cluster" column must be complete and
+      only contain cluster names associated with the model (',
+        paste0(shQuote(clusterNames(object)), collapse = ', '), ').'))
+
     # predictForCluster with newdata subsets
     clusdataList = as.data.table(newdata) %>%
       split(by = 'Cluster', sorted = TRUE) %>%
