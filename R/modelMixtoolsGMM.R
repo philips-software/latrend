@@ -1,27 +1,15 @@
 #' @include model.R
 setClass('lcModelMixtoolsGMM', contains = 'lcModel')
 
-#' @rdname interface-mixtools
-setMethod('postprob', signature('lcModelMixtoolsGMM'), function(object, ...) {
-  pp = object@model$posterior.z
-  colnames(pp) = clusterNames(object)
-  return(pp)
-})
 
-
-#' @export
+#. clusterTrajectories ####
 #' @importFrom plyr alply
 #' @rdname interface-mixtools
-#' @inheritParams predict.lcModel
-predict.lcModelMixtoolsGMM = function(object, ..., newdata = NULL, what = 'mu') {
-  assert_that(is.newdata(newdata),
-              what %in% c('mu'))
-
-  if (is.null(newdata)) {
-    newdata = model.data(object) %>%
-      subset(select = setdiff(names(.), 'Cluster'))
-  }
-  assert_that(has_name(newdata, timeVariable(object)))
+#' @inheritParams predictForCluster
+setMethod('predictForCluster', signature('lcModelMixtoolsGMM'), function(
+  object, newdata, cluster, what = 'mu', ...)
+{
+  assert_that(what == 'mu')
 
   idVar = idVariable(object)
   fixed = dropResponse(object@model$fixed)
@@ -37,25 +25,32 @@ predict.lcModelMixtoolsGMM = function(object, ..., newdata = NULL, what = 'mu') 
     # patient-specific prediction
     XidList = split(Xran, newdata[[idVar]]) %>%
       lapply(matrix, ncol = ncol(Xran))
-    ranefList = ranef.lcModelMixtoolsGMM(object) %>% asplit(2)
-    assert_that(all(names(XidList) %in% names(ranefList)), msg = 'unknown Ids specified in newdata. prediction for new Ids is not supported')
+    ranefList = ranef.lcModelMixtoolsGMM(object) %>%
+      asplit(2)
+    assert_that(
+      all(names(XidList) %in% names(ranefList)),
+      msg = 'unknown Ids specified in newdata. prediction for new Ids is not supported')
 
-    predMat = mapply('%*%', XidList, ranefList[names(XidList)], SIMPLIFY =
-                       FALSE) %>%
+    predMat = mapply('%*%', XidList, ranefList[names(XidList)], SIMPLIFY = FALSE) %>%
       do.call(rbind, .) + predFix
     assert_that(nrow(predMat) == nrow(newdata))
   } else {
-    fitRan = apply(betaMat, 2, function(beta)
-      Xran %*% beta) %>%
+    fitRan = apply(betaMat, 2, function(beta) Xran %*% beta) %>%
       set_colnames(clusterNames(object))
     predMat = fitRan + predFix
   }
 
-  transformPredict(pred = predMat,
-                   model = object,
-                   newdata = newdata)
-}
+  clusIdx = match(cluster, clusterNames(object))
+  predMat[, clusIdx]
+})
 
+
+#' @rdname interface-mixtools
+setMethod('postprob', signature('lcModelMixtoolsGMM'), function(object, ...) {
+  pp = object@model$posterior.z
+  colnames(pp) = clusterNames(object)
+  return(pp)
+})
 
 
 #' @export
@@ -67,6 +62,7 @@ logLik.lcModelMixtoolsGMM = function(object, ...) {
   class(ll) = 'logLik'
   return(ll)
 }
+
 
 #' @export
 #' @rdname interface-mixtools
@@ -82,11 +78,13 @@ coef.lcModelMixtoolsGMM = function(object, ...) {
   )
 }
 
+
 #' @export
 #' @rdname interface-mixtools
 sigma.lcModelMixtoolsGMM = function(object, ...) {
   object@model$sigma
 }
+
 
 ranef.lcModelMixtoolsGMM = function(object, ...) {
   betaNames = colnames(object@model$x[[1]])
