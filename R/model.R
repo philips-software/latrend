@@ -682,7 +682,7 @@ nobs.lcModel = function(object, ...) {
 #' @importFrom stats predict
 #' @title lcModel predictions
 #' @description Predicts the expected trajectory observations at the given time for each cluster, unless specified.
-#' @details The default `predict.lcModel` implementation.
+#' @details Subclasses of `lcModel` should preferably implement `predictForCluster` instead of overriding `predict.lcModel` in order to benefit from standardized error checking and output handling.
 #' @param object The `lcModel` object.
 #' @param newdata Optional data frame for which to compute the model predictions. If omitted, the model training data is used.
 #' Cluster trajectory predictions are made when ids are not specified. If the clusters are specified under the Cluster column, output is given only for the specified cluster. Otherwise, a matrix is returned with predictions for all clusters.
@@ -739,22 +739,26 @@ predict.lcModel = function(object, ...,
                       ...)
   }, clusterNames(object), clusdataList, SIMPLIFY = FALSE)
 
-  assert_that(uniqueN(vapply(predList, class, FUN.VALUE = '')) == 1, msg =
-                'output from predictForCluster() must be same class for all clusters. Check the model implementation.')
+  assert_that(uniqueN(vapply(predList, class, FUN.VALUE = '')) == 1,
+    msg = 'output from predictForCluster() must be same class for all clusters.
+    Check the model implementation.')
 
   if (is.data.frame(predList[[1]])) {
     pred = rbindlist(predList, idcol = 'Cluster')
   }
   else if (is.numeric(predList[[1]])) {
-    clusDataRows = vapply(clusdataList, nrow, FUN.VALUE=0)
-    clusPredRows = vapply(predList, length, FUN.VALUE=0)
-    assert_that(all(clusDataRows == clusPredRows), msg='Numeric output length from predictForCluster() does not match the number of input newdata rows for one or more clusters')
+    clusDataRows = vapply(clusdataList, nrow, FUN.VALUE = 0)
+    clusPredRows = vapply(predList, length, FUN.VALUE = 0)
+    assert_that(all(clusDataRows == clusPredRows),
+      msg = 'Numeric output length from predictForCluster() does not match
+      the number of input newdata rows for one or more clusters')
     pred = data.table(Cluster = rep(seq_len(nClusters(object)), clusDataRows),
                       Fit = do.call(c, predList))
   }
   else {
     stop(
-      'unsupported output from predictForCluster(): must be data.frame or numeric. Check the model implementation.'
+      'unsupported output from predictForCluster(): must be data.frame or numeric.
+      Check the model implementation.'
     )
   }
 

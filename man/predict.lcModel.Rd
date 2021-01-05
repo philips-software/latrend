@@ -23,7 +23,7 @@ If newdata specifies the cluster membership; a vector of cluster-specific predic
 Predicts the expected trajectory observations at the given time for each cluster, unless specified.
 }
 \details{
-The default \code{predict.lcModel} implementation.
+Subclasses of \code{lcModel} should preferably implement \code{predictForCluster} instead of overriding \code{predict.lcModel} in order to benefit from standardized error checking and output handling.
 }
 \examples{
 data(latrendData)
