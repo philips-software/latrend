@@ -95,6 +95,7 @@ setGeneric('externalMetric', function(object, object2, name, ...) standardGeneri
 #' @export
 #' @name latrend-generics
 setGeneric('fit', function(method, data, envir, verbose, ...) {
+  dateStart = Sys.time()
   start = proc.time()
   model <- standardGeneric('fit')
   estimationTime = proc.time()['elapsed'] - start['elapsed']
@@ -107,6 +108,7 @@ setGeneric('fit', function(method, data, envir, verbose, ...) {
   model@time = timeVariable(method)
   model@response = responseVariable(method)
   model@label = getLabel(method)
+  model@date = dateStart
   model@estimationTime = as.numeric(estimationTime, 'secs')
 
   return(model)
