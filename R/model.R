@@ -713,8 +713,18 @@ predict.lcModel = function(object, ...,
       newdata[['Cluster']] = NULL # allowing the Cluster column to remain would break the fitted() output.
     }
   }
+  else {
+    if (nrow(newdata) == 0) {
+      warning('called predict() with empty newdata data.frame (nrow = 0)')
+    }
+  }
+
+  newdata = as.data.table(newdata)
 
   if (hasName(newdata, 'Cluster')) {
+    # enforce cluster ordering
+    newdata[, Cluster := factor(Cluster, levels = clusterNames(object))]
+
     assert_that(noNA(newdata$Cluster) &
         all(unique(newdata$Cluster) %in% clusterNames(object)),
       msg = paste0('The provided newdata "Cluster" column must be complete and only contain cluster names associated with the model (',
@@ -722,7 +732,7 @@ predict.lcModel = function(object, ...,
 
     # predictForCluster with newdata subsets
     clusdataList = as.data.table(newdata) %>%
-      split(by = 'Cluster', sorted = TRUE) %>%
+      split(by = 'Cluster', sorted = TRUE, drop = TRUE) %>%
       lapply(function(cdata) cdata[, Cluster := NULL])
   }
   else {
