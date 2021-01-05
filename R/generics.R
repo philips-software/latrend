@@ -37,7 +37,8 @@ setGeneric('clusterProportions', function(object, ...) {
     length(props) == nClusters(object),
     noNA(props),
     all(is.finite(props)),
-    min(props) >= 0
+    min(props) >= 0,
+    max(props) <= 1
   )
 
   names(props) = clusterNames(object)
@@ -200,23 +201,45 @@ setGeneric('postprob', function(object, ...) {
 #' @export
 #' @name latrend-generics
 setGeneric('predictAssignments', function(object, newdata = NULL, ...) {
-    assignments <- standardGeneric('predictAssignments')
+  assert_that(is.newdata(newdata))
 
-    assert_that(
-      is.null(newdata) || length(assignments) == nrow(newdata)
-    )
+  assignments <- standardGeneric('predictAssignments')
 
-    make.trajectoryAssignments(object, assignments)
+  assert_that(
+    is.null(newdata) || length(assignments) == nrow(newdata)
+  )
+
+  make.trajectoryAssignments(object, assignments)
 })
 
 #' @export
 #' @name latrend-generics
-setGeneric('predictForCluster',
-  function(object, newdata = NULL, cluster, ...) standardGeneric('predictForCluster'))
+setGeneric('predictForCluster', function(object, newdata = NULL, cluster, ...) {
+  assert_that(
+    is.newdata(newdata),
+    cluster %in% clusterNames(object)
+  )
+
+  out <- standardGeneric('predictForCluster')
+
+  assert_that(is.numeric(out) || is.data.frame(out))
+
+  if (!is.null(newdata)) {
+    if (is.numeric(out)) {
+      assert_that(length(out) == nrow(newdata))
+    } else if (is.data.frame(out)) {
+      assert_that(nrow(out) == nrow(newdata))
+    }
+  }
+
+  out
+})
 
 #' @export
 #' @name latrend-generics
 setGeneric('predictPostprob', function(object, newdata = NULL, ...) {
+  assert_that(is.newdata(newdata))
+
   pp <- standardGeneric('predictPostprob')
 
   assert_that(
@@ -264,11 +287,13 @@ setGeneric('prepareData', function(method, data, verbose, ...) {
 #' @name latrend-generics
 setGeneric('responseVariable', function(object, ...) {
   response <- standardGeneric('responseVariable')
+
   assert_that(
     is.character(response),
     length(response) == 1,
     nchar(response) > 0
   )
+
   response
 })
 
@@ -285,11 +310,13 @@ setGeneric('strip', function(object, ...) standardGeneric('strip'))
 #' @name latrend-generics
 setGeneric('timeVariable', function(object, ...) {
   time <- standardGeneric('timeVariable')
+
   assert_that(
     is.character(time),
     length(time) == 1,
     nchar(time) > 0
   )
+
   time
 })
 
@@ -297,6 +324,7 @@ setGeneric('timeVariable', function(object, ...) {
 #' @name latrend-generics
 setGeneric('validate', function(method, data, envir, ...) {
   validationResult <- standardGeneric('validate')
+
   if (!isTRUE(validationResult)) {
     stop('method validation failed: ', validationResult)
   }
