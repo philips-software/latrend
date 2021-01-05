@@ -710,9 +710,7 @@ nobs.lcModel = function(object, ...) {
 #' # Prediction matrix for id S1 for all clusters
 #' predIdAll <- predict(model, newdata = data.frame(Id = "S1", Time = time(model)))
 #' @family model-specific methods
-predict.lcModel = function(object, ...,
-                           newdata = NULL,
-                           what = 'mu') {
+predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
   # special case for when no newdata is provided
   if (is.null(newdata)) {
     newdata = model.data(object)
