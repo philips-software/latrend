@@ -7,7 +7,7 @@
 \alias{preFit,lcMethodFunFEM-method}
 \alias{fit,lcMethodFunFEM-method}
 \alias{fitted.lcModelFunFEM}
-\alias{predict.lcModelFunFEM}
+\alias{predictForCluster,lcModelFunFEM-method}
 \alias{postprob,lcModelFunFEM-method}
 \alias{coef.lcModelFunFEM}
 \alias{logLik.lcModelFunFEM}
@@ -24,7 +24,14 @@
 
 \method{fitted}{lcModelFunFEM}(object, ..., clusters = trajectoryAssignments(object))
 
-\method{predict}{lcModelFunFEM}(object, ..., newdata = NULL, what = "mu", approxFun = approx)
+\S4method{predictForCluster}{lcModelFunFEM}(
+  object,
+  newdata,
+  cluster,
+  what = "mu",
+  approxFun = approx,
+  ...
+)
 
 \S4method{postprob}{lcModelFunFEM}(object, ...)
 
@@ -51,6 +58,8 @@
 
 \item{newdata}{Optional data frame for which to compute the model predictions. If omitted, the model training data is used.
 Cluster trajectory predictions are made when ids are not specified. If the clusters are specified under the Cluster column, output is given only for the specified cluster. Otherwise, a matrix is returned with predictions for all clusters.}
+
+\item{cluster}{The cluster name (as \code{character}) to predict for.}
 
 \item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying what='mb'.}
 }

@@ -28,6 +28,8 @@ fitted.lcApproxModel = function(object, ..., clusters = trajectoryAssignments(ob
 #' @inheritParams predictForCluster
 setMethod('predictForCluster', signature('lcApproxModel'),
   function(object, newdata, cluster, what = 'mu', approxFun = approx, ...) {
+  assert_that(is.function(approxFun))
+
   clusTrajs = clusterTrajectories(object, at = NULL, what = what, approxFun = approxFun, ...) %>%
     as.data.table() %>%
     .[Cluster == cluster]
