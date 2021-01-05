@@ -53,7 +53,6 @@ setMethod('preFit', signature('lcMethodMixtoolsGMM'), function(method, data, env
   f = formula(method)
   valueColumn = responseVariable(method)
   id = idVariable(method)
-  assert_that(!hasCLUSTER(f), msg = 'CLUSTER-specific fixed effects are not supported for this method')
   e$fixed = dropRE(f)
   reTerms = getREterms(f)
   if (length(reTerms) > 0) {

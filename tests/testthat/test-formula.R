@@ -130,29 +130,6 @@ test_that('dropRE', {
   expect_equal(dropRE(A ~ B + (1 | C) + (D | E)), A ~ B)
 })
 
-test_that('dropCLUSTER', {
-  expect_equal(dropCLUSTER(~0), ~0)
-  expect_equal(dropCLUSTER(~1), ~1)
-  expect_equal(dropCLUSTER(~A), ~A)
-  expect_equal(dropCLUSTER(A~B), A~B)
-  expect_equal(dropCLUSTER(~CLUSTER), ~1)
-  expect_equal(dropCLUSTER(A~CLUSTER), A~1)
-  expect_equal(dropCLUSTER(A~B + CLUSTER), A~B)
-  expect_equal(dropCLUSTER(A~B * CLUSTER), A~B)
-  expect_equal(dropCLUSTER(A~B : CLUSTER), A~1)
-})
-
-test_that('keepCLUSTER', {
-  expect_false(hasIntercept(keepCLUSTER(~0)))
-  expect_false(hasIntercept(keepCLUSTER(A~0)))
-  expect_false(hasIntercept(keepCLUSTER(~1)))
-  expect_false(hasIntercept(keepCLUSTER(A~1)))
-  expect_equal(keepCLUSTER(~CLUSTER), ~1)
-  expect_equal(keepCLUSTER(~A * CLUSTER), ~A)
-  expect_equal(keepCLUSTER(A~B * CLUSTER), A ~ B)
-  expect_equal(keepCLUSTER(A~B : CLUSTER), A ~ B - 1)
-})
-
 test_that('getSpecialTerms', {
   f = Value ~ 0 + time(1) + time(B + C) + D + time + time(I(A^2)) + I(time(Z))
   expect_equal(getSpecialTerms(A~0, special='time'), character())

@@ -47,7 +47,7 @@ setMethod('getShortName', signature('lcMethodFlexmix'), function(object) 'flx')
 setMethod('preFit', signature('lcMethodFlexmix'), function(method, data, envir, verbose, ...) {
   e = new.env()
 
-  f = formula(method) %>% dropRE %>% dropCLUSTER
+  f = formula(method) %>% dropRE()
   e$formula = paste(deparse(f), '|', idVariable(method)) %>% as.formula
   if (isArgDefined(method, 'model')) {
     e$model = method$model
