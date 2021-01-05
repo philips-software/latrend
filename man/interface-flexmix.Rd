@@ -10,8 +10,8 @@
 \alias{getName,lcMethodFlexmixGBTM-method}
 \alias{getShortName,lcMethodFlexmixGBTM-method}
 \alias{preFit,lcMethodFlexmixGBTM-method}
-\alias{predict.lcModelFlexmix}
 \alias{fitted.lcModelFlexmix}
+\alias{predictForCluster,lcModelFlexmix-method}
 \alias{postprob,lcModelFlexmix-method}
 \alias{logLik.lcModelFlexmix}
 \alias{coef.lcModelFlexmix}
@@ -32,9 +32,9 @@
 
 \S4method{preFit}{lcMethodFlexmixGBTM}(method, data, envir, verbose)
 
-\method{predict}{lcModelFlexmix}(object, ..., newdata = NULL, what = "mu")
-
 \method{fitted}{lcModelFlexmix}(object, ..., clusters = trajectoryAssignments(object))
+
+\S4method{predictForCluster}{lcModelFlexmix}(object, newdata, cluster, what = "mu", ...)
 
 \S4method{postprob}{lcModelFlexmix}(object, ...)
 
@@ -57,12 +57,14 @@
 
 \item{...}{Additional arguments.}
 
+\item{clusters}{Optional cluster assignments per id. If unspecified, a \code{matrix} is returned containing the cluster-specific predictions per column.}
+
 \item{newdata}{Optional data frame for which to compute the model predictions. If omitted, the model training data is used.
 Cluster trajectory predictions are made when ids are not specified. If the clusters are specified under the Cluster column, output is given only for the specified cluster. Otherwise, a matrix is returned with predictions for all clusters.}
 
-\item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying what='mb'.}
+\item{cluster}{The cluster name (as \code{character}) to predict for.}
 
-\item{clusters}{Optional cluster assignments per id. If unspecified, a \code{matrix} is returned containing the cluster-specific predictions per column.}
+\item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying what='mb'.}
 }
 \description{
 flexmix interface

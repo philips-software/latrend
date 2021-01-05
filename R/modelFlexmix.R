@@ -4,29 +4,6 @@ setClass('lcModelFlexmix', contains = 'lcModel')
 
 #' @export
 #' @rdname interface-flexmix
-#' @inheritParams predict.lcModel
-predict.lcModelFlexmix = function(object, ...,
-                                  newdata = NULL,
-                                  what = 'mu') {
-  assert_that(is.newdata(newdata))
-  assert_that(what == 'mu', msg = 'only what="mu" is supported')
-
-  if (is.null(newdata)) {
-    predOut = flexmix::predict(object@model)
-  } else {
-    predOut = flexmix::predict(object@model, newdata = newdata)
-  }
-  predMat = do.call(cbind, predOut) %>%
-    set_colnames(clusterNames(object))
-
-  transformPredict(pred = predMat,
-                   model = object,
-                   newdata = newdata)
-}
-
-
-#' @export
-#' @rdname interface-flexmix
 #' @inheritParams fitted.lcModel
 fitted.lcModelFlexmix = function(object, ..., clusters = trajectoryAssignments(object)) {
   predNames = paste0('pred_m', 1:nClusters(object))
@@ -37,6 +14,31 @@ fitted.lcModelFlexmix = function(object, ..., clusters = trajectoryAssignments(o
                   clusters = clusters)
 }
 
+
+#. predictForCluster ####
+#' @rdname interface-flexmix
+#' @inheritParams predictForCluster
+setMethod('predictForCluster', signature('lcModelFlexmix'), function(
+  object, newdata, cluster, what = 'mu', ...)
+{
+  assert_that(what == 'mu', msg = 'only what="mu" is supported')
+
+  if (nrow(newdata) == 0) {
+    return(numeric())
+  }
+
+  predOut = flexmix::predict(object@model, newdata = newdata)
+
+  clusIdx = match(cluster, clusterNames(object))
+
+  pred = predOut[[clusIdx]]
+  assert_that(ncol(pred) == 1,
+    msg = 'unexpected output. the lcModel implementation does not support this model')
+
+  pred
+})
+
+
 #' @rdname interface-flexmix
 setMethod('postprob', signature('lcModelFlexmix'), function(object, ...) {
   pp = postProbFromObs(object@model@posterior$scaled, make.idRowIndices(object))
@@ -44,17 +46,20 @@ setMethod('postprob', signature('lcModelFlexmix'), function(object, ...) {
   return(pp)
 })
 
+
 #' @export
 #' @rdname interface-flexmix
 logLik.lcModelFlexmix = function(object, ...) {
   logLik(object@model)
 }
 
+
 #' @export
 #' @rdname interface-flexmix
 coef.lcModelFlexmix = function(object, ...) {
   flexmix::parameters(object@model)
 }
+
 
 #' @rdname interface-flexmix
 setMethod('converged', signature('lcModelFlexmix'), function(object, ...) {
