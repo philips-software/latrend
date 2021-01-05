@@ -16,28 +16,6 @@ fitted.lcModelFunFEM = function(object, ..., clusters = trajectoryAssignments(ob
 }
 
 
-# predict.lcModelFunFEM = function(object, ...,
-#                                  newdata = NULL,
-#                                  what = 'mu',
-#                                  approxFun = approx) {
-#   assert_that(is.newdata(newdata))
-#   assert_that(what == 'mu', msg = 'only what="mu" is supported')
-#   assert_that(is.function(approxFun))
-#
-#   if (is.null(newdata)) {
-#     predMat = fitted(object, clusters = NULL)
-#   } else {
-#     assert_that(has_name(newdata, timeVariable(object)))
-#     fdmeans = object@model$fd
-#     fdmeans$coefs = t(object@model$prms$my)
-#     predMat = fda::eval.fd(evalarg = newdata[[timeVariable(object)]], fdobj = fdmeans)
-#   }
-#
-#   transformPredict(pred = predMat,
-#                    model = object,
-#                    newdata = newdata)
-# }
-
 #. predictForCluster ####
 #' @rdname interface-funFEM
 #' @inheritParams predictForCluster
