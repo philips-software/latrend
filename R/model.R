@@ -728,6 +728,7 @@ predict.lcModel = function(object, ...,
   else {
     # predictForCluster with newdata for each cluster
     clusdataList = replicate(nClusters(object), newdata, simplify = FALSE)
+    names(clusdataList) = clusterNames(object)
   }
 
   predList = mapply(function(cname, cdata) {
@@ -736,31 +737,35 @@ predict.lcModel = function(object, ...,
                       newdata = cdata,
                       what = what,
                       ...)
-  }, clusterNames(object), clusdataList, SIMPLIFY = FALSE)
+  }, names(clusdataList), clusdataList, SIMPLIFY = FALSE)
 
+  assert_that(length(predList) == length(clusdataList), msg = 'unexpected internal state. please report')
   assert_that(uniqueN(vapply(predList, class, FUN.VALUE = '')) == 1,
     msg = 'output from predictForCluster() must be same class for all clusters. Check the model implementation.')
 
   if (is.data.frame(predList[[1]])) {
     pred = rbindlist(predList, idcol = 'Cluster')
+    pred[, Cluster := factor(Cluster,
+      levels = seq_len(nClusters(object)),
+      labels = clusterNames(object))]
   }
   else if (is.numeric(predList[[1]])) {
     clusDataRows = vapply(clusdataList, nrow, FUN.VALUE = 0)
     clusPredRows = vapply(predList, length, FUN.VALUE = 0)
     assert_that(all(clusDataRows == clusPredRows),
       msg = 'Numeric output length from predictForCluster() does not match the number of input newdata rows for one or more clusters')
-    pred = data.table(Cluster = rep(seq_len(nClusters(object)), clusDataRows),
-                      Fit = do.call(c, predList))
+
+    pred = data.table(
+      Cluster = rep(
+        factor(names(clusDataRows), levels = clusterNames(object)),
+        clusDataRows),
+      Fit = do.call(c, predList))
   }
   else {
     stop(
       'unsupported output from predictForCluster(): must be data.frame or numeric. Check the model implementation.'
     )
   }
-
-  pred[, Cluster := factor(Cluster,
-                           levels = seq_len(nClusters(object)),
-                           labels = clusterNames(object))]
 
   transformPredict(pred = pred,
                    model = object,
