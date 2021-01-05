@@ -15,8 +15,7 @@
 \alias{logLik.lcModelMixtoolsGMM}
 \alias{coef.lcModelMixtoolsGMM}
 \alias{sigma.lcModelMixtoolsGMM}
-\alias{predict.lcModelMixtoolsRM}
-\alias{fitted.lcModelMixtoolsRM}
+\alias{clusterTrajectories,lcModelMixtoolsRM-method}
 \alias{postprob,lcModelMixtoolsRM-method}
 \alias{logLik.lcModelMixtoolsRM}
 \alias{converged,lcModelMixtoolsRM-method}
@@ -46,17 +45,14 @@
 
 \method{sigma}{lcModelMixtoolsGMM}(object, ...)
 
-\method{predict}{lcModelMixtoolsRM}(
+\S4method{clusterTrajectories}{lcModelMixtoolsRM}(
   object,
-  ...,
-  newdata = NULL,
+  at = time(object),
   what = "mu",
   se = TRUE,
   ci = c(0.025, 0.975),
-  approxFun = approx
+  ...
 )
-
-\method{fitted}{lcModelMixtoolsRM}(object, ..., clusters)
 
 \S4method{postprob}{lcModelMixtoolsRM}(object, ...)
 
@@ -81,6 +77,9 @@
 Cluster trajectory predictions are made when ids are not specified. If the clusters are specified under the Cluster column, output is given only for the specified cluster. Otherwise, a matrix is returned with predictions for all clusters.}
 
 \item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying what='mb'.}
+
+\item{at}{An optional vector, list or data frame of covariates at which to compute the cluster trajectory predictions.
+If a vector is specified, this is assumed to be the time covariate. Otherwise, a named list or data frame must be provided.}
 
 \item{se}{Whether to compute the standard error of the prediction.}
 
