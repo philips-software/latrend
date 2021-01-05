@@ -35,7 +35,8 @@ Compute internal model metric(s)
 }
 \examples{
 data(latrendData)
-model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time, id = "Id", time = "Time"), latrendData)
+model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
+   id = "Id", time = "Time"), latrendData)
 bic <- metric(model, "BIC")
 
 ic <- metric(model, c("AIC", "BIC"))

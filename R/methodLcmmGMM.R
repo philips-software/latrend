@@ -21,6 +21,10 @@ setValidity('lcMethodLcmmGMM', function(object) {
 #' @export
 #' @title Specify GMM method using lcmm
 #' @description Growth mixture modeling through latent-class linear mixed modeling.
+#' @param fixed The fixed effects formula.
+#' @param mixture The mixture-specific effects formula. See [lcmm::hlme] for details.
+#' @param random The random effects formula. See [lcmm::hlme] for details.
+#' @param classmb The cluster membership formula for the multinomial logistic model. See [lcmm::hlme] for details.
 #' @param time The name of the time variable.
 #' @param id The name of the trajectory identifier variable. This replaces the `subject` argument of [lcmm::hlme].
 #' @param nClusters The number of clusters to fit. This replaces the `ng` argument of [lcmm::hlme].

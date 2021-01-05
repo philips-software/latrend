@@ -18,7 +18,8 @@ Takes the inputs and generates a named \code{lcModels} object containing a list 
 \examples{
 data(latrendData)
 kml <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-gmm <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time, id = "Id", time = "Time"), latrendData)
+gmm <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
+   id = "Id", time = "Time"), latrendData)
 lcModels(kml, gmm)
 
 lcModels(defaults = c(kml, gmm))

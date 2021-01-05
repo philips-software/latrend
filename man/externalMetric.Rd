@@ -55,7 +55,8 @@ Compute external model metric(s)
 \examples{
 data(latrendData)
 model1 <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-model2 <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time, id = "Id", time = "Time"), latrendData)
+model2 <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
+   id = "Id", time = "Time"), latrendData)
 ari <- externalMetric(model1, model2, 'adjustedRand')
 }
 \seealso{

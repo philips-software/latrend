@@ -16,6 +16,14 @@ lcMethodLcmmGMM(
 )
 }
 \arguments{
+\item{fixed}{The fixed effects formula.}
+
+\item{mixture}{The mixture-specific effects formula. See \link[lcmm:hlme]{lcmm::hlme} for details.}
+
+\item{random}{The random effects formula. See \link[lcmm:hlme]{lcmm::hlme} for details.}
+
+\item{classmb}{The cluster membership formula for the multinomial logistic model. See \link[lcmm:hlme]{lcmm::hlme} for details.}
+
 \item{time}{The name of the time variable.}
 
 \item{id}{The name of the trajectory identifier variable. This replaces the \code{subject} argument of \link[lcmm:hlme]{lcmm::hlme}.}

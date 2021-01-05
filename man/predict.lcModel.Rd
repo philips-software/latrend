@@ -27,7 +27,9 @@ Subclasses of \code{lcModel} should preferably implement \code{predictForCluster
 }
 \examples{
 data(latrendData)
-model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time, id = "Id", time = "Time"), latrendData)
+model <- latrend(lcMethodLcmmGMM(
+   fixed = Y ~ Time, mixture = ~ Time,
+   id = "Id", time = "Time"), latrendData)
 predFitted <- predict(model) # same result as fitted(model)
 
 # Cluster trajectory of cluster A

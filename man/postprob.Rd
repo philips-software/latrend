@@ -17,7 +17,8 @@ Posterior probability per fitted id
 }
 \examples{
 data(latrendData)
-model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time, id = "Id", time = "Time"), data = latrendData)
+model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
+   id = "Id", time = "Time"), data = latrendData)
 postprob(model)
 }
 \seealso{
