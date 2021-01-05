@@ -17,6 +17,11 @@ if(file.exists(mixt_file)) {
 expect_valid_lcModel = function(object) {
   expect_s4_class(object, 'lcModel')
 
+  # change cluster names to ensure the model implementations correctly handle this
+  clusNames = paste0('T', seq_len(nClusters(object)))
+  clusterNames(object) = clusNames
+  expect_equal(clusterNames(object), clusNames)
+
   getCall(object) %>%
     expect_is('call')
   model.data(object) %>%
@@ -55,7 +60,7 @@ expect_valid_lcModel = function(object) {
   # Predict
   if(!is(object, 'lcModelCustom')) {
     # cluster-specific prediction
-    pred = predict(object, newdata=data.frame(Cluster='A', Assessment=time(object)[c(1,3)]))
+    pred = predict(object, newdata=data.frame(Cluster='T1', Assessment=time(object)[c(1,3)]))
     expect_is(pred, 'data.frame', info='predictClusterTime')
     expect_true('Fit' %in% names(pred), info='predictClusterTime')
     expect_equal(nrow(pred), 2, info='predictClusterTime')
@@ -64,10 +69,10 @@ expect_valid_lcModel = function(object) {
     pred2 = predict(object, newdata=data.frame(Assessment=time(object)[c(1,3)]))
     expect_is(pred2, 'list', info='predictTime')
     expect_length(pred2, nClusters(object))
-    expect_true('Fit' %in% names(pred2$A), info='predictTime')
+    expect_true('Fit' %in% names(pred2$T1), info='predictTime')
 
     # id-specific prediction for a specific cluster; data.frame
-    pred3 = predict(object, newdata=data.frame(Cluster=rep('A', 4),
+    pred3 = predict(object, newdata=data.frame(Cluster=rep('T1', 4),
                                        Traj=c(ids(object)[c(1,1,2)], tail(ids(object), 1)),
                                        Assessment=c(time(object)[c(1,3,1,1)])))
     expect_is(pred3, 'data.frame', info='predictClusterIdTime')
@@ -79,7 +84,7 @@ expect_valid_lcModel = function(object) {
                                        Assessment=c(time(object)[c(1,3,1,1)])))
     expect_is(pred4, 'list', info='predictIdTime')
     expect_length(pred4, nClusters(object))
-    expect_true('Fit' %in% names(pred4$A), info='predictIdTime')
+    expect_true('Fit' %in% names(pred4$T1), info='predictIdTime')
 
     fitted(object, clusters=trajectoryAssignments(object)) %>%
       expect_is(c('NULL', 'numeric'), info='fittedClusters')
@@ -89,7 +94,7 @@ expect_valid_lcModel = function(object) {
     predNul = predict(object, newdata=NULL)
     expect_is(predNul, 'list', info='predictNull')
     expect_length(predNul, nClusters(object))
-    expect_true('Fit' %in% names(predNul$A), info='predictNull')
+    expect_true('Fit' %in% names(predNul$T1), info='predictNull')
 
     residuals(object, clusters=trajectoryAssignments(object)) %>%
       expect_is(c('NULL', 'numeric'), label='residuals')
