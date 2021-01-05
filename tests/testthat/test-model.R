@@ -113,3 +113,12 @@ test_that('clusterNames<-', {
   clusterNames(x) = newNames
   expect_equal(clusterNames(x), newNames)
 })
+
+test_that('consistency between predict() and predict(cluster)', {
+  allPreds = predict(model, newdata = data.frame(Assessment = c(0, 1)))
+  dfPredA = predict(model, newdata = data.frame(Assessment = c(0, 1), Cluster = 'A'))
+  dfPredB = predict(model, newdata = data.frame(Assessment = c(0, 1), Cluster = 'B'))
+
+  expect_equal(allPreds$A$Fit, dfPredA$Fit)
+  expect_equal(allPreds$B$Fit, dfPredB$Fit)
+})
