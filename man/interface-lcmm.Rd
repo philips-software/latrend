@@ -12,7 +12,7 @@
 \alias{preFit,lcMethodLcmmGBTM-method}
 \alias{fit,lcMethodLcmmGBTM-method}
 \alias{fitted.lcModelLcmmGMM}
-\alias{predict.lcModelLcmmGMM}
+\alias{predictForCluster,lcModelLcmmGMM-method}
 \alias{model.matrix.lcModelLcmmGMM}
 \alias{logLik.lcModelLcmmGMM}
 \alias{sigma.lcModelLcmmGMM}
@@ -38,7 +38,14 @@
 
 \method{fitted}{lcModelLcmmGMM}(object, ..., clusters = trajectoryAssignments(object))
 
-\method{predict}{lcModelLcmmGMM}(object, ..., newdata = NULL, what = "mu")
+\S4method{predictForCluster}{lcModelLcmmGMM}(
+  object,
+  newdata,
+  cluster,
+  what = "mu",
+  approxFun = approx,
+  ...
+)
 
 \method{model.matrix}{lcModelLcmmGMM}(object, ..., what = "mu")
 
@@ -67,6 +74,8 @@
 
 \item{newdata}{Optional data frame for which to compute the model predictions. If omitted, the model training data is used.
 Cluster trajectory predictions are made when ids are not specified. If the clusters are specified under the Cluster column, output is given only for the specified cluster. Otherwise, a matrix is returned with predictions for all clusters.}
+
+\item{cluster}{The cluster name (as \code{character}) to predict for.}
 
 \item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying what='mb'.}
 }

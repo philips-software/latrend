@@ -12,39 +12,38 @@ fitted.lcModelLcmmGMM = function(object, ..., clusters = trajectoryAssignments(o
   transformFitted(predMat, model = object, clusters = clusters)
 }
 
-#' @export
+
+#. predictForCluster ####
 #' @rdname interface-lcmm
-#' @inheritParams predict.lcModel
-predict.lcModelLcmmGMM = function(object, ...,
-                                  newdata = NULL,
-                                  what = 'mu') {
-  assert_that(is.newdata(newdata))
+#' @inheritParams predictForCluster
+setMethod('predictForCluster', signature('lcModelLcmmGMM'), function(
+    object, newdata, cluster, what = 'mu', approxFun = approx, ...)
+{
   assert_that(what == 'mu', msg = 'only what="mu" is supported')
+  vars = union(getCovariates(object@model$fixed), getCovariates(object@model$mixture))
+  missingVars = setdiff(vars, names(newdata))
 
-  if (is.null(newdata)) {
-    predMat = fitted(object, clusters = NULL)
-  } else {
-    vars = union(getCovariates(object@model$fixed),
-                 getCovariates(object@model$mixture))
-    missingVars = setdiff(vars, names(newdata))
-
-    if (length(missingVars) > 0) {
-      # compute marginal means for unspecified covariates
-      missingVarMeans = model.data(object) %>%
-        .[missingVars] %>%
-        vapply(mean, na.rm = TRUE, FUN.VALUE = 0)
-      newdata = cbind(newdata, missingVarMeans)
-      newdata$Cluster = make.clusterIndices(object, newdata$Cluster)
-    }
-
-    predMat = lcmm::predictY(object@model, newdata = newdata)$pred %>%
-      set_colnames(clusterNames(object))
+  if (nrow(newdata) == 0) {
+    return(numeric())
   }
 
-  transformPredict(pred = predMat,
-                   model = object,
-                   newdata = newdata)
-}
+  if (length(missingVars) > 0) {
+    # compute marginal means for unspecified covariates
+    missingVarMeans = model.data(object) %>%
+      .[missingVars] %>%
+      vapply(mean, na.rm = TRUE, FUN.VALUE = 0)
+    newdata = cbind(newdata, missingVarMeans)
+    newdata$Cluster = make.clusterIndices(object, newdata$Cluster)
+  }
+
+  predMat = lcmm::predictY(object@model, newdata = newdata)$pred %>%
+    set_colnames(clusterNames(object))
+
+  clusIdx = match(cluster, clusterNames(object))
+
+  predMat[, clusIdx]
+})
+
 
 #' @export
 #' @rdname interface-lcmm
@@ -56,6 +55,7 @@ model.matrix.lcModelLcmmGMM = function(object, ..., what = 'mu') {
     model.matrix(object@model$mb, data = model.data(object))
   }
 }
+
 
 #' @export
 #' @rdname interface-lcmm
@@ -69,11 +69,13 @@ logLik.lcModelLcmmGMM = function(object, ...) {
   return(ll)
 }
 
+
 #' @export
 #' @rdname interface-lcmm
 sigma.lcModelLcmmGMM = function(object, ...) {
   coef(object)['stderr'] %>% unname()
 }
+
 
 #' @rdname interface-lcmm
 setMethod('postprob', signature('lcModelLcmmGMM'), function(object, ...) {
@@ -83,6 +85,7 @@ setMethod('postprob', signature('lcModelLcmmGMM'), function(object, ...) {
   colnames(pp) = clusterNames(object)
   return(pp)
 })
+
 
 #' @rdname interface-lcmm
 setMethod('converged', signature('lcModelLcmmGMM'), function(object, ...) {
