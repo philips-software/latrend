@@ -17,7 +17,7 @@ fitted.lcModelLcmmGMM = function(object, ..., clusters = trajectoryAssignments(o
 #' @rdname interface-lcmm
 #' @inheritParams predictForCluster
 setMethod('predictForCluster', signature('lcModelLcmmGMM'), function(
-    object, newdata, cluster, what = 'mu', approxFun = approx, ...)
+    object, newdata, cluster, what = 'mu', ...)
 {
   assert_that(what == 'mu', msg = 'only what="mu" is supported')
   vars = union(getCovariates(object@model$fixed), getCovariates(object@model$mixture))

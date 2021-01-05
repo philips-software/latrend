@@ -38,14 +38,7 @@
 
 \method{fitted}{lcModelLcmmGMM}(object, ..., clusters = trajectoryAssignments(object))
 
-\S4method{predictForCluster}{lcModelLcmmGMM}(
-  object,
-  newdata,
-  cluster,
-  what = "mu",
-  approxFun = approx,
-  ...
-)
+\S4method{predictForCluster}{lcModelLcmmGMM}(object, newdata, cluster, what = "mu", ...)
 
 \method{model.matrix}{lcModelLcmmGMM}(object, ..., what = "mu")
 
