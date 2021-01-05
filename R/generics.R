@@ -95,9 +95,9 @@ setGeneric('externalMetric', function(object, object2, name, ...) standardGeneri
 #' @export
 #' @name latrend-generics
 setGeneric('fit', function(method, data, envir, verbose, ...) {
-  start = Sys.time()
+  start = proc.time()
   model <- standardGeneric('fit')
-  estimationTime = Sys.time() - start
+  estimationTime = proc.time()['elapsed'] - start['elapsed']
 
   assert_that(is.lcModel(model),
     msg = 'fit(lcMethod, ...) returned an unexpected object. Should be of type lcModel.')
