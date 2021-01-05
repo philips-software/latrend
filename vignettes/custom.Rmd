@@ -273,23 +273,9 @@ slotNames("lcModelSimpleGBTM")
 ```
 The `"model"` slot is free to be used to assign an arbitrary data structure that represents the internal model representation(s). In our implementation, this slot contains the `lcmm` model. The other slots are assigned in the constructor of the `lcModel` class, or by the `latrend()` estimation function. It is best practice to use the relevant getter functions for obtaining these values (via e.g., `idVariable()`, `getLcMethod()`, `clusterNames()`).
 
-Typically, most effort of implementing the model interface goes to the `predict()` function. While implementing the function is optional, it is used for obtaining the fitted values, fitted trajectories, residuals, and cluster trajectories. Without this function, there is little functionality from a model except for the partitioning of the fitted trajectories.
+Typically, most effort of implementing the model interface goes to the `predictForCluster()` function. While implementing the function is optional, it is used for obtaining the fitted values, fitted trajectories, residuals, and cluster trajectories. Without this function, there is little functionality from a model except for the partitioning of the fitted trajectories.
 
-The default `fitted.lcModel()` function returns the output from `predict(model, newdata=NULL)`. As such, it is advisable to implement this special case. Here, we move the logic to the custom `fitted.lcModelSimpleGBTM` function, as defined below.
-```{r}
-predict.lcModelSimpleGBTM <- function(object, newdata = NULL, what = "mu", ...) {
-  if(is.null(newdata)) {
-    predMat <- fitted(object, clusters = NULL)
-  } else {
-    predMat <- lcmm::predictY(object@model, newdata = newdata)$pred %>%
-      set_colnames(clusterNames(object))
-  }
-
-  transformPredict(pred = predMat, model = object, newdata = newdata)
-}
-```
-
-The `fitted()` function should return the fitted values per trajectory per (requested) cluster. If not clusters are provided, the function is expected to return a matrix with the fitted values for each cluster. This logic is handled in the `transformFitted()` function, which is available in the package.
+The `fitted()` function returns the fitted values per trajectory per cluster. If the clusters are not provided, the function is expected to return a matrix with the fitted values for each cluster. This logic is handled in the `transformFitted()` function, which is available in the package.
 ```{r}
 fitted.lcModelSimpleGBTM <- function(object, clusters = trajectoryAssignments(object)) {
   predNames <- paste0("pred_m", 1:nClusters(object))
@@ -297,6 +283,19 @@ fitted.lcModelSimpleGBTM <- function(object, clusters = trajectoryAssignments(ob
   colnames(predMat) <- clusterNames(object)
   transformFitted(pred = predMat, model = object, clusters = clusters)
 }
+```
+
+The easiest way to add predictive capability to a model is by implementing the function `predictForCluster()`. This function returns the predicted values of a specific cluster, for the respective observations. This function is used by `predict.lcModel(model, newdata)` function, which also reduces the output of `fitted(model)` in case of `newdata = NULL`.
+```{r}
+setMethod('predictForCluster', signature('lcModelSimpleGBTM'), function(
+    object, newdata, cluster, what = 'mu', ...)
+{
+  predMat = lcmm::predictY(object@model, newdata = newdata)$pred %>%
+    set_colnames(clusterNames(object))
+
+  clusIdx = match(cluster, clusterNames(object))
+  predMat[, clusIdx]
+})
 ```
 
 In order for the model implementation to return cluster assignments through the `trajectoryAssignments()` function, we need to implement the `postprob()` function to return the posterior probability matrix for the fitted data.
