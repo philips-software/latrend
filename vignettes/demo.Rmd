@@ -137,7 +137,7 @@ The KML analysis has provided us with clues on an appropriate model for the clus
 
 ```{r}
 library(splines)
-gbtmMethod <- lcMethodLcmmGBTM(Y ~ bs(Time) * CLUSTER + (1 | Id))
+gbtmMethod <- lcMethodLcmmGBTM(fixed = Y ~ bs(Time), mixture = fixed)
 
 gbtmMethod
 ```
@@ -163,7 +163,7 @@ plot(bestGbtmModel)
 We have identified 3 apparent clusters via GBTM. However, we may wish to obtain a model that betters explains the within-cluster heterogeneity (as seen in the cluster trajectories plot above). We apply a growth mixture model (GMM) using trajectories represented by a second-order polynomial.
 
 ```{r}
-gmmMethod <- lcMethodLcmmGMM(Y ~ poly(Time, 2, raw = TRUE) * CLUSTER + (1 | Id), idiag = TRUE)
+gmmMethod <- lcMethodLcmmGMM(fixed = Y ~ poly(Time, 2, raw = TRUE), mixture = fixed, idiag = TRUE)
 
 gmmMethod
 ```

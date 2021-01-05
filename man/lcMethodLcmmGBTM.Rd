@@ -5,8 +5,9 @@
 \title{Specify GBTM method}
 \usage{
 lcMethodLcmmGBTM(
-  formula,
-  formula.mb = ~1,
+  fixed,
+  mixture = ~1,
+  classmb = ~1,
   time = getOption("latrend.time"),
   id = getOption("latrend.id"),
   nClusters = 2,
@@ -14,12 +15,6 @@ lcMethodLcmmGBTM(
 )
 }
 \arguments{
-\item{formula}{A \code{formula} of the form \code{Response ~ Var1 + CLUSTER * Var2 + .}
-Variables specified in the model are included as fixed effects.
-If an interaction is specified with the \code{CLUSTER} term then these covariates are included as fixed and mixture effects.}
-
-\item{formula.mb}{A \code{formula} specifying the class membership model. By default, an intercept-only model is used. This is a replacement of the internal \code{classmb} argument in \link[lcmm:hlme]{lcmm::hlme}.}
-
 \item{time}{The name of the time variable.}
 
 \item{id}{The name of the trajectory identifier variable. This replaces the \code{subject} argument of \link[lcmm:hlme]{lcmm::hlme}.}
@@ -34,11 +29,13 @@ Group-based trajectory modeling through fixed-effects modeling.
 }
 \examples{
 data(latrendData)
-method <- lcMethodLcmmGBTM(Y ~ CLUSTER, id = "Id", time = "Time", nClusters = 3)
+method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
+   id = "Id", time = "Time", nClusters = 3)
 gbtm <- latrend(method, data = latrendData)
 summary(gbtm)
 
-method <- lcMethodLcmmGBTM(Y ~ CLUSTER * Time, id = "Id", time = "Time", nClusters = 3)
+method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ Time,
+    id = "Id", time = "Time", nClusters = 3)
 }
 \seealso{
 Other lcMethod implementations: 

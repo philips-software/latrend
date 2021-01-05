@@ -27,7 +27,7 @@ Update a method specification
 Updates or adds arguments to a \code{lcMethod} object. The inputs are evaluated in order to determine the presence of \code{formula} objects, which are updated accordingly.
 }
 \examples{
-m <- lcMethodLcmmGBTM(Value ~ 1)
+m <- lcMethodMixtoolsGMM(Value ~ 1)
 m2 <- update(m, formula = ~ . + Time)
 
 m3 <- update(m2, nClusters = 3)

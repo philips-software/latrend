@@ -6,11 +6,13 @@
 \alias{getShortName,lcMethodLcmmGMM-method}
 \alias{preFit,lcMethodLcmmGMM-method}
 \alias{fit,lcMethodLcmmGMM-method}
+\alias{responseVariable,lcMethodLcmmGMM-method}
 \alias{interface-lcmm}
 \alias{getName,lcMethodLcmmGBTM-method}
 \alias{getShortName,lcMethodLcmmGBTM-method}
 \alias{preFit,lcMethodLcmmGBTM-method}
 \alias{fit,lcMethodLcmmGBTM-method}
+\alias{responseVariable,lcMethodLcmmGBTM-method}
 \alias{fitted.lcModelLcmmGMM}
 \alias{predictForCluster,lcModelLcmmGMM-method}
 \alias{model.matrix.lcModelLcmmGMM}
@@ -28,6 +30,8 @@
 
 \S4method{fit}{lcMethodLcmmGMM}(method, data, envir, verbose, ...)
 
+\S4method{responseVariable}{lcMethodLcmmGMM}(object, ...)
+
 \S4method{getName}{lcMethodLcmmGBTM}(object)
 
 \S4method{getShortName}{lcMethodLcmmGBTM}(object)
@@ -35,6 +39,8 @@
 \S4method{preFit}{lcMethodLcmmGBTM}(method, data, envir, verbose, ...)
 
 \S4method{fit}{lcMethodLcmmGBTM}(method, data, envir, verbose, ...)
+
+\S4method{responseVariable}{lcMethodLcmmGBTM}(object, ...)
 
 \method{fitted}{lcModelLcmmGMM}(object, ..., clusters = trajectoryAssignments(object))
 

@@ -28,7 +28,7 @@ If the \code{lcMethod} object specifies a \code{formula} argument, then the resp
 method <- lcMethodKML("Value")
 responseVariable(method) # "Value"
 
-method <- lcMethodLcmmGBTM(Value ~ Time)
+method <- lcMethodLcmmGBTM(fixed = Value ~ Time, mixture = ~ Time)
 responseVariable(method) # "Value"
 
 data(latrendData)

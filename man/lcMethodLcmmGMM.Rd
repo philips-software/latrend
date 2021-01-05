@@ -5,8 +5,10 @@
 \title{Specify GMM method using lcmm}
 \usage{
 lcMethodLcmmGMM(
-  formula,
-  formula.mb = ~1,
+  fixed,
+  mixture = ~1,
+  random = ~1,
+  classmb = ~1,
   time = getOption("latrend.time"),
   id = getOption("latrend.id"),
   nClusters = 2,
@@ -14,14 +16,6 @@ lcMethodLcmmGMM(
 )
 }
 \arguments{
-\item{formula}{A \code{formula} of the form \code{Response ~ Var1 + CLUSTER * Var2 + . + (Random1 + Random2 + . | Id)}.
-Variables specified in the model are included as fixed effects.
-If an interaction is specified with the \code{CLUSTER} term, then these covariates are included as fixed and mixture effects.
-The formula must contain a single random-effects component of the form  \code{(. | Id)}, where \code{Id} matches the name specified in the \code{id} argument, or \code{ID} (which will be substituted by the \code{id} argument).
-The random effects are cluster-specific.}
-
-\item{formula.mb}{A \code{formula} specifying the class membership model. By default, an intercept-only model is used. This is a replacement of the internal \code{classmb} argument in \link[lcmm:hlme]{lcmm::hlme}.}
-
 \item{time}{The name of the time variable.}
 
 \item{id}{The name of the trajectory identifier variable. This replaces the \code{subject} argument of \link[lcmm:hlme]{lcmm::hlme}.}
@@ -34,18 +28,17 @@ The following arguments are ignored: data, fixed, random, mixture, subject, clas
 \description{
 Growth mixture modeling through latent-class linear mixed modeling.
 }
-\details{
-The \code{formula} argument is used to generate the \code{fixed}, \code{random}, and \code{mixture} arguments for \link[lcmm:hlme]{lcmm::hlme}.
-}
 \examples{
 data(latrendData)
-method <- lcMethodLcmmGMM(Y ~ Time * CLUSTER + (1 | Id),
-                     id = "Id", time = "Time", , nClusters = 3)
+method <- lcMethodLcmmGMM(fixed = Y ~ Time,
+   mixture = ~ Time, random = ~ 1,
+   id = "Id", time = "Time", , nClusters = 3)
 gmm <- latrend(method, data = latrendData)
 summary(gmm)
 
-method <- lcMethodLcmmGMM(Y ~ Time * CLUSTER + (Time | Id),
-                     id = "Id", time = "Time", nClusters = 3)
+method <- lcMethodLcmmGMM(fixed = Y ~ Time,
+    mixture = ~ Time, random = ~ Time,
+    id = "Id", time = "Time", nClusters = 3)
 }
 \seealso{
 Other lcMethod implementations: 

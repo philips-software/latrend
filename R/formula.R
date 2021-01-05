@@ -49,7 +49,11 @@ getREGroupName = function(term) {
 }
 
 getCovariates = function(f) {
-  dropResponse(f) %>% all.vars
+  if(is.null(f)) {
+    character()
+  } else {
+    dropResponse(f) %>% all.vars()
+  }
 }
 
 hasCovariates = function(f) {
@@ -63,7 +67,7 @@ hasRE = function(f) {
 addInteraction = function(f, var) {
   assert_that(is.formula(f))
   assert_that(is.character(var))
-  vars = terms(f) %>% labels
+  vars = terms(f) %>% labels()
 
   if (length(vars) == 0) {
     if (hasIntercept(f)) {
@@ -90,8 +94,8 @@ merge.formula = function(x, y, ...) {
   assert_that(is.formula(x))
   assert_that(is.formula(y))
   assert_that(!hasResponse(y))
-  xlabels = terms(x) %>% labels
-  ylabels = terms(y) %>% labels
+  xlabels = terms(x) %>% labels()
+  ylabels = terms(y) %>% labels()
 
   allLabels = union(xlabels, ylabels)
   if (length(allLabels) == 0) {

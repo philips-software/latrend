@@ -22,9 +22,8 @@ The \code{formula} for the given distributional parameter.
 Extracts the associated \code{formula} for the given distributional parameter.
 }
 \examples{
-m <- lcMethodLcmmGBTM(Value ~ Time)
-formula(m) # Value ~ Time
-formula(m, what = "mb") # ~1
+m <- lcMethodMixtoolsGMM(formula = Y ~ Time + (1 | Id))
+formula(m) # Y ~ Time + (1 | Id)
 }
 \seealso{
 Other lcMethod functions: 

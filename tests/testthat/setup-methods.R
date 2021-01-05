@@ -4,11 +4,11 @@ lcMethodTestKML = function(...) {
 
 if (requireNamespace('lcmm')) {
   lcMethodTestLcmmGMM = function(...) {
-    lcMethodLcmmGMM(formula = Value ~ 1 + CLUSTER + (1 | ID), maxiter=10, ..., seed=1)
+    lcMethodLcmmGMM(fixed = Value ~ 1, maxiter=10, ..., seed=1)
   }
 
   lcMethodTestLcmmGBTM = function(...) {
-    lcMethodLcmmGBTM(formula = Value ~ CLUSTER, maxiter=10, ..., seed=1)
+    lcMethodLcmmGBTM(fixed = Value ~ 1, maxiter=10, ..., seed=1)
   }
 }
 

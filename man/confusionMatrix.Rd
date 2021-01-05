@@ -19,7 +19,9 @@ Compute a \verb{nClusters x nClusters} posterior confusion matrix (PCM). The ent
 }
 \examples{
 data(latrendData)
-model = latrend(method=lcMethodLcmmGMM(Y ~ CLUSTER * Time + (1 | Id), id = "Id", time = "Time"),
+model = latrend(lcMethodLcmmGMM(
+  fixed = Y ~ Time, mixture = ~ Time, random = ~ 1,
+  id = "Id", time = "Time"),
   data=latrendData)
 confusionMatrix(model)
 }

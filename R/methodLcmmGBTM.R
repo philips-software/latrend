@@ -11,16 +11,12 @@ NULL
 setClass('lcMethodLcmmGBTM', contains = 'lcMethod')
 
 setValidity('lcMethodLcmmGBTM', function(object) {
-  if (isArgDefined(object, 'formula')) {
-    f = formula(object)
-    assert_that(hasSingleResponse(object$formula))
+  assert_that(
+    !has_name(object, 'random'),
+    msg = 'formula cannot contain random effects. Consider using lcMethodLcmmGMM.')
 
-    reTerms = getREterms(f)
-    assert_that(length(getREterms(f)) == 0, msg = 'formula cannot contain random effects. Consider using lcMethodLcmmGMM.')
-  }
-
-  if (isArgDefined(object, 'formula.mb')) {
-    assert_that(!hasResponse(formula(object, 'mb')))
+  if (isArgDefined(object, 'classmb')) {
+    assert_that(!hasResponse(object$classmb))
   }
 })
 
@@ -29,34 +25,30 @@ setValidity('lcMethodLcmmGBTM', function(object) {
 #' @title Specify GBTM method
 #' @description Group-based trajectory modeling through fixed-effects modeling.
 #' @inheritParams lcMethodLcmmGMM
-#' @param formula A `formula` of the form `Response ~ Var1 + CLUSTER * Var2 + .`
-#' Variables specified in the model are included as fixed effects.
-#' If an interaction is specified with the `CLUSTER` term then these covariates are included as fixed and mixture effects.
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodLcmmGBTM(Y ~ CLUSTER, id = "Id", time = "Time", nClusters = 3)
+#' method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
+#'    id = "Id", time = "Time", nClusters = 3)
 #' gbtm <- latrend(method, data = latrendData)
 #' summary(gbtm)
 #'
-#' method <- lcMethodLcmmGBTM(Y ~ CLUSTER * Time, id = "Id", time = "Time", nClusters = 3)
+#' method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ Time,
+#'     id = "Id", time = "Time", nClusters = 3)
 #' @family lcMethod implementations
-lcMethodLcmmGBTM = function(formula,
-                            formula.mb =  ~ 1,
+lcMethodLcmmGBTM = function(fixed,
+                            mixture = ~ 1,
+                            classmb =  ~ 1,
                             time = getOption('latrend.time'),
                             id = getOption('latrend.id'),
                             nClusters = 2,
                             ...) {
   lcMethod.call(
     'lcMethodLcmmGBTM',
-    call = match.call.defaults(),
+    call = match.call.all(),
     defaults = lcmm::hlme,
     excludeArgs = c(
       'data',
-      'fixed',
-      'random',
-      'mixture',
       'subject',
-      'classmb',
       'returndata',
       'ng',
       'verbose'
@@ -86,4 +78,9 @@ setMethod('fit', signature('lcMethodLcmmGBTM'), function(method, data, envir, ve
     model = model,
     clusterNames = make.clusterNames(method$nClusters)
   )
+})
+
+#' @rdname interface-lcmm
+setMethod('responseVariable', signature('lcMethodLcmmGBTM'), function(object, ...) {
+  getResponse(object$fixed)
 })

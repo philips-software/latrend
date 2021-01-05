@@ -106,7 +106,7 @@ setValidity('lcModel', function(object) {
 #' If a vector is specified, this is assumed to be the time covariate. Otherwise, a named list or data frame must be provided.
 #' @return A data.frame of the estimated values at the given times. The first column should be named "Cluster". The second column should be time, with the name matching the `timeVariable(object)`. The third column should be the expected value of the observations, named after the `responseVariable(object)`.
 #' @examples
-#' model <- latrend(method = lcMethodLcmmGMM(Y ~ Time + (1 | Id)),
+#' model <- latrend(method = lcMethodLcmmGMM(fixed = Y ~ Time, mixture = fixed),
 #'   id = "Id", time = "Time", data = latrendData)
 #' clusterTrajectories(model)
 #'
@@ -263,7 +263,9 @@ coef.lcModel = function(object, ...) {
 #' @param scale Whether to express the confusion in probabilities (`scale = TRUE`), or in the number of trajectories.
 #' @examples
 #' data(latrendData)
-#' model = latrend(method=lcMethodLcmmGMM(Y ~ CLUSTER * Time + (1 | Id), id = "Id", time = "Time"),
+#' model = latrend(lcMethodLcmmGMM(
+#'   fixed = Y ~ Time, mixture = ~ Time, random = ~ 1,
+#'   id = "Id", time = "Time"),
 #'   data=latrendData)
 #' confusionMatrix(model)
 confusionMatrix = function(object, strategy = which.max, scale = TRUE) {
@@ -358,7 +360,7 @@ df.residual.lcModel = function(object, ...) {
 #' @examples
 #' data(latrendData)
 #' model1 <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-#' model2 <- latrend(lcMethodLcmmGMM(Y ~ Time + (1 | Id), id = "Id", time = "Time"), latrendData)
+#' model2 <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time, id = "Id", time = "Time"), latrendData)
 #' ari <- externalMetric(model1, model2, 'adjustedRand')
 #' @return For `externalMetric(lcModel, lcModel)`: A `numeric` vector of the computed metrics.
 #' @family metric functions
@@ -548,7 +550,7 @@ logLik.lcModel = function(object, ...) {
 #' @aliases metric,lcModel-method
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodLcmmGMM(Y ~ Time + (1 | Id), id = "Id", time = "Time"), latrendData)
+#' model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time, id = "Id", time = "Time"), latrendData)
 #' bic <- metric(model, "BIC")
 #'
 #' ic <- metric(model, c("AIC", "BIC"))
@@ -692,7 +694,7 @@ nobs.lcModel = function(object, ...) {
 #' @param ... Additional arguments.
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodLcmmGMM(Y ~ Time + (1 | Id), id = "Id", time = "Time"), latrendData)
+#' model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time, id = "Id", time = "Time"), latrendData)
 #' predFitted <- predict(model) # same result as fitted(model)
 #'
 #' # Cluster trajectory of cluster A
@@ -979,7 +981,7 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
 #' @param ... Additional arguments.
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodLcmmGMM(Y ~ Time + (1 | Id), id = "Id", time = "Time"), data = latrendData)
+#' model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time, id = "Id", time = "Time"), data = latrendData)
 #' postprob(model)
 #' @family model-specific methods
 setMethod('postprob', signature('lcModel'), function(object, ...) {

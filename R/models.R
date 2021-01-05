@@ -10,7 +10,7 @@ setOldClass('lcModels')
 #' @examples
 #' data(latrendData)
 #' kml <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-#' gmm <- latrend(lcMethodLcmmGMM(Y ~ Time + (1 | Id), id = "Id", time = "Time"), latrendData)
+#' gmm <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time, id = "Id", time = "Time"), latrendData)
 #' lcModels(kml, gmm)
 #'
 #' lcModels(defaults = c(kml, gmm))
@@ -388,7 +388,7 @@ plotMetric = function(models,
 #' kml1 <- latrend(mKML, nClusters = 1, latrendData)
 #' kml2 <- latrend(mKML, nClusters = 2, latrendData)
 #' kml3 <- latrend(mKML, nClusters = 3, latrendData)
-#' gmm <- latrend(lcMethodLcmmGMM(Y ~ Time + (1 | Id), id = "Id", time = "Time"), latrendData)
+#' gmm <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time, id = "Id", time = "Time"), latrendData)
 #' models <- lcModels(kml1, kml2, kml3, gmm)
 #'
 #' subset(models, nClusters > 1 & .method == 'kml')

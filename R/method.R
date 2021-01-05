@@ -405,9 +405,8 @@ setMethod('fit', signature('lcMethod'), function(method, data, envir, verbose) {
 #' @param what The distributional parameter to which this formula applies. By default, the formula specifies `"mu"`.
 #' @return The `formula` for the given distributional parameter.
 #' @examples
-#' m <- lcMethodLcmmGBTM(Value ~ Time)
-#' formula(m) # Value ~ Time
-#' formula(m, what = "mb") # ~1
+#' m <- lcMethodMixtoolsGMM(formula = Y ~ Time + (1 | Id))
+#' formula(m) # Y ~ Time + (1 | Id)
 #' @family lcMethod functions
 formula.lcMethod = function(x, what = 'mu',
                             envir = NULL, ...) {
@@ -705,7 +704,7 @@ evaluate.lcMethod = function(object,
 #' @param .remove Names of arguments that should be removed.
 #' @return The new `lcMethod` object with the additional or updated arguments.
 #' @examples
-#' m <- lcMethodLcmmGBTM(Value ~ 1)
+#' m <- lcMethodMixtoolsGMM(Value ~ 1)
 #' m2 <- update(m, formula = ~ . + Time)
 #'
 #' m3 <- update(m2, nClusters = 3)
@@ -789,7 +788,7 @@ update.lcMethod = function(object,
 #' method <- lcMethodKML("Value")
 #' responseVariable(method) # "Value"
 #'
-#' method <- lcMethodLcmmGBTM(Value ~ Time)
+#' method <- lcMethodLcmmGBTM(fixed = Value ~ Time, mixture = ~ Time)
 #' responseVariable(method) # "Value"
 #'
 setMethod('responseVariable', signature('lcMethod'), function(object, ...) {
