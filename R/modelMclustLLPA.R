@@ -4,7 +4,7 @@ setClass('lcModelMclustLLPA', contains = 'lcModel')
 
 #' @export
 #' @rdname interface-mclust
-#' @inheritParams predict.lcApproxModel
+#' @inheritParams predictForCluster
 predict.lcModelMclustLLPA = function(object,
                                      ...,
                                      newdata = NULL,

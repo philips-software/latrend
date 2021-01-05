@@ -717,8 +717,7 @@ predict.lcModel = function(object, ...,
   if (hasName(newdata, 'Cluster')) {
     assert_that(noNA(newdata$Cluster) &
         all(unique(newdata$Cluster) %in% clusterNames(object)),
-      msg = paste0('The provided newdata "Cluster" column must be complete and
-      only contain cluster names associated with the model (',
+      msg = paste0('The provided newdata "Cluster" column must be complete and only contain cluster names associated with the model (',
         paste0(shQuote(clusterNames(object)), collapse = ', '), ').'))
 
     # predictForCluster with newdata subsets
@@ -740,8 +739,7 @@ predict.lcModel = function(object, ...,
   }, clusterNames(object), clusdataList, SIMPLIFY = FALSE)
 
   assert_that(uniqueN(vapply(predList, class, FUN.VALUE = '')) == 1,
-    msg = 'output from predictForCluster() must be same class for all clusters.
-    Check the model implementation.')
+    msg = 'output from predictForCluster() must be same class for all clusters. Check the model implementation.')
 
   if (is.data.frame(predList[[1]])) {
     pred = rbindlist(predList, idcol = 'Cluster')
@@ -750,15 +748,13 @@ predict.lcModel = function(object, ...,
     clusDataRows = vapply(clusdataList, nrow, FUN.VALUE = 0)
     clusPredRows = vapply(predList, length, FUN.VALUE = 0)
     assert_that(all(clusDataRows == clusPredRows),
-      msg = 'Numeric output length from predictForCluster() does not match
-      the number of input newdata rows for one or more clusters')
+      msg = 'Numeric output length from predictForCluster() does not match the number of input newdata rows for one or more clusters')
     pred = data.table(Cluster = rep(seq_len(nClusters(object)), clusDataRows),
                       Fit = do.call(c, predList))
   }
   else {
     stop(
-      'unsupported output from predictForCluster(): must be data.frame or numeric.
-      Check the model implementation.'
+      'unsupported output from predictForCluster(): must be data.frame or numeric. Check the model implementation.'
     )
   }
 

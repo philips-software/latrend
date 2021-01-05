@@ -5,7 +5,7 @@ setClass('lcModelMixtoolsRM', contains = 'lcModel')
 #' @export
 #' @importFrom plyr alply
 #' @rdname interface-mixtools
-#' @inheritParams predict.lcApproxModel
+#' @inheritParams predictForCluster
 #' @param se Whether to compute the standard error of the prediction.
 #' @param ci The confidence interval to compute.
 predict.lcModelMixtoolsRM = function(object,

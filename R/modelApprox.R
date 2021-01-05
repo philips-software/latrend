@@ -23,65 +23,20 @@ fitted.lcApproxModel = function(object, ..., clusters = trajectoryAssignments(ob
     transformFitted(model = object, clusters = clusters)
 }
 
-#' @export
+#. predictForCluster ####
 #' @rdname lcApproxModel-class
-#' @inheritParams predict.lcModel
-#' @param approxFun The interpolation function to use for time points not in the feature set.
-predict.lcApproxModel = function(object, ...,
-                                 newdata = NULL,
-                                 what = 'mu',
-                                 approxFun = approx) {
-  assert_that(is.newdata(newdata), is.function(approxFun))
+#' @inheritParams predictForCluster
+setMethod('predictForCluster', signature('lcApproxModel'),
+  function(object, newdata, cluster, what = 'mu', approxFun = approx, ...) {
+  clusTrajs = clusterTrajectories(object, at = NULL, what = what, approxFun = approxFun, ...) %>%
+    as.data.table() %>%
+    .[Cluster == cluster]
 
-  if (is.null(newdata)) {
-    predMat = fitted(object, clusters = NULL)
-    transformPredict(pred = predMat,
-                     model = object,
-                     newdata = newdata)
-  } else {
-    time = timeVariable(object)
-    resp = responseVariable(object)
-    assert_that(has_name(newdata, time))
+  time = timeVariable(object)
+  resp = responseVariable(object)
 
-    # compute cluster trajectories
-    clusTrajs = clusterTrajectories(object, at = NULL, what = what) %>% as.data.table()
-    assert_that(
-      is.data.frame(clusTrajs),
-      has_name(clusTrajs, 'Cluster'),
-      has_name(clusTrajs, time),
-      has_name(clusTrajs, resp)
-    )
-
-    if (has_name(newdata, 'Cluster')) {
-      assert_that(any(unique(clusTrajs$Cluster) %in% clusterNames(object)), msg =
-                    'invalid clusterTrajectories output: Cluster column has wrong names for the clusters')
-
-      # generate newdata prediction for the specified cluster(s)
-      newclusdata = as.data.table(newdata)
-
-      # to be simplified..
-      dtcluspred = clusTrajs[Cluster %in% unique(newclusdata$Cluster),
-                             as.list(newclusdata[Cluster == .BY[[1]], -'Cluster']) %>%
-                               c(list(Fit = approxFun(
-                                 x = get(time),
-                                 y = get(resp),
-                                 xout = newclusdata[Cluster == .BY[[1]], get(time)]
-                               )$y)),
-                             by = Cluster]
-    } else {
-      # generate newdata prediction per cluster
-      newtimes = newdata[[timeVariable(object)]]
-      dtcluspred = clusTrajs[, as.list(newdata) %>% c(list(Fit = approxFun(
-        x = get(time),
-        y = get(resp),
-        xout = newtimes
-      )$y)), by = Cluster]
-      assert_that(nrow(dtcluspred) <= nrow(newdata) * nClusters(object))
-    }
-
-    assert_that(nrow(dtcluspred) > 0 || nrow(newdata) == 0)
-    transformPredict(pred = dtcluspred,
-                     model = object,
-                     newdata = newdata)
-  }
-}
+  approxFun(
+    x = clusTrajs[[time]],
+    y = clusTrajs[[resp]],
+    xout = newdata[[time]])$y
+})

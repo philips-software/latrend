@@ -53,8 +53,6 @@
 Cluster trajectory predictions are made when ids are not specified. If the clusters are specified under the Cluster column, output is given only for the specified cluster. Otherwise, a matrix is returned with predictions for all clusters.}
 
 \item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying what='mb'.}
-
-\item{approxFun}{The interpolation function to use for time points not in the feature set.}
 }
 \description{
 funFEM interface

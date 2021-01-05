@@ -85,10 +85,6 @@ Cluster trajectory predictions are made when ids are not specified. If the clust
 \item{se}{Whether to compute the standard error of the prediction.}
 
 \item{ci}{The confidence interval to compute.}
-
-\item{approxFun}{The interpolation function to use for time points not in the feature set.}
-
-\item{clusters}{Optional cluster assignments per id. If unspecified, a \code{matrix} is returned containing the cluster-specific predictions per column.}
 }
 \description{
 mixtools interface

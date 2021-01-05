@@ -17,7 +17,7 @@ fitted.lcModelFunFEM = function(object, ..., clusters = trajectoryAssignments(ob
 
 #' @export
 #' @rdname interface-funFEM
-#' @inheritParams predict.lcApproxModel
+#' @inheritParams predictForCluster
 predict.lcModelFunFEM = function(object, ...,
                                  newdata = NULL,
                                  what = 'mu',

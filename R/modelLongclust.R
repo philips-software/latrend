@@ -4,7 +4,7 @@ setClass('lcModelLongclust', contains='lcModel')
 
 #' @export
 #' @rdname interface-longclust
-#' @inheritParams predict.lcApproxModel
+#' @inheritParams predictForCluster
 predict.lcModelLongclust = function(object, ..., newdata=NULL, what='mu', approxFun=approx) {
   assert_that(is.newdata(newdata))
   assert_that(what == 'mu')
