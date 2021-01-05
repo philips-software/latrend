@@ -1,29 +1,19 @@
 #' @include model.R
 setClass('lcModelCrimCV', contains = 'lcModel')
 
-#' @rdname interface-crimCV
-#' @keywords internal
-setMethod('postprob', signature('lcModelCrimCV'), function(object) {
-  pp = object@model$gwt
-  colnames(pp) = clusterNames(object)
-  return(pp)
-})
 
-
-#' @export
+#. predictForCluster ####
 #' @rdname interface-crimCV
-#' @inheritParams predict.lcModel
-predict.lcModelCrimCV = function(object, ...,
-                                 newdata = NULL,
-                                 what = 'mean') {
-  assert_that(is.newdata(newdata))
+#' @inheritParams predictForCluster
+setMethod('predictForCluster', signature('lcModelCrimCV'), function(
+  object, newdata, cluster, what = 'mu', ...)
+{
   assert_that(what %in% c('mu', 'nu', 'mean'))
 
-  # compute cluster trajectories
-  if (is.null(newdata)) {
-    newdata = model.data(object)
+  if (nrow(newdata) == 0) {
+    return(numeric())
   }
-  assert_that(has_name(newdata, timeVariable(object)))
+
   newtime = (newdata[[timeVariable(object)]] - object@model$minTime) / object@model$durTime
 
   X = splines::bs(
@@ -36,7 +26,7 @@ predict.lcModelCrimCV = function(object, ...,
   lambdaMat = exp(Xmat)
 
   if (hasName(object@model, 'tau')) {
-    nuMat = exp(-object@model$tau * t(Xmat)) %>% t
+    nuMat = exp(-object@model$tau * t(Xmat)) %>% t()
   } else {
     Zmat = splines::bs(
       x = newtime,
@@ -49,23 +39,22 @@ predict.lcModelCrimCV = function(object, ...,
   nuMat = nuMat / (1 + nuMat)
 
   predMat = switch(what,
-                   mu = lambdaMat,
-                   nu = nuMat,
-                   mean = (1 - nuMat) * lambdaMat)
+    mu = lambdaMat,
+    nu = nuMat,
+    mean = (1 - nuMat) * lambdaMat)
 
-  transformPredict(pred = predMat,
-                   model = object,
-                   newdata = newdata)
-}
+  clusIdx = match(cluster, clusterNames(object))
+  predMat[, clusIdx]
+})
+
 
 #' @rdname interface-crimCV
-#' @inheritParams fitted.lcModel
-fitted.lcModelCrimCV = function(object, ...,
-                                clusters = trajectoryAssignments(object),
-                                what = 'mean') {
-  predict(object, newdata = NULL, what = what) %>%
-    transformFitted(model = object, clusters = clusters)
-}
+#' @keywords internal
+setMethod('postprob', signature('lcModelCrimCV'), function(object) {
+  pp = object@model$gwt
+  colnames(pp) = clusterNames(object)
+  return(pp)
+})
 
 
 #' @export
@@ -98,6 +87,7 @@ coef.lcModelCrimCV = function(object, ...) {
   }
   return(coefMat)
 }
+
 
 #' @rdname interface-crimCV
 setMethod('converged', signature('lcModelCrimCV'), function(object) {
