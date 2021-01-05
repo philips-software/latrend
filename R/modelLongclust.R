@@ -1,43 +1,35 @@
 #' @include model.R
-setClass('lcModelLongclust', contains='lcModel')
+setClass('lcModelLongclust', contains='lcApproxModel')
 
 
-#' @export
+#. clusterTrajectories ####
 #' @rdname interface-longclust
+#' @inheritParams clusterTrajectories
 #' @inheritParams predictForCluster
-predict.lcModelLongclust = function(object, ..., newdata=NULL, what='mu', approxFun=approx) {
-  assert_that(is.newdata(newdata))
-  assert_that(what == 'mu')
-  assert_that(is.function(approxFun))
+setMethod('clusterTrajectories', signature('lcModelLongclust'), function(object, at = time(object), ...) {
+  if (is.null(at)) {
+    trajMat = object@model$mubest
+    assert_that(
+      is.matrix(trajMat),
+      nrow(trajMat) > 0,
+      msg='empty estimate for mu. model probably did not converge'
+    )
 
-  # compute cluster trajectories
-  trajMat = object@model$mubest
-  assert_that(is.matrix(trajMat), nrow(trajMat) > 0, msg='empty estimate for mu. model probably did not converge')
+    dtclus = meltRepeatedMeasures(
+      trajMat,
+      times = time(object),
+      id = 'Cluster',
+      time = timeVariable(object),
+      response = responseVariable(object),
+      as.data.table = TRUE)
 
-  if(is.null(newdata)) {
-    predMat = fitted(object, clusters=NULL)
+    dtclus[, Cluster := factor(Cluster, levels = seq_len(nClusters(object)), labels = clusterNames(object))]
+    dtclus
   } else {
-    assert_that(has_name(newdata, timeVariable(object)))
-    newtimes = newdata[[timeVariable(object)]]
-    predMat = apply(trajMat, 1, function(y) approxFun(x=time(object), y=y, xout=newtimes)$y)
+    callNextMethod()
   }
+})
 
-  transformPredict(pred = predMat, model = object, newdata = newdata)
-}
-
-
-#' @export
-#' @rdname interface-longclust
-#' @inheritParams fitted.lcApproxModel
-fitted.lcModelLongclust = function(object, ..., clusters=trajectoryAssignments(object)) {
-  times = time(object)
-  newdata = data.table(Id=rep(ids(object), each=length(times)),
-                       Time=times) %>%
-    setnames('Id', idVariable(object)) %>%
-    setnames('Time', timeVariable(object))
-  predict(object, newdata=newdata) %>%
-    transformFitted(model = object, clusters)
-}
 
 #' @rdname interface-longclust
 setMethod('postprob', signature('lcModelLongclust'), function(object, ...) {
@@ -70,6 +62,7 @@ logLik.lcModelLongclust = function(object, ...) {
   class(ll) = 'logLik'
   return(ll)
 }
+
 
 #' @export
 #' @rdname interface-longclust

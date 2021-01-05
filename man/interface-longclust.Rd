@@ -5,8 +5,7 @@
 \alias{getName,lcMethodLongclust-method}
 \alias{getShortName,lcMethodLongclust-method}
 \alias{fit,lcMethodLongclust-method}
-\alias{predict.lcModelLongclust}
-\alias{fitted.lcModelLongclust}
+\alias{clusterTrajectories,lcModelLongclust-method}
 \alias{postprob,lcModelLongclust-method}
 \alias{converged,lcModelLongclust-method}
 \alias{logLik.lcModelLongclust}
@@ -19,9 +18,7 @@
 
 \S4method{fit}{lcMethodLongclust}(method, data, envir, verbose, ...)
 
-\method{predict}{lcModelLongclust}(object, ..., newdata = NULL, what = "mu", approxFun = approx)
-
-\method{fitted}{lcModelLongclust}(object, ..., clusters = trajectoryAssignments(object))
+\S4method{clusterTrajectories}{lcModelLongclust}(object, at = time(object), ...)
 
 \S4method{postprob}{lcModelLongclust}(object, ...)
 
@@ -44,12 +41,8 @@
 
 \item{...}{Additional arguments.}
 
-\item{newdata}{Optional data frame for which to compute the model predictions. If omitted, the model training data is used.
-Cluster trajectory predictions are made when ids are not specified. If the clusters are specified under the Cluster column, output is given only for the specified cluster. Otherwise, a matrix is returned with predictions for all clusters.}
-
-\item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying what='mb'.}
-
-\item{clusters}{Optional cluster assignments per id. If unspecified, a \code{matrix} is returned containing the cluster-specific predictions per column.}
+\item{at}{An optional vector, list or data frame of covariates at which to compute the cluster trajectory predictions.
+If a vector is specified, this is assumed to be the time covariate. Otherwise, a named list or data frame must be provided.}
 }
 \description{
 longclust interface
