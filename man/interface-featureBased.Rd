@@ -20,10 +20,10 @@
 \alias{getShortName,lcMethodStratify-method}
 \alias{compose,lcMethodStratify-method}
 \alias{fit,lcMethodStratify-method}
+\alias{predictForCluster,lcModelLMKM-method}
 \alias{coef.lcModelLMKM}
 \alias{converged,lcModelLMKM-method}
 \alias{postprob,lcModelLMKM-method}
-\alias{predict.lcModelLMKM}
 \alias{getName,lcModelTwoStep-method}
 \alias{getShortName,lcModelTwoStep-method}
 \title{featureBased interface}
@@ -62,13 +62,13 @@
 
 \S4method{fit}{lcMethodStratify}(method, data, envir, verbose, ...)
 
+\S4method{predictForCluster}{lcModelLMKM}(object, newdata, cluster, what = "mu", ...)
+
 \method{coef}{lcModelLMKM}(object, ..., cluster = NULL)
 
 \S4method{converged}{lcModelLMKM}(object, ...)
 
 \S4method{postprob}{lcModelLMKM}(object, ...)
-
-\method{predict}{lcModelLMKM}(object, ..., newdata = NULL, what = "mu")
 
 \S4method{getName}{lcModelTwoStep}(object, ...)
 
@@ -105,10 +105,10 @@
 
 \item{envir}{The \code{environment} in which the \code{lcMethod} should be evaluated}
 
-\item{cluster}{The cluster name.}
-
 \item{newdata}{Optional data frame for which to compute the model predictions. If omitted, the model training data is used.
 Cluster trajectory predictions are made when ids are not specified. If the clusters are specified under the Cluster column, output is given only for the specified cluster. Otherwise, a matrix is returned with predictions for all clusters.}
+
+\item{cluster}{The cluster name.}
 
 \item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying what='mb'.}
 }
