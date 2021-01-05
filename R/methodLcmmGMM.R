@@ -86,7 +86,7 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
     }
     e$mixture = as.formula('~1', env = environment(method$mixture))
   } else {
-    e$mixture = method$mixture
+    e$mixture = dropResponse(method$mixture)
   }
 
   # drop intercept from formula.mb
