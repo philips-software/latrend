@@ -36,9 +36,14 @@ setMethod('predictForCluster', signature('lcApproxModel'),
 
   time = timeVariable(object)
   resp = responseVariable(object)
+  newtimes = newdata[[time]]
 
-  approxFun(
-    x = clusTrajs[[time]],
-    y = clusTrajs[[resp]],
-    xout = newdata[[time]])$y
+  dtpred = clusTrajs[, lapply(.SD, function(y)
+        approxFun(
+          x = get(time),
+          y = y,
+          xout = newtimes)$y),
+    keyby = Cluster, .SDcols = -c(time)]
+
+  dtpred[[resp]]
 })
