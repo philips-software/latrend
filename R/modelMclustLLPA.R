@@ -1,53 +1,31 @@
 #' @include model.R
-setClass('lcModelMclustLLPA', contains = 'lcModel')
+setClass('lcModelMclustLLPA', contains = 'lcApproxModel')
 
 
-#' @export
+#. clusterTrajectories ####
 #' @rdname interface-mclust
+#' @inheritParams clusterTrajectories
 #' @inheritParams predictForCluster
-predict.lcModelMclustLLPA = function(object,
-                                     ...,
-                                     newdata = NULL,
-                                     what = 'mu',
-                                     approxFun = approx) {
-  assert_that(is.newdata(newdata),
-    is.function(approxFun))
-  assert_that(what == 'mu', msg = 'only what="mu" is supported')
+setMethod('clusterTrajectories', signature('lcModelMclustLLPA'), function(object, at = time(object), ...) {
+  if (is.null(at)) {
+    trajMat = object@model$parameters$mean
+    assert_that(
+      is.matrix(trajMat),
+      nrow(trajMat) > 0,
+      msg='empty estimate for mean. model probably did not converge'
+    )
 
-  # compute cluster trajectories
-  trajMat = object@model$parameters$mean
-
-  if (is.null(newdata)) {
-    predMat = fitted(object, clusters = NULL)
+    dtclus = meltRepeatedMeasures(
+      t(trajMat),
+      times = time(object),
+      id = 'Cluster',
+      ids = clusterNames(object),
+      time = timeVariable(object),
+      response = responseVariable(object))
   } else {
-    assert_that(has_name(newdata, timeVariable(object)))
-    newtimes = newdata[[timeVariable(object)]]
-    predMat = apply(trajMat, 2, function(y)
-      approxFun(
-        x = time(object),
-        y = y,
-        xout = newtimes
-      )$y)
+    callNextMethod()
   }
-
-  transformPredict(pred = predMat,
-                   model = object,
-                   newdata = newdata)
-}
-
-
-#' @export
-#' @rdname interface-mclust
-#' @inheritParams fitted.lcApproxModel
-fitted.lcModelMclustLLPA = function(object, ..., clusters = trajectoryAssignments(object)) {
-  times = time(object)
-  newdata = data.table(Id = rep(ids(object), each = length(times)),
-                       Time = times) %>%
-    setnames('Id', idVariable(object)) %>%
-    setnames('Time', timeVariable(object))
-  predict(object, newdata = newdata) %>%
-    transformFitted(model = object, clusters)
-}
+})
 
 
 # . postprob ####
