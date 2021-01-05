@@ -122,7 +122,7 @@ computeKMLCenters = function(object) {
 
   if (!is.matrix(centerMat)) {
     centerMat = matrix(centerMat, nrow = 1)
-    rownames(centerMat) = clusterNames(object)
   }
+  rownames(centerMat) = clusterNames(object)
   return(centerMat)
 }
