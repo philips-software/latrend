@@ -101,9 +101,10 @@ setValidity('lcModel', function(object) {
 #' @title Extract the cluster trajectories
 #' @description Extracts a data frame of all cluster trajectories.
 #' @inheritParams predict.lcModel
+#' @inheritParams predictForCluster
 #' @param at An optional vector, list or data frame of covariates at which to compute the cluster trajectory predictions.
 #' If a vector is specified, this is assumed to be the time covariate. Otherwise, a named list or data frame must be provided.
-#' @return A data.frame of the estimated values at the given times
+#' @return A data.frame of the estimated values at the given times. The first column should be named "Cluster". The second column should be time, with the name matching the `timeVariable(object)`. The third column should be the expected value of the observations, named after the `responseVariable(object)`.
 #' @examples
 #' model <- latrend(method = lcMethodLcmmGMM(Y ~ Time + (1 | Id)),
 #'   id = "Id", time = "Time", data = latrendData)

@@ -46,7 +46,17 @@ setGeneric('clusterProportions', function(object, ...) {
 
 #' @export
 #' @name latrend-generics
-setGeneric('clusterTrajectories', function(object, ...) standardGeneric('clusterTrajectories'))
+setGeneric('clusterTrajectories', function(object, ...) {
+  dfclus <- standardGeneric('clusterTrajectories')
+  assert_that(
+    is.data.frame(dfclus),
+    names(dfclus)[1] == 'Cluster',
+    names(dfclus)[2] == timeVariable(object),
+    names(dfclus)[3] == responseVariable(object),
+    msg = paste0('Invalid output format for data.frame from clusterTrajectories() implementation of lcModel ', class(object)))
+
+  dfclus
+})
 
 #' @export
 #' @name latrend-generics

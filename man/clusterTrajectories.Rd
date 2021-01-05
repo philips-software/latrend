@@ -18,7 +18,7 @@ If a vector is specified, this is assumed to be the time covariate. Otherwise, a
 \item{...}{Additional arguments.}
 }
 \value{
-A data.frame of the estimated values at the given times
+A data.frame of the estimated values at the given times. The first column should be named "Cluster". The second column should be time, with the name matching the \code{timeVariable(object)}. The third column should be the expected value of the observations, named after the \code{responseVariable(object)}.
 }
 \description{
 Extracts a data frame of all cluster trajectories.
