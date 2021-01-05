@@ -10,8 +10,8 @@
 \arguments{
 \item{object}{The \code{lcModel} object.}
 
-\item{newdata}{Optional data frame for which to compute the model predictions. If omitted, the model training data is used.
-Cluster trajectory predictions are made when ids are not specified. If the clusters are specified under the Cluster column, output is given only for the specified cluster. Otherwise, a matrix is returned with predictions for all clusters.}
+\item{newdata}{Optional \code{data.frame} for which to compute the model predictions. If omitted, the model training data is used.
+Cluster trajectory predictions are made when ids are not specified.}
 
 \item{strategy}{A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.}
 

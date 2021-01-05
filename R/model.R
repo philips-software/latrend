@@ -686,13 +686,13 @@ nobs.lcModel = function(object, ...) {
 #' @rdname predict.lcModel
 #' @importFrom stats predict
 #' @title lcModel predictions
-#' @description Predicts the expected trajectory observations at the given time for each cluster, unless specified.
+#' @description Predicts the expected trajectory observations at the given time for each cluster.
 #' @details Subclasses of `lcModel` should preferably implement `predictForCluster` instead of overriding `predict.lcModel` in order to benefit from standardized error checking and output handling.
 #' @param object The `lcModel` object.
-#' @param newdata Optional data frame for which to compute the model predictions. If omitted, the model training data is used.
-#' Cluster trajectory predictions are made when ids are not specified. If the clusters are specified under the Cluster column, output is given only for the specified cluster. Otherwise, a matrix is returned with predictions for all clusters.
-#' @param what The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying what='mb'.
-#' @return If newdata specifies the cluster membership; a vector of cluster-specific predictions. Otherwise, a matrix of predictions is returned corresponding to each cluster.
+#' @param newdata Optional `data.frame` for which to compute the model predictions. If omitted, the model training data is used.
+#' Cluster trajectory predictions are made when ids are not specified.
+#' @param what The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying `what = 'mb'`.
+#' @return If `newdata` specifies the cluster membership; a `data.frame` of cluster-specific predictions. Otherwise, a `list` of `data.frame` of cluster-specific predictions is returned.
 #' @param ... Additional arguments.
 #' @examples
 #' data(latrendData)

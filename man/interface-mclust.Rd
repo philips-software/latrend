@@ -47,8 +47,8 @@
 \item{at}{An optional vector, list or data frame of covariates at which to compute the cluster trajectory predictions.
 If a vector is specified, this is assumed to be the time covariate. Otherwise, a named list or data frame must be provided.}
 
-\item{newdata}{Optional data frame for which to compute the model predictions. If omitted, the model training data is used.
-Cluster trajectory predictions are made when ids are not specified. If the clusters are specified under the Cluster column, output is given only for the specified cluster. Otherwise, a matrix is returned with predictions for all clusters.}
+\item{newdata}{Optional \code{data.frame} for which to compute the model predictions. If omitted, the model training data is used.
+Cluster trajectory predictions are made when ids are not specified.}
 }
 \description{
 mclust interface

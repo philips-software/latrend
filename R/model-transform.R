@@ -168,11 +168,17 @@ setMethod('transformPredict', signature('data.frame', 'lcModel'), function(pred,
       subset(select = predvars)
   }
 
-
-  # only split when newdata does not specify Cluster
-  if (hasName(newdata, 'Cluster') || !hasName(newpred, 'Cluster')) {
-    newpred
+  if (hasName(newpred, 'Cluster')) {
+    newpredClusters = newpred$Cluster
+    # drop Cluster column
+    newpred = subset(newpred, select = setdiff(names(newpred), 'Cluster')) %>%
+      as.data.frame()
+    if (hasName(newdata, 'Cluster')) {
+      newpred
+    } else {
+      split(newpred, newpredClusters)
+    }
   } else {
-    split(newpred, newpred$Cluster)
+    as.data.frame(newpred)
   }
 })

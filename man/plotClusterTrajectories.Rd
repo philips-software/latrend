@@ -49,7 +49,7 @@
 
 \item{...}{Arguments passed to \link{clusterTrajectories}, or \link[ggplot2:geom_path]{ggplot2::geom_line} for plotting the cluster trajectory lines.}
 
-\item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying what='mb'.}
+\item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying \code{what = 'mb'}.}
 
 \item{at}{An optional vector, list or data frame of covariates at which to compute the cluster trajectory predictions.
 If a vector is specified, this is assumed to be the time covariate. Otherwise, a named list or data frame must be provided.}
