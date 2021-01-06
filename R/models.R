@@ -192,10 +192,9 @@ setMethod('externalMetric', signature('lcModels', 'lcModel'), .externalMetric.lc
 #' @return For `externalMetric(list, lcModel)`: A named `numeric` vector or `data.frame`
 #' containing the computed model metrics.
 setMethod('externalMetric', signature('list', 'lcModel'),
-  function(object, object2, name, drop = TRUE)
-  {
-  assert_that(is.lcModels(object))
-  .externalMetric.lcModels(object, object2, name, drop = drop)
+  function(object, object2, name, drop = TRUE) {
+    models = as.lcModels(object)
+    .externalMetric.lcModels(models, object2, name, drop = drop)
 })
 
 
