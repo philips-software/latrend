@@ -34,6 +34,8 @@ setValidity('lcMethodRandom', function(object) {
 #' method <- lcMethodRandom(alpha = c(100, 1, 1, 1), nClusters = 4,
 #'   response = "Y", id = "Id", time = "Time")
 #' @family lcMethod implementations
+#' @references
+#' \insertRef{frigyik2010introduction}{latrend}
 lcMethodRandom = function(response,
                           alpha = 10,
                           center = meanNA,

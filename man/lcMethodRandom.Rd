@@ -44,6 +44,9 @@ method <- lcMethodRandom(alpha = 1e3, nClusters = 3, response = "Y", id = "Id", 
 method <- lcMethodRandom(alpha = c(100, 1, 1, 1), nClusters = 4,
   response = "Y", id = "Id", time = "Time")
 }
+\references{
+\insertRef{frigyik2010introduction}{latrend}
+}
 \seealso{
 Other lcMethod implementations: 
 \code{\link{lcMethod-class}},

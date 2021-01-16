@@ -9,6 +9,7 @@
 #' @param name The name(s) of the metric(s) to compute.
 #' @param ... Additional arguments.
 #' @return For `metric(lcModel)`: A named `numeric` vector with the computed model metrics.
+#' @references
 #' @seealso [externalMetric] [min.lcModels] [max.lcModels]
 NULL
 
@@ -18,6 +19,18 @@ NULL
 #' @inheritParams metric
 #' @param object2 The other `lcModel` to compare with.
 #' @return A named `numeric` vector containing the computed model metrics.
+#' @references
+#' \insertRef{desgraupes2018clustercrit}{latrend}
+#'
+#' \insertRef{you2018mclustcomp}{latrend}
+#'
+#' \insertRef{csardi2006igraph}{latrend}
+#'
+#' \insertRef{hubert1985comparing}{latrend}
+#'
+#' \insertRef{revelle2019psych}{latrend}
+#'
+#' \insertRef{scrucca2016mclust}{latrend}
 #' @seealso [metric]
 NULL
 

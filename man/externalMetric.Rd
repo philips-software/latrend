@@ -59,6 +59,19 @@ model2 <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
    id = "Id", time = "Time"), latrendData)
 ari <- externalMetric(model1, model2, 'adjustedRand')
 }
+\references{
+\insertRef{desgraupes2018clustercrit}{latrend}
+
+\insertRef{you2018mclustcomp}{latrend}
+
+\insertRef{csardi2006igraph}{latrend}
+
+\insertRef{hubert1985comparing}{latrend}
+
+\insertRef{revelle2019psych}{latrend}
+
+\insertRef{scrucca2016mclust}{latrend}
+}
 \seealso{
 \link{metric}
 

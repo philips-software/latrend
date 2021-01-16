@@ -45,6 +45,7 @@ method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ Time,
 }
 \references{
 \insertRef{proustlima2017estimation}{latrend}
+
 \insertRef{proustlima2019lcmm}{latrend}
 }
 \seealso{
