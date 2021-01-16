@@ -1,4 +1,4 @@
-#' @include methodTwoStep.R
+#' @include methodFeature.R
 setClass('lcMethodGCKM', contains = 'lcMethod')
 
 setValidity('lcMethodGCKM', function(object) {
@@ -12,7 +12,7 @@ setValidity('lcMethodGCKM', function(object) {
 #' @export
 #' @title Two-step clustering through linear mixed modeling and k-means
 #' @description Two-step clustering through linear mixed modeling and k-means.
-#' @inheritParams lcMethodTwoStep
+#' @inheritParams lcMethodFeature
 #' @param formula Formula, including a random effects component for the trajectory. See [lme4::lmer] formula syntax.
 #' @param time The name of the time variable..
 #' @param id The name of the trajectory identifier variable.
@@ -53,7 +53,7 @@ lcMethodGCKM_as_twostep = function(method) {
   call$representationStep = representationStepGCKM
   call$clusterStep = clusterStepGCKM
   call$standardize = scale
-  lcMethod.call('lcMethodTwoStep', call = call)
+  lcMethod.call('lcMethodFeature', call = call)
 }
 
 #' @rdname interface-featureBased

@@ -143,9 +143,9 @@ clusStep <- function(method, data, repMat, envir, verbose) {
 }
 ```
 
-We are now ready to create the `lcMethodTwoStep` method.
+We are now ready to create the `lcMethodFeature` method.
 ```{r}
-m.twostep <- lcMethodTwoStep(response = "Y", representationStep = repStep, clusterStep = clusStep)
+m.twostep <- lcMethodFeature(response = "Y", representationStep = repStep, clusterStep = clusStep)
 ```
 
 ```{r message=TRUE}
@@ -158,7 +158,7 @@ summary(model.twostep)
 The two-step model defined above is hard-coded for a given formula and a fixed number of clusters. In an exploratory setting, it is convenient to define a parameterized method. Here, we change the two functions to take arguments through the `lcMethod` object in the `method` variable.
 
 
-Note that we can introduce new arguments which are not originally part of `lcMethodTwoStep` (e.g., `nClusters`) to enable the specification of the number of clusters in our method.
+Note that we can introduce new arguments which are not originally part of `lcMethodFeature` (e.g., `nClusters`) to enable the specification of the number of clusters in our method.
 ```{r}
 repStep.gen <- function(method, data, verbose) {
   coefdata <- data[, lm(method$formula, .SD) %>% coef() %>% as.list(), keyby = c(method$id)]
@@ -180,9 +180,9 @@ clusStep.gen <- function(method, data, repMat, envir, verbose) {
 }
 ```
 
-We create a new `lcMethodTwoStep` instance with the more generic functions. Defining values for `formula` and `nClusters` here makes these arguments values act as default values in a call of `latrend`.
+We create a new `lcMethodFeature` instance with the more generic functions. Defining values for `formula` and `nClusters` here makes these arguments values act as default values in a call of `latrend`.
 ```{r}
-m.twostepgen <- lcMethodTwoStep(response = "Y",
+m.twostepgen <- lcMethodFeature(response = "Y",
   representationStep = repStep.gen, 
   clusterStep = clusStep.gen)
 ```
@@ -194,7 +194,7 @@ summary(model.twostepgen)
 ```
 
 # Implementing a new method
-The use of `lcMethodStratify` and `lcMethodTwostep` enables rapid prototyping. Once the desired model has been identified, it may be worthwhile to implement it as a standalone method in the framework. This way the model can be extended to output more representative cluster trajectories, or to extend the model with predictive capabilities such that it can be validated on external data.
+The use of `lcMethodStratify` and `lcMethodFeature` enables rapid prototyping. Once the desired model has been identified, it may be worthwhile to implement it as a standalone method in the framework. This way the model can be extended to output more representative cluster trajectories, or to extend the model with predictive capabilities such that it can be validated on external data.
 
 To illustrate this, we will implement a basic group-based trajectory model (GBTM), also known as latent-class growth analysis.  We make use of the implementation available in the `lcmm` package through the `lcmm()` function, which allows for a relatively concise illustration.
 

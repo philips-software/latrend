@@ -3,14 +3,14 @@
 #' @name interface-featureBased
 #' @rdname interface-featureBased
 #' @title featureBased interface
-#' @seealso [lcMethodTwoStep] [lcMethodGCKM] [lcMethodLMKM]
+#' @seealso [lcMethodFeature] [lcMethodGCKM] [lcMethodLMKM]
 #' @keywords internal
 NULL
 
-setClass('lcMethodTwoStep', contains = 'lcMethod')
+setClass('lcMethodFeature', contains = 'lcMethod')
 
-setValidity('lcMethodTwoStep', function(object) {
-  assert_that(has_lcMethod_args(object, formalArgs(lcMethodTwoStep)))
+setValidity('lcMethodFeature', function(object) {
+  assert_that(has_lcMethod_args(object, formalArgs(lcMethodFeature)))
 
   assert_that(
     !isArgDefined(object, 'representationStep') ||
@@ -23,7 +23,7 @@ setValidity('lcMethodTwoStep', function(object) {
 })
 
 #' @export
-#' @title Two-step clustering
+#' @title Feature-based clustering
 #' @description Feature-based clustering.
 #' @inheritParams lcMethodCustom
 #' @param representationStep A `function` with signature `function(method, data)` that computes the representation per strata, returned as a `matrix`.
@@ -32,7 +32,7 @@ setValidity('lcMethodTwoStep', function(object) {
 #' @param standardize A `function` to standardize the output `matrix` of the representation step. By default, the output is shifted and rescaled to ensure zero mean and unit variance.
 #' @param ... Additional arguments.
 #' @family lcMethod implementations
-lcMethodTwoStep = function(response,
+lcMethodFeature = function(response,
                            representationStep,
                            clusterStep,
                            standardize = scale,
@@ -40,27 +40,27 @@ lcMethodTwoStep = function(response,
                            time = getOption('latrend.time'),
                            id = getOption('latrend.id'),
                            ...) {
-  lcMethod.call('lcMethodTwoStep',
+  lcMethod.call('lcMethodFeature',
                  call = match.call.all(),
                  excludeArgs = c('verbose'))
 }
 
 #' @rdname interface-featureBased
 #' @inheritParams getName
-setMethod('getName', signature('lcMethodTwoStep'), function(object) 'two-step clustering')
+setMethod('getName', signature('lcMethodFeature'), function(object) 'two-step clustering')
 
 #' @rdname interface-featureBased
-setMethod('getShortName', signature('lcMethodTwoStep'), function(object) 'twostep')
+setMethod('getShortName', signature('lcMethodFeature'), function(object) 'twostep')
 
 #' @rdname interface-featureBased
-setMethod('prepareData', signature('lcMethodTwoStep'), function(method, data, verbose, ...) {
+setMethod('prepareData', signature('lcMethodFeature'), function(method, data, verbose, ...) {
   assert_that(has_name(data, responseVariable(method)))
   return(NULL)
 })
 
 #' @rdname interface-featureBased
 #' @inheritParams fit
-setMethod('fit', signature('lcMethodTwoStep'), function(method, data, envir, verbose, ...) {
+setMethod('fit', signature('lcMethodFeature'), function(method, data, envir, verbose, ...) {
   nIds = uniqueN(data[[idVariable(method)]])
 
   ## Representation step #
@@ -80,7 +80,7 @@ setMethod('fit', signature('lcMethodTwoStep'), function(method, data, envir, ver
     repEnv$repMat = repOut
   } else {
     stop(
-      'unexpected output from the representationStep function. See the documentation ?lcMethodTwoStep for help.'
+      'unexpected output from the representationStep function. See the documentation ?lcMethodFeature for help.'
     )
   }
 
@@ -100,15 +100,15 @@ setMethod('fit', signature('lcMethodTwoStep'), function(method, data, envir, ver
     verbose = verbose
   )
 
-  assert_that(is.lcModelCustom(model), msg = 'invalid output from the clusterStep function; expected object of class lcModelCustom. See the documentation of ?lcMethodTwoStep for help.')
+  assert_that(is.lcModelCustom(model), msg = 'invalid output from the clusterStep function; expected object of class lcModelCustom. See the documentation of ?lcMethodFeature for help.')
 
 
-  # convert lcModelCustom to a lcModelTwoStep with the appropriate call
+  # convert lcModelCustom to a lcModelFeature with the appropriate call
   slots = slotNames(model) %>%
     lapply(slot, object = model) %>%
     setNames(slotNames(model))
 
-  slots$Class = 'lcModelTwoStep'
+  slots$Class = 'lcModelFeature'
   slots$data = data
   slots$call = getCall(method) # will be updated by latrend
   slots$method = method

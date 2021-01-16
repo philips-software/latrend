@@ -59,7 +59,7 @@ lcMethodTestLMKM = function(...) {
 }
 
 lcMethodTestTwoStep = function(...) {
-  lcMethodTwoStep(response = 'Value', ...)
+  lcMethodFeature(response = 'Value', ...)
 }
 
 lcMethodTestMixTVEM = function(...) {

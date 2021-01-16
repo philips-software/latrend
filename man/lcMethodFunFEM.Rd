@@ -53,6 +53,7 @@ Other lcMethod implementations:
 \code{\link{lcMethodCrimCV}},
 \code{\link{lcMethodCustom}},
 \code{\link{lcMethodDtwclust}},
+\code{\link{lcMethodFeature}},
 \code{\link{lcMethodGCKM}},
 \code{\link{lcMethodKML}},
 \code{\link{lcMethodLMKM}},
@@ -64,7 +65,6 @@ Other lcMethod implementations:
 \code{\link{lcMethodMixtoolsGMM}},
 \code{\link{lcMethodMixtoolsNPRM}},
 \code{\link{lcMethodRandom}},
-\code{\link{lcMethodStratify}},
-\code{\link{lcMethodTwoStep}}
+\code{\link{lcMethodStratify}}
 }
 \concept{lcMethod implementations}
