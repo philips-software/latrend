@@ -31,6 +31,7 @@ Depends:
 Imports:
     stats (>= 3.6.0),
     methods (>= 3.6.0),
+    Rdpack,
     R.utils (>= 2.9.0),
     assertthat (>= 0.2.1),
     foreach (>= 1.4.7),
@@ -68,6 +69,7 @@ Suggests:
     qqplotr (>= 0.0.4)
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
+RdMacros: Rdpack
 VignetteBuilder: knitr
 Collate: 
     'assert.R'

@@ -3,6 +3,7 @@
 #' @import methods
 #' @import magrittr
 #' @import stats
+#' @importFrom Rdpack reprompt
 #' @importFrom scales percent
 #' @importFrom foreach foreach %do%
 #' @import ggplot2

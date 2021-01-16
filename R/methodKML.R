@@ -22,6 +22,8 @@ setClass('lcMethodKML', contains = 'lcMatrixMethod')
 #' data(latrendData)
 #' method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
+#' @references
+#' \insertRef{genolini2015kml}{latrend}
 #' @family lcMethod implementations
 lcMethodKML = function(response,
                        time = getOption('latrend.time'),

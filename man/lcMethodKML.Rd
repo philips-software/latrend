@@ -33,6 +33,9 @@ data(latrendData)
 method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
 model <- latrend(method, latrendData)
 }
+\references{
+\insertRef{genolini2015kml}{latrend}
+}
 \seealso{
 Other lcMethod implementations: 
 \code{\link{lcMethod-class}},
