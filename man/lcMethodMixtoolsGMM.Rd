@@ -38,6 +38,9 @@ method <- lcMethodMixtoolsGMM(
    arb.R = FALSE)
 }
 }
+\references{
+\insertRef{benaglia2009mixtools}{latrend}
+}
 \seealso{
 Other lcMethod implementations: 
 \code{\link{lcMethod-class}},

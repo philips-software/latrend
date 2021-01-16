@@ -46,4 +46,6 @@ try({
 }
 \references{
 \url{https://github.com/dziakj1/MixTVEM}
+
+\insertRef{dziak2015modeling}{latrend}
 }

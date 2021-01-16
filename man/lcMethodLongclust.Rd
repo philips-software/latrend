@@ -33,6 +33,9 @@ data(latrendData)
 method <- lcMethodLongclust("Y", id = "Id", time = "Time", nClusters = 3)
 model <- latrend(method, latrendData)
 }
+\references{
+\insertRef{mcnicholas2019longclust}{latrend}
+}
 \seealso{
 Other lcMethod implementations: 
 \code{\link{lcMethod-class}},

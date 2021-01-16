@@ -23,6 +23,8 @@ setClass('lcMethodDtwclust', contains = 'lcMethod')
 #' method <- lcMethodDtwclust("Y", id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
+#' @references
+#' \insertRef{sardaespinosa2019time}{latrend}
 lcMethodDtwclust = function(response,
                        time = getOption('latrend.time'),
                        id = getOption('latrend.id'),

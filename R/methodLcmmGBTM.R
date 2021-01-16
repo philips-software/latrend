@@ -35,6 +35,9 @@ setValidity('lcMethodLcmmGBTM', function(object) {
 #' method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ Time,
 #'     id = "Id", time = "Time", nClusters = 3)
 #' @family lcMethod implementations
+#' @references
+#' \insertRef{proustlima2017estimation}{latrend}
+#' \insertRef{proustlima2019lcmm}{latrend}
 lcMethodLcmmGBTM = function(fixed,
                             mixture = ~ 1,
                             classmb =  ~ 1,

@@ -37,6 +37,9 @@ method <- lcMethodMixAK_GLMM(fixed = Y ~ 1, random = ~ Time,
 model <- latrend(method, latrendData)
 summary(model)
 }
+\references{
+\insertRef{komarek2009new}{latrend}
+}
 \seealso{
 Other lcMethod implementations: 
 \code{\link{lcMethod-class}},

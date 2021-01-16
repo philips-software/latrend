@@ -29,6 +29,8 @@ setClass('lcMethodFunFEM', contains = 'lcMatrixMethod')
 #'         nbasis = 10, norder = 4)
 #' })
 #' @family lcMethod implementations
+#' @references
+#' \insertRef{bouveyron2015funfem}{latrend}
 lcMethodFunFEM = function(response,
                           time = getOption('latrend.time'),
                           id = getOption('latrend.id'),

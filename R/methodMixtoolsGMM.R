@@ -25,6 +25,8 @@ setClass('lcMethodMixtoolsGMM', contains = 'lcMethod')
 #'    arb.R = FALSE)
 #' }
 #' @family lcMethod implementations
+#' @references
+#' \insertRef{benaglia2009mixtools}{latrend}
 lcMethodMixtoolsGMM = function(formula,
                                time = getOption('latrend.time'),
                                id = getOption('latrend.id'),

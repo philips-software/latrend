@@ -14,6 +14,8 @@ setClass('lcMethodFlexmixGBTM', contains = 'lcMethodFlexmix')
 #' method <- lcMethodFlexmixGBTM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' @family lcMethod package interfaces
+#' @references
+#' \insertRef{gruen2008flexmix}{latrend}
 lcMethodFlexmixGBTM = function(formula,
                                formula.mb =  ~ 1,
                                time = getOption('latrend.time'),

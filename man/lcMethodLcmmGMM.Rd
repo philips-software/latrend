@@ -48,6 +48,10 @@ method <- lcMethodLcmmGMM(fixed = Y ~ Time,
     mixture = ~ Time, random = ~ Time,
     id = "Id", time = "Time", nClusters = 3)
 }
+\references{
+\insertRef{proustlima2017estimation}{latrend}
+\insertRef{proustlima2019lcmm}{latrend}
+}
 \seealso{
 Other lcMethod implementations: 
 \code{\link{lcMethod-class}},

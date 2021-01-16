@@ -21,6 +21,8 @@ setClass('lcMethodLongclust', contains = 'lcMatrixMethod')
 #' method <- lcMethodLongclust("Y", id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
+#' @references
+#' \insertRef{mcnicholas2019longclust}{latrend}
 lcMethodLongclust = function(response,
                              time = getOption('latrend.time'),
                              id = getOption('latrend.id'),

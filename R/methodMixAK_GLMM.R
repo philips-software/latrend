@@ -25,6 +25,8 @@ setClass('lcMethodMixAK_GLMM', contains = 'lcMethod')
 #'   id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' summary(model)
+#' @references
+#' \insertRef{komarek2009new}{latrend}
 lcMethodMixAK_GLMM = function(fixed,
                               random,
                             time = getOption('latrend.time'),

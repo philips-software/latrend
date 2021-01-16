@@ -43,6 +43,9 @@ method <- lcMethodFunFEM("Y",
         nbasis = 10, norder = 4)
 })
 }
+\references{
+\insertRef{bouveyron2015funfem}{latrend}
+}
 \seealso{
 Other lcMethod implementations: 
 \code{\link{lcMethod-class}},

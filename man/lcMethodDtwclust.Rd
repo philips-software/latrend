@@ -33,6 +33,9 @@ data(latrendData)
 method <- lcMethodDtwclust("Y", id = "Id", time = "Time", nClusters = 3)
 model <- latrend(method, latrendData)
 }
+\references{
+\insertRef{sardaespinosa2019time}{latrend}
+}
 \seealso{
 Other lcMethod implementations: 
 \code{\link{lcMethod-class}},

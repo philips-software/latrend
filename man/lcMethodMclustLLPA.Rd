@@ -33,6 +33,9 @@ data(latrendData)
 method <- lcMethodMclustLLPA("Y", id = "Id", time = "Time", nClusters = 3)
 model <- latrend(method, latrendData)
 }
+\references{
+\insertRef{scrucca2016mclust}{latrend}
+}
 \seealso{
 Other lcMethod implementations: 
 \code{\link{lcMethod-class}},

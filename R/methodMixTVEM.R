@@ -88,6 +88,8 @@ setValidity('lcMethodMixTVEM', function(object) {
 #'                      id='Id', nClusters=3)
 #' })
 #' }
+#' @references
+#' \insertRef{dziak2015modeling}{latrend}
 lcMethodMixTVEM = function(formula,
                            formula.mb =  ~ 1,
                            time = getOption('latrend.time'),

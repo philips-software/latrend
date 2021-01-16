@@ -36,6 +36,9 @@ data(latrendData)
 method <- lcMethodAkmedoids(response = "Y", time = "Time", id = "Id", nClusters = 3)
 model <- latrend(method, data = latrendData)
 }
+\references{
+\insertRef{adepeju2020akmedoids}{latrend}
+}
 \seealso{
 Other lcMethod implementations: 
 \code{\link{lcMethod-class}},

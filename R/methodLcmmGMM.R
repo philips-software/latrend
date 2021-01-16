@@ -42,6 +42,9 @@ setValidity('lcMethodLcmmGMM', function(object) {
 #'     mixture = ~ Time, random = ~ Time,
 #'     id = "Id", time = "Time", nClusters = 3)
 #' @family lcMethod implementations
+#' @references
+#' \insertRef{proustlima2017estimation}{latrend}
+#' \insertRef{proustlima2019lcmm}{latrend}
 lcMethodLcmmGMM = function(fixed,
                           mixture = ~ 1,
                           random = ~ 1,

@@ -29,6 +29,8 @@ setClass('lcMethodCrimCV', contains = 'lcMatrixMethod')
 #' model <- latrend(method, data = TO1adj[1:100, ])
 #' }
 #' @family lcMethod implementations
+#' @references
+#' \insertRef{nielsen2018crimcv}{latrend}
 lcMethodCrimCV = function(response,
                           time = getOption('latrend.time'),
                           id = getOption('latrend.id'),

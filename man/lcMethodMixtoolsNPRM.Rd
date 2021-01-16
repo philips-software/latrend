@@ -42,6 +42,9 @@ data(latrendData)
 method <- lcMethodMixtoolsNPRM("Y", id = "Id", time = "Time", nClusters = 3)
 model <- latrend(method, latrendData)
 }
+\references{
+\insertRef{benaglia2009mixtools}{latrend}
+}
 \seealso{
 Other lcMethod implementations: 
 \code{\link{lcMethod-class}},

@@ -36,6 +36,9 @@ data(latrendData)
 method <- lcMethodFlexmixGBTM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
 model <- latrend(method, latrendData)
 }
+\references{
+\insertRef{gruen2008flexmix}{latrend}
+}
 \seealso{
 Other lcMethod package interfaces: 
 \code{\link{lcMethodFlexmix}}

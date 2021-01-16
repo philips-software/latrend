@@ -24,6 +24,8 @@ setClass('lcMethodAkmedoids', contains = 'lcMatrixMethod')
 #' method <- lcMethodAkmedoids(response = "Y", time = "Time", id = "Id", nClusters = 3)
 #' model <- latrend(method, data = latrendData)
 #' @family lcMethod implementations
+#' @references
+#' \insertRef{adepeju2020akmedoids}{latrend}
 lcMethodAkmedoids = function(response,
                              time = getOption('latrend.time'),
                              id = getOption('latrend.id'),

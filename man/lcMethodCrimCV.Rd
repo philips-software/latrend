@@ -41,6 +41,9 @@ method <- lcMethodCrimCV(response = "Offenses", time = "Offense", id = "Subject"
 model <- latrend(method, data = TO1adj[1:100, ])
 }
 }
+\references{
+\insertRef{nielsen2018crimcv}{latrend}
+}
 \seealso{
 Other lcMethod implementations: 
 \code{\link{lcMethod-class}},
