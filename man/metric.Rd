@@ -41,9 +41,6 @@ bic <- metric(model, "BIC")
 
 ic <- metric(model, c("AIC", "BIC"))
 }
-\references{
-
-}
 \seealso{
 \link{externalMetric} \link{min.lcModels} \link{max.lcModels}
 

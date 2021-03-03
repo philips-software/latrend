@@ -9,7 +9,6 @@
 #' @param name The name(s) of the metric(s) to compute.
 #' @param ... Additional arguments.
 #' @return For `metric(lcModel)`: A named `numeric` vector with the computed model metrics.
-#' @references
 #' @seealso [externalMetric] [min.lcModels] [max.lcModels]
 NULL
 
