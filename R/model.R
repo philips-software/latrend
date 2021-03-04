@@ -754,9 +754,13 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
                       ...)
   }, names(clusdataList), clusdataList, SIMPLIFY = FALSE)
 
-  assert_that(length(predList) == length(clusdataList), msg = 'unexpected internal state. please report')
-  assert_that(uniqueN(vapply(predList, class, FUN.VALUE = '')) == 1,
+  assert_that(
+    length(predList) == length(clusdataList),
+    msg = 'unexpected internal state. please report')
+  assert_that(
+    all(vapply(predList, function(x) is(x, class(predList[[1]])), FUN.VALUE = TRUE)),
     msg = 'output from predictForCluster() must be same class for all clusters. Check the model implementation.')
+
 
   if (is.data.frame(predList[[1]])) {
     pred = rbindlist(predList, idcol = 'Cluster')
