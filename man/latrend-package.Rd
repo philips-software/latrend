@@ -32,7 +32,7 @@ Other contributors:
 \itemize{
   \item Steffen Pauws \email{s.c.pauws@uvt.nl} [contributor]
   \item Edwin van den Heuvel \email{e.r.v.d.heuvel@tue.nl} [contributor]
-  \item Copyright © 2020 Koninklijke Philips N.V. [copyright holder]
+  \item Copyright © 2021 Koninklijke Philips N.V. [copyright holder]
 }
 
 }
