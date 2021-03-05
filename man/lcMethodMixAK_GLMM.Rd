@@ -32,10 +32,13 @@ Specify a GLMM iwht a normal mixture in the random effects
 }
 \examples{
 data(latrendData)
-method <- lcMethodMixAK_GLMM(fixed = Y ~ 1, random = ~ Time,
+# this example only runs when the mixAK package is installed
+try({
+ method <- lcMethodMixAK_GLMM(fixed = Y ~ 1, random = ~ Time,
   id = "Id", time = "Time", nClusters = 3)
-model <- latrend(method, latrendData)
-summary(model)
+ model <- latrend(method, latrendData)
+ summary(model)
+})
 }
 \references{
 \insertRef{komarek2009new}{latrend}

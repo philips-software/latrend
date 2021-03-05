@@ -21,10 +21,13 @@ setClass('lcMethodMixAK_GLMM', contains = 'lcMethod')
 #' @family lcMethod implementations
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodMixAK_GLMM(fixed = Y ~ 1, random = ~ Time,
+#' # this example only runs when the mixAK package is installed
+#' try({
+#'  method <- lcMethodMixAK_GLMM(fixed = Y ~ 1, random = ~ Time,
 #'   id = "Id", time = "Time", nClusters = 3)
-#' model <- latrend(method, latrendData)
-#' summary(model)
+#'  model <- latrend(method, latrendData)
+#'  summary(model)
+#' })
 #' @references
 #' \insertRef{komarek2009new}{latrend}
 lcMethodMixAK_GLMM = function(fixed,
