@@ -63,7 +63,7 @@ Cluster trajectory predictions are made when ids are not specified.}
 
 \item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying \code{what = 'mb'}.}
 
-\item{approxFun}{Function to interpolate between measurement moments, \url{approx} by default.}
+\item{approxFun}{Function to interpolate between measurement moments, \link[stats]{approx}() by default.}
 }
 \description{
 funFEM interface

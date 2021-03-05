@@ -33,10 +33,10 @@ Cluster trajectory predictions are made when ids are not specified.}
 
 \item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying \code{what = 'mb'}.}
 
-\item{approxFun}{Function to interpolate between measurement moments, \url{approx} by default.}
+\item{approxFun}{Function to interpolate between measurement moments, \link[stats]{approx}() by default.}
 }
 \description{
 approx models have defined cluster trajectories at fixed moments in time, which should be interpolated
-For a correct implementation, lcApproxModel requires the extending class to implement clusterTrajectories(at=NULL)
+For a correct implementation, \code{lcApproxModel} requires the extending class to implement \code{clusterTrajectories(at=NULL)}
 to return the fixed cluster trajectories
 }

@@ -5,7 +5,7 @@
 #' @aliases lcApproxModel
 #' @title lcApproxModel class
 #' @description approx models have defined cluster trajectories at fixed moments in time, which should be interpolated
-#' For a correct implementation, lcApproxModel requires the extending class to implement clusterTrajectories(at=NULL)
+#' For a correct implementation, `lcApproxModel` requires the extending class to implement `clusterTrajectories(at=NULL)`
 #' to return the fixed cluster trajectories
 setClass('lcApproxModel', contains = 'lcModel')
 
@@ -26,7 +26,7 @@ fitted.lcApproxModel = function(object, ..., clusters = trajectoryAssignments(ob
 #. predictForCluster ####
 #' @rdname lcApproxModel-class
 #' @inheritParams predictForCluster
-#' @param approxFun Function to interpolate between measurement moments, [approx]() by default.
+#' @param approxFun Function to interpolate between measurement moments, \link[stats]{approx}() by default.
 setMethod('predictForCluster', signature('lcApproxModel'),
   function(object, newdata, cluster, what = 'mu', approxFun = approx, ...) {
   assert_that(is.function(approxFun))
