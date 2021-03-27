@@ -1,13 +1,16 @@
 skip_on_cran()
 skip_on_ci()
+skip_if_not_installed('parallel')
 skip_if(parallel::detectCores(logical = FALSE) < 2)
 
-skip_if_not_installed('parallel')
-cl = parallel::makeCluster(2)
-
-skip_if_not_installed('doParallel')
-doParallel::registerDoParallel(cl)
-
+if (.Platform$OS.type == 'unix') {
+  skip_if_not_installed('doMC')
+  doMC::registerDoMC(2)
+} else {
+  cl = parallel::makeCluster(2)
+  skip_if_not_installed('doParallel')
+  doParallel::registerDoParallel(cl)
+}
 
 setClass('lcMethodSleep', contains = 'lcMethodRandom')
 setMethod('fit', signature('lcMethodSleep'), function(method, data, envir, verbose, ...) {
@@ -43,4 +46,7 @@ test_that('parallel latrendRep', {
   expect_lt(time['elapsed'], 18)
 })
 
-parallel::stopCluster(cl)
+# cleanup
+if (exists('cl')) {
+  parallel::stopCluster(cl)
+}
