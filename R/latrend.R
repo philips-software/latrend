@@ -25,8 +25,8 @@ latrend = function(method,
                     ...,
                     envir = NULL,
                     verbose = getOption('latrend.verbose')) {
-  envir = lcMethod.env(method, parent.frame(), envir)
   assert_that(is.lcMethod(method))
+  envir = lcMethod.env(method, parent.frame(), envir)
 
   verbose = as.Verbose(verbose)
   argList = list(...)
@@ -272,6 +272,7 @@ latrendRep = function(method,
 #' @param methods A `list` of `lcMethod` objects.
 #' @param data A `data.frame`, `matrix`, or a `list` thereof to which to apply to the respective `lcMethod`. Multiple datasets can be supplied by encapsulating the datasets using `data=.(df1, df2, ..., dfN)`.
 #' @param cartesian Whether to fit the provided methods on each of the datasets. If `cartesian=FALSE`, only a single dataset may be provided or a list of data matching the length of `methods`.
+#' @param parallel Whether to enable parallel evaluation.
 #' @param envir The `environment` in which to evaluate the `lcMethod` arguments.
 #' @return A `lcModels` object.
 #' @examples
@@ -288,6 +289,7 @@ latrendRep = function(method,
 latrendBatch = function(methods,
                          data,
                          cartesian = TRUE,
+                         parallel = FALSE,
                          envir = NULL,
                          verbose = getOption('latrend.verbose')) {
   if (!is.list(methods)) {
@@ -299,8 +301,8 @@ latrendBatch = function(methods,
   )), msg = 'methods argument must be a list of lcMethod objects')
   assert_that(
     !missing(data),
-    is.logical(cartesian),
-    is.scalar(cartesian)
+    is.flag(cartesian),
+    is.flag(parallel)
   )
 
   envir = lcMethod.env(methods[[1]], parent.frame(), envir)
@@ -309,8 +311,7 @@ latrendBatch = function(methods,
   nModels = length(methods)
   mc = match.call()[-1]
 
-  header(verbose,
-         sprintf('Batch estimation (N=%d) for longitudinal clustering', nModels))
+  header(verbose, sprintf('Batch estimation (N=%d) for longitudinal clustering', nModels))
 
   dataCall = mc$data
   if (is.name(dataCall)) {
@@ -337,32 +338,62 @@ latrendBatch = function(methods,
   cat(verbose, 'Calling latrend for each method...')
   pushState(verbose)
 
-  models = vector('list', nModels * ifelse(cartesian, nData, 1))
+  # generate method and data lists
+  if (cartesian) {
+    allMethods = methods[rep(seq_len(nModels), nData)]
+    allDataOpts = dataList[rep(seq_len(nData), nModels)]
+  } else if (nModels == nData) {
+    allMethods = methods
+    allDataOpts = dataList
+  } else {
+    # replicate methods and data such that they are equal length
+    allMethods = methods[rep_len(seq_len(nModels), length.out = max(nModels, nData))]
+    allDataOpts = dataList[rep_len(seq_len(nData), length.out = max(nModels, nData))]
+  }
+  assert_that(length(allMethods) == length(allDataOpts))
 
-  for (m in seq_along(methods)) {
-    if (cartesian) {
-      dOpts = seq_along(dataList)
-    } else {
-      dOpts = min(m, nData, nModels)
+  # generate calls
+  allCalls = vector('list', length(allMethods))
+  for (i in seq_along(allMethods)) {
+    allCalls[[i]] = do.call(call,
+      c(
+        'latrend',
+        method = allMethods[[i]],
+        data = quote(allDataOpts[[i]]),
+        envir = quote(envir),
+        verbose = quote(verbose)
+      ))
+  }
+
+  `%infix%` = ifelse(parallel, `%dopar%`, `%do%`)
+  penv = parent.frame()
+
+  models = foreach(cl = allCalls, .packages = 'latrend', .errorhandling = 'pass', .export = 'envir') %dopar% {
+    assert_that(is.lcMethod(cl$method),
+      msg = sprintf('The provided lcMethod object of class "%s" is not defined on the parallel cluster worker.
+        You need to export the S4 class definition and methods of "%s" to the cluster workers.
+        Also ensure that any custom S4 lcModel classes are exported.',
+        class(cl$method),
+        class(cl$method)))
+
+    model = eval(cl, envir = penv)
+
+    if(!is.lcModel(model)) {
+      warning(sprintf('The resulting lcModel object of class "%s" is not defined on the parallel cluster worker.
+        This may result in unexpected post-processing, in which case you need to export the S4 class defintions
+        and methods of "%s" to the cluster workers',
+        class(model),
+        class(model)
+      ))
     }
-    for (d in dOpts) {
-      cl = do.call(call,
-                   c(
-                     'latrend',
-                     method = quote(methods[[m]]),
-                     data = quote(dataList[[d]]),
-                     envir = quote(envir),
-                     verbose = quote(verbose)
-                   ))
-      models[[(m - 1) * length(dOpts) + ifelse(cartesian, d, 1)]] = eval(cl, envir = parent.frame())
-    }
+
+    model
   }
 
   popState(verbose)
   cat(verbose, sprintf('Done fitting %d models.', nModels))
   as.lcModels(models)
 }
-
 
 #' @export
 #' @title Cluster longitudinal data using bootstrapping

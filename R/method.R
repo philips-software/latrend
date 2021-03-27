@@ -524,7 +524,7 @@ isArgDefined = function(object, name, envir = environment(object)) {
 #' @param x The object to check the class of.
 #' @keywords internal
 is.lcMethod = function(x) {
-  isS4(x) && is(x, 'lcMethod')
+  isS4(x) && inherits(x, 'lcMethod')
 }
 
 
