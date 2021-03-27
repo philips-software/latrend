@@ -146,6 +146,7 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
 #' If `"remove"`, errors are ignored and the respective repetition is exempt from the returned model list.
 #' If `"stop"`, errors are not caught, ensuring that the function halts on the first error.
 #' @param .seed Set the seed for generating the respective seed for each of the repeated fits.
+#' @param .parallel Whether to use parallel evaluation.
 #' @details This method is faster than repeatedly calling [latrend] as it only prepares the data via `prepareData()` once.
 #' @return A `lcModels` object containing the resulting models.
 #' @examples
@@ -161,11 +162,15 @@ latrendRep = function(method,
                        ...,
                        .errorhandling = 'remove',
                        .seed = NULL,
+                       .parallel = FALSE,
                        envir = NULL,
                        verbose = getOption('latrend.verbose')) {
   envir = lcMethod.env(method, parent.frame(), envir)
-  assert_that(is.lcMethod(method),
-              is.count(.rep))
+  assert_that(
+    is.lcMethod(method),
+    is.count(.rep),
+    is.flag(.parallel)
+  )
 
   verbose = as.Verbose(verbose)
   errh = match.arg(.errorhandling, c('stop', 'remove'))
@@ -192,13 +197,11 @@ latrendRep = function(method,
 
   # seed
   if (hasName(cmethod, 'seed')) {
-    warning(
-      'The supplied lcMethod object defines a seed, which will result in repeated identical results. Use the .seed argument of latrendRep() to generate different seeds for the repetitions in a reproducible way.'
-    )
+    warning('The supplied lcMethod object defines a seed, which will result in repeated identical results.
+      Use the .seed argument of latrendRep() to generate different seeds for the repetitions in a reproducible way.')
   }
 
-  cat(verbose,
-      sprintf('Generating method seeds for seed = %s.', as.character(.seed)))
+  cat(verbose, sprintf('Generating method seeds for seed = %s.', as.character(.seed)))
   localRNG(seed = .seed, {
     repSeeds = sample.int(.Machine$integer.max,
                           size = .rep,
@@ -208,6 +211,7 @@ latrendRep = function(method,
   id = idVariable(cmethod)
   time = timeVariable(cmethod)
   response = responseVariable(cmethod)
+
   assert_that(
     is.character(idVariable(cmethod)),
     is.character(timeVariable(cmethod)),
@@ -231,12 +235,14 @@ latrendRep = function(method,
                         verbose = verbose)
   exit(verbose)
 
+  `%infix%` = ifelse(.parallel, `%dopar%`, `%do%`)
+
   models = foreach(
     i = seq_len(.rep),
     iseed = repSeeds,
     .combine = c,
     .errorhandling = errh
-  ) %do% {
+  ) %infix% {
     cat(verbose,
         sprintf('Fitting model %d/%d for seed %s...',
         i,

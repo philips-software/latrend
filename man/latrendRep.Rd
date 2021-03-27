@@ -11,6 +11,7 @@ latrendRep(
   ...,
   .errorhandling = "remove",
   .seed = NULL,
+  .parallel = FALSE,
   envir = NULL,
   verbose = getOption("latrend.verbose")
 )
@@ -29,6 +30,8 @@ If \code{"remove"}, errors are ignored and the respective repetition is exempt f
 If \code{"stop"}, errors are not caught, ensuring that the function halts on the first error.}
 
 \item{.seed}{Set the seed for generating the respective seed for each of the repeated fits.}
+
+\item{.parallel}{Whether to use parallel evaluation.}
 
 \item{envir}{The \code{environment} in which to evaluate the method arguments. Note that this only applies to \code{data} when \code{data} is a \code{call}.}
 
