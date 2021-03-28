@@ -9,7 +9,7 @@ latrendRep(
   data,
   .rep = 10,
   ...,
-  .errorhandling = "remove",
+  .errorhandling = "stop",
   .seed = NULL,
   .parallel = FALSE,
   envir = NULL,
@@ -26,8 +26,8 @@ latrendRep(
 \item{...}{Any other arguments to update the \code{lcMethod} definition with.}
 
 \item{.errorhandling}{How to handle fits in which on error occurs.
-If \code{"remove"}, errors are ignored and the respective repetition is exempt from the returned model list.
-If \code{"stop"}, errors are not caught, ensuring that the function halts on the first error.}
+If \code{"stop"}, errors are not caught, ensuring that the function halts on the first error.
+If \code{"remove"}, errors are ignored and the respective repetition is exempt from the returned model list.}
 
 \item{.seed}{Set the seed for generating the respective seed for each of the repeated fits.}
 

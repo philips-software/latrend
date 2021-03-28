@@ -27,6 +27,7 @@ assertthat::on_failure(has_same_ids) = function(call, env) {
          all.equal(ids(m1), ids(m2)))
 }
 
+
 has_same_modelData = function(m1, m2) {
   assert_that(is.lcModel(m1), is.lcModel(m2))
   all.equal(model.data(m1), model.data(m2)) %>%
@@ -40,6 +41,15 @@ assertthat::on_failure(has_same_modelData) = function(call, env) {
          all.equal(model.data(m1), model.data(m2)))
 }
 
+
+is_class_defined = function(x) {
+  isClass(class(x))
+}
+
+assertthat::on_failure(is_class_defined) = function(call, env) {
+  sprintf('The class "%s" is not defined.\nYou are likely running a custom method or model on a parallel cluster worker without loading the class definitions and methods.',
+    class(eval(call$x, env)))
+}
 
 
 #' @export

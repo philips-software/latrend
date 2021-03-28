@@ -25,7 +25,10 @@ latrend = function(method,
                     ...,
                     envir = NULL,
                     verbose = getOption('latrend.verbose')) {
-  assert_that(is.lcMethod(method))
+  assert_that(
+    is_class_defined(method),
+    is.lcMethod(method)
+  )
   envir = lcMethod.env(method, parent.frame(), envir)
 
   verbose = as.Verbose(verbose)
@@ -88,6 +91,7 @@ latrend = function(method,
 
 fitLatrendMethod = function(method, data, envir, mc, verbose) {
   assert_that(
+    is_class_defined(method),
     is.lcMethod(method),
     is.data.frame(data),
     is.call(mc),
@@ -114,6 +118,8 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
     envir = modelEnv,
     verbose = verbose
   )
+
+  assert_that(is_class_defined(model))
 
   model@call = do.call(call,
                        c(
@@ -143,8 +149,8 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
 #' @inheritParams latrend
 #' @param .rep The number of repeated fits.
 #' @param .errorhandling How to handle fits in which on error occurs.
-#' If `"remove"`, errors are ignored and the respective repetition is exempt from the returned model list.
 #' If `"stop"`, errors are not caught, ensuring that the function halts on the first error.
+#' If `"remove"`, errors are ignored and the respective repetition is exempt from the returned model list.
 #' @param .seed Set the seed for generating the respective seed for each of the repeated fits.
 #' @param .parallel Whether to use parallel evaluation.
 #' @details This method is faster than repeatedly calling [latrend] as it only prepares the data via `prepareData()` once.
@@ -160,7 +166,7 @@ latrendRep = function(method,
                        data,
                        .rep = 10,
                        ...,
-                       .errorhandling = 'remove',
+                       .errorhandling = 'stop',
                        .seed = NULL,
                        .parallel = FALSE,
                        envir = NULL,
@@ -248,6 +254,7 @@ latrendRep = function(method,
         i,
         .rep,
         as.character(iseed)))
+    assert_that(is_class_defined(cmethod))
     imethod = update(cmethod, seed = iseed, .eval = TRUE)
     model = fitLatrendMethod(
       imethod,
@@ -368,25 +375,8 @@ latrendBatch = function(methods,
   `%infix%` = ifelse(parallel, `%dopar%`, `%do%`)
   penv = parent.frame()
 
-  models = foreach(cl = allCalls, .packages = 'latrend', .errorhandling = 'pass', .export = 'envir') %dopar% {
-    assert_that(is.lcMethod(cl$method),
-      msg = sprintf('The provided lcMethod object of class "%s" is not defined on the parallel cluster worker.
-        You need to export the S4 class definition and methods of "%s" to the cluster workers.
-        Also ensure that any custom S4 lcModel classes are exported.',
-        class(cl$method),
-        class(cl$method)))
-
+  models = foreach(cl = allCalls, .packages = 'latrend', .errorhandling = 'stop', .export = 'envir') %infix% {
     model = eval(cl, envir = penv)
-
-    if(!is.lcModel(model)) {
-      warning(sprintf('The resulting lcModel object of class "%s" is not defined on the parallel cluster worker.
-        This may result in unexpected post-processing, in which case you need to export the S4 class defintions
-        and methods of "%s" to the cluster workers',
-        class(model),
-        class(model)
-      ))
-    }
-
     model
   }
 
