@@ -489,6 +489,8 @@ latrendCV = function(method,
                       data,
                       folds = 10,
                       seed = NULL,
+                      parallel = FALSE,
+                      errorHandling = 'stop',
                       envir = NULL,
                       verbose = getOption('latrend.verbose')) {
   assert_that(!missing(data), msg = 'data must be specified')
@@ -526,6 +528,8 @@ latrendCV = function(method,
                    list(
                      method = method,
                      data = dataCall,
+                     parallel = parallel,
+                     errorHandling = errorHandling,
                      verbose = verbose
                    ), envir = parent.frame())
 
