@@ -21,7 +21,7 @@ latrendBatch(
 
 \item{cartesian}{Whether to fit the provided methods on each of the datasets. If \code{cartesian=FALSE}, only a single dataset may be provided or a list of data matching the length of \code{methods}.}
 
-\item{parallel}{Whether to enable parallel evaluation.}
+\item{parallel}{Whether to enable parallel evaluation. See \link{latrend-parallel}.}
 
 \item{errorHandling}{Whether to \code{"stop"} on an error, or to \verb{"remove'} evaluations that raised an error.}
 

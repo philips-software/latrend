@@ -150,7 +150,7 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
 #' @param .rep The number of repeated fits.
 #' @param errorHandling Whether to `"stop"` on an error, or to `"remove'` evaluations that raised an error.
 #' @param .seed Set the seed for generating the respective seed for each of the repeated fits.
-#' @param .parallel Whether to use parallel evaluation.
+#' @param .parallel Whether to use parallel evaluation. See \link{latrend-parallel}.
 #' @details This method is faster than repeatedly calling [latrend] as it only prepares the data via `prepareData()` once.
 #' @return A `lcModels` object containing the resulting models.
 #' @examples
@@ -276,7 +276,7 @@ latrendRep = function(method,
 #' @param methods A `list` of `lcMethod` objects.
 #' @param data A `data.frame`, `matrix`, or a `list` thereof to which to apply to the respective `lcMethod`. Multiple datasets can be supplied by encapsulating the datasets using `data=.(df1, df2, ..., dfN)`.
 #' @param cartesian Whether to fit the provided methods on each of the datasets. If `cartesian=FALSE`, only a single dataset may be provided or a list of data matching the length of `methods`.
-#' @param parallel Whether to enable parallel evaluation.
+#' @param parallel Whether to enable parallel evaluation. See \link{latrend-parallel}.
 #' @param errorHandling Whether to `"stop"` on an error, or to `"remove'` evaluations that raised an error.
 #' @param envir The `environment` in which to evaluate the `lcMethod` arguments.
 #' @return A `lcModels` object.

@@ -27,7 +27,7 @@ latrendRep(
 
 \item{.seed}{Set the seed for generating the respective seed for each of the repeated fits.}
 
-\item{.parallel}{Whether to use parallel evaluation.}
+\item{.parallel}{Whether to use parallel evaluation. See \link{latrend-parallel}.}
 
 \item{envir}{The \code{environment} in which to evaluate the method arguments. Note that this only applies to \code{data} when \code{data} is a \code{call}.}
 
