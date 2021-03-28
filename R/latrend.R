@@ -148,9 +148,7 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
 #' @description Performs a repeated fit of the specified latrend model on the given data.
 #' @inheritParams latrend
 #' @param .rep The number of repeated fits.
-#' @param .errorhandling How to handle fits in which on error occurs.
-#' If `"stop"`, errors are not caught, ensuring that the function halts on the first error.
-#' If `"remove"`, errors are ignored and the respective repetition is exempt from the returned model list.
+#' @param errorHandling Whether to `"stop"` on an error, or to `"remove'` evaluations that raised an error.
 #' @param .seed Set the seed for generating the respective seed for each of the repeated fits.
 #' @param .parallel Whether to use parallel evaluation.
 #' @details This method is faster than repeatedly calling [latrend] as it only prepares the data via `prepareData()` once.
@@ -166,7 +164,7 @@ latrendRep = function(method,
                        data,
                        .rep = 10,
                        ...,
-                       .errorhandling = 'stop',
+                       .errorHandling = 'stop',
                        .seed = NULL,
                        .parallel = FALSE,
                        envir = NULL,
@@ -179,7 +177,6 @@ latrendRep = function(method,
   )
 
   verbose = as.Verbose(verbose)
-  errh = match.arg(.errorhandling, c('stop', 'remove'))
   argList = list(...)
   argList$envir = envir
   newmethod = do.call(update, c(object = method, argList))
@@ -247,7 +244,7 @@ latrendRep = function(method,
     i = seq_len(.rep),
     iseed = repSeeds,
     .combine = c,
-    .errorhandling = errh
+    .errorhandling = .errorHandling
   ) %infix% {
     cat(verbose,
         sprintf('Fitting model %d/%d for seed %s...',
@@ -280,6 +277,7 @@ latrendRep = function(method,
 #' @param data A `data.frame`, `matrix`, or a `list` thereof to which to apply to the respective `lcMethod`. Multiple datasets can be supplied by encapsulating the datasets using `data=.(df1, df2, ..., dfN)`.
 #' @param cartesian Whether to fit the provided methods on each of the datasets. If `cartesian=FALSE`, only a single dataset may be provided or a list of data matching the length of `methods`.
 #' @param parallel Whether to enable parallel evaluation.
+#' @param errorHandling Whether to `"stop"` on an error, or to `"remove'` evaluations that raised an error.
 #' @param envir The `environment` in which to evaluate the `lcMethod` arguments.
 #' @return A `lcModels` object.
 #' @examples
@@ -297,6 +295,7 @@ latrendBatch = function(methods,
                          data,
                          cartesian = TRUE,
                          parallel = FALSE,
+                         errorHandling = 'stop',
                          envir = NULL,
                          verbose = getOption('latrend.verbose')) {
   if (!is.list(methods)) {
@@ -375,7 +374,7 @@ latrendBatch = function(methods,
   `%infix%` = ifelse(parallel, `%dopar%`, `%do%`)
   penv = parent.frame()
 
-  models = foreach(cl = allCalls, .packages = 'latrend', .errorhandling = 'stop', .export = 'envir') %infix% {
+  models = foreach(cl = allCalls, .packages = 'latrend', .errorhandling = errorHandling, .export = 'envir') %infix% {
     model = eval(cl, envir = penv)
     model
   }

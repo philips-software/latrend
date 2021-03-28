@@ -9,7 +9,7 @@ latrendRep(
   data,
   .rep = 10,
   ...,
-  .errorhandling = "stop",
+  .errorHandling = "stop",
   .seed = NULL,
   .parallel = FALSE,
   envir = NULL,
@@ -25,10 +25,6 @@ latrendRep(
 
 \item{...}{Any other arguments to update the \code{lcMethod} definition with.}
 
-\item{.errorhandling}{How to handle fits in which on error occurs.
-If \code{"stop"}, errors are not caught, ensuring that the function halts on the first error.
-If \code{"remove"}, errors are ignored and the respective repetition is exempt from the returned model list.}
-
 \item{.seed}{Set the seed for generating the respective seed for each of the repeated fits.}
 
 \item{.parallel}{Whether to use parallel evaluation.}
@@ -39,6 +35,8 @@ If \code{"remove"}, errors are ignored and the respective repetition is exempt f
 a \code{logical} indicating whether to show basic computation information,
 a \code{numeric} indicating the verbosity level (see \link{Verbose}),
 or one of \code{c('info', 'fine', 'finest')}.}
+
+\item{errorHandling}{Whether to \code{"stop"} on an error, or to \verb{"remove'} evaluations that raised an error.}
 }
 \value{
 A \code{lcModels} object containing the resulting models.
