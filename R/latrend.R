@@ -391,6 +391,7 @@ latrendBatch = function(methods,
 #' @param data A `data.frame`.
 #' @param samples The number of bootstrap samples to evaluate.
 #' @param seed The seed to use. Optional.
+#' @inheritParams latrendBatch
 #' @return A `lcModels` object of length `samples`.
 #' @examples
 #' data(latrendData)
@@ -402,6 +403,8 @@ latrendBoot = function(method,
                         data,
                         samples = 50,
                         seed = NULL,
+                        parallel = FALSE,
+                        errorHandling = 'stop',
                         envir = NULL,
                         verbose = getOption('latrend.verbose')) {
   assert_that(is.lcMethod(method), msg = 'method must be lcMethod object (e.g., lcMethodKML("Y") )')
@@ -452,6 +455,8 @@ latrendBoot = function(method,
       methods = methods,
       data = enquote(dataCall),
       cartesian = FALSE,
+      parallel = parallel,
+      errorHandling = errorHandling,
       envir = quote(envir),
       verbose = verbose
     )

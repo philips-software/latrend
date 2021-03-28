@@ -63,6 +63,16 @@ test_that('parallel latrendBatch with 2 methods', {
   expect_valid_lcModel(output[[1]])
 })
 
+test_that('parallel latrendBoot with 2 repetitions', {
+  time = system.time({
+    output = latrendBoot(mSleep10, data = testLongData, samples = 2, parallel = TRUE)
+  })
+  expect_lt(time['elapsed'], 18)
+  expect_is(output, 'lcModels')
+  expect_length(output, 2)
+  expect_valid_lcModel(output[[1]])
+})
+
 # cleanup
 if (exists('cl')) {
   parallel::stopCluster(cl)

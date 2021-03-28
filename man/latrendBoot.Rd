@@ -9,6 +9,8 @@ latrendBoot(
   data,
   samples = 50,
   seed = NULL,
+  parallel = FALSE,
+  errorHandling = "stop",
   envir = NULL,
   verbose = getOption("latrend.verbose")
 )
@@ -21,6 +23,10 @@ latrendBoot(
 \item{samples}{The number of bootstrap samples to evaluate.}
 
 \item{seed}{The seed to use. Optional.}
+
+\item{parallel}{Whether to enable parallel evaluation.}
+
+\item{errorHandling}{Whether to \code{"stop"} on an error, or to \verb{"remove'} evaluations that raised an error.}
 
 \item{envir}{The \code{environment} in which to evaluate the method arguments. Note that this only applies to \code{data} when \code{data} is a \code{call}.}
 
