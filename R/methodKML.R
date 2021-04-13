@@ -54,7 +54,11 @@ setMethod('preFit', signature('lcMethodKML'), function(method, data, envir, verb
   # Model specification
   cat(verbose, 'Creating clusterLongData object...', level = verboseLevels$finest)
 
-  parRefArgs = list(saveFreq = Inf, scale = FALSE)
+  parRefArgs = list(
+    saveFreq = ifelse(.Platform$OS.type == 'windows', Inf, 1e99), # using Inf results in missing value error on linux
+    scale = FALSE
+  )
+
   parArgs = modifyList(parRefArgs, as.list(method, args = kml::parALGO), keep.null = TRUE)
   e$par = do.call(kml::parALGO, parArgs)
 
