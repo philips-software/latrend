@@ -3,10 +3,16 @@ localRNG = function(seed = NULL, expr) {
     force(expr)
     return(invisible())
   } else {
-    prevSeed = .Random.seed
-    set.seed(seed)
-    force(expr)
-    .Random.seed = prevSeed
+    if (exists('.Random.seed')) {
+      prevSeed = .Random.seed
+      set.seed(seed)
+      force(expr)
+      .Random.seed = prevSeed
+    }
+    else {
+      set.seed(seed)
+      force(expr)
+    }
   }
 }
 
