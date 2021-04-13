@@ -14,3 +14,4 @@ tests/testthat/*.rds
 /inst/REFERENCES.bib.bak
 /inst/REFERENCES.bib.sav
 /inst/REFERENCES.bib.sav.bak
+/check.R
