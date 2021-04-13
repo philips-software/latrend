@@ -4,6 +4,7 @@
 .Rprofile
 cld.Rdata
 ^MixTVEM.r$
+^check.r$
 ^.*bat$
 ^.*\.Rproj$
 ^\.Rproj\.user$

@@ -16,7 +16,7 @@ eval(init_methodSleep)
 
 if (.Platform$OS.type == 'unix') {
   skip_if_not_installed('doMC')
-  doMC::registerDoMC(2)
+  registerDoMC(2)
 } else {
   cl = parallel::makeCluster(2)
 
@@ -27,7 +27,7 @@ if (.Platform$OS.type == 'unix') {
   parallel::clusterExport(cl, 'testLongData', envir = environment())
 
   skip_if_not_installed('doParallel')
-  doParallel::registerDoParallel(cl)
+  registerDoParallel(cl)
 }
 
 mSleep = lcMethod('lcMethodSleep',

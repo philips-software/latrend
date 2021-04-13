@@ -148,7 +148,7 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
 #' @description Performs a repeated fit of the specified latrend model on the given data.
 #' @inheritParams latrend
 #' @param .rep The number of repeated fits.
-#' @param errorHandling Whether to `"stop"` on an error, or to `"remove'` evaluations that raised an error.
+#' @param .errorHandling Whether to `"stop"` on an error, or to `"remove'` evaluations that raised an error.
 #' @param .seed Set the seed for generating the respective seed for each of the repeated fits.
 #' @param .parallel Whether to use parallel evaluation. See \link{latrend-parallel}.
 #' @details This method is faster than repeatedly calling [latrend] as it only prepares the data via `prepareData()` once.

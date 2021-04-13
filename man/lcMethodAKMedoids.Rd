@@ -25,6 +25,8 @@ lcMethodAkmedoids(
 
 \item{clusterCenter}{A function for computing the cluster center representation.}
 
+\item{crit}{Criterion to apply for internal model selection. Not applicable.}
+
 \item{...}{Arguments passed to \link[akmedoids:akclustr]{akmedoids::akclustr}.
 The following external arguments are ignored: traj, id_field, k}
 }

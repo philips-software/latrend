@@ -25,6 +25,8 @@ latrendRep(
 
 \item{...}{Any other arguments to update the \code{lcMethod} definition with.}
 
+\item{.errorHandling}{Whether to \code{"stop"} on an error, or to \verb{"remove'} evaluations that raised an error.}
+
 \item{.seed}{Set the seed for generating the respective seed for each of the repeated fits.}
 
 \item{.parallel}{Whether to use parallel evaluation. See \link{latrend-parallel}.}
@@ -35,8 +37,6 @@ latrendRep(
 a \code{logical} indicating whether to show basic computation information,
 a \code{numeric} indicating the verbosity level (see \link{Verbose}),
 or one of \code{c('info', 'fine', 'finest')}.}
-
-\item{errorHandling}{Whether to \code{"stop"} on an error, or to \verb{"remove'} evaluations that raised an error.}
 }
 \value{
 A \code{lcModels} object containing the resulting models.

@@ -16,6 +16,7 @@ setClass('lcMethodAkmedoids', contains = 'lcMatrixMethod')
 #' @inheritParams lcMethodCustom
 #' @inheritParams lcMethodKML
 #' @param clusterCenter A function for computing the cluster center representation.
+#' @param crit Criterion to apply for internal model selection. Not applicable.
 #' @param ... Arguments passed to [akmedoids::akclustr].
 #' The following external arguments are ignored: traj, id_field, k
 #' @examples

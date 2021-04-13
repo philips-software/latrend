@@ -35,7 +35,7 @@ NULL
 #' parallel::clusterEvalQ(cl, expr=library(latrend))
 #' }
 #'
-#' Then, register the cluster as the parallel back-end using the \link[doParallel]{doParallel-package}
+#' Then, register the cluster as the parallel back-end using the `doParallel` package:
 #' \preformatted{
 #' doParallel::registerDoParallel(cl)
 #' }
@@ -49,7 +49,7 @@ NULL
 #'
 #' @section Unix:
 #' On Unix systems, it is easier to setup parallelization as the R process is forked.
-#' In this example we use the \link[doMC]{doMC-package}
+#' In this example we use the `doMC` package:
 #' \preformatted{
 #' nCores = parallel::detectCores(logical = FALSE)
 #' doMC::registerDoMC(nCores - 1)
@@ -85,7 +85,7 @@ NULL
 }
 
 globalVariables(c('.', '.name', '.group', '.method', '.ROW_INDEX', '.Mean', '.Block',
-  'i', 'iseed', 'N', 'i.N', 'g', 'fun', 'method', 'plotTrajs',
+  'i', 'iseed', 'N', 'i.N', 'g', 'fun', 'method', 'plotTrajs', 'cl',
   'Prob', 'Cluster', 'Class', 'Value', 'Id', 'Time',
   'Mu', 'Mu.cluster', 'Mu.class', 'Mu.fixed', 'Mu.random',
   'warning.Verbose',
