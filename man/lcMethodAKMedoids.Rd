@@ -10,6 +10,7 @@ lcMethodAkmedoids(
   id = getOption("latrend.id"),
   nClusters = 3,
   clusterCenter = median,
+  crit = "Calinski_Harabasz",
   ...
 )
 }
@@ -24,7 +25,7 @@ lcMethodAkmedoids(
 
 \item{clusterCenter}{A function for computing the cluster center representation.}
 
-\item{...}{Arguments passed to \link[akmedoids:akmedoids.clust]{akmedoids::akmedoids.clust}.
+\item{...}{Arguments passed to \link[akmedoids:akclustr]{akmedoids::akclustr}.
 The following external arguments are ignored: traj, id_field, k}
 }
 \description{

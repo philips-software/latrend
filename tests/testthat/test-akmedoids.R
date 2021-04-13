@@ -3,12 +3,12 @@ skip_if_not_installed('akmedoids')
 rngReset()
 
 library(akmedoids)
-data(traj)
+data(traj, package = 'akmedoids')
 capture.output({
-  traj = dataImputation(traj, id_field=TRUE, method=2, replace_with=1, fill_zeros=FALSE)
+  impTraj = akmedoids::data_imputation(traj, id_field=TRUE, method=2, replace_with=1, fill_zeros=FALSE)
 })
-trajMat = as.matrix(traj[-1])
-rownames(trajMat) = traj[,1]
+trajMat = as.matrix(impTraj$CompleteData[-1])
+rownames(trajMat) = impTraj$CompleteData[,1]
 
 test_that('default', {
   suppressWarnings({
