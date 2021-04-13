@@ -4,6 +4,8 @@ options(latrend.id = 'Traj')
 options(latrend.time = 'Assessment')
 options(latrend.verbose = R.utils::Verbose())
 
+foreach::registerDoSEQ()
+
 # one of the cluster methods is altering the RNG kind, so reset it for each context
 rngReset = function() {
   RNGkind('Mersenne-Twister', 'Inversion', 'Rejection')

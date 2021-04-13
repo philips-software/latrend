@@ -16,7 +16,8 @@ eval(init_methodSleep)
 
 if (.Platform$OS.type == 'unix') {
   skip_if_not_installed('doMC')
-  registerDoMC(2)
+  skip_if_not_installed('doRNG')
+  doMC::registerDoMC(cores = 2)
 } else {
   cl = parallel::makeCluster(2)
 
@@ -27,7 +28,7 @@ if (.Platform$OS.type == 'unix') {
   parallel::clusterExport(cl, 'testLongData', envir = environment())
 
   skip_if_not_installed('doParallel')
-  registerDoParallel(cl)
+  doParallel::registerDoParallel(cl)
 }
 
 mSleep = lcMethod('lcMethodSleep',
@@ -87,3 +88,5 @@ test_that('parallel latrendCV with 2 folds', {
 if (exists('cl')) {
   parallel::stopCluster(cl)
 }
+
+foreach::registerDoSEQ()

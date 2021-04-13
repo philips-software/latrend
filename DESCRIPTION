@@ -66,7 +66,9 @@ Suggests:
     dtwclust,
     mixAK,
     psych,
-    qqplotr
+    qqplotr,
+    doParallel,
+    doMC
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 RdMacros: Rdpack
