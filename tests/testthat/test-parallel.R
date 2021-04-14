@@ -1,6 +1,7 @@
 skip_on_cran()
 skip_on_ci()
 skip_if_not_installed('parallel')
+skip_if_not_installed('doParallel')
 skip_if(parallel::detectCores(logical = FALSE) < 2)
 
 init_methodSleep = expression({
@@ -15,9 +16,7 @@ init_methodSleep = expression({
 eval(init_methodSleep)
 
 if (.Platform$OS.type == 'unix') {
-  skip_if_not_installed('doMC')
-  skip_if_not_installed('doRNG')
-  doMC::registerDoMC(cores = 2)
+  cl = parallel::makeCluster(2, type = 'FORK')
 } else {
   cl = parallel::makeCluster(2)
 
@@ -26,10 +25,8 @@ if (.Platform$OS.type == 'unix') {
   do.call(parallel::clusterEvalQ, list(cl, init_methodSleep))
 
   parallel::clusterExport(cl, 'testLongData', envir = environment())
-
-  skip_if_not_installed('doParallel')
-  doParallel::registerDoParallel(cl)
 }
+doParallel::registerDoParallel(cl)
 
 mSleep = lcMethod('lcMethodSleep',
   response = 'Value',
