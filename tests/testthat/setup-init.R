@@ -6,6 +6,11 @@ options(latrend.verbose = R.utils::Verbose())
 
 foreach::registerDoSEQ()
 
+# remove kml cld file from possible previous failed run
+if (file.exists('cld.Rdata')) {
+  file.remove('cld.Rdata')
+}
+
 # one of the cluster methods is altering the RNG kind, so reset it for each context
 rngReset = function() {
   RNGkind('Mersenne-Twister', 'Inversion', 'Rejection')

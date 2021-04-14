@@ -36,3 +36,7 @@ test_that('predictPostprob', {
   pp = predictPostprob(model, newdata = testData)
   expect_true(is_valid_postprob(pp, model))
 })
+
+test_that('cld.Rdata not present', {
+  expect_false(file.exists('cld.Rdata'))
+})

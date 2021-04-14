@@ -79,6 +79,10 @@ setMethod('fit', signature('lcMethodKML'), function(method, data, envir, verbose
   valueColumn = responseVariable(method)
   suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
+  if (.Platform$OS.type != 'windows') {
+    cldFilePresent = file.exists('cld.Rdata')
+  }
+
   cat(verbose, 'Running kml()...', level = verboseLevels$finest)
   suppressFun(
     # note that slowKML throws an error for nbClusters=1
@@ -90,6 +94,13 @@ setMethod('fit', signature('lcMethodKML'), function(method, data, envir, verbose
       parAlgo = envir$par
     )
   )
+
+  # cleanup
+  if (.Platform$OS.type != 'windows' && !cldFilePresent && file.exists('cld.Rdata')) {
+    suppressWarnings({
+      file.remove('cld.Rdata')
+    })
+  }
 
   new(
     'lcModelKML',
