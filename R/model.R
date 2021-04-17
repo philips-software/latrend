@@ -1107,24 +1107,14 @@ sigma.lcModel = function(object, ...) {
 #' @title Reduce the lcModel memory footprint for serialization
 #' @description Strip a lcModel of non-essential variables and environments in order to reduce the model size for serialization.
 #' @param object The `lcModel`.
+#' @param classes The object classes for which to remove their assigned environment. By default, only environments from `formula` are removed.
 #' @param ... Additional arguments.
-setMethod('strip', signature('lcModel'), function(object, ...) {
+setMethod('strip', signature('lcModel'), function(object, ..., classes = 'formula') {
   newObject = object
 
   environment(newObject) = NULL
-  newObject@method = strip(object@method)
-
-  # recursively strip elements (for calls in calls)
-  rstrip = function(x) {
-    if (is.list(x) || is(x, 'call')) { # is.call is TRUE for formulas
-      replace(x, seq_along(x), lapply(x, rstrip))
-    } else {
-      environment(x) = NULL
-      x
-    }
-  }
-
-  newObject@call = rstrip(object@call)
+  newObject@method = strip(object@method, ..., classes = classes)
+  newObject@call = strip(object@call, ..., classes = classes)
 
   return(newObject)
 })

@@ -821,17 +821,43 @@ setMethod('show', 'lcMethod', function(object) {
 #' @title Strip a lcModel for serialization
 #' @param object The `lcMethod` object.
 #' @param ... Additional arguments.
-#' @description Removes associated environments from any of the arguments. This is typically the case for arguments of type `formula`.
-setMethod('strip', signature('lcMethod'), function(object, ...) {
+setMethod('strip', signature('lcMethod'), function(object, ..., classes = 'formula') {
   newObject = object
 
-  environment(newObject) = NULL
-  newObject@arguments = eapply(object@arguments, 'environment<-', NULL) %>%
-    list2env(hash = FALSE, parent = emptyenv())
+  environment(newObject) = emptyenv()
 
-  newObject@sourceCalls = lapply(object@sourceCalls, 'environment<-', NULL)
+  classMask = eapply(object@arguments, inherits, what = classes, all.names = TRUE) %>%
+    unlist()
+
+  if (any(classMask)) {
+    stripArgNames = names(classMask)[classMask]
+    newArgs = as.list(object@arguments, all.names = TRUE)
+    stripArgs = mget(stripArgNames, envir = object@arguments) %>%
+      lapply('environment<-', value = emptyenv())
+
+    newArgs = replace(newArgs, which(classMask), stripArgs)
+    newObject@arguments = list2env(newArgs, hash = FALSE, parent = emptyenv())
+  }
+
+  newObject@sourceCalls = lapply(object@sourceCalls, strip, ..., classes = classes)
 
   return(newObject)
+})
+
+
+#' @export
+#' @name strip
+#' @rdname strip
+#' @aliases strip,lcMethod-method
+#' @title Strip an object for serialization
+#' @param object The `call`.
+setMethod('strip', signature('ANY'), function(object, ..., classes = 'formula') {
+  if (is.list(object) || is(object, 'call')) { # is.call is TRUE for formulas
+    replace(object, seq_along(object), lapply(object, strip))
+  } else if (inherits(object, what = classes)) {
+    environment(object) = emptyenv()
+    object
+  }
 })
 
 

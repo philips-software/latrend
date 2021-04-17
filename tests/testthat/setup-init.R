@@ -123,5 +123,8 @@ expect_valid_lcModel = function(object) {
     expect_is('lcSummary')
   expect_output(print(object))
 
+  newObject = strip(object)
+  expect_is(newObject, class(object))
+
   return(object)
 }

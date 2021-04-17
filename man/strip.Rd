@@ -6,17 +6,19 @@
 \alias{strip,lcModel-method}
 \title{Strip a lcModel for serialization}
 \usage{
-\S4method{strip}{lcMethod}(object, ...)
+\S4method{strip}{lcMethod}(object, ..., classes = "formula")
 
-\S4method{strip}{lcModel}(object, ...)
+\S4method{strip}{ANY}(object, ..., classes = "formula")
+
+\S4method{strip}{lcModel}(object, ..., classes = "formula")
 }
 \arguments{
 \item{object}{The \code{lcModel}.}
 
 \item{...}{Additional arguments.}
+
+\item{classes}{The object classes for which to remove their assigned environment. By default, only environments from \code{formula} are removed.}
 }
 \description{
-Removes associated environments from any of the arguments. This is typically the case for arguments of type \code{formula}.
-
 Strip a lcModel of non-essential variables and environments in order to reduce the model size for serialization.
 }
