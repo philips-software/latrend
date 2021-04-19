@@ -19,15 +19,42 @@ transformFitted(pred, model, clusters)
 \S4method{transformFitted}{data.frame,lcModel}(pred, model, clusters)
 }
 \arguments{
-\item{pred}{Prediction object}
+\item{pred}{The cluster-specific predictions for each observation}
 
-\item{model}{The model from which the prediction is made.}
+\item{model}{The \code{lcModel} by which the prediction was made.}
 
-\item{clusters}{Optional argument for specifying the trajectory cluster assignments.}
+\item{clusters}{The trajectory cluster assignment per observation. Optional.}
 }
 \value{
-A \code{vector} if the \code{clusters} argument is specified, else a \code{matrix} with the fitted values per cluster per column.
+If the \code{clusters} argument was specified, a \code{vector} of fitted values conditional on the given cluster assignment. Else, a \code{matrix} with the fitted values per cluster per column.
 }
 \description{
-This function is also responsible for checking whether the input data is valid, such that the fitting process can fail early.
+A helper function for implementing the \link[=fitted.lcModel]{fitted.lcModel()} method as part of your own \code{lcModel} class. This function has no use outside of \code{lcModel} class implementations.
+The function ensures that the output format is correct for the given the input (see the Value section).
+It also checks whether the input data is valid.
+
+The prediction ordering depends on the original ordering of the observations in the data that was used for fitting the \code{lcModel}.
+
+By default, \code{transformFitted} accepts one of the following inputs:
+\describe{
+\item{\code{data.frame}}{A \code{data.frame} in long format providing a cluster-specific prediction for each observation per row, with column names \code{"Fit"} and \code{"Cluster"}. This \code{data.frame} therefore has \code{nObs(object) * nClusters(object)} rows.}
+\item{\code{matrix}}{An N-by-K \code{matrix} where each row provides the cluster-specific predictions for the respective observation. Here, \code{N = nObs(object)} and \code{K = nClusters(object)}.}
+\item{\code{list}}{A \code{list} of cluster-specific prediction \code{vector}s. Each prediction vector should be of length \code{nObs(object)}. The overall (named) list of cluster-specific prediction vectors is of length \code{nClusters(object)}.}
 }
+
+Users can implement support for other prediction formats by defining the \code{transformFitted} method with other signatures.
+}
+\section{Example implementation}{
+
+A typical implementation of \code{fitted.lcModel} for your own \code{lcModel} class would have the following format:
+\preformatted{
+fitted.lcModelExample <- function(object, clusters = trajectoryAssignments(object)) {
+  # computations of the fitted values per cluster here
+  predictionMatrix <- CODE_HERE
+  transformFitted(pred = predictionMatrix, model = object, clusters = clusters)
+}
+}
+
+For a complete and runnable example, see the custom models vignette accessible via \code{vignette("custom", package = "latrend")}.
+}
+

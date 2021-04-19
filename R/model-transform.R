@@ -2,13 +2,39 @@
 
 #' @export
 #' @rdname transformFitted
-#' @usage transformFitted(pred, model, clusters)
 #' @title Helper function for ensuring the right fitted() output
-#' @description This function is also responsible for checking whether the input data is valid, such that the fitting process can fail early.
-#' @param pred Prediction object
-#' @param model The model from which the prediction is made.
-#' @param clusters Optional argument for specifying the trajectory cluster assignments.
-#' @return A `vector` if the `clusters` argument is specified, else a `matrix` with the fitted values per cluster per column.
+#' @description A helper function for implementing the [fitted.lcModel()][fitted.lcModel] method as part of your own `lcModel` class. This function has no use outside of `lcModel` class implementations.
+#' The function ensures that the output format is correct for the given the input (see the Value section).
+#' It also checks whether the input data is valid.
+#'
+#' The prediction ordering depends on the original ordering of the observations in the data that was used for fitting the `lcModel`.
+#'
+#' By default, `transformFitted` accepts one of the following inputs:
+#' \describe{
+#'  \item{`data.frame`}{A `data.frame` in long format providing a cluster-specific prediction for each observation per row, with column names `"Fit"` and `"Cluster"`. This `data.frame` therefore has `nObs(object) * nClusters(object)` rows.}
+#'  \item{`matrix`}{An N-by-K `matrix` where each row provides the cluster-specific predictions for the respective observation. Here, `N = nObs(object)` and `K = nClusters(object)`.}
+#'  \item{`list`}{A `list` of cluster-specific prediction `vector`s. Each prediction vector should be of length `nObs(object)`. The overall (named) list of cluster-specific prediction vectors is of length `nClusters(object)`.}
+#' }
+#'
+#' Users can implement support for other prediction formats by defining the `transformFitted` method with other signatures.
+#'
+#' @section Example implementation:
+#' A typical implementation of `fitted.lcModel` for your own `lcModel` class would have the following format:
+#' \preformatted{
+#' fitted.lcModelExample <- function(object, clusters = trajectoryAssignments(object)) {
+#'   # computations of the fitted values per cluster here
+#'   predictionMatrix <- CODE_HERE
+#'   transformFitted(pred = predictionMatrix, model = object, clusters = clusters)
+#' }
+#' }
+#'
+#' For a complete and runnable example, see the custom models vignette accessible via \code{vignette("custom", package = "latrend")}.
+#'
+#' @usage transformFitted(pred, model, clusters)
+#' @param pred The cluster-specific predictions for each observation
+#' @param model The `lcModel` by which the prediction was made.
+#' @param clusters The trajectory cluster assignment per observation. Optional.
+#' @return If the `clusters` argument was specified, a `vector` of fitted values conditional on the given cluster assignment. Else, a `matrix` with the fitted values per cluster per column.
 setGeneric('transformFitted', function(pred, model, clusters) standardGeneric('transformFitted'))
 
 #' @rdname transformFitted
