@@ -21,6 +21,16 @@ test_that('two clusters', {
   }
 })
 
+test_that('single cluster', {
+  for(name in externalMetrics) {
+    suppressWarnings({
+      value = externalMetric(kml1, lmkm1, name=name)
+    })
+    expect_is(value, 'numeric')
+    expect_length(value, 1)
+  }
+})
+
 test_that('different clusters', {
   for(name in externalMetrics) {
     value = externalMetric(kml2, lmkm3, name=name)
