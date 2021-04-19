@@ -366,6 +366,7 @@ df.residual.lcModel = function(object, ...) {
 #' @return For `externalMetric(lcModel, lcModel)`: A `numeric` vector of the computed metrics.
 #' @family metric functions
 setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, object2, name, ...) {
+  assert_that(length(name) > 0, msg = 'no external metric names provided')
   assert_that(is.character(name))
 
   funMask = name %in% getExternalMetricNames()
@@ -560,6 +561,7 @@ logLik.lcModel = function(object, ...) {
 #'
 #' @family metric functions
 setMethod('metric', signature('lcModel'), function(object, name, ...) {
+  assert_that(length(name) > 0, msg = 'no metric names provided')
   assert_that(is.lcModel(object),
               is.character(name))
 

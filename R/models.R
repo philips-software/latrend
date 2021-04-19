@@ -139,6 +139,7 @@ as.data.frame.lcModels = function(x, ...,
 }
 
 .externalMetricDist.lcModels = function(object, name) {
+  assert_that(length(name) > 0, msg = 'no external metric names provided')
   assert_that(
     is.character(name),
     length(name) == 1
@@ -200,6 +201,7 @@ setMethod('externalMetric', signature('list', 'lcModel'),
 
 # metric ####
 .metric.lcModels = function(object, name, drop = TRUE) {
+  assert_that(length(name) > 0, msg = 'no metric names provided')
   assert_that(is.lcModels(object),
     is.character(name),
     is.flag(drop))
