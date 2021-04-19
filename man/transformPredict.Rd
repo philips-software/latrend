@@ -6,7 +6,7 @@
 \alias{transformPredict,vector,lcModel-method}
 \alias{transformPredict,matrix,lcModel-method}
 \alias{transformPredict,data.frame,lcModel-method}
-\title{Helper function that matches the output to the specified newdata}
+\title{Helper function for custom lcModel classes implementing predict.lcModel()}
 \usage{
 transformPredict(pred, model, newdata)
 
@@ -19,16 +19,50 @@ transformPredict(pred, model, newdata)
 \S4method{transformPredict}{data.frame,lcModel}(pred, model, newdata)
 }
 \arguments{
-\item{pred}{The prediction object}
+\item{pred}{The (per-cluster) predictions for \code{newdata}.}
 
-\item{model}{The model for which the prediction is made.}
+\item{model}{The \code{lcModel} for which the prediction was made.}
 
 \item{newdata}{A \code{data.frame} containing the input data to predict for.}
 }
 \value{
-A data.frame with the predictions, or a list of cluster-specific prediction frames
+A \code{data.frame} with the predictions, or a list of cluster-specific prediction \code{data.frame}s.
 }
 \description{
-If Cluster is not provided, the prediction is outputted in long format per cluster,
-resulting in a longer data.frame than the newdata input
+A helper function for implementing the \link[=predict.lcModel]{predict.lcModel()} method as part of your own \code{lcModel} class, ensuring the correct output type and format (see the Value section).
+Note that this function has no use outside of ensuring output for \code{predict.lcModel}. For implementing \code{lcModel} predictions from scratch, it is advisable to implement \link{predictForCluster} instead of \link{predict.lcModel}.
+
+The prediction ordering corresponds to the observation ordering of the \code{newdata} argument.
+
+By default, \code{transformPredict()} accepts one of the following inputs:
+\describe{
+\item{\code{data.frame}}{A \code{data.frame} in long format providing a cluster-specific prediction for each observation per row, with column names \code{"Fit"} and \code{"Cluster"}. This \code{data.frame} therefore has \code{nObs(object) * nClusters(object)} rows.}
+\item{\code{matrix}}{An N-by-K \code{matrix} where each row provides the cluster-specific predictions for the respective observations in \code{newdata}. Here, \code{N = nrow(newdata)} and \code{K = nClusters(object)}.}
+\item{\code{vector}}{A \code{vector} of length \code{nrow(newdata)} with predictions corresponding to the rows of \code{newdata}.}
+}
+
+Users can implement support for other prediction formats by defining the \code{transformPredict()} method with other signatures.
+}
+\section{Example implementation}{
+
+In case we have a custom \code{lcModel} class based on an existing internal model representation with a \code{predict()} function,
+we can use \code{transformPredict()} to easily transform the internal model predictions to the right format.
+A common output is a \code{matrix} with the cluster-specific predictions.
+\preformatted{
+predict.lcModelExample <- function(object, newdata) {
+  predictionMatrix <- predict(object@model, newdata)
+  transformPredict(
+    pred = predictionMatrix,
+    model = object,
+    newdata = newdata)
+}
+}
+
+However, for ease of implementation it is generally advisable to implement \link{predictForCluster} instead of \link{predict.lcModel}.
+
+For a complete and runnable example, see the custom models vignette accessible via \code{vignette("custom", package = "latrend")}.
+}
+
+\seealso{
+predictForCluster, predict.lcModel
 }

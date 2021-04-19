@@ -2,14 +2,15 @@
 
 #' @export
 #' @rdname transformFitted
-#' @title Helper function for ensuring the right fitted() output
-#' @description A helper function for implementing the [fitted.lcModel()][fitted.lcModel] method as part of your own `lcModel` class. This function has no use outside of `lcModel` class implementations.
-#' The function ensures that the output format is correct for the given the input (see the Value section).
-#' It also checks whether the input data is valid.
+#' @title Helper function for custom lcModel classes implementing fitted.lcModel()
+#' @description A helper function for implementing the [fitted.lcModel()][fitted.lcModel] method as part of your own `lcModel` class, ensuring the correct output type and format (see the Value section).
+#' Note that this function has no use outside of implementing `fitted.lcModel`.
 #'
-#' The prediction ordering depends on the original ordering of the observations in the data that was used for fitting the `lcModel`.
+#' The function makes it easier to implement `fitted.lcModel` based on existing implementations that may output their results in different data formats. Furthermore, the function checks whether the input data is valid.
 #'
-#' By default, `transformFitted` accepts one of the following inputs:
+#' The prediction ordering depends on the ordering of the data observations that was used for fitting the `lcModel`.
+#'
+#' By default, `transformFitted()` accepts one of the following inputs:
 #' \describe{
 #'  \item{`data.frame`}{A `data.frame` in long format providing a cluster-specific prediction for each observation per row, with column names `"Fit"` and `"Cluster"`. This `data.frame` therefore has `nObs(object) * nClusters(object)` rows.}
 #'  \item{`matrix`}{An N-by-K `matrix` where each row provides the cluster-specific predictions for the respective observation. Here, `N = nObs(object)` and `K = nClusters(object)`.}
@@ -19,9 +20,11 @@
 #' Users can implement support for other prediction formats by defining the `transformFitted` method with other signatures.
 #'
 #' @section Example implementation:
-#' A typical implementation of `fitted.lcModel` for your own `lcModel` class would have the following format:
+#' A typical implementation of `fitted.lcModel()` for your own `lcModel` class would have the following format:
 #' \preformatted{
-#' fitted.lcModelExample <- function(object, clusters = trajectoryAssignments(object)) {
+#' fitted.lcModelExample <- function(object,
+#'   clusters = trajectoryAssignments(object)
+#'   ) {
 #'   # computations of the fitted values per cluster here
 #'   predictionMatrix <- CODE_HERE
 #'   transformFitted(pred = predictionMatrix, model = object, clusters = clusters)
@@ -81,14 +84,45 @@ setMethod('transformFitted', signature('data.frame', 'lcModel'), function(pred, 
 
 #' @export
 #' @rdname transformPredict
+#' @title Helper function for custom lcModel classes implementing predict.lcModel()
+#' @description A helper function for implementing the [predict.lcModel()][predict.lcModel] method as part of your own `lcModel` class, ensuring the correct output type and format (see the Value section).
+#' Note that this function has no use outside of ensuring output for `predict.lcModel`. For implementing `lcModel` predictions from scratch, it is advisable to implement [predictForCluster] instead of [predict.lcModel].
+#'
+#' The prediction ordering corresponds to the observation ordering of the `newdata` argument.
+#'
+#' By default, `transformPredict()` accepts one of the following inputs:
+#' \describe{
+#'  \item{`data.frame`}{A `data.frame` in long format providing a cluster-specific prediction for each observation per row, with column names `"Fit"` and `"Cluster"`. This `data.frame` therefore has `nObs(object) * nClusters(object)` rows.}
+#'  \item{`matrix`}{An N-by-K `matrix` where each row provides the cluster-specific predictions for the respective observations in `newdata`. Here, `N = nrow(newdata)` and `K = nClusters(object)`.}
+#'  \item{`vector`}{A `vector` of length `nrow(newdata)` with predictions corresponding to the rows of `newdata`.}
+#' }
+#'
+#' Users can implement support for other prediction formats by defining the `transformPredict()` method with other signatures.
+#'
+#' @section Example implementation:
+#' In case we have a custom `lcModel` class based on an existing internal model representation with a `predict()` function,
+#' we can use `transformPredict()` to easily transform the internal model predictions to the right format.
+#' A common output is a `matrix` with the cluster-specific predictions.
+#' \preformatted{
+#' predict.lcModelExample <- function(object, newdata) {
+#'   predictionMatrix <- predict(object@model, newdata)
+#'   transformPredict(
+#'     pred = predictionMatrix,
+#'     model = object,
+#'     newdata = newdata)
+#' }
+#' }
+#'
+#' However, for ease of implementation it is generally advisable to implement [predictForCluster] instead of [predict.lcModel].
+#'
+#' For a complete and runnable example, see the custom models vignette accessible via \code{vignette("custom", package = "latrend")}.
+#'
 #' @usage transformPredict(pred, model, newdata)
-#' @title Helper function that matches the output to the specified newdata
-#' @description If Cluster is not provided, the prediction is outputted in long format per cluster,
-#' resulting in a longer data.frame than the newdata input
-#' @param pred The prediction object
-#' @param model The model for which the prediction is made.
+#' @param pred The (per-cluster) predictions for `newdata`.
+#' @param model The `lcModel` for which the prediction was made.
 #' @param newdata A `data.frame` containing the input data to predict for.
-#' @return A data.frame with the predictions, or a list of cluster-specific prediction frames
+#' @return A `data.frame` with the predictions, or a list of cluster-specific prediction `data.frame`s.
+#' @seealso predictForCluster, predict.lcModel
 setGeneric('transformPredict', function(pred, model, newdata) standardGeneric('transformPredict'))
 
 #' @rdname transformPredict
