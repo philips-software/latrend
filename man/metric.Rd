@@ -7,7 +7,11 @@
 \alias{metric,lcModels-method}
 \title{Compute internal model metric(s)}
 \usage{
-\S4method{metric}{lcModel}(object, name = c("AIC", "BIC", "WRSS", "APPA"), ...)
+\S4method{metric}{lcModel}(
+  object,
+  name = getOption("latrend.metric", c("WRSS", "APPA", "AIC", "BIC")),
+  ...
+)
 
 \S4method{metric}{list}(object, name, drop = TRUE)
 
@@ -16,7 +20,7 @@
 \arguments{
 \item{object}{The \code{lcModel}, \code{lcModels}, or \code{list} of \code{lcModel} objects to compute the metrics for.}
 
-\item{name}{The name(s) of the metric(s) to compute.}
+\item{name}{The name(s) of the metric(s) to compute. If no names are given, the names specified in the \code{latrend.metric} option (WRSS, APPA, AIC, BIC) are used.}
 
 \item{...}{Additional arguments.}
 
@@ -40,6 +44,8 @@ model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
 bic <- metric(model, "BIC")
 
 ic <- metric(model, c("AIC", "BIC"))
+
+
 }
 \seealso{
 \link{externalMetric} \link{min.lcModels} \link{max.lcModels}

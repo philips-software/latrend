@@ -9,7 +9,7 @@ plotMetric(models, name, by = "nClusters", subset, group = character())
 \arguments{
 \item{models}{A \code{lcModels} or list of \code{lcModel} objects to compute and plot the metrics of.}
 
-\item{name}{The name(s) of the metric(s) to compute.}
+\item{name}{The name(s) of the metric(s) to compute. If no names are given, the names specified in the \code{latrend.metric} option (WRSS, APPA, AIC, BIC) are used.}
 
 \item{by}{The argument name along which methods are plotted.}
 

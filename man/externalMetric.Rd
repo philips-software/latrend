@@ -10,7 +10,12 @@
 \alias{externalMetric,list,lcModel-method}
 \title{Compute external model metric(s)}
 \usage{
-\S4method{externalMetric}{lcModel,lcModel}(object, object2, name, ...)
+\S4method{externalMetric}{lcModel,lcModel}(
+  object,
+  object2,
+  name = getOption("latrend.externalMetric"),
+  ...
+)
 
 \S4method{externalMetric}{lcModels,missing}(object, object2, name = "adjustedRand")
 
@@ -25,7 +30,7 @@
 
 \item{object2}{The other \code{lcModel} to compare with.}
 
-\item{name}{The name(s) of the metric(s) to compute.}
+\item{name}{The name(s) of the external metric(s) to compute. If no names are given, the names specified in the \code{latrend.externalMetric} option (none by default) are used.}
 
 \item{...}{Additional arguments.}
 

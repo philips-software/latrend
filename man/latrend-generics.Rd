@@ -14,7 +14,12 @@ compose(method, envir, ...)
 
 converged(object, ...)
 
-externalMetric(object, object2, name, ...)
+externalMetric(
+  object,
+  object2,
+  name = getOption("latrend.externalMetric"),
+  ...
+)
 
 fit(method, data, envir, verbose, ...)
 
@@ -26,7 +31,11 @@ getShortName(object, ...)
 
 idVariable(object, ...)
 
-metric(object, name, ...)
+metric(
+  object,
+  name = getOption("latrend.metric", c("WRSS", "APPA", "AIC", "BIC")),
+  ...
+)
 
 plotClusterTrajectories(object, ...)
 

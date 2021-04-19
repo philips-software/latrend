@@ -90,7 +90,11 @@ setGeneric('converged', function(object, ...) {
 #' @export
 #' @name latrend-generics
 #' @param object2 The model to compare with.
-setGeneric('externalMetric', function(object, object2, name, ...) standardGeneric('externalMetric'))
+setGeneric('externalMetric', function(
+  object,
+  object2,
+  name = getOption('latrend.externalMetric'),
+  ...) standardGeneric('externalMetric'))
 
 #' @export
 #' @name latrend-generics
@@ -163,7 +167,10 @@ setGeneric('idVariable', function(object, ...) {
 
 #' @export
 #' @name latrend-generics
-setGeneric('metric', function(object, name, ...) standardGeneric('metric'))
+setGeneric('metric', function(
+  object,
+  name = getOption('latrend.metric', c('WRSS', 'APPA', 'AIC', 'BIC')),
+  ...) standardGeneric('metric'))
 
 #' @export
 #' @name latrend-generics

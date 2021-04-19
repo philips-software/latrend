@@ -6,7 +6,7 @@
 #' @rdname metric
 #' @title Compute internal model metric(s)
 #' @param object The `lcModel`, `lcModels`, or `list` of `lcModel` objects to compute the metrics for.
-#' @param name The name(s) of the metric(s) to compute.
+#' @param name The name(s) of the metric(s) to compute. If no names are given, the names specified in the `latrend.metric` option (WRSS, APPA, AIC, BIC) are used.
 #' @param ... Additional arguments.
 #' @return For `metric(lcModel)`: A named `numeric` vector with the computed model metrics.
 #' @seealso [externalMetric] [min.lcModels] [max.lcModels]
@@ -17,6 +17,7 @@ NULL
 #' @title Compute external model metric(s)
 #' @inheritParams metric
 #' @param object2 The other `lcModel` to compare with.
+#' @param name The name(s) of the external metric(s) to compute. If no names are given, the names specified in the `latrend.externalMetric` option (none by default) are used.
 #' @return A named `numeric` vector containing the computed model metrics.
 #' @references
 #' \insertRef{desgraupes2018clustercrit}{latrend}

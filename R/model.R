@@ -556,8 +556,10 @@ logLik.lcModel = function(object, ...) {
 #' bic <- metric(model, "BIC")
 #'
 #' ic <- metric(model, c("AIC", "BIC"))
+#'
+#'
 #' @family metric functions
-setMethod('metric', signature('lcModel'), function(object, name = c('AIC', 'BIC', 'WRSS', 'APPA'), ...) {
+setMethod('metric', signature('lcModel'), function(object, name, ...) {
   assert_that(is.lcModel(object),
               is.character(name))
 
