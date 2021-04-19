@@ -6,48 +6,33 @@ rngReset()
 
 internalMetrics = getInternalMetricNames() %>% setdiff('deviance')
 
-externalMetrics = getExternalMetricNames() %>% setdiff('McNemar')
+kml1 = latrend(lcMethodTestKML(), testLongData, nClusters=1)
+kml2 = latrend(lcMethodTestKML(), testLongData, nClusters=2)
 
-test_that('internal, two clusters', {
-  model = latrend(lcMethodTestKML(), testLongData, nClusters=2)
+test_that('two clusters', {
 
-  for(name in internalMetrics) {
-    value = metric(model, name=name)
-    expect_is(value, 'numeric')
-    expect_true(is.finite(value), info=name)
-  }
-})
-
-test_that('internal, single cluster', {
-  model = latrend(lcMethodTestKML(), testLongData, nClusters=1)
 
   for(name in internalMetrics) {
-    value = metric(model, name=name)
+    value = metric(kml2, name=name)
+    expect_is(value, 'numeric')
+    expect_true(is.finite(value), info=name)
+  }
+})
+
+test_that('single cluster', {
+  for(name in internalMetrics) {
+    value = metric(kml1, name=name)
     expect_is(value, 'numeric')
     expect_length(value, 1)
   }
 })
 
-test_that('external, two clusters', {
-  model1 = latrend(lcMethodTestKML(), testLongData, nClusters=2)
-  model2 = latrend(lcMethodTestLMKM(), testLongData, nClusters=2)
-
-  for(name in externalMetrics) {
-    value = externalMetric(model1, model2, name=name)
-    expect_is(value, 'numeric')
-    expect_length(value, 1)
-    expect_true(is.finite(value), info=name)
-  }
+test_that('error on empty name', {
+  expect_error(metric(kml1, name = NULL))
 })
 
-test_that('external, different clusters', {
-  model1 = latrend(lcMethodTestKML(), testLongData, nClusters=2)
-  model2 = latrend(lcMethodTestLMKM(), testLongData, nClusters=3)
-
-  for(name in externalMetrics) {
-    value = externalMetric(model1, model2, name=name)
-    expect_is(value, 'numeric')
-    expect_length(value, 1)
-    expect_true(is.finite(value), info=name)
-  }
+test_that('default names', {
+  # if this test fails then the documentation needs to be updated
+  out = metric(kml2)
+  expect_named(out, c('WRSS', 'APPA', 'AIC', 'BIC'))
 })
