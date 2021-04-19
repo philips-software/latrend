@@ -70,8 +70,6 @@ test_that('make.clusterIndices', {
 })
 
 test_that('metrics', {
-  expect_length(metric(model, character()), 0)
-
   value = metric(model, 'BIC')
   expect_is(value, 'numeric')
   expect_named(value, 'BIC')
