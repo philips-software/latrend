@@ -10,7 +10,11 @@
 \arguments{
 \item{object}{The \code{lcModel} to obtain the proportions from.}
 
-\item{...}{Not used.}
+\item{...}{
+  Arguments passed on to \code{\link[=postprob]{postprob}}
+  \describe{
+    \item{\code{}}{}
+  }}
 }
 \value{
 A named \verb{numeric vector} of length \code{nClusters(object)} with the proportional size of each cluster.
@@ -27,5 +31,5 @@ model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 clusterProportions(model)
 }
 \seealso{
-\link{postprob}
+\link{clusterSizes} \link{postprob}
 }

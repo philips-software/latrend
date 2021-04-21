@@ -14,18 +14,24 @@
 
 \item{...}{Any additional arguments passed to the strategy function.}
 }
-\description{
-Get the cluster membership of each trajectory
+\value{
+A \code{factor} indicating the cluster membership for each trajectory, of length \code{nIds(object)}.
 }
-\details{
-While the default strategy is \link{which.max}, it is recommended to use \link[nnet]{which.is.max} instead, as this function breaks ties randomly.
-Another strategy to consider is the function \link{which.weight}, which enables weighted sampling of cluster assignments.
+\description{
+Classify the fitted trajectories based on the posterior probabilities computed by \code{\link[=postprob]{postprob()}}, according to a given classification strategy.
+
+By default, trajectories are assigned based on the highest posterior probability using \code{\link[=which.max]{which.max()}}.
+In cases where identical probabilities are expected between clusters, it is preferable to use \link[nnet]{which.is.max} instead, as this function breaks ties at random.
+Another strategy to consider is the function \code{\link[=which.weight]{which.weight()}}, which enables weighted sampling of cluster assignments based on the trajectory-specific probabilities.
 }
 \examples{
 data(latrendData)
 model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 trajectoryAssignments(model)
 
-# assign ids at random using weighted sampling
+# assign trajectories at random using weighted sampling
 trajectoryAssignments(model, strategy = which.weight)
+}
+\seealso{
+\link{postprob} \link{clusterSizes}
 }

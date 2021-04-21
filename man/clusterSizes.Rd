@@ -2,17 +2,32 @@
 % Please edit documentation in R/model.R
 \name{clusterSizes}
 \alias{clusterSizes}
-\title{Number of strata per cluster}
+\title{Number of trajectories per cluster}
 \usage{
-clusterSizes(object)
+clusterSizes(object, ...)
 }
 \arguments{
 \item{object}{The \code{lcModel} object.}
+
+\item{...}{
+  Arguments passed on to \code{\link[=trajectoryAssignments]{trajectoryAssignments}}
+  \describe{
+    \item{\code{}}{}
+  }}
+}
+\value{
+A named \verb{integer vector} of length \code{nClusters(object)} with the number of assigned trajectories per cluster.
 }
 \description{
-Number of strata per cluster
+Obtain the size of each cluster, where the size is determined by the number of assigned trajectories to each cluster.
+}
+\details{
+The cluster sizes are computed from the trajectory cluster membership as decided by the \code{\link[=trajectoryAssignments]{trajectoryAssignments()}} function.
 }
 \examples{
 model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 clusterSizes(model)
+}
+\seealso{
+\link{clusterProportions} \link{trajectoryAssignments}
 }

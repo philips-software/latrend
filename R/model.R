@@ -171,16 +171,22 @@ clusterNames = function(object, factor = FALSE) {
 }
 
 #' @export
-#' @title Number of strata per cluster
+#' @title Number of trajectories per cluster
+#' @description Obtain the size of each cluster, where the size is determined by the number of assigned trajectories to each cluster.
+#' @details The cluster sizes are computed from the trajectory cluster membership as decided by the [trajectoryAssignments()] function.
 #' @param object The `lcModel` object.
+#' @inheritDotParams trajectoryAssignments
+#' @seealso [clusterProportions] [trajectoryAssignments]
+#' @return A named `integer vector` of length `nClusters(object)` with the number of assigned trajectories per cluster.
 #' @examples
 #' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' clusterSizes(model)
-clusterSizes = function(object) {
+clusterSizes = function(object, ...) {
   assert_that(is.lcModel(object))
-  trajectoryAssignments(object) %>%
+
+  trajectoryAssignments(object, ...) %>%
     table() %>%
-    as.numeric() %>%
+    as.integer() %>%
     setNames(clusterNames(object))
 }
 
@@ -192,15 +198,15 @@ clusterSizes = function(object) {
 #' @description Obtain the proportional size per cluster, with sizes between 0 and 1.
 #' @details By default, the cluster proportions are computed from the average cluster weight from the posterior probabilities of the fitted data (as computed by the [postprob()] function).
 #' @param object The `lcModel` to obtain the proportions from.
-#' @param ... Not used.
+#' @inheritDotParams postprob
 #' @return A named `numeric vector` of length `nClusters(object)` with the proportional size of each cluster.
-#' @seealso [postprob]
+#' @seealso [clusterSizes] [postprob]
 #' @examples
 #' data(latrendData)
 #' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' clusterProportions(model)
 setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
-  pp = postprob(object)
+  pp = postprob(object, ...)
   assert_that(!is.null(pp), msg = 'cannot determine cluster assignments because postprob() returned NULL')
   colMeans(pp)
 })
@@ -210,21 +216,25 @@ setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
 #' @name trajectoryAssignments
 #' @aliases trajectoryAssignments,lcModel-method
 #' @title Get the cluster membership of each trajectory
-#' @details While the default strategy is [which.max], it is recommended to use \link[nnet]{which.is.max} instead, as this function breaks ties randomly.
-#' Another strategy to consider is the function [which.weight], which enables weighted sampling of cluster assignments.
+#' @description Classify the fitted trajectories based on the posterior probabilities computed by [postprob()], according to a given classification strategy.
+#'
+#' By default, trajectories are assigned based on the highest posterior probability using [which.max()].
+#' In cases where identical probabilities are expected between clusters, it is preferable to use \link[nnet]{which.is.max} instead, as this function breaks ties at random.
+#' Another strategy to consider is the function [which.weight()], which enables weighted sampling of cluster assignments based on the trajectory-specific probabilities.
 #' @param object The `lcModel` to obtain the cluster assignments from.
 #' @param strategy A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.
 #' @param ... Any additional arguments passed to the strategy function.
+#' @return A `factor` indicating the cluster membership for each trajectory, of length `nIds(object)`.
+#' @seealso [postprob] [clusterSizes]
 #' @examples
 #' data(latrendData)
 #' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' trajectoryAssignments(model)
 #'
-#' # assign ids at random using weighted sampling
+#' # assign trajectories at random using weighted sampling
 #' trajectoryAssignments(model, strategy = which.weight)
 setMethod('trajectoryAssignments', signature('lcModel'), function(object, strategy = which.max, ...) {
   pp = postprob(object)
-  assert_that(is_valid_postprob(pp, object))
 
   result = apply(pp, 1, strategy, ...)
   assert_that(is.numeric(result),
