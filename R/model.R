@@ -715,6 +715,13 @@ nobs.lcModel = function(object, ...) {
 #' predIdAll <- predict(model, newdata = data.frame(Id = "S1", Time = time(model)))
 #' @family model-specific methods
 predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
+  assert_that(is.newdata(newdata))
+
+  predMethod = selectMethod('predictForCluster', class(object), optional = TRUE)
+  if (is.null(predMethod) || predMethod@defined@.Data == 'lcModel') {
+    stop(sprintf('Cannot compute predictions for model of class %1$s because neither predict.%1$s nor predictForCluster(%1$s) are implemented for this model', class(object)[1]))
+  }
+
   # special case for when no newdata is provided
   if (is.null(newdata)) {
     newdata = model.data(object)
@@ -809,22 +816,19 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
 #' @return A `vector` with the predictions per `newdata` observation, or a `data.frame` with the predictions and newdata alongside.
 #' @seealso [predict.lcModel]
 #' @family model-specific methods
-setMethod('predictForCluster', signature('lcModel'), function(object, newdata = NULL, cluster, ..., what = 'mu') {
-  assert_that(is.newdata(newdata))
+setMethod('predictForCluster', signature('lcModel'),
+  function(object, newdata = NULL, cluster, ..., what = 'mu') {
+  # check whether predict.lcModelType exists
+  cls = class(object)
+  classes = extends(class(object)) %>% setdiff('lcModel')
+  methodsAvailable = vapply(classes, function(x) !is.null(getS3method('predict', x, optional = TRUE)), FUN.VALUE = FALSE)
 
-  warning(
-    'predictForCluster() not implemented for ',
-    class(object)[1],
-    '. Returning NA predictions.'
-  )
+  assert_that(any(methodsAvailable),
+    msg = sprintf('Cannot compute cluster-specific predictions for model of class %1$s because neither predict.%1$s nor predictForCluster(%1$s) are implemented for this model', cls))
 
-  if(is.null(newdata)) {
-    N = nrow(model.data(object))
-  } else {
-    N = nrow(newdata)
-  }
-
-  rep(as.numeric(NA), N)
+  newdata = cbind(newdata, Cluster = cluster)
+  pred = predict(object, newdata = newdata, ..., what = what)
+  pred$Fit
 })
 
 

@@ -3,31 +3,61 @@ rngReset()
 
 model = latrend(lcMethodTestKML(), data=testLongData)
 
-test_that('default predict', {
-  suppressWarnings({
-    setClass('lcModelTest', contains='lcModel')
-    testModel = model
-    class(testModel) = 'lcModelTest'
-    dfpred = predict(testModel, newdata=data.frame(Assessment=1))
-    expect_is(dfpred, 'list')
-    expect_is(dfpred$A$Fit, 'numeric')
-    expect_equivalent(nrow(dfpred$A), 1)
-  })
+setClass('lcModelTest', contains='lcModel')
+testModel = model
+class(testModel) = 'lcModelTest'
+
+predClusFun = function(object, newdata = NULL, cluster, ...) {
+  rep(NaN, nrow(newdata))
+}
+
+predFun = function(object, newdata, ...) {
+  pred = matrix(NaN, nrow = nrow(newdata), ncol = nClusters(object))
+  transformPredict(pred = pred, model = object, newdata = newdata)
+}
+
+# including this test results in error for predict() and fitted() in later tests. No clue why.
+# test_that('no predict funs', {
+#   expect_error(predict(testModel, newdata=data.frame(Assessment=1)))
+#   expect_error(predictForCluster(testModel, newdata=data.frame(Assessment=1), cluster = 'A'))
+# })
+
+setMethod('predictForCluster', signature('lcModelTest'), definition = predClusFun)
+
+test_that('default predict.lcModel', {
+  dfpred = predict(testModel, newdata=data.frame(Assessment=1))
+
+  expect_is(dfpred, 'list')
+  expect_is(dfpred$A$Fit, 'numeric')
+  expect_equivalent(nrow(dfpred$A), 1)
+
+  # removeMethod('predictForCluster', 'lcModelTest')
 })
 
+# NOTE: disabled until there is a way to unregister an S3 method
+# test_that('default predictForCluster', {
+#   .S3method('predict', 'lcModelTest', predFun)
+#   pred = predictForCluster(testModel, newdata=data.frame(Assessment=c(1,2)), cluster = 'A')
+#   expect_is(pred, 'numeric')
+#   expect_equ
+#   .S3method('predict', 'lcModelTest', predict.lcModel)
+# })
+
+
 test_that('default fitted', {
+  # setMethod('predictForCluster', signature('lcModelTest'), predClusFun)
+
   suppressWarnings({
-    setClass('lcModelTest', contains='lcModel')
-    testModel = model
-    class(testModel) = 'lcModelTest'
     expect_is(fitted(testModel), 'numeric')
   })
+
+  # removeMethod('predictForCluster', 'lcModelTest')
 })
 
 test_that('trajectoryAssignments', {
-  trajectoryAssignments(model) %>%
-    expect_is('factor') %T>%
-    {expect_equal(nlevels(.), nClusters(model))}
+  trajClus = trajectoryAssignments(model)
+  expect_is(trajClus, 'factor')
+  expect_equal(nlevels(trajClus), nClusters(model))
 })
 
 test_that('make.trajectoryAssignments', {

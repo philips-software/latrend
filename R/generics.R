@@ -226,8 +226,22 @@ setGeneric('predictAssignments', function(object, newdata = NULL, ...) {
 setGeneric('predictForCluster', function(object, newdata = NULL, cluster, ...) {
   assert_that(
     is.newdata(newdata),
+    is.scalar(cluster),
     cluster %in% clusterNames(object)
   )
+
+  # special case for when no newdata is provided
+  if (is.null(newdata)) {
+    newdata = model.data(object)
+    if (hasName(newdata, 'Cluster')) {
+      newdata[['Cluster']] = NULL
+    }
+  }
+  else {
+    if (nrow(newdata) == 0) {
+      warning('called predictForCluster() with empty newdata data.frame (nrow = 0)')
+    }
+  }
 
   out <- standardGeneric('predictForCluster')
 
