@@ -250,17 +250,16 @@ setMethod('trajectoryAssignments', signature('lcModel'), function(object, strate
 
 #' @export
 #' @importFrom stats coef
-#' @title Coefficients of a lcModel
+#' @title Extract lcModel coefficients
+#' @description Extract the coefficients of the `lcModel` object, if defined. The returned set of coefficients is dependent on the underlying type of `lcModel`.
+#' @details The default implementation checks for the existence of a `coef()` function for the internal model, and returns the output, if available.
 #' @param object The `lcModel` object.
 #' @param ... Additional arguments.
-#' @return A `named numeric vector` with all coefficients, or a `matrix` with each column containing the cluster-specific coefficients.
+#' @return A named `numeric vector` with all coefficients, or a `matrix` with each column containing the cluster-specific coefficients. If `coef()` is not defined for the given model, an empty `numeric vector` is returned.
 #' @family model-specific methods
 coef.lcModel = function(object, ...) {
-  if (is.null(getS3method(
-    'coef',
-    class = class(object@model),
-    optional = TRUE
-  ))) {
+  if (is.null(object@model) ||
+      is.null(getS3method('coef', class = class(object@model), optional = TRUE))) {
     numeric()
   } else {
     coef(object@model)

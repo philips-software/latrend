@@ -2,7 +2,7 @@
 % Please edit documentation in R/model.R
 \name{coef.lcModel}
 \alias{coef.lcModel}
-\title{Coefficients of a lcModel}
+\title{Extract lcModel coefficients}
 \usage{
 \method{coef}{lcModel}(object, ...)
 }
@@ -12,10 +12,13 @@
 \item{...}{Additional arguments.}
 }
 \value{
-A \verb{named numeric vector} with all coefficients, or a \code{matrix} with each column containing the cluster-specific coefficients.
+A named \verb{numeric vector} with all coefficients, or a \code{matrix} with each column containing the cluster-specific coefficients. If \code{coef()} is not defined for the given model, an empty \verb{numeric vector} is returned.
 }
 \description{
-Coefficients of a lcModel
+Extract the coefficients of the \code{lcModel} object, if defined. The returned set of coefficients is dependent on the underlying type of \code{lcModel}.
+}
+\details{
+The default implementation checks for the existence of a \code{coef()} function for the internal model, and returns the output, if available.
 }
 \seealso{
 Other model-specific methods: 
