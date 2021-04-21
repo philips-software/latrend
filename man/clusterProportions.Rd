@@ -12,11 +12,20 @@
 
 \item{...}{Not used.}
 }
+\value{
+A named \verb{numeric vector} of length \code{nClusters(object)} with the proportional size of each cluster.
+}
 \description{
-Proportional size of each cluster
+Obtain the proportional size per cluster, with sizes between 0 and 1.
+}
+\details{
+By default, the cluster proportions are computed from the average cluster weight from the posterior probabilities of the fitted data (as computed by the \code{\link[=postprob]{postprob()}} function).
 }
 \examples{
 data(latrendData)
 model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 clusterProportions(model)
+}
+\seealso{
+\link{postprob}
 }

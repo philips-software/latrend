@@ -189,8 +189,12 @@ clusterSizes = function(object) {
 #' @name clusterProportions
 #' @aliases clusterProportions,lcModel-method
 #' @title Proportional size of each cluster
+#' @description Obtain the proportional size per cluster, with sizes between 0 and 1.
+#' @details By default, the cluster proportions are computed from the average cluster weight from the posterior probabilities of the fitted data (as computed by the [postprob()] function).
 #' @param object The `lcModel` to obtain the proportions from.
 #' @param ... Not used.
+#' @return A named `numeric vector` of length `nClusters(object)` with the proportional size of each cluster.
+#' @seealso [postprob]
 #' @examples
 #' data(latrendData)
 #' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
