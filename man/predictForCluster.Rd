@@ -3,7 +3,7 @@
 \name{predictForCluster}
 \alias{predictForCluster}
 \alias{predictForCluster,lcModel-method}
-\title{lcModel prediction for a specific cluster}
+\title{lcModel prediction conditional on a cluster}
 \usage{
 \S4method{predictForCluster}{lcModel}(object, newdata = NULL, cluster, ..., what = "mu")
 }
@@ -24,6 +24,25 @@ A \code{vector} with the predictions per \code{newdata} observation, or a \code{
 }
 \description{
 Predicts the expected trajectory observations at the given time under the assumption that the trajectory belongs to the specified cluster.
+
+The same result can be obtained by calling \code{\link[=predict.lcModel]{predict()}} with the \code{newdata} \code{data.frame} having a \code{"Cluster"} assignment column.
+The main purpose of this function is to make it easier to implement the prediction computations for custom \code{lcModel} classes.
+}
+\details{
+The default \code{predictForCluster()} method makes use of \code{\link[=predict.lcModel]{predict.lcModel()}}, and vice versa. For this to work, any extending \code{lcModel} classes, e.g., \code{lcModelExample}, should implement either \code{predictForCluster(lcModelExample)} or \code{predict.lcModelExample()}. When implementing new models, it is advisable to implement \code{predictForCluster} as the cluster-specific computation generally results in shorter and simpler code.
+}
+\examples{
+library(kml)
+data(latrendData)
+method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
+model <- latrend(method, latrendData)
+
+predictForCluster(model,
+  newdata = data.frame(Time = c(0, 1)),
+  cluster = "B")
+
+# all fitted values under cluster B
+predictForCluster(model, cluster = "B")
 }
 \seealso{
 \link{predict.lcModel}

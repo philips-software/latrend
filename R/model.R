@@ -808,14 +808,31 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
 #' @name predictForCluster
 #' @rdname predictForCluster
 #' @aliases predictForCluster,lcModel-method
-#' @title lcModel prediction for a specific cluster
+#' @title lcModel prediction conditional on a cluster
 #' @description Predicts the expected trajectory observations at the given time under the assumption that the trajectory belongs to the specified cluster.
+#'
+#' The same result can be obtained by calling [`predict()`][predict.lcModel()] with the `newdata` `data.frame` having a `"Cluster"` assignment column.
+#' The main purpose of this function is to make it easier to implement the prediction computations for custom `lcModel` classes.
+#'
+#' @details The default `predictForCluster()` method makes use of [predict.lcModel()], and vice versa. For this to work, any extending `lcModel` classes, e.g., `lcModelExample`, should implement either `predictForCluster(lcModelExample)` or `predict.lcModelExample()`. When implementing new models, it is advisable to implement `predictForCluster` as the cluster-specific computation generally results in shorter and simpler code.
 #' @inheritParams predict.lcModel
 #' @param cluster The cluster name (as `character`) to predict for.
 #' @param ... Additional arguments.
 #' @return A `vector` with the predictions per `newdata` observation, or a `data.frame` with the predictions and newdata alongside.
 #' @seealso [predict.lcModel]
 #' @family model-specific methods
+#' @examples
+#' library(kml)
+#' data(latrendData)
+#' method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
+#' model <- latrend(method, latrendData)
+#'
+#' predictForCluster(model,
+#'   newdata = data.frame(Time = c(0, 1)),
+#'   cluster = "B")
+#'
+#' # all fitted values under cluster B
+#' predictForCluster(model, cluster = "B")
 setMethod('predictForCluster', signature('lcModel'),
   function(object, newdata = NULL, cluster, ..., what = 'mu') {
   # check whether predict.lcModelType exists
