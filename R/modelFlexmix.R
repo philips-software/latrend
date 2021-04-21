@@ -35,7 +35,7 @@ setMethod('predictForCluster', signature('lcModelFlexmix'), function(
   assert_that(ncol(pred) == 1,
     msg = 'unexpected output. the lcModel implementation does not support this model')
 
-  pred
+  as.numeric(pred)
 })
 
 
