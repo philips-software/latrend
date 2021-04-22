@@ -16,7 +16,10 @@
 Either \code{logical} indicating convergence, or a \code{numeric} status code.
 }
 \description{
-Check convergence of the fitted model.
+Check convergence of the fitted \code{lcModel} object.
+}
+\details{
+The default implementation returns \code{NA}.
 }
 \seealso{
 Other model-specific methods: 

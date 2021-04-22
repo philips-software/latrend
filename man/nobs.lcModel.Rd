@@ -14,7 +14,16 @@
 \description{
 Extract the number of observations from a lcModel
 }
+\examples{
+library(kml)
+data(latrendData)
+method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
+kml <- latrend(method, latrendData)
+nobs(kml)
+}
 \seealso{
+\link{nIds} \link{nClusters}
+
 Other model-specific methods: 
 \code{\link{clusterTrajectories}()},
 \code{\link{coef.lcModel}()},

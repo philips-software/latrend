@@ -21,6 +21,19 @@ a \code{numeric} indicating the verbosity level (see \link{Verbose}),
 or one of \code{c('info', 'fine', 'finest')}.}
   }}
 }
+\value{
+The refitted \code{lcModel} object, of the same type as the \code{object} argument.
+}
 \description{
 Fit a new model with modified arguments from the current model.
+}
+\examples{
+library(kml)
+data(latrendData)
+model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3), data = latrendData)
+# fit for a different number of clusters
+update(model, nClusters = 2)
+}
+\seealso{
+\link{latrend} \link{getCall}
 }

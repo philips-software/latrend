@@ -14,12 +14,21 @@
 \item{clusters}{Optional cluster assignments per id. If unspecified, a \code{matrix} is returned containing the cluster-specific predictions per column.}
 }
 \value{
-A vector of residuals for the cluster assignments specified by clusters. If clusters is unspecified, a matrix of cluster-specific residuals per observations is returned.
+A \verb{numeric vector} of residuals for the cluster assignments specified by clusters.
+If the \code{clusters} argument is unspecified, a \code{matrix} of cluster-specific residuals per observations is returned.
 }
 \description{
-Extract lcModel residuals
+Extract the residuals for a fitted \code{lcModel} object.
+By default, residuals are computed under the most likely cluster assignment for each trajectory.
 }
 \seealso{
+\link{fitted.lcModel} \link{trajectories}
+library(lcmm)
+data(latrendData)
+model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
+id = "Id", time = "Time"), data = latrendData)
+summary(residuals(model))
+
 Other model-specific methods: 
 \code{\link{clusterTrajectories}()},
 \code{\link{coef.lcModel}()},

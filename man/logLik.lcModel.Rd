@@ -11,10 +11,25 @@
 
 \item{...}{Additional arguments.}
 }
+\value{
+A \code{numeric} with the computed log-likelihood. If unavailable, \code{NA} is returned.
+}
 \description{
 Extract the log-likelihood of a lcModel
 }
+\details{
+The default implementation checks for the existence of the \code{logLik()} function for the internal model, and returns the output, if available.
+}
+\examples{
+data(latrendData)
+method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
+  id = "Id", time = "Time", nClusters = 3)
+gbtm <- latrend(method, data = latrendData)
+logLik(gbtm)
+}
 \seealso{
+\link[stats:logLik]{stats::logLik} \link{metric}
+
 Other model-specific methods: 
 \code{\link{clusterTrajectories}()},
 \code{\link{coef.lcModel}()},

@@ -9,6 +9,19 @@ nClusters(object)
 \arguments{
 \item{object}{The \code{lcModel} object.}
 }
+\value{
+An \code{integer} with the number of clusters identified by the \code{lcModel}.
+}
 \description{
-Number of clusters
+Get the number of clusters estimated by the given \code{lcModel} object.
+}
+\examples{
+library(kml)
+data(latrendData)
+method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
+kml <- latrend(method, latrendData)
+nClusters(kml)
+}
+\seealso{
+\link{nIds} \link{nobs}
 }

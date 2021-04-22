@@ -11,10 +11,18 @@
 
 \item{...}{Additional arguments.}
 }
+\value{
+A \code{numeric} with the deviance value. If unavailable, \code{NA} is returned.
+}
 \description{
-lcModel deviance
+Get the deviance of the fitted \code{lcModel} object.
+}
+\details{
+The default implementation checks for the existence of the \code{deviance()} function for the internal model, and returns the output, if available.
 }
 \seealso{
+\link[stats:deviance]{stats::deviance} \link{metric}
+
 Other model-specific methods: 
 \code{\link{clusterTrajectories}()},
 \code{\link{coef.lcModel}()},

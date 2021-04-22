@@ -4,18 +4,29 @@
 \alias{confusionMatrix}
 \title{Compute the posterior confusion matrix}
 \usage{
-confusionMatrix(object, strategy = which.max, scale = TRUE)
+confusionMatrix(object, strategy = which.max, scale = TRUE, ...)
 }
 \arguments{
 \item{object}{The object.}
 
-\item{strategy}{The \link{trajectoryAssignments} strategy to compute the PCM under.
-If \code{strategy = NULL}, weighted random assignment is assumed (analogous to a repeated [\link{which.weight}] strategy evaluation).}
+\item{strategy}{The strategy for assigning trajectories to a specific cluster, see \code{\link[=trajectoryAssignments]{trajectoryAssignments()}}.
+If \code{strategy = NULL}, the posterior probabilities are used as weights (analogous to a repeated evaluation of \code{strategy = which.weight}).}
 
-\item{scale}{Whether to express the confusion in probabilities (\code{scale = TRUE}), or in the number of trajectories.}
+\item{scale}{Whether to express the confusion in probabilities (\code{scale = TRUE}), or in terms of the number of trajectories.}
+
+\item{...}{
+  Arguments passed on to \code{\link[=trajectoryAssignments]{trajectoryAssignments}}
+  \describe{
+    \item{\code{}}{}
+  }}
+}
+\value{
+A K-by-K confusion \code{matrix} with \code{K = nClusters(object)}.
 }
 \description{
-Compute a \verb{nClusters x nClusters} posterior confusion matrix (PCM). The entry (i,j) represents the probability of a trajectory belonging to class i is assigned to class j under a given assignment strategy.
+Compute the posterior confusion matrix (PCM).
+The entry \eqn{(i,j)} represents the probability (or number, in case of  \code{scale = TRUE}) of a trajectory
+belonging to cluster \eqn{i} is assigned to cluster \eqn{j} under the specified trajectory cluster assignment strategy.
 }
 \examples{
 data(latrendData)
@@ -24,4 +35,7 @@ model = latrend(lcMethodLcmmGMM(
   id = "Id", time = "Time"),
   data=latrendData)
 confusionMatrix(model)
+}
+\seealso{
+\link{postprob} \link{clusterProportions} \link{trajectoryAssignments}
 }

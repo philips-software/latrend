@@ -10,8 +10,8 @@ estimationTime(object)
 \item{object}{The \code{lcModel} object.}
 }
 \value{
-The model estimation time in seconds.
+A \code{numeric} representing the model estimation time, in seconds.
 }
 \description{
-Get the model estimation time
+Get the estimation time of the model, determined by the time taken for the associated \code{\link[=fit]{fit()}} function to finish.
 }

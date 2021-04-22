@@ -19,7 +19,14 @@ A \code{numeric} vector of the fitted values for the respective class, or a \cod
 \description{
 Extract lcModel fitted values
 }
+\examples{
+data(latrendData)
+model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+fitted(model)
+}
 \seealso{
+\link[stats:fitted.values]{stats::fitted} \link{predict.lcModel} \link{trajectoryAssignments} \link{transformFitted}
+
 Other model-specific methods: 
 \code{\link{clusterTrajectories}()},
 \code{\link{coef.lcModel}()},

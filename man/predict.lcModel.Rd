@@ -42,6 +42,8 @@ predId <- predict(model, newdata = data.frame(Cluster = "A", Id = "S1", Time = t
 predIdAll <- predict(model, newdata = data.frame(Id = "S1", Time = time(model)))
 }
 \seealso{
+\link{predictForCluster} \link[stats:predict]{stats::predict} \link{fitted.lcModel} \link{clusterTrajectories} \link{trajectories} \link{predictPostprob} \link{predictAssignments}
+
 Other model-specific methods: 
 \code{\link{clusterTrajectories}()},
 \code{\link{coef.lcModel}()},

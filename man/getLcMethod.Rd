@@ -9,10 +9,16 @@ getLcMethod(object)
 \arguments{
 \item{object}{The \code{lcModel} object.}
 }
+\value{
+An \code{lcMethod} object.
+}
 \description{
-Get the method specification of a lcModel
+Get the \code{lcMethod} specification object that was used for fitting the given \code{lcModel} object.
 }
 \examples{
 model = latrend(method=lcMethodKML("Y", id = "Id", time = "Time"), data=latrendData)
 getLcMethod(model)
+}
+\seealso{
+\link{getCall.lcModel}
 }

@@ -11,7 +11,18 @@
 
 \item{...}{Not used.}
 }
+\value{
+A \code{call} to \code{\link[=latrend]{latrend()}} with the necessary arguments and data.
+}
 \description{
-Get the model call
+Extract the \code{call} that was used to fit the given \code{lcModel} object.
+}
+\examples{
+data(latrendData)
+model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+getCall(model)
+}
+\seealso{
+\link[stats:update]{stats::getCall} \link{getLcMethod}
 }
 \keyword{internal}

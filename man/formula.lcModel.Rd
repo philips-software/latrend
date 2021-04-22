@@ -9,13 +9,26 @@
 \arguments{
 \item{x}{The \code{lcModel} object.}
 
-\item{what}{The distributional parameter}
+\item{what}{The distributional parameter.}
 
 \item{...}{Additional arguments.}
 }
 \value{
-Returns the associated \code{formula}, or \code{ ~ 0} if not specified.
+Returns the associated \code{formula}, or \code{response ~ 0} if not specified.
 }
 \description{
-Extract the formula of a lcModel
+Get the formula associated with the fitted \code{lcModel} object.
+This is determined by the \code{formula} argument of the \code{lcMethod} specification that was used to fit the model.
+}
+\examples{
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
+lmkm <- latrend(method, data = latrendData)
+formula(lmkm) # Y ~ Time
+
+kml <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+formula(kml) # Y ~ 0
+}
+\seealso{
+\link[stats:formula]{stats::formula}
 }

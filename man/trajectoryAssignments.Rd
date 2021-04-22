@@ -25,6 +25,7 @@ In cases where identical probabilities are expected between clusters, it is pref
 Another strategy to consider is the function \code{\link[=which.weight]{which.weight()}}, which enables weighted sampling of cluster assignments based on the trajectory-specific probabilities.
 }
 \examples{
+library(kml)
 data(latrendData)
 model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 trajectoryAssignments(model)
@@ -33,5 +34,5 @@ trajectoryAssignments(model)
 trajectoryAssignments(model, strategy = which.weight)
 }
 \seealso{
-\link{postprob} \link{clusterSizes}
+\link{postprob} \link{clusterSizes} \link{predictAssignments}
 }

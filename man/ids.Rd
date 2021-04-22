@@ -2,20 +2,24 @@
 % Please edit documentation in R/model.R
 \name{ids}
 \alias{ids}
-\title{Get the unique ids included in this model}
+\title{Get the trajectory ids on which the model was fitted}
 \usage{
 ids(object)
 }
 \arguments{
 \item{object}{The \code{lcModel} object.}
 }
+\value{
+A \verb{character vector} or \verb{integer vector} of the identifier for every fitted trajectory.
+}
 \description{
-Get the unique ids included in this model
+Get the trajectory ids on which the model was fitted
 }
 \details{
-The order returned by ids(lcModel) determines the id order for any output involving id-specific values, such as in trajectoryAssignments() or postprob()
+The order returned by \code{ids(object)} determines the id order for any output involving id-specific values, such as in \code{\link[=trajectoryAssignments]{trajectoryAssignments()}} or \code{\link[=postprob]{postprob()}}.
 }
 \examples{
+data(latrendData)
 model = latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-ids(model) # S1, S2, ..., S500
+ids(model) # 1, 2, ..., 200
 }

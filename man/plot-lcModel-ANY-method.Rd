@@ -11,11 +11,24 @@
 
 \item{y}{Not used.}
 
-\item{...}{Arguments passed to \link{plotClusterTrajectories}.}
+\item{...}{
+  Arguments passed on to \code{\link[=plotClusterTrajectories]{plotClusterTrajectories}}
+  \describe{
+    \item{\code{object}}{The (cluster) trajectory data.}
+  }}
 }
 \value{
 A \code{ggplot} object.
 }
 \description{
-Plot a lcModel. By default, this plots the cluster trajectories of the model, along with the training data.
+Plot a \code{lcModel} object. By default, this plots the cluster trajectories of the model, along with the training data.
+}
+\examples{
+library(kml)
+data(latrendData)
+model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+plot(model)
+}
+\seealso{
+\link{plotClusterTrajectories} \link{plotTrajectories} \link[ggplot2:ggplot]{ggplot2::ggplot}
 }

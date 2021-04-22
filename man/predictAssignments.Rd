@@ -13,12 +13,13 @@
 \item{newdata}{Optional \code{data.frame} for which to compute the model predictions. If omitted, the model training data is used.
 Cluster trajectory predictions are made when ids are not specified.}
 
-\item{strategy}{A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.}
+\item{strategy}{A function returning the cluster index based on the given \code{vector} of membership probabilities.
+By default (\code{strategy = which.max}), trajectories are assigned to the most likely cluster.}
 
 \item{...}{Additional arguments.}
 }
 \value{
-A \code{factor} with length \code{nrow(newdata)} that indicates the posterior probability per trajectory per observation.
+A \code{factor} of length \code{nrow(newdata)} that indicates the assigned cluster per trajectory per observation.
 }
 \description{
 Computes the posterior probability based on the provided (observed) data.
@@ -26,8 +27,14 @@ Computes the posterior probability based on the provided (observed) data.
 \details{
 The default implementation uses \link{predictPostprob} to determine the cluster membership.
 }
+\examples{
+library(kml)
+data(latrendData)
+model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+predictAssignments(model, newdata = data.frame(Id = 999, Y = 0, Time = 0))
+}
 \seealso{
-\link{predictPostprob}
+\link{predictPostprob} \link{predict.lcModel}
 
 Other model-specific methods: 
 \code{\link{clusterTrajectories}()},

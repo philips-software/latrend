@@ -8,14 +8,24 @@
 \S4method{qqPlot}{lcModel}(object, byCluster = FALSE, ...)
 }
 \arguments{
-\item{object}{The model.}
+\item{object}{The \code{lcModel} object.}
 
 \item{byCluster}{Whether to plot the Q-Q line per cluster}
 
-\item{...}{Other arguments passed to qqplotr::geom_qq_band, qqplotr::stat_qq_line, and qqplotr::stat_qq_point.}
+\item{...}{Additional arguments passed to \code{\link[qqplotr:stat_qq_band]{qqplotr::geom_qq_band()}}, \code{\link[qqplotr:stat_qq_line]{qqplotr::stat_qq_line()}}, and \code{\link[qqplotr:stat_qq_point]{qqplotr::stat_qq_point()}}.}
+}
+\value{
+A \code{ggplot} object.
 }
 \description{
-Quantile-quantile plot
+Plot the quantile-quantile (Q-Q) plot for the fitted \code{lcModel} object. This function is based on the \pkg{qqplotr} package.
+}
+\examples{
+library(lcmm)
+data(latrendData)
+model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
+   id = "Id", time = "Time"), data = latrendData)
+qqPlot(model)
 }
 \seealso{
 \link{residuals.lcModel} \link{metric} \link{plotClusterTrajectories}

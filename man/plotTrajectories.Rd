@@ -49,4 +49,11 @@ data(latrendData)
 plotTrajectories(latrendData, response = "Y", id = "Id", time = "Time")
 
 plotTrajectories(latrendData, response = quote(exp(Y)), id = "Id", time = "Time")
+library(kml)
+data(latrendData)
+model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+plotTrajectories(model)
+}
+\seealso{
+\link{plot.lcModel} \link{plotClusterTrajectories} \link{trajectories}
 }

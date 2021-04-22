@@ -12,12 +12,14 @@
 \item{...}{Not used.}
 }
 \value{
-The unique times at which observations occur.
+A \verb{numeric vector} of the unique times at which observations occur, in increasing order.
 }
 \description{
-Sampling times of a lcModel
+Extract the sampling times on which the \code{lcModel} was fitted.
 }
 \seealso{
+\link{timeVariable} \link{model.data}
+
 Other model-specific methods: 
 \code{\link{clusterTrajectories}()},
 \code{\link{coef.lcModel}()},

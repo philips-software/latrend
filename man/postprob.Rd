@@ -3,7 +3,7 @@
 \name{postprob}
 \alias{postprob}
 \alias{postprob,lcModel-method}
-\title{Posterior probability per fitted id}
+\title{Posterior probability per fitted trajectory}
 \usage{
 \S4method{postprob}{lcModel}(object, ...)
 }
@@ -12,16 +12,25 @@
 
 \item{...}{Additional arguments.}
 }
+\value{
+A I-by-K \code{matrix} with \code{I = nIds(object)} and \code{K = nClusters(object)}.
+}
 \description{
-Posterior probability per fitted id
+Get the posterior probability matrix with element \eqn{(i,j)} indicating the probability of trajectory \eqn{i} belonging to cluster \eqn{j}.
+}
+\details{
+This method should be extended by \code{lcModel} implementations. The default implementation returns uniform probabilities for all observations.
 }
 \examples{
+library(lcmm)
 data(latrendData)
 model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
    id = "Id", time = "Time"), data = latrendData)
 postprob(model)
 }
 \seealso{
+\link{trajectoryAssignments} \link{predictPostprob} \link{predictAssignments}
+
 Other model-specific methods: 
 \code{\link{clusterTrajectories}()},
 \code{\link{coef.lcModel}()},

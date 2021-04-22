@@ -12,8 +12,18 @@
 \item{...}{Additional arguments.}
 }
 \value{
-The \code{data.frame} that was used for fitting the \code{lcModel}.
+The full \code{data.frame} that was used for fitting the \code{lcModel}.
 }
 \description{
 Evaluates the data call in the environment that the model was trained in.
+}
+\examples{
+library(kml)
+data(latrendData)
+method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
+kml <- latrend(method, latrendData)
+model.data(kml)
+}
+\seealso{
+\link{model.frame.lcModel} \link{time.lcModel}
 }

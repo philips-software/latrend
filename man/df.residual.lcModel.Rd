@@ -11,10 +11,15 @@
 
 \item{...}{Additional arguments.}
 }
+\value{
+A \code{numeric} with the residual degrees of freedom. If unavailable, \code{NA} is returned.
+}
 \description{
 Extract the residual degrees of freedom from a lcModel
 }
 \seealso{
+\link[stats:df.residual]{stats::df.residual} \link{nobs} \link{residuals}
+
 Other model-specific methods: 
 \code{\link{clusterTrajectories}()},
 \code{\link{coef.lcModel}()},

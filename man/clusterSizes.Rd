@@ -25,6 +25,7 @@ Obtain the size of each cluster, where the size is determined by the number of a
 The cluster sizes are computed from the trajectory cluster membership as decided by the \code{\link[=trajectoryAssignments]{trajectoryAssignments()}} function.
 }
 \examples{
+data(latrendData)
 model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 clusterSizes(model)
 }

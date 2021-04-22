@@ -19,6 +19,16 @@
 
 \item{classes}{The object classes for which to remove their assigned environment. By default, only environments from \code{formula} are removed.}
 }
+\value{
+An \code{lcModel} object of the same type as the \code{object} argument.
+}
 \description{
 Strip a lcModel of non-essential variables and environments in order to reduce the model size for serialization.
+}
+\examples{
+library(lcmm)
+data(latrendData)
+model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
+   id = "Id", time = "Time"), data = latrendData)
+strip(model)
 }

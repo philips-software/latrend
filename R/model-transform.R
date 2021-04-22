@@ -12,9 +12,9 @@
 #'
 #' By default, `transformFitted()` accepts one of the following inputs:
 #' \describe{
-#'  \item{`data.frame`}{A `data.frame` in long format providing a cluster-specific prediction for each observation per row, with column names `"Fit"` and `"Cluster"`. This `data.frame` therefore has `nObs(object) * nClusters(object)` rows.}
-#'  \item{`matrix`}{An N-by-K `matrix` where each row provides the cluster-specific predictions for the respective observation. Here, `N = nObs(object)` and `K = nClusters(object)`.}
-#'  \item{`list`}{A `list` of cluster-specific prediction `vector`s. Each prediction vector should be of length `nObs(object)`. The overall (named) list of cluster-specific prediction vectors is of length `nClusters(object)`.}
+#'  \item{`data.frame`}{A `data.frame` in long format providing a cluster-specific prediction for each observation per row, with column names `"Fit"` and `"Cluster"`. This `data.frame` therefore has `nobs(object) * nClusters(object)` rows.}
+#'  \item{`matrix`}{An N-by-K `matrix` where each row provides the cluster-specific predictions for the respective observation. Here, `N = nobs(object)` and `K = nClusters(object)`.}
+#'  \item{`list`}{A `list` of cluster-specific prediction `vector`s. Each prediction vector should be of length `nobs(object)`. The overall (named) list of cluster-specific prediction vectors is of length `nClusters(object)`.}
 #' }
 #'
 #' Users can implement support for other prediction formats by defining the `transformFitted` method with other signatures.
@@ -92,7 +92,7 @@ setMethod('transformFitted', signature('data.frame', 'lcModel'), function(pred, 
 #'
 #' By default, `transformPredict()` accepts one of the following inputs:
 #' \describe{
-#'  \item{`data.frame`}{A `data.frame` in long format providing a cluster-specific prediction for each observation per row, with column names `"Fit"` and `"Cluster"`. This `data.frame` therefore has `nObs(object) * nClusters(object)` rows.}
+#'  \item{`data.frame`}{A `data.frame` in long format providing a cluster-specific prediction for each observation per row, with column names `"Fit"` and `"Cluster"`. This `data.frame` therefore has `nobs(object) * nClusters(object)` rows.}
 #'  \item{`matrix`}{An N-by-K `matrix` where each row provides the cluster-specific predictions for the respective observations in `newdata`. Here, `N = nrow(newdata)` and `K = nClusters(object)`.}
 #'  \item{`vector`}{A `vector` of length `nrow(newdata)` with predictions corresponding to the rows of `newdata`.}
 #' }

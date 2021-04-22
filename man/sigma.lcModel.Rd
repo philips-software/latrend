@@ -11,10 +11,22 @@
 
 \item{...}{Additional arguments.}
 }
+\value{
+A \code{numeric} indicating the residual standard deviation.
+}
 \description{
-Extract residual standard deviation from a lcModel
+Extracts or estimates the residual standard deviation. If \code{\link[=sigma]{sigma()}} is not defined for a model, it is estimated from the residual error vector.
+}
+\examples{
+library(lcmm)
+data(latrendData)
+model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
+   id = "Id", time = "Time"), data = latrendData)
+sigma(model)
 }
 \seealso{
+\link{coef.lcModel} \link{metric}
+
 Other model-specific methods: 
 \code{\link{clusterTrajectories}()},
 \code{\link{coef.lcModel}()},
