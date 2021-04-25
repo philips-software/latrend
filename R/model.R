@@ -222,10 +222,10 @@ setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
 #' By default, trajectories are assigned based on the highest posterior probability using [which.max()].
 #' In cases where identical probabilities are expected between clusters, it is preferable to use \link[nnet]{which.is.max} instead, as this function breaks ties at random.
 #' Another strategy to consider is the function [which.weight()], which enables weighted sampling of cluster assignments based on the trajectory-specific probabilities.
-#' @param object The `lcModel` to obtain the cluster assignments from.
+#' @param object The object to obtain the cluster assignments from.
 #' @param strategy A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.
 #' @param ... Any additional arguments passed to the strategy function.
-#' @return A `factor` indicating the cluster membership for each trajectory, of length `nIds(object)`.
+#' @return A `factor` indicating the cluster membership for each trajectory.
 #' @seealso [postprob] [clusterSizes] [predictAssignments]
 #' @examples
 #' library(kml)

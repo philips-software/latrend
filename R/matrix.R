@@ -12,7 +12,7 @@ rowColumns = function(x, i) {
 #' @export
 #' @name trajectoryAssignments
 #' @aliases trajectoryAssignments,matrix-method
-#' @param object The posterior probability `matrix`, with the \eqn{k}th column containing the observation- or trajectory-specific probability for cluster \eqn{k}.
+#' @details In case `object` is a `matrix`: the posterior probability `matrix`, with the \eqn{k}th column containing the observation- or trajectory-specific probability for cluster \eqn{k}.
 #' @param clusterNames Optional `character vector` with the cluster names. If `clusterNames = NULL`, [make.clusterNames()] is used.
 setMethod('trajectoryAssignments', signature('matrix'), function(object, strategy = which.max, clusterNames = colnames(object), ...) {
   assert_that(is_valid_postprob(object))

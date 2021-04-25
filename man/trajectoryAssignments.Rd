@@ -16,7 +16,7 @@
 \S4method{trajectoryAssignments}{lcModel}(object, strategy = which.max, ...)
 }
 \arguments{
-\item{object}{The \code{lcModel} to obtain the cluster assignments from.}
+\item{object}{The object to obtain the cluster assignments from.}
 
 \item{strategy}{A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.}
 
@@ -25,7 +25,7 @@
 \item{...}{Any additional arguments passed to the strategy function.}
 }
 \value{
-A \code{factor} indicating the cluster membership for each trajectory, of length \code{nIds(object)}.
+A \code{factor} indicating the cluster membership for each trajectory.
 }
 \description{
 Classify the fitted trajectories based on the posterior probabilities computed by \code{\link[=postprob]{postprob()}}, according to a given classification strategy.
@@ -33,6 +33,9 @@ Classify the fitted trajectories based on the posterior probabilities computed b
 By default, trajectories are assigned based on the highest posterior probability using \code{\link[=which.max]{which.max()}}.
 In cases where identical probabilities are expected between clusters, it is preferable to use \link[nnet]{which.is.max} instead, as this function breaks ties at random.
 Another strategy to consider is the function \code{\link[=which.weight]{which.weight()}}, which enables weighted sampling of cluster assignments based on the trajectory-specific probabilities.
+}
+\details{
+In case \code{object} is a \code{matrix}: the posterior probability \code{matrix}, with the \eqn{k}th column containing the observation- or trajectory-specific probability for cluster \eqn{k}.
 }
 \examples{
 library(kml)
