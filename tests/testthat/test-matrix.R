@@ -51,3 +51,14 @@ test_that('dcastRepeatedMeasures', {
   expect_equal(ncol(mat), ncol(m))
   expect_equal(as.numeric(mat), as.numeric(m))
 })
+
+
+test_that('trajectoryAssignments,matrix', {
+  model = latrend(lcMethodTestKML(), data = testLongData)
+  pp = postprob(model)
+
+  refLabels = trajectoryAssignments(model)
+  trajLabels = trajectoryAssignments(pp)
+
+  expect_equal(trajLabels, refLabels)
+})

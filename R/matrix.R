@@ -8,6 +8,36 @@ rowColumns = function(x, i) {
   x[cbind(1:nrow(x), i)]
 }
 
+
+#' @export
+#' @name trajectoryAssignments
+#' @aliases trajectoryAssignments,matrix-method
+#' @param object The posterior probability `matrix`, with the \eqn{k}th column containing the observation- or trajectory-specific probability for cluster \eqn{k}.
+#' @param clusterNames Optional `character vector` with the cluster names. If `clusterNames = NULL`, [make.clusterNames()] is used.
+setMethod('trajectoryAssignments', signature('matrix'), function(object, strategy = which.max, clusterNames = colnames(object), ...) {
+  assert_that(is_valid_postprob(object))
+
+  nTraj = nrow(object)
+  nClus = ncol(object)
+
+  if (is.null(clusterNames)) {
+    clusterNames = make.clusterNames(nClus)
+  }
+
+  result = apply(object, 1, strategy, ...)
+
+  assert_that(
+    is.numeric(result),
+    length(result) == nTraj,
+    all(sapply(result, is.count) | sapply(result, is.na)),
+    min(result, na.rm = TRUE) >= 1,
+    max(result, na.rm = TRUE) <= nClus
+  )
+
+  factor(result, levels = 1:nClus, labels = clusterNames)
+})
+
+
 #' @export
 #' @title Convert a repeated measures data matrix to a data.frame
 #' @param data The `matrix` containing a trajectory on each row.
