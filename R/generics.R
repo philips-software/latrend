@@ -18,13 +18,7 @@ NULL
 #' @export
 #' @name latrend-generics
 setGeneric('trajectoryAssignments', function(object, ...) {
-  assignments <- standardGeneric('trajectoryAssignments')
-
-  assert_that(
-    length(assignments) == nIds(object)
-  )
-
-  make.trajectoryAssignments(object, assignments)
+  standardGeneric('trajectoryAssignments')
 })
 
 #' @export

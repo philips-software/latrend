@@ -239,13 +239,18 @@ setMethod('trajectoryAssignments', signature('lcModel'), function(object, strate
   pp = postprob(object)
 
   result = apply(pp, 1, strategy, ...)
-  assert_that(is.numeric(result),
-    length(result) == nrow(pp),
+
+  assert_that(
+    is.numeric(result),
+    length(result) == nIds(object),
     all(sapply(result, is.count) | sapply(result, is.na)),
     min(result, na.rm = TRUE) >= 1,
-    max(result, na.rm = TRUE) <= nClusters(object))
+    max(result, na.rm = TRUE) <= nClusters(object)
+  )
 
-  factor(result, levels = 1:nClusters(object), labels = clusterNames(object))
+  assignments = factor(result, levels = 1:nClusters(object), labels = clusterNames(object))
+
+  make.trajectoryAssignments(object, assignments)
 })
 
 
