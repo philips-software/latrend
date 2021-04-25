@@ -615,7 +615,13 @@ is.lcModel = function(x) {
 logLik.lcModel = function(object, ...) {
   if (is.null(object@model) ||
       is.null(getS3method('logLik', class = class(object@model), optional = TRUE))) {
-    as.numeric(NA)
+    N = nIds(object)
+    df = length(coef(object))
+    ll = as.numeric(NA)
+    attr(ll, 'nobs') = N
+    attr(ll, 'df') = df
+    class(ll) = 'logLik'
+    ll
   } else {
     logLik(object@model)
   }
@@ -1059,6 +1065,7 @@ setMethod('predictAssignments', signature('lcModel'), function(object, newdata =
 #' plot(model)
 setMethod('plot', signature('lcModel'), function(x, y, ...) {
   args = list(...)
+
   if(!has_name(args, 'trajectories')) {
     args$trajectories = TRUE
   }
