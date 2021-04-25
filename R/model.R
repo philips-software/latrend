@@ -243,7 +243,7 @@ setMethod('trajectoryAssignments', signature('lcModel'), function(object, strate
   assert_that(
     is.numeric(result),
     length(result) == nIds(object),
-    all(sapply(result, is.count) | sapply(result, is.na)),
+    all(vapply(result, is.count, FUN.VALUE = TRUE) | vapply(result, is.na, FUN.VALUE = TRUE)),
     min(result, na.rm = TRUE) >= 1,
     max(result, na.rm = TRUE) <= nClusters(object)
   )

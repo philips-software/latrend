@@ -29,7 +29,7 @@ setMethod('trajectoryAssignments', signature('matrix'), function(object, strateg
   assert_that(
     is.numeric(result),
     length(result) == nTraj,
-    all(sapply(result, is.count) | sapply(result, is.na)),
+    all(vapply(result, is.count, FUN.VALUE = TRUE) | vapply(result, is.na, FUN.VALUE = TRUE)),
     min(result, na.rm = TRUE) >= 1,
     max(result, na.rm = TRUE) <= nClus
   )
