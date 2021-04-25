@@ -23,36 +23,52 @@ if(file.exists(mixt_file)) {
 
 expect_valid_lcModel = function(object) {
   expect_s4_class(object, 'lcModel')
+  expect_true(is.count(nClusters(object)))
 
+  # clusters
   # change cluster names to ensure the model implementations correctly handle this
   clusNames = paste0('T', seq_len(nClusters(object)))
   clusterNames(object) = clusNames
+  expect_is(clusterNames(object), 'character')
+  expect_length(clusterNames(object), nClusters(object))
   expect_equal(clusterNames(object), clusNames)
+  expect_is(clusterSizes(object), 'integer')
+  expect_true(all(clusterSizes(object) >= 0))
+  expect_is(clusterProportions(object), 'numeric')
+  expect_gte(min(clusterProportions(object)), 0)
+  expect_lte(max(clusterProportions(object)), 1)
 
-  getCall(object) %>%
-    expect_is('call')
-  model.data(object) %>%
-    expect_is('data.frame')
-  getName(object) %>%
-    expect_is('character')
-  getShortName(object) %>%
-    expect_is('character')
-  idVariable(object) %>%
-    expect_is('character')
-  timeVariable(object) %>%
-    expect_is('character')
-  responseVariable(object) %>%
-    expect_is('character')
-  coef(object) %>%
-    expect_is(c('numeric', 'matrix', 'list', 'NULL'), label='coef')
-  converged(object) %>%
-    expect_is(c('logical', 'numeric', 'integer'), label='converged')
-  nClusters(object) %T>%
-    {expect_true(is.count(.))}
-  clusterNames(object) %>%
-    expect_is('character') %>%
-    expect_length(nClusters(object))
+  expect_is(getCall(object), 'call')
+  expect_is(getName(object), 'character')
+  expect_is(getShortName(object), 'character')
+  expect_is(idVariable(object), 'character')
+  expect_is(timeVariable(object), 'character')
+  expect_is(responseVariable(object), 'character')
+  expect_is(coef(object), c('numeric', 'matrix', 'list', 'NULL'), label='coef')
+  expect_is(converged(object), c('logical', 'numeric', 'integer'), label='converged')
 
+  expect_true(is.count(nobs(object)))
+
+  expect_true(is.count(nIds(object)))
+  expect_length(ids(object), nIds(object))
+
+  expect_true(is.numeric(time(object)))
+  expect_gt(length(time(object)), 0)
+
+  expect_is(deviance(object), 'numeric')
+  expect_true(is.numeric(df.residual(object)))
+  expect_is(logLik(object), 'logLik')
+  expect_is(sigma(object), 'numeric')
+  expect_gte(estimationTime(object), 0)
+  expect_is(formula(object), 'formula')
+
+
+  # model.data
+  expect_is(model.data(object), 'data.frame')
+  expect_true(has_name(model.data(object), c(
+    idVariable(object),
+    timeVariable(object),
+    responseVariable(object))))
 
   # Posterior
   pp = postprob(object)
@@ -63,6 +79,8 @@ expect_valid_lcModel = function(object) {
   expect_length(clus, nIds(object))
   expect_gte(min(as.integer(clus)), 1)
   expect_lte(max(as.integer(clus)), nIds(object))
+
+  expect_is(confusionMatrix(object), 'matrix')
 
   # Predict
   if(!is(object, 'lcModelCustom')) {
