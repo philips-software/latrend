@@ -66,7 +66,8 @@ lcModelWeightedPartition = function(data,
     clusterNames = clusterNames,
     id = id,
     time = time,
-    response = response
+    response = response,
+    estimationTime = 0
   )
 }
 

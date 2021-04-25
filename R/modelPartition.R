@@ -94,7 +94,8 @@ lcModelPartition = function(data,
     clusterNames = clusterNames,
     id = id,
     time = time,
-    response = response
+    response = response,
+    estimationTime = 0
   )
   environment(model) = envir
   return(model)
