@@ -82,15 +82,17 @@ assertthat::on_failure(has_lcMethod_args) = function(call, env) {
 
 #' @export
 #' @rdname assert
-#' @description Check whether the input is a valid posterior probability matrix for the given model.
+#' @description Check whether the input is a valid posterior probability matrix (for the given model).
 #' @param pp The posterior probability `matrix`.
-#' @param model The `lcModel` object.
-is_valid_postprob = function(pp, model) {
-  assert_that(is.lcModel(model))
+#' @param model The `lcModel` object. Optional.
+is_valid_postprob = function(pp, model = NULL) {
+  assert_that(is.null(model) || is.lcModel(model))
+
+  clusColsOK = is.null(model) || ncol(pp) == nClusters(model)
 
   is.matrix(pp) &&
     is.numeric(pp) &&
-    ncol(pp) == nClusters(model) &&
+    clusColsOK &&
     noNA(pp) &&
     min(pp) >= 0 &&
     max(pp) <= 1 &&
@@ -105,11 +107,20 @@ is_valid_postprob = function(pp, model) {
 assertthat::on_failure(is_valid_postprob) = function(call, env) {
   pp = eval(call$pp, env)
   model = eval(call$model, env)
-  validate_that(is.matrix(pp) &&
-      is.numeric(pp) &&
-      ncol(pp) == nClusters(model) &&
-      noNA(pp) &&
-      min(pp) >= 0 &&
-      max(pp) <= 1 &&
-      isTRUE(all.equal(rowSums(pp), rep(1, nrow(pp)))))
+
+  if (!is.null(model)) {
+    clusVal = validate_that(ncol(pp) == nClusters(model))
+    if (clusVal) {
+      return (clusVal)
+    }
+  }
+
+  validate_that(
+    is.matrix(pp) &&
+    is.numeric(pp) &&
+    noNA(pp) &&
+    min(pp) >= 0 &&
+    max(pp) <= 1 &&
+    isTRUE(all.equal(rowSums(pp), rep(1, nrow(pp))))
+  )
 }

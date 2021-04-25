@@ -8,7 +8,7 @@
 \usage{
 has_lcMethod_args(object, which)
 
-is_valid_postprob(pp, model)
+is_valid_postprob(pp, model = NULL)
 }
 \arguments{
 \item{object}{The object to test.}
@@ -17,11 +17,11 @@ is_valid_postprob(pp, model)
 
 \item{pp}{The posterior probability \code{matrix}.}
 
-\item{model}{The \code{lcModel} object.}
+\item{model}{The \code{lcModel} object. Optional.}
 }
 \description{
 Assertions and checks that may be of use for custom model implementations.
 
-Check whether the input is a valid posterior probability matrix for the given model.
+Check whether the input is a valid posterior probability matrix (for the given model).
 }
 \keyword{internal}
