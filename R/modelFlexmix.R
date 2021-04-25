@@ -50,7 +50,13 @@ setMethod('postprob', signature('lcModelFlexmix'), function(object, ...) {
 #' @export
 #' @rdname interface-flexmix
 logLik.lcModelFlexmix = function(object, ...) {
-  logLik(object@model)
+  ll = object@model@logLik
+  N = nIds(object)
+  df = length(coef(object))
+  attr(ll, 'nobs') = N
+  attr(ll, 'df') = df
+  class(ll) = 'logLik'
+  ll
 }
 
 
