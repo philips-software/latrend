@@ -3,10 +3,6 @@
 \docType{class}
 \name{lcMethod-class}
 \alias{lcMethod-class}
-\alias{compose}
-\alias{compose,lcMethod-method}
-\alias{fit}
-\alias{fit,lcMethod-method}
 \alias{getLabel}
 \alias{getLabel,lcMethod-method}
 \alias{getName}
@@ -15,20 +11,8 @@
 \alias{getShortName,lcMethod-method}
 \alias{length,lcMethod-method}
 \alias{names,lcMethod-method}
-\alias{preFit}
-\alias{preFit,lcMethod-method}
-\alias{prepareData}
-\alias{prepareData,lcMethod-method}
-\alias{postFit}
-\alias{postFit,lcMethod-method}
-\alias{validate}
-\alias{validate,lcMethod-method}
 \title{lcMethod class}
 \usage{
-\S4method{compose}{lcMethod}(method, envir = NULL)
-
-\S4method{fit}{lcMethod}(method, data, envir, verbose)
-
 \S4method{getLabel}{lcMethod}(object, ...)
 
 \S4method{getName}{lcMethod}(object)
@@ -38,62 +22,21 @@
 \S4method{length}{lcMethod}(x)
 
 \S4method{names}{lcMethod}(x)
-
-\S4method{preFit}{lcMethod}(method, data, envir, verbose)
-
-\S4method{prepareData}{lcMethod}(method, data, verbose)
-
-\S4method{postFit}{lcMethod}(method, data, model, envir, verbose)
-
-\S4method{validate}{lcMethod}(method, data, envir = NULL, ...)
 }
 \arguments{
-\item{method}{The \code{lcMethod} object.}
-
-\item{envir}{The \code{environment} in which the \code{lcMethod} should be evaluated}
-
-\item{data}{The data, as a \code{data.frame}, on which the model will be trained.}
-
-\item{verbose}{A \link[R.utils:Verbose]{R.utils::Verbose} object indicating the level of verbosity.}
-
 \item{object}{The object to extract the label from.}
 
 \item{...}{Additional arguments.}
 
 \item{x}{The \code{lcMethod} object.}
-
-\item{model}{The \code{lcModel} object returned by \code{fit()}.}
 }
 \value{
-The updated \code{lcMethod} object.
-
-An \code{lcModel} object.
-
 The extracted label, as \code{character}.
 
 A \verb{character vector} of argument names.
-
-An \code{environment} that will be passed to \code{fit()}.
-
-A \code{data.frame} with the post-processed data.
-
-The updated \code{lcModel} object.
-
-Either \code{TRUE} if all validation checks passed,
-or a \code{character} containing a description of the failed validation checks.
 }
 \description{
-Base class used to define a longitudinal cluster method. It is implemented as a wrapper around a \code{call}.
-
-Model estimation is handled through a series of calls implement by the \code{lcMethod} object. The calls are made by \link{latrend}, in the following order:
-\itemize{
-\item compose
-\item validate
-\item prepareData
-\item preFit
-\item fit
-\item postFit
-}
+Base class used to define a longitudinal cluster method.
 
 Extracts the assigned label.
 
@@ -110,6 +53,22 @@ A default \code{environment} can be assigned or obtained from a \code{lcMethod} 
 
 \item{\code{sourceCalls}}{A list of calls for tracking the original call after substitution. Used for printing objects which require too many characters (e.g. ,function definitions, matrices).}
 }}
+
+\section{Fitting procedure}{
+
+The fitting procedure for \code{lcMethod} objects is handled through a series of steps implemented by the \code{lcMethod} object.
+The fitting procedure is handled by \code{\link[=latrend]{latrend()}}, in executed in the following order:
+\enumerate{
+\item \code{\link[=compose]{compose()}}: Evaluate and finalize the method argument values.
+\item \code{\link[=validate]{validate()}}: Check the validity of the method argument values.
+\item \code{\link[=prepareData]{prepareData()}}: Process the training data for fitting.
+\item \code{\link[=preFit]{preFit()}}: Prepare environment for estimation, independent of training data.
+\item \code{\link[=fit]{fit()}}: Estimate the specified method on the training data, outputting an object inheriting from \code{lcModel}.
+\item \code{\link[=postFit]{postFit()}}: Post-process the outputted \code{lcModel} object.
+}
+
+The result of the fitting procedure is an \linkS4class{lcModel} object that inherits from the \code{lcModel} class.
+}
 
 \examples{
 getName(lcMethodKML("Y")) # "longitudinal k-means"

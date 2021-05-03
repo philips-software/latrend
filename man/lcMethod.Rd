@@ -20,5 +20,5 @@ Provides a mechanism for creating \code{lcMethod} objects for an arbitrary class
 Note that it is advisable to use the class-specific constructors instead.
 }
 \seealso{
-\link{lcMethod.call}
+\linkS4class{lcMethod} \link{lcMethod.call}
 }

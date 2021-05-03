@@ -34,15 +34,13 @@
 \arguments{
 \item{object}{The object to extract the label from.}
 
-\item{method}{The \code{lcMethod} object.}
+\item{method}{An object inheriting from \code{lcMethod} with all its arguments having been evaluated and finalized.}
 
-\item{data}{The data, as a \code{data.frame}, on which the model will be trained.}
+\item{data}{A \code{data.frame} representing the transformed training data.}
 
 \item{verbose}{A \link[R.utils:Verbose]{R.utils::Verbose} object indicating the level of verbosity.}
 
 \item{...}{Additional arguments.}
-
-\item{envir}{The \code{environment} in which the \code{lcMethod} should be evaluated}
 
 \item{at}{An optional vector, list or data frame of covariates at which to compute the cluster trajectory predictions.
 If a vector is specified, this is assumed to be the time covariate. Otherwise, a named list or data frame must be provided.}

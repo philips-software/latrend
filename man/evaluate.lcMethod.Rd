@@ -30,6 +30,8 @@ A new \code{lcMethod} object with the substituted arguments.
 Substitutes the call arguments if they can be evaluated without error.
 }
 \seealso{
+\link{compose}
+
 Other lcMethod functions: 
 \code{\link{[[,lcMethod-method}},
 \code{\link{as.data.frame.lcMethods}()},

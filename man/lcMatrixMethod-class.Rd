@@ -19,9 +19,9 @@
 
 \item{...}{Additional arguments.}
 
-\item{method}{The \code{lcMethod} object.}
+\item{method}{An object inheriting from \code{lcMethod} with all its arguments having been evaluated and finalized.}
 
-\item{data}{The data, as a \code{data.frame}, on which the model will be trained.}
+\item{data}{A \code{data.frame} representing the transformed training data.}
 
 \item{verbose}{A \link[R.utils:Verbose]{R.utils::Verbose} object indicating the level of verbosity.}
 }

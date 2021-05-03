@@ -1,15 +1,22 @@
 #' @export
 #' @name lcMethod-class
+#' @rdname lcMethod-class
 #' @title lcMethod class
-#' @description Base class used to define a longitudinal cluster method. It is implemented as a wrapper around a `call`.
+#' @description Base class used to define a longitudinal cluster method.
+#' @section Fitting procedure:
+#' The fitting procedure for `lcMethod` objects is handled through a series of steps implemented by the `lcMethod` object.
+#' The fitting procedure is handled by [latrend()], in executed in the following order:
+#' \enumerate{
+#'   \item [compose()]: Evaluate and finalize the method argument values.
+#'   \item [validate()]: Check the validity of the method argument values.
+#'   \item [prepareData()]: Process the training data for fitting.
+#'   \item [preFit()]: Prepare environment for estimation, independent of training data.
+#'   \item [fit()]: Estimate the specified method on the training data, outputting an object inheriting from `lcModel`.
+#'   \item [postFit()]: Post-process the outputted `lcModel` object.
+#' }
 #'
-#' Model estimation is handled through a series of calls implement by the `lcMethod` object. The calls are made by [latrend], in the following order:
-#' * compose
-#' * validate
-#' * prepareData
-#' * preFit
-#' * fit
-#' * postFit
+#' The result of the fitting procedure is an [lcModel-class] object that inherits from the `lcModel` class.
+#'
 #' @details Because the `lcMethod` arguments may be unevaluated, evaluation functions such as `[[` accept an `envir` argument.
 #' A default `environment` can be assigned or obtained from a `lcMethod` object using the `environment()` function.
 #' @seealso [environment]
@@ -27,12 +34,10 @@ setMethod('initialize', 'lcMethod', function(.Object, ...) {
 
 #. validity ####
 setValidity('lcMethod', function(object) {
-  assert_that(all(vapply(
-    lapply(names(object), nchar), '>', 0, FUN.VALUE = TRUE
-  )), msg = 'lcMethod argument names cannot be empty')
-  assert_that(!any(vapply(
-    names(object), startsWith, '.', FUN.VALUE = TRUE
-  )), msg = 'lcMethod argument names cannot start with "."')
+  assert_that(all(vapply(lapply(names(object), nchar), '>', 0, FUN.VALUE = TRUE)),
+    msg = 'lcMethod argument names cannot be empty')
+  assert_that(!any(vapply(names(object), startsWith, '.', FUN.VALUE = TRUE)),
+    msg = 'lcMethod argument names cannot start with "."')
   assert_that(!has_name(object, 'data'), msg = 'lcMethod argument name cannot be "data"')
   assert_that(!has_name(object, 'envir'), msg = 'lcMethod argument name cannot be "envir"')
   assert_that(!has_name(object, 'verbose'), msg = 'lcMethod argument name cannot be "verbose"')
@@ -81,13 +86,11 @@ setMethod('$', signature('lcMethod'), function(x, name) {
 setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL) {
   envir = lcMethod.env(x, parent.frame(3), envir)
   if (is.character(i)) {
-    assert_that(has_name(x, i),
-                msg = sprintf('method does not have an argument named "%s"', i))
+    assert_that(has_name(x, i), msg = sprintf('method does not have an argument named "%s"', i))
     arg = get(i, envir = x@arguments)
   } else {
     argName = names(x)[i]
-    assert_that(!is.na(argName),
-                msg = sprintf('index "%s" exceeded argument name options', i))
+    assert_that(!is.na(argName), msg = sprintf('index "%s" exceeded argument name options', i))
     arg = get(i, envir = x@arguments)
   }
 
@@ -104,11 +107,8 @@ setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL)
           eval(arg, envir = parent.env(getNamespace(.packageName)))
         }, error = function(e3) {
           stop(
-            sprintf(
-              'error in evaluating lcMethod argument "%s" with expression "%s":\n\t%s',
-              i,
-              deparse(e2$call),
-              e2$message
+            sprintf('error in evaluating lcMethod argument "%s" with expression "%s":\n\t%s',
+              i, deparse(e2$call), e2$message
             )
           )
         })
@@ -134,11 +134,8 @@ setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL)
 #' @param ... Any arguments to assign to the method object.
 #' @param .defaults See `defaults` of [lcMethod.call].
 #' @param .excludeArgs See `excludeArgs` of [lcMethod.call].
-#' @seealso [lcMethod.call]
-lcMethod = function(.class,
-                     ...,
-                     .defaults = list(),
-                     .excludeArgs = c()) {
+#' @seealso [lcMethod-class] [lcMethod.call]
+lcMethod = function(.class, ..., .defaults = list(), .excludeArgs = c()) {
   mc = match.call()
   mc[[1]] = as.name(.class)
   mc$.class = NULL
@@ -182,11 +179,12 @@ lcMethod.call = function(Class,
                           excludeArgs = c()) {
   classRep = getClass(Class)
   assert_that('lcMethod' %in% names(classRep@contains), msg = 'specified class does not inherit from lcMethod')
-  assert_that(is.call(call))
-  assert_that(is.function(defaults) ||
-                is.list(defaults) &&
-                all(vapply(defaults, is.function, FUN.VALUE = TRUE)))
-  assert_that(is.null(excludeArgs) || is.character(excludeArgs))
+  assert_that(
+    is.call(call),
+    is.function(defaults) ||
+      is.list(defaults) &&
+      all(vapply(defaults, is.function, FUN.VALUE = TRUE)),
+    is.null(excludeArgs) || is.character(excludeArgs))
 
   excludeArgs = union(excludeArgs, c('verbose', 'envir', 'data'))
 
@@ -248,14 +246,13 @@ lcMethod.call = function(Class,
 #' # select arguments used by either kml() or parALGO()
 #' as.list(method, args = c(kml::kml, kml::parALGO))
 #' @family lcMethod functions
-as.list.lcMethod = function(x, ...,
-                            args = names(x),
-                            eval = TRUE,
-                            expand = FALSE,
-                            envir = NULL) {
-  assert_that(is.lcMethod(x),
-              is.flag(eval),
-              is.flag(expand))
+as.list.lcMethod = function(x, ..., args = names(x), eval = TRUE, expand = FALSE, envir = NULL) {
+  assert_that(
+    is.lcMethod(x),
+    is.flag(eval),
+    is.flag(expand)
+  )
+
   envir = lcMethod.env(x, parent.frame(), envir)
 
   if (is.function(args)) {
@@ -298,13 +295,12 @@ as.list.lcMethod = function(x, ...,
 #' @param nullValue Value to use to represent the `NULL` type. Must be of length 1.
 #' @return A single-row `data.frame` where each columns represents an argument call or evaluation.
 #' @family lcMethod functions
-as.data.frame.lcMethod = function(x, ...,
-                                  eval = FALSE,
-                                  nullValue = NA,
-                                  envir = NULL) {
-  assert_that(is.lcMethod(x),
-              is.flag(eval),
-              length(nullValue) == 1)
+as.data.frame.lcMethod = function(x, ..., eval = FALSE, nullValue = NA, envir = NULL) {
+  assert_that(
+    is.lcMethod(x),
+    is.flag(eval),
+    length(nullValue) == 1
+  )
 
   if (isTRUE(eval)) {
     envir = lcMethod.env(x, parent.frame(), envir)
@@ -344,9 +340,11 @@ as.data.frame.lcMethod = function(x, ...,
 #' @description Returns envir if specified. Otherwise, returns environment(object) if specified. The defaultEnvir is returned when the former two are NULL.
 #' @keywords internal
 lcMethod.env = function(object, defaultEnvir, envir) {
-  assert_that(is.lcMethod(object))
-  assert_that(is.null(defaultEnvir) || is.environment(defaultEnvir))
-  assert_that(is.null(envir) || is.environment(envir))
+  assert_that(
+    is.lcMethod(object),
+    is.null(defaultEnvir) || is.environment(defaultEnvir),
+    is.null(envir) || is.environment(envir)
+  )
 
   if (!is.null(envir)) {
     envir
@@ -361,12 +359,27 @@ lcMethod.env = function(object, defaultEnvir, envir) {
 #. compose ####
 #' @export
 #' @name compose
-#' @rdname lcMethod-class
 #' @aliases compose,lcMethod-method
+#' @title Compose an lcMethod object
+#' @description Evaluate and finalize the arguments of the given object inheriting from `lcMethod`.
+#' The default implementation returns an updated object with all arguments having been evaluated.
 #' @param method The `lcMethod` object.
 #' @param envir The `environment` in which the `lcMethod` should be evaluated
 #' @param ... Not used.
-#' @return The updated `lcMethod` object.
+#' @return The evaluated and finalized `lcMethod` object.
+#' @inheritSection lcMethod-class Fitting procedure
+#' @section Implementation:
+#' In general, there is no need to extend this method for a specific method, as all arguments are automatically evaluated by the `compose,lcMethod` method.
+#'
+#' However, in case there is a need to extend processing or to prevent evaluation of specific arguments (e.g., for handling errors), the method can be overridden for the specific `lcMethod` subclass.
+#' \preformatted{
+#' setMethod("compose", "lcMethodExample", function(method, envir = NULL) {
+#'   newMethod <- callNextMethod()
+#'   # further processing
+#'   return (newMethod)
+#' })
+#' }
+#' @seealso [evaluate.lcMethod]
 setMethod('compose', signature('lcMethod'), function(method, envir = NULL) {
   evaluate.lcMethod(method, try = FALSE, envir = envir)
 })
@@ -375,23 +388,36 @@ setMethod('compose', signature('lcMethod'), function(method, envir = NULL) {
 # . fit ####
 #' @export
 #' @name fit
-#' @rdname lcMethod-class
 #' @aliases fit,lcMethod-method
-#' @title lcMethod interface
-#' @param data The data, as a `data.frame`, on which the model will be trained.
-#' @param verbose A [R.utils::Verbose] object indicating the level of verbosity.
-#' @return An `lcModel` object.
+#' @title Fit an lcMethod object to the processed data
+#' @description Estimates the model as determined by the evaluated method specification, processed training data, and prepared environment.
+#' @inheritParams preFit
+#' @return The fitted object inheriting from `lcModel`.
+#' @section Implementation:
+#' This method should be implemented for all `lcMethod` subclasses.
+#'
+#' \preformatted{
+#' setMethod("fit", "lcMethodExample", function(method, data, envir, verbose) {
+#'   # estimate the model or cluster parameters
+#'   coefs <- FIT_CODE
+#'
+#'   # create the lcModel object
+#'   new("lcModelExample",
+#'     method = method,
+#'     data = data,
+#'     model = coefs,
+#'     clusterNames = make.clusterNames(method$nClusters)
+#'   )
+#' }
+#' }
+#' @inheritSection lcMethod-class Fitting procedure
 setMethod('fit', signature('lcMethod'), function(method, data, envir, verbose) {
   stop(
-    sprintf(
-      'method cannot be estimated because the fit() function is not implemented for lcMethod of class %s.
+    sprintf('method cannot be estimated because the fit() function is not implemented for lcMethod of class %1$s.
    define the fit() method using:
-      \tsetMethod("fit", signature("%s"), function(method, data, verbose) {
+      \tsetMethod("fit", signature("%1$s"), function(method, data, verbose) {
       \t\t<your code returning a lcModel-extended class here>
-      \t})")'
-    ),
-    class(method)[1],
-    class(method)[1]
+      \t})")', class(method)[1])
   )
 })
 
@@ -408,16 +434,22 @@ setMethod('fit', signature('lcMethod'), function(method, data, envir, verbose) {
 #' m <- lcMethodMixtoolsGMM(formula = Y ~ Time + (1 | Id))
 #' formula(m) # Y ~ Time + (1 | Id)
 #' @family lcMethod functions
-formula.lcMethod = function(x, what = 'mu',
-                            envir = NULL, ...) {
-  assert_that(is.lcMethod(x))
+formula.lcMethod = function(x, what = 'mu', envir = NULL, ...) {
+  assert_that(
+    is.lcMethod(x),
+    is.scalar(what),
+    is.character(what)
+  )
+
   envir = lcMethod.env(x, parent.frame(), envir)
-  assert_that(is.scalar(what), is.character(what))
+
   if (what == 'mu') {
-    x$formula
+    f = x$formula
   } else {
-    x[[paste0('formula.', what)]]
+    f = x[[paste0('formula.', what)]]
   }
+  environment(f) = envir
+  f
 }
 
 
@@ -493,10 +525,12 @@ setMethod('idVariable', signature('lcMethod'), function(object, ...) object$id)
 #' @param envir The `environment` to evaluate the arguments in. If `NULL`, the argument is not evaluated.
 #' @keywords internal
 isArgDefined = function(object, name, envir = environment(object)) {
-  assert_that(is.lcMethod(object),
+  assert_that(
+    is.lcMethod(object),
     is.character(name),
     is.scalar(name),
-    is.environment(envir) || is.null(envir))
+    is.environment(envir) || is.null(envir)
+  )
 
   if (!hasName(object, name)) {
     return(FALSE)
@@ -558,32 +592,84 @@ setMethod('names', signature('lcMethod'), function(x) {
 
 # . preFit ####
 #' @name preFit
-#' @rdname lcMethod-class
 #' @aliases preFit,lcMethod-method
-#' @return An `environment` that will be passed to `fit()`.
+#' @title Prepare environment for fitting
+#' @description Perform preparatory work that is needed for fitting the method, but should not be counted towards the method estimation time.
+#' The work is added to the provided `environment`, allowing the [fit()] function to make use of the prepared work.
+#' @inheritParams prepareData
+#' @section Implementation:
+#' \preformatted{
+#' setMethod("preFit", "lcMethodExample", function(method, data, envir, verbose) {
+#'   # update envir with additional computed work
+#'   envir$x <- INTENSIVE_OPERATION
+#'   return (envir)
+#' })
+#' }
+#' @inheritSection lcMethod-class Fitting procedure
+#' @return The updated `environment` that will be passed to `fit()`.
 setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose) {
-  return(envir)
+  envir
 })
 
 
 # . prepareData ####
 #' @name prepareData
-#' @rdname lcMethod-class
 #' @aliases prepareData,lcMethod-method
-#' @return A `data.frame` with the post-processed data.
+#' @title Prepare the training data for fitting
+#' @description Post-process the training data to meet the method requirements, such as transforming the data to a matrix, truncating the response variable, or creating additional data objects.
+#'
+#' The computed variables are stored in an `environment` which is passed to the [preFit()] function for further processing.
+#'
+#' By default, this method does not do anything.
+#'
+#' @inheritParams validate
+#' @param verbose A [R.utils::Verbose] object indicating the level of verbosity.
+#' @return An `environment` with the prepared data variable(s) that will be passed to [preFit()].
+#' @section Implementation:
+#' A common use case for this method is when the internal method fitting procedure expects the data in a different format.
+#' In this example, the method converts the training data `data.frame` to a `matrix` of repeated and aligned trajectory measurements.
+#' \preformatted{
+#' setMethod("prepareData", "lcMethodExample", function(method, data, verbose) {
+#'   envir = new.env()
+#'   # transform the data to matrix
+#'   envir$dataMat = dcastRepeatedMeasures(data,
+#'     id = idColumn, time = timeColumn, response = valueColumn)
+#'   return (envir)
+#' })
+#' }
+#' @inheritSection lcMethod-class Fitting procedure
 setMethod('prepareData', signature('lcMethod'), function(method, data, verbose) {
-  return(NULL)
+  NULL
 })
 
 
 # . postFit ####
 #' @name postFit
-#' @rdname lcMethod-class
 #' @aliases postFit,lcMethod-method
-#' @param model The `lcModel` object returned by `fit()`.
+#' @title Post-process the fitted lcModel object
+#' @description Post-process the `lcModel` object returned by [fit()]. This can be used, for example, to (pre)compute additional metrics.
+#' By default, this method does not do anything and returns the original `lcModel` object.
+#'
+#' This is the last step in the `lcMethod` fitting procedure. The `postFit` method may be called again on fitted `lcModel` objects, allowing post-processing to be updated for existing models.
+#'
+#' @inheritParams fit
+#' @param model The `lcModel` object returned by [fit()].
 #' @return The updated `lcModel` object.
+#' @section Implementation:
+#' The method is intended to be able to be called on previously fitted `lcModel` objects as well, allowing for potential bugfixes or additions to previously fitted models.
+#' Therefore, when implementing this method, ensure that you do not discard information from the model which would prevent the method from being run a second time on the object.
+#'
+#' In this example, the `lcModelExample` class is assumed to be defined with a slot named `"centers"`:
+#' \preformatted{
+#' setMethod("postFit", "lcMethodExample", function(method, data, model, envir, verbose) {
+#'   # compute and store the cluster centers
+#'   model@centers <- INTENSIVE_COMPUTATION
+#'   return (model)
+#' })
+#' }
+#' @inheritSection lcMethod-class Fitting procedure
 setMethod('postFit', signature('lcMethod'), function(method, data, model, envir, verbose) {
-  return(model)
+  model
 })
 
 
@@ -595,8 +681,11 @@ setMethod('postFit', signature('lcMethod'), function(method, data, model, envir,
 #' @param envir The environment in which to evaluate the arguments when `eval = TRUE`.
 #' @param ... Not used.
 print.lcMethod = function(x, ..., eval = FALSE, width = 40, envir = NULL) {
-  assert_that(is.lcMethod(x),
-              is.flag(eval))
+  assert_that(
+    is.lcMethod(x),
+    is.flag(eval)
+  )
+
   envir = lcMethod.env(x, parent.frame(), envir)
   if (isTRUE(eval)) {
     x = evaluate.lcMethod(x, envir = envir)
@@ -643,14 +732,17 @@ print.lcMethod = function(x, ..., eval = FALSE, width = 40, envir = NULL) {
 #' @param try Whether to try to evaluate arguments and ignore errors (the default), or to fail on any argument evaluation error.
 #' @param exclude Arguments to exclude from evaluation.
 #' @return A new `lcMethod` object with the substituted arguments.
+#' @seealso [compose]
 #' @family lcMethod functions
 evaluate.lcMethod = function(object,
                                classes = 'ANY',
                                try = TRUE,
                                exclude = character(),
                                envir = NULL) {
-  assert_that(is.lcMethod(object),
-              is.character(classes))
+  assert_that(
+    is.lcMethod(object),
+    is.character(classes)
+  )
 
   envir = lcMethod.env(object, parent.frame(), envir)
 
@@ -715,14 +807,12 @@ evaluate.lcMethod = function(object,
 #' m5 <- update(m, nClusters = k, .eval = TRUE) # nClusters: 2
 #'
 #' @family lcMethod functions
-update.lcMethod = function(object,
-                           ...,
-                           .eval = FALSE,
-                           .remove = character(),
-                           envir = NULL) {
-  assert_that(is.lcMethod(object),
-              is.flag(.eval),
-              is.character(.remove))
+update.lcMethod = function(object, ..., .eval = FALSE, .remove = character(), envir = NULL) {
+  assert_that(
+    is.lcMethod(object),
+    is.flag(.eval),
+    is.character(.remove)
+  )
 
   envir = lcMethod.env(object, parent.frame(), envir)
 
@@ -881,10 +971,27 @@ setMethod('timeVariable', signature('lcMethod'), function(object, ...) object$ti
 #. validate ####
 #' @export
 #' @name validate
-#' @rdname lcMethod-class
 #' @aliases validate,lcMethod-method
+#' @title Validate the argument values of a lcMethod object
+#' @inheritParams compose
+#' @param method An object inheriting from `lcMethod` with all its arguments having been evaluated and finalized.
+#' @param data A `data.frame` representing the transformed training data.
 #' @return Either `TRUE` if all validation checks passed,
 #' or a `character` containing a description of the failed validation checks.
+#' @inheritSection lcMethod-class Fitting procedure
+#' @section Implementation:
+#' An example implementation checking for the existence of specific arguments and type:
+#' \preformatted{
+#' library(assertthat)
+#' setMethod("validate", "lcMethodExample", function(method, data, envir = NULL, ...) {
+#'   validate_that(
+#'     hasName(method, "myArgument"),
+#'     hasName(method, "anotherArgument"),
+#'     is.numeric(method$myArgument)
+#'   )
+#' })
+#' }
+#' @seealso [assertthat::validate_that]
 setMethod('validate', signature('lcMethod'), function(method, data, envir = NULL, ...) {
   validate_that(
     hasName(data, idVariable(method)),
