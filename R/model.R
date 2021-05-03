@@ -82,15 +82,16 @@ setValidity('lcModel', function(object) {
     return(TRUE)
   }
 
-  assert_that(nchar(object@id) > 0,
-              nchar(object@time) > 0,
-              nchar(object@response) > 0)
+  assert_that(
+    nchar(object@id) > 0,
+    nchar(object@time) > 0,
+    nchar(object@response) > 0
+  )
 
   data = model.data(object)
-  assert_that(!is.null(data), msg = 'invalid data object for new lcModel. Either specify the data slot or ensure that the model call contains a data argument which correctly evaluates.')
-  assert_that(has_name(data, c(
-    object@id, object@time, object@response
-  )))
+  assert_that(!is.null(data),
+    msg = 'invalid data object for new lcModel. Either specify the data slot or ensure that the model call contains a data argument which correctly evaluates.')
+  assert_that(has_name(data, c(object@id, object@time, object@response)))
   return(TRUE)
 })
 
@@ -165,9 +166,12 @@ clusterNames = function(object, factor = FALSE) {
 #' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' clusterNames(model) <- c("Group 1", "Group 2")
 `clusterNames<-` = function(object, value) {
-  assert_that(is.lcModel(object),
+  assert_that(
+    is.lcModel(object),
     is.character(value),
-    length(value) == nClusters(object))
+    length(value) == nClusters(object)
+  )
+
   object@clusterNames = value
   return(object)
 }
@@ -252,7 +256,9 @@ setMethod('trajectoryAssignments', signature('lcModel'), function(object, strate
   assert_that(
     is.numeric(result),
     length(result) == nIds(object),
-    all(vapply(result, is.count, FUN.VALUE = TRUE) | vapply(result, is.na, FUN.VALUE = TRUE)),
+    all(
+      vapply(result, is.count, FUN.VALUE = TRUE) |
+        vapply(result, is.na, FUN.VALUE = TRUE)),
     min(result, na.rm = TRUE) >= 1,
     max(result, na.rm = TRUE) <= nClusters(object)
   )
@@ -455,10 +461,7 @@ setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, ob
     value = fun(object, object2)
     assert_that(
       is.scalar(value) && (is.numeric(value) || is.logical(value)),
-      msg = sprintf(
-        'invalid output for metric "%s"; expected scalar number or logical value',
-        name
-      )
+      msg = sprintf('invalid output for metric "%s"; expected scalar number or logical value', name)
     )
     return(value)
   }, metricFuns, name[funMask])
@@ -957,11 +960,7 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
   }
 
   predList = mapply(function(cname, cdata) {
-    predictForCluster(object,
-                      cluster = cname,
-                      newdata = cdata,
-                      what = what,
-                      ...)
+    predictForCluster(object, cluster = cname, newdata = cdata, what = what, ...)
   }, names(clusdataList), clusdataList, SIMPLIFY = FALSE)
 
   assert_that(
@@ -996,9 +995,7 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
     )
   }
 
-  transformPredict(pred = pred,
-                   model = object,
-                   newdata = newdata)
+  transformPredict(pred = pred, model = object, newdata = newdata)
 }
 
 
@@ -1124,8 +1121,10 @@ setMethod('predictAssignments', signature('lcModel'), function(object, newdata =
     newdata = model.data(object)
   }
 
-  assert_that(is_valid_postprob(pp, object),
-              nrow(pp) == nrow(newdata))
+  assert_that(
+    is_valid_postprob(pp, object),
+    nrow(pp) == nrow(newdata)
+  )
 
   apply(pp, 1, strategy, ...) %>%
     factor(levels = 1:nClusters(object),
@@ -1270,9 +1269,7 @@ setMethod('postprob', signature('lcModel'), function(object, ...) {
   warning('postprob() not implemented for ', class(object)[1],
     '. Returning uniform posterior probability matrix.')
 
-  matrix(1 / nClusters(object),
-    nrow = nIds(object),
-    ncol = nClusters(object))
+  matrix(1 / nClusters(object), nrow = nIds(object), ncol = nClusters(object))
 })
 
 
