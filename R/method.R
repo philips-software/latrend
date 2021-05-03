@@ -1,11 +1,27 @@
 #' @export
 #' @name lcMethod-class
 #' @rdname lcMethod-class
+#' @aliases lcMethod
 #' @title lcMethod class
-#' @description Base class used to define a longitudinal cluster method.
+#' @description Objects of type `lcMethod` enable the specification and estimation of different methods for longitudinal clustering.
+#' The base class `lcMethod` provides the logic for storing, evaluating, and printing the method parameters.
+#'
+#' Subclasses of `lcMethod` differ only on the fitting procedure logic (see below).
+#'
+#' The intended way for specifying methods is through the method-specific constructor functions, e.g., through [lcMethodKML], [lcMethodLcmmGBTM], or [lcMethodDtwclust].
+#'
+#' @section Method arguments:
+#' `lcMethod` objects represent the specification of a method with a set of configurable parameters (referred to as arguments).
+#'
+#' Arguments can be of any type. It is up to the `lcMethod` implementation of [validate()] to ensure that the required arguments are present and are of the expected type.
+#'
+#' Arguments can have almost any name. Exceptions include the names `"data"`, `"envir"`, and `"verbose"`. Furthermore, argument names may not start with a period (`"."`).
+#'
+#' Arguments cannot be directly modified, i.e., `lcMethod` objects are immutable. Modifying an argument involves creating a derivative object through the [update.lcMethod] method.
+#'
 #' @section Fitting procedure:
-#' The fitting procedure for `lcMethod` objects is handled through a series of steps implemented by the `lcMethod` object.
-#' The fitting procedure is handled by [latrend()], in executed in the following order:
+#' Each `lcMethod` subclass defines a type of methods in terms of a series of steps for estimating the method.
+#' These steps, as part of the fitting procedure, are executed by [latrend()] in the following order:
 #' \enumerate{
 #'   \item [compose()]: Evaluate and finalize the method argument values.
 #'   \item [validate()]: Check the validity of the method argument values.
@@ -17,9 +33,9 @@
 #'
 #' The result of the fitting procedure is an [lcModel-class] object that inherits from the `lcModel` class.
 #'
-#' @details Because the `lcMethod` arguments may be unevaluated, evaluation functions such as `[[` accept an `envir` argument.
+#' @details Because the `lcMethod` arguments may be unevaluated, argument retrieval functions such as `[[` accept an `envir` argument.
 #' A default `environment` can be assigned or obtained from a `lcMethod` object using the `environment()` function.
-#' @seealso [environment]
+#' @seealso [environment] [lcMethod-constructor]
 #' @slot arguments A `list` representing the arguments of the `lcMethod` object. Arguments are not evaluated upon creation of the method object. Instead, arguments are stored similar to a `call` object. Do not modify or access.
 #' @slot sourceCalls A list of calls for tracking the original call after substitution. Used for printing objects which require too many characters (e.g. ,function definitions, matrices).
 #' @family lcMethod implementations
@@ -127,6 +143,8 @@ setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL)
 
 
 #' @export
+#' @name lcMethod-constructor
+#' @rdname lcMethod-constructor
 #' @title Create a lcMethod object of the specified type and arguments
 #' @description Provides a mechanism for creating `lcMethod` objects for an arbitrary class.
 #' Note that it is advisable to use the class-specific constructors instead.

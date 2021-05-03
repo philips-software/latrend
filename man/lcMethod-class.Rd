@@ -3,6 +3,7 @@
 \docType{class}
 \name{lcMethod-class}
 \alias{lcMethod-class}
+\alias{lcMethod}
 \alias{getLabel}
 \alias{getLabel,lcMethod-method}
 \alias{getName}
@@ -36,14 +37,19 @@ The extracted label, as \code{character}.
 A \verb{character vector} of argument names.
 }
 \description{
-Base class used to define a longitudinal cluster method.
+Objects of type \code{lcMethod} enable the specification and estimation of different methods for longitudinal clustering.
+The base class \code{lcMethod} provides the logic for storing, evaluating, and printing the method parameters.
+
+Subclasses of \code{lcMethod} differ only on the fitting procedure logic (see below).
+
+The intended way for specifying methods is through the method-specific constructor functions, e.g., through \link{lcMethodKML}, \link{lcMethodLcmmGBTM}, or \link{lcMethodDtwclust}.
 
 Extracts the assigned label.
 
 Extracts the name of the given \code{object}.
 }
 \details{
-Because the \code{lcMethod} arguments may be unevaluated, evaluation functions such as \code{[[} accept an \code{envir} argument.
+Because the \code{lcMethod} arguments may be unevaluated, argument retrieval functions such as \code{[[} accept an \code{envir} argument.
 A default \code{environment} can be assigned or obtained from a \code{lcMethod} object using the \code{environment()} function.
 }
 \section{Slots}{
@@ -54,10 +60,21 @@ A default \code{environment} can be assigned or obtained from a \code{lcMethod} 
 \item{\code{sourceCalls}}{A list of calls for tracking the original call after substitution. Used for printing objects which require too many characters (e.g. ,function definitions, matrices).}
 }}
 
+\section{Method arguments}{
+
+\code{lcMethod} objects represent the specification of a method with a set of configurable parameters (referred to as arguments).
+
+Arguments can be of any type. It is up to the \code{lcMethod} implementation of \code{\link[=validate]{validate()}} to ensure that the required arguments are present and are of the expected type.
+
+Arguments can have almost any name. Exceptions include the names \code{"data"}, \code{"envir"}, and \code{"verbose"}. Furthermore, argument names may not start with a period (\code{"."}).
+
+Arguments cannot be directly modified, i.e., \code{lcMethod} objects are immutable. Modifying an argument involves creating a derivative object through the \link{update.lcMethod} method.
+}
+
 \section{Fitting procedure}{
 
-The fitting procedure for \code{lcMethod} objects is handled through a series of steps implemented by the \code{lcMethod} object.
-The fitting procedure is handled by \code{\link[=latrend]{latrend()}}, in executed in the following order:
+Each \code{lcMethod} subclass defines a type of methods in terms of a series of steps for estimating the method.
+These steps, as part of the fitting procedure, are executed by \code{\link[=latrend]{latrend()}} in the following order:
 \enumerate{
 \item \code{\link[=compose]{compose()}}: Evaluate and finalize the method argument values.
 \item \code{\link[=validate]{validate()}}: Check the validity of the method argument values.
@@ -77,7 +94,7 @@ m = lcMethodKML("Y")
 names(m)
 }
 \seealso{
-\link{environment}
+\link{environment} \link{lcMethod-constructor}
 
 Other lcMethod implementations: 
 \code{\link{lcMethodAkmedoids}},
