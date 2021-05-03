@@ -25,6 +25,18 @@ An \code{lcModel} object of the same type as the \code{object} argument.
 \description{
 Strip a lcModel of non-essential variables and environments in order to reduce the model size for serialization.
 }
+\section{Implementation}{
+
+Classes extending \code{lcModel} can override this method to remove additional non-essentials.
+\preformatted{
+setMethod("strip", "lcModelExt", function(object, ..., classes = "formula") {
+  object <- callNextMethod()
+  # further process the object
+  return (object)
+})
+}
+}
+
 \examples{
 library(lcmm)
 data(latrendData)

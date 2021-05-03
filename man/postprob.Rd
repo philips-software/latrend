@@ -21,6 +21,16 @@ Get the posterior probability matrix with element \eqn{(i,j)} indicating the pro
 \details{
 This method should be extended by \code{lcModel} implementations. The default implementation returns uniform probabilities for all observations.
 }
+\section{Implementation}{
+
+Classes extending \code{lcModel} should override this method.
+\preformatted{
+setMethod("postprob", "lcModelExt", function(object, ...) {
+  # return trajectory-specific posterior probability matrix
+})
+}
+}
+
 \examples{
 library(lcmm)
 data(latrendData)

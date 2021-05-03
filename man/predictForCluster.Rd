@@ -31,6 +31,18 @@ The main purpose of this function is to make it easier to implement the predicti
 \details{
 The default \code{predictForCluster()} method makes use of \code{\link[=predict.lcModel]{predict.lcModel()}}, and vice versa. For this to work, any extending \code{lcModel} classes, e.g., \code{lcModelExample}, should implement either \code{predictForCluster(lcModelExample)} or \code{predict.lcModelExample()}. When implementing new models, it is advisable to implement \code{predictForCluster} as the cluster-specific computation generally results in shorter and simpler code.
 }
+\section{Implementation}{
+
+Classes extending \code{lcModel} should override this method, unless \code{\link[=predict.lcModel]{predict.lcModel()}} is preferred.
+\preformatted{
+setMethod("predictForCluster", "lcModelExt",
+ function(object, newdata = NULL, cluster, ..., what = "mu") {
+  # return model predictions for the given data under the
+  # assumption of the data belonging to the given cluster
+})
+}
+}
+
 \examples{
 library(kml)
 data(latrendData)

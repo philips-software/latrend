@@ -17,9 +17,25 @@ Either \code{logical} indicating convergence, or a \code{numeric} status code.
 }
 \description{
 Check convergence of the fitted \code{lcModel} object.
-}
-\details{
 The default implementation returns \code{NA}.
+}
+\section{Implementation}{
+
+Classes extending \code{lcModel} can override this method to return a convergence status or code.
+\preformatted{
+setMethod("converged", "lcModelExt", function(object, ...) {
+  # return convergence code
+})
+}
+}
+
+\examples{
+library(lcmm)
+data(latrendData)
+method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
+  id = "Id", time = "Time", nClusters = 3)
+gbtm <- latrend(method, data = latrendData)
+converged(gbtm)
 }
 \seealso{
 Other model-specific methods: 

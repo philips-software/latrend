@@ -15,14 +15,23 @@
 \item{...}{Additional arguments.}
 }
 \value{
-A \code{matrix} indicating the posterior probability per trajectory per measurement on each row, for each cluster (the columns).
+A N-by-K \code{matrix} indicating the posterior probability per trajectory per measurement on each row, for each cluster (the columns).
+Here, \code{N = nrow(newdata)} and \code{K = nClusters(object)}.
 }
 \description{
-lcModel posterior probability prediction
-}
-\details{
+Returns the observation-specific posterior probabilities for the given data.
 The default implementation returns a uniform probability matrix.
 }
+\section{Implementation}{
+
+Classes extending \code{lcModel} should override this method to enable posterior probability predictions for new data.
+\preformatted{
+setMethod("predictPostprob", "lcModelExt", function(object, newdata = NULL, ...) {
+  # return observation-specific posterior probability matrix
+})
+}
+}
+
 \seealso{
 Other model-specific methods: 
 \code{\link{clusterTrajectories}()},

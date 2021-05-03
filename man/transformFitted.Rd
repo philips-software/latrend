@@ -51,7 +51,6 @@ A typical implementation of \code{fitted.lcModel()} for your own \code{lcModel} 
 \preformatted{
 fitted.lcModelExample <- function(object,
   clusters = trajectoryAssignments(object)
-  ) {
   # computations of the fitted values per cluster here
   predictionMatrix <- CODE_HERE
   transformFitted(pred = predictionMatrix, model = object, clusters = clusters)

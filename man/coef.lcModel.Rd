@@ -15,10 +15,27 @@
 A named \verb{numeric vector} with all coefficients, or a \code{matrix} with each column containing the cluster-specific coefficients. If \code{coef()} is not defined for the given model, an empty \verb{numeric vector} is returned.
 }
 \description{
-Extract the coefficients of the \code{lcModel} object, if defined. The returned set of coefficients is dependent on the underlying type of \code{lcModel}.
+Extract the coefficients of the \code{lcModel} object, if defined.
+The returned set of coefficients depends on the underlying type of \code{lcModel}.
+The default implementation checks for the existence of a \code{coef()} function for the internal model as defined in the \verb{@model} slot, returning the output if available.
 }
-\details{
-The default implementation checks for the existence of a \code{coef()} function for the internal model, and returns the output, if available.
+\section{Implementation}{
+
+Classes extending \code{lcModel} can override this method to return model-specific coefficients.
+\preformatted{
+coef.lcModelExt <- function(object, ...) {
+  # return model coefficients
+}
+}
+}
+
+\examples{
+library(lcmm)
+data(latrendData)
+method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
+  id = "Id", time = "Time", nClusters = 3)
+gbtm <- latrend(method, data = latrendData)
+coef(gbtm)
 }
 \seealso{
 Other model-specific methods: 

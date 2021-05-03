@@ -22,9 +22,30 @@ If \code{newdata} specifies the cluster membership; a \code{data.frame} of clust
 \description{
 Predicts the expected trajectory observations at the given time for each cluster.
 }
-\details{
-Subclasses of \code{lcModel} should preferably implement \code{predictForCluster} instead of overriding \code{predict.lcModel} in order to benefit from standardized error checking and output handling.
+\section{Implementation}{
+
+Note: Subclasses of \code{lcModel} should preferably implement \code{\link[=predictForCluster]{predictForCluster()}} instead of overriding \code{predict.lcModel} as that function is designed to be easier to implement because it is single-purpose.
+
+The \code{predict.lcModelExt} function should be able to handle the case where \code{newdata = NULL} by returning the fitted values.
+After post-processing the non-NULL newdata input, the observation- and cluster-specific predictions can be computed.
+Lastly, the output logic is handled by the \code{\link[=transformPredict]{transformPredict()}} function. It converts the computed predictions (e.g., \code{matrix} or \code{data.frame}) to the appropriate output format.
+\preformatted{
+predict.lcModelExt <- function(object, newdata = NULL, what = "mu", ...) {
+  if (is.null(newdata)) {
+    newdata = model.data(object)
+    if (hasName(newdata, 'Cluster')) {
+      # allowing the Cluster column to remain would break the fitted() output.
+      newdata[['Cluster']] = NULL
+    }
+  }
+
+  # compute cluster-specific predictions for the given newdata
+  pred <- NEWDATA_COMPUTATIONS_HERE
+  transformPredict(pred = pred, model = object, newdata = newdata)
+})
 }
+}
+
 \examples{
 data(latrendData)
 model <- latrend(lcMethodLcmmGMM(

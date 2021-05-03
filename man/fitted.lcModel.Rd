@@ -17,8 +17,22 @@
 A \code{numeric} vector of the fitted values for the respective class, or a \code{matrix} of fitted values for each cluster.
 }
 \description{
-Extract lcModel fitted values
+Returns the cluster-specific fitted values for the given \code{lcModel} object.
+The default implementation calls \code{\link[=predict]{predict()}} with \code{newdata = NULL}.
 }
+\section{Implementation}{
+
+Classes extending \code{lcModel} can override this method to adapt the computation of the predicted values for the training data.
+Note that the implementation of this function is only needed when \code{\link[=predict]{predict()}} and \code{\link[=predictForCluster]{predictForCluster()}} are not defined for the \code{lcModel} subclass.
+\preformatted{
+fitted.lcModelExt <- function(object, ..., clusters = trajectoryAssignments(object)) {
+  pred = predict(object, newdata = NULL)
+  transformFitted(pred = pred, model = object, clusters = clusters)
+}
+}
+The \code{\link[=transformFitted]{transformFitted()}} function takes care of transforming the prediction input to the right output format.
+}
+
 \examples{
 data(latrendData)
 model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)

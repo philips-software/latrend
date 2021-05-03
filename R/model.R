@@ -197,7 +197,14 @@ clusterSizes = function(object, ...) {
 #' @aliases clusterProportions,lcModel-method
 #' @title Proportional size of each cluster
 #' @description Obtain the proportional size per cluster, with sizes between 0 and 1.
-#' @details By default, the cluster proportions are computed from the average cluster weight from the posterior probabilities of the fitted data (as computed by the [postprob()] function).
+#' By default, the cluster proportions are determined from the cluster-averaged posterior probabilities of the fitted data (as computed by the [postprob()] function).
+#' @section Implementation:
+#' Classes extending `lcModel` can override this method to return, for example, the exact estimated mixture proportions based on the model coefficients.
+#' \preformatted{
+#' setMethod("clusterProportions", "lcModelExt", function(object, ...) {
+#'   # return cluster proportion vector
+#' })
+#' }
 #' @param object The `lcModel` to obtain the proportions from.
 #' @inheritDotParams postprob
 #' @return A named `numeric vector` of length `nClusters(object)` with the proportional size of each cluster.
@@ -258,12 +265,27 @@ setMethod('trajectoryAssignments', signature('lcModel'), function(object, strate
 #' @export
 #' @importFrom stats coef
 #' @title Extract lcModel coefficients
-#' @description Extract the coefficients of the `lcModel` object, if defined. The returned set of coefficients is dependent on the underlying type of `lcModel`.
-#' @details The default implementation checks for the existence of a `coef()` function for the internal model, and returns the output, if available.
+#' @description Extract the coefficients of the `lcModel` object, if defined.
+#' The returned set of coefficients depends on the underlying type of `lcModel`.
+#' The default implementation checks for the existence of a `coef()` function for the internal model as defined in the `@model` slot, returning the output if available.
 #' @param object The `lcModel` object.
 #' @param ... Additional arguments.
+#' @section Implementation:
+#' Classes extending `lcModel` can override this method to return model-specific coefficients.
+#' \preformatted{
+#' coef.lcModelExt <- function(object, ...) {
+#'   # return model coefficients
+#' }
+#' }
 #' @return A named `numeric vector` with all coefficients, or a `matrix` with each column containing the cluster-specific coefficients. If `coef()` is not defined for the given model, an empty `numeric vector` is returned.
 #' @family model-specific methods
+#' @examples
+#' library(lcmm)
+#' data(latrendData)
+#' method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
+#'   id = "Id", time = "Time", nClusters = 3)
+#' gbtm <- latrend(method, data = latrendData)
+#' coef(gbtm)
 coef.lcModel = function(object, ...) {
   if (is.null(object@model) ||
       is.null(getS3method('coef', class = class(object@model), optional = TRUE))) {
@@ -335,11 +357,25 @@ confusionMatrix = function(object, strategy = which.max, scale = TRUE, ...) {
 #' @aliases converged,lcModel-method
 #' @title Check model convergence
 #' @description Check convergence of the fitted `lcModel` object.
+#' The default implementation returns `NA`.
 #' @param object The `lcModel` to check for convergence.
 #' @param ... Additional arguments.
 #' @return Either `logical` indicating convergence, or a `numeric` status code.
-#' @details The default implementation returns `NA`.
+#' @section Implementation:
+#' Classes extending `lcModel` can override this method to return a convergence status or code.
+#' \preformatted{
+#' setMethod("converged", "lcModelExt", function(object, ...) {
+#'   # return convergence code
+#' })
+#' }
 #' @family model-specific methods
+#' @examples
+#' library(lcmm)
+#' data(latrendData)
+#' method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
+#'   id = "Id", time = "Time", nClusters = 3)
+#' gbtm <- latrend(method, data = latrendData)
+#' converged(gbtm)
 setMethod('converged', signature('lcModel'), function(object, ...) {
   NA
 })
@@ -435,10 +471,22 @@ setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, ob
 #' @export
 #' @importFrom stats fitted
 #' @title Extract lcModel fitted values
+#' @description Returns the cluster-specific fitted values for the given `lcModel` object.
+#' The default implementation calls [predict()] with `newdata = NULL`.
 #' @param object The `lcModel` object.
 #' @param ... Additional arguments.
 #' @param clusters Optional cluster assignments per id. If unspecified, a `matrix` is returned containing the cluster-specific predictions per column.
 #' @return A `numeric` vector of the fitted values for the respective class, or a `matrix` of fitted values for each cluster.
+#' @section Implementation:
+#' Classes extending `lcModel` can override this method to adapt the computation of the predicted values for the training data.
+#' Note that the implementation of this function is only needed when [predict()] and [predictForCluster()] are not defined for the `lcModel` subclass.
+#' \preformatted{
+#' fitted.lcModelExt <- function(object, ..., clusters = trajectoryAssignments(object)) {
+#'   pred = predict(object, newdata = NULL)
+#'   transformFitted(pred = pred, model = object, clusters = clusters)
+#' }
+#' }
+#' The [transformFitted()] function takes care of transforming the prediction input to the right output format.
 #' @seealso [stats::fitted] [predict.lcModel] [trajectoryAssignments] [transformFitted]
 #' @family model-specific methods
 #' @examples
@@ -819,7 +867,27 @@ nobs.lcModel = function(object, ...) {
 #' @importFrom stats predict
 #' @title lcModel predictions
 #' @description Predicts the expected trajectory observations at the given time for each cluster.
-#' @details Subclasses of `lcModel` should preferably implement `predictForCluster` instead of overriding `predict.lcModel` in order to benefit from standardized error checking and output handling.
+#' @section Implementation:
+#' Note: Subclasses of `lcModel` should preferably implement [predictForCluster()] instead of overriding `predict.lcModel` as that function is designed to be easier to implement because it is single-purpose.
+#'
+#' The `predict.lcModelExt` function should be able to handle the case where `newdata = NULL` by returning the fitted values.
+#' After post-processing the non-NULL newdata input, the observation- and cluster-specific predictions can be computed.
+#' Lastly, the output logic is handled by the [transformPredict()] function. It converts the computed predictions (e.g., `matrix` or `data.frame`) to the appropriate output format.
+#' \preformatted{
+#' predict.lcModelExt <- function(object, newdata = NULL, what = "mu", ...) {
+#'   if (is.null(newdata)) {
+#'     newdata = model.data(object)
+#'     if (hasName(newdata, 'Cluster')) {
+#'       # allowing the Cluster column to remain would break the fitted() output.
+#'       newdata[['Cluster']] = NULL
+#'     }
+#'   }
+#'
+#'   # compute cluster-specific predictions for the given newdata
+#'   pred <- NEWDATA_COMPUTATIONS_HERE
+#'   transformPredict(pred = pred, model = object, newdata = newdata)
+#' })
+#' }
 #' @param object The `lcModel` object.
 #' @param newdata Optional `data.frame` for which to compute the model predictions. If omitted, the model training data is used.
 #' Cluster trajectory predictions are made when ids are not specified.
@@ -948,6 +1016,15 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
 #' @param cluster The cluster name (as `character`) to predict for.
 #' @param ... Additional arguments.
 #' @return A `vector` with the predictions per `newdata` observation, or a `data.frame` with the predictions and newdata alongside.
+#' @section Implementation:
+#' Classes extending `lcModel` should override this method, unless [predict.lcModel()] is preferred.
+#' \preformatted{
+#' setMethod("predictForCluster", "lcModelExt",
+#'  function(object, newdata = NULL, cluster, ..., what = "mu") {
+#'   # return model predictions for the given data under the
+#'   # assumption of the data belonging to the given cluster
+#' })
+#' }
 #' @seealso [predict.lcModel]
 #' @family model-specific methods
 #' @examples
@@ -985,11 +1062,20 @@ setMethod('predictForCluster', signature('lcModel'),
 #' @rdname predictPostprob
 #' @aliases predictPostprob,lcModel-method
 #' @title lcModel posterior probability prediction
-#' @details The default implementation returns a uniform probability matrix.
+#' @description Returns the observation-specific posterior probabilities for the given data.
+#' The default implementation returns a uniform probability matrix.
 #' @param object The `lcModel` to predict the posterior probabilities with.
 #' @param newdata Optional data frame for which to compute the posterior probability. If omitted, the model training data is used.
 #' @param ... Additional arguments.
-#' @return A `matrix` indicating the posterior probability per trajectory per measurement on each row, for each cluster (the columns).
+#' @return A N-by-K `matrix` indicating the posterior probability per trajectory per measurement on each row, for each cluster (the columns).
+#' Here, `N = nrow(newdata)` and `K = nClusters(object)`.
+#' @section Implementation:
+#' Classes extending `lcModel` should override this method to enable posterior probability predictions for new data.
+#' \preformatted{
+#' setMethod("predictPostprob", "lcModelExt", function(object, newdata = NULL, ...) {
+#'   # return observation-specific posterior probability matrix
+#' })
+#' }
 #' @family model-specific methods
 setMethod('predictPostprob', signature('lcModel'), function(object, newdata = NULL, ...) {
   if (is.null(newdata)) {
@@ -1005,11 +1091,7 @@ setMethod('predictPostprob', signature('lcModel'), function(object, newdata = NU
       '. Returning uniform probability matrix.'
     )
 
-    N = nrow(newdata)
-
-    matrix(1 / nClusters(object),
-      nrow = N,
-      ncol = nClusters(object))
+    matrix(1 / nClusters(object), nrow = nrow(newdata), ncol = nClusters(object))
   }
 })
 
@@ -1167,6 +1249,13 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
 #' @param object The `lcModel`.
 #' @param ... Additional arguments.
 #' @return A I-by-K `matrix` with `I = nIds(object)` and `K = nClusters(object)`.
+#' @section Implementation:
+#' Classes extending `lcModel` should override this method.
+#' \preformatted{
+#' setMethod("postprob", "lcModelExt", function(object, ...) {
+#'   # return trajectory-specific posterior probability matrix
+#' })
+#' }
 #' @seealso [trajectoryAssignments] [predictPostprob] [predictAssignments]
 #' @family model-specific methods
 #' @examples
@@ -1322,6 +1411,15 @@ sigma.lcModel = function(object, ...) {
 #' @param classes The object classes for which to remove their assigned environment. By default, only environments from `formula` are removed.
 #' @param ... Additional arguments.
 #' @return An `lcModel` object of the same type as the `object` argument.
+#' @section Implementation:
+#' Classes extending `lcModel` can override this method to remove additional non-essentials.
+#' \preformatted{
+#' setMethod("strip", "lcModelExt", function(object, ..., classes = "formula") {
+#'   object <- callNextMethod()
+#'   # further process the object
+#'   return (object)
+#' })
+#' }
 #' @examples
 #' library(lcmm)
 #' data(latrendData)
