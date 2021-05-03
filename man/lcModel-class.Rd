@@ -55,7 +55,9 @@ For predicting the posterior probability for unseen data, the \code{predictPostp
 
 \item{\code{label}}{The label assigned to this model.}
 
-\item{\code{ids}}{The possible trajectory identifier values the model was fitted on.}
+\item{\code{ids}}{The trajectory identifier values the model was fitted on.}
+
+\item{\code{times}}{The exact times on which the model has been trained}
 
 \item{\code{clusterNames}}{The names of the clusters.}
 

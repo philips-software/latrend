@@ -24,7 +24,8 @@
 #' @slot time The name of the time variable.
 #' @slot response The name of the response variable.
 #' @slot label The label assigned to this model.
-#' @slot ids The possible trajectory identifier values the model was fitted on.
+#' @slot ids The trajectory identifier values the model was fitted on.
+#' @slot times The exact times on which the model has been trained
 #' @slot clusterNames The names of the clusters.
 #' @slot estimationTime The time, in seconds, that it took to fit the model.
 #' @slot tag An arbitrary user-specified data structure. This slot may be accessed and updated directly.
@@ -41,6 +42,7 @@ setClass(
     response = 'character',
     label = 'character',
     ids = 'vector',
+    times = 'vector',
     clusterNames = 'character',
     date = 'POSIXct',
     estimationTime = 'numeric',
@@ -1521,7 +1523,11 @@ setMethod('trajectories', signature('lcModel'), function(object, at, what, clust
 #' @family model-specific methods
 #' @seealso [timeVariable] [model.data]
 time.lcModel = function(x, ...) {
-  model.data(x)[[timeVariable(x)]] %>% unique() %>% sort()
+  if (length(x@times) == 0) {
+    model.data(x)[[timeVariable(x)]] %>% unique() %>% sort()
+  } else {
+    x@times
+  }
 }
 
 
