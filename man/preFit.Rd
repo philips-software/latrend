@@ -15,7 +15,7 @@
 \item{verbose}{A \link[R.utils:Verbose]{R.utils::Verbose} object indicating the level of verbosity.}
 }
 \value{
-The updated \code{environment} that will be passed to \code{fit()}.
+The updated \code{environment} that will be passed to \code{\link[=fit]{fit()}}.
 }
 \description{
 Perform preparatory work that is needed for fitting the method, but should not be counted towards the method estimation time.

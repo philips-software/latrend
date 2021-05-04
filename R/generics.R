@@ -274,7 +274,7 @@ setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
   model <- standardGeneric('postFit')
   assert_that(
     inherits(model, 'lcModel'),
-    msg = 'postFit(lcMethod, ...) returned an unexpected object. Should be of type lcModel.')
+    msg = 'postFit(lcMethod, ...) should return an object of type lcModel.')
 
   return(model)
 })
@@ -283,9 +283,7 @@ setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
 #' @name latrend-generics
 setGeneric('preFit', function(method, data, envir, verbose, ...) {
   modelEnv <- standardGeneric('preFit')
-  assert_that(
-    is.null(modelEnv) || is.environment(modelEnv),
-    msg = 'preFit(method, ...) returned an unexpected object. Should be environment or NULL')
+  assert_that(is.environment(modelEnv), msg = 'preFit(method, ...) should return an environment')
 
   return(modelEnv)
 })

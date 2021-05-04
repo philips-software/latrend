@@ -624,7 +624,7 @@ setMethod('names', signature('lcMethod'), function(x) {
 #' })
 #' }
 #' @inheritSection lcMethod-class Fitting procedure
-#' @return The updated `environment` that will be passed to `fit()`.
+#' @return The updated `environment` that will be passed to [fit()].
 setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose) {
   envir
 })
