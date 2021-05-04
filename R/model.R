@@ -1132,6 +1132,8 @@ setMethod('predictAssignments', signature('lcModel'), function(object, newdata =
 
 #. plot ####
 #' @export
+#' @name plot
+#' @aliases plot,lcModel,ANY-method
 #' @title Plot a lcModel
 #' @description Plot a `lcModel` object. By default, this plots the cluster trajectories of the model, along with the training data.
 #' @param x The `lcModel` object.
@@ -1163,7 +1165,7 @@ setMethod('plot', signature('lcModel'), function(x, y, ...) {
 #' @title Plot fitted trajectories of a lcModel
 #' @param ... Arguments passed to [trajectories].
 #' @inheritDotParams trajectories
-#' @seealso [plot.lcModel] [plotClusterTrajectories] [trajectories]
+#' @seealso [plot] [plotClusterTrajectories] [trajectories]
 #' @examples
 #' library(kml)
 #' data(latrendData)
@@ -1192,7 +1194,7 @@ setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
 #' @param trajAssignments The cluster assignments for the fitted trajectories. Only used when `trajectories = TRUE` and `facet = TRUE`. See [trajectoryAssignments].
 #' @param ... Arguments passed to [clusterTrajectories()], or [ggplot2::geom_line()] for plotting the cluster trajectory lines.
 #' @return A `ggplot` object.
-#' @seealso [plot.lcModel] [plotTrajectories] [clusterTrajectories]
+#' @seealso [plot] [plotTrajectories] [clusterTrajectories]
 #' @examples
 #' library(kml)
 #' data(latrendData)

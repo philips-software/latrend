@@ -55,5 +55,5 @@ model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendDat
 plotTrajectories(model)
 }
 \seealso{
-\link{plot.lcModel} \link{plotClusterTrajectories} \link{trajectories}
+\link{plot} \link{plotClusterTrajectories} \link{trajectories}
 }
