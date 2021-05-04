@@ -482,13 +482,21 @@ getCall.lcMethod = function(x, ...) {
 #. getLabel ####
 #' @export
 #' @name getLabel
-#' @rdname lcMethod-class
+#' @rdname getLabel
 #' @aliases getLabel,lcMethod-method
 #' @title Extract the method label.
-#' @description Extracts the assigned label.
-#' @param object The object to extract the label from.
+#' @description Extracts the assigned label from the given `lcMethod` or `lcModel` object.
+#' By default, the label is determined from the `"label"` argument of the `lcMethod` object.
+#' The label of an `lcModel` object is set upon estimation by [latrend()] to the label of its associated `lcMethod` object.
+#' @param object The `lcMethod` or `lcModel` object.
 #' @param ... Additional arguments.
 #' @return The extracted label, as `character`.
+#' @seealso [getName] [getShortName]
+#' @examples
+#' library(kml)
+#' getLabel(lcMethodKML()) # ""
+#'
+#' getLabel(lcMethodKML(label = "v2")) # "v2"
 setMethod('getLabel', signature('lcMethod'), function(object, ...) {
   if (hasName(object, 'label')) {
     object$label
@@ -501,22 +509,45 @@ setMethod('getLabel', signature('lcMethod'), function(object, ...) {
 #. getName ####
 #' @export
 #' @name getName
-#' @rdname lcMethod-class
+#' @rdname getName
 #' @aliases getName,lcMethod-method
-#' @description Extracts the name of the given `object`.
+#' @title Get the (short) name of the lcMethod or Model
+#' @description Extract the full or shortened name of the given `lcMethod` or `lcModel` object.
+#' The name of the fitted `lcModel` is determined by its associated `lcMethod` name and label, unless specified otherwise.
+#' @param object The `lcMethod` or `lcModel` object.
+#' @return A `character` name.
+#' @section Implementation:
+#' When implementing your own `lcMethod` subclass, override these methods to provide full and abbreviated names.
+#' \preformatted{
+#' setMethod("getName", "lcMethodExample", function(object) "example name")
+#'
+#' setMethod("getShortName", "lcMethodExample", function(object) "EX")
+#' }
+#'
+#' Similar methods can be implemented for your `lcModel` subclass,
+#' however in practice this is not needed as the names are determined by default from the `lcMethod` object that was used to fit the `lcModel` object.
+#'
+#' @seealso [getLabel]
 #' @examples
-#' getName(lcMethodKML("Y")) # "longitudinal k-means"
-setMethod('getName', signature('lcMethod'), function(object) 'custom')
+#' library(kml)
+#' getName(lcMethodKML()) # "longitudinal k-means"
+setMethod('getName', signature('lcMethod'), function(object) 'undefined')
+
+#' @name latrend-generics
+setMethod('getName', signature('NULL'), function(object) 'null')
 
 #. getShortName ####
 #' @export
 #' @name getShortName
-#' @rdname lcMethod-class
+#' @rdname getName
 #' @aliases getShortName,lcMethod-method
 #' @title Extract the short object name
 #' @examples
-#' getShortName(lcMethodKML("Y")) # "KML"
+#' getShortName(lcMethodKML()) # "KML"
 setMethod('getShortName', signature('lcMethod'), getName)
+
+#' @name latrend-generics
+setMethod('getShortName', signature('NULL'), function(object) 'nul')
 
 
 #. idVariable ####
@@ -530,6 +561,7 @@ setMethod('getShortName', signature('lcMethod'), getName)
 #' @param ... Not used.
 #' @return The trajectory identifier name, as `character`.
 #' @examples
+#' library(kml)
 #' method <- lcMethodKML(id = "Traj")
 #' idVariable(method) # "Traj"
 #'

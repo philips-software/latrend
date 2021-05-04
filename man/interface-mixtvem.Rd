@@ -35,7 +35,7 @@
 \method{coef}{lcModelMixTVEM}(object, ...)
 }
 \arguments{
-\item{object}{The object to extract the label from.}
+\item{object}{The \code{lcMethod} or \code{lcModel} object.}
 
 \item{method}{An object inheriting from \code{lcMethod} with all its arguments having been evaluated and finalized.}
 

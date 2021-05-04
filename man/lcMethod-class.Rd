@@ -4,36 +4,18 @@
 \name{lcMethod-class}
 \alias{lcMethod-class}
 \alias{lcMethod}
-\alias{getLabel}
-\alias{getLabel,lcMethod-method}
-\alias{getName}
-\alias{getName,lcMethod-method}
-\alias{getShortName}
-\alias{getShortName,lcMethod-method}
 \alias{length,lcMethod-method}
 \alias{names,lcMethod-method}
 \title{lcMethod class}
 \usage{
-\S4method{getLabel}{lcMethod}(object, ...)
-
-\S4method{getName}{lcMethod}(object)
-
-\S4method{getShortName}{lcMethod}(object, ...)
-
 \S4method{length}{lcMethod}(x)
 
 \S4method{names}{lcMethod}(x)
 }
 \arguments{
-\item{object}{The object to extract the label from.}
-
-\item{...}{Additional arguments.}
-
 \item{x}{The \code{lcMethod} object.}
 }
 \value{
-The extracted label, as \code{character}.
-
 A \verb{character vector} of argument names.
 }
 \description{
@@ -43,10 +25,6 @@ The base class \code{lcMethod} provides the logic for storing, evaluating, and p
 Subclasses of \code{lcMethod} differ only on the fitting procedure logic (see below).
 
 The intended way for specifying methods is through the method-specific constructor functions, e.g., through \link{lcMethodKML}, \link{lcMethodLcmmGBTM}, or \link{lcMethodDtwclust}.
-
-Extracts the assigned label.
-
-Extracts the name of the given \code{object}.
 }
 \details{
 Because the \code{lcMethod} arguments may be unevaluated, argument retrieval functions such as \code{[[} accept an \code{envir} argument.
@@ -88,8 +66,6 @@ The result of the fitting procedure is an \linkS4class{lcModel} object that inhe
 }
 
 \examples{
-getName(lcMethodKML("Y")) # "longitudinal k-means"
-getShortName(lcMethodKML("Y")) # "KML"
 m = lcMethodKML("Y")
 names(m)
 }

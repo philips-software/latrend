@@ -560,7 +560,7 @@ getCall.lcModel = function(x, ...) {
 
 #. getLabel ####
 #' @export
-#' @rdname lcModel-class
+#' @rdname getLabel
 #' @aliases getLabel,lcModel-method
 setMethod('getLabel', signature('lcModel'), function(object, ...) {
   object@label
@@ -584,10 +584,8 @@ getLcMethod = function(object) {
 
 # . getName ####
 #' @export
-#' @rdname lcModel-class
+#' @rdname getName
 #' @aliases getName,lcModel-method
-#' @description Extracts the name of the `lcModel` object.
-#' The name is comprised of the underlying `lcMethod` name, and the assigned label (if any).
 setMethod('getName', signature('lcModel'), function(object) {
   basename = getLcMethod(object) %>% getName()
   lbl = getLabel(object)
@@ -600,7 +598,7 @@ setMethod('getName', signature('lcModel'), function(object) {
 
 # . getShortName ####
 #' @export
-#' @rdname lcModel-class
+#' @rdname getName
 #' @aliases getShortName,lcModel-method
 setMethod('getShortName',  signature('lcModel'),
   function(object) getLcMethod(object) %>% getShortName())

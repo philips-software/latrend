@@ -22,6 +22,7 @@ The trajectory identifier name, as \code{character}.
 Extracts the trajectory identifier variable (i.e., column name) from the given \code{object}.
 }
 \examples{
+library(kml)
 method <- lcMethodKML(id = "Traj")
 idVariable(method) # "Traj"
 

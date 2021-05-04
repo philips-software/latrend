@@ -3,17 +3,7 @@
 \docType{class}
 \name{lcModel-class}
 \alias{lcModel-class}
-\alias{getLabel,lcModel-method}
-\alias{getName,lcModel-method}
-\alias{getShortName,lcModel-method}
 \title{lcModel class}
-\usage{
-\S4method{getLabel}{lcModel}(object, ...)
-
-\S4method{getName}{lcModel}(object)
-
-\S4method{getShortName}{lcModel}(object)
-}
 \arguments{
 \item{object}{The \code{lcModel} object.}
 
@@ -21,9 +11,6 @@
 }
 \description{
 Abstract class for defining estimated longitudinal cluster models.
-
-Extracts the name of the \code{lcModel} object.
-The name is comprised of the underlying \code{lcMethod} name, and the assigned label (if any).
 }
 \details{
 An extending class must implement the following methods to ensure basic functionality:
