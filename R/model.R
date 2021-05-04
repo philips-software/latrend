@@ -1260,7 +1260,6 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
 #' @seealso [trajectoryAssignments] [predictPostprob] [predictAssignments]
 #' @family model-specific methods
 #' @examples
-#' library(lcmm)
 #' data(latrendData)
 #' model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
 #'    id = "Id", time = "Time"), data = latrendData)
