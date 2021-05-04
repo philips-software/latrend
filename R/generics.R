@@ -15,12 +15,16 @@
 #' @keywords internal
 NULL
 
+
+# trajectoryAssignments ####
 #' @export
 #' @name latrend-generics
 setGeneric('trajectoryAssignments', function(object, ...) {
   standardGeneric('trajectoryAssignments')
 })
 
+
+# clusterProportions ####
 #' @export
 #' @name latrend-generics
 setGeneric('clusterProportions', function(object, ...) {
@@ -39,6 +43,8 @@ setGeneric('clusterProportions', function(object, ...) {
   props
 })
 
+
+# clusterTrajectories ####
 #' @export
 #' @name latrend-generics
 setGeneric('clusterTrajectories', function(object, ...) {
@@ -53,6 +59,8 @@ setGeneric('clusterTrajectories', function(object, ...) {
   dfclus
 })
 
+
+# compose ####
 #' @export
 #' @name latrend-generics
 setGeneric('compose', def = function(method, envir, ...) {
@@ -69,6 +77,7 @@ setGeneric('compose', def = function(method, envir, ...) {
   return(newmethod)
 })
 
+# converged ####
 #' @export
 #' @name latrend-generics
 setGeneric('converged', function(object, ...) {
@@ -81,6 +90,7 @@ setGeneric('converged', function(object, ...) {
   state
 })
 
+# externalMetric ####
 #' @export
 #' @name latrend-generics
 #' @param object2 The model to compare with.
@@ -88,8 +98,12 @@ setGeneric('externalMetric', function(
   object,
   object2,
   name = getOption('latrend.externalMetric'),
-  ...) standardGeneric('externalMetric'))
+  ...)
+  standardGeneric('externalMetric')
+)
 
+
+# fit ####
 #' @export
 #' @name latrend-generics
 setGeneric('fit', function(method, data, envir, verbose, ...) {
@@ -112,6 +126,8 @@ setGeneric('fit', function(method, data, envir, verbose, ...) {
   return(model)
 })
 
+
+# getLabel ####
 #' @export
 #' @name latrend-generics
 setGeneric('getLabel', function(object, ...) {
@@ -123,6 +139,8 @@ setGeneric('getLabel', function(object, ...) {
   label
 })
 
+
+# getName ####
 #' @export
 #' @name latrend-generics
 setGeneric('getName', function(object, ...) {
@@ -135,6 +153,8 @@ setGeneric('getName', function(object, ...) {
   name
 })
 
+
+# getShortName ####
 #' @export
 #' @name latrend-generics
 setGeneric('getShortName', function(object, ...) {
@@ -147,6 +167,8 @@ setGeneric('getShortName', function(object, ...) {
   name
 })
 
+
+# idVariable ####
 #' @export
 #' @name latrend-generics
 setGeneric('idVariable', function(object, ...) {
@@ -159,6 +181,8 @@ setGeneric('idVariable', function(object, ...) {
   id
 })
 
+
+# metric ####
 #' @export
 #' @name latrend-generics
 setGeneric('metric', function(
@@ -166,20 +190,28 @@ setGeneric('metric', function(
   name = getOption('latrend.metric', c('WRSS', 'APPA', 'AIC', 'BIC')),
   ...) standardGeneric('metric'))
 
+
+# plotClusterTrajectories ####
 #' @export
 #' @name latrend-generics
 setGeneric('plotClusterTrajectories',
   function(object, ...) standardGeneric('plotClusterTrajectories'))
 
+
+# qqPlot ####
 #' @export
 #' @name latrend-generics
 #' @title Quantile-quantile plot
 setGeneric('qqPlot', function(object, ...) standardGeneric('qqPlot'))
 
+
+# plotTrajectories ####
 #' @export
 #' @name latrend-generics
 setGeneric('plotTrajectories', function(object, ...) standardGeneric('plotTrajectories'))
 
+
+# postprob ####
 #' @export
 #' @name latrend-generics
 setGeneric('postprob', function(object, ...) {
@@ -201,6 +233,8 @@ setGeneric('postprob', function(object, ...) {
   pp
 })
 
+
+# predictAssignments ####
 #' @export
 #' @name latrend-generics
 setGeneric('predictAssignments', function(object, newdata = NULL, ...) {
@@ -215,6 +249,8 @@ setGeneric('predictAssignments', function(object, newdata = NULL, ...) {
   make.trajectoryAssignments(object, assignments)
 })
 
+
+# predictForCluster ####
 #' @export
 #' @name latrend-generics
 setGeneric('predictForCluster', function(object, newdata = NULL, cluster, ...) {
@@ -252,6 +288,8 @@ setGeneric('predictForCluster', function(object, newdata = NULL, cluster, ...) {
   out
 })
 
+
+# predictPostprob ####
 #' @export
 #' @name latrend-generics
 setGeneric('predictPostprob', function(object, newdata = NULL, ...) {
@@ -268,6 +306,8 @@ setGeneric('predictPostprob', function(object, newdata = NULL, ...) {
   pp
 })
 
+
+# postFit ####
 #' @export
 #' @name latrend-generics
 setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
@@ -279,6 +319,8 @@ setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
   return(model)
 })
 
+
+# preFit ####
 #' @export
 #' @name latrend-generics
 setGeneric('preFit', function(method, data, envir, verbose, ...) {
@@ -288,6 +330,8 @@ setGeneric('preFit', function(method, data, envir, verbose, ...) {
   return(modelEnv)
 })
 
+
+# prepareData ####
 #' @export
 #' @name latrend-generics
 setGeneric('prepareData', function(method, data, verbose, ...) {
@@ -296,6 +340,8 @@ setGeneric('prepareData', function(method, data, verbose, ...) {
   return(envir)
 })
 
+
+# responseVariable ####
 #' @export
 #' @name latrend-generics
 setGeneric('responseVariable', function(object, ...) {
@@ -310,6 +356,8 @@ setGeneric('responseVariable', function(object, ...) {
   response
 })
 
+
+# strip ####
 #' @export
 #' @name latrend-generics
 #' @description Reduce the (serialized) memory footprint of an object.
@@ -333,6 +381,8 @@ setGeneric('timeVariable', function(object, ...) {
   time
 })
 
+
+# validate ####
 #' @export
 #' @name latrend-generics
 setGeneric('validate', function(method, data, envir, ...) {
