@@ -16,3 +16,4 @@ tests/testthat/*.rds
 /inst/REFERENCES.bib.sav.bak
 /check.R
 .Rproj.user
+*.pdf
