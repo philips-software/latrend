@@ -8,7 +8,7 @@
 lcMethod(.class, ..., .defaults = list(), .excludeArgs = c())
 }
 \arguments{
-\item{.class}{The type of \link{lcMethod-class} class}
+\item{.class}{The type of \code{lcMethod} class}
 
 \item{...}{Any arguments to assign to the method object.}
 
@@ -17,6 +17,8 @@ lcMethod(.class, ..., .defaults = list(), .excludeArgs = c())
 \item{.excludeArgs}{See \code{excludeArgs} of \link{lcMethod.call}.}
 }
 \description{
+Note, see the \linkS4class{lcMethod} help page for documentation about the \code{lcMethod} class.
+
 Provides a mechanism for creating \code{lcMethod} objects for an arbitrary class.
 Note that it is advisable to use the class-specific constructors instead.
 }

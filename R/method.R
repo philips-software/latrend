@@ -1,7 +1,6 @@
 #' @export
 #' @name lcMethod-class
 #' @rdname lcMethod-class
-#' @aliases lcMethod
 #' @title lcMethod class
 #' @description Objects of type `lcMethod` enable the specification and estimation of different methods for longitudinal clustering.
 #' The base class `lcMethod` provides the logic for storing, evaluating, and printing the method parameters.
@@ -146,9 +145,11 @@ setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL)
 #' @name lcMethod-constructor
 #' @rdname lcMethod-constructor
 #' @title Create a lcMethod object of the specified type and arguments
-#' @description Provides a mechanism for creating `lcMethod` objects for an arbitrary class.
-#' Note that it is advisable to use the class-specific constructors instead.
-#' @param .class The type of \link{lcMethod-class} class
+#' @description Note, see the [lcMethod-class] help page for documentation about the `lcMethod` class.
+#'
+#' Provides a mechanism for creating `lcMethod` objects for an arbitrary class.
+#' However, it is advisable to use the class-specific constructors instead.
+#' @param .class The type of `lcMethod` class
 #' @param ... Any arguments to assign to the method object.
 #' @param .defaults See `defaults` of [lcMethod.call].
 #' @param .excludeArgs See `excludeArgs` of [lcMethod.call].

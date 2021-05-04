@@ -3,7 +3,6 @@
 \docType{class}
 \name{lcMethod-class}
 \alias{lcMethod-class}
-\alias{lcMethod}
 \alias{length,lcMethod-method}
 \alias{names,lcMethod-method}
 \title{lcMethod class}
