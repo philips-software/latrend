@@ -537,7 +537,8 @@ setMethod('getName', signature('lcMethod'), function(object, ...) 'undefined')
 
 #' @export
 #' @name latrend-generics
-setMethod('getName', signature('NULL'), function(object, ...) 'null')
+#' @aliases getName,NULL-method
+setMethod('getName', 'NULL', function(object, ...) 'null')
 
 #. getShortName ####
 #' @export
@@ -551,7 +552,8 @@ setMethod('getShortName', signature('lcMethod'), getName)
 
 #' @export
 #' @name latrend-generics
-setMethod('getShortName', signature('NULL'), function(object, ...) 'nul')
+#' @aliases getShortName,NULL-method
+setMethod('getShortName', 'NULL', function(object, ...) 'nul')
 
 
 #. idVariable ####

@@ -2,6 +2,8 @@
 % Please edit documentation in R/generics.R, R/method.R, R/zzz.R
 \name{latrend-generics}
 \alias{latrend-generics}
+\alias{getName,NULL-method}
+\alias{getShortName,NULL-method}
 \title{Method- and model-specific generics defined by the latrend package}
 \usage{
 trajectoryAssignments(object, ...)

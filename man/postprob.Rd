@@ -32,7 +32,6 @@ setMethod("postprob", "lcModelExt", function(object, ...) {
 }
 
 \examples{
-library(lcmm)
 data(latrendData)
 model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
    id = "Id", time = "Time"), data = latrendData)
