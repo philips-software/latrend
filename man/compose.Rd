@@ -11,8 +11,6 @@
 \item{method}{The \code{lcMethod} object.}
 
 \item{envir}{The \code{environment} in which the \code{lcMethod} should be evaluated}
-
-\item{...}{Not used.}
 }
 \value{
 The evaluated and finalized \code{lcMethod} object.

@@ -9,7 +9,7 @@
 \alias{getShortName,lcModel-method}
 \title{Get the (short) name of the lcMethod or Model}
 \usage{
-\S4method{getName}{lcMethod}(object)
+\S4method{getName}{lcMethod}(object, ...)
 
 \S4method{getShortName}{lcMethod}(object, ...)
 
@@ -19,6 +19,8 @@
 }
 \arguments{
 \item{object}{The \code{lcMethod} or \code{lcModel} object.}
+
+\item{...}{Additional arguments.}
 }
 \value{
 A \code{character} name.

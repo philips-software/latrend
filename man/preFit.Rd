@@ -12,6 +12,8 @@
 
 \item{data}{A \code{data.frame} representing the transformed training data.}
 
+\item{envir}{The \code{environment} containing additional data variables returned by \code{\link[=prepareData]{prepareData()}}.}
+
 \item{verbose}{A \link[R.utils:Verbose]{R.utils::Verbose} object indicating the level of verbosity.}
 }
 \value{

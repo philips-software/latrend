@@ -1404,7 +1404,7 @@ sigma.lcModel = function(object, ...) {
 #' @aliases strip,lcModel-method
 #' @title Reduce the lcModel memory footprint for serialization
 #' @description Strip a lcModel of non-essential variables and environments in order to reduce the model size for serialization.
-#' @param object The `lcModel`.
+#' @param object The `lcModel` object.
 #' @param classes The object classes for which to remove their assigned environment. By default, only environments from `formula` are removed.
 #' @param ... Additional arguments.
 #' @return An `lcModel` object of the same type as the `object` argument.
@@ -1538,7 +1538,8 @@ time.lcModel = function(x, ...) {
 #' @examples
 #' library(kml)
 #' data(latrendData)
-#' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3), data = latrendData)
+#' m <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
+#' model <- latrend(method = m, data = latrendData)
 #' # fit for a different number of clusters
 #' update(model, nClusters = 2)
 update.lcModel = function(object, ...) {

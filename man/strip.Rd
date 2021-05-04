@@ -3,8 +3,9 @@
 \name{strip}
 \alias{strip}
 \alias{strip,lcMethod-method}
+\alias{strip,ANY-method}
 \alias{strip,lcModel-method}
-\title{Strip a lcModel for serialization}
+\title{Reduce the lcModel memory footprint for serialization}
 \usage{
 \S4method{strip}{lcMethod}(object, ..., classes = "formula")
 
@@ -13,7 +14,7 @@
 \S4method{strip}{lcModel}(object, ..., classes = "formula")
 }
 \arguments{
-\item{object}{The \code{lcModel}.}
+\item{object}{The \code{lcModel} object.}
 
 \item{...}{Additional arguments.}
 
