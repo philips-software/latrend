@@ -29,7 +29,7 @@ transformFitted(pred, model, clusters)
 If the \code{clusters} argument was specified, a \code{vector} of fitted values conditional on the given cluster assignment. Else, a \code{matrix} with the fitted values per cluster per column.
 }
 \description{
-A helper function for implementing the \link[=fitted.lcModel]{fitted.lcModel()} method as part of your own \code{lcModel} class, ensuring the correct output type and format (see the Value section).
+A helper function for implementing the \code{\link[=fitted.lcModel]{fitted.lcModel()}} method as part of your own \code{lcModel} class, ensuring the correct output type and format (see the Value section).
 Note that this function has no use outside of implementing \code{fitted.lcModel}.
 
 The function makes it easier to implement \code{fitted.lcModel} based on existing implementations that may output their results in different data formats. Furthermore, the function checks whether the input data is valid.
@@ -47,10 +47,10 @@ Users can implement support for other prediction formats by defining the \code{t
 }
 \section{Example implementation}{
 
-A typical implementation of \code{fitted.lcModel()} for your own \code{lcModel} class would have the following format:
+A typical implementation of \code{\link[=fitted.lcModel]{fitted.lcModel()}} for your own \code{lcModel} class would have the following format:
 \preformatted{
 fitted.lcModelExample <- function(object,
-  clusters = trajectoryAssignments(object)
+ clusters = trajectoryAssignments(object)) {
   # computations of the fitted values per cluster here
   predictionMatrix <- CODE_HERE
   transformFitted(pred = predictionMatrix, model = object, clusters = clusters)

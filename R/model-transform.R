@@ -3,7 +3,7 @@
 #' @export
 #' @rdname transformFitted
 #' @title Helper function for custom lcModel classes implementing fitted.lcModel()
-#' @description A helper function for implementing the [fitted.lcModel()][fitted.lcModel] method as part of your own `lcModel` class, ensuring the correct output type and format (see the Value section).
+#' @description A helper function for implementing the [fitted.lcModel()] method as part of your own `lcModel` class, ensuring the correct output type and format (see the Value section).
 #' Note that this function has no use outside of implementing `fitted.lcModel`.
 #'
 #' The function makes it easier to implement `fitted.lcModel` based on existing implementations that may output their results in different data formats. Furthermore, the function checks whether the input data is valid.
@@ -20,10 +20,10 @@
 #' Users can implement support for other prediction formats by defining the `transformFitted` method with other signatures.
 #'
 #' @section Example implementation:
-#' A typical implementation of `fitted.lcModel()` for your own `lcModel` class would have the following format:
+#' A typical implementation of [fitted.lcModel()] for your own `lcModel` class would have the following format:
 #' \preformatted{
 #' fitted.lcModelExample <- function(object,
-#'   clusters = trajectoryAssignments(object)
+#'  clusters = trajectoryAssignments(object)) {
 #'   # computations of the fitted values per cluster here
 #'   predictionMatrix <- CODE_HERE
 #'   transformFitted(pred = predictionMatrix, model = object, clusters = clusters)
