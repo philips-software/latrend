@@ -657,7 +657,7 @@ setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose
 #' }
 #' @inheritSection lcMethod-class Fitting procedure
 setMethod('prepareData', signature('lcMethod'), function(method, data, verbose) {
-  NULL
+  new.env(parent = emptyenv())
 })
 
 

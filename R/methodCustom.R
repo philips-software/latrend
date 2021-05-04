@@ -75,7 +75,7 @@ setMethod('getShortName', signature('lcMethodCustom'), function(object) 'custom'
 #' @rdname interface-custom
 setMethod('prepareData', signature('lcMethodCustom'), function(method, data, verbose) {
   assert_that(has_name(data, responseVariable(method)))
-  return(NULL)
+  callNextMethod()
 })
 
 #' @rdname interface-custom

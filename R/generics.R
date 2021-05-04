@@ -294,9 +294,7 @@ setGeneric('preFit', function(method, data, envir, verbose, ...) {
 #' @name latrend-generics
 setGeneric('prepareData', function(method, data, verbose, ...) {
   envir <- standardGeneric('prepareData')
-  assert_that(is.null(envir) ||
-      is.environment(envir),
-    msg = 'prepareData(method, ...) returned an unexpected object. Should be environment or NULL')
+  assert_that(is.environment(envir), msg = 'prepareData(method, ...) should return an environment')
   return(envir)
 })
 

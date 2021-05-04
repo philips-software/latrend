@@ -40,9 +40,7 @@ lcMethodFeature = function(response,
                            time = getOption('latrend.time'),
                            id = getOption('latrend.id'),
                            ...) {
-  lcMethod.call('lcMethodFeature',
-                 call = match.call.all(),
-                 excludeArgs = c('verbose'))
+  lcMethod.call('lcMethodFeature', call = match.call.all(), excludeArgs = c('verbose'))
 }
 
 #' @rdname interface-featureBased
@@ -55,7 +53,7 @@ setMethod('getShortName', signature('lcMethodFeature'), function(object) 'twoste
 #' @rdname interface-featureBased
 setMethod('prepareData', signature('lcMethodFeature'), function(method, data, verbose, ...) {
   assert_that(has_name(data, responseVariable(method)))
-  return(NULL)
+  callNextMethod()
 })
 
 #' @rdname interface-featureBased
@@ -79,9 +77,7 @@ setMethod('fit', signature('lcMethodFeature'), function(method, data, envir, ver
     repEnv = new.env()
     repEnv$repMat = repOut
   } else {
-    stop(
-      'unexpected output from the representationStep function. See the documentation ?lcMethodFeature for help.'
-    )
+    stop('unexpected output from the representationStep function. See the documentation ?lcMethodFeature for help.')
   }
 
   assert_that(exists('repMat', envir = repEnv))
