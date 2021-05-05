@@ -241,7 +241,6 @@ setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
 #' @return A `factor` indicating the cluster membership for each trajectory.
 #' @seealso [postprob] [clusterSizes] [predictAssignments]
 #' @examples
-#' library(kml)
 #' data(latrendData)
 #' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' trajectoryAssignments(model)
@@ -288,7 +287,6 @@ setMethod('trajectoryAssignments', signature('lcModel'), function(object, strate
 #' @return A named `numeric vector` with all coefficients, or a `matrix` with each column containing the cluster-specific coefficients. If `coef()` is not defined for the given model, an empty `numeric vector` is returned.
 #' @family model-specific methods
 #' @examples
-#' library(lcmm)
 #' data(latrendData)
 #' method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
 #'   id = "Id", time = "Time", nClusters = 3)
@@ -378,7 +376,6 @@ confusionMatrix = function(object, strategy = which.max, scale = TRUE, ...) {
 #' }
 #' @family model-specific methods
 #' @examples
-#' library(lcmm)
 #' data(latrendData)
 #' method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
 #'   id = "Id", time = "Time", nClusters = 3)
@@ -776,7 +773,6 @@ model.data = function(object, ...) {
 #' @return The full `data.frame` that was used for fitting the `lcModel`.
 #' @seealso [model.frame.lcModel] [time.lcModel]
 #' @examples
-#' library(kml)
 #' data(latrendData)
 #' method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
 #' kml <- latrend(method, latrendData)
@@ -815,7 +811,6 @@ model.data.lcModel = function(object, ...) {
 #' @return An `integer` with the number of trajectories on which the `lcModel` was fitted.
 #' @seealso [nobs] [nClusters]
 #' @examples
-#' library(kml)
 #' data(latrendData)
 #' method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
 #' kml <- latrend(method, latrendData)
@@ -836,7 +831,6 @@ nIds = function(object) {
 #' @return An `integer` with the number of clusters identified by the `lcModel`.
 #' @seealso [nIds] [nobs]
 #' @examples
-#' library(kml)
 #' data(latrendData)
 #' method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
 #' kml <- latrend(method, latrendData)
@@ -855,7 +849,6 @@ nClusters = function(object) {
 #' @family model-specific methods
 #' @seealso [nIds] [nClusters]
 #' @examples
-#' library(kml)
 #' data(latrendData)
 #' method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
 #' kml <- latrend(method, latrendData)
@@ -1025,7 +1018,6 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
 #' @seealso [predict.lcModel]
 #' @family model-specific methods
 #' @examples
-#' library(kml)
 #' data(latrendData)
 #' method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
@@ -1108,14 +1100,21 @@ setMethod('predictPostprob', signature('lcModel'), function(object, newdata = NU
 #' @seealso [predictPostprob] [predict.lcModel]
 #' @family model-specific methods
 #' @examples
-#' library(kml)
+#' \dontrun{
 #' data(latrendData)
 #' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' predictAssignments(model, newdata = data.frame(Id = 999, Y = 0, Time = 0))
-setMethod('predictAssignments', signature('lcModel'), function(object, newdata = NULL, strategy = which.max, ...) {
+#' }
+setMethod('predictAssignments', signature('lcModel'), function(
+  object,
+  newdata = NULL,
+  strategy = which.max,
+  ...
+  ) {
+
   pp = predictPostprob(object, newdata = newdata)
 
-  if(is.null(newdata)) {
+  if (is.null(newdata)) {
     newdata = model.data(object)
   }
 
@@ -1142,7 +1141,6 @@ setMethod('predictAssignments', signature('lcModel'), function(object, newdata =
 #' @return A `ggplot` object.
 #' @seealso [plotClusterTrajectories] [plotTrajectories] [ggplot2::ggplot]
 #' @examples
-#' library(kml)
 #' data(latrendData)
 #' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' plot(model)
@@ -1167,7 +1165,6 @@ setMethod('plot', signature('lcModel'), function(x, y, ...) {
 #' @inheritDotParams trajectories
 #' @seealso [plot] [plotClusterTrajectories] [trajectories]
 #' @examples
-#' library(kml)
 #' data(latrendData)
 #' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' plotTrajectories(model)
@@ -1196,7 +1193,6 @@ setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
 #' @return A `ggplot` object.
 #' @seealso [plot] [plotTrajectories] [clusterTrajectories]
 #' @examples
-#' library(kml)
 #' data(latrendData)
 #' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' plotClusterTrajectories(model)
@@ -1285,7 +1281,6 @@ setMethod('postprob', signature('lcModel'), function(object, ...) {
 #' @return A `ggplot` object.
 #' @seealso [residuals.lcModel] [metric] [plotClusterTrajectories]
 #' @examples
-#' library(lcmm)
 #' data(latrendData)
 #' model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
 #'    id = "Id", time = "Time"), data = latrendData)
@@ -1321,7 +1316,6 @@ setMethod('qqPlot', signature('lcModel'), function(object, byCluster = FALSE, ..
 #' If the `clusters` argument is unspecified, a `matrix` of cluster-specific residuals per observations is returned.
 #' @family model-specific methods
 #' @seealso [fitted.lcModel] [trajectories]
-#' library(lcmm)
 #' data(latrendData)
 #' model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
 #'    id = "Id", time = "Time"), data = latrendData)
@@ -1383,7 +1377,6 @@ setMethod('show', 'lcModel', function(object) {
 #' @seealso [coef.lcModel] [metric]
 #' @family model-specific methods
 #' @examples
-#' library(lcmm)
 #' data(latrendData)
 #' model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
 #'    id = "Id", time = "Time"), data = latrendData)
@@ -1419,7 +1412,6 @@ sigma.lcModel = function(object, ...) {
 #' })
 #' }
 #' @examples
-#' library(lcmm)
 #' data(latrendData)
 #' model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
 #'    id = "Id", time = "Time"), data = latrendData)
@@ -1459,7 +1451,6 @@ setMethod('timeVariable', signature('lcModel'), function(object) object@time)
 #' @param ... Additional arguments.
 #' @return A `data.frame` representing the fitted response per trajectory per moment in time.
 #' @examples
-#' library(kml)
 #' data(latrendData)
 #' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), data = latrendData)
 #' trajectories(model)
@@ -1537,7 +1528,6 @@ time.lcModel = function(x, ...) {
 #' @inheritDotParams latrend
 #' @seealso [latrend] [getCall]
 #' @examples
-#' library(kml)
 #' data(latrendData)
 #' m <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method = m, data = latrendData)

@@ -18,7 +18,6 @@ The full \code{data.frame} that was used for fitting the \code{lcModel}.
 Evaluates the data call in the environment that the model was trained in.
 }
 \examples{
-library(kml)
 data(latrendData)
 method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
 kml <- latrend(method, latrendData)

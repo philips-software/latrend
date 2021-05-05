@@ -30,7 +30,6 @@ coef.lcModelExt <- function(object, ...) {
 }
 
 \examples{
-library(lcmm)
 data(latrendData)
 method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
   id = "Id", time = "Time", nClusters = 3)

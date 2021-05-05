@@ -71,7 +71,6 @@ Instead of passing the plotting arguments through \code{...}, consider modifying
 For example, changing the default line size: \code{update_geom_defaults("line", list(size = 1.5))}
 }
 \examples{
-library(kml)
 data(latrendData)
 model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 plotClusterTrajectories(model)

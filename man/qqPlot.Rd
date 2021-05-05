@@ -21,7 +21,6 @@ A \code{ggplot} object.
 Plot the quantile-quantile (Q-Q) plot for the fitted \code{lcModel} object. This function is based on the \pkg{qqplotr} package.
 }
 \examples{
-library(lcmm)
 data(latrendData)
 model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
    id = "Id", time = "Time"), data = latrendData)

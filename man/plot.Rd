@@ -25,7 +25,6 @@ A \code{ggplot} object.
 Plot a \code{lcModel} object. By default, this plots the cluster trajectories of the model, along with the training data.
 }
 \examples{
-library(kml)
 data(latrendData)
 model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 plot(model)

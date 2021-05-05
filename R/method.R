@@ -494,7 +494,6 @@ getCall.lcMethod = function(x, ...) {
 #' @return The extracted label, as `character`.
 #' @seealso [getName] [getShortName]
 #' @examples
-#' library(kml)
 #' getLabel(lcMethodKML()) # ""
 #'
 #' getLabel(lcMethodKML(label = "v2")) # "v2"
@@ -531,7 +530,6 @@ setMethod('getLabel', signature('lcMethod'), function(object, ...) {
 #'
 #' @seealso [getLabel]
 #' @examples
-#' library(kml)
 #' getName(lcMethodKML()) # "longitudinal k-means"
 setMethod('getName', signature('lcMethod'), function(object, ...) 'undefined')
 
@@ -567,7 +565,6 @@ setMethod('getShortName', 'NULL', function(object, ...) 'nul')
 #' @param ... Not used.
 #' @return The trajectory identifier name, as `character`.
 #' @examples
-#' library(kml)
 #' method <- lcMethodKML(id = "Traj")
 #' idVariable(method) # "Traj"
 #'

@@ -44,7 +44,6 @@ setMethod("predictForCluster", "lcModelExt",
 }
 
 \examples{
-library(kml)
 data(latrendData)
 method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
 model <- latrend(method, latrendData)

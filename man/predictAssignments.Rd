@@ -28,10 +28,11 @@ Computes the posterior probability based on the provided (observed) data.
 The default implementation uses \link{predictPostprob} to determine the cluster membership.
 }
 \examples{
-library(kml)
+\dontrun{
 data(latrendData)
 model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 predictAssignments(model, newdata = data.frame(Id = 999, Y = 0, Time = 0))
+}
 }
 \seealso{
 \link{predictPostprob} \link{predict.lcModel}

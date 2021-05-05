@@ -23,7 +23,6 @@ By default, residuals are computed under the most likely cluster assignment for 
 }
 \seealso{
 \link{fitted.lcModel} \link{trajectories}
-library(lcmm)
 data(latrendData)
 model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
 id = "Id", time = "Time"), data = latrendData)

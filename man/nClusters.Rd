@@ -16,7 +16,6 @@ An \code{integer} with the number of clusters identified by the \code{lcModel}.
 Get the number of clusters estimated by the given \code{lcModel} object.
 }
 \examples{
-library(kml)
 data(latrendData)
 method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
 kml <- latrend(method, latrendData)

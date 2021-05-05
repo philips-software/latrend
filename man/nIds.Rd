@@ -17,7 +17,6 @@ Get the number of trajectories (strata) that were used for fitting the given \co
 The number of trajectories is determined from the number of unique identifiers in the training data. In case the trajectory ids were supplied using a \code{factor} column, the number of trajectories is determined by the number of levels instead.
 }
 \examples{
-library(kml)
 data(latrendData)
 method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
 kml <- latrend(method, latrendData)

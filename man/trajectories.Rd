@@ -39,7 +39,6 @@ A \code{data.frame} representing the fitted response per trajectory per moment i
 Extract the fitted trajectories for all strata
 }
 \examples{
-library(kml)
 data(latrendData)
 model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), data = latrendData)
 trajectories(model)

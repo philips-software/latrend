@@ -38,7 +38,6 @@ Another strategy to consider is the function \code{\link[=which.weight]{which.we
 In case \code{object} is a \code{matrix}: the posterior probability \code{matrix}, with the \eqn{k}th column containing the observation- or trajectory-specific probability for cluster \eqn{k}.
 }
 \examples{
-library(kml)
 data(latrendData)
 model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 trajectoryAssignments(model)

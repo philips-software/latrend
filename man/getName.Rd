@@ -43,7 +43,6 @@ however in practice this is not needed as the names are determined by default fr
 }
 
 \examples{
-library(kml)
 getName(lcMethodKML()) # "longitudinal k-means"
 getShortName(lcMethodKML()) # "KML"
 }

@@ -28,7 +28,6 @@ The refitted \code{lcModel} object, of the same type as the \code{object} argume
 Fit a new model with modified arguments from the current model.
 }
 \examples{
-library(kml)
 data(latrendData)
 m <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
 model <- latrend(method = m, data = latrendData)

@@ -18,7 +18,6 @@ A \code{numeric} indicating the residual standard deviation.
 Extracts or estimates the residual standard deviation. If \code{\link[=sigma]{sigma()}} is not defined for a model, it is estimated from the residual error vector.
 }
 \examples{
-library(lcmm)
 data(latrendData)
 model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
    id = "Id", time = "Time"), data = latrendData)
