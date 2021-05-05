@@ -38,6 +38,7 @@
 #' @slot arguments A `list` representing the arguments of the `lcMethod` object. Arguments are not evaluated upon creation of the method object. Instead, arguments are stored similar to a `call` object. Do not modify or access.
 #' @slot sourceCalls A list of calls for tracking the original call after substitution. Used for printing objects which require too many characters (e.g. ,function definitions, matrices).
 #' @family lcMethod implementations
+#' @family lcMethod functions
 setClass('lcMethod', slots = c(arguments = 'environment', sourceCalls = 'list'))
 
 #. initialize ####
@@ -68,6 +69,7 @@ setValidity('lcMethod', function(object) {
 
 #. $ ####
 #' @export
+#' @name [[,lcMethod-method
 #' @rdname indexy
 #' @aliases $,lcMethod-method
 #' @param name The argument name, as `character`.
