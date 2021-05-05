@@ -3,20 +3,7 @@
 \docType{class}
 \name{lcMethod-class}
 \alias{lcMethod-class}
-\alias{length,lcMethod-method}
-\alias{names,lcMethod-method}
 \title{lcMethod class}
-\usage{
-\S4method{length}{lcMethod}(x)
-
-\S4method{names}{lcMethod}(x)
-}
-\arguments{
-\item{x}{The \code{lcMethod} object.}
-}
-\value{
-A \verb{character vector} of argument names.
-}
 \description{
 Objects of type \code{lcMethod} enable the specification and estimation of different methods for longitudinal clustering.
 The base class \code{lcMethod} provides the logic for storing, evaluating, and printing the method parameters.
@@ -64,10 +51,6 @@ These steps, as part of the fitting procedure, are executed by \code{\link[=latr
 The result of the fitting procedure is an \linkS4class{lcModel} object that inherits from the \code{lcModel} class.
 }
 
-\examples{
-m = lcMethodKML("Y")
-names(m)
-}
 \seealso{
 \link{environment} \link{lcMethod-constructor}
 
@@ -90,16 +73,5 @@ Other lcMethod implementations:
 \code{\link{lcMethodMixtoolsNPRM}},
 \code{\link{lcMethodRandom}},
 \code{\link{lcMethodStratify}}
-
-Other lcMethod functions: 
-\code{\link{[[,lcMethod-method}},
-\code{\link{as.data.frame.lcMethods}()},
-\code{\link{as.data.frame.lcMethod}()},
-\code{\link{as.lcMethods}()},
-\code{\link{as.list.lcMethod}()},
-\code{\link{evaluate.lcMethod}()},
-\code{\link{formula.lcMethod}()},
-\code{\link{update.lcMethod}()}
 }
-\concept{lcMethod functions}
 \concept{lcMethod implementations}

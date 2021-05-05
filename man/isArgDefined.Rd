@@ -9,7 +9,7 @@ isArgDefined(object, name, envir = environment(object))
 \arguments{
 \item{object}{The \code{lcMethod} object.}
 
-\item{name}{The name of the argument.}
+\item{name}{The name of the argument, as \code{character}.}
 
 \item{envir}{The \code{environment} to evaluate the arguments in. If \code{NULL}, the argument is not evaluated.}
 }

@@ -68,11 +68,9 @@ setValidity('lcMethod', function(object) {
 
 #. $ ####
 #' @export
-#' @rdname cash
-#' @title Retrieve and evaluate a lcMethod argument by name
-#' @param x The `lcMethod` object.
-#' @param name Name of the argument to retrieve.
-#' @return The argument evaluation result.
+#' @rdname indexy
+#' @aliases $,lcMethod-method
+#' @param name The argument name, as `character`.
 #' @examples
 #' m <- lcMethodKML(nClusters = 3)
 #' m$nClusters # 3
@@ -574,7 +572,7 @@ setMethod('idVariable', signature('lcMethod'), function(object, ...) object$id)
 #' @title Check whether the argument of a lcMethod has a defined value.
 #' @description Determines whether the associated argument value is defined. If the argument value is of type `language`, the argument is evaluated to see if it can be resolved within its `environment`.
 #' @param object The `lcMethod` object.
-#' @param name The name of the argument.
+#' @param name The name of the argument, as `character`.
 #' @param envir The `environment` to evaluate the arguments in. If `NULL`, the argument is not evaluated.
 #' @keywords internal
 isArgDefined = function(object, name, envir = environment(object)) {
@@ -595,7 +593,7 @@ isArgDefined = function(object, name, envir = environment(object)) {
     if (is.null(envir)) {
       return(FALSE)
     } else {
-      arg = try(object[[name, envir = envir]], silent = TRUE)
+      arg = try(object[[name[1], envir = envir]], silent = TRUE)
       return(!is(arg, 'try-error'))
     }
   } else {
@@ -617,21 +615,25 @@ is.lcMethod = function(x) {
 
 #. length ####
 #' @export
-#' @rdname lcMethod-class
-#' @param x The `lcMethod` object.
+#' @name names,lcMethod-method
+#' @rdname names-lcMethod-method
+#' @aliases length,lcMethod-method
+#' @return The number of arguments, as `integer`.
 setMethod('length', signature('lcMethod'), function(x) {
   length(x@arguments)
 })
 
 
 #. names ####
+#' @export
 #' @title lcMethod argument names
-#' @rdname lcMethod-class
+#' @description Extract the argument names or number of arguments from an `lcMethod` object.
 #' @param x The `lcMethod` object.
 #' @return A `character vector` of argument names.
 #' @examples
-#' m = lcMethodKML("Y")
+#' m = lcMethodKML()
 #' names(m)
+#' length(m)
 #' @family lcMethod functions
 setMethod('names', signature('lcMethod'), function(x) {
   argNames = names(x@arguments)

@@ -33,13 +33,13 @@ Substitutes the call arguments if they can be evaluated without error.
 \link{compose}
 
 Other lcMethod functions: 
-\code{\link{[[,lcMethod-method}},
+\code{\link{$,lcMethod-method}},
 \code{\link{as.data.frame.lcMethods}()},
 \code{\link{as.data.frame.lcMethod}()},
 \code{\link{as.lcMethods}()},
 \code{\link{as.list.lcMethod}()},
 \code{\link{formula.lcMethod}()},
-\code{\link{lcMethod-class}},
+\code{\link{names,lcMethod-method}},
 \code{\link{update.lcMethod}()}
 }
 \concept{lcMethod functions}
