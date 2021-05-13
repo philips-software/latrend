@@ -1187,7 +1187,7 @@ setMethod('plot', signature('lcModel'), function(x, y, ...) {
 setMethod('plotFittedTrajectories', signature('lcModel'), function(object, ...) {
   data = fittedTrajectories(object, ...)
 
-  .plotTrajs(
+  plotTrajectories(
     data,
     response = responseVariable(object),
     time = timeVariable(object),

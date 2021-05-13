@@ -3,35 +3,25 @@
 \name{plotFittedTrajectories}
 \alias{plotFittedTrajectories}
 \alias{plotFittedTrajectories,lcModel-method}
-\alias{plotTrajectories,lcModel-method}
 \title{Plot fitted trajectories of a lcModel}
 \usage{
 \S4method{plotFittedTrajectories}{lcModel}(object, ...)
-
-\S4method{plotTrajectories}{lcModel}(object, ...)
 }
 \arguments{
 \item{...}{
-  Arguments passed on to \code{\link[=trajectories]{trajectories}}, \code{\link[=trajectories]{trajectories}}
+  Arguments passed on to \code{\link[=trajectories]{trajectories}}
   \describe{
     \item{\code{object}}{The data or model or extract the trajectories from.}
   }}
 }
 \description{
 Plot fitted trajectories of a lcModel
-
-Plot fitted trajectories of a lcModel
 }
 \examples{
-data(latrendData)
-model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-plotFittedTrajectories(model)
 data(latrendData)
 model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 plotFittedTrajectories(model)
 }
 \seealso{
 \link{fittedTrajectories} \link{plotClusterTrajectories} \link{plotTrajectories} \link{plot}
-
-\link{trajectories} \link{plotFittedTrajectories} \link{plotClusterTrajectories} \link{plot}
 }

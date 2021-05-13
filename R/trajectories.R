@@ -29,13 +29,9 @@ setMethod('trajectories', signature('matrix'), function(object, id, time, respon
 #' @param envir The `environment` used to evaluate the data object in (e.g., in case `object` is of type `call`).
 setMethod('trajectories', signature('call'), function(object, ..., envir) {
   data = eval(object, envir = envir)
-
-  trajectories(
-    data,
-    ...,
-    envir = envir
-  )
+  trajectories(data, ..., envir = envir)
 })
+
 
 # Plot cluster trajectories ####
 #' @export
@@ -161,6 +157,13 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
 #' plotTrajectories(latrendData, response = "Y", id = "Id", time = "Time")
 #'
 #' plotTrajectories(latrendData, response = quote(exp(Y)), id = "Id", time = "Time")
+#'
+#' plotTrajectories(latrendData, response = "Y", id = "Id", time = "Time", cluster = "Class")
+#'
+#' # compute cluster membership based on the mean being below 0
+#' assignments = aggregate(Y ~ Id, latrendData, mean)$Y < 0
+#' plotTrajectories(latrendData,
+#'   response = "Y", id = "Id", time = "Time", cluster = assignments)
 setMethod('plotTrajectories', signature('data.frame'), function(
   object,
   response,
@@ -170,14 +173,37 @@ setMethod('plotTrajectories', signature('data.frame'), function(
   facet = TRUE,
   ...) {
 
-  if (length(cluster) > 1) {
+  assert_that(
+    !is.character(response) || has_name(object, response),
+    has_name(object, time),
+    has_name(object, id),
+    is.null(cluster) || has_name(object, cluster),
+    is.flag(facet)
+  )
+
+  if (!is.null(cluster)) {
     assert_that(length(cluster) == uniqueN(object[[id]]))
     object$Cluster = cluster[rleidv(object[[id]])]
     cluster = 'Cluster'
   }
 
-  .plotTrajs(object, response, time, id, cluster, facet = facet)
+  if (!is.null(cluster) && !facet) {
+    map = aes_string(x = time, y = response, group = id, cluster = cluster, color = cluster)
+  } else {
+    map = aes_string(x = time, y = response, group = id, cluster = cluster)
+  }
+
+  p = ggplot(data = object, mapping = map) +
+    theme(legend.position = 'top') +
+    geom_line() +
+    labs(title = 'Trajectories')
+
+  if (!is.null(cluster) && facet) {
+    p = p + facet_wrap(cluster)
+  }
+  return (p)
 })
+
 
 #' @export
 #' @rdname plotTrajectories
@@ -186,31 +212,3 @@ setMethod('plotTrajectories', signature('ANY'), function(object, ...) {
   data = trajectories(object, ...)
   plotTrajectories(data, ...)
 })
-
-
-.plotTrajs = function(data, response, time, id, cluster, facet = TRUE) {
-  assert_that(
-    !is.character(response) || has_name(data, response),
-    has_name(data, time),
-    has_name(data, id),
-    is.null(cluster) || has_name(data, cluster),
-    is.flag(facet)
-  )
-
-  if (!is.null(cluster) && !facet) {
-    map = aes_string(x = time, y = response, group = id, cluster = cluster, color = cluster)
-  } else {
-    map = aes_string(x = time, y = response, group = id, cluster = cluster)
-  }
-
-  p = ggplot(data = data, mapping = map) +
-    theme(legend.position = 'top') +
-    geom_line() +
-    labs(title = 'Trajectories')
-
-  if (!is.null(cluster) && facet) {
-    p = p + facet_wrap(cluster)
-  }
-  return(p)
-}
-
