@@ -16,13 +16,16 @@ testFold(data, fold, id, folds, seed)
 \arguments{
 \item{data}{The \code{data.frame} representing the model dataset.}
 
-\item{id}{The name of the trajectory identifier variable.}
+\item{id}{The identifier variable name.}
 
 \item{seed}{Optional seed for ensuring reproducibility.}
 
 \item{fold}{The fold to select.}
 
 \item{folds}{Total number of folds to create.}
+}
+\value{
+A subset of \code{data} of type \code{data.frame}.
 }
 \description{
 The data filters are applied by \link{latrend} prior to model estimation. These filters are used in \link{latrendBoot} and \link{latrendCV}.

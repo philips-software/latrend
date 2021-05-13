@@ -190,10 +190,7 @@ setMethod('postprob', signature('lcModelCustom'), function(object, ...) {
 
 #' @export
 #' @rdname interface-custom
-predict.lcModelCustom = function(object,
-                                 ...,
-                                 newdata = NULL,
-                                 what = 'mu') {
+predict.lcModelCustom = function(object, ..., newdata = NULL, what = 'mu') {
   if (is.null(object@predict)) {
     NULL
   } else {
@@ -222,11 +219,12 @@ setMethod('predictPostprob', signature('lcModelCustom'), function(object, newdat
 
 #' @rdname interface-custom
 #' @inheritParams clusterTrajectories
-setMethod('clusterTrajectories',
-  signature('lcModelCustom'), function(object, at = time(object), ...) {
+setMethod('clusterTrajectories', signature('lcModelCustom'),
+  function(object, at = time(object), ...) {
+
   if (all(at %in% time(object))) {
     dt_traj = object@clusterTrajectories %>%
-      as.data.table %>%
+      as.data.table() %>%
       .[, Cluster := factor(Cluster,
                             levels = 1:nClusters(object),
                             labels = clusterNames(object))]
@@ -235,12 +233,13 @@ setMethod('clusterTrajectories',
   } else {
     dt_traj = object@predict(object, at, ...)
   }
-  return(dt_traj[])
+
+  dt_traj[]
 })
 
 #' @rdname interface-custom
 #' @inheritParams trajectories
-setMethod('trajectories', signature('lcModelCustom'), function(object, at, what, ...) {
+setMethod('fittedTrajectories', signature('lcModelCustom'), function(object, at, ...) {
   if (all(at %in% time(object))) {
     object@trajectories
   } else {

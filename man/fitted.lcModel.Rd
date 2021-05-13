@@ -39,7 +39,7 @@ model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 fitted(model)
 }
 \seealso{
-\link[stats:fitted.values]{stats::fitted} \link{predict.lcModel} \link{trajectoryAssignments} \link{transformFitted}
+\link{fittedTrajectories} \link{plotFittedTrajectories} \link[stats:fitted.values]{stats::fitted} \link{predict.lcModel} \link{trajectoryAssignments} \link{transformFitted}
 
 Other model-specific methods: 
 \code{\link{clusterTrajectories}()},
@@ -47,6 +47,7 @@ Other model-specific methods:
 \code{\link{converged}()},
 \code{\link{deviance.lcModel}()},
 \code{\link{df.residual.lcModel}()},
+\code{\link{fittedTrajectories,lcModel-method}},
 \code{\link{lcModel-class}},
 \code{\link{logLik.lcModel}()},
 \code{\link{model.frame.lcModel}()},
@@ -58,7 +59,6 @@ Other model-specific methods:
 \code{\link{predictPostprob}()},
 \code{\link{residuals.lcModel}()},
 \code{\link{sigma.lcModel}()},
-\code{\link{time.lcModel}()},
-\code{\link{trajectories}()}
+\code{\link{time.lcModel}()}
 }
 \concept{model-specific methods}

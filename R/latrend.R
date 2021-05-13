@@ -52,7 +52,7 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
   response = responseVariable(cmethod)
 
   # transform data
-  modelData = transformLatrendData(
+  modelData = trajectories(
     data,
     id = id,
     time = time,
@@ -221,7 +221,7 @@ latrendRep = function(method,
   )
 
   # transform data
-  modelData = transformLatrendData(
+  modelData = trajectories(
     data,
     id = id,
     time = time,
@@ -618,64 +618,15 @@ createTestDataFolds = function(data, trainDataList, ...) {
 
 
 # Data helper functions ####
-#. transformLatrendData ####
-#' @export
-#' @rdname transformLatrendData
-#' @title Transform latrend input data into the right format
-#' @description This function is also responsible for checking whether the input data is valid, such that the fitting process can fail early.
-#' @param object The data object to transform.
-#' @param envir The `environment` used to evaluate the data object in (e.g., in case `object` is of type `call`).
-#' @inheritParams lcMethodKML
-#' @return A `data.frame` with an id, time, and measurement columns.
-setGeneric('transformLatrendData', function(object, id, time, response, envir) {
-  data <- standardGeneric('transformLatrendData')
-
-  assert_that(
-    is.data.frame(data),
-    has_name(data, id),
-    has_name(data, time),
-    is.numeric(data[[id]]) || is.factor(data[[id]]) || is.character(data[[id]]),
-    noNA(data[[id]]),
-    noNA(data[[time]])
-  )
-
-  return(data)
-})
-
-#' @rdname transformLatrendData
-#' @aliases transformLatrendData,data.frame-method
-setMethod('transformLatrendData', signature('data.frame'), function(object, id, time, response, envir) {
-  object
-})
-
-#' @rdname transformLatrendData
-#' @aliases transformLatrendData,matrix-method
-setMethod('transformLatrendData', signature('matrix'), function(object, id, time, response, envir) {
-  data = meltRepeatedMeasures(object, id = id, time = time, response = response)
-  transformLatrendData(data, id = id, time = time, response = response, envir = envir)
-})
-
-#' @rdname transformLatrendData
-#' @aliases transformLatrendData,call-method
-setMethod('transformLatrendData', signature('call'), function(object, id, time, response, envir) {
-  data = eval(object, envir = envir)
-  transformLatrendData(
-    data,
-    id = id,
-    time = time,
-    response = response,
-    envir = envir
-  )
-})
-
 #' @export
 #' @name lcModel-data-filters
 #' @rdname lcModel-data-filters
 #' @title Data filters for lcModel
 #' @description The data filters are applied by [latrend] prior to model estimation. These filters are used in [latrendBoot] and [latrendCV].
-#' @inheritParams transformLatrendData
+#' @inheritParams trajectories
 #' @param data The `data.frame` representing the model dataset.
 #' @param seed Optional seed for ensuring reproducibility.
+#' @return A subset of `data` of type `data.frame`.
 #' @family validation methods
 bootSample = function(data, id, seed = NULL) {
   assert_that(is.data.frame(data), has_name(data, id))

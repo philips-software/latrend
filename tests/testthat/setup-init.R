@@ -144,6 +144,8 @@ expect_valid_lcModel = function(object) {
   # Derivative predict
   clusterTrajectories(object) %>%
     expect_is('data.frame', label='clusterTrajectories')
+  fittedTrajectories(object) %>%
+    expect_is(c('NULL', 'data.frame'), label='fittedTrajectories')
   trajectories(object) %>%
     expect_is('data.frame', label='trajectories')
 

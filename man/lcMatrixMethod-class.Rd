@@ -15,7 +15,7 @@
 \S4method{prepareData}{lcMatrixMethod}(method, data, verbose, ...)
 }
 \arguments{
-\item{object}{The data object to transform.}
+\item{object}{The data or model or extract the trajectories from.}
 
 \item{...}{Additional arguments.}
 

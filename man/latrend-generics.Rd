@@ -6,8 +6,6 @@
 \alias{getShortName,NULL-method}
 \title{Method- and model-specific generics defined by the latrend package}
 \usage{
-trajectoryAssignments(object, ...)
-
 clusterProportions(object, ...)
 
 clusterTrajectories(object, ...)
@@ -25,6 +23,14 @@ externalMetric(
 
 fit(method, data, envir, verbose, ...)
 
+fittedTrajectories(
+  object,
+  at = time(object),
+  what = "mu",
+  clusters = trajectoryAssignments(object),
+  ...
+)
+
 getLabel(object, ...)
 
 getName(object, ...)
@@ -39,11 +45,11 @@ metric(
   ...
 )
 
+plotFittedTrajectories(object, ...)
+
 plotClusterTrajectories(object, ...)
 
-qqPlot(object, ...)
-
-plotTrajectories(object, ...)
+postFit(method, data, model, envir, verbose, ...)
 
 postprob(object, ...)
 
@@ -53,17 +59,19 @@ predictForCluster(object, newdata = NULL, cluster, ...)
 
 predictPostprob(object, newdata = NULL, ...)
 
-postFit(method, data, model, envir, verbose, ...)
+prepareData(method, data, verbose, ...)
 
 preFit(method, data, envir, verbose, ...)
 
-prepareData(method, data, verbose, ...)
+qqPlot(object, ...)
 
 responseVariable(object, ...)
 
 strip(object, ...)
 
 timeVariable(object, ...)
+
+trajectoryAssignments(object, ...)
 
 validate(method, data, envir, ...)
 
@@ -88,11 +96,11 @@ validate(method, data, envir, ...)
 
 \item{verbose}{\link[R.utils:Verbose]{R.utils::Verbose}.}
 
+\item{what}{Parameter.}
+
 \item{newdata}{\code{data.frame} of newdata.}
 
 \item{cluster}{Cluster name.}
-
-\item{what}{Parameter.}
 }
 \value{
 The stripped (i.e., updated) object.

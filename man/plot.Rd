@@ -30,5 +30,5 @@ model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendDat
 plot(model)
 }
 \seealso{
-\link{plotClusterTrajectories} \link{plotTrajectories} \link[ggplot2:ggplot]{ggplot2::ggplot}
+\link{plotClusterTrajectories} \link{plotFittedTrajectories} \link{plotTrajectories} \link[ggplot2:ggplot]{ggplot2::ggplot}
 }

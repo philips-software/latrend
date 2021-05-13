@@ -1,4 +1,4 @@
-#' @include method.R plot.R latrend.R
+#' @include method.R trajectories.R latrend.R
 #' @importFrom stats coef deviance df.residual getCall logLik model.frame model.matrix predict residuals sigma time update
 
 
@@ -225,49 +225,6 @@ setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
   colMeans(pp)
 })
 
-#. trajectoryAssignments ####
-#' @export
-#' @name trajectoryAssignments
-#' @aliases trajectoryAssignments,lcModel-method
-#' @title Get the cluster membership of each trajectory
-#' @description Classify the fitted trajectories based on the posterior probabilities computed by [postprob()], according to a given classification strategy.
-#'
-#' By default, trajectories are assigned based on the highest posterior probability using [which.max()].
-#' In cases where identical probabilities are expected between clusters, it is preferable to use \link[nnet]{which.is.max} instead, as this function breaks ties at random.
-#' Another strategy to consider is the function [which.weight()], which enables weighted sampling of cluster assignments based on the trajectory-specific probabilities.
-#' @param object The object to obtain the cluster assignments from.
-#' @param strategy A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.
-#' @param ... Any additional arguments passed to the strategy function.
-#' @return A `factor` indicating the cluster membership for each trajectory.
-#' @seealso [postprob] [clusterSizes] [predictAssignments]
-#' @examples
-#' data(latrendData)
-#' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-#' trajectoryAssignments(model)
-#'
-#' # assign trajectories at random using weighted sampling
-#' trajectoryAssignments(model, strategy = which.weight)
-setMethod('trajectoryAssignments', signature('lcModel'), function(object, strategy = which.max, ...) {
-  pp = postprob(object)
-
-  result = apply(pp, 1, strategy, ...)
-
-  assert_that(
-    is.numeric(result),
-    length(result) == nIds(object),
-    all(
-      vapply(result, is.count, FUN.VALUE = TRUE) |
-        vapply(result, is.na, FUN.VALUE = TRUE)),
-    min(result, na.rm = TRUE) >= 1,
-    max(result, na.rm = TRUE) <= nClusters(object)
-  )
-
-  assignments = factor(result, levels = 1:nClusters(object), labels = clusterNames(object))
-
-  make.trajectoryAssignments(object, assignments)
-})
-
-
 
 #' @export
 #' @importFrom stats coef
@@ -489,7 +446,7 @@ setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, ob
 #' }
 #' }
 #' The [transformFitted()] function takes care of transforming the prediction input to the right output format.
-#' @seealso [stats::fitted] [predict.lcModel] [trajectoryAssignments] [transformFitted]
+#' @seealso [fittedTrajectories] [plotFittedTrajectories] [stats::fitted] [predict.lcModel] [trajectoryAssignments] [transformFitted]
 #' @family model-specific methods
 #' @examples
 #' data(latrendData)
@@ -499,6 +456,65 @@ fitted.lcModel = function(object, ..., clusters = trajectoryAssignments(object))
   pred = predict(object, newdata = NULL)
   transformFitted(pred = pred, model = object, clusters = clusters)
 }
+
+
+# . fittedTrajectories ####
+#' @export
+#' @rdname fittedTrajectories
+#' @aliases fittedTrajectories,lcModel-method
+#' @title Extract the fitted trajectories for all strata
+#' @param object The model.
+#' @param at The time points at which to compute the id-specific trajectories.
+#' @param what The distributional parameter to compute the response for.
+#' @param clusters The cluster assignments for the strata to base the trajectories on.
+#' @param ... Additional arguments.
+#' @return A `data.frame` representing the fitted response per trajectory per moment in time.
+#' @examples
+#' data(latrendData)
+#' m <- lcMethodKML("Y", id = "Id", time = "Time")
+#' model <- latrend(method = m, data = latrendData)
+#' fittedTrajectories(model)
+#'
+#' fittedTrajectories(model, at = c(0, .5, 1))
+#' @family model-specific methods
+setMethod('fittedTrajectories', signature('lcModel'), function(object, at, what, clusters, ...) {
+  ids = ids(object)
+  assert_that(length(clusters) == nIds(object))
+
+  if (is.numeric(at)) {
+    newdata = data.table(
+      Id = rep(ids, each = length(at)),
+      Cluster = rep(clusters, each = length(at)),
+      Time = at
+    ) %>%
+      setnames('Id', idVariable(object)) %>%
+      setnames('Time', timeVariable(object))
+  } else if (is.list(at)) {
+    assert_that(has_name(at, timeVariable(object)), msg = 'Named list at must contain the time covariate')
+    assert_that(!has_name(at, c(idVariable(object), 'Cluster')))
+
+    at = as.data.table(at)
+    idx = seq_len(nrow(at)) %>% rep(length(ids))
+    newdata = data.table(Id = rep(ids, each = nrow(at)),
+      Cluster = rep(clusters, each = nrow(at)),
+      at[idx,]) %>%
+      setnames('Id', idVariable(object))
+  } else {
+    stop('unsupported input')
+  }
+
+  preds = predict(object, newdata = newdata, what = what)
+
+  if (is.null(preds)) {
+    warning('fitted predictions not supported by the model: got NULL output')
+    return (NULL)
+  }
+
+  assert_that(is.data.frame(preds))
+  assert_that(nrow(preds) == nrow(newdata), msg = 'invalid output from predict function of lcModel; expected a prediction per newdata row')
+  newdata[, c(responseVariable(object, what = what)) := preds$Fit]
+  return(newdata[])
+})
 
 
 #' @export
@@ -789,7 +805,7 @@ model.data.lcModel = function(object, ...) {
                 msg = sprintf('could not find "%s" in the model environment', deparse(data)))
     assert_that(!is.function(data), msg = sprintf('The data object was not found in the model environment. The data object currently evaluates to a function, indicating the original training data is not loaded.'))
 
-    modelData = transformLatrendData(
+    modelData = trajectories(
       data,
       id = idVariable(object),
       time = timeVariable(object),
@@ -1139,7 +1155,7 @@ setMethod('predictAssignments', signature('lcModel'), function(
 #' @param y Not used.
 #' @inheritDotParams plotClusterTrajectories
 #' @return A `ggplot` object.
-#' @seealso [plotClusterTrajectories] [plotTrajectories] [ggplot2::ggplot]
+#' @seealso [plotClusterTrajectories] [plotFittedTrajectories] [plotTrajectories] [ggplot2::ggplot]
 #' @examples
 #' data(latrendData)
 #' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
@@ -1155,21 +1171,22 @@ setMethod('plot', signature('lcModel'), function(x, y, ...) {
 })
 
 
-#. plotTrajectories ####
+#. plotFittedTrajectories ####
 #' @export
-#' @name plotTrajectories
-#' @rdname plotTrajectories
-#' @aliases plotTrajectories,lcModel-method
+#' @name plotFittedTrajectories
+#' @rdname plotFittedTrajectories
+#' @aliases plotFittedTrajectories,lcModel-method
 #' @title Plot fitted trajectories of a lcModel
 #' @param ... Arguments passed to [trajectories].
 #' @inheritDotParams trajectories
-#' @seealso [plot] [plotClusterTrajectories] [trajectories]
+#' @seealso [fittedTrajectories] [plotClusterTrajectories] [plotTrajectories] [plot]
 #' @examples
 #' data(latrendData)
 #' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-#' plotTrajectories(model)
-setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
-  data = trajectories(object, ...)
+#' plotFittedTrajectories(model)
+setMethod('plotFittedTrajectories', signature('lcModel'), function(object, ...) {
+  data = fittedTrajectories(object, ...)
+
   .plotTrajs(
     data,
     response = responseVariable(object),
@@ -1191,7 +1208,7 @@ setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
 #' @param trajAssignments The cluster assignments for the fitted trajectories. Only used when `trajectories = TRUE` and `facet = TRUE`. See [trajectoryAssignments].
 #' @param ... Arguments passed to [clusterTrajectories()], or [ggplot2::geom_line()] for plotting the cluster trajectory lines.
 #' @return A `ggplot` object.
-#' @seealso [plot] [plotTrajectories] [clusterTrajectories]
+#' @seealso [clusterTrajectories] [plotFittedTrajectories] [plotTrajectories] [plot]
 #' @examples
 #' data(latrendData)
 #' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
@@ -1232,6 +1249,21 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
     facet = facet,
     rawdata = rawdata,
     ...)
+})
+
+
+#. plotTrajectories ####
+#' @export
+#' @rdname plotTrajectories
+#' @aliases plotTrajectories,lcModel-method
+#' @inheritDotParams trajectories
+#' @examples
+#' data(latrendData)
+#' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+#' plotTrajectories(model)
+setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
+  data = trajectories(object, ...)
+  plotTrajectories(data, ...)
 })
 
 
@@ -1440,64 +1472,6 @@ setMethod('strip', signature('lcModel'), function(object, ..., classes = 'formul
 setMethod('timeVariable', signature('lcModel'), function(object) object@time)
 
 
-# . trajectories ####
-#' @export
-#' @rdname trajectories
-#' @title Extract the fitted trajectories for all strata
-#' @param object The model.
-#' @param at The time points at which to compute the id-specific trajectories.
-#' @param what The distributional parameter to compute the response for.
-#' @param clusters The cluster assignments for the strata to base the trajectories on.
-#' @param ... Additional arguments.
-#' @return A `data.frame` representing the fitted response per trajectory per moment in time.
-#' @examples
-#' data(latrendData)
-#' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), data = latrendData)
-#' trajectories(model)
-#'
-#' trajectories(model, at = c(0, .5, 1))
-#' @family model-specific methods
-setGeneric('trajectories', function(object,
-                                    at = time(object),
-                                    what = 'mu',
-                                    clusters = trajectoryAssignments(object),
-                                    ...) standardGeneric('trajectories'))
-
-#' @rdname trajectories
-#' @aliases trajectories,lcModel-method
-setMethod('trajectories', signature('lcModel'), function(object, at, what, clusters, ...) {
-  ids = ids(object)
-  assert_that(length(clusters) == nIds(object))
-
-  if (is.numeric(at)) {
-    newdata = data.table(
-      Id = rep(ids, each = length(at)),
-      Cluster = rep(clusters, each = length(at)),
-      Time = at
-    ) %>%
-      setnames('Id', idVariable(object)) %>%
-      setnames('Time', timeVariable(object))
-  } else if (is.list(at)) {
-    assert_that(has_name(at, timeVariable(object)), msg = 'Named list at must contain the time covariate')
-    assert_that(!has_name(at, c(idVariable(object), 'Cluster')))
-
-    at = as.data.table(at)
-    idx = seq_len(nrow(at)) %>% rep(length(ids))
-    newdata = data.table(Id = rep(ids, each = nrow(at)),
-                         Cluster = rep(clusters, each = nrow(at)),
-                         at[idx,]) %>%
-      setnames('Id', idVariable(object))
-  } else {
-    stop('unsupported input')
-  }
-
-  preds = predict(object, newdata = newdata, what = what)
-
-  assert_that(is.data.frame(preds))
-  assert_that(nrow(preds) == nrow(newdata), msg = 'invalid output from predict function of lcModel; expected a prediction per newdata row')
-  newdata[, c(responseVariable(object, what = what)) := preds$Fit]
-  return(newdata[])
-})
 
 
 #' @export
@@ -1516,6 +1490,67 @@ time.lcModel = function(x, ...) {
     x@times
   }
 }
+
+
+# . trajectories ####
+#' @rdname trajectories
+#' @aliases trajectories,lcModel-method
+setMethod('trajectories', signature('lcModel'), function(object, ...) {
+  data = model.data(object)
+
+  assert_that(!is.null(data), msg = 'no associated training data for this model')
+
+  id = idVariable(object)
+  time = timeVariable(object)
+  res = responseVariable(object)
+
+  trajdata = subset(data, select = c(id, time, res))
+
+  trajectories(trajdata, id = id, time = time, response = res)
+})
+
+
+#. trajectoryAssignments ####
+#' @export
+#' @name trajectoryAssignments
+#' @aliases trajectoryAssignments,lcModel-method
+#' @title Get the cluster membership of each trajectory
+#' @description Classify the fitted trajectories based on the posterior probabilities computed by [postprob()], according to a given classification strategy.
+#'
+#' By default, trajectories are assigned based on the highest posterior probability using [which.max()].
+#' In cases where identical probabilities are expected between clusters, it is preferable to use \link[nnet]{which.is.max} instead, as this function breaks ties at random.
+#' Another strategy to consider is the function [which.weight()], which enables weighted sampling of cluster assignments based on the trajectory-specific probabilities.
+#' @param object The object to obtain the cluster assignments from.
+#' @param strategy A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.
+#' @param ... Any additional arguments passed to the strategy function.
+#' @return A `factor` indicating the cluster membership for each trajectory.
+#' @seealso [postprob] [clusterSizes] [predictAssignments]
+#' @examples
+#' data(latrendData)
+#' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+#' trajectoryAssignments(model)
+#'
+#' # assign trajectories at random using weighted sampling
+#' trajectoryAssignments(model, strategy = which.weight)
+setMethod('trajectoryAssignments', signature('lcModel'), function(object, strategy = which.max, ...) {
+  pp = postprob(object)
+
+  result = apply(pp, 1, strategy, ...)
+
+  assert_that(
+    is.numeric(result),
+    length(result) == nIds(object),
+    all(
+      vapply(result, is.count, FUN.VALUE = TRUE) |
+        vapply(result, is.na, FUN.VALUE = TRUE)),
+    min(result, na.rm = TRUE) >= 1,
+    max(result, na.rm = TRUE) <= nClusters(object)
+  )
+
+  assignments = factor(result, levels = 1:nClusters(object), labels = clusterNames(object))
+
+  make.trajectoryAssignments(object, assignments)
+})
 
 
 #' @export

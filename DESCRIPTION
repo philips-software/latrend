@@ -87,7 +87,7 @@ Collate:
     'methodCrimCV.R'
     'methodCustom.R'
     'methodDtwclust.R'
-    'plot.R'
+    'trajectories.R'
     'model.R'
     'modelCustom.R'
     'methodFeature.R'

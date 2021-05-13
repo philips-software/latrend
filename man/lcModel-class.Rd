@@ -61,6 +61,7 @@ Other model-specific methods:
 \code{\link{deviance.lcModel}()},
 \code{\link{df.residual.lcModel}()},
 \code{\link{fitted.lcModel}()},
+\code{\link{fittedTrajectories,lcModel-method}},
 \code{\link{logLik.lcModel}()},
 \code{\link{model.frame.lcModel}()},
 \code{\link{nobs.lcModel}()},
@@ -71,7 +72,6 @@ Other model-specific methods:
 \code{\link{predictPostprob}()},
 \code{\link{residuals.lcModel}()},
 \code{\link{sigma.lcModel}()},
-\code{\link{time.lcModel}()},
-\code{\link{trajectories}()}
+\code{\link{time.lcModel}()}
 }
 \concept{model-specific methods}

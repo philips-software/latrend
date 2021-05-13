@@ -14,7 +14,7 @@
 \alias{predict.lcModelCustom}
 \alias{predictPostprob,lcModelCustom-method}
 \alias{clusterTrajectories,lcModelCustom-method}
-\alias{trajectories,lcModelCustom-method}
+\alias{fittedTrajectories,lcModelCustom-method}
 \alias{getName,lcMethodRandom-method}
 \alias{getShortName,lcMethodRandom-method}
 \alias{fit,lcMethodRandom-method}
@@ -51,7 +51,7 @@
 
 \S4method{clusterTrajectories}{lcModelCustom}(object, at = time(object), ...)
 
-\S4method{trajectories}{lcModelCustom}(
+\S4method{fittedTrajectories}{lcModelCustom}(
   object,
   at = time(object),
   what = "mu",
@@ -102,8 +102,6 @@
 
 \item{at}{An optional vector, list or data frame of covariates at which to compute the cluster trajectory predictions.
 If a vector is specified, this is assumed to be the time covariate. Otherwise, a named list or data frame must be provided.}
-
-\item{clusters}{The cluster assignments for the strata to base the trajectories on.}
 }
 \description{
 custom interface

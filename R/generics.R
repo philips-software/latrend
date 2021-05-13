@@ -16,14 +16,6 @@
 NULL
 
 
-# trajectoryAssignments ####
-#' @export
-#' @name latrend-generics
-setGeneric('trajectoryAssignments', function(object, ...) {
-  standardGeneric('trajectoryAssignments')
-})
-
-
 # clusterProportions ####
 #' @export
 #' @name latrend-generics
@@ -127,6 +119,17 @@ setGeneric('fit', function(method, data, envir, verbose, ...) {
 })
 
 
+# fittedTrajectories ####
+#' @export
+#' @name latrend-generics
+setGeneric('fittedTrajectories', function(
+  object,
+  at = time(object),
+  what = 'mu',
+  clusters = trajectoryAssignments(object),
+  ...) standardGeneric('fittedTrajectories'))
+
+
 # getLabel ####
 #' @export
 #' @name latrend-generics
@@ -191,6 +194,13 @@ setGeneric('metric', function(
   ...) standardGeneric('metric'))
 
 
+# plotFittedTrajectories ####
+#' @export
+#' @name latrend-generics
+setGeneric('plotFittedTrajectories',
+  function(object, ...) standardGeneric('plotFittedTrajectories'))
+
+
 # plotClusterTrajectories ####
 #' @export
 #' @name latrend-generics
@@ -198,17 +208,25 @@ setGeneric('plotClusterTrajectories',
   function(object, ...) standardGeneric('plotClusterTrajectories'))
 
 
-# qqPlot ####
-#' @export
-#' @name latrend-generics
-#' @title Quantile-quantile plot
-setGeneric('qqPlot', function(object, ...) standardGeneric('qqPlot'))
-
-
 # plotTrajectories ####
 #' @export
-#' @name latrend-generics
+#' @rdname plotTrajectories
+#' @title Plot the data trajectories
+#' @description Plots the output of [trajectories] for the given object.
 setGeneric('plotTrajectories', function(object, ...) standardGeneric('plotTrajectories'))
+
+
+# postFit ####
+#' @export
+#' @name latrend-generics
+setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
+  model <- standardGeneric('postFit')
+  assert_that(
+    inherits(model, 'lcModel'),
+    msg = 'postFit(lcMethod, ...) should return an object of type lcModel.')
+
+  return(model)
+})
 
 
 # postprob ####
@@ -307,16 +325,13 @@ setGeneric('predictPostprob', function(object, newdata = NULL, ...) {
 })
 
 
-# postFit ####
+# prepareData ####
 #' @export
 #' @name latrend-generics
-setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
-  model <- standardGeneric('postFit')
-  assert_that(
-    inherits(model, 'lcModel'),
-    msg = 'postFit(lcMethod, ...) should return an object of type lcModel.')
-
-  return(model)
+setGeneric('prepareData', function(method, data, verbose, ...) {
+  envir <- standardGeneric('prepareData')
+  assert_that(is.environment(envir), msg = 'prepareData(method, ...) should return an environment')
+  return(envir)
 })
 
 
@@ -331,14 +346,11 @@ setGeneric('preFit', function(method, data, envir, verbose, ...) {
 })
 
 
-# prepareData ####
+# qqPlot ####
 #' @export
 #' @name latrend-generics
-setGeneric('prepareData', function(method, data, verbose, ...) {
-  envir <- standardGeneric('prepareData')
-  assert_that(is.environment(envir), msg = 'prepareData(method, ...) should return an environment')
-  return(envir)
-})
+#' @title Quantile-quantile plot
+setGeneric('qqPlot', function(object, ...) standardGeneric('qqPlot'))
 
 
 # responseVariable ####
@@ -367,6 +379,8 @@ setGeneric('responseVariable', function(object, ...) {
 #' @return The stripped (i.e., updated) object.
 setGeneric('strip', function(object, ...) standardGeneric('strip'))
 
+
+# timeVariable ####
 #' @export
 #' @name latrend-generics
 setGeneric('timeVariable', function(object, ...) {
@@ -380,6 +394,38 @@ setGeneric('timeVariable', function(object, ...) {
 
   time
 })
+
+
+# trajectories ####
+#' @export
+#' @name trajectories
+#' @rdname trajectories
+#' @title Extract the trajectories
+#' @description Transform or extract the trajectories from the given object to a standardized format.
+#'
+#' The standardized data format is for method estimation by [latrend], and for plotting functions.
+#' @param object The data or model or extract the trajectories from.
+#' @param id The identifier variable name.
+#' @param time The time variable name.
+#' @param response The response variable name.
+#' @return A `data.frame` with columns matching the `id`, `time`, and `response` name arguments.
+#' @seealso [plotTrajectories] [latrend]
+setGeneric('trajectories', function(object, ...) {
+  data <- standardGeneric('trajectories')
+
+  assert_that(
+    is.data.frame(data),
+    ncol(data) > 2
+  )
+
+  data
+})
+
+
+# trajectoryAssignments ####
+#' @export
+#' @name latrend-generics
+setGeneric('trajectoryAssignments', function(object, ...) standardGeneric('trajectoryAssignments'))
 
 
 # validate ####

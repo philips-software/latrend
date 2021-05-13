@@ -2,7 +2,7 @@
 #' @title lcMatrixMethod
 #' @name lcMatrixMethod-class
 #' @rdname lcMatrixMethod-class
-#' @inheritParams transformLatrendData
+#' @inheritParams trajectories
 #' @keywords internal
 setClass('lcMatrixMethod', contains = 'lcMethod')
 
