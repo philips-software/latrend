@@ -12,9 +12,9 @@
 \item{...}{
   Arguments passed on to \code{\link[=latrend]{latrend}}
   \describe{
-    \item{\code{method}}{The \code{lcMethod} object specifying the longitudinal cluster method to apply.}
-    \item{\code{data}}{The \code{data.frame} or \code{matrix} to which to apply the method.}
-    \item{\code{envir}}{The \code{environment} in which to evaluate the method arguments. Note that this only applies to \code{data} when \code{data} is a \code{call}.}
+    \item{\code{method}}{The \code{lcMethod} object specifying the longitudinal cluster method to apply. See \linkS4class{lcMethod} for details.}
+    \item{\code{data}}{The \code{data.frame} to which to apply the method. Inputs supported by \code{\link[=transformLatrendData]{transformLatrendData()}} can also be used.}
+    \item{\code{envir}}{The \code{environment} in which to evaluate the method arguments (by \code{\link[=compose]{compose()}}). This environment is also used to evaluate the \code{data} argument if it is of type \code{call}.}
     \item{\code{verbose}}{The level of verbosity. Either an object of class \code{Verbose} (see \link[R.utils:Verbose]{R.utils::Verbose} for details),
 a \code{logical} indicating whether to show basic computation information,
 a \code{numeric} indicating the verbosity level (see \link{Verbose}),

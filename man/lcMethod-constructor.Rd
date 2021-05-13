@@ -20,7 +20,7 @@ lcMethod(.class, ..., .defaults = list(), .excludeArgs = c())
 Note, see the \linkS4class{lcMethod} help page for documentation about the \code{lcMethod} class.
 
 Provides a mechanism for creating \code{lcMethod} objects for an arbitrary class.
-However, it is advisable to use the class-specific constructors instead.
+However, it is advisable to use the subclass-specific constructors instead (e.g., \code{\link[=lcMethodLcmmGBTM]{lcMethodLcmmGBTM()}}, \code{\link[=lcMethodKML]{lcMethodKML()}}, or \code{\link[=lcMethodLMKM]{lcMethodLMKM()}}).
 }
 \seealso{
 \linkS4class{lcMethod} \link{lcMethod.call}

@@ -145,10 +145,10 @@ setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL)
 #' @name lcMethod-constructor
 #' @rdname lcMethod-constructor
 #' @title Create a lcMethod object of the specified type and arguments
-#' @description Note, see the [lcMethod-class] help page for documentation about the `lcMethod` class.
+#' @description Note, see the [lcMethod-class][lcMethod-class] help page for documentation about the `lcMethod` class.
 #'
 #' Provides a mechanism for creating `lcMethod` objects for an arbitrary class.
-#' However, it is advisable to use the class-specific constructors instead.
+#' However, it is advisable to use the subclass-specific constructors instead (e.g., [lcMethodLcmmGBTM()], [lcMethodKML()], or [lcMethodLMKM()]).
 #' @param .class The type of `lcMethod` class
 #' @param ... Any arguments to assign to the method object.
 #' @param .defaults See `defaults` of [lcMethod.call].

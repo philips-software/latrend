@@ -16,7 +16,7 @@ latrendCV(
 )
 }
 \arguments{
-\item{method}{The \code{lcMethod} object specifying the longitudinal cluster method to apply.}
+\item{method}{The \code{lcMethod} object specifying the longitudinal cluster method to apply. See \linkS4class{lcMethod} for details.}
 
 \item{data}{A \code{data.frame}.}
 
@@ -28,7 +28,7 @@ latrendCV(
 
 \item{errorHandling}{Whether to \code{"stop"} on an error, or to \verb{"remove'} evaluations that raised an error.}
 
-\item{envir}{The \code{environment} in which to evaluate the method arguments. Note that this only applies to \code{data} when \code{data} is a \code{call}.}
+\item{envir}{The \code{environment} in which to evaluate the method arguments (by \code{\link[=compose]{compose()}}). This environment is also used to evaluate the \code{data} argument if it is of type \code{call}.}
 
 \item{verbose}{The level of verbosity. Either an object of class \code{Verbose} (see \link[R.utils:Verbose]{R.utils::Verbose} for details),
 a \code{logical} indicating whether to show basic computation information,

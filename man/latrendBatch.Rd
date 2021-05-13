@@ -2,7 +2,7 @@
 % Please edit documentation in R/latrend.R
 \name{latrendBatch}
 \alias{latrendBatch}
-\title{Cluster longitudinal data for a list of model specifications}
+\title{Cluster longitudinal data for a list of method specifications}
 \usage{
 latrendBatch(
   methods,

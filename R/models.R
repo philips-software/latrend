@@ -3,8 +3,12 @@
 setOldClass('lcModels')
 
 #' @export
+#' @aliases lcModels-class
 #' @title Construct a flat (named) list of lcModel objects
-#' @description Takes the inputs and generates a named `lcModels` object containing a list of the input models. Duplicates are preserved.
+#' @description The `lcModels` `S3` class represents a `list` of `lcModel` objects.
+#' This makes it easier to work with a set of models in a more structured manner.
+#'
+#' The `lcModels()` function takes the inputs and generates a named `lcModels` object containing a list of the input models. Duplicates are preserved.
 #' @param ... `lcModel`, `lcModels`, or a recursive `list` of `lcModel` objects. Arguments may be named.
 #' @return A `lcModels` object containing all specified `lcModel` objects.
 #' @examples
@@ -36,8 +40,9 @@ is.lcModels = function(x) {
 
 #' @export
 #' @title Convert a list of lcModels to a lcModels list
-#' @param x An `R` object.
+#' @param x A `list` of `lcModel` objects, an `lcModels` object, or `NULL`.
 #' @return A `lcModels` object.
+#' @seealso lcModels
 #' @family lcModel list functions
 as.lcModels = function(x) {
   if (missing(x) || is.null(x)) {

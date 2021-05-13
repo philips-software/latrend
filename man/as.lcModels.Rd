@@ -7,7 +7,7 @@
 as.lcModels(x)
 }
 \arguments{
-\item{x}{An \code{R} object.}
+\item{x}{A \code{list} of \code{lcModel} objects, an \code{lcModels} object, or \code{NULL}.}
 }
 \value{
 A \code{lcModels} object.
@@ -16,6 +16,8 @@ A \code{lcModels} object.
 Convert a list of lcModels to a lcModels list
 }
 \seealso{
+lcModels
+
 Other lcModel list functions: 
 \code{\link{lcModels}},
 \code{\link{print.lcModels}()},

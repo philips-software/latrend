@@ -1,10 +1,13 @@
 #' @export
 #' @importFrom stackoverflow match.call.defaults
 #' @title Cluster longitudinal data
-#' @param method The `lcMethod` object specifying the longitudinal cluster method to apply.
-#' @param data The `data.frame` or `matrix` to which to apply the method.
+#' @description Fit a longitudinal cluster method to the given training data, according to the specification provided by the `lcMethod` object.
+#'
+#' This function runs all steps as part of the [method fitting procedure][lcMethod-class].
+#' @param method The `lcMethod` object specifying the longitudinal cluster method to apply. See [lcMethod-class][lcMethod-class] for details.
+#' @param data The `data.frame` to which to apply the method. Inputs supported by [transformLatrendData()] can also be used.
 #' @param ... Any other arguments to update the `lcMethod` definition with.
-#' @param envir The `environment` in which to evaluate the method arguments. Note that this only applies to `data` when `data` is a `call`.
+#' @param envir The `environment` in which to evaluate the method arguments (by [compose()]). This environment is also used to evaluate the `data` argument if it is of type `call`.
 #' @param verbose The level of verbosity. Either an object of class `Verbose` (see [R.utils::Verbose] for details),
 #' a `logical` indicating whether to show basic computation information,
 #' a `numeric` indicating the verbosity level (see [Verbose]),
@@ -20,11 +23,7 @@
 #'
 #' model <- latrend(method, data = latrendData, nClusters = 3, seed = 1)
 #' @family longitudinal cluster fit functions
-latrend = function(method,
-                    data,
-                    ...,
-                    envir = NULL,
-                    verbose = getOption('latrend.verbose')) {
+latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend.verbose')) {
   assert_that(
     is_class_defined(method),
     is.lcMethod(method)
@@ -270,7 +269,7 @@ latrendRep = function(method,
 
 # latrend-derived ####
 #' @export
-#' @title Cluster longitudinal data for a list of model specifications
+#' @title Cluster longitudinal data for a list of method specifications
 #' @description Fit a list of longitudinal cluster methods.
 #' @inheritParams latrend
 #' @param methods A `list` of `lcMethod` objects.

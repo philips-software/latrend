@@ -2,6 +2,7 @@
 % Please edit documentation in R/models.R
 \name{lcModels}
 \alias{lcModels}
+\alias{lcModels-class}
 \title{Construct a flat (named) list of lcModel objects}
 \usage{
 lcModels(...)
@@ -13,7 +14,10 @@ lcModels(...)
 A \code{lcModels} object containing all specified \code{lcModel} objects.
 }
 \description{
-Takes the inputs and generates a named \code{lcModels} object containing a list of the input models. Duplicates are preserved.
+The \code{lcModels} \code{S3} class represents a \code{list} of \code{lcModel} objects.
+This makes it easier to work with a set of models in a more structured manner.
+
+The \code{lcModels()} function takes the inputs and generates a named \code{lcModels} object containing a list of the input models. Duplicates are preserved.
 }
 \examples{
 data(latrendData)
