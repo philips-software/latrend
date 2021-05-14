@@ -408,6 +408,7 @@ setGeneric('timeVariable', function(object, ...) {
 #' @param id The identifier variable name.
 #' @param time The time variable name.
 #' @param response The response variable name.
+#' @param ... Additional arguments.
 #' @return A `data.frame` with columns matching the `id`, `time`, and `response` name arguments.
 #' @seealso [plotTrajectories] [latrend]
 setGeneric('trajectories', function(object, ...) {

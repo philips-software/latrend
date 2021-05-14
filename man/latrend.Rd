@@ -15,7 +15,7 @@ latrend(
 \arguments{
 \item{method}{The \code{lcMethod} object specifying the longitudinal cluster method to apply. See \linkS4class{lcMethod} for details.}
 
-\item{data}{The \code{data.frame} to which to apply the method. Inputs supported by \code{\link[=transformLatrendData]{transformLatrendData()}} can also be used.}
+\item{data}{The \code{data.frame} to which to apply the method. Inputs supported by \code{\link[=trajectories]{trajectories()}} can also be used.}
 
 \item{...}{Any other arguments to update the \code{lcMethod} definition with.}
 

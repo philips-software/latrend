@@ -15,7 +15,7 @@ A framework for clustering longitudinal datasets in a standardized way. Provides
 \item Supports many different methods for longitudinal clustering out of the box (see the list of supported packages below).
 \item The framework consists of extensible S4 methods based on an abstract model class, enabling rapid prototyping of new cluster methods or model specifications.
 \item Standard plotting tools for model evaluation across methods (e.g., trajectories, cluster trajectories, model fit, metrics)
-\item Support for many cluster metrics through the packages \link[=clusterCrit-package]{clusterCrit}, \link[=mclustcomp-package]{mclustcomp}, and \link[=igraph-package]{igraph}.
+\item Support for many cluster metrics through the packages \link[=clusterCrit-package]{clusterCrit}, \link[=mclustcomp-package]{mclustcomp}, and igraph.
 \item The structured and unified analysis approach enables simulation studies for comparing methods.
 \item Standardized model validation for all methods through bootstrapping or k-fold cross-validation.
 }

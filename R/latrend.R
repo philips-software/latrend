@@ -5,7 +5,7 @@
 #'
 #' This function runs all steps as part of the [method fitting procedure][lcMethod-class].
 #' @param method The `lcMethod` object specifying the longitudinal cluster method to apply. See [lcMethod-class][lcMethod-class] for details.
-#' @param data The `data.frame` to which to apply the method. Inputs supported by [transformLatrendData()] can also be used.
+#' @param data The `data.frame` to which to apply the method. Inputs supported by [trajectories()] can also be used.
 #' @param ... Any other arguments to update the `lcMethod` definition with.
 #' @param envir The `environment` in which to evaluate the method arguments (by [compose()]). This environment is also used to evaluate the `data` argument if it is of type `call`.
 #' @param verbose The level of verbosity. Either an object of class `Verbose` (see [R.utils::Verbose] for details),

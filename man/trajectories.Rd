@@ -21,6 +21,8 @@ trajectories(object, ...)
 \arguments{
 \item{object}{The data or model or extract the trajectories from.}
 
+\item{...}{Additional arguments.}
+
 \item{id}{The identifier variable name.}
 
 \item{time}{The time variable name.}

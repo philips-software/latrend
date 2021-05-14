@@ -8,10 +8,12 @@
 \S4method{plotFittedTrajectories}{lcModel}(object, ...)
 }
 \arguments{
+\item{object}{The \code{lcModel} object.}
+
 \item{...}{
   Arguments passed on to \code{\link[=trajectories]{trajectories}}
   \describe{
-    \item{\code{object}}{The data or model or extract the trajectories from.}
+    \item{\code{}}{}
   }}
 }
 \description{

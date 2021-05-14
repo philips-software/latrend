@@ -15,7 +15,7 @@
 #' * Supports many different methods for longitudinal clustering out of the box (see the list of supported packages below).
 #' * The framework consists of extensible S4 methods based on an abstract model class, enabling rapid prototyping of new cluster methods or model specifications.
 #' * Standard plotting tools for model evaluation across methods (e.g., trajectories, cluster trajectories, model fit, metrics)
-#' * Support for many cluster metrics through the packages [clusterCrit][clusterCrit-package], [mclustcomp][mclustcomp-package], and [igraph][igraph-package].
+#' * Support for many cluster metrics through the packages [clusterCrit][clusterCrit-package], [mclustcomp][mclustcomp-package], and igraph.
 #' * The structured and unified analysis approach enables simulation studies for comparing methods.
 #' * Standardized model validation for all methods through bootstrapping or k-fold cross-validation.
 #'

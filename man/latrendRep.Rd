@@ -19,7 +19,7 @@ latrendRep(
 \arguments{
 \item{method}{The \code{lcMethod} object specifying the longitudinal cluster method to apply. See \linkS4class{lcMethod} for details.}
 
-\item{data}{The \code{data.frame} to which to apply the method. Inputs supported by \code{\link[=transformLatrendData]{transformLatrendData()}} can also be used.}
+\item{data}{The \code{data.frame} to which to apply the method. Inputs supported by \code{\link[=trajectories]{trajectories()}} can also be used.}
 
 \item{.rep}{The number of repeated fits.}
 

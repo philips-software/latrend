@@ -460,6 +460,7 @@ fitted.lcModel = function(object, ..., clusters = trajectoryAssignments(object))
 
 # . fittedTrajectories ####
 #' @export
+#' @name fittedTrajectories
 #' @rdname fittedTrajectories
 #' @aliases fittedTrajectories,lcModel-method
 #' @title Extract the fitted trajectories for all strata
@@ -1177,7 +1178,8 @@ setMethod('plot', signature('lcModel'), function(x, y, ...) {
 #' @rdname plotFittedTrajectories
 #' @aliases plotFittedTrajectories,lcModel-method
 #' @title Plot fitted trajectories of a lcModel
-#' @param ... Arguments passed to [trajectories].
+#' @param object The `lcModel` object.
+#' @param ... Arguments passed to [fittedTrajectories()].
 #' @inheritDotParams trajectories
 #' @seealso [fittedTrajectories] [plotClusterTrajectories] [plotTrajectories] [plot]
 #' @examples

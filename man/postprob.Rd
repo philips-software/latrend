@@ -47,7 +47,7 @@ Other model-specific methods:
 \code{\link{deviance.lcModel}()},
 \code{\link{df.residual.lcModel}()},
 \code{\link{fitted.lcModel}()},
-\code{\link{fittedTrajectories,lcModel-method}},
+\code{\link{fittedTrajectories}()},
 \code{\link{lcModel-class}},
 \code{\link{logLik.lcModel}()},
 \code{\link{model.frame.lcModel}()},
