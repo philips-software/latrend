@@ -35,7 +35,9 @@ For \code{metric(list)}: A \code{data.frame} with a metric per column.
 For \code{metric(lcModels)}: A \code{data.frame} with a metric per column.
 }
 \description{
-Compute internal model metric(s)
+Compute one or more internal metrics for the given \code{lcModel} object.
+
+Call \code{\link[=getInternalMetricNames]{getInternalMetricNames()}} to retrieve the names of the defined internal metrics.
 }
 \examples{
 data(latrendData)

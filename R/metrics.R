@@ -5,6 +5,9 @@
 #' @name metric
 #' @rdname metric
 #' @title Compute internal model metric(s)
+#' @description Compute one or more internal metrics for the given `lcModel` object.
+#'
+#' Call [getInternalMetricNames()] to retrieve the names of the defined internal metrics.
 #' @param object The `lcModel`, `lcModels`, or `list` of `lcModel` objects to compute the metrics for.
 #' @param name The name(s) of the metric(s) to compute. If no names are given, the names specified in the `latrend.metric` option (WRSS, APPA, AIC, BIC) are used.
 #' @param ... Additional arguments.
@@ -15,6 +18,9 @@ NULL
 #' @name externalMetric
 #' @rdname externalMetric
 #' @title Compute external model metric(s)
+#' @description COmpute one or more external metrics for two or more `lcModel` objects.
+#'
+#' Call [getExternalMetricNames()] to retrieve the names of the defined internal metrics.
 #' @inheritParams metric
 #' @param object2 The other `lcModel` to compare with.
 #' @param name The name(s) of the external metric(s) to compute. If no names are given, the names specified in the `latrend.externalMetric` option (none by default) are used.

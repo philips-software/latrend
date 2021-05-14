@@ -55,7 +55,9 @@ For \code{externalMetric(list, lcModel)}: A named \code{numeric} vector or \code
 containing the computed model metrics.
 }
 \description{
-Compute external model metric(s)
+COmpute one or more external metrics for two or more \code{lcModel} objects.
+
+Call \code{\link[=getExternalMetricNames]{getExternalMetricNames()}} to retrieve the names of the defined internal metrics.
 }
 \examples{
 data(latrendData)
