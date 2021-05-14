@@ -1263,7 +1263,11 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
 #' plotTrajectories(model)
 setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
   data = trajectories(object, ...)
-  plotTrajectories(data, ...)
+  plotTrajectories(data,
+    id = idVariable(object),
+    time = timeVariable(object),
+    response = responseVariable(object)
+  )
 })
 
 
