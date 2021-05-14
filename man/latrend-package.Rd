@@ -8,13 +8,88 @@
 \description{
 A framework for clustering longitudinal datasets in a standardized way. Provides an interface to existing R packages for clustering longitudinal univariate trajectories, facilitating reproducible and transparent analyses. Additionally, standard tools are provided to support cluster analyses, including repeated estimation, model validation, and model assessment. The interface enables users to compare results between methods, and to implement and evaluate new methods with ease.
 }
+\section{Features}{
+
+\itemize{
+\item Unified cluster analysis, independent of the underlying algorithms used. Enabling users to compare the performance of various longitudinal cluster methods on the case study at hand.
+\item Supports many different methods for longitudinal clustering out of the box (see the list of supported packages below).
+\item The framework consists of extensible S4 methods based on an abstract model class, enabling rapid prototyping of new cluster methods or model specifications.
+\item Standard plotting tools for model evaluation across methods (e.g., trajectories, cluster trajectories, model fit, metrics)
+\item Support for many cluster metrics through the packages \link[=clusterCrit-package]{clusterCrit}, \link[=mclustcomp-package]{mclustcomp}, and \link[=igraph-package]{igraph}.
+\item The structured and unified analysis approach enables simulation studies for comparing methods.
+\item Standardized model validation for all methods through bootstrapping or k-fold cross-validation.
+}
+}
+
 \section{Getting started}{
 
+The \link{latrendData} dataset is included with the package and is used in all examples.
+The \code{\link[=plotTrajectories]{plotTrajectories()}} function can be used to visualize any longitudinal dataset, given the \code{id} and \code{time} are specified.
+\preformatted{
+data(latrendData)
+head(latrendData)
+options(latrend.id = "Id", latrend.time = "Time")
+plotTrajectories(latrendData, response = "Y")
+}
+
+Discovering longitudinal clusters using the package involves the specification of the longitudinal cluster method that should be used.
+\preformatted{
+kmlMethod <- lcMethodKML("Y", nClusters = 3)
+kmlMethod
+}
+
+The specified method is then estimated on the data using the generic estimation procedure function \code{\link[=latrend]{latrend()}}:
+\preformatted{
+model <- latrend(kmlMethod, data = latrendData)
+}
+
+Analyze the fitted model
+\preformatted{
+summary(model)
+plot(model)
+metric(model, c("WMAE", "BIC"))
+qqPlot(model)
+}
+
+Create derivative method specifications for 1 to 5 clusters using the \code{\link[=lcMethods]{lcMethods()}} function.
+A series of methods can be estimated using \code{\link[=latrendBatch]{latrendBatch()}}.
+\preformatted{
+kmlMethods = lcMethods(kmlMethod, nClusters = 1:5)
+models <- latrendBatch(kmlMethods, data = latrendData)
+}
+
+Determine the number of clusters through one or more internal cluser metrics.
+This can be done visually using the \code{\link[=plotMetric]{plotMetric()}} function.
+\preformatted{
+plotMetric(models, c("WMAE", "BIC"))
+}
+}
+
+\section{Vignettes}{
+
+Further step-by-step instructions on how to use the package are described in the vignettes.
 \itemize{
 \item See \code{vignette("demo", package = "latrend")} for an introduction to conducting a longitudinal cluster analysis on a example case study.
 \item See \code{vignette("custom", package = "latrend")} for examples on constructing your own cluster models.
 \item See \code{vignette("validation", package = "latrend")} for examples on applying internal cluster validation.
 }
+}
+
+\section{Useful pages}{
+
+Method specification:
+\linkS4class{lcMethod}
+\link{lcMethods}
+
+Method estimation:
+\link{latrend} \link{latrendRep} \link{latrendBatch} \link{latrendBoot} \link{latrendCV}
+\link{latrend-parallel}
+
+Model functions:
+\linkS4class{lcModel}
+\link{clusterTrajectories} \link{plotClusterTrajectories}
+\link{postprob} \link{trajectoryAssignments} \link{predictPostprob} \link{predictAssignments}
+\link{predict.lcModel} \link{predictForCluster} \link{fitted.lcModel} \link{fittedTrajectories}
 }
 
 \seealso{
