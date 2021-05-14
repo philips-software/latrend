@@ -30,6 +30,14 @@ test_that('nclusters', {
   expect_valid_lcModel(models[[2]])
 })
 
+test_that('fitted', {
+  m = lcMethodTestKML()
+  model = latrend(m, testLongData)
+
+  dtft = fittedTrajectories(model) %>% as.data.table()
+  expect_true(all(dtft[, uniqueN(Value), keyby=Cluster]$V1 == length(time(model))))
+})
+
 test_that('predictPostprob', {
   model = latrend(lcMethodTestKML(), testLongData)
   testData = testLongData[Traj %in% unique(Traj)[1:3]]

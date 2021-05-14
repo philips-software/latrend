@@ -957,8 +957,7 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
         paste0(shQuote(clusterNames(object)), collapse = ', '), ').'))
 
     # predictForCluster with newdata subsets
-    clusdataList = as.data.table(newdata) %>%
-      split(by = 'Cluster', sorted = TRUE, drop = TRUE) %>%
+    clusdataList = split(newdata, by = 'Cluster', sorted = TRUE, drop = TRUE) %>%
       lapply(function(cdata) cdata[, Cluster := NULL])
   }
   else {
@@ -981,9 +980,7 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
 
   if (is.data.frame(predList[[1]])) {
     pred = rbindlist(predList, idcol = 'Cluster')
-    pred[, Cluster := factor(Cluster,
-      levels = seq_len(nClusters(object)),
-      labels = clusterNames(object))]
+    pred[, Cluster := factor(Cluster, levels = seq_len(nClusters(object)), labels = clusterNames(object))]
   }
   else if (is.numeric(predList[[1]])) {
     clusDataRows = vapply(clusdataList, nrow, FUN.VALUE = 0)
@@ -992,10 +989,9 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
       msg = 'Numeric output length from predictForCluster() does not match the number of input newdata rows for one or more clusters')
 
     pred = data.table(
-      Cluster = rep(
-        factor(names(clusDataRows), levels = clusterNames(object)),
-        clusDataRows),
-      Fit = do.call(c, predList))
+      Cluster = rep(factor(names(clusDataRows), levels = clusterNames(object)), clusDataRows),
+      Fit = do.call(c, predList)
+    )
   }
   else {
     stop(
@@ -1003,7 +999,9 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
     )
   }
 
-  transformPredict(pred = pred, model = object, newdata = newdata)
+  preddata = cbind(rbindlist(clusdataList), pred)
+
+  transformPredict(pred = preddata, model = object, newdata = newdata)
 }
 
 
