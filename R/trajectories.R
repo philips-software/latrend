@@ -177,11 +177,11 @@ setMethod('plotTrajectories', signature('data.frame'), function(
     !is.character(response) || has_name(object, response),
     has_name(object, time),
     has_name(object, id),
-    is.null(cluster) || has_name(object, cluster),
+    length(cluster) != 1 || (is.character(cluster) && has_name(object, cluster)),
     is.flag(facet)
   )
 
-  if (!is.null(cluster)) {
+  if (length(cluster) > 1) {
     assert_that(length(cluster) == uniqueN(object[[id]]))
     object$Cluster = cluster[rleidv(object[[id]])]
     cluster = 'Cluster'
