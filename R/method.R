@@ -427,7 +427,7 @@ setMethod('compose', signature('lcMethod'), function(method, envir = NULL) {
 #'     model = coefs,
 #'     clusterNames = make.clusterNames(method$nClusters)
 #'   )
-#' }
+#' })
 #' }
 #' @inheritSection lcMethod-class Fitting procedure
 setMethod('fit', signature('lcMethod'), function(method, data, envir, verbose) {

@@ -38,7 +38,7 @@ setMethod("fit", "lcMethodExample", function(method, data, envir, verbose) {
     model = coefs,
     clusterNames = make.clusterNames(method$nClusters)
   )
-}
+})
 }
 }
 
