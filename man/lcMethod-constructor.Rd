@@ -22,6 +22,36 @@ Note, see the \linkS4class{lcMethod} help page for documentation about the \code
 Provides a mechanism for creating \code{lcMethod} objects for an arbitrary class.
 However, it is advisable to use the subclass-specific constructors instead (e.g., \code{\link[=lcMethodLcmmGBTM]{lcMethodLcmmGBTM()}}, \code{\link[=lcMethodKML]{lcMethodKML()}}, or \code{\link[=lcMethodLMKM]{lcMethodLMKM()}}).
 }
+\section{Implementation}{
+
+When creating your own \code{lcMethod} subclass, it is recommended to provide a constructor function for the subclass.
+Sensible default method argument values are are specified through the function arguments.
+
+The \code{\link[=lcMethod.call]{lcMethod.call()}} function provides a convenient way to initialize the method according to the user-specified and default function arguments.
+
+\preformatted{
+lcMethodExample <- function(
+  response,
+  time = getOption("latrend.time"),
+  id = getOption("latrend.id"),
+  nClusters = 2,
+  # custom method argument defaults
+  extraNum = 1,
+  myOptAlgo = "EM",
+  algoFunction = mean,
+  ...
+) {
+  lcMethod.call(
+    "lcMethodExample",
+    call = match.call.defaults()
+  )
+}
+}
+
+Users can then specify \code{lcMethodExample} objects using the \code{lcMethodExample()} function.
+For example, by calling \code{lcMethodExample(response = "Y", nClusters = 3)}.
+}
+
 \seealso{
 \linkS4class{lcMethod} \link{lcMethod.call}
 }

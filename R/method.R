@@ -153,6 +153,34 @@ setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL)
 #' @param ... Any arguments to assign to the method object.
 #' @param .defaults See `defaults` of [lcMethod.call].
 #' @param .excludeArgs See `excludeArgs` of [lcMethod.call].
+#' @section Implementation:
+#' When creating your own `lcMethod` subclass, it is recommended to provide a constructor function for the subclass.
+#' Sensible default method argument values are are specified through the function arguments.
+#'
+#' The [lcMethod.call()] function provides a convenient way to initialize the method according to the user-specified and default function arguments.
+#'
+#' \preformatted{
+#' lcMethodExample <- function(
+#'   response,
+#'   time = getOption("latrend.time"),
+#'   id = getOption("latrend.id"),
+#'   nClusters = 2,
+#'   # custom method argument defaults
+#'   extraNum = 1,
+#'   myOptAlgo = "EM",
+#'   algoFunction = mean,
+#'   ...
+#' ) {
+#'   lcMethod.call(
+#'     "lcMethodExample",
+#'     call = match.call.defaults()
+#'   )
+#' }
+#' }
+#'
+#' Users can then specify `lcMethodExample` objects using the `lcMethodExample()` function.
+#' For example, by calling `lcMethodExample(response = "Y", nClusters = 3)`.
+#'
 #' @seealso [lcMethod-class] [lcMethod.call]
 lcMethod = function(.class, ..., .defaults = list(), .excludeArgs = c()) {
   mc = match.call()
