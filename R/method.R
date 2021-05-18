@@ -173,7 +173,7 @@ setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL)
 #' ) {
 #'   lcMethod.call(
 #'     "lcMethodExample",
-#'     call = match.call.defaults()
+#'     call = stackoverflow::match.call.defaults()
 #'   )
 #' }
 #' }
