@@ -41,17 +41,19 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
   print(verbose, newmethod)
   ruler(verbose)
 
-  cat(verbose,
-      'Composing & validating method arguments...',
-      level = verboseLevels$finest)
-
   # compose
+  cat(verbose, 'Evaluating the method arguments.', level = verboseLevels$fine)
+  pushState(verbose)
   cmethod = compose(newmethod, envir = envir)
+  popState(verbose)
+
   id = idVariable(cmethod)
   time = timeVariable(cmethod)
   response = responseVariable(cmethod)
 
   # transform data
+  cat(verbose, 'Checking and transforming the training data format.')
+  pushState(verbose)
   modelData = trajectories(
     data,
     id = id,
@@ -59,16 +61,22 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
     response = response,
     envir = envir
   )
+  popState(verbose)
 
+  cat(verbose, 'Validating method arguments.', level = verboseLevels$fine)
+  pushState(verbose)
   validate(cmethod, modelData)
+  popState(verbose)
 
   # prepare
+  cat(verbose, 'Preparing the training data for fitting.')
+  pushState(verbose)
   modelEnv = prepareData(method = cmethod,
                          data = modelData,
                          verbose = verbose)
+  popState(verbose)
 
-  cat(verbose, 'Fitting model')
-  pushState(verbose)
+  enter(verbose, 'Fitting the method')
   mc = match.call.defaults()
   model = fitLatrendMethod(
     cmethod,
@@ -78,7 +86,7 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
     verbose = verbose
   )
   environment(model) = envir
-  popState(verbose)
+  exit(verbose)
 
   # done
   ruler(verbose)
@@ -195,7 +203,10 @@ latrendRep = function(method,
   mc = match.call.defaults()
 
   # compose
+  cat(verbose, 'Evaluating the method arguments.', level = verboseLevels$fine)
+  pushState(verbose)
   cmethod = compose(newmethod, envir = envir)
+  popState(verbose)
 
   # seed
   if (hasName(cmethod, 'seed')) {
@@ -221,6 +232,8 @@ latrendRep = function(method,
   )
 
   # transform data
+  cat(verbose, 'Checking the training data and ensuring the standard data format.')
+  pushState(verbose)
   modelData = trajectories(
     data,
     id = id,
@@ -228,17 +241,23 @@ latrendRep = function(method,
     response = response,
     envir = envir
   )
+  popState(verbose)
 
+  cat(verbose, 'Validating the method arguments.', level = verboseLevels$fine)
+  pushState(verbose)
   validate(cmethod, modelData)
+  popState(verbose)
 
-  enter(verbose, 'Preparing...')
+  cat(verbose, 'Preparing the training data for fitting.')
+  pushState(verbose)
   prepEnv = prepareData(method = method,
                         data = modelData,
                         verbose = verbose)
-  exit(verbose)
+  popState(verbose)
 
   `%infix%` = ifelse(.parallel, `%dopar%`, `%do%`)
 
+  enter(verbose, 'Fitting the methods')
   models = foreach(
     i = seq_len(.rep),
     iseed = repSeeds,
@@ -262,6 +281,7 @@ latrendRep = function(method,
     environment(model) = envir
     model
   }
+  exit(verbose)
 
   as.lcModels(models)
 }
