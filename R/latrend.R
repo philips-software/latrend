@@ -264,11 +264,8 @@ latrendRep = function(method,
     .combine = c,
     .errorhandling = .errorHandling
   ) %infix% {
-    cat(verbose,
-        sprintf('Fitting model %d/%d for seed %s...',
-        i,
-        .rep,
-        as.character(iseed)))
+    cat(verbose, sprintf('Fitting model %d/%d (%d%%)...', i, .rep, signif(i / .rep * 100, 2)))
+    pushState(verbose)
     assert_that(is_class_defined(cmethod))
     imethod = update(cmethod, seed = iseed, .eval = TRUE)
     model = fitLatrendMethod(
@@ -279,6 +276,7 @@ latrendRep = function(method,
       verbose = verbose
     )
     environment(model) = envir
+    popState(verbose)
     model
   }
   exit(verbose)
