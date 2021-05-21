@@ -505,7 +505,11 @@ setMethod('fittedTrajectories', signature('lcModel'), function(object, at, what,
       at[idx,]) %>%
       setnames('Id', idVariable(object))
   } else {
-    stop('unsupported input')
+    stop(
+      sprintf(
+        'The "at" argument of call to fittedTrajectories() is of unsupported type %s',
+        class(at)
+    ))
   }
 
   preds = predict(object, newdata = newdata, what = what)
