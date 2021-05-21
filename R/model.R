@@ -127,7 +127,11 @@ setMethod('clusterTrajectories', signature('lcModel'), function(object, at = tim
     newdata = data.table(
       Cluster = rep(clusterNames(object, factor = TRUE), each = nrow(at)), at[idx,])
   } else {
-    stop('unsupported input')
+    stop(
+      sprintf(
+        'The "at" argument of call to clusterTrajectories() is of unsupported type %s',
+        class(at)
+    ))
   }
 
   dfPred = predict(object, newdata = newdata, what = what, ...)
