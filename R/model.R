@@ -1489,10 +1489,24 @@ setMethod('timeVariable', signature('lcModel'), function(object) object@time)
 #' @seealso [timeVariable] [model.data]
 time.lcModel = function(x, ...) {
   if (length(x@times) == 0) {
-    model.data(x)[[timeVariable(x)]] %>% unique() %>% sort()
+    assert_that(
+      has_name(model.data(x), timeVariable(x)),
+      msg = sprintf(
+        'cannot identify model times: model.data() is missing time variable column "%s"',
+        timeVariable(x)
+    ))
+    times = model.data(x)[[timeVariable(x)]] %>% unique() %>% sort()
   } else {
-    x@times
+    times = x@times
   }
+
+  assert_that(
+    length(times) > 0,
+    is.vector(times),
+    is.numeric(times)
+  )
+
+  times
 }
 
 
