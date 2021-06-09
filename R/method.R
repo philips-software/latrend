@@ -574,7 +574,7 @@ setMethod('getName', 'NULL', function(object, ...) 'null')
 #' @title Extract the short object name
 #' @examples
 #' getShortName(lcMethodKML()) # "KML"
-setMethod('getShortName', signature('lcMethod'), getName)
+setMethod('getShortName', signature('lcMethod'), function(object, ...) getName(object, ...))
 
 #' @export
 #' @name latrend-generics

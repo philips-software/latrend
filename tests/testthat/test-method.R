@@ -269,3 +269,15 @@ test_that('lcMethod function with default NULL argument', {
 
   expect_true(all(formalArgs(lcMethodTestKML2) %in% names(m)))
 })
+
+test_that('name', {
+  m = lcMethod('lcMethodTest', num = 2.5)
+  name = getName(m)
+  expect_equal(name, 'undefined')
+})
+
+test_that('shortname', {
+  m = lcMethod('lcMethodTest', num = 2.5)
+  name = getShortName(m)
+  expect_equal(name, 'undefined')
+})

@@ -150,3 +150,13 @@ test_that('consistency between predict() and predict(cluster)', {
   expect_equal(allPreds$A$Fit, dfPredA$Fit)
   expect_equal(allPreds$B$Fit, dfPredB$Fit)
 })
+
+test_that('name', {
+  name = getName(testModel)
+  expect_equal(name, getName(lcMethodTestKML()))
+})
+
+test_that('shortname', {
+  name = getShortName(testModel)
+  expect_equal(name, getShortName(lcMethodTestKML()))
+})
