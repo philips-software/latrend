@@ -31,9 +31,7 @@ Plot one or more internal metrics for all lcModels
 \examples{
 data(latrendData)
 baseMethod <- lcMethodKML(response = "Y", id = "Id", time = "Time")
-kml1 <- latrend(baseMethod, nClusters = 1, latrendData)
-kml2 <- latrend(baseMethod, nClusters = 2, latrendData)
-kml3 <- latrend(baseMethod, nClusters = 3, latrendData)
-models <- lcModels(kml1, kml2, kml3)
-plotMetric(models, "BIC", by = "nClusters", group = ".name")
+methods <- lcMethods(baseMethod, nClusters = 1:6)
+models <- latrendBatch(methods, latrendData)
+plotMetric(models, c("BIC", "WRSS"))
 }

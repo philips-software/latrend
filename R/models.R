@@ -315,11 +315,9 @@ max.lcModels = function(x, name, ...) {
 #' @examples
 #' data(latrendData)
 #' baseMethod <- lcMethodKML(response = "Y", id = "Id", time = "Time")
-#' kml1 <- latrend(baseMethod, nClusters = 1, latrendData)
-#' kml2 <- latrend(baseMethod, nClusters = 2, latrendData)
-#' kml3 <- latrend(baseMethod, nClusters = 3, latrendData)
-#' models <- lcModels(kml1, kml2, kml3)
-#' plotMetric(models, "BIC", by = "nClusters", group = ".name")
+#' methods <- lcMethods(baseMethod, nClusters = 1:6)
+#' models <- latrendBatch(methods, latrendData)
+#' plotMetric(models, c("BIC", "WRSS"))
 plotMetric = function(models,
                       name,
                       by = 'nClusters',
@@ -340,15 +338,17 @@ plotMetric = function(models,
 
   dtModels = as.data.frame(models) %>%
     as.data.table()
-  assert_that(nrow(dtModels) == nrow(dtMetrics))
-  assert_that(is.null(group) || has_name(dtModels, group))
+
+  assert_that(
+    nrow(dtModels) == nrow(dtMetrics),
+    is.null(group) || has_name(dtModels, group)
+  )
 
   dtModelMetrics = cbind(dtModels, dtMetrics)
   if (length(group) == 0) {
     dtModelMetrics[, .group := 'All']
   } else {
-    dtModelMetrics[, .group := do.call(interaction, base::subset(dtModelMetrics, select =
-                                                             group))]
+    dtModelMetrics[, .group := do.call(interaction, base::subset(dtModelMetrics, select = group))]
   }
   assert_that(has_name(dtModelMetrics, by))
 
@@ -365,11 +365,14 @@ plotMetric = function(models,
 
   p = ggplot(dtgg, aes_string(x = by, y = 'Value', group = 'Group'))
 
-  if (is.numeric(dtModelMetrics[[by]]) ||
-      is.logical(dtModelMetrics[[by]])) {
+  if (is.numeric(dtModelMetrics[[by]]) || is.logical(dtModelMetrics[[by]])) {
     p = p + geom_line()
   }
   p = p + geom_point()
+
+  if (by == 'nClusters') {
+    p = p + scale_x_continuous(breaks = seq(1, max(dtModelMetrics[[by]])), minor_breaks = NULL)
+  }
 
   if (length(name) == 1) {
     p = p + ylab(name)
