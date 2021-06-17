@@ -226,6 +226,7 @@ clusterSizes = function(object, ...) {
 setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
   pp = postprob(object, ...)
   assert_that(!is.null(pp), msg = 'cannot determine cluster assignments because postprob() returned NULL')
+  assert_that(nrow(pp) > 0, msg = 'cannot determine cluster assignments because postprob() returned a matrix without rows')
   colMeans(pp)
 })
 
@@ -585,7 +586,12 @@ getCall.lcModel = function(x, ...) {
 #' @rdname getLabel
 #' @aliases getLabel,lcModel-method
 setMethod('getLabel', signature('lcModel'), function(object, ...) {
-  object@label
+  lbl = object@label
+  if (length(lbl) > 0) {
+    lbl
+  } else {
+    ''
+  }
 })
 
 
@@ -843,11 +849,24 @@ model.data.lcModel = function(object, ...) {
 #' kml <- latrend(method, latrendData)
 #' nIds(kml)
 nIds = function(object) {
-  iddata = model.data(object)[[idVariable(object)]]
-  if (is.factor(iddata)) {
-    nlevels(iddata)
+  if (length(object@ids) == 0) {
+    suppressWarnings({
+      data = model.data(object)
+    })
+
+    if (is.null(data)) {
+      warning('cannot determine number of ids because model.data() is NULL and no id vector is assigned to @ids')
+      return (0)
+    }
+
+    iddata = model.data(object)[[idVariable(object)]]
+    if (is.factor(iddata)) {
+      nlevels(iddata)
+    } else {
+      uniqueN(iddata)
+    }
   } else {
-    uniqueN(iddata)
+    length(object@ids)
   }
 }
 
@@ -1307,10 +1326,20 @@ setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
 #'    id = "Id", time = "Time"), data = latrendData)
 #' postprob(model)
 setMethod('postprob', signature('lcModel'), function(object, ...) {
-  warning('postprob() not implemented for ', class(object)[1],
-    '. Returning uniform posterior probability matrix.')
+  if (nIds(object) > 0) {
+    warning('postprob() not implemented for ',
+      class(object)[1],
+      '. Returning uniform posterior probability matrix.'
+    )
 
-  matrix(1 / nClusters(object), nrow = nIds(object), ncol = nClusters(object))
+    matrix(1 / nClusters(object), nrow = nIds(object), ncol = nClusters(object))
+  }
+  else {
+    warning('postprob() not implemented for ',
+      class(object)[1],
+      ' and no associated trajectories for this model. Returning empty matrix.')
+    matrix(1 / nClusters(object), nrow = 0, ncol = nClusters(object))
+  }
 })
 
 
