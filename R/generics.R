@@ -426,7 +426,15 @@ setGeneric('trajectories', function(object, ...) {
 # trajectoryAssignments ####
 #' @export
 #' @name latrend-generics
-setGeneric('trajectoryAssignments', function(object, ...) standardGeneric('trajectoryAssignments'))
+setGeneric('trajectoryAssignments', function(object, ...) {
+  clusters <- standardGeneric('trajectoryAssignments')
+  assert_that(
+    is.factor(clusters),
+    !is.lcModel(object) || all(levels(clusters) == clusterNames(object))
+  )
+
+  clusters
+})
 
 
 # validate ####
