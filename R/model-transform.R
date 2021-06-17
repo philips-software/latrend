@@ -42,19 +42,27 @@ setGeneric('transformFitted', function(pred, model, clusters) standardGeneric('t
 #' @rdname transformFitted
 #' @aliases transformFitted,NULL,lcModel-method
 setMethod('transformFitted', signature('NULL', 'lcModel'), function(pred, model, clusters) {
-  NULL
+  suppressWarnings({
+    newpred = matrix(nrow = nobs(model), ncol = nClusters(model))
+  })
+  transformFitted(newpred, model, clusters)
 })
 
 #' @rdname transformFitted
 #' @aliases transformFitted,matrix,lcModel-method
 setMethod('transformFitted', signature('matrix', 'lcModel'), function(pred, model, clusters) {
-  assert_that(is.matrix(pred),
-              ncol(pred) == nClusters(model),
-              nrow(pred) == nobs(model))
+  suppressWarnings(assert_that(
+    is.matrix(pred),
+    ncol(pred) == nClusters(model),
+    nrow(pred) == nobs(model)
+  ))
+
   colnames(pred) = clusterNames(model)
 
   if (is.null(clusters)) {
     pred
+  } else if (nrow(pred) == 0) {
+    numeric()
   } else {
     clusters = make.clusterIndices(model, clusters)
     rowClusters = clusters[make.idRowIndices(model)]

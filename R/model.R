@@ -458,8 +458,14 @@ setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, ob
 #' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' fitted(model)
 fitted.lcModel = function(object, ..., clusters = trajectoryAssignments(object)) {
-  pred = predict(object, newdata = NULL)
-  transformFitted(pred = pred, model = object, clusters = clusters)
+  if (suppressWarnings(nIds(object)) == 0) {
+    warning('No result for fitted() because this model has no associated trajectories that were used for training.')
+    transformFitted(pred = NULL, model = object, clusters = clusters)
+  }
+  else {
+    pred = predict(object, newdata = NULL)
+    transformFitted(pred = pred, model = object, clusters = clusters)
+  }
 }
 
 
@@ -1598,6 +1604,10 @@ setMethod('trajectories', signature('lcModel'), function(object, ...) {
 #' # assign trajectories at random using weighted sampling
 #' trajectoryAssignments(model, strategy = which.weight)
 setMethod('trajectoryAssignments', signature('lcModel'), function(object, strategy = which.max, ...) {
+  if (suppressWarnings(nIds(object)) == 0) {
+    return (factor(levels = 1:nClusters(object), labels = clusterNames(object)))
+  }
+
   pp = postprob(object)
 
   result = apply(pp, 1, strategy, ...)

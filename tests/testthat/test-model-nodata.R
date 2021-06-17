@@ -50,10 +50,6 @@ test_that('model.data', {
   expect_null(out)
 })
 
-test_that('predict', {
-  expect_error(fitted(model))
-})
-
 test_that('time', {
   expect_error(suppressWarnings(time(model)))
 })
@@ -68,4 +64,25 @@ test_that('postprob', {
 
 test_that('clusterProportions', {
   expect_error(suppressWarnings(clusterProportions(model)))
+})
+
+test_that('trajectoryAssignments', {
+  out = trajectoryAssignments(model)
+  expect_length(out, 0)
+})
+
+test_that('fitted', {
+  expect_warning({
+    out = fitted(model)
+  })
+
+  expect_length(out, 0)
+})
+
+test_that('residuals', {
+  expect_warning({
+    out = residuals(model)
+  })
+
+  expect_length(out, 0)
 })
