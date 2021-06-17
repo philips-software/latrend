@@ -806,12 +806,11 @@ model.data.lcModel = function(object, ...) {
   if (!is.null(object@data)) {
     object@data
     assert_that(is.data.frame(object@data), msg = 'expected data reference to be a data.frame')
-    return(object@data)
-  } else {
-    assert_that(has_name(getCall(object), 'data'), msg = 'Cannot determine data used to train this lcModel. Data not part of model call, and not assigned to the @data slot')
+    return (object@data)
+  } else if (has_name(getCall(object), 'data')) {
     data = eval(getCall(object)$data, envir = environment(object))
     assert_that(!is.null(data),
-                msg = sprintf('could not find "%s" in the model environment', deparse(data)))
+      msg = sprintf('could not find "%s" in the model environment', deparse(data)))
     assert_that(!is.function(data), msg = sprintf('The data object was not found in the model environment. The data object currently evaluates to a function, indicating the original training data is not loaded.'))
 
     modelData = trajectories(
@@ -824,6 +823,9 @@ model.data.lcModel = function(object, ...) {
 
     assert_that(is.data.frame(modelData), msg = 'expected data reference to be a data.frame')
     return(modelData)
+  } else {
+    warning('Cannot determine data used to train this lcModel. Data not part of model call, and not assigned to the @data slot. Returning NULL.')
+    return (NULL)
   }
 }
 
