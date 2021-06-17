@@ -256,7 +256,7 @@ setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
 #' coef(gbtm)
 coef.lcModel = function(object, ...) {
   if (is.null(object@model) ||
-      is.null(getS3method('coef', class = class(object@model), optional = TRUE))) {
+      is.null(getS3method('coef', class = class(object@model)[1], optional = TRUE))) {
     numeric()
   } else {
     coef(object@model)
@@ -360,7 +360,7 @@ setMethod('converged', signature('lcModel'), function(object, ...) {
 #' @family model-specific methods
 deviance.lcModel = function(object, ...) {
   if (is.null(object@model) ||
-      is.null(getS3method('deviance', class = class(object@model), optional = TRUE))) {
+      is.null(getS3method('deviance', class = class(object@model)[1], optional = TRUE))) {
     as.numeric(NA)
   } else {
     deviance(object@model)
@@ -378,7 +378,7 @@ deviance.lcModel = function(object, ...) {
 #' @family model-specific methods
 df.residual.lcModel = function(object, ...) {
   if (is.null(object@model) ||
-      is.null(getS3method('df.residual', class = class(object@model), optional = TRUE))) {
+      is.null(getS3method('df.residual', class = class(object@model)[1], optional = TRUE))) {
     df = attr(logLik(object), 'df')
     if (!is.null(df) && is.finite(df)) {
       nobs(object) - df
@@ -693,7 +693,7 @@ is.lcModel = function(x) {
 #' logLik(gbtm)
 logLik.lcModel = function(object, ...) {
   if (is.null(object@model) ||
-      is.null(getS3method('logLik', class = class(object@model), optional = TRUE))) {
+      is.null(getS3method('logLik', class = class(object@model)[1], optional = TRUE))) {
     N = nIds(object)
     df = length(coef(object))
     ll = as.numeric(NA)
@@ -771,7 +771,7 @@ setMethod('metric', signature('lcModel'), function(object, name, ...) {
 #' model.frame(lmkm)
 model.frame.lcModel = function(formula, ...) {
   if (is.null(formula@model) ||
-      is.null(getS3method('model.frame', class = class(formula@model), optional = TRUE))) {
+      is.null(getS3method('model.frame', class = class(formula@model)[1], optional = TRUE))) {
     labs = stats::formula(formula) %>%
       terms() %>%
       labels()
@@ -1458,7 +1458,7 @@ setMethod('show', 'lcModel', function(object) {
 #' sigma(model)
 sigma.lcModel = function(object, ...) {
   if (is.null(object@model) ||
-      is.null(getS3method('sigma', class = class(object@model), optional = TRUE))) {
+      is.null(getS3method('sigma', class = class(object@model)[1], optional = TRUE))) {
     residuals(object) %>% sd()
   } else {
     sigma(object@model)
