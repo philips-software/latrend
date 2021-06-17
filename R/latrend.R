@@ -110,21 +110,25 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
     set.seed(method$seed)
   }
 
-  # preFit
-  modelEnv = preFit(
-    method = method,
-    data = data,
-    envir = envir,
-    verbose = verbose
-  )
+  suppressFun = ifelse(as.logical(verbose), force, function(...) capture.output(suppressMessages(...)))
 
-  # fit
-  model = fit(
-    method = method,
-    data = data,
-    envir = modelEnv,
-    verbose = verbose
-  )
+  suppressFun({
+    # preFit
+    modelEnv = preFit(
+      method = method,
+      data = data,
+      envir = envir,
+      verbose = verbose
+    )
+
+    # fit
+    model = fit(
+      method = method,
+      data = data,
+      envir = modelEnv,
+      verbose = verbose
+    )
+  })
 
   assert_that(is_class_defined(model))
 
@@ -137,13 +141,15 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
   model@call['envir'] = list(mc$envir)
 
   # postFit
-  model = postFit(
-    method = method,
-    data = data,
-    model = model,
-    envir = modelEnv,
-    verbose = verbose
-  )
+  suppressFun({
+    model = postFit(
+      method = method,
+      data = data,
+      model = model,
+      envir = modelEnv,
+      verbose = verbose
+    )
+  })
 
   return(model)
 }

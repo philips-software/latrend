@@ -150,11 +150,7 @@ setMethod('fit', signature('lcMethodMixTVEM'), function(method, data, envir, ver
   args$max.time = NA
   args$numClasses = method$nClusters
 
-  suppressFun = ifelse(as.logical(verbose), force, capture.output)
-
-  suppressFun({
-    model = do.call(TVEMMixNormal, args[intersect(names(args), formalArgs(TVEMMixNormal))])
-  })
+  model = do.call(TVEMMixNormal, args[intersect(names(args), formalArgs(TVEMMixNormal))])
 
   new(
     'lcModelMixTVEM',

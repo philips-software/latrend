@@ -64,16 +64,13 @@ setMethod('prepareData', signature('lcMethodCrimCV'), function(method, data, ver
 #' @rdname interface-crimCV
 #' @inheritParams fit
 setMethod('fit', signature('lcMethodCrimCV'), function(method, data, envir, verbose, ...) {
-  suppressFun = ifelse(as.logical(verbose), force, capture.output)
   time = timeVariable(method)
 
   args = as.list(method, args = crimCV::crimCV)
   args$Dat = envir$dataMat
   args$ng = method$nClusters
 
-  suppressFun({
-    model = do.call(crimCV::crimCV, args)
-  })
+  model = do.call(crimCV::crimCV, args)
   model$data = envir$dataMat
   model$minTime = min(data[[time]])
   model$durTime = max(data[[time]]) - model$minTime

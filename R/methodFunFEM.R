@@ -72,12 +72,7 @@ setMethod('fit', signature('lcMethodFunFEM'), function(method, data, envir, verb
   args$disp = FALSE
   args$graph = FALSE
 
-  # Helper variables
-  suppressFun = ifelse(as.logical(verbose), force, capture.output)
-
-  suppressFun({
-    model = do.call(funFEM::funFEM, args)
-  })
+  model = do.call(funFEM::funFEM, args)
   model$basis = envir$basis
   model$fd = envir$fd
 

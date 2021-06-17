@@ -77,22 +77,19 @@ setMethod('fit', signature('lcMethodKML'), function(method, data, envir, verbose
 
   # Helper variables
   valueColumn = responseVariable(method)
-  suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
   if (.Platform$OS.type != 'windows') {
     cldFilePresent = file.exists('cld.Rdata')
   }
 
   cat(verbose, 'Running kml()...', level = verboseLevels$finest)
-  suppressFun(
-    # note that slowKML throws an error for nbClusters=1
-    kml::kml(
-      cld,
-      nbClusters = method$nClusters,
-      nbRedrawing = method$nbRedrawing,
-      toPlot = 'none',
-      parAlgo = envir$par
-    )
+  # note that slowKML throws an error for nbClusters=1
+  kml::kml(
+    cld,
+    nbClusters = method$nClusters,
+    nbRedrawing = method$nbRedrawing,
+    toPlot = 'none',
+    parAlgo = envir$par
   )
 
   # cleanup

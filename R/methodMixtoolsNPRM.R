@@ -53,11 +53,8 @@ setMethod('fit', signature('lcMethodMixtoolsNPRM'), function(method, data, envir
 
   # Helper variables
   valueColumn = method$response
-  suppressFun = ifelse(as.logical(verbose), force, capture.output)
 
-  suppressFun({
-    model = do.call(mixtools::npEM, args)
-  })
+  model = do.call(mixtools::npEM, args)
 
   new(
     'lcModelMixtoolsRM',

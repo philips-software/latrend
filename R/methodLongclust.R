@@ -54,11 +54,7 @@ setMethod('fit', signature('lcMethodLongclust'), function(method, data, envir, v
     args$userseed = method$seed
   }
 
-  suppressFun = ifelse(as.logical(verbose), force, capture.output)
-
-  suppressFun({
-    model = do.call(longclust::longclustEM, args)
-  })
+  model = do.call(longclust::longclustEM, args)
 
   new(
     'lcModelLongclust',

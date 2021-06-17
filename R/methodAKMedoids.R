@@ -56,12 +56,7 @@ setMethod('fit', signature('lcMethodAkmedoids'), function(method, data, envir, v
   args$k = method$nClusters
   args$id_field = FALSE
 
-  # Helper variables
-  suppressFun = ifelse(as.logical(verbose), force, capture.output)
-
-  suppressFun({
-    model = do.call(akmedoids::akclustr, args)
-  })
+  model = do.call(akmedoids::akclustr, args)
 
   clusNames = make.clusterNames(method$nClusters)
 

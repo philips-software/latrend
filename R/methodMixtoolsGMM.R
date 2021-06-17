@@ -93,11 +93,7 @@ setMethod('fit', signature('lcMethodMixtoolsGMM'), function(method, data, envir,
   args$addintercept.random = FALSE
   args$verb = canShow(verbose, 'fine')
 
-  suppressFun = ifelse(as.logical(verbose), force, capture.output)
-
-  suppressFun({
-    model = do.call(mixtools::regmixEM.mixed, args)
-  })
+  model = do.call(mixtools::regmixEM.mixed, args)
   model$fixed = envir$fixed
   model$random = envir$random
 
