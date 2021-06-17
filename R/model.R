@@ -861,8 +861,7 @@ nIds = function(object) {
     })
 
     if (is.null(data)) {
-      warning('cannot determine number of ids because model.data() is NULL and no id vector is assigned to @ids')
-      return (0)
+      return (0L)
     }
 
     iddata = model.data(object)[[idVariable(object)]]
