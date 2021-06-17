@@ -380,7 +380,7 @@ df.residual.lcModel = function(object, ...) {
   if (is.null(object@model) ||
       is.null(getS3method('df.residual', class = class(object@model)[1], optional = TRUE))) {
     df = attr(logLik(object), 'df')
-    if (!is.null(df) && is.finite(df)) {
+    if (!is.null(df) && is.finite(df) && is.numeric(nobs(object))) {
       nobs(object) - df
     } else {
       as.numeric(NA)
@@ -900,7 +900,15 @@ nClusters = function(object) {
 #' kml <- latrend(method, latrendData)
 #' nobs(kml)
 nobs.lcModel = function(object, ...) {
-  nrow(model.data(object))
+  suppressWarnings({
+    data = model.data(object)
+  })
+
+  if (is.null(data)) {
+    return (0L)
+  } else {
+    nrow(model.data(object))
+  }
 }
 
 
