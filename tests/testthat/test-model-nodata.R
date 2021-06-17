@@ -86,3 +86,8 @@ test_that('residuals', {
 
   expect_length(out, 0)
 })
+
+test_that('summary', {
+  out = summary(model)
+  expect_is(out, 'lcSummary')
+})

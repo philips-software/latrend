@@ -25,25 +25,30 @@ setClass(
 #' @param object The `lcModel` object.
 #' @param ... Additional arguments.
 summary.lcModel = function(object, ...) {
-  res = residuals(object)
-  if (is.null(res)) {
-    res = as.numeric(NA)
-  }
+  suppressWarnings({
+    res = residuals(object)
+    if (length(res) == 0) {
+      res = as.numeric(NA)
+    }
 
-  new(
-    'lcSummary',
-    method = getLcMethod(object),
-    name = getName(object),
-    nClusters = nClusters(object),
-    nObs = ifelse(is.null(nobs(object)), 0L, nobs(object)),
-    id = idVariable(object),
-    coefficients = coef(object),
-    residuals = res,
-    clusterNames = clusterNames(object),
-    trajectoryAssignments = trajectoryAssignments(object),
-    clusterSizes = clusterSizes(object),
-    clusterProportions = clusterProportions(object)
-  )
+    props = tryCatch(clusterProportions(object), error = function(...) rep(NaN, nClusters(object)))
+    ss = new(
+      'lcSummary',
+      method = getLcMethod(object),
+      name = getName(object),
+      nClusters = nClusters(object),
+      nObs = ifelse(is.null(nobs(object)), 0L, nobs(object)),
+      id = idVariable(object),
+      coefficients = coef(object),
+      residuals = res,
+      clusterNames = clusterNames(object),
+      trajectoryAssignments = trajectoryAssignments(object),
+      clusterSizes = clusterSizes(object),
+      clusterProportions = props
+    )
+  })
+
+  ss
 }
 
 
