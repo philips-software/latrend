@@ -66,6 +66,13 @@ test_that('clusterProportions', {
   expect_error(suppressWarnings(clusterProportions(model)))
 })
 
+test_that('clusterSizes', {
+  out = clusterSizes(model)
+  ref = rep(0, nClusters(model))
+  names(ref) = clusterNames(model)
+  expect_equal(out, ref)
+})
+
 test_that('trajectoryAssignments', {
   out = trajectoryAssignments(model)
   expect_length(out, 0)
