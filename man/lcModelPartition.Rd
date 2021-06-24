@@ -22,9 +22,10 @@ lcModelPartition(
 
 \item{response}{The name of the response variable.}
 
-\item{trajectoryAssignments}{A \code{vector} of cluster membership per trajectory, either \code{factor}, or \code{integer} (\code{1} to \code{nClusters}).}
+\item{trajectoryAssignments}{A \code{vector} of cluster membership per trajectory, either \code{factor}, \code{character}, or \code{integer} (\code{1} to \code{nClusters}).
+The order of the trajectory, and thus the respective assignments, is determined by the id column of the data. Provide a \code{factor} id column to make sure the ordering is as you aspect.}
 
-\item{nClusters}{The number of clusters. Optional for \code{factor} assignments.}
+\item{nClusters}{The number of clusters. Should be \code{NA} for trajectory assignments of type \code{factor}.}
 
 \item{center}{The \code{function} for computing the longitudinal cluster centers, used for representing the cluster trajectories.}
 
