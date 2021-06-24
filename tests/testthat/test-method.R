@@ -148,6 +148,12 @@ test_that('internal variable reference', {
   expect_equal(method$warmup, floor(method$iter / 2))
 })
 
+test_that('variable of argument name', {
+  warmup = 3
+  method = lcMethod.call('lcMethodTest', call=call('lcMethod', iter=1e3, warmup = quote(warmup)))
+  expect_equal(method$warmup, warmup)
+})
+
 test_that('formula', {
   method = lcMethod.call('lcMethodTest', call=call('lcMethod', formula=A~B, formula.sigma=~C))
   expect_is(formula(method), 'formula')
