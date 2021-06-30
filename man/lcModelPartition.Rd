@@ -22,8 +22,10 @@ lcModelPartition(
 
 \item{response}{The name of the response variable.}
 
-\item{trajectoryAssignments}{A \code{vector} of cluster membership per trajectory, either \code{factor}, \code{character}, or \code{integer} (\code{1} to \code{nClusters}).
-The order of the trajectory, and thus the respective assignments, is determined by the id column of the data. Provide a \code{factor} id column to make sure the ordering is as you aspect.}
+\item{trajectoryAssignments}{A \code{vector} of cluster membership per trajectory, or a \code{data.frame} with an id column and \code{"Cluster"} column.
+For \code{vector} input, the type must be \code{factor}, \code{character}, or \code{integer} (\code{1} to \code{nClusters}).
+The order of the trajectory, and thus the respective assignments, is determined by the id column of the data.
+Provide a \code{factor} id column for the input data to ensure that the ordering is as you aspect.}
 
 \item{nClusters}{The number of clusters. Should be \code{NA} for trajectory assignments of type \code{factor}.}
 
@@ -42,4 +44,14 @@ The order of the trajectory, and thus the respective assignments, is determined 
 \description{
 Represents an arbitrary partitioning of a set of trajectories.
 As such, this model has no predictive capabilities. The cluster trajectories are represented by the specified center function (mean by default).
+}
+\examples{
+# comparing a model to the ground truth using the adjusted Rand index
+data(latrendData)
+model <- latrend(lcMethodKML(), data = latrendData, response = "Y")
+# extract the reference class from the Class column
+trajLabels <- aggregate(Class ~ Id, head, 1, data = latrendData)
+trajLabels$Cluster <- trajLabels$Class
+refModel <- lcModelPartition(latrendData, response = "Y", trajectoryAssignments = trajLabels)
+externalMetric(model, refModel, 'adjustedRand') # 0.76
 }

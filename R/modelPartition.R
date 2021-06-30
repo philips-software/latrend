@@ -16,11 +16,22 @@ setClass(
 #' As such, this model has no predictive capabilities. The cluster trajectories are represented by the specified center function (mean by default).
 #' @inheritParams lcMethodStratify
 #' @param data A `data.frame` representing the trajectory data.
-#' @param trajectoryAssignments A `vector` of cluster membership per trajectory, either `factor`, `character`, or `integer` (`1` to `nClusters`).
-#' The order of the trajectory, and thus the respective assignments, is determined by the id column of the data. Provide a `factor` id column to make sure the ordering is as you aspect.
+#' @param trajectoryAssignments A `vector` of cluster membership per trajectory, or a `data.frame` with an id column and `"Cluster"` column.
+#' For `vector` input, the type must be `factor`, `character`, or `integer` (`1` to `nClusters`).
+#' The order of the trajectory, and thus the respective assignments, is determined by the id column of the data.
+#' Provide a `factor` id column for the input data to ensure that the ordering is as you aspect.
 #' @param nClusters The number of clusters. Should be `NA` for trajectory assignments of type `factor`.
 #' @param clusterNames The names of the clusters, or a function with input `n` outputting a `character vector` of names.
 #' @param envir The `environment` associated with the model. Used for evaluating the assigned `data` object by [model.data.lcModel].
+#' @examples
+#' # comparing a model to the ground truth using the adjusted Rand index
+#' data(latrendData)
+#' model <- latrend(lcMethodKML(), data = latrendData, response = "Y")
+#' # extract the reference class from the Class column
+#' trajLabels <- aggregate(Class ~ Id, head, 1, data = latrendData)
+#' trajLabels$Cluster <- trajLabels$Class
+#' refModel <- lcModelPartition(latrendData, response = "Y", trajectoryAssignments = trajLabels)
+#' externalMetric(model, refModel, 'adjustedRand') # 0.76
 lcModelPartition = function(data,
                             response,
                             trajectoryAssignments,
@@ -41,16 +52,37 @@ lcModelPartition = function(data,
     noNA(trajectoryAssignments),
     is.function(center)
   )
-  assert_that(
-    length(trajectoryAssignments) == uniqueN(data[[id]]),
-    msg = 'Number of trajectory assignments does not match the number of trajectories (ids) in the data'
-  )
+
 
   if (is.na(nClusters) && length(clusterNames) > 0) {
     nClusters = length(clusterNames)
   }
 
+  if (is.data.frame(trajectoryAssignments)) {
+    # data.frame input
+    assert_that(
+      has_name(trajectoryAssignments, id),
+      has_name(trajectoryAssignments, 'Cluster'),
+      all(trajectoryAssignments[[id]] %in% unique(data[[id]]))
+    )
+
+    newOrder = match(trajectoryAssignments[[id]], levels(factor(data[[id]])))
+    assert_that(
+      noNA(newOrder),
+      uniqueN(newOrder) == length(newOrder)
+    )
+
+    trajectoryAssignments = trajectoryAssignments$Cluster[newOrder]
+  }
+
+  # vector input
+  assert_that(
+    length(trajectoryAssignments) == uniqueN(data[[id]]),
+    msg = 'Number of trajectory assignments does not match the number of trajectories (ids) in the data'
+  )
+
   if (is.numeric(trajectoryAssignments)) {
+    # integer
     assert_that(all(vapply(trajectoryAssignments, is.count, FUN.VALUE = TRUE)), msg = 'numeric input must be integer from 1,2,3,...')
 
     if (is.na(nClusters)) {
@@ -60,6 +92,7 @@ lcModelPartition = function(data,
       numClus = nClusters
     }
   } else if (is.character(trajectoryAssignments)) {
+    # character
     if (is.na(nClusters)) {
       numClus = uniqueN(trajectoryAssignments)
     } else {
@@ -74,6 +107,7 @@ lcModelPartition = function(data,
       trajectoryAssignments = factor(trajectoryAssignments, levels = clusterNames)
     }
   } else if (is.factor(trajectoryAssignments)) {
+    # factor
     assert_that(is.na(nClusters), msg = 'nClusters cannot be specified for trajectoryAssignments of type factor')
     if (!is.null(clusterNames)) {
       assert_that(nlevels(trajectoryAssignments) == length(clusterNames))
@@ -83,6 +117,8 @@ lcModelPartition = function(data,
   } else {
     stop('unsupported input type for trajectoryAssignments argument')
   }
+
+
 
   intAssignments = as.integer(trajectoryAssignments)
   assert_that(min(intAssignments) >= 1, max(intAssignments) <= numClus)
