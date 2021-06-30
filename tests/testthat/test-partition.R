@@ -32,6 +32,7 @@ test_that('factor assignments', {
   expect_equivalent(clusterNames(model), clusterNames(refmodel))
 })
 
+
 test_that('table assignments', {
   model = lcModelPartition(
     testLongData,
@@ -43,6 +44,20 @@ test_that('table assignments', {
 
   expect_valid_lcModel(model)
   expect_equivalent(trajectoryAssignments(model), trajectoryAssignments(refmodel))
+  expect_equivalent(nClusters(model), nClusters(refmodel))
+  expect_equivalent(clusterNames(model), clusterNames(refmodel))
+})
+
+
+test_that('data column assignment', {
+  model = lcModelPartition(
+    testLongData,
+    response = 'Value',
+    trajectoryAssignments = 'Class'
+  )
+
+  expect_valid_lcModel(model)
+  expect_true(externalMetric(model, refmodel, 'adjustedRand') >= .99)
   expect_equivalent(nClusters(model), nClusters(refmodel))
   expect_equivalent(clusterNames(model), clusterNames(refmodel))
 })

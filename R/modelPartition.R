@@ -16,7 +16,7 @@ setClass(
 #' As such, this model has no predictive capabilities. The cluster trajectories are represented by the specified center function (mean by default).
 #' @inheritParams lcMethodStratify
 #' @param data A `data.frame` representing the trajectory data.
-#' @param trajectoryAssignments A `vector` of cluster membership per trajectory, or a `data.frame` with an id column and `"Cluster"` column.
+#' @param trajectoryAssignments A `vector` of cluster membership per trajectory, a `data.frame` with an id column and `"Cluster"` column, or the name of the cluster membership column in the `data` argument..
 #' For `vector` input, the type must be `factor`, `character`, or `integer` (`1` to `nClusters`).
 #' The order of the trajectory, and thus the respective assignments, is determined by the id column of the data.
 #' Provide a `factor` id column for the input data to ensure that the ordering is as you aspect.
@@ -57,6 +57,15 @@ lcModelPartition = function(data,
 
   if (is.na(nClusters) && length(clusterNames) > 0) {
     nClusters = length(clusterNames)
+  }
+
+  if (length(trajectoryAssignments) == 1 &&
+      is.character(trajectoryAssignments) &&
+      uniqueN(data[[id]]) > 1) {
+    # cluster column name
+    assert_that(has_name(data, trajectoryAssignments), msg = 'cluster column specified in "trajectoryAssignments" argument is not present in data')
+    trajectoryAssignments = aggregate(data[[trajectoryAssignments]], by = list(Id = data[[id]]), FUN = head, 1) %>%
+      set_names(c(id, 'Cluster'))
   }
 
   if (is.data.frame(trajectoryAssignments)) {
