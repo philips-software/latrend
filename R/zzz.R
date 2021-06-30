@@ -51,7 +51,7 @@
 #' Create derivative method specifications for 1 to 5 clusters using the [lcMethods()] function.
 #' A series of methods can be estimated using [latrendBatch()].
 #' \preformatted{
-#' kmlMethods = lcMethods(kmlMethod, nClusters = 1:5)
+#' kmlMethods <- lcMethods(kmlMethod, nClusters = 1:5)
 #' models <- latrendBatch(kmlMethods, data = latrendData)
 #' }
 #'
