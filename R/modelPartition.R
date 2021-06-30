@@ -22,6 +22,7 @@ setClass(
 #' Provide a `factor` id column for the input data to ensure that the ordering is as you aspect.
 #' @param nClusters The number of clusters. Should be `NA` for trajectory assignments of type `factor`.
 #' @param clusterNames The names of the clusters, or a function with input `n` outputting a `character vector` of names.
+#' If unspecified, the names are determined from the `trajectoryAssignments` argument.
 #' @param envir The `environment` associated with the model. Used for evaluating the assigned `data` object by [model.data.lcModel].
 #' @examples
 #' # comparing a model to the ground truth using the adjusted Rand index
@@ -102,6 +103,7 @@ lcModelPartition = function(data,
 
     if (is.null(clusterNames)) {
       trajectoryAssignments = factor(trajectoryAssignments)
+      clusterNames = levels(trajectoryAssignments)
     } else {
       assert_that(all(trajectoryAssignments %in% clusterNames))
       trajectoryAssignments = factor(trajectoryAssignments, levels = clusterNames)
@@ -109,7 +111,9 @@ lcModelPartition = function(data,
   } else if (is.factor(trajectoryAssignments)) {
     # factor
     assert_that(is.na(nClusters), msg = 'nClusters cannot be specified for trajectoryAssignments of type factor')
-    if (!is.null(clusterNames)) {
+    if (is.null(clusterNames)) {
+      clusterNames = levels(trajectoryAssignments)
+    } else {
       assert_that(nlevels(trajectoryAssignments) == length(clusterNames))
       trajectoryAssignments = factor(trajectoryAssignments, levels = clusterNames, labels = clusterNames)
     }

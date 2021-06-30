@@ -29,6 +29,22 @@ test_that('factor assignments', {
   expect_valid_lcModel(model)
   expect_equivalent(trajectoryAssignments(model), trajectoryAssignments(refmodel))
   expect_equivalent(nClusters(model), nClusters(refmodel))
+  expect_equivalent(clusterNames(model), clusterNames(refmodel))
+})
+
+test_that('table assignments', {
+  model = lcModelPartition(
+    testLongData,
+    response = 'Value',
+    trajectoryAssignments = data.frame(
+      Traj = ids(refmodel),
+      Cluster = trajectoryAssignments(refmodel))
+  )
+
+  expect_valid_lcModel(model)
+  expect_equivalent(trajectoryAssignments(model), trajectoryAssignments(refmodel))
+  expect_equivalent(nClusters(model), nClusters(refmodel))
+  expect_equivalent(clusterNames(model), clusterNames(refmodel))
 })
 
 
@@ -42,6 +58,7 @@ test_that('character assignments', {
   expect_valid_lcModel(model)
   expect_equivalent(trajectoryAssignments(model), trajectoryAssignments(refmodel))
   expect_equivalent(nClusters(model), nClusters(refmodel))
+  expect_equivalent(clusterNames(model), clusterNames(refmodel))
 })
 
 
