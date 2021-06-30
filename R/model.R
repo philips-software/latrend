@@ -75,11 +75,11 @@ setMethod('initialize', 'lcModel', function(.Object, ...) {
 
 
 setValidity('lcModel', function(object) {
-  return(TRUE)
+  return (TRUE)
 
   if (as.character(object@call[[1]]) == "<undef>") {
     # nothing to validate as lcModel is incomplete
-    return(TRUE)
+    return (TRUE)
   }
 
   assert_that(
@@ -92,7 +92,7 @@ setValidity('lcModel', function(object) {
   assert_that(!is.null(data),
     msg = 'invalid data object for new lcModel. Either specify the data slot or ensure that the model call contains a data argument which correctly evaluates.')
   assert_that(has_name(data, c(object@id, object@time, object@response)))
-  return(TRUE)
+  return (TRUE)
 })
 
 
@@ -138,7 +138,8 @@ setMethod('clusterTrajectories', signature('lcModel'), function(object, at = tim
   assert_that(is.data.frame(dfPred), msg = 'invalid output from predict()')
   assert_that(nrow(dfPred) == nrow(newdata), msg = 'invalid output from predict function of lcModel; expected a prediction per newdata row')
   newdata[, c(responseVariable(object, what = what)) := dfPred$Fit]
-  return(newdata[])
+
+  return (newdata[])
 })
 
 
@@ -153,8 +154,8 @@ setMethod('clusterTrajectories', signature('lcModel'), function(object, at = tim
 #' clusterNames(model) # A, B
 clusterNames = function(object, factor = FALSE) {
   assert_that(is.lcModel(object))
-  if (factor[1]) {
-    object@clusterNames %>% factor(levels = object@clusterNames)
+  if (isTRUE(factor)) {
+    factor(object@clusterNames, levels = object@clusterNames)
   } else {
     object@clusterNames
   }
@@ -177,7 +178,7 @@ clusterNames = function(object, factor = FALSE) {
   )
 
   object@clusterNames = value
-  return(object)
+  return (object)
 }
 
 #' @export
@@ -422,13 +423,13 @@ setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, ob
       is.scalar(value) && (is.numeric(value) || is.logical(value)),
       msg = sprintf('invalid output for metric "%s"; expected scalar number or logical value', name)
     )
-    return(value)
+    return (value)
   }, metricFuns, name[funMask])
 
   allMetrics = rep(NA * 0, length(name))
   allMetrics[funMask] = unlist(metricValues)
   names(allMetrics) = name
-  return(allMetrics)
+  return (allMetrics)
 })
 
 
@@ -529,7 +530,7 @@ setMethod('fittedTrajectories', signature('lcModel'), function(object, at, what,
   assert_that(is.data.frame(preds))
   assert_that(nrow(preds) == nrow(newdata), msg = 'invalid output from predict function of lcModel; expected a prediction per newdata row')
   newdata[, c(responseVariable(object, what = what)) := preds$Fit]
-  return(newdata[])
+  return (newdata[])
 })
 
 
@@ -649,6 +650,7 @@ setMethod('getShortName',  signature('lcModel'),
 #' model = latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' ids(model) # 1, 2, ..., 200
 ids = function(object) {
+  assert_that(is.lcModel(object))
   if (length(object@ids) == 0) {
     iddata = model.data(object)[[idVariable(object)]]
     if (is.factor(iddata)) {
@@ -730,8 +732,10 @@ logLik.lcModel = function(object, ...) {
 #' @family metric functions
 setMethod('metric', signature('lcModel'), function(object, name, ...) {
   assert_that(length(name) > 0, msg = 'no metric names provided')
-  assert_that(is.lcModel(object),
-              is.character(name))
+  assert_that(
+    is.lcModel(object),
+    is.character(name)
+  )
 
   funMask = name %in% getInternalMetricNames()
   if (!all(funMask)) {
@@ -751,13 +755,13 @@ setMethod('metric', signature('lcModel'), function(object, name, ...) {
         name
       )
     )
-    return(value)
+    return (value)
   }, metricFuns, name[funMask])
 
   allMetrics = rep(NA * 0, length(name))
   allMetrics[funMask] = unlist(metricValues)
   names(allMetrics) = name
-  return(allMetrics)
+  return (allMetrics)
 })
 
 
@@ -834,7 +838,7 @@ model.data.lcModel = function(object, ...) {
     )
 
     assert_that(is.data.frame(modelData), msg = 'expected data reference to be a data.frame')
-    return(modelData)
+    return (modelData)
   } else {
     warning('Cannot determine data used to train this lcModel. Data not part of model call, and not assigned to the @data slot. Returning NULL.')
     return (NULL)
@@ -855,24 +859,8 @@ model.data.lcModel = function(object, ...) {
 #' kml <- latrend(method, latrendData)
 #' nIds(kml)
 nIds = function(object) {
-  if (length(object@ids) == 0) {
-    suppressWarnings({
-      data = model.data(object)
-    })
-
-    if (is.null(data)) {
-      return (0L)
-    }
-
-    iddata = model.data(object)[[idVariable(object)]]
-    if (is.factor(iddata)) {
-      nlevels(iddata)
-    } else {
-      uniqueN(iddata)
-    }
-  } else {
-    length(object@ids)
-  }
+  modelIds = ids(object)
+  length(modelIds)
 }
 
 #' @export
@@ -1390,7 +1378,7 @@ setMethod('qqPlot', signature('lcModel'), function(object, byCluster = FALSE, ..
     p = p + facet_wrap(~ Cluster)
   }
 
-  return(p)
+  return (p)
 })
 
 
@@ -1421,7 +1409,7 @@ residuals.lcModel = function(object, ..., clusters = trajectoryAssignments(objec
     assert_that(length(yref) == length(ypred))
     yref - ypred
   } else {
-    return(NULL)
+    return (NULL)
   }
 }
 
@@ -1511,7 +1499,7 @@ setMethod('strip', signature('lcModel'), function(object, ..., classes = 'formul
   newObject@method = strip(object@method, ..., classes = classes)
   newObject@call = strip(object@call, ..., classes = classes)
 
-  return(newObject)
+  return (newObject)
 })
 
 
