@@ -38,6 +38,19 @@ model <- latrend(kmlMethod, data = latrendData)
 summary(model)
 plot(model)
 ```
+
+Identify solutions for 1 to 5 clusters.
+```
+kmlMethods <- lcMethods(kmlMethod, nClusters = 1:5)
+models <- latrendBatch(kmlMethods, data = latrendData)
+```
+
+Determine the number of clusters through one or more internal cluser metrics.
+```
+metric(models, c("WMAE", "BIC"))
+plotMetric(models, c("WMAE", "BIC"))
+```
+
 # Supported packages
 The `latrend` package provides interfaces to the relevant methods for longitudinal clustering for the following packages:
 * [akmedoids](https://CRAN.R-project.org/package=akmedoids)
