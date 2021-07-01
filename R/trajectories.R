@@ -110,7 +110,8 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
       is.data.frame(rawdata),
       has_name(rawdata, id),
       has_name(rawdata, time),
-      has_name(rawdata, response)
+      has_name(rawdata, response),
+      nrow(rawdata) > 0
     )
 
     cols = c(id, time, response)

@@ -260,7 +260,7 @@ coef.lcModel = function(object, ...) {
       is.null(getS3method('coef', class = class(object@model)[1], optional = TRUE))) {
     numeric()
   } else {
-    coef(object@model)
+    coef(object@model, ...)
   }
 }
 
@@ -464,7 +464,7 @@ fitted.lcModel = function(object, ..., clusters = trajectoryAssignments(object))
     transformFitted(pred = NULL, model = object, clusters = clusters)
   }
   else {
-    pred = predict(object, newdata = NULL)
+    pred = predict(object, newdata = NULL, ...)
     transformFitted(pred = pred, model = object, clusters = clusters)
   }
 }
@@ -520,7 +520,7 @@ setMethod('fittedTrajectories', signature('lcModel'), function(object, at, what,
     ))
   }
 
-  preds = predict(object, newdata = newdata, what = what)
+  preds = predict(object, newdata = newdata, what = what, ...)
 
   if (is.null(preds)) {
     warning('fitted predictions not supported by the model: got NULL output')
@@ -563,7 +563,7 @@ formula.lcModel = function(x, what = 'mu', ...) {
   } else {
     formulaName = paste('formula', what, sep = '.')
     if (has_name(method, formulaName)) {
-      formula(method, what = what)
+      formula(method, what = what, ...)
     } else {
       ~ 0
     }
@@ -710,7 +710,7 @@ logLik.lcModel = function(object, ...) {
     class(ll) = 'logLik'
     ll
   } else {
-    logLik(object@model)
+    logLik(object@model, ...)
   }
 }
 
@@ -792,7 +792,7 @@ model.frame.lcModel = function(formula, ...) {
       stop(sprintf('cannot determine model.frame for the given model of class %s', class(formula)))
     }
   } else {
-    model.frame(formula@model)
+    model.frame(formula@model, ...)
   }
 }
 
@@ -876,7 +876,12 @@ nIds = function(object) {
 #' nClusters(kml)
 nClusters = function(object) {
   assert_that(is.lcModel(object))
-  length(object@clusterNames)
+  nClus = length(object@clusterNames)
+  assert_that(
+    is.count(nClus),
+    nClus > 0
+  )
+  nClus
 }
 
 
@@ -1157,7 +1162,7 @@ setMethod('predictAssignments', signature('lcModel'), function(
   ...
   ) {
 
-  pp = predictPostprob(object, newdata = newdata)
+  pp = predictPostprob(object, newdata = newdata, ...)
 
   if (is.null(newdata)) {
     newdata = model.data(object)
@@ -1222,7 +1227,8 @@ setMethod('plotFittedTrajectories', signature('lcModel'), function(object, ...) 
     response = responseVariable(object),
     time = timeVariable(object),
     id = idVariable(object),
-    cluster = 'Cluster'
+    cluster = 'Cluster',
+    ...
   )
 })
 
@@ -1257,12 +1263,11 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
   ) {
   assert_that(length(clusterLabels) == nClusters(object))
 
-  clusdata = clusterTrajectories(object, at = at, what = what, ...) %>%
-    as.data.table() %>%
-    .[, Cluster := factor(Cluster, levels = levels(Cluster), labels = clusterLabels)]
+  clusdata = clusterTrajectories(object, at = at, what = what, ...) %>% as.data.table()
+  clusdata[, Cluster := factor(Cluster, levels = levels(Cluster), labels = clusterLabels)]
 
   rawdata = model.data(object) %>% as.data.table()
-  if (!is.null(trajAssignments)) {
+  if (nrow(rawdata) > 0 && !is.null(trajAssignments)) {
     assert_that(
       length(trajAssignments) == nIds(object),
       all(trajAssignments %in% clusterNames(object))
@@ -1271,14 +1276,16 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
     rawdata[, Cluster := trajAssignments[make.idRowIndices(object)]]
   }
 
-  .plotClusterTrajs(clusdata,
+  .plotClusterTrajs(
+    clusdata,
     response = responseVariable(object, what = what),
     time = timeVariable(object),
     id = idVariable(object),
     trajectories = trajectories,
     facet = facet,
     rawdata = rawdata,
-    ...)
+    ...
+  )
 })
 
 
@@ -1296,7 +1303,8 @@ setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
   plotTrajectories(data,
     id = idVariable(object),
     time = timeVariable(object),
-    response = responseVariable(object)
+    response = responseVariable(object),
+    ...
   )
 })
 
@@ -1363,10 +1371,14 @@ setMethod('postprob', signature('lcModel'), function(object, ...) {
 #' qqPlot(model)
 setMethod('qqPlot', signature('lcModel'), function(object, byCluster = FALSE, ...) {
   assert_that(is.lcModel(object))
-  idIndexColumn = factor(model.data(object)[[idVariable(object)]], levels = ids(object)) %>% as.integer()
+
+  res = residuals(object, ...)
+  mdata = model.data(object)
+  assert_that(!is.null(mdata), msg = 'no model data available')
+
+  idIndexColumn = factor(mdata[[idVariable(object)]], levels = ids(object)) %>% as.integer()
   rowClusters = trajectoryAssignments(object)[idIndexColumn]
 
-  res = residuals(object)
   requireNamespace('qqplotr')
   p = ggplot(data = data.frame(Cluster = rowClusters, res = res), aes(sample = res)) +
     qqplotr::geom_qq_band(...) +
@@ -1439,7 +1451,7 @@ estimationTime = function(object) {
 
 # . show ####
 setMethod('show', 'lcModel', function(object) {
-  summary(object) %>% show()
+  show(summary(object))
 })
 
 
@@ -1460,9 +1472,9 @@ setMethod('show', 'lcModel', function(object) {
 sigma.lcModel = function(object, ...) {
   if (is.null(object@model) ||
       is.null(getS3method('sigma', class = class(object@model)[1], optional = TRUE))) {
-    residuals(object) %>% sd()
+    residuals(object, ...) %>% sd()
   } else {
-    sigma(object@model)
+    sigma(object@model, ...)
   }
 }
 
@@ -1564,7 +1576,7 @@ setMethod('trajectories', signature('lcModel'), function(object, ...) {
 
   trajdata = subset(data, select = c(id, time, res))
 
-  trajectories(trajdata, id = id, time = time, response = res)
+  trajectories(trajdata, id = id, time = time, response = res, ...)
 })
 
 
@@ -1595,7 +1607,7 @@ setMethod('trajectoryAssignments', signature('lcModel'), function(object, strate
     return (factor(levels = 1:nClusters(object), labels = clusterNames(object)))
   }
 
-  pp = postprob(object)
+  pp = postprob(object, ...)
 
   result = apply(pp, 1, strategy, ...)
 

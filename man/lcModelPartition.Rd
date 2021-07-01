@@ -22,7 +22,7 @@ lcModelPartition(
 
 \item{response}{The name of the response variable.}
 
-\item{trajectoryAssignments}{A \code{vector} of cluster membership per trajectory, or a \code{data.frame} with an id column and \code{"Cluster"} column.
+\item{trajectoryAssignments}{A \code{vector} of cluster membership per trajectory, a \code{data.frame} with an id column and \code{"Cluster"} column, or the name of the cluster membership column in the \code{data} argument..
 For \code{vector} input, the type must be \code{factor}, \code{character}, or \code{integer} (\code{1} to \code{nClusters}).
 The order of the trajectory, and thus the respective assignments, is determined by the id column of the data.
 Provide a \code{factor} id column for the input data to ensure that the ordering is as you aspect.}
@@ -31,7 +31,8 @@ Provide a \code{factor} id column for the input data to ensure that the ordering
 
 \item{center}{The \code{function} for computing the longitudinal cluster centers, used for representing the cluster trajectories.}
 
-\item{clusterNames}{The names of the clusters, or a function with input \code{n} outputting a \verb{character vector} of names.}
+\item{clusterNames}{The names of the clusters, or a function with input \code{n} outputting a \verb{character vector} of names.
+If unspecified, the names are determined from the \code{trajectoryAssignments} argument.}
 
 \item{time}{The name of the time variable.}
 
