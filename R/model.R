@@ -1198,7 +1198,7 @@ setMethod('plot', signature('lcModel'), function(x, y, ...) {
   args = list(...)
 
   if(!has_name(args, 'trajectories')) {
-    args$trajectories = TRUE
+    args$trajectories = !has_name(args, 'what')
   }
 
   do.call(plotClusterTrajectories, c(x, args))
