@@ -1442,10 +1442,20 @@ setMethod('responseVariable', signature('lcModel'), function(object, ...) object
 #' @title Get the model estimation time
 #' @description Get the estimation time of the model, determined by the time taken for the associated [fit()] function to finish.
 #' @param object The `lcModel` object.
+#' @param unit The time unit in which the estimation time should be outputted.
+#' By default, estimation time is in seconds.
+#' For accepted units, see [base::difftime].
 #' @return A `numeric` representing the model estimation time, in seconds.
-estimationTime = function(object) {
+#' @examples
+#' data(latrendData)
+#' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+#' estimationTime(model)
+#' estimationTime(model, unit = 'mins')
+#' estimationTime(model, unit = 'days')
+estimationTime = function(object, unit = 'secs') {
   assert_that(is.lcModel(object))
-  object@estimationTime
+  dtime = as.difftime(object@estimationTime, units = 'secs')
+  as.numeric(dtime, units = unit)
 }
 
 

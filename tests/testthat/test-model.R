@@ -160,3 +160,11 @@ test_that('shortname', {
   name = getShortName(testModel)
   expect_equal(name, getShortName(lcMethodTestKML()))
 })
+
+test_that('estimationTime', {
+  expect_equivalent(estimationTime(model), model@estimationTime)
+})
+
+test_that('estimationTime in days', {
+  expect_equivalent(estimationTime(model, unit = 'days'), estimationTime(model) / 86400)
+})
