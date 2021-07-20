@@ -1,84 +1,97 @@
 context('latrendBatch')
 rngReset()
 
-test_that('single method and data, cartesian=TRUE', {
-  models = latrendBatch(lcMethodTestKML(), testLongData, cartesian=TRUE) %>%
-    expect_is('lcModels') %>%
-    expect_length(1)
 
-  getCall(models[[1]]) %T>%
-    {expect_equal(deparse(.$data), 'testLongData')}
+test_that('single method and data, cartesian=TRUE', {
+  models = latrendBatch(mTest, testLongData, cartesian = TRUE)
+  expect_is(models, 'lcModels')
+  expect_length(models, 1)
+
+  expect_equal(deparse(getCall(models[[1]])$data), 'testLongData')
 })
+
 
 test_that('single method and data, cartesian=FALSE', {
-  models = latrendBatch(lcMethodTestKML(), testLongData, cartesian=FALSE) %>%
-    expect_is('lcModels') %>%
-    expect_length(1)
+  models = latrendBatch(mTest, testLongData, cartesian = FALSE)
+  expect_is(models, 'lcModels')
+  expect_length(models, 1)
 
-  getCall(models[[1]]) %T>%
-    {expect_equal(deparse(.$data), 'testLongData')}
+  expect_equal(deparse(getCall(models[[1]])$data), 'testLongData')
 })
+
 
 test_that('multiple datasets', {
-  methods = lcMethods(lcMethodTestKML(), nClusters=1:2)
+  methods = lcMethods(mTest, nClusters = 1:2)
 
-  models = latrendBatch(methods, data=.(testLongData, testLongData[Assessment < .5], testLongData[Assessment >= .5]), cartesian=TRUE) %>%
-    expect_is('lcModels') %>%
-    expect_length(2*3)
+  models = latrendBatch(
+    methods,
+    data = .(testLongData,
+      testLongData[Assessment < .5],
+      testLongData[Assessment >= .5]),
+    cartesian = TRUE)
 
-  getCall(models[[1]]) %T>%
-    {expect_equal(deparse(.$data), 'testLongData')}
-  getCall(models[[2]]) %T>%
-    {expect_equal(deparse(.$data), 'testLongData[Assessment < 0.5]')}
-  getCall(models[[3]]) %T>%
-    {expect_equal(deparse(.$data), 'testLongData[Assessment >= 0.5]')}
+  expect_is(models, 'lcModels')
+  expect_length(models, 2*3)
+
+  expect_equal(deparse(getCall(models[[1]])$data), 'testLongData')
+  expect_equal(deparse(getCall(models[[2]])$data), 'testLongData[Assessment < 0.5]')
+  expect_equal(deparse(getCall(models[[3]])$data), 'testLongData[Assessment >= 0.5]')
 })
+
 
 test_that('datasets list', {
-  methods = lcMethods(lcMethodTestKML(), nClusters=1:2)
-  dataList = list(testLongData, testLongData[Assessment < .5], testLongData[Assessment >= .5])
+  methods = lcMethods(mTest, nClusters = 1:2)
+  dataList = list(
+    testLongData,
+    testLongData[Assessment < .5],
+    testLongData[Assessment >= .5]
+  )
 
-  models = latrendBatch(methods, data=dataList, cartesian=TRUE) %>%
-    expect_is('lcModels') %>%
-    expect_length(2*3)
+  models = latrendBatch(methods, data = dataList, cartesian = TRUE)
+  expect_is(models, 'lcModels')
+  expect_length(models, 2*3)
 
-  getCall(models[[1]]) %T>%
-    {expect_equal(deparse(.$data), 'dataList[[1]]')}
-  getCall(models[[2]]) %T>%
-    {expect_equal(deparse(.$data), 'dataList[[2]]')}
-  getCall(models[[3]]) %T>%
-    {expect_equal(deparse(.$data), 'dataList[[3]]')}
+  expect_equal(deparse(getCall(models[[1]])$data), 'dataList[[1]]')
+  expect_equal(deparse(getCall(models[[2]])$data), 'dataList[[2]]')
+  expect_equal(deparse(getCall(models[[3]])$data), 'dataList[[3]]')
 })
+
 
 test_that('datasets list, cartesian=FALSE', {
-  methods = lcMethods(lcMethodTestKML(), nClusters=1:3)
-  dataList = list(testLongData, testLongData[Assessment < .5], testLongData[Assessment >= .5])
-  models = latrendBatch(methods, data=dataList, cartesian=FALSE) %>%
-    expect_is('lcModels') %>%
-    expect_length(3)
+  methods = lcMethods(mTest, nClusters = 1:3)
+  dataList = list(
+    testLongData,
+    testLongData[Assessment < .5],
+    testLongData[Assessment >= .5]
+  )
+  models = latrendBatch(methods, data = dataList, cartesian = FALSE)
 
-  getCall(models[[1]]) %T>%
-    {expect_equal(deparse(.$data), 'dataList[[1]]')}
-  getCall(models[[2]]) %T>%
-    {expect_equal(deparse(.$data), 'dataList[[2]]')}
-  getCall(models[[3]]) %T>%
-    {expect_equal(deparse(.$data), 'dataList[[3]]')}
+  expect_is(models, 'lcModels')
+  expect_length(models, 3)
+
+  expect_equal(deparse(getCall(models[[1]])$data), 'dataList[[1]]')
+  expect_equal(deparse(getCall(models[[2]])$data), 'dataList[[2]]')
+  expect_equal(deparse(getCall(models[[3]])$data), 'dataList[[3]]')
 })
+
 
 test_that('single method, multiple datasets', {
-  dataList = list(testLongData, testLongData[Assessment < .5], testLongData[Assessment >= .5])
+  dataList = list(
+    testLongData,
+    testLongData[Assessment < .5],
+    testLongData[Assessment >= .5]
+  )
 
-  models = latrendBatch(lcMethodTestKML(), data=dataList, cartesian=TRUE) %>%
-    expect_is('lcModels') %>%
-    expect_length(3)
+  models = latrendBatch(mTest, data = dataList, cartesian = TRUE)
 
-  getCall(models[[1]]) %T>%
-    {expect_equal(deparse(.$data), 'dataList[[1]]')}
-  getCall(models[[2]]) %T>%
-    {expect_equal(deparse(.$data), 'dataList[[2]]')}
-  getCall(models[[3]]) %T>%
-    {expect_equal(deparse(.$data), 'dataList[[3]]')}
+  expect_is(models, 'lcModels')
+  expect_length(models, 3)
+
+  expect_equal(deparse(getCall(models[[1]])$data), 'dataList[[1]]')
+  expect_equal(deparse(getCall(models[[2]])$data), 'dataList[[2]]')
+  expect_equal(deparse(getCall(models[[3]])$data), 'dataList[[3]]')
 })
+
 
 test_that('stop on error', {
   methods = list(mTest, mError)
@@ -90,15 +103,18 @@ test_that('stop on error', {
 test_that('error removal', {
   methods = list(mTest, mError)
   models = latrendBatch(methods, data = testLongData, errorHandling = 'remove')
+
   expect_is(models, 'lcModels')
   expect_length(models, 1)
 })
+
 
 test_that('error passing', {
   methods = list(mTest, mError)
   expect_warning({
     models = latrendBatch(methods, data = testLongData, errorHandling = 'pass')
   })
+
   expect_is(models, 'list')
   expect_length(models, 2)
 })

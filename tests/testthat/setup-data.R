@@ -1,4 +1,5 @@
 set.seed(1)
+
 testLongData = generateLongData(
   sizes = c(20, 30),
   fixed = Value ~ 1 + Assessment,
@@ -11,5 +12,6 @@ testLongData = generateLongData(
   randomScales = cbind(.1, .1),
   noiseScales = c(.1, .1),
   clusterNames = c('A', 'B'),
-  shuffle = TRUE) %>%
+  shuffle = TRUE
+) %>%
   .[, .(Traj, Assessment, Value, Class)]

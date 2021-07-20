@@ -9,8 +9,9 @@ test_that('method', {
 
 test_that('default', {
   m = lcMethodTestKML()
-  model = latrend(m, testLongData) %>%
-    expect_silent()
+  expect_silent({
+    model = latrend(m, testLongData)
+  })
   expect_valid_lcModel(model)
 })
 

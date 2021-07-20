@@ -36,30 +36,53 @@ test_that('as.data.frame', {
                                 call=quote(1 + 2 * 3),
                                 name=quote(xvar)))
 
-  as.data.frame(m) %>%
-    expect_length(length(m)) %>%
-    expect_named(names(m)) %T>%
-    {expect_equal(., data.frame(null=NA, log=TRUE, int=3L, num=2.5, char='a',
+  df = as.data.frame(m)
+  expect_length(df, length(m))
+  expect_named(df, names(m))
+  expect_equal(df, data.frame(null=NA, log=TRUE, int=3L, num=2.5, char='a',
                                 fac=factor('b', levels=c('a', 'b')),
-                                form='A ~ B', call='1 + 2 * 3', name='xvar', stringsAsFactors=FALSE))}
+                                form='A ~ B', call='1 + 2 * 3', name='xvar', stringsAsFactors=FALSE))
+})
 
-  as.data.frame(m, eval=TRUE) %>%
-    expect_length(length(m)) %>%
-    expect_named(names(m)) %T>%
-    {expect_equal(., data.frame(null=NA, log=TRUE, int=3L, num=2.5, char='a',
-                                fac=factor('b', levels=c('a', 'b')),
-                                form='A ~ B', call=7, name='xvar', stringsAsFactors=FALSE))}
 
+test_that('as.data.frame(eval=TRUE)', {
+  m = lcMethod.call('lcMethodTest', call=call('lcMethod',
+    null=NULL, log=TRUE, int=3L, num=2.5, char='a',
+    fac=factor('b', levels=c('a', 'b')),
+    form=A~B,
+    call=quote(1 + 2 * 3),
+    name=quote(xvar)))
+  df = as.data.frame(m, eval=TRUE)
+
+  expect_length(df, length(m))
+  expect_named(df, names(m))
+  expect_equal(df, data.frame(null=NA, log=TRUE, int=3L, num=2.5, char='a',
+      fac=factor('b', levels=c('a', 'b')),
+      form='A ~ B', call=7, name='xvar', stringsAsFactors=FALSE))
+})
+
+
+test_that('as.data.frame with symbols', {
+  m = lcMethod.call('lcMethodTest', call=call('lcMethod',
+    null=NULL, log=TRUE, int=3L, num=2.5, char='a',
+    fac=factor('b', levels=c('a', 'b')),
+    form=A~B,
+    call=quote(1 + 2 * 3),
+    name=quote(xvar)))
   xvar = 2
-  as.data.frame(m, eval=TRUE) %>%
-    expect_length(length(m)) %>%
-    expect_named(names(m)) %T>%
-    {expect_equal(., data.frame(null=NA, log=TRUE, int=3L, num=2.5, char='a',
-                                fac=factor('b', levels=c('a', 'b')),
-                                form='A ~ B', call=7, name=2, stringsAsFactors=FALSE))}
+  df = as.data.frame(m, eval=TRUE)
 
-  m2 = lcMethod.call('lcMethodTest', call=call('lcMethod', vec=LETTERS[1:2]))
-  expect_output(print(m2))
+  expect_length(df, length(m))
+  expect_named(df, names(m))
+  expect_equal(df, data.frame(null=NA, log=TRUE, int=3L, num=2.5, char='a',
+      fac=factor('b', levels=c('a', 'b')),
+      form='A ~ B', call=7, name=2, stringsAsFactors=FALSE))
+})
+
+
+test_that('print', {
+  m = lcMethod.call('lcMethodTest', call = call('lcMethod', vec = LETTERS[1:2]))
+  expect_output(print(m))
 })
 
 
@@ -73,12 +96,14 @@ test_that('creation', {
   expect_output(print(method))
 })
 
+
 test_that('unevaluated creation', {
   method = lcMethod.call('lcMethodTest', call=call('lcMethod', e=quote(xvar)))
   expect_error(method$e)
   expect_output(show(method))
   expect_output(print(method))
 })
+
 
 test_that('length', {
   lcMethod.call('lcMethodTest', call=call('lcMethod')) %>%
@@ -90,6 +115,7 @@ test_that('length', {
   lcMethod.call('lcMethodTest', call=call('lcMethod', a=1, e=quote(xvar))) %>%
     expect_length(2)
 })
+
 
 test_that('argument retrieval', {
   xvar = 2
@@ -107,6 +133,7 @@ test_that('argument retrieval', {
   expect_is(method[['e', eval=FALSE]], 'name')
 })
 
+
 test_that('environment()', {
   method = lcMethod.call('lcMethodTest', call=call('lcMethod', e=quote(xvar)))
   e = new.env()
@@ -116,6 +143,7 @@ test_that('environment()', {
   environment(method) = e
   expect_equal(method$e, e$xvar)
 })
+
 
 test_that('local variables', {
   f = function() {
@@ -133,6 +161,7 @@ test_that('local variables', {
   expect_equal(g(), 3)
 })
 
+
 test_that('variable from custom environment', {
   method = lcMethod.call('lcMethodTest', call=call('lcMethod', e=quote(xvar)))
   expect_error(method$e)
@@ -143,16 +172,19 @@ test_that('variable from custom environment', {
   expect_equal(method[['e', envir=e]], 2)
 })
 
+
 test_that('internal variable reference', {
   method = lcMethod.call('lcMethodTest', call=call('lcMethod', iter=1e3, warmup = quote(floor(iter / 2))))
   expect_equal(method$warmup, floor(method$iter / 2))
 })
+
 
 test_that('variable of argument name', {
   warmup = 3
   method = lcMethod.call('lcMethodTest', call=call('lcMethod', iter=1e3, warmup = quote(warmup)))
   expect_equal(method$warmup, warmup)
 })
+
 
 test_that('formula', {
   method = lcMethod.call('lcMethodTest', call=call('lcMethod', formula=A~B, formula.sigma=~C))
@@ -161,6 +193,7 @@ test_that('formula', {
   expect_equal(formula(method), A~B)
   expect_equal(formula(method, 'sigma'), ~C)
 })
+
 
 test_that('update', {
   xvar = 2
@@ -180,12 +213,14 @@ test_that('update', {
   expect_equal(m3$newf, A~B)
 })
 
+
 test_that('update with eval', {
   xvar = 2
   m0 = lcMethod.call('lcMethodTest', call=call('lcMethod', a=1, b='a', c=NULL, d=NA, e=xvar))
   m1 = update(m0, new=xvar, .eval=TRUE)
   expect_equal(m1$new, xvar)
 })
+
 
 test_that('update with formula eval', {
   xvar = ~ 1
@@ -194,11 +229,13 @@ test_that('update with formula eval', {
   expect_equal(m1$f, A ~ 1)
 })
 
+
 test_that('update formula', {
   method = lcMethod.call('lcMethodTest', call=call('lcMethod', a=1, f=A~1))
   update(method, f=.~B) %T>%
     {expect_equal(.$f, A~B)}
 })
+
 
 test_that('update.lcMethod with local variables', {
   xvar = 2
@@ -208,10 +245,12 @@ test_that('update.lcMethod with local variables', {
   expect_equal(u$e, 3)
 })
 
+
 test_that('dependency function evaluation', {
   method = lcMethodTestKML()
   expect_is(method$centerMethod, 'function')
 })
+
 
 test_that('as.list', {
   xvar = 2
@@ -223,11 +262,13 @@ test_that('as.list', {
     expect_length(length(method))
 })
 
+
 test_that('as.list with function', {
   m = lcMethodTestKML()
   lis = as.list(m, args=kml::parALGO)
   expect_length(setdiff(names(lis), formalArgs(kml::parALGO)), 0)
 })
+
 
 test_that('as.list with two functions', {
   m = lcMethodTestKML()
@@ -235,6 +276,7 @@ test_that('as.list with two functions', {
   lis = as.list(m, args=funs)
   expect_length(setdiff(names(lis), union(formalArgs(funs[[1]]), formalArgs(funs[[2]]))), 0)
 })
+
 
 test_that('substitute', {
   xvar = 2
@@ -246,13 +288,16 @@ test_that('substitute', {
   expect_equal(method2[['e', eval=FALSE]], 2)
 })
 
+
 test_that('.arg error', {
   expect_error(lcMethod.call('lcMethodTest', call=call('lcMethod', a=1, .b='a')))
 })
 
+
 test_that('negative nClusters error', {
   expect_error(lcMethod.call('lcMethodTest', call=call('lcMethod', nClusters=-1, .b='a')))
 })
+
 
 test_that('lcMethod function', {
   lcMethodTestKML2 = function(time='Traj', id='Traj', response = 'Value', nClusters=2) {
@@ -265,6 +310,7 @@ test_that('lcMethod function', {
   expect_true(all(formalArgs(lcMethodTestKML2) %in% names(m)))
 })
 
+
 test_that('lcMethod function with default NULL argument', {
   lcMethodTestKML2 = function(time=NULL, id='Traj', response = 'Value', nClusters=2) {
     lcMethod.call('lcMethodKML', call=match.call.defaults(),
@@ -276,11 +322,13 @@ test_that('lcMethod function with default NULL argument', {
   expect_true(all(formalArgs(lcMethodTestKML2) %in% names(m)))
 })
 
+
 test_that('name', {
   m = lcMethod('lcMethodTest', num = 2.5)
   name = getName(m)
   expect_equal(name, 'undefined')
 })
+
 
 test_that('shortname', {
   m = lcMethod('lcMethodTest', num = 2.5)
