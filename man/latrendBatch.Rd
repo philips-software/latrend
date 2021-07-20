@@ -34,6 +34,7 @@ or one of \code{c('info', 'fine', 'finest')}.}
 }
 \value{
 A \code{lcModels} object.
+In case of a model fit error under \code{errorHandling = pass}, a \code{list} is returned.
 }
 \description{
 Fit a list of longitudinal cluster methods.

@@ -2,6 +2,23 @@ lcMethodTestKML = function(...) {
   lcMethodKML(response = 'Value', nbRedrawing=1, maxIt=10, ..., seed=1)
 }
 
+mTest = lcMethodTestKML(nClusters = 1)
+
+# method class that triggers an error during fitting
+setClass('lcMethodError', contains = 'lcMethod')
+
+lcMethodError = function(
+  response = 'Value',
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  nClusters = 2,
+  ...) {
+  lcMethod.call('lcMethodError', call = latrend::match.call.all())
+}
+
+mError = lcMethodError()
+
+
 if (requireNamespace('lcmm')) {
   lcMethodTestLcmmGMM = function(...) {
     lcMethodLcmmGMM(fixed = Value ~ 1, maxiter=10, ..., seed=1)

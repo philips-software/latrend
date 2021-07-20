@@ -303,6 +303,7 @@ latrendRep = function(method,
 #' @param errorHandling Whether to `"stop"` on an error, or to `"remove'` evaluations that raised an error.
 #' @param envir The `environment` in which to evaluate the `lcMethod` arguments.
 #' @return A `lcModels` object.
+#' In case of a model fit error under `errorHandling = pass`, a `list` is returned.
 #' @examples
 #' data(latrendData)
 #' methods <- lcMethods(lcMethodKML("Y", id = "Id", time = "Time"), nClusters = 1:3)
@@ -325,9 +326,11 @@ latrendBatch = function(methods,
     methods = list(methods)
   }
 
-  assert_that(is.list(methods), all(vapply(
-    methods, inherits, 'lcMethod', FUN.VALUE = FALSE
-  )), msg = 'methods argument must be a list of lcMethod objects')
+  assert_that(
+    is.list(methods),
+    all(vapply(methods, inherits, 'lcMethod', FUN.VALUE = FALSE)),
+    msg = 'methods argument must be a list of lcMethod objects'
+  )
   assert_that(
     !missing(data),
     is.flag(cartesian),
@@ -403,8 +406,30 @@ latrendBatch = function(methods,
   }
 
   popState(verbose)
-  cat(verbose, sprintf('Done fitting %d models.', nModels))
-  as.lcModels(models)
+
+  nCalls = length(allMethods)
+  errorMask = !vapply(models, is.lcModel, FUN.VALUE = TRUE)
+
+  if (any(errorMask)) {
+    # some list entries are not lcModel
+    nError = sum(errorMask)
+    cat(verbose, sprintf('Done, but errors occurred in %d out of %d methods', nError, nCalls))
+    warning(sprintf(
+      'Returning "list" object instead of "lcModels" object for latrendBatch()
+      because %d method estimations produced an error',
+      nError
+    ))
+    return (models)
+  } else if (length(models) < nCalls ) {
+    # fewer models were obtained than expected
+    nError = nCalls - length(models)
+    cat(verbose, sprintf('Done, but errors occurred in %d out of %d methods', nError, nCalls))
+    return (as.lcModels(models))
+  } else {
+    # no errors
+    cat(verbose, sprintf('Done fitting %d models.', nCalls))
+    return (as.lcModels(models))
+  }
 }
 
 #' @export
@@ -486,7 +511,7 @@ latrendBoot = function(method,
   )
   models = eval(cl, envir = parent.frame())
 
-  return(models)
+  return (models)
 }
 
 

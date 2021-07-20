@@ -79,3 +79,26 @@ test_that('single method, multiple datasets', {
   getCall(models[[3]]) %T>%
     {expect_equal(deparse(.$data), 'dataList[[3]]')}
 })
+
+test_that('stop on error', {
+  methods = list(mTest, mError)
+  expect_error({
+    latrendBatch(methods, data = testLongData)
+  })
+})
+
+test_that('error removal', {
+  methods = list(mTest, mError)
+  models = latrendBatch(methods, data = testLongData, errorHandling = 'remove')
+  expect_is(models, 'lcModels')
+  expect_length(models, 1)
+})
+
+test_that('error passing', {
+  methods = list(mTest, mError)
+  expect_warning({
+    models = latrendBatch(methods, data = testLongData, errorHandling = 'pass')
+  })
+  expect_is(models, 'list')
+  expect_length(models, 2)
+})
