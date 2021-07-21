@@ -42,7 +42,8 @@ lcMethodRandom = function(response,
                           time = getOption('latrend.time'),
                           id = getOption('latrend.id'),
                           nClusters = 2,
-                          name = 'random') {
+                          name = 'random',
+                          ...) {
   lcMethod.call('lcMethodRandom', call = match.call.defaults())
 }
 
