@@ -300,6 +300,7 @@ latrendRep = function(method,
 #' @param data A `data.frame`, `matrix`, or a `list` thereof to which to apply to the respective `lcMethod`. Multiple datasets can be supplied by encapsulating the datasets using `data=.(df1, df2, ..., dfN)`.
 #' @param cartesian Whether to fit the provided methods on each of the datasets. If `cartesian=FALSE`, only a single dataset may be provided or a list of data matching the length of `methods`.
 #' @param parallel Whether to enable parallel evaluation. See \link{latrend-parallel}.
+#' @param seed Sets the seed for generating the respective seed for each of the method fits. Seeds are only set for methods without a seed argument.
 #' @param errorHandling Whether to `"stop"` on an error, or to `"remove'` evaluations that raised an error.
 #' @param envir The `environment` in which to evaluate the `lcMethod` arguments.
 #' @return A `lcModels` object.
@@ -318,6 +319,7 @@ latrendRep = function(method,
 latrendBatch = function(methods,
                          data,
                          cartesian = TRUE,
+                         seed = NULL,
                          parallel = FALSE,
                          errorHandling = 'stop',
                          envir = NULL,
@@ -366,10 +368,6 @@ latrendBatch = function(methods,
     msg = 'number of datasets must be 1 or match the number of specified methods'
   )
 
-  # latrend
-  cat(verbose, 'Calling latrend for each method...')
-  pushState(verbose)
-
   # generate method and data lists
   if (cartesian) {
     allMethods = methods[rep(seq_len(nModels), nData)]
@@ -383,6 +381,18 @@ latrendBatch = function(methods,
     allDataOpts = dataList[rep_len(seq_len(nData), length.out = max(nModels, nData))]
   }
   assert_that(length(allMethods) == length(allDataOpts))
+  nCalls = length(allMethods)
+
+  # seeds
+  cat(verbose, sprintf('Generating method seeds for seed = %s.', as.character(seed)))
+  localRNG(seed = seed, {
+    allSeeds = sample.int(.Machine$integer.max, size = nCalls, replace = FALSE)
+  })
+
+  # restore seed for methods which have a seed argument
+  seedMask = vapply(allMethods, hasName, 'seed', FUN.VALUE = TRUE)
+  allSeeds[seedMask] = vapply(allMethods[seedMask], '[[', 'seed', FUN.VALUE = 0)
+  assert_that(length(allSeeds) == nCalls)
 
   # generate calls
   allCalls = vector('list', length(allMethods))
@@ -392,6 +402,7 @@ latrendBatch = function(methods,
         'latrend',
         method = allMethods[[i]],
         data = quote(allDataOpts[[i]]),
+        seed = allSeeds[[i]],
         envir = quote(envir),
         verbose = quote(verbose)
       ))
@@ -400,6 +411,10 @@ latrendBatch = function(methods,
   `%infix%` = ifelse(parallel, `%dopar%`, `%do%`)
   penv = parent.frame()
 
+  # latrend
+  cat(verbose, 'Calling latrend for each method...')
+  pushState(verbose)
+
   models = foreach(cl = allCalls, .packages = 'latrend', .errorhandling = errorHandling, .export = 'envir') %infix% {
     model = eval(cl, envir = penv)
     model
@@ -407,7 +422,6 @@ latrendBatch = function(methods,
 
   popState(verbose)
 
-  nCalls = length(allMethods)
   errorMask = !vapply(models, is.lcModel, FUN.VALUE = TRUE)
 
   if (any(errorMask)) {

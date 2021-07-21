@@ -2,7 +2,10 @@ lcMethodTestKML = function(...) {
   lcMethodKML(response = 'Value', nbRedrawing = 1, maxIt = 10, ..., seed = 1)
 }
 
+# test method with deterministic result
 mTest = lcMethodTestKML(nClusters = 1)
+# test method with random result (no seed argument)
+mRandomTest = lcMethodKML(response = 'Value', nbRedrawing = 1, maxIt = 10)
 
 # method class that triggers an error during fitting
 setClass('lcMethodError', contains = 'lcMethod')

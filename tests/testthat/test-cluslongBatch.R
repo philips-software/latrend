@@ -118,3 +118,24 @@ test_that('error passing', {
   expect_is(models, 'list')
   expect_length(models, 2)
 })
+
+test_that('unique default seeds', {
+  methods = list(mRandomTest, mRandomTest)
+  models = latrendBatch(methods, data = testLongData)
+  seeds = lapply(models, getLcMethod) %>%
+    vapply('[[', 'seed', FUN.VALUE = 0)
+
+  expect_equal(uniqueN(seeds), length(methods))
+})
+
+test_that('method seeds are preserved', {
+  methods = list(mTest, mRandomTest, update(mTest, seed = 3))
+  models = latrendBatch(methods, data = testLongData)
+
+  seeds = lapply(models, getLcMethod) %>%
+    vapply('[[', 'seed', FUN.VALUE = 0)
+
+  expect_equivalent(seeds[1], methods[[1]]$seed)
+  expect_false(seeds[2] == seeds[1] || seeds[2] == seeds[3])
+  expect_equivalent(seeds[3], methods[[3]]$seed)
+})
