@@ -176,3 +176,31 @@ test_that('data with missing observations', {
   expect_error(latrend(lcMethodTestKML(), data = naData))
 })
 
+
+test_that('running the same probabilistic method twice without seed yields different results', {
+  method = lcMethodTestRandom(alpha = 1, nClusters = 2)
+  model1 = latrend(method, data = testLongData)
+  model2 = latrend(method, data = testLongData)
+
+  expect_true(!isTRUE(all.equal(trajectoryAssignments(model1), trajectoryAssignments(model2))))
+})
+
+
+test_that('setting seed', {
+  method = lcMethodTestRandom(alpha = 1, nClusters = 2)
+  model1 = latrend(method, data = testLongData, seed = 1)
+  model2 = latrend(method, data = testLongData, seed = 1)
+
+  expect_equivalent(trajectoryAssignments(model1), trajectoryAssignments(model2))
+})
+
+
+test_that('setting different seeds yields different result', {
+  method = lcMethodTestRandom(alpha = 1, nClusters = 2)
+  model1 = latrend(method, data = testLongData, seed = 1)
+  model2 = latrend(method, data = testLongData, seed = 2)
+
+  expect_true(getLcMethod(model1)$seed == 1)
+  expect_true(getLcMethod(model2)$seed == 2)
+  expect_true(!isTRUE(all.equal(trajectoryAssignments(model1), trajectoryAssignments(model2))))
+})
