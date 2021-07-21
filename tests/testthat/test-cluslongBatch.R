@@ -119,7 +119,7 @@ test_that('error passing', {
   expect_length(models, 2)
 })
 
-test_that('unique default seeds', {
+test_that('unique default seeds assigned to method specs', {
   methods = list(mRandomTest, mRandomTest)
   models = latrendBatch(methods, data = testLongData)
   seeds = lapply(models, getLcMethod) %>%
@@ -128,7 +128,7 @@ test_that('unique default seeds', {
   expect_equal(uniqueN(seeds), length(methods))
 })
 
-test_that('method seeds are preserved', {
+test_that('method seeds are preserved in method specs', {
   methods = list(mTest, mRandomTest, update(mTest, seed = 3))
   models = latrendBatch(methods, data = testLongData)
 
@@ -138,4 +138,22 @@ test_that('method seeds are preserved', {
   expect_equivalent(seeds[1], methods[[1]]$seed)
   expect_false(seeds[2] == seeds[1] || seeds[2] == seeds[3])
   expect_equivalent(seeds[3], methods[[3]]$seed)
+})
+
+
+test_that('repeated probabilistic method calls yield different results', {
+  method = lcMethodTestRandom(alpha = 1, nClusters = 3)
+  models = latrendBatch(replicate(2, method), data = testLongData)
+
+  expect_true(!isTRUE(all.equal(trajectoryAssignments(models[[1]]), trajectoryAssignments(models[[2]]))))
+})
+
+
+test_that('original method seeds have effect', {
+  method = lcMethodTestRandom(alpha = 1, nClusters = 3, seed = 2)
+
+  refModel = latrend(method, data = testLongData)
+  batchModels = latrendBatch(list(mTest, method), data = testLongData)
+
+  expect_equivalent(trajectoryAssignments(refModel), trajectoryAssignments(batchModels[[2]]))
 })
