@@ -11,6 +11,7 @@ lcMethodLcmmGMM(
   classmb = ~1,
   time = getOption("latrend.time"),
   id = getOption("latrend.id"),
+  init = "lme",
   nClusters = 2,
   ...
 )
@@ -27,6 +28,12 @@ lcMethodLcmmGMM(
 \item{time}{The name of the time variable.}
 
 \item{id}{The name of the trajectory identifier variable. This replaces the \code{subject} argument of \link[lcmm:hlme]{lcmm::hlme}.}
+
+\item{init}{Alternative for the \code{B} argument of \link[lcmm:hlme]{lcmm::hlme}, for initializing the hlme fitting procedure.
+If \code{"lme"} (default), fits a standard linear mixed model and passes this to the \code{B} argument.
+If \code{NULL}, the default \link{lcmm:hlme} input for \code{B} is used.
+
+The argument is ignored if the \code{B} argument is specified, or \code{nClusters = 1}.}
 
 \item{nClusters}{The number of clusters to fit. This replaces the \code{ng} argument of \link[lcmm:hlme]{lcmm::hlme}.}
 

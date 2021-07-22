@@ -27,6 +27,12 @@ setValidity('lcMethodLcmmGMM', function(object) {
 #' @param classmb The cluster membership formula for the multinomial logistic model. See [lcmm::hlme] for details.
 #' @param time The name of the time variable.
 #' @param id The name of the trajectory identifier variable. This replaces the `subject` argument of [lcmm::hlme].
+#' @param init Alternative for the `B` argument of [lcmm::hlme], for initializing the hlme fitting procedure.
+#' If `"lme"` (default), fits a standard linear mixed model and passes this to the `B` argument.
+#' If `NULL`, the default [lcmm:hlme] input for `B` is used.
+#'
+#' The argument is ignored if the `B` argument is specified, or `nClusters = 1`.
+#'
 #' @param nClusters The number of clusters to fit. This replaces the `ng` argument of [lcmm::hlme].
 #' @param ... Arguments passed to [lcmm::hlme].
 #' The following arguments are ignored: data, fixed, random, mixture, subject, classmb, returndata, ng, verbose, subset.
@@ -52,6 +58,7 @@ lcMethodLcmmGMM = function(fixed,
                           classmb = ~ 1,
                           time = getOption('latrend.time'),
                           id = getOption('latrend.id'),
+                          init = 'lme',
                           nClusters = 2,
                           ...) {
   lcMethod.call(
@@ -81,50 +88,66 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
 
   # Check & process data
   id = idVariable(method)
-  e$data = as.data.table(data) %>%
+  trainData = as.data.table(data) %>%
     .[, c(id) := factor(get(id)) %>% as.integer()]
 
-  # Parameter processing
-  if (length(getCovariates(method$mixture)) == 0 && !hasIntercept(method$mixture)) {
-    if (method$nClusters > 1) {
-      warnings.Verbose(
-        verbose,
-        'no cluster-specific terms specified in formula. Defaulting to intercept.'
-      )
+  # Create argument list
+  args = as.list(method, args = lcmm::hlme)
+  args$data = as.data.frame(trainData)
+  args$subject = idVariable(method)
+  args$classmb = e$classmb = dropIntercept(method$classmb) # drop intercept from formula.mb
+  args$ng = method$nClusters
+  args$verbose = envir$verbose
+  args$returndata = TRUE
+
+  # process mixture formula
+  if (method$nClusters > 1) {
+    if (length(getCovariates(method$mixture)) == 0 && !hasIntercept(method$mixture)) {
+      if (method$nClusters > 1) {
+        warnings.Verbose(
+          verbose,
+          'no cluster-specific terms specified in formula. Defaulting to intercept.'
+        )
+      }
+      args$mixture = as.formula('~1', env = environment(method$mixture))
+    } else {
+      args$mixture = dropResponse(method$mixture)
     }
-    e$mixture = as.formula('~1', env = environment(method$mixture))
   } else {
-    e$mixture = dropResponse(method$mixture)
+    args$mixture = NULL
   }
 
-  # drop intercept from formula.mb
-  e$classmb = dropIntercept(method$classmb)
+  # classmb is not allowed to be specified for ng=1
+  if (method$nClusters == 1 || !hasCovariates(args$classmb)) {
+    args$classmb = NULL
+  }
 
-  return(e)
+  if (hasName(method, 'init') && method$nClusters > 1 && !hasName(method, 'B')) {
+    init = match.arg(method$init, c('default', 'lme'))
+
+    switch(init,
+      lme = {
+        cat(verbose, 'Fitting standard linear mixed model for initializing the mixture estimation...')
+        args1 = args
+        args1$ng = 1
+        args1$mixture = NULL
+        args1$classmb = NULL
+
+        args$B = do.call(lcmm::hlme, args1)
+      }
+    )
+  }
+
+  e$args = args
+
+  return (e)
 }
 #' @rdname interface-lcmm
 setMethod('preFit', signature('lcMethodLcmmGMM'), gmm_prepare)
 
 ##
 gmm_fit = function(method, data, envir, verbose, ...) {
-  args = as.list(method, args = lcmm::hlme)
-  args$data = as.data.frame(envir$data)
-  if (method$nClusters > 1) {
-    args$mixture = envir$mixture
-  } else {
-    args$mixture = NULL
-  }
-  args$subject = idVariable(method)
-  args$classmb = envir$classmb
-  args$ng = method$nClusters
-  args$verbose = envir$verbose
-  args$returndata = TRUE
-
-  if (method$nClusters == 1 || !hasCovariates(args$classmb)) {
-    # classmb is not allowed to be specified for ng=1
-    args$classmb = NULL
-  }
-
+  args = envir$args
   model = do.call(lcmm::hlme, args)
 
   model$fixed = args$fixed
@@ -132,7 +155,7 @@ gmm_fit = function(method, data, envir, verbose, ...) {
   model$random = args$random
   model$mb = envir$classmb
 
-  return(model)
+  return (model)
 }
 
 #' @rdname interface-lcmm
