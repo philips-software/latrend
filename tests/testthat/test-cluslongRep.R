@@ -43,3 +43,37 @@ test_that('envir', {
   expect_length(models, 2)
   expect_equal(nClusters(models[[1]]), 1)
 })
+
+test_that('repeated probabilistic method calls yield different results', {
+  method = lcMethodTestRandom(alpha = 1, nClusters = 3)
+  models = latrendRep(method, data = testLongData, .rep = 2)
+
+  expect_true(!isTRUE(all.equal(trajectoryAssignments(models[[1]]), trajectoryAssignments(models[[2]]))))
+})
+
+test_that('setting .seed', {
+  method = lcMethodTestRandom(alpha = 1, nClusters = 3)
+  models1 = latrendRep(method, data = testLongData, .rep = 2, .seed = 1)
+  models2 = latrendRep(method, data = testLongData, .rep = 2, .seed = 2)
+
+  expect_true(!isTRUE(all.equal(trajectoryAssignments(models1[[1]]), trajectoryAssignments(models1[[2]]))))
+  expect_true(!isTRUE(all.equal(trajectoryAssignments(models2[[1]]), trajectoryAssignments(models2[[2]]))))
+
+  expect_true(!isTRUE(all.equal(trajectoryAssignments(models1[[1]]), trajectoryAssignments(models2[[1]]))))
+  expect_true(!isTRUE(all.equal(trajectoryAssignments(models1[[2]]), trajectoryAssignments(models2[[2]]))))
+})
+
+test_that('method seed is ignored', {
+  method = lcMethodTestRandom(alpha = 1, nClusters = 3, seed = 1)
+  expect_warning({
+    models = latrendRep(method, data = testLongData)
+  })
+
+  expect_true(!isTRUE(all.equal(trajectoryAssignments(models[[1]]), trajectoryAssignments(models[[2]]))))
+
+  expect_warning({
+    models2 = latrendRep(method, data = testLongData, seed = 2)
+  })
+  expect_true(!isTRUE(all.equal(trajectoryAssignments(models[[1]]), trajectoryAssignments(models2[[1]]))))
+  expect_true(!isTRUE(all.equal(trajectoryAssignments(models2[[1]]), trajectoryAssignments(models2[[2]]))))
+})

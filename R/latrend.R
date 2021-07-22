@@ -216,7 +216,7 @@ latrendRep = function(method,
 
   # seed
   if (hasName(cmethod, 'seed')) {
-    warning('The supplied lcMethod object defines a seed, which will result in repeated identical results.
+    warning('The supplied lcMethod object defines a seed, which would result in repeated identical results. This seed will be ignored.
       Use the .seed argument of latrendRep() to generate different seeds for the repetitions in a reproducible way.')
   }
 
