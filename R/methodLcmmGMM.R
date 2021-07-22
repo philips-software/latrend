@@ -28,8 +28,10 @@ setValidity('lcMethodLcmmGMM', function(object) {
 #' @param time The name of the time variable.
 #' @param id The name of the trajectory identifier variable. This replaces the `subject` argument of [lcmm::hlme].
 #' @param init Alternative for the `B` argument of [lcmm::hlme], for initializing the hlme fitting procedure.
-#' If `"lme"` (default), fits a standard linear mixed model and passes this to the `B` argument.
-#' If `NULL`, the default [lcmm:hlme] input for `B` is used.
+#' If `"lme.random"` (default): random initialization through a standard linear mixed model.
+#' Assigns a fitted standard linear mixed model enclosed in a call to random() to the `B` argument.
+#' If `"lme"`, fits a standard linear mixed model and passes this to the `B` argument.
+#' If `NULL` or `"default"`, the default [lcmm:hlme] input for `B` is used.
 #'
 #' The argument is ignored if the `B` argument is specified, or `nClusters = 1`.
 #'
@@ -58,7 +60,7 @@ lcMethodLcmmGMM = function(fixed,
                           classmb = ~ 1,
                           time = getOption('latrend.time'),
                           id = getOption('latrend.id'),
-                          init = 'lme',
+                          init = 'lme.random',
                           nClusters = 2,
                           ...) {
   lcMethod.call(
@@ -123,7 +125,7 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
   }
 
   if (hasName(method, 'init') && method$nClusters > 1 && !hasName(method, 'B')) {
-    init = match.arg(method$init, c('default', 'lme'))
+    init = match.arg(method$init, c('default', 'lme', 'lme.random'))
 
     switch(init,
       lme = {
@@ -134,6 +136,15 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
         args1$classmb = NULL
 
         args$B = do.call(lcmm::hlme, args1)
+      },
+      lme.random = {
+        cat(verbose, 'Fitting standard linear mixed model for random initialization for the mixture estimation...')
+        args1 = args
+        args1$ng = 1
+        args1$mixture = NULL
+        args1$classmb = NULL
+        e$lme = do.call(lcmm::hlme, args1)
+        args$B = quote(random(lme))
       }
     )
   }
@@ -148,6 +159,15 @@ setMethod('preFit', signature('lcMethodLcmmGMM'), gmm_prepare)
 ##
 gmm_fit = function(method, data, envir, verbose, ...) {
   args = envir$args
+
+  if (hasName(envir, 'lme')) {
+    # work-around for eval() of hlme() only considering global and function scope
+    assign('.latrend.lme', value = envir$lme, envir = .GlobalEnv)
+    args$B = quote(random(.latrend.lme))
+
+    on.exit({ rm('.latrend.lme', envir = .GlobalEnv) }, add = TRUE)
+  }
+
   model = do.call(lcmm::hlme, args)
 
   model$fixed = args$fixed

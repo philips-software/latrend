@@ -23,12 +23,20 @@ mError = lcMethodError()
 
 
 if (requireNamespace('lcmm')) {
-  lcMethodTestLcmmGMM = function(...) {
-    lcMethodLcmmGMM(fixed = Value ~ 1, maxiter = 10, ..., seed = 1)
+  lcMethodTestLcmmGMM = function(..., init = NULL, seed = 1) {
+    mc = match.call.all() %>% as.list()
+    mc$fixed = Value ~ 1
+    mc$maxiter = 10
+
+    do.call(lcMethodLcmmGMM, mc[-1])
   }
 
-  lcMethodTestLcmmGBTM = function(...) {
-    lcMethodLcmmGBTM(fixed = Value ~ 1, maxiter = 10, ..., seed = 1)
+  lcMethodTestLcmmGBTM = function(..., init = NULL, seed = 1) {
+    mc = match.call.all() %>% as.list()
+    mc$fixed = Value ~ 1
+    mc$maxiter = 10
+
+    do.call(lcMethodLcmmGBTM, mc[-1])
   }
 }
 
