@@ -42,18 +42,16 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
   ruler(verbose)
 
   # compose
-  cat(verbose, 'Evaluating the method arguments.', level = verboseLevels$fine)
-  pushState(verbose)
+  enter(verbose, 'Evaluating the method arguments.', level = verboseLevels$fine, suffix = '')
   cmethod = compose(newmethod, envir = envir)
-  popState(verbose)
+  exit(verbose, level = verboseLevels$finest)
 
   id = idVariable(cmethod)
   time = timeVariable(cmethod)
   response = responseVariable(cmethod)
 
   # transform data
-  cat(verbose, 'Checking and transforming the training data format.')
-  pushState(verbose)
+  enter(verbose, 'Checking and transforming the training data format.', suffix = '')
   modelData = trajectories(
     data,
     id = id,
@@ -61,20 +59,18 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
     response = response,
     envir = envir
   )
-  popState(verbose)
+  exit(verbose, level = verboseLevels$finest)
 
-  cat(verbose, 'Validating method arguments.', level = verboseLevels$fine)
-  pushState(verbose)
+  enter(verbose, 'Validating method arguments.', level = verboseLevels$fine, suffix = '')
   validate(cmethod, modelData)
-  popState(verbose)
+  exit(verbose, level = verboseLevels$finest)
 
   # prepare
-  cat(verbose, 'Preparing the training data for fitting.')
-  pushState(verbose)
+  enter(verbose, 'Preparing the training data for fitting')
   modelEnv = prepareData(method = cmethod,
                          data = modelData,
                          verbose = verbose)
-  popState(verbose)
+  exit(verbose, level = verboseLevels$finest)
 
   enter(verbose, 'Fitting the method')
   mc = match.call.defaults()
@@ -90,7 +86,7 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
 
   # done
   ruler(verbose)
-  return(model)
+  return (model)
 }
 
 
@@ -209,10 +205,9 @@ latrendRep = function(method,
   mc = match.call.defaults()
 
   # compose
-  cat(verbose, 'Evaluating the method arguments.', level = verboseLevels$fine)
-  pushState(verbose)
+  enter(verbose, 'Evaluating the method arguments.', suffix = '', level = verboseLevels$fine)
   cmethod = compose(newmethod, envir = envir)
-  popState(verbose)
+  exit(verbose, level = verboseLevels$finest)
 
   # seed
   if (hasName(cmethod, 'seed')) {
@@ -238,8 +233,7 @@ latrendRep = function(method,
   )
 
   # transform data
-  cat(verbose, 'Checking the training data and ensuring the standard data format.')
-  pushState(verbose)
+  enter(verbose, 'Checking the training data and ensuring the standard data format.', suffix = '')
   modelData = trajectories(
     data,
     id = id,
@@ -247,19 +241,17 @@ latrendRep = function(method,
     response = response,
     envir = envir
   )
-  popState(verbose)
+  exit(verbose, level = verboseLevels$finest)
 
-  cat(verbose, 'Validating the method arguments.', level = verboseLevels$fine)
-  pushState(verbose)
+  enter(verbose, 'Validating the method arguments.', suffix = '', level = verboseLevels$fine)
   validate(cmethod, modelData)
-  popState(verbose)
+  exit(verbose, level = verboseLevels$finest)
 
-  cat(verbose, 'Preparing the training data for fitting.')
-  pushState(verbose)
+  enter(verbose, 'Preparing the training data for fitting')
   prepEnv = prepareData(method = method,
                         data = modelData,
                         verbose = verbose)
-  popState(verbose)
+  exit(verbose, level = verboseLevels$finest)
 
   `%infix%` = ifelse(.parallel, `%dopar%`, `%do%`)
 
@@ -270,8 +262,7 @@ latrendRep = function(method,
     .combine = c,
     .errorhandling = .errorHandling
   ) %infix% {
-    cat(verbose, sprintf('Fitting model %d/%d (%d%%)...', i, .rep, signif(i / .rep * 100, 2)))
-    pushState(verbose)
+    enter(verbose, sprintf('Fitting model %d/%d (%d%%)', i, .rep, signif(i / .rep * 100, 2)))
     assert_that(is_class_defined(cmethod))
     imethod = update(cmethod, seed = iseed, .eval = TRUE)
     model = fitLatrendMethod(
@@ -282,7 +273,7 @@ latrendRep = function(method,
       verbose = verbose
     )
     environment(model) = envir
-    popState(verbose)
+    exit(verbose, level = verboseLevels$finest)
     model
   }
   exit(verbose)
@@ -412,15 +403,14 @@ latrendBatch = function(methods,
   penv = parent.frame()
 
   # latrend
-  cat(verbose, 'Calling latrend for each method...')
-  pushState(verbose)
+  enter(verbose, 'Calling latrend for each method')
 
   models = foreach(cl = allCalls, .packages = 'latrend', .errorhandling = errorHandling, .export = 'envir') %infix% {
     model = eval(cl, envir = penv)
     model
   }
 
-  popState(verbose)
+  exit(verbose, level = verboseLevels$finest)
 
   errorMask = !vapply(models, is.lcModel, FUN.VALUE = TRUE)
 
