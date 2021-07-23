@@ -270,6 +270,52 @@ lcMethod.call = function(Class,
 }
 
 
+as.character.lcMethod = function(x, ..., eval = FALSE, width = 40, prefix = '', envir = NULL) {
+  assert_that(
+    is.lcMethod(x),
+    is.flag(eval)
+  )
+
+  envir = lcMethod.env(x, parent.frame(), envir)
+  if (isTRUE(eval)) {
+    x = evaluate.lcMethod(x, envir = envir)
+  }
+
+  arg2char = function(a) {
+    if (is.null(a)) {
+      'NULL'
+    } else if (is.character(a)) {
+      paste0('"', a, '"', collapse = ', ')
+    } else if (is.atomic(a)) {
+      paste0(as.character(a), collapse = ', ')
+    } else {
+      deparse(a) %>% paste0(collapse = '')
+    }
+  }
+
+  argNames = names(x)
+  chrValues = lapply(x@arguments, arg2char) %>% unlist()
+  assert_that(all(vapply(chrValues, length, FUN.VALUE = 0) == 1))
+
+  sourceMask = vapply(chrValues, nchar, FUN.VALUE = 0) > width &
+    argNames %in% names(x@sourceCalls)
+  chrSource = lapply(x@sourceCalls[argNames[sourceMask]], arg2char) %>% unlist()
+  chrValues[sourceMask] = paste0('`', chrSource, '`')
+
+  args = vapply(chrValues, strtrim, width = width, FUN.VALUE = '')
+
+  header = sprintf('%s as "%s"', class(x)[1], getName(x))
+
+  if (length(args) > 0) {
+    body = sprintf('%s%-16s%s', prefix, paste0(argNames, ':'), args)
+  } else {
+    body = 'no arguments'
+  }
+
+  c(header, body)
+}
+
+
 #' @export
 #' @title Extract the method arguments as a list
 #' @param x The `lcMethod` object.
@@ -767,44 +813,8 @@ setMethod('postFit', signature('lcMethod'), function(method, data, model, envir,
 #' @param envir The environment in which to evaluate the arguments when `eval = TRUE`.
 #' @param ... Not used.
 print.lcMethod = function(x, ..., eval = FALSE, width = 40, envir = NULL) {
-  assert_that(
-    is.lcMethod(x),
-    is.flag(eval)
-  )
-
-  envir = lcMethod.env(x, parent.frame(), envir)
-  if (isTRUE(eval)) {
-    x = evaluate.lcMethod(x, envir = envir)
-  }
-
-  arg2char = function(a) {
-    if (is.null(a)) {
-      'NULL'
-    } else if (is.character(a)) {
-      paste0('"', a, '"', collapse = ', ')
-    } else if (is.atomic(a)) {
-      paste0(as.character(a), collapse = ', ')
-    } else {
-      deparse(a) %>% paste0(collapse = '')
-    }
-  }
-
-  argNames = names(x)
-  chrValues = lapply(x@arguments, arg2char) %>% unlist()
-  assert_that(all(vapply(chrValues, length, FUN.VALUE = 0) == 1))
-
-  sourceMask = vapply(chrValues, nchar, FUN.VALUE = 0) > width &
-    argNames %in% names(x@sourceCalls)
-  chrSource = lapply(x@sourceCalls[argNames[sourceMask]], arg2char) %>% unlist()
-  chrValues[sourceMask] = paste0('`', chrSource, '`')
-
-  args = vapply(chrValues, strtrim, width = width, FUN.VALUE = '')
-
-  if (length(args) > 0) {
-    cat(sprintf(' %-16s%s\n', paste0(argNames, ':'), args), sep = '')
-  } else {
-    cat(' no arguments\n')
-  }
+  out = as.character(x, ..., eval = eval, width = width, envir = envir, prefix = ' ')
+  cat(out, sep = '\n')
 }
 
 
@@ -984,8 +994,7 @@ setMethod('responseVariable', signature('lcMethod'), function(object, ...) {
 
 #. show ####
 setMethod('show', 'lcMethod', function(object) {
-  cat(class(object)[1], ' as "', getName(object), '"\n', sep = '')
-  print(object)
+  print(x = object)
 })
 
 

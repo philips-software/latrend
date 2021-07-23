@@ -37,8 +37,7 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
   environment(newmethod) = envir
 
   header(verbose, sprintf('Longitudinal clustering using "%s"', getName(newmethod)))
-  cat(verbose, 'Method arguments:')
-  print(verbose, newmethod)
+  cat(verbose, c('Method arguments:', as.character(newmethod)[-1]))
   ruler(verbose)
 
   # compose
@@ -191,14 +190,8 @@ latrendRep = function(method,
   newmethod = do.call(update, c(object = method, argList))
   environment(newmethod) = envir
 
-  header(verbose,
-         sprintf(
-           'Repeated (%d) longitudinal clustering using "%s"',
-           .rep,
-           getName(method)
-         ))
-  cat(verbose, 'Method arguments:')
-  print(verbose, newmethod)
+  header(verbose, sprintf('Repeated (%d) longitudinal clustering using "%s"', .rep, getName(method)))
+  cat(verbose, c('Method arguments:', as.character(newmethod)[-1]))
   ruler(verbose)
 
 
