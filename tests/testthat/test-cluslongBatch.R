@@ -141,6 +141,22 @@ test_that('method seeds are preserved in method specs', {
 })
 
 
+test_that('model calls can be used to refit, with identical result', {
+  models = latrendBatch(replicate(2, mRandomTest), data = testLongData)
+
+  refits = list(
+    eval(getCall(models[[1]])),
+    eval(getCall(models[[2]]))
+  )
+
+  expect_is(refits[[1]], 'lcModel')
+  expect_is(refits[[2]], 'lcModel')
+
+  expect_equivalent(getLcMethod(models[[1]])$seed, getLcMethod(refits[[1]])$seed)
+  expect_equivalent(getLcMethod(models[[2]])$seed, getLcMethod(refits[[2]])$seed)
+})
+
+
 test_that('repeated probabilistic method calls yield different results', {
   method = lcMethodTestRandom(alpha = 1, nClusters = 3)
   models = latrendBatch(replicate(2, method), data = testLongData)

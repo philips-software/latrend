@@ -24,7 +24,7 @@ latrendCV(
 
 \item{seed}{The seed to use. Optional.}
 
-\item{parallel}{Whether to enable parallel evaluation. See \link{latrend-parallel}.}
+\item{parallel}{Whether to enable parallel evaluation. See \link{latrend-parallel}. Method evaluation and dataset transformation is done on the calling thread.}
 
 \item{errorHandling}{Whether to \code{"stop"} on an error, or to \verb{"remove'} evaluations that raised an error.}
 

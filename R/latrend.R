@@ -278,12 +278,13 @@ latrendRep = function(method,
 # latrend-derived ####
 #' @export
 #' @title Cluster longitudinal data for a list of method specifications
-#' @description Fit a list of longitudinal cluster methods.
+#' @description Fit a list of longitudinal cluster methods on one or more datasets.
+#' @details Methods and datasets are evaluated and validated prior to any fitting. This ensures that the batch estimation fails as early as possible in case of errors.
 #' @inheritParams latrend
 #' @param methods A `list` of `lcMethod` objects.
 #' @param data A `data.frame`, `matrix`, or a `list` thereof to which to apply to the respective `lcMethod`. Multiple datasets can be supplied by encapsulating the datasets using `data=.(df1, df2, ..., dfN)`.
 #' @param cartesian Whether to fit the provided methods on each of the datasets. If `cartesian=FALSE`, only a single dataset may be provided or a list of data matching the length of `methods`.
-#' @param parallel Whether to enable parallel evaluation. See \link{latrend-parallel}.
+#' @param parallel Whether to enable parallel evaluation. See \link{latrend-parallel}. Method evaluation and dataset transformation is done on the calling thread.
 #' @param seed Sets the seed for generating the respective seed for each of the method fits. Seeds are only set for methods without a seed argument.
 #' @param errorHandling Whether to `"stop"` on an error, or to `"remove'` evaluations that raised an error.
 #' @param envir The `environment` in which to evaluate the `lcMethod` arguments.
@@ -326,10 +327,8 @@ latrendBatch = function(methods,
   envir = lcMethod.env(methods[[1]], parent.frame(), envir)
 
   verbose = as.Verbose(verbose)
-  nModels = length(methods)
+  nMethods = length(methods)
   mc = match.call()[-1]
-
-  header(verbose, sprintf('Batch estimation (N=%d) for longitudinal clustering', nModels))
 
   dataCall = mc$data
   if (is.name(dataCall)) {
@@ -348,35 +347,63 @@ latrendBatch = function(methods,
   }
   nData = length(dataList)
   assert_that(
-    cartesian || nData %in% c(1, nModels),
+    cartesian || nData %in% c(1, nMethods),
     msg = 'number of datasets must be 1 or match the number of specified methods'
   )
 
+  header(verbose, sprintf('Longitudinal clustering of %d dataset(s) using %d method(s)', nMethods, nData))
+
+  # compose methods
+  enter(verbose, sprintf('Evaluating method arguments of %d methods', nMethods), level = verboseLevels$fine, suffix = '')
+  methods = lapply(methods, compose, envir = envir)
+  exit(verbose, level = verboseLevels$finest)
+
   # generate method and data lists
   if (cartesian) {
-    allMethods = methods[rep(seq_len(nModels), nData)]
-    allDataOpts = dataList[rep(seq_len(nData), nModels)]
-  } else if (nModels == nData) {
+    allMethods = methods[rep(seq_len(nMethods), nData)]
+    allDataOpts = dataList[rep(seq_len(nData), nMethods)]
+  } else if (nMethods == nData) {
     allMethods = methods
     allDataOpts = dataList
   } else {
     # replicate methods and data such that they are equal length
-    allMethods = methods[rep_len(seq_len(nModels), length.out = max(nModels, nData))]
-    allDataOpts = dataList[rep_len(seq_len(nData), length.out = max(nModels, nData))]
+    allMethods = methods[rep_len(seq_len(nMethods), length.out = max(nMethods, nData))]
+    allDataOpts = dataList[rep_len(seq_len(nData), length.out = max(nMethods, nData))]
   }
   assert_that(length(allMethods) == length(allDataOpts))
-  nCalls = length(allMethods)
+  nModels = length(allMethods)
+
+  # transform data
+  enter(verbose, sprintf('Checking and transforming the data format for %d datasets.', nData), suffix = '', level = verboseLevels$fine)
+  allData = lapply(allDataOpts, eval, envir = envir)
+  allModelData = mapply(function(data, method) {
+    trajectories(data, id = idVariable(method), time = timeVariable(method), response = responseVariable(method), envir = envir)
+  }, allData, allMethods, SIMPLIFY = FALSE)
+  assert_that(
+    is.list(allModelData),
+    length(allModelData) == nModels,
+    all(vapply(allModelData, is.data.frame, FUN.VALUE = TRUE))
+  )
+  exit(verbose, level = verboseLevels$finest)
+
+  # validate methods on data
+  enter(verbose, sprintf('Validating methods against the datasets (%d checks).', nModels), level = verboseLevels$fine, suffix = '')
+  mapply(validate, allMethods, allModelData, SIMPLIFY = FALSE)
+  exit(verbose, level = verboseLevels$finest)
 
   # seeds
   cat(verbose, sprintf('Generating method seeds for seed = %s.', as.character(seed)))
   localRNG(seed = seed, {
-    allSeeds = sample.int(.Machine$integer.max, size = nCalls, replace = FALSE)
+    allSeeds = sample.int(.Machine$integer.max, size = nModels, replace = FALSE)
   })
 
-  # restore seed for methods which have a seed argument
-  seedMask = vapply(allMethods, hasName, 'seed', FUN.VALUE = TRUE)
-  allSeeds[seedMask] = vapply(allMethods[seedMask], '[[', 'seed', FUN.VALUE = 0)
-  assert_that(length(allSeeds) == nCalls)
+  # update methods that don't have a seed argument
+  seedMask = !vapply(allMethods, hasName, 'seed', FUN.VALUE = TRUE)
+  allMethods[seedMask] = mapply(
+    function(method, seed) update(method, seed = seed, .eval = TRUE),
+    allMethods[seedMask],
+    allSeeds[seedMask]
+  )
 
   # generate calls
   allCalls = vector('list', length(allMethods))
@@ -396,35 +423,64 @@ latrendBatch = function(methods,
   penv = parent.frame()
 
   # latrend
-  enter(verbose, 'Calling latrend for each method')
+  enter(verbose, sprintf('Fitting %d models', nModels))
+  ruler(verbose)
 
-  models = foreach(cl = allCalls, .packages = 'latrend', .errorhandling = errorHandling, .export = 'envir') %infix% {
-    model = eval(cl, envir = penv)
-    model
+  models = foreach(
+    i = seq_along(allMethods),
+    modelMethod = allMethods,
+    modelData = allModelData,
+    modelCall = allCalls,
+    .packages = 'latrend',
+    .errorhandling = errorHandling) %infix%
+  {
+    enter(verbose, sprintf('Fitting model %d/%d (%d%%)', i, nModels, round(i / nModels * 100), getName(modelMethod)))
+    on.exit(expr = exit(verbose, level = verboseLevels$finest), add = TRUE)
+
+    cat(verbose, as.character(modelMethod, prefix = '- '))
+    prepEnv = local({
+      enter(verbose, 'Preparing the training data for fitting', suffix = '', level = verboseLevels$fine)
+      on.exit(expr = exit(verbose, level = verboseLevels$finest), add = TRUE)
+      prepareData(method = modelMethod, data = modelData, verbose = verbose)
+    })
+
+    model = fitLatrendMethod(
+      method = modelMethod,
+      data = modelData,
+      mc = modelCall,
+      envir = prepEnv,
+      verbose = verbose
+    )
+
+    return (model)
   }
 
   exit(verbose, level = verboseLevels$finest)
 
+  # handle model results
   errorMask = !vapply(models, is.lcModel, FUN.VALUE = TRUE)
 
   if (any(errorMask)) {
     # some list entries are not lcModel
     nError = sum(errorMask)
-    cat(verbose, sprintf('Done, but errors occurred in %d out of %d methods', nError, nCalls))
+    cat(verbose, sprintf('Done, but errors occurred in %d out of %d methods', nError, nModels))
+    ruler(verbose)
     warning(sprintf(
       'Returning "list" object instead of "lcModels" object for latrendBatch()
       because %d method estimations produced an error',
       nError
     ))
     return (models)
-  } else if (length(models) < nCalls ) {
+  } else if (length(models) < nModels ) {
     # fewer models were obtained than expected
-    nError = nCalls - length(models)
-    cat(verbose, sprintf('Done, but errors occurred in %d out of %d methods', nError, nCalls))
+    nError = nModels - length(models)
+    cat(verbose, sprintf('Done, but errors occurred in %d out of %d methods', nError, nModels))
+    ruler(verbose)
     return (as.lcModels(models))
   } else {
     # no errors
-    cat(verbose, sprintf('Done fitting %d models.', nCalls))
+    cat(verbose, sprintf('Done fitting %d models.', nModels))
+    ruler(verbose)
     return (as.lcModels(models))
   }
 }

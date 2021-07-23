@@ -24,7 +24,7 @@ latrendBatch(
 
 \item{seed}{Sets the seed for generating the respective seed for each of the method fits. Seeds are only set for methods without a seed argument.}
 
-\item{parallel}{Whether to enable parallel evaluation. See \link{latrend-parallel}.}
+\item{parallel}{Whether to enable parallel evaluation. See \link{latrend-parallel}. Method evaluation and dataset transformation is done on the calling thread.}
 
 \item{errorHandling}{Whether to \code{"stop"} on an error, or to \verb{"remove'} evaluations that raised an error.}
 
@@ -40,7 +40,10 @@ A \code{lcModels} object.
 In case of a model fit error under \code{errorHandling = pass}, a \code{list} is returned.
 }
 \description{
-Fit a list of longitudinal cluster methods.
+Fit a list of longitudinal cluster methods on one or more datasets.
+}
+\details{
+Methods and datasets are evaluated and validated prior to any fitting. This ensures that the batch estimation fails as early as possible in case of errors.
 }
 \examples{
 data(latrendData)
