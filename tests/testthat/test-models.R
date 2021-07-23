@@ -151,6 +151,28 @@ test_that('max', {
     expect_is('lcModel')
 })
 
+test_that('plot', {
+  p = plot(models)
+  expect_is(p, 'grob')
+})
+
+test_that('plot empty list', {
+  expect_warning({
+    p = plot(as.lcModels(list()))
+  })
+})
+
+test_that('plot subset', {
+  p = plot(models, subset = nClusters == 2)
+  expect_is(p, 'grob')
+})
+
+test_that('plot subset with no results', {
+  expect_warning({
+    p = plot(models, subset = nClusters < 1)
+  })
+})
+
 test_that('plotMetric', {
   plotMetric(models, name='BIC', subset=.method == 'kml') %>%
     expect_is('gg')

@@ -116,7 +116,6 @@ as.data.frame.lcModels = function(x, ...,
   as.data.frame(dt)
 }
 
-# externalMetric ####
 .externalMetric.lcModels = function(object, object2, name, drop = TRUE) {
   assert_that(is.character(name),
     is.flag(drop))
@@ -160,6 +159,7 @@ as.data.frame.lcModels = function(x, ...,
   as.dist(t(m), diag = FALSE, upper = FALSE)
 }
 
+# . externalMetric ####
 #' @export
 #' @importFrom stats as.dist
 #' @rdname externalMetric
@@ -204,7 +204,6 @@ setMethod('externalMetric', signature('list', 'lcModel'),
 })
 
 
-# metric ####
 .metric.lcModels = function(object, name, drop = TRUE) {
   assert_that(length(name) > 0, msg = 'no metric names provided')
   assert_that(is.lcModels(object),
@@ -233,6 +232,7 @@ setMethod('externalMetric', signature('list', 'lcModel'),
   }
 }
 
+# . metric ####
 #' @export
 #' @rdname metric
 #' @param drop Whether to return a `numeric vector` instead of a `data.frame`
@@ -298,6 +298,39 @@ max.lcModels = function(x, name, ...) {
     x[[bestIdx]]
   }
 }
+
+
+# . plot ####
+#' @export
+#' @title Grid plot for a list of models
+#' @inheritParams subset.lcModels
+#' @param x The `lcModels` object.
+#' @param y Not used.
+#' @param ... Additional parameters passed to the `plot()` call for each `lcModel` object.
+#' @param gridArgs Named list of parameters passed to [gridExtra::arrangeGrob].
+setMethod('plot', signature('lcModels'), function(x, y, ..., subset, gridArgs = list()) {
+  if (length(x) == 0) {
+    warning('Cannot plot empty list of models')
+    return (invisible(FALSE))
+  }
+
+  if (!missing(subset)) {
+    mc = match.call.all()
+    x = do.call(subset.lcModels, list(x = x, subset = mc$subset))
+
+    if (length(x) == 0) {
+      warning('Subsetting resulted in 0 models selected for plotting')
+      return (invisible(FALSE))
+    }
+  }
+
+
+  pList = lapply(x, plot, ...)
+
+  grob = do.call(gridExtra::arrangeGrob, c(pList, gridArgs))
+
+  gridExtra::grid.arrange(grob)
+})
 
 
 #' @export
