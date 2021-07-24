@@ -163,7 +163,9 @@ NULL
 globalVariables(c('.', '.name', '.group', '.method', '.ROW_INDEX', '.Mean', '.Block',
   'i', 'iseed', 'N', 'i.N', 'g', 'fun', 'method', 'plotTrajs', 'cl',
   'Prob', 'Cluster', 'Class', 'Value', 'Id', 'Time',
+  'modelMethod', 'modelData', 'modelCall',
   'Mu', 'Mu.cluster', 'Mu.class', 'Mu.fixed', 'Mu.random',
   'warning.Verbose',
   'TVEMMixNormal',
-  '.Component'))
+  '.Component'
+))
