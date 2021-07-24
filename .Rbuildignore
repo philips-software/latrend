@@ -19,3 +19,4 @@ README\.md
 ^.*pdf$
 ^.*bak$
 ^.*\.Rproj$
+^data-raw$

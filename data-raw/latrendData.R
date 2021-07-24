@@ -1,4 +1,3 @@
-library(usethis)
 library(magrittr)
 library(latrend)
 
@@ -13,7 +12,7 @@ latrendData = generateLongData(
   data = data.frame(Time = seq(0, 2, length.out = 10)),
   fixedCoefs = 0,
   clusterCoefs = cbind(c(-1, 1.5, -.4), c(0, 0, 0), c(.25, .25, -.4)),
-  randomScales = cbind(c(.3, .05), c(.2, .1), c(.1, .1)), #cbind(c(0,0), c(0,0), c(0,0)),
+  randomScales = cbind(c(.3, .05), c(.2, .1), c(.1, .1)),
   noiseScales = c(.1, .1, .1),
   clusterNames = paste('Class', 1:3),
   shuffle = FALSE) %>%
@@ -24,4 +23,4 @@ plotTrajectories(latrendData, response = 'Y')
 plotTrajectories(latrendData, response = 'Y', cluster = 'Class', facet = FALSE)
 plotTrajectories(latrendData, response = 'Y', cluster = 'Class', facet = TRUE)
 
-use_data(latrendData, overwrite = TRUE)
+usethis::use_data(latrendData, overwrite = TRUE)
