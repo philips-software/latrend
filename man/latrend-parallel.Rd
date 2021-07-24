@@ -11,9 +11,8 @@ In order to make use of parallel execution, a parallel back-end must be register
 
 On Windows, the \link[parallel]{parallel-package} can be used to define parallel socket workers.
 \preformatted{
-nCores = parallel::detectCores(logical = FALSE)
-cl = parallel::makeCluster(nCores - 1)
-parallel::clusterEvalQ(cl, expr=library(latrend))
+nCores <- parallel::detectCores(logical = FALSE)
+cl <- parallel::makeCluster(nCores)
 }
 
 Then, register the cluster as the parallel back-end using the \code{doParallel} package:
@@ -34,11 +33,22 @@ parallel::clusterEvalQ(cl,
 On Unix systems, it is easier to setup parallelization as the R process is forked.
 In this example we use the \code{doMC} package:
 \preformatted{
-nCores = parallel::detectCores(logical = FALSE)
-doMC::registerDoMC(nCores - 1)
+nCores <- parallel::detectCores(logical = FALSE)
+doMC::registerDoMC(nCores)
 }
 }
 
+\examples{
+data(latrendData)
+
+# parallel latrendRep()
+method <- lcMethodKML(response = "Y")
+models <- latrendRep(method, data = latrendData, .rep = 10, parallel = TRUE)
+
+# parallel latrendBatch()
+methods <- lcMethods(method, nClusters = 1:3)
+models <- latrendBatch(methods, data = latrendData, parallel = TRUE)
+}
 \seealso{
 \link{latrendRep}, \link{latrendBatch}, \link{latrendBoot}, \link{latrendCV}
 }
