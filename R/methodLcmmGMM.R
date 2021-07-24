@@ -162,10 +162,9 @@ gmm_fit = function(method, data, envir, verbose, ...) {
 
   if (hasName(envir, 'lme')) {
     # work-around for eval() of hlme() only considering global and function scope
-    assign('.latrend.lme', value = envir$lme, envir = .GlobalEnv)
-    args$B = quote(random(.latrend.lme))
-
-    on.exit({ rm('.latrend.lme', envir = .GlobalEnv) }, add = TRUE)
+    .latrend.lme <- envir$lme
+    # args$B = quote(random(get('.latrend.lme', envir = parent.frame(3))))
+    args$B = quote(random(dynGet('.latrend.lme')))
   }
 
   model = do.call(lcmm::hlme, args)
