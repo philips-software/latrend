@@ -29,6 +29,8 @@ lcMethodRandom(
 \item{nClusters}{The number of clusters.}
 
 \item{name}{The name of the method.}
+
+\item{...}{Additional arguments, such as the seed.}
 }
 \description{
 Creates a model with random cluster assignments according to the random cluster proportions drawn from a Dirichlet distribution.

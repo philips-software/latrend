@@ -32,7 +32,7 @@ lcMethodLcmmGBTM(
 If \code{"lme.random"} (default): random initialization through a standard linear mixed model.
 Assigns a fitted standard linear mixed model enclosed in a call to random() to the \code{B} argument.
 If \code{"lme"}, fits a standard linear mixed model and passes this to the \code{B} argument.
-If \code{NULL} or \code{"default"}, the default \link{lcmm:hlme} input for \code{B} is used.
+If \code{NULL} or \code{"default"}, the default \link[lcmm:hlme]{lcmm::hlme} input for \code{B} is used.
 
 The argument is ignored if the \code{B} argument is specified, or \code{nClusters = 1}.}
 

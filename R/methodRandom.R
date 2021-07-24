@@ -22,6 +22,7 @@ setValidity('lcMethodRandom', function(object) {
 #' @inheritParams lcMethodCustom
 #' @param nClusters The number of clusters.
 #' @param alpha The Dirichlet parameters. Either `scalar` or of length `nClusters`. The higher alpha, the more uniform the clusters will be.
+#' @param ... Additional arguments, such as the seed.
 #' @examples
 #' data(latrendData)
 #' method <- lcMethodRandom(response = "Y", id = "Id", time = "Time")

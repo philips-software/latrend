@@ -31,7 +31,7 @@ setValidity('lcMethodLcmmGMM', function(object) {
 #' If `"lme.random"` (default): random initialization through a standard linear mixed model.
 #' Assigns a fitted standard linear mixed model enclosed in a call to random() to the `B` argument.
 #' If `"lme"`, fits a standard linear mixed model and passes this to the `B` argument.
-#' If `NULL` or `"default"`, the default [lcmm:hlme] input for `B` is used.
+#' If `NULL` or `"default"`, the default [lcmm::hlme] input for `B` is used.
 #'
 #' The argument is ignored if the `B` argument is specified, or `nClusters = 1`.
 #'
