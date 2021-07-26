@@ -116,6 +116,23 @@ as.data.frame.lcModels = function(x, ...,
   as.data.frame(dt)
 }
 
+# . estimationTime ####
+#' @export
+#' @rdname estimationTime
+#' @param object The list of `lcModel` objects.
+setMethod('estimationTime', signature('lcModels'), function(object, unit, ...) {
+  sum(vapply(object, estimationTime, unit = unit, ..., FUN.VALUE = 0), na.rm = TRUE)
+})
+
+
+#' @export
+#' @rdname estimationTime
+setMethod('estimationTime', signature('list'), function(object, unit, ...) {
+  models = as.lcModels(object)
+  estimationTime(models, unit = unit, ...)
+})
+
+
 .externalMetric.lcModels = function(object, object2, name, drop = TRUE) {
   assert_that(is.character(name),
     is.flag(drop))

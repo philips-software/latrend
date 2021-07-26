@@ -194,3 +194,19 @@ test_that('externalMetric against model', {
     expect_is('numeric') %>%
     expect_length(length(models))
 })
+
+test_that('estimationTime', {
+  secs = estimationTime(models)
+  expect_is(secs, 'numeric')
+  expect_length(secs, 1)
+  expect_gt(secs, estimationTime(models[[1]]))
+})
+
+test_that('estimationTime with unit argument', {
+  secs = estimationTime(models)
+  mins = estimationTime(models, unit = 'mins')
+  days = estimationTime(models, unit = 'days')
+
+  expect_gt(secs, mins)
+  expect_gt(mins, days)
+})

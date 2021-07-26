@@ -99,9 +99,14 @@ setGeneric('externalMetric', function(
 #' @export
 #' @name latrend-generics
 #' @param unit Time unit.
-setGeneric('estimationTime', function(object, unit = 'secs', ...)
-  standardGeneric('estimationTime')
-)
+setGeneric('estimationTime', function(object, unit = 'secs', ...) {
+  duration <- standardGeneric('estimationTime')
+  assert_that(
+    is.scalar(duration),
+    is.finite(duration)
+  )
+  duration
+})
 
 
 # fit ####
