@@ -10,6 +10,8 @@ The `latrend` package provides a framework for clustering longitudinal datasets 
 * The structured and unified analysis approach enables **simulation studies** for comparing methods.
 * Standardized **model validation** for all methods through bootstrapping or k-fold cross-validation.
 
+See the [news page](https://github.com/philips-software/latrend/blob/master/NEWS.md) for the latest updates.
+
 # Installation
 ```
 remotes::install_github("https://github.com/philips-software/latrend")
