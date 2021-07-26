@@ -95,6 +95,15 @@ setGeneric('externalMetric', function(
 )
 
 
+# estimationTime ####
+#' @export
+#' @name latrend-generics
+#' @param unit Time unit.
+setGeneric('estimationTime', function(object, unit = 'secs', ...)
+  standardGeneric('estimationTime')
+)
+
+
 # fit ####
 #' @export
 #' @name latrend-generics

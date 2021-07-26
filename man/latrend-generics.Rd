@@ -21,6 +21,8 @@ externalMetric(
   ...
 )
 
+estimationTime(object, unit = "secs", ...)
+
 fit(method, data, envir, verbose, ...)
 
 fittedTrajectories(
@@ -91,6 +93,8 @@ validate(method, data, envir, ...)
 \item{object2}{The model to compare with.}
 
 \item{name}{Metric name.}
+
+\item{unit}{Time unit.}
 
 \item{data}{\code{data.frame}.}
 

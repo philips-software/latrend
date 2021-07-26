@@ -2,9 +2,10 @@
 % Please edit documentation in R/model.R
 \name{estimationTime}
 \alias{estimationTime}
+\alias{estimationTime,lcModel-method}
 \title{Get the model estimation time}
 \usage{
-estimationTime(object, unit = "secs")
+\S4method{estimationTime}{lcModel}(object, unit = "secs", ...)
 }
 \arguments{
 \item{object}{The \code{lcModel} object.}
@@ -14,7 +15,7 @@ By default, estimation time is in seconds.
 For accepted units, see \link[base:difftime]{base::difftime}.}
 }
 \value{
-A \code{numeric} representing the model estimation time, in seconds.
+A \code{numeric} representing the model estimation time, in the specified unit.
 }
 \description{
 Get the estimation time of the model, determined by the time taken for the associated \code{\link[=fit]{fit()}} function to finish.
