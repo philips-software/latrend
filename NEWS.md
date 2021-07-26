@@ -9,7 +9,7 @@
 4. `latrendBatch()` now supports an expression for its `"data"` argument ([#50](https://github.com/philips-software/latrend/issues/50)).
 5. Variable argument pass-through for `lcModel` methods.
 6. Default implementation for `predictForCluster()`.
-7. Added timing information to log output of `latrend*()` methods.
+7. Added timing information to log output of `latrend*()` methods ([#51](https://github.com/philips-software/latrend/issues/51)).
 8. Added `"unit"` option to `estimationTime()`.
 9. Implemented `estimationTime()` for `lcModels`.
 10. `plot(lcModel)` only shows trajectories when `"what"` argument is not specified.
