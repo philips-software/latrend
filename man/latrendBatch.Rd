@@ -18,7 +18,10 @@ latrendBatch(
 \arguments{
 \item{methods}{A \code{list} of \code{lcMethod} objects.}
 
-\item{data}{A \code{data.frame}, \code{matrix}, or a \code{list} thereof to which to apply to the respective \code{lcMethod}. Multiple datasets can be supplied by encapsulating the datasets using \code{data=.(df1, df2, ..., dfN)}.}
+\item{data}{The dataset(s) to which to fit the respective \code{lcMethod} on.
+Either a \code{data.frame}, \code{matrix}, \code{list} or an expression evaluating to one of the supported types.
+Multiple datasets can be supplied by encapsulating the datasets using \code{data = .(df1, df2, ..., dfN)}.
+Doing this results in a more readable \code{call} associated with each fitted \code{lcModel} object.}
 
 \item{cartesian}{Whether to fit the provided methods on each of the datasets. If \code{cartesian=FALSE}, only a single dataset may be provided or a list of data matching the length of \code{methods}.}
 

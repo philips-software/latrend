@@ -282,7 +282,10 @@ latrendRep = function(method,
 #' @details Methods and datasets are evaluated and validated prior to any fitting. This ensures that the batch estimation fails as early as possible in case of errors.
 #' @inheritParams latrend
 #' @param methods A `list` of `lcMethod` objects.
-#' @param data A `data.frame`, `matrix`, or a `list` thereof to which to apply to the respective `lcMethod`. Multiple datasets can be supplied by encapsulating the datasets using `data=.(df1, df2, ..., dfN)`.
+#' @param data The dataset(s) to which to fit the respective `lcMethod` on.
+#' Either a `data.frame`, `matrix`, `list` or an expression evaluating to one of the supported types.
+#' Multiple datasets can be supplied by encapsulating the datasets using `data = .(df1, df2, ..., dfN)`.
+#' Doing this results in a more readable `call` associated with each fitted `lcModel` object.
 #' @param cartesian Whether to fit the provided methods on each of the datasets. If `cartesian=FALSE`, only a single dataset may be provided or a list of data matching the length of `methods`.
 #' @param parallel Whether to enable parallel evaluation. See \link{latrend-parallel}. Method evaluation and dataset transformation is done on the calling thread.
 #' @param seed Sets the seed for generating the respective seed for each of the method fits. Seeds are only set for methods without a seed argument.
@@ -331,7 +334,11 @@ latrendBatch = function(methods,
   mc = match.call()[-1]
 
   dataCall = mc$data
-  if (is.name(dataCall)) {
+  if (is.call(dataCall) && dataCall[[1]] == '.') {
+    # data = .(d1, d2, dN)
+    dataList = as.list(dataCall[-1])
+  } else {
+    # data = varName  OR data = expr
     dataEval = eval(dataCall, envir = parent.frame())
     assert_that(length(dataEval) >= 1)
     if (is(dataEval, 'list')) {
@@ -340,10 +347,6 @@ latrendBatch = function(methods,
     } else {
       dataList = list(dataCall)
     }
-  } else if (is.call(dataCall) && dataCall[[1]] == '.') {
-    dataList = as.list(dataCall[-1])
-  } else {
-    stop('unsupported data input')
   }
   nData = length(dataList)
   assert_that(

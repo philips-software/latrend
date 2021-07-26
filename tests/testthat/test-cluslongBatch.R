@@ -39,6 +39,23 @@ test_that('multiple datasets', {
 })
 
 
+test_that('single entry from a datasets list', {
+  datasets = list(testLongData, testLongData)
+  models = latrendBatch(mTest, data = datasets[[1]])
+  expect_length(models, 1)
+  expect_equal(deparse(getCall(models[[1]])$data), 'datasets[[1]]')
+})
+
+
+test_that('datasets list subset', {
+  datasets = list(testLongData, testLongData, testLongData)
+  models = latrendBatch(mTest, data = datasets[c(2,3)])
+  expect_length(models, 2)
+  expect_equal(deparse(getCall(models[[1]])$data), 'datasets[c(2, 3)][[1]]')
+  expect_equal(deparse(getCall(models[[2]])$data), 'datasets[c(2, 3)][[2]]')
+})
+
+
 test_that('datasets list', {
   methods = lcMethods(mTest, nClusters = 1:2)
   dataList = list(
