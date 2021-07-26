@@ -354,7 +354,7 @@ latrendBatch = function(methods,
     msg = 'number of datasets must be 1 or match the number of specified methods'
   )
 
-  header(verbose, sprintf('Longitudinal clustering of %d dataset(s) using %d method(s)', nMethods, nData))
+  header(verbose, sprintf('Longitudinal clustering of %d dataset(s) using %d method(s)', nData, nMethods))
 
   # compose methods
   enter(verbose, sprintf('Evaluating method arguments of %d methods', nMethods), level = verboseLevels$fine, suffix = '')
