@@ -9,22 +9,25 @@
 4. `latrendBatch()` now supports an expression for its `"data"` argument ([#50](https://github.com/philips-software/latrend/issues/50)).
 5. Variable argument pass-through for `lcModel` methods.
 6. Default implementation for `predictForCluster()`.
-7. Added `"unit"` option to `estimationTime()`.
-8. `plot(lcModel)` only shows trajectories when `"what"` argument is not specified.
-9. Support for `lcModel` objects without training data ([#36](https://github.com/philips-software/latrend/issues/36)).
-10. Made it easier to define new `lcMethod` subclasses by defining better default methods.
-11. `plot()` for `lcModels` ([#48](https://github.com/philips-software/latrend/issues/48))
-12. `latrend()` and derivative methods automatically supress console output when `verbose = FALSE` ([#45](https://github.com/philips-software/latrend/issues/45))
-13. Better automatic axis breaks in metric plots (#44).
-14. `trajectoryAssignments()` signature that accepts a posterior probability matrix ([#34](https://github.com/philips-software/latrend/issues/34))
-15. Added convenient mixture initialization options to `lcMethodLcmmGBTM` and `lcMethodLcmmGMM` based on standard (single cluster) linear mixed model fit.
-16. `lcMethodRandom()` accepts `seed` argument.
-17. Expand trajectory assignment input options for `lcModelPartition`.
+7. Added timing information to log output of `latrend*()` methods.
+8. Added `"unit"` option to `estimationTime()`.
+9. Implemented `estimationTime()` for `lcModels`.
+10. `plot(lcModel)` only shows trajectories when `"what"` argument is not specified.
+11. Support for `lcModel` objects without training data ([#36](https://github.com/philips-software/latrend/issues/36)).
+12. Made it easier to define new `lcMethod` subclasses by defining better default methods.
+13. `plot()` for `lcModels` ([#48](https://github.com/philips-software/latrend/issues/48))
+14. `latrend()` and derivative methods automatically supress console output when `verbose = FALSE` ([#45](https://github.com/philips-software/latrend/issues/45))
+15. Better automatic axis breaks in metric plots (#44).
+16. `trajectoryAssignments()` signature that accepts a posterior probability matrix ([#34](https://github.com/philips-software/latrend/issues/34))
+17. Added convenient mixture initialization options to `lcMethodLcmmGBTM` and `lcMethodLcmmGMM` based on standard (single cluster) linear mixed model fit.
+18. `lcMethodRandom()` accepts `seed` argument.
+19. Expand trajectory assignment input options for `lcModelPartition`.
 
 ## Breaking changes
 1. Significant: `trajectories()` now returns the original training data, instead of the fitted (predicted) data ([#32](https://github.com/philips-software/latrend/issues/32)). This was done to improve clarity. 
 Previous uses of `trajectories()` and `plotTrajectories()` should be replaced by `fittedTrajectories()` and `plotFittedTrajectories()`, respectively.
-3. Minor: `lcMethod` implementations: `prepareData()` must now return an `environment` ([#39](https://github.com/philips-software/latrend/issues/39)). In the past, `NULL` was allowed, but this increased code complexity further down the process.
+2. Minor: `lcMethod` implementations: `prepareData()` must now return an `environment` ([#39](https://github.com/philips-software/latrend/issues/39)). In the past, `NULL` was allowed, but this increased code complexity further down the process.
+3. Minor: `estimationTime()` is now an S4 generic method. This does not affect existing code.
  
 ## Bug fixes
 1. Critical: Fixed `predict()` when cluster membership is specified for the new data ([#40](https://github.com/philips-software/latrend/issues/40)).
