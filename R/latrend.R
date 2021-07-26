@@ -71,7 +71,7 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
                          verbose = verbose)
   exit(verbose, level = verboseLevels$finest)
 
-  enter(verbose, 'Fitting the method')
+  fitTiming = .enterTimed(verbose, 'Fitting the method')
   mc = match.call.defaults()
   model = fitLatrendMethod(
     cmethod,
@@ -81,7 +81,7 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
     verbose = verbose
   )
   environment(model) = envir
-  exit(verbose)
+  .exitTimed(fitTiming, msg = 'Done fitting the method (%s)')
 
   # done
   ruler(verbose)
@@ -248,7 +248,7 @@ latrendRep = function(method,
 
   `%infix%` = ifelse(.parallel, `%dopar%`, `%do%`)
 
-  enter(verbose, 'Fitting the methods')
+  fitTiming = .enterTimed(verbose, 'Fitting the methods')
   models = foreach(
     i = seq_len(.rep),
     iseed = repSeeds,
@@ -269,7 +269,8 @@ latrendRep = function(method,
     exit(verbose, level = verboseLevels$finest)
     model
   }
-  exit(verbose)
+  .exitTimed(fitTiming, msg = 'Done fitting the methods (%s)')
+  ruler(verbose)
 
   as.lcModels(models)
 }
@@ -426,7 +427,7 @@ latrendBatch = function(methods,
   penv = parent.frame()
 
   # latrend
-  enter(verbose, sprintf('Fitting %d models', nModels))
+  fitTiming = .enterTimed(verbose, sprintf('Fitting %d models', nModels))
   ruler(verbose)
 
   models = foreach(
@@ -437,8 +438,8 @@ latrendBatch = function(methods,
     .packages = 'latrend',
     .errorhandling = errorHandling) %infix%
   {
-    enter(verbose, sprintf('Fitting model %d/%d (%d%%)', i, nModels, round(i / nModels * 100), getName(modelMethod)))
-    on.exit(expr = exit(verbose, level = verboseLevels$finest), add = TRUE)
+    modelTiming = .enterTimed(verbose, sprintf('Fitting model %d/%d (%d%%)', i, nModels, round(i / nModels * 100), getName(modelMethod)))
+    on.exit(expr = .exitTimed(modelTiming), add = TRUE)
 
     cat(verbose, as.character(modelMethod, prefix = '- '))
     prepEnv = local({
@@ -458,7 +459,7 @@ latrendBatch = function(methods,
     return (model)
   }
 
-  exit(verbose, level = verboseLevels$finest)
+  .exitTimed(fitTiming)
 
   # handle model results
   errorMask = !vapply(models, is.lcModel, FUN.VALUE = TRUE)
