@@ -134,5 +134,6 @@ Collate:
     'modelWeightedPartition.R'
     'models.R'
     'random.R'
+    'timing.R'
     'verbose.R'
     'zzz.R'

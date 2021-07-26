@@ -30,3 +30,27 @@ as.Verbose = function(x) {
 canShow = function(verbose, level) {
   getThreshold(verbose) < getThreshold(as.Verbose(level))
 }
+
+
+.enterTimed = function(verbose, ..., level = verbose$defaultLevel) {
+  stopifnot(is(verbose, 'Verbose'))
+  enter(verbose, ...)
+  state = list(
+    verbose = verbose,
+    level = level,
+    start = .tic()
+  )
+  invisible(state)
+}
+
+.exitTimed = function(state, msg = '', suffix = '...done (%s)', level = state$level, ...) {
+  stopifnot(is.list(state))
+  secs = .toc(state$start)
+  timeText = .formatElapsedSeconds(secs)
+
+  if (nchar(msg) == 0) {
+    exit(state$verbose, ..., level = level, suffix = sprintf(suffix, timeText))
+  } else {
+    exit(state$verbose, sprintf(msg, timeText), level = level, suffix = '')
+  }
+}
