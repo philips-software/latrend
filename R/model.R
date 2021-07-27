@@ -1449,6 +1449,7 @@ setMethod('responseVariable', signature('lcModel'), function(object, ...) object
 #' @param unit The time unit in which the estimation time should be outputted.
 #' By default, estimation time is in seconds.
 #' For accepted units, see [base::difftime].
+#' @param ... Additional arguments.
 #' @return A `numeric` representing the model estimation time, in the specified unit.
 #' @examples
 #' data(latrendData)

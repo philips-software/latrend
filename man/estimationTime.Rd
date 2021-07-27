@@ -19,6 +19,8 @@
 \item{unit}{The time unit in which the estimation time should be outputted.
 By default, estimation time is in seconds.
 For accepted units, see \link[base:difftime]{base::difftime}.}
+
+\item{...}{Additional arguments.}
 }
 \value{
 A \code{numeric} representing the model estimation time, in the specified unit.
