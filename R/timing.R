@@ -21,7 +21,7 @@
 
   if (is.null(timeUnit)) {
     # fallback scenario
-    paste(signif(secs, digits), 'seconds')
+    paste(signif(x, digits), 'seconds')
   } else {
     paste(signif(time, digits), timeUnit)
   }
