@@ -483,7 +483,6 @@ latrendBatch = function(methods,
     return (as.lcModels(models))
   } else {
     # no errors
-    cat(verbose, sprintf('Done fitting %d models.', nModels))
     ruler(verbose)
     return (as.lcModels(models))
   }
