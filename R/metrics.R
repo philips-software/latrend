@@ -169,13 +169,13 @@ intMetricsEnv$sigma = sigma
 intMetricsEnv$WMAE = function(m) {
   wMat = postprob(m)[make.idRowIndices(m), ]
   resMat = residuals(m, clusters = NULL)
-  mean(wMat * abs(resMat))
+  mean(rowSums(wMat * abs(resMat)))
 }
 
 intMetricsEnv$WMSE = function(m) {
   wMat = postprob(m)[make.idRowIndices(m), ]
   resMat = residuals(m, clusters = NULL)
-  mean(wMat * resMat ^ 2)
+  mean(rowSums(wMat * resMat ^ 2))
 }
 
 intMetricsEnv$WRSS = function(m) {
