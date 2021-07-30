@@ -31,10 +31,11 @@ Previous uses of `trajectories()` and `plotTrajectories()` should be replaced by
  
 ## Bug fixes
 1. Critical: Fixed `predict()` when cluster membership is specified for the new data ([#40](https://github.com/philips-software/latrend/issues/40)).
-2. Fixed `lcMethod` argument evaluation for symbolic name input that equals the respective argument name ([#41](https://github.com/philips-software/latrend/issues/41)).
-3. Fixed `strip()` error related to use of `eapply()`.
-4. Fixed output error for `latrendBatch()` when `errorHandling = "pass"` ([#46](https://github.com/philips-software/latrend/issues/46))
-5. Defined estimation time for `lcModelPartition` and `lcModelWeightedPartition` ([#38](https://github.com/philips-software/latrend/issues/38)).
-6. Fixed default output of `logLik.lcModel` and other implementations ([#37](https://github.com/philips-software/latrend/issues/37)).
-7. Default `metric()` did not compute any metrics.
-8. Fixed indentation of messages for `latrend()` and derivative methods.
+2. Critical: Fixed computation of WMAE and WMSE metrics ([#52](https://github.com/philips-software/latrend/issues/52)).
+3. Fixed `lcMethod` argument evaluation for symbolic name input that equals the respective argument name ([#41](https://github.com/philips-software/latrend/issues/41)).
+4. Fixed `strip()` error related to use of `eapply()`.
+5. Fixed output error for `latrendBatch()` when `errorHandling = "pass"` ([#46](https://github.com/philips-software/latrend/issues/46))
+6. Defined estimation time for `lcModelPartition` and `lcModelWeightedPartition` ([#38](https://github.com/philips-software/latrend/issues/38)).
+7. Fixed default output of `logLik.lcModel` and other implementations ([#37](https://github.com/philips-software/latrend/issues/37)).
+8. Default `metric()` did not compute any metrics.
+9. Fixed indentation of messages for `latrend()` and derivative methods.
