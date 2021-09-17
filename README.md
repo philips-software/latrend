@@ -1,4 +1,7 @@
 # latrend
+<!-- badges: start -->
+  [![Codecov test coverage](https://codecov.io/gh/philips-software/latrend/branch/master/graph/badge.svg)](https://codecov.io/gh/philips-software/latrend?branch=master)
+  <!-- badges: end -->
 The `latrend` package provides a framework for clustering longitudinal datasets in a standardized way. It provides interfaces to various R packages for longitudinal clustering.
 
 # Features
