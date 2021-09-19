@@ -18,11 +18,11 @@ jobs:
       matrix:
         config:
           - {os: macOS-latest,   r: 'release', pkg-type: 'binary'}
-          #- {os: windows-latest, r: 'release'}
-          #- {os: windows-latest, r: '3.6'}
-          #- {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
+          - {os: windows-latest, r: 'release', pkg-type: 'binary'}
+          - {os: windows-latest, r: '3.6', pkg-type: 'binary'}
+          - {os: ubuntu-latest,   r: 'devel', pkg-type: 'source'}
           - {os: ubuntu-latest,   r: 'release', pkg-type: 'source'}
-          #- {os: ubuntu-latest,   r: 'oldrel-1'}
+          - {os: ubuntu-latest,   r: 'oldrel-1', pkg-type: 'source'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -54,23 +54,18 @@ jobs:
 
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -yq libglu1-mesa-dev freeglut3-dev mesa-common-dev libcurl4-openssl-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install -yq libglu1-mesa-dev freeglut3-dev mesa-common-dev libcurl4-openssl-dev
+          Xvfb :1 -screen 1 1024x768x24 -ac &
 
-      - name: Install XQuartz
+      - name: Install macOS dependencies
         if: runner.os == 'macOS'
-        run: brew install --cask xquartz
-
-      #- name: Install macOS dependencies
-      #  run: brew install libgit2
-
-      - name: Start Linux Xvfb server
-        if: runner.os == 'Linux'
-        run: Xvfb :1 -screen 1 1024x768x24 -ac &
-
-      - name: Start xvfb server
-        if: runner.os == 'macOS'
-        run: sudo /usr/X11/bin/xvfb :1 -screen 1 1024x768x24 -ac &
-
+        run: |
+          brew install --cask xquartz
+          sudo /usr/X11/bin/xvfb :1 -screen 1 1024x768x24 -ac &
+        # brew install libgit2
+        
       - name: Query R package dependencies
         shell: Rscript {0}
         run: |
