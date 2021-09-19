@@ -83,7 +83,7 @@ jobs:
       - name: Install R packages
         shell: Rscript {0}
         run: |
-          remotes::install_deps(dependencies = TRUE, type = Sys.getenv("R_PKG_TYPE"))
+          remotes::install_deps(dependencies = TRUE, type = Sys.getenv("R_PKG_TYPE"), quiet = TRUE)
           remotes::install_cran("rcmdcheck")
 
       - name: Check
