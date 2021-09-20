@@ -87,11 +87,11 @@ jobs:
           remotes::install_cran("devtools")
 
       - name: Test
-        run: tlmgr --version
+        run: pdflatex
 
       - name: Build manual
         shell: Rscript {0}
-        run: build_manual()
+        run: devtools::build_manual()
         
       - name: Check
         shell: Rscript {0}
