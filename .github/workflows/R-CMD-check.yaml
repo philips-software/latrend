@@ -86,6 +86,7 @@ jobs:
           remotes::install_cran("rcmdcheck")
       
       - name: Manual
+        shell: bash
         run: R CMD Rd2pdf . --output=manual.pdf --force --no-preview
         
       - name: Check
