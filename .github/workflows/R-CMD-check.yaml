@@ -1,0 +1,103 @@
+# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+on:
+  push:
+  pull_request:
+    branches: [main, master]
+
+name: R-CMD-check
+
+jobs:
+  R-CMD-check:
+    runs-on: ${{ matrix.config.os }}
+
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macOS-latest,   r: 'release', pkg-type: 'binary'}
+          - {os: windows-latest, r: 'release', pkg-type: 'binary'}
+          - {os: windows-latest, r: '3.6', pkg-type: 'binary'}
+          - {os: ubuntu-latest,   r: 'devel', pkg-type: 'source'}
+          - {os: ubuntu-latest,   r: 'release', pkg-type: 'source'}
+          - {os: ubuntu-latest,   r: 'oldrel-1', pkg-type: 'source'}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_PKG_TYPE: ${{ matrix.config.pkg-type }}
+      _R_CHECK_FORCE_SUGGESTS_: false
+      _R_CHECK_CRAN_INCOMING_REMOTE_: false
+      _R_CHECK_CRAN_INCOMING_: false
+      _R_CHECK_RD_XREFS_: true
+      R_KEEP_PKG_SOURCE: true
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      RGL_USE_NULL: 'TRUE'
+      DISPLAY: ':1.1'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@master
+        with:
+          r-version: ${{ matrix.config.r }}
+          http-user-agent: ${{ matrix.config.http-user-agent }}
+
+      - name: Setup pandoc
+        uses: r-lib/actions/setup-pandoc@master
+
+      - name: Setup TinyTeX
+        if: runner.os != 'Windows'
+        uses: r-lib/actions/setup-tinytex@v1
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -yq libglu1-mesa-dev freeglut3-dev mesa-common-dev libcurl4-openssl-dev
+          Xvfb :1 -screen 1 1024x768x24 -ac &
+
+      - name: Install macOS dependencies
+        if: runner.os == 'macOS'
+        run: |
+          brew install --cask xquartz
+          sudo /usr/X11/bin/xvfb :1 -screen 1 1024x768x24 -ac &
+        # brew install libgit2
+        
+      - name: Query R package dependencies
+        shell: Rscript {0}
+        run: |
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), "depends.Rds", version = 2)
+
+      - name: Cache R packages
+        if: runner.os != 'Windows'
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
+          restore-keys: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-
+
+      - name: Install R packages
+        shell: Rscript {0}
+        run: |
+          remotes::install_deps(dependencies = TRUE, type = Sys.getenv("R_PKG_TYPE"), quiet = TRUE)
+          remotes::install_cran("rcmdcheck")
+
+      - name: Check
+        shell: Rscript {0}
+        run: rcmdcheck::rcmdcheck(args = c("--no-examples", "--no-manual", "--no-tests"), error_on = "warning", check_dir = "check")
+
+      - name: Show testthat output
+        shell: bash
+        if: always()
+        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
+
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
+          path: check
