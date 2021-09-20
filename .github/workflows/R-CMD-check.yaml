@@ -49,7 +49,6 @@ jobs:
         uses: r-lib/actions/setup-pandoc@master
 
       - name: Setup TinyTeX
-        if: runner.os != 'Windows'
         uses: r-lib/actions/setup-tinytex@v1
 
       - name: Install Linux dependencies
@@ -91,6 +90,7 @@ jobs:
         run: rcmdcheck::rcmdcheck(args = c("--as-cran"), error_on = "warning", check_dir = "check")
 
       - name: Debug
+        if: always()
         run: type "D:/a/latrend/latrend/check/latrend.Rcheck/00check.log"
 
       - name: Show testthat output
