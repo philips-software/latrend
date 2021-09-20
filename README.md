@@ -1,7 +1,9 @@
 # latrend
 <!-- badges: start -->
+  [![CRAN](https://www.r-pkg.org/badges/version/latrend)](https://cran.r-project.org/package=latrend)
   [![Codecov test coverage](https://codecov.io/gh/philips-software/latrend/branch/master/graph/badge.svg)](https://codecov.io/gh/philips-software/latrend?branch=master)
-  <!-- badges: end -->
+  [![Downloads](https://cranlogs.r-pkg.org/badges/latrend)](https://www.r-pkg.org/pkg/latrend)
+<!-- badges: end -->
 The `latrend` package provides a framework for clustering longitudinal datasets in a standardized way. It provides interfaces to various R packages for longitudinal clustering.
 
 # Features
