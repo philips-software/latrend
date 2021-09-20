@@ -84,15 +84,10 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE, type = Sys.getenv("R_PKG_TYPE"), quiet = TRUE)
           remotes::install_cran("rcmdcheck")
-          remotes::install_cran("devtools")
-
-      - name: Build manual
-        shell: Rscript {0}
-        run: devtools::build_manual()
         
       - name: Check
         shell: Rscript {0}
-        run: rcmdcheck::rcmdcheck(args = c("--as-cran"), error_on = "warning", check_dir = "check")
+        run: print(rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-tests"), error_on = "warning", check_dir = "check"))
 
       - name: Debug
         if: always()
