@@ -19,7 +19,7 @@ jobs:
         config:
           #- {os: macOS-latest,   r: 'release', pkg-type: 'binary'}
           - {os: windows-latest, r: 'release', pkg-type: 'binary'}
-          - {os: windows-latest, r: '3.6', pkg-type: 'binary'}
+          #- {os: windows-latest, r: '3.6', pkg-type: 'binary'}
           #- {os: ubuntu-latest,   r: 'devel', pkg-type: 'source'}
           #- {os: ubuntu-latest,   r: 'release', pkg-type: 'source'}
           #- {os: ubuntu-latest,   r: 'oldrel-1', pkg-type: 'source'}
@@ -65,7 +65,7 @@ jobs:
           sudo /usr/X11/bin/xvfb :1 -screen 1 1024x768x24 -ac &
         # brew install libgit2
         
-      - name: Query R package dependencies
+      - name: Gather R package dependencies
         shell: Rscript {0}
         run: |
           install.packages('remotes')
@@ -84,7 +84,15 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE, type = Sys.getenv("R_PKG_TYPE"), quiet = TRUE)
           remotes::install_cran("rcmdcheck")
+          remotes::install_cran("devtools")
 
+      - name: Test
+        run: tlmgr --version
+
+      - name: Build manual
+        shell: Rscript {0}
+        run: build_manual()
+        
       - name: Check
         shell: Rscript {0}
         run: rcmdcheck::rcmdcheck(args = c("--as-cran"), error_on = "warning", check_dir = "check")
