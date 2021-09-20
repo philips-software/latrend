@@ -21,3 +21,4 @@ README\.md
 ^.*bak$
 ^.*\.Rproj$
 ^data-raw$
+^depends\.Rds$
