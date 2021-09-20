@@ -84,6 +84,9 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE, type = Sys.getenv("R_PKG_TYPE"), quiet = TRUE)
           remotes::install_cran("rcmdcheck")
+      
+      - name: Manual
+        run: R CMD Rd2pdf . --output=manual.pdf --force --no-preview
         
       - name: Check
         shell: Rscript {0}
