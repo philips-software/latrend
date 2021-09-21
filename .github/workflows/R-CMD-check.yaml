@@ -49,7 +49,7 @@ jobs:
         uses: r-lib/actions/setup-pandoc@master
 
       - name: Setup TinyTeX
-        uses: r-lib/actions/setup-tinytex@v1
+        uses: r-lib/actions/setup-tinytex@master
 
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
@@ -79,12 +79,12 @@ jobs:
           key: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
           restore-keys: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-
 
-      - name: Install tinytex
-        shell: Rscript {0}
-        run: |
-          install.packages('tinytex')
-          tinytex::install_tinytex(force = TRUE, add_path = TRUE)
-          tinytex::tlmgr_install(readLines('https://github.com/yihui/tinytex/raw/master/tools/pkgs-yihui.txt'))
+      #- name: Install tinytex
+      #  shell: Rscript {0}
+      #  run: |
+      #    install.packages('tinytex')
+       #   tinytex::install_tinytex(force = TRUE, add_path = TRUE)
+        #  tinytex::tlmgr_install(readLines('https://github.com/yihui/tinytex/raw/master/tools/pkgs-yihui.txt'))
         
       - name: Test if makeindex can be found
         shell: bash
