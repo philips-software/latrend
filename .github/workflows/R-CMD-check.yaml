@@ -79,14 +79,23 @@ jobs:
           key: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
           restore-keys: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-
 
+       name: Install tinytex
+        shell: Rscript {0}
+        run: |
+          tinytex::install_tinytex(force = TRUE, add_path = TRUE)
+          tinytex::tlmgr_install(readLines('https://github.com/yihui/tinytex/raw/master/tools/pkgs-yihui.txt'))
+        
+      - name: Test if makeindex can be found
+        run: |
+          makeindex
+          where makeindex
+        
       - name: Install R packages
         shell: Rscript {0}
         run: |
           remotes::install_deps(dependencies = TRUE, type = Sys.getenv("R_PKG_TYPE"), quiet = TRUE)
           remotes::install_cran("rcmdcheck")
           remotes::install_cran("devtools")
-          tinytex::install_tinytex(force = TRUE)
-          tinytex::tlmgr_install(readLines('https://github.com/yihui/tinytex/raw/master/tools/pkgs-yihui.txt'))
       
       - name: Build
         shell: Rscript {0}
