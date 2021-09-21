@@ -12,11 +12,13 @@ cld\.Rdata
 ^MixTVEM\.r$
 ^check\.r$
 ^\.git$
-^\.github
+^\.github$
 ^\.gitignore$
+^\.covrignore$
 README\.md
 ^.*bat$
 ^.*pdf$
 ^.*bak$
 ^.*\.Rproj$
 ^data-raw$
+^depends\.Rds$
