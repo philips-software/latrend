@@ -49,6 +49,18 @@ jobs:
       - name: Setup pandoc
         uses: r-lib/actions/setup-pandoc@master
 
+      - name: Setup TinyTeX
+        uses: r-lib/actions/setup-tinytex@v1
+        
+      - name: Install makeindex
+        run: tlmgr install makeindex
+      
+      - name: Test latex
+        shell: bash
+        run: |
+          pdflatex --version
+          makeindex
+
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
         run: |
@@ -77,21 +89,15 @@ jobs:
           key: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
           restore-keys: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-
       
-      - name: Install TinyTeX
-        shell: Rscript {0}
-        run: |
-          install.packages('tinytex')
-          tinytex::install_tinytex()
-          tinytex::tlmgr_install("makeindex")
+      #- name: Install TinyTeX
+       # shell: Rscript {0}
+        #run: |
+         # install.packages('tinytex')
+         # tinytex::install_tinytex()
+         # tinytex::tlmgr_install("makeindex")
       
-      - name: Append PATH
-        run: echo "C:\Users\runneradmin\AppData\Roaming\TinyTeX\bin\win32" >> $GITHUB_PATH
-      
-      - name: Test latex
-        shell: bash
-        run: |
-          pdflatex --version
-          makeindex
+      #- name: Append PATH
+       # run: echo "C:\Users\runneradmin\AppData\Roaming\TinyTeX\bin\win32" >> $GITHUB_PATH
 
       - name: Install R packages
         shell: Rscript {0}
