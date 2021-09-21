@@ -84,14 +84,11 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE, type = Sys.getenv("R_PKG_TYPE"), quiet = TRUE)
           remotes::install_cran("rcmdcheck")
+          tinytex::tlmgr_install(readLines('https://github.com/yihui/tinytex/raw/master/tools/pkgs-yihui.txt'))
       
-      - name: Manual
-        shell: bash
-        run: R CMD Rd2pdf . --output=manual.pdf --force --no-preview
-        
       - name: Check
         shell: Rscript {0}
-        run: print(rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-tests"), error_on = "warning", check_dir = "check"))
+        run: rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-tests"), error_on = "warning", check_dir = "check")
 
       - name: Debug
         if: always()
