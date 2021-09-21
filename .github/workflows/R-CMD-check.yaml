@@ -92,7 +92,9 @@ jobs:
 
       - name: Check
         shell: Rscript {0}
-        run: rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-tests"), error_on = "warning", check_dir = "check")
+        run: |
+          tinytex::tlmgr_path()
+          rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-tests"), error_on = "warning", check_dir = "check")
 
       - name: Show testthat output
         shell: bash
