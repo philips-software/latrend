@@ -79,7 +79,7 @@ jobs:
           key: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
           restore-keys: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-
 
-       name: Install tinytex
+      - name: Install tinytex
         shell: Rscript {0}
         run: |
           tinytex::install_tinytex(force = TRUE, add_path = TRUE)
