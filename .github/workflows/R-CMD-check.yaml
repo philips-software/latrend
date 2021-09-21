@@ -87,9 +87,10 @@ jobs:
           tinytex::tlmgr_install(readLines('https://github.com/yihui/tinytex/raw/master/tools/pkgs-yihui.txt'))
         
       - name: Test if makeindex can be found
+        shell: bash
         run: |
-          makeindex
           where makeindex
+          makeindex
         
       - name: Install R packages
         shell: Rscript {0}
