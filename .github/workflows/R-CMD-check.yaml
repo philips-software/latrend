@@ -19,7 +19,7 @@ jobs:
         config:
           #- {os: macOS-latest,   r: 'release', pkg-type: 'binary'}
           - {os: windows-latest, r: 'release', pkg-type: 'binary'}
-          #- {os: windows-latest, r: '3.6', pkg-type: 'binary'}
+          - {os: windows-latest, r: '3.6', pkg-type: 'binary'}
           #- {os: ubuntu-latest,   r: 'devel', pkg-type: 'source'}
           #- {os: ubuntu-latest,   r: 'release', pkg-type: 'source'}
           #- {os: ubuntu-latest,   r: 'oldrel-1', pkg-type: 'source'}
@@ -47,9 +47,6 @@ jobs:
 
       - name: Setup pandoc
         uses: r-lib/actions/setup-pandoc@master
-
-      - name: Setup TinyTeX
-        uses: r-lib/actions/setup-tinytex@master
 
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
@@ -79,45 +76,23 @@ jobs:
           key: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
           restore-keys: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-
 
-      - name: Install tinytex
-        shell: Rscript {0}
-        run: |
-          install.packages('tinytex')
-          tinytex::tlmgr_install('makeindex')
-       #   tinytex::install_tinytex(force = TRUE, add_path = TRUE)
-        #  tinytex::tlmgr_install(readLines('https://github.com/yihui/tinytex/raw/master/tools/pkgs-yihui.txt'))
-        
-      - name: Test if makeindex can be found
-        shell: bash
-        run: |
-          where makeindex
-          makeindex
-        
       - name: Install R packages
         shell: Rscript {0}
         run: |
           remotes::install_deps(dependencies = TRUE, type = Sys.getenv("R_PKG_TYPE"), quiet = TRUE)
           remotes::install_cran("rcmdcheck")
           remotes::install_cran("devtools")
+          remotes::install_cran("tinytex")
       
-      - name: Build
+      - name: Install TinyTeX
         shell: Rscript {0}
-        run: devtools::install()
-        
-      - name: Manual
-        shell: bash
         run: |
-          pwd
-          ls
-          R CMD Rd2pdf . --output=man/figures/manual.pdf --force --no-preview
-        
+          tinytex::install_tinytex()
+          tinytex::tlmgr_install("makeindex")  
+
       - name: Check
         shell: Rscript {0}
         run: rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-tests"), error_on = "warning", check_dir = "check")
-
-      - name: Debug
-        if: always()
-        run: type "D:/a/latrend/latrend/check/latrend.Rcheck/00check.log"
 
       - name: Show testthat output
         shell: bash
