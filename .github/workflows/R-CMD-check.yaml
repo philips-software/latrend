@@ -79,10 +79,11 @@ jobs:
           key: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
           restore-keys: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-
 
-      #- name: Install tinytex
-      #  shell: Rscript {0}
-      #  run: |
-      #    install.packages('tinytex')
+      - name: Install tinytex
+        shell: Rscript {0}
+        run: |
+          install.packages('tinytex')
+          tinytex::tlmgr_install('makeindex')
        #   tinytex::install_tinytex(force = TRUE, add_path = TRUE)
         #  tinytex::tlmgr_install(readLines('https://github.com/yihui/tinytex/raw/master/tools/pkgs-yihui.txt'))
         
