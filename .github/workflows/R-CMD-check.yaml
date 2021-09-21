@@ -85,6 +85,7 @@ jobs:
           remotes::install_deps(dependencies = TRUE, type = Sys.getenv("R_PKG_TYPE"), quiet = TRUE)
           remotes::install_cran("rcmdcheck")
           remotes::install_cran("devtools")
+          tinytex::install_tinytex(force = TRUE)
           tinytex::tlmgr_install(readLines('https://github.com/yihui/tinytex/raw/master/tools/pkgs-yihui.txt'))
       
       - name: Build
