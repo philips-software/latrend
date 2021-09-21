@@ -85,7 +85,7 @@ jobs:
           tinytex::tlmgr_install("makeindex")
       
       - name: Append PATH
-        run: echo "~/AppData/Roaming/TinyTeX/bin/win32" >> $GITHUB_PATH
+        run: echo "C:\Users\runneradmin\AppData\Roaming\TinyTeX\bin\win32" >> $GITHUB_PATH
       
       - name: Test latex
         shell: bash
