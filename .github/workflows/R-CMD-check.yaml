@@ -26,6 +26,7 @@ jobs:
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      TINYTEX_BIN: '%APPDATA%/.TinyTeX/bin/win32'
       R_PKG_TYPE: ${{ matrix.config.pkg-type }}
       _R_CHECK_FORCE_SUGGESTS_: false
       _R_CHECK_CRAN_INCOMING_REMOTE_: false
@@ -75,6 +76,22 @@ jobs:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
           restore-keys: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-
+      
+      - name: Install TinyTeX
+        shell: Rscript {0}
+        run: |
+          install.packages('tinytex')
+          tinytex::install_tinytex()
+          tinytex::tlmgr_install("makeindex")
+      
+      - name: Tinytex path
+        run: ls %APPDATA%/.TinyTeX/bin
+      
+      - name: Test latex
+        shell: bash
+        run: |
+          pdflatex --version
+          makeindex
 
       - name: Install R packages
         shell: Rscript {0}
@@ -82,14 +99,8 @@ jobs:
           remotes::install_deps(dependencies = TRUE, type = Sys.getenv("R_PKG_TYPE"), quiet = TRUE)
           remotes::install_cran("rcmdcheck")
           remotes::install_cran("devtools")
-          remotes::install_cran("tinytex")
-      
-      - name: Install TinyTeX
-        shell: Rscript {0}
-        run: |
-          tinytex::install_tinytex()
-          tinytex::tlmgr_install("makeindex")  
-
+        # remotes::install_cran("tinytex")
+        
       - name: Check
         shell: Rscript {0}
         run: |
