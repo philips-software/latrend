@@ -17,16 +17,15 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          #- {os: macOS-latest,   r: 'release', pkg-type: 'binary'}
+          - {os: macOS-latest,   r: 'release', pkg-type: 'binary'}
           - {os: windows-latest, r: 'release', pkg-type: 'binary'}
-          #- {os: windows-latest, r: '3.6', pkg-type: 'binary'}
+          - {os: windows-latest, r: '3.6', pkg-type: 'binary'}
           #- {os: ubuntu-latest,   r: 'devel', pkg-type: 'source'}
-          #- {os: ubuntu-latest,   r: 'release', pkg-type: 'source'}
+          - {os: ubuntu-latest,   r: 'release', pkg-type: 'source'}
           #- {os: ubuntu-latest,   r: 'oldrel-1', pkg-type: 'source'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      TINYTEX_BIN: '~/AppData/Roaming/TinyTeX/bin/win32'
       R_PKG_TYPE: ${{ matrix.config.pkg-type }}
       _R_CHECK_FORCE_SUGGESTS_: false
       _R_CHECK_CRAN_INCOMING_REMOTE_: false
@@ -47,7 +46,7 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
 
       - name: Setup pandoc
-        uses: r-lib/actions/setup-pandoc@master
+        uses: r-lib/actions/setup-pandoc@v1
 
       - name: Setup TinyTeX
         uses: r-lib/actions/setup-tinytex@v1
@@ -88,30 +87,16 @@ jobs:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
           restore-keys: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-
-      
-      #- name: Install TinyTeX
-       # shell: Rscript {0}
-        #run: |
-         # install.packages('tinytex')
-         # tinytex::install_tinytex()
-         # tinytex::tlmgr_install("makeindex")
-      
-      #- name: Append PATH
-       # run: echo "C:\Users\runneradmin\AppData\Roaming\TinyTeX\bin\win32" >> $GITHUB_PATH
 
       - name: Install R packages
         shell: Rscript {0}
         run: |
           remotes::install_deps(dependencies = TRUE, type = Sys.getenv("R_PKG_TYPE"), quiet = TRUE)
           remotes::install_cran("rcmdcheck")
-          remotes::install_cran("devtools")
-        # remotes::install_cran("tinytex")
         
       - name: Check
         shell: Rscript {0}
-        run: |
-          tinytex::tlmgr_path()
-          rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-tests"), error_on = "warning", check_dir = "check")
+        run: rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-tests"), error_on = "warning", check_dir = "check")
 
       - name: Show testthat output
         shell: bash
