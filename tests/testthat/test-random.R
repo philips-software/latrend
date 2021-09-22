@@ -24,3 +24,17 @@ test_that('single group', {
   expect_equal(nClusters(model), 1)
   expect_equivalent(clusterProportions(model), 1)
 })
+
+test_that('which.weight', {
+  expect_equal(which.weight(1), 1)
+  expect_equal(which.weight(.1), 1)
+  expect_equal(which.weight(c(0, 1, 0)), 2)
+  expect_equal(which.weight(c(0, 10, 0)), 2)
+  expect_true(which.weight(c(.5, 0, .5)) != 2)
+  expect_true(which.weight(c(3, 0, 3)) != 2)
+
+  expect_error(which.weight(0))
+  expect_error(which.weight(c(1, -1)))
+  expect_error(which.weight(c(1, NA)))
+  expect_error(which.weight(c(1, Inf)))
+})

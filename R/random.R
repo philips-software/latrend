@@ -10,8 +10,10 @@ localRNG = function(seed = NULL, expr) {
       .Random.seed = prevSeed
     }
     else {
+      # nocov start
       set.seed(seed)
       force(expr)
+      # nocov end
     }
   }
 }
