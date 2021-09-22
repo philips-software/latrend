@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Den Teuling"
+  given-names: "Niek"
+  orcid: "https://orcid.org/0000-0003-1026-5080"
+title: "latrend: A Framework for Clustering Longitudinal Data"
+version: 1.2.0
+date-released: 2021-07-26
+url: "https://github.com/philips-software/latrend"
