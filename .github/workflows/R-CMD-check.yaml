@@ -52,7 +52,9 @@ jobs:
         uses: r-lib/actions/setup-tinytex@v1
         
       - name: Install makeindex
-        run: tlmgr install makeindex
+        run: |
+          tlmgr update --self
+          tlmgr install makeindex
       
       - name: Test latex
         shell: bash
