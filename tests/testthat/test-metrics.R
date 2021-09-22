@@ -77,3 +77,10 @@ test_that('metric definition', {
 test_that('missing metric definition', {
   expect_error(getInternalMetricDefinition('.MISSING'))
 })
+
+test_that('define metric', {
+  defineInternalMetric('.NEW', force)
+  expect_warning(defineInternalMetric('.NEW', force))
+
+  expect_equal(getInternalMetricDefinition('.NEW'), force)
+})

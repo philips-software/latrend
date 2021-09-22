@@ -82,7 +82,7 @@ defineExternalMetric = function(name, fun, warnIfExists = TRUE) {
 }
 
 defineMetric = function(name, fun, warnIfExists, envir) {
-  if (warnIfExists && exists(name, envir = intMetricsEnv, inherits = FALSE)) {
+  if (warnIfExists && exists(name, envir = envir, inherits = FALSE)) {
     warning(sprintf('ovewriting existing metric definition for %s', name))
   }
   assign(name, value = fun, envir = envir)

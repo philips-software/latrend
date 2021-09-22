@@ -61,3 +61,12 @@ test_that('metric definition', {
 test_that('missing metric definition', {
   expect_error(getExternalMetricDefinition('.MISSING'))
 })
+
+test_that('define metric', {
+  fun = function(m1, m2) { }
+
+  defineExternalMetric('.NEW', fun)
+  expect_warning(defineExternalMetric('.NEW', fun))
+
+  expect_equal(getExternalMetricDefinition('.NEW'), fun)
+})
