@@ -111,7 +111,7 @@ getMetricDef = function(name, envir) {
   if (exists(name, envir = envir, inherits = FALSE)) {
     get(name, envir = envir)
   } else {
-    NULL
+    stop(sprintf('No metric definition for "%s"', name))
   }
 }
 

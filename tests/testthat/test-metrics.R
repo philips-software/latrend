@@ -64,3 +64,16 @@ test_that('WMAE', {
 
   expect_gte(wmaeFuzzy, maeFuzzy)
 })
+
+test_that('missing metric', {
+  expect_warning(met <- metric(kml2, '.MISSING'))
+  expect_true(is.na(met))
+})
+
+test_that('metric definition', {
+  expect_true(is.function(getInternalMetricDefinition('MAE')))
+})
+
+test_that('missing metric definition', {
+  expect_error(getInternalMetricDefinition('.MISSING'))
+})

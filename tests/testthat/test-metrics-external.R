@@ -48,3 +48,16 @@ test_that('default names', {
   # if this test fails then the documentation needs to be updated
   expect_error(externalMetric(kml1, kml2))
 })
+
+test_that('missing metric', {
+  expect_warning(met <- externalMetric(kml1, kml2, '.MISSING'))
+  expect_true(is.na(met))
+})
+
+test_that('metric definition', {
+  expect_true(is.function(getExternalMetricDefinition('adjustedRand')))
+})
+
+test_that('missing metric definition', {
+  expect_error(getExternalMetricDefinition('.MISSING'))
+})
