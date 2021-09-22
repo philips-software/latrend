@@ -2,6 +2,16 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
+    paths:
+      - 'R/**'
+      - 'vignettes/**'
+      - 'tests/**'
+      - 'data/**'
+      - 'inst/**'
+      - 'man/**'
+      - 'DESCRIPTION'
+      - 'NAMESPACE'
+
   pull_request:
     branches: [main, master]
 
@@ -50,12 +60,12 @@ jobs:
 
       - name: Setup TinyTeX
         uses: r-lib/actions/setup-tinytex@v1
-        
+
       - name: Install makeindex
         run: |
           tlmgr update --self
           tlmgr install makeindex
-      
+
       - name: Test latex
         shell: bash
         run: |
@@ -75,7 +85,7 @@ jobs:
           brew install --cask xquartz
           sudo /usr/X11/bin/xvfb :1 -screen 1 1024x768x24 -ac &
         # brew install libgit2
-        
+
       - name: Gather R package dependencies
         shell: Rscript {0}
         run: |
@@ -95,7 +105,7 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE, type = Sys.getenv("R_PKG_TYPE"), quiet = TRUE)
           remotes::install_cran("rcmdcheck")
-        
+
       - name: Check
         shell: Rscript {0}
         run: rcmdcheck::rcmdcheck(args = c("--as-cran"), error_on = "warning", check_dir = "check")
