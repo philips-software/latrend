@@ -145,9 +145,6 @@ expect_valid_lcModel = function(object) {
   ctPred = clusterTrajectories(object)
   expect_is(ctPred, 'data.frame', label='clusterTrajectories')
 
-  # ctListPred = clusterTrajectories(object, at = list(Assessment = time(object)))
-  # expect_equal(nrow(ctListPred), length(time(object)) * 2, label='clusterTrajectories with at=list')
-
   fittedTrajectories(object) %>%
     expect_is(c('NULL', 'data.frame'), label='fittedTrajectories')
   trajectories(object) %>%

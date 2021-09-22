@@ -105,8 +105,7 @@ setValidity('lcModel', function(object) {
 #' @description Extracts a data frame of all cluster trajectories.
 #' @inheritParams predict.lcModel
 #' @inheritParams predictForCluster
-#' @param at An optional vector, list or data frame of covariates at which to compute the cluster trajectory predictions.
-#' If a vector is specified, this is assumed to be the time covariate. Otherwise, a named list or data frame must be provided.
+#' @param at An optional vector of the times at which to compute the cluster trajectory predictions.
 #' @return A data.frame of the estimated values at the given times. The first column should be named "Cluster". The second column should be time, with the name matching the `timeVariable(object)`. The third column should be the expected value of the observations, named after the `responseVariable(object)`.
 #' @examples
 #' model <- latrend(method = lcMethodLcmmGMM(fixed = Y ~ Time, mixture = fixed),
@@ -116,25 +115,11 @@ setValidity('lcModel', function(object) {
 #' clusterTrajectories(model, at = c(0, .5, 1))
 #' @family model-specific methods
 setMethod('clusterTrajectories', signature('lcModel'), function(object, at = time(object), what = 'mu', ...) {
-  if (is.numeric(at)) {
-    newdata = data.table(
-      Cluster = rep(clusterNames(object, factor = TRUE), each = length(at)),
-      Time = at
-    ) %>%
-      setnames('Time', timeVariable(object))
-  } else if (is.list(at)) {
-    at = as.data.table(at)
-    idx = seq_len(nrow(at)) %>% rep(nClusters(object))
-    newdata = data.table(
-      Cluster = rep(clusterNames(object, factor = TRUE), each = nrow(at)), at[idx,]
-    )
-  } else {
-    stop(
-      sprintf(
-        'The "at" argument of call to clusterTrajectories() is of unsupported type %s',
-        class(at)
-    ))
-  }
+  newdata = data.table(
+    Cluster = rep(clusterNames(object, factor = TRUE), each = length(at)),
+    Time = at
+  ) %>%
+    setnames('Time', timeVariable(object))
 
   assert_that(
     has_name(newdata, timeVariable(object)),

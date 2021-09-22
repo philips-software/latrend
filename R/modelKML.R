@@ -6,7 +6,7 @@ setClass('lcModelKML', contains = 'lcApproxModel')
 #' @rdname interface-kml
 #' @inheritParams clusterTrajectories
 setMethod('clusterTrajectories', signature('lcModelKML'), function(object, at = time(object), ...) {
-  if (is.null(at)) {
+  if (length(at) == 0) {
     trajMat = computeKMLCenters(object)
 
     meltRepeatedMeasures(

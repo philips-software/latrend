@@ -11,7 +11,7 @@ setClass('lcModelMixtoolsRM', contains = 'lcApproxModel')
 setMethod('clusterTrajectories', signature('lcModelMixtoolsRM'), function(
     object, at = time(object), what = 'mu', se = TRUE, ci = c(.025, .975), ...)
   {
-  if (is.null(at)) {
+  if (length(at) == 0) {
     assert_that(
       what %in% c('mu', 'sigma'),
       is.logical(se),

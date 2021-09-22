@@ -60,12 +60,6 @@ test_that('clusterTrajectories', {
   expect_equal(nrow(pred), length(times) * 2)
 })
 
-test_that('clusterTrajectories with list data', {
-  times = time(model)
-  pred = clusterTrajectories(model, at = list(Assessment = times))
-  expect_equal(nrow(pred), length(times) * 2)
-})
-
 test_that('clusterTrajectories with invalid data format', {
   expect_error(clusterTrajectories(model, at = 'a'))
 })

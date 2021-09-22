@@ -174,7 +174,7 @@ lcModelPartition = function(data,
 
 #' @rdname interface-custom
 setMethod('clusterTrajectories', signature('lcModelPartition'), function(object, at = time(object), ...) {
-  if (is.null(at)) {
+  if (length(at) == 0) {
     clusTrajs = as.data.table(object@clusterTrajectories)
     clusTrajs[, Cluster := factor(Cluster,
                                   levels = seq_len(nClusters(object)),

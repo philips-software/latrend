@@ -15,12 +15,12 @@ setClass(
 #' @inheritParams clusterTrajectories
 setMethod('clusterTrajectories', signature('lcModelStratify'),
   function(object, at = time(object), ...) {
-  if (is.null(at)) {
+  if (length(at) == 0) {
     clusTrajs = copy(object@clusterTrajectories)
     clusTrajs[, Cluster := factor(Cluster,
                                   levels = seq_len(nClusters(object)),
                                   labels = clusterNames(object))]
-    return(clusTrajs[])
+    return (clusTrajs[])
   } else {
     callNextMethod()
   }

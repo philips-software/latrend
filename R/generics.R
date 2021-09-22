@@ -49,7 +49,9 @@ setGeneric('clusterProportions', function(object, ...) {
 # clusterTrajectories ####
 #' @export
 #' @name latrend-generics
-setGeneric('clusterTrajectories', function(object, ...) {
+setGeneric('clusterTrajectories', function(object, at = time(object), ...) {
+  assert_that(is.numeric(at))
+
   dfclus <- standardGeneric('clusterTrajectories')
 
   valid = validate_that(

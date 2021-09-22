@@ -7,7 +7,7 @@ setClass('lcModelMclustLLPA', contains = 'lcApproxModel')
 #' @inheritParams clusterTrajectories
 #' @inheritParams predictForCluster
 setMethod('clusterTrajectories', signature('lcModelMclustLLPA'), function(object, at = time(object), ...) {
-  if (is.null(at)) {
+  if (length(at) == 0) {
     trajMat = object@model$parameters$mean
     assert_that(
       is.matrix(trajMat),

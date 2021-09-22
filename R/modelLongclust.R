@@ -7,7 +7,7 @@ setClass('lcModelLongclust', contains='lcApproxModel')
 #' @inheritParams clusterTrajectories
 #' @inheritParams predictForCluster
 setMethod('clusterTrajectories', signature('lcModelLongclust'), function(object, at = time(object), ...) {
-  if (is.null(at)) {
+  if (length(at) == 0) {
     trajMat = object@model$mubest
     assert_that(
       is.matrix(trajMat),
