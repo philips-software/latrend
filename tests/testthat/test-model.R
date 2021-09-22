@@ -87,6 +87,9 @@ test_that('make.trajectoryAssignments', {
 
   make.trajectoryAssignments(model, factor(refFac, levels=rev(levels(refFac)))) %>%
     expect_equal(refFac)
+
+  expect_error(make.trajectoryAssignments(model, NULL))
+  expect_error(make.trajectoryAssignments(model, Sys.time()))
 })
 
 test_that('make.clusterIndices', {
@@ -107,6 +110,33 @@ test_that('make.clusterIndices', {
 
   make.clusterIndices(model, factor(refFac, levels=rev(levels(refFac)))) %>%
     expect_equal(refIdx)
+
+  expect_error(make.clusterIndices(model, NULL))
+  expect_error(make.clusterIndices(model, Sys.time()))
+})
+
+test_that('make.clusterNames', {
+  opts = getOption('latrend.clusterNames', LETTERS)
+  expect_gt(length(opts), 0)
+
+  expect_length(make.clusterNames(1), 1)
+  expect_length(make.clusterNames(4), 4)
+  expect_is(make.clusterNames(4), 'character')
+  expect_length(make.clusterNames(4), 4)
+
+  options(latrend.clusterNames = function(n) LETTERS[1:n])
+  expect_length(make.clusterNames(4), 4)
+
+  options(latrend.clusterNames = character())
+  expect_warning(make.clusterNames(2))
+
+  options(latrend.clusterNames = opts)
+  expect_warning(make.clusterNames(1e2))
+
+  expect_error(make.clusterNames(0))
+  expect_error(make.clusterNames(-1))
+  expect_error(make.clusterNames(1.1))
+  expect_error(make.clusterNames(NA))
 })
 
 test_that('metrics', {

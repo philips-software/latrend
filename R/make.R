@@ -11,11 +11,12 @@ make.trajectoryAssignments = function(object, clusters) {
   clusNames = clusterNames(object)
   nClusters = nClusters(object)
 
-  assert_that(noNA(clusters))
+  assert_that(
+    !is.null(clusters),
+    noNA(clusters)
+  )
 
-  if (is.null(clusters)) {
-    NULL
-  } else if (is.factor(clusters)) {
+  if (is.factor(clusters)) {
     # factor
     assert_that(nlevels(clusters) == nClusters)
     if (all(levels(clusters) == clusNames)) {
@@ -62,11 +63,10 @@ make.clusterIndices = function(object, clusters) {
   clusNames = clusterNames(object)
   nClusters = nClusters(object)
 
+  assert_that(!is.null(clusters))
   assert_that(noNA(clusters), msg = 'each trajectory should be assigned to a cluster')
 
-  if (is.null(clusters)) {
-    NULL
-  } else if (is.integer(clusters)) {
+  if (is.integer(clusters)) {
     # integer
     assert_that(min(clusters) >= 1,
       max(clusters) <= nClusters)
