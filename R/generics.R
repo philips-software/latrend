@@ -22,7 +22,7 @@ NULL
 setGeneric('clusterProportions', function(object, ...) {
   props <- standardGeneric('clusterProportions')
 
-  assert_that(
+  valid = validate_that(
     is.numeric(props),
     length(props) == nClusters(object),
     noNA(props),
@@ -30,6 +30,16 @@ setGeneric('clusterProportions', function(object, ...) {
     min(props) >= 0,
     max(props) <= 1
   )
+
+  if (!isTRUE(valid)) {
+    stop(
+      sprintf(
+        'Invalid output returned by clusterProportions(%s, ...): %s',
+        class(object)[1],
+        valid
+      )
+    )
+  }
 
   names(props) = clusterNames(object)
   props
@@ -41,14 +51,25 @@ setGeneric('clusterProportions', function(object, ...) {
 #' @name latrend-generics
 setGeneric('clusterTrajectories', function(object, ...) {
   dfclus <- standardGeneric('clusterTrajectories')
-  assert_that(
+
+  valid = validate_that(
     is.data.frame(dfclus),
     names(dfclus)[1] == 'Cluster',
     names(dfclus)[2] == timeVariable(object),
-    names(dfclus)[3] == responseVariable(object),
-    msg = paste0('Invalid output format for data.frame from clusterTrajectories() implementation of lcModel ', class(object)))
+    names(dfclus)[3] == responseVariable(object)
+  )
 
-  dfclus
+  if (!isTRUE(valid)) {
+    stop(
+      sprintf(
+        '%1$s implemention error: output of clusterTrajectories(%1$s, ...) is not valid: %2$s',
+        class(object)[1],
+        valid
+      )
+    )
+  }
+
+  return (dfclus)
 })
 
 
@@ -57,16 +78,27 @@ setGeneric('clusterTrajectories', function(object, ...) {
 #' @name latrend-generics
 setGeneric('compose', def = function(method, envir, ...) {
   newmethod <- standardGeneric('compose')
-  assert_that(is.lcMethod(newmethod),
-    msg = paste0('invalid method output from compose(', class(newmethod), ')')
+
+  assert_that(
+    is.lcMethod(newmethod),
+    msg = sprintf(
+      '%1$s implemention error: output of compose(%1$s, ...) must be of type lcMethod, not %2$s',
+      class(method)[1],
+      class(newmethod)[2]
+    )
   )
 
   assert_that(
     is.character(idVariable(newmethod)),
     is.character(timeVariable(newmethod)),
-    is.character(responseVariable(newmethod))
+    is.character(responseVariable(newmethod)),
+    msg = sprintf(
+      '%1$s implemention error: output of compose(%1$s, ...) must contain id, time, and response variables',
+      class(method)[1]
+    )
   )
-  return(newmethod)
+
+  return (newmethod)
 })
 
 # converged ####
@@ -74,12 +106,17 @@ setGeneric('compose', def = function(method, envir, ...) {
 #' @name latrend-generics
 setGeneric('converged', function(object, ...) {
   state <- standardGeneric('converged')
+
   assert_that(
     is.logical(state) || is.numeric(state),
     length(state) == 1,
-    msg = 'output of converged() must be either logical or numeric, and of length 1'
+    msg = sprintf(
+      '%1$s implemention error: output of converged(%1$s, ...) must be either logical or numeric, and of length 1',
+      class(object)[1]
+    )
   )
-  state
+
+  return (state)
 })
 
 # externalMetric ####
@@ -91,6 +128,7 @@ setGeneric('externalMetric', function(
   object2,
   name = getOption('latrend.externalMetric'),
   ...)
+
   standardGeneric('externalMetric')
 )
 
@@ -101,11 +139,13 @@ setGeneric('externalMetric', function(
 #' @param unit Time unit.
 setGeneric('estimationTime', function(object, unit = 'secs', ...) {
   duration <- standardGeneric('estimationTime')
+
   assert_that(
     is.scalar(duration),
     is.finite(duration)
   )
-  duration
+
+  return (duration)
 })
 
 
@@ -118,8 +158,13 @@ setGeneric('fit', function(method, data, envir, verbose, ...) {
   model <- standardGeneric('fit')
   estimationTime = .toc(start)
 
-  assert_that(is.lcModel(model),
-    msg = 'fit(lcMethod, ...) returned an unexpected object. Should be of type lcModel.')
+  assert_that(
+    is.lcModel(model),
+    msg = sprintf('%1$s implementation error: fit(%1$s, ...) should output an lcModel object, not %2$s',
+      class(method)[1],
+      class(model)[1]
+    )
+  )
 
   model@method = method
   model@id = idVariable(method)
@@ -129,7 +174,7 @@ setGeneric('fit', function(method, data, envir, verbose, ...) {
   model@date = dateStart
   model@estimationTime = as.numeric(estimationTime, 'secs')
 
-  return(model)
+  return (model)
 })
 
 
@@ -149,11 +194,13 @@ setGeneric('fittedTrajectories', function(
 #' @name latrend-generics
 setGeneric('getLabel', function(object, ...) {
   label <- standardGeneric('getLabel')
+
   assert_that(
     is.character(label),
     length(label) == 1
   )
-  label
+
+  return (label)
 })
 
 
@@ -162,12 +209,14 @@ setGeneric('getLabel', function(object, ...) {
 #' @name latrend-generics
 setGeneric('getName', function(object, ...) {
   name <- standardGeneric('getName')
+
   assert_that(
     is.character(name),
     length(name) == 1,
     nchar(name) > 0
   )
-  name
+
+  return (name)
 })
 
 
@@ -176,12 +225,14 @@ setGeneric('getName', function(object, ...) {
 #' @name latrend-generics
 setGeneric('getShortName', function(object, ...) {
   name <- standardGeneric('getShortName')
+
   assert_that(
     is.character(name),
     length(name) == 1,
     nchar(name) > 0
   )
-  name
+
+  return (name)
 })
 
 
@@ -190,12 +241,14 @@ setGeneric('getShortName', function(object, ...) {
 #' @name latrend-generics
 setGeneric('idVariable', function(object, ...) {
   id <- standardGeneric('idVariable')
+
   assert_that(
     is.character(id),
     length(id) == 1,
     nchar(id) > 0
   )
-  id
+
+  return (id)
 })
 
 
@@ -235,11 +288,17 @@ setGeneric('plotTrajectories', function(object, ...) standardGeneric('plotTrajec
 #' @name latrend-generics
 setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
   model <- standardGeneric('postFit')
+
   assert_that(
     inherits(model, 'lcModel'),
-    msg = 'postFit(lcMethod, ...) should return an object of type lcModel.')
+    msg = sprintf(
+      '%1$s implementation error: postFit should return an object of type lcModel, not %2$s',
+      class(method)[1],
+      class(model)[1]
+    )
+  )
 
-  return(model)
+  return (model)
 })
 
 
@@ -257,9 +316,15 @@ setGeneric('postprob', function(object, ...) {
 
   colnames(pp) = clusterNames(object)
 
-  msg = validate_that(is_valid_postprob(pp, object))
-  if(!isTRUE(msg)) {
-    warning('Output returned by postprob() of ', class(object), ' was not valid: ', msg)
+  valid = validate_that(is_valid_postprob(pp, object))
+  if(!isTRUE(valid)) {
+    warning(
+      sprintf(
+        '%1$s implementation error: Output returned by postprob(%1$s, ...) was not valid: %2$s',
+        class(object)[1],
+        valid
+      )
+    )
   }
 
   pp
@@ -307,17 +372,40 @@ setGeneric('predictForCluster', function(object, newdata = NULL, cluster, ...) {
 
   out <- standardGeneric('predictForCluster')
 
-  assert_that(is.numeric(out) || is.data.frame(out))
+  assert_that(
+    is.numeric(out) || is.data.frame(out),
+    msg = sprintf(
+      '%1$s implementation error: predictForCluster(%1$s, ...) implementation returned output of type %$2s. Only numeric and data.frame are supported outputs.',
+      class(object)[1],
+      class(out)[1]
+    )
+  )
 
   if (!is.null(newdata)) {
     if (is.numeric(out)) {
-      assert_that(length(out) == nrow(newdata))
+      assert_that(
+        length(out) == nrow(newdata),
+        msg = sprintf(
+          '%1$s implementation error: predictForCluster(%1$s, ...) returned numeric vector with %2$d predictions, but should have returned %3$d predictions.',
+          class(object)[1],
+          length(out),
+          nrow(newdata)
+        )
+      )
     } else if (is.data.frame(out)) {
-      assert_that(nrow(out) == nrow(newdata))
+      assert_that(
+        nrow(out) == nrow(newdata),
+        msg = sprintf(
+          '%1$s implementation error: predictForCluster(%1$s, ...) returned data.frame with %2$d predictions (rows), but should have returned %3$d predictions.',
+          class(object)[1],
+          nrow(out),
+          nrow(newdata)
+        )
+      )
     }
   }
 
-  out
+  return (out)
 })
 
 
@@ -329,13 +417,23 @@ setGeneric('predictPostprob', function(object, newdata = NULL, ...) {
 
   pp <- standardGeneric('predictPostprob')
 
-  assert_that(
+  valid = validate_that(
     is.null(newdata) || nrow(pp) == nrow(newdata),
     is_valid_postprob(pp, object)
   )
 
+  if (!isTRUE(valid)) {
+    stop(
+      sprintf(
+        '%1$s implementation error: predictForCluster(%1$s, ...) has invalid output: %2$s',
+        class(object)[1],
+        valid
+      )
+    )
+  }
+
   colnames(pp) = clusterNames(object)
-  pp
+  return (pp)
 })
 
 
@@ -344,8 +442,15 @@ setGeneric('predictPostprob', function(object, newdata = NULL, ...) {
 #' @name latrend-generics
 setGeneric('prepareData', function(method, data, verbose, ...) {
   envir <- standardGeneric('prepareData')
-  assert_that(is.environment(envir), msg = 'prepareData(method, ...) should return an environment')
-  return(envir)
+  assert_that(
+    is.environment(envir),
+    msg = sprintf(
+      'prepareData(%s, ...) should return an environment',
+      class(method)[1]
+    )
+  )
+
+  return (envir)
 })
 
 
@@ -354,9 +459,15 @@ setGeneric('prepareData', function(method, data, verbose, ...) {
 #' @name latrend-generics
 setGeneric('preFit', function(method, data, envir, verbose, ...) {
   modelEnv <- standardGeneric('preFit')
-  assert_that(is.environment(modelEnv), msg = 'preFit(method, ...) should return an environment')
+  assert_that(
+    is.environment(modelEnv),
+    msg = sprintf(
+      'preFit(%s, ...) should return an environment',
+      class(method)[1]
+    )
+  )
 
-  return(modelEnv)
+  return (modelEnv)
 })
 
 
@@ -379,7 +490,7 @@ setGeneric('responseVariable', function(object, ...) {
     nchar(response) > 0
   )
 
-  response
+  return (response)
 })
 
 
@@ -406,7 +517,7 @@ setGeneric('timeVariable', function(object, ...) {
     nchar(time) > 0
   )
 
-  time
+  return (time)
 })
 
 
@@ -433,7 +544,7 @@ setGeneric('trajectories', function(object, ...) {
     ncol(data) > 2
   )
 
-  data
+  return (data)
 })
 
 
@@ -447,7 +558,7 @@ setGeneric('trajectoryAssignments', function(object, ...) {
     !is.lcModel(object) || all(levels(clusters) == clusterNames(object))
   )
 
-  clusters
+  return (clusters)
 })
 
 
@@ -458,6 +569,6 @@ setGeneric('validate', function(method, data, envir, ...) {
   validationResult <- standardGeneric('validate')
 
   if (!isTRUE(validationResult)) {
-    stop('method validation failed: ', validationResult)
+    stop(sprintf('%s validation failed: %s', class(method)[1], validationResult))
   }
 })
