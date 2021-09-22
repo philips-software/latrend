@@ -66,7 +66,7 @@ getExternalMetricNames = function() {
 defineInternalMetric = function(name, fun, warnIfExists = TRUE) {
   assert_that(is.function(fun))
   assert_that(!is.null(formalArgs(fun)), msg = 'function must accept one argument (a lcModel)')
-  defineMetric(name, fun, warnIfExists, intMetricsEnv)
+  .defineMetric(name, fun = fun, warnIfExists = warnIfExists, envir = intMetricsEnv)
 }
 
 #' @export
@@ -78,10 +78,10 @@ defineInternalMetric = function(name, fun, warnIfExists = TRUE) {
 defineExternalMetric = function(name, fun, warnIfExists = TRUE) {
   assert_that(is.function(fun))
   assert_that(length(formalArgs(fun)) == 2, msg = 'function must accept two arguments (two lcModels)')
-  defineMetric(name, fun, warnIfExists, extMetricsEnv)
+  .defineMetric(name, fun = fun, warnIfExists = warnIfExists, envir = extMetricsEnv)
 }
 
-defineMetric = function(name, fun, warnIfExists, envir) {
+.defineMetric = function(name, fun, warnIfExists, envir) {
   if (warnIfExists && exists(name, envir = envir, inherits = FALSE)) {
     warning(sprintf('ovewriting existing metric definition for %s', name))
   }
@@ -95,7 +95,7 @@ defineMetric = function(name, fun, warnIfExists, envir) {
 #' @return The metric function, or NULL if not defined.
 #' @family metric functions
 getInternalMetricDefinition = function(name) {
-  getMetricDef(name, intMetricsEnv)
+  .getMetricDef(name, envir = intMetricsEnv)
 }
 
 #' @export
@@ -104,10 +104,10 @@ getInternalMetricDefinition = function(name) {
 #' @return The metric function, or NULL if not defined.
 #' @family metric functions
 getExternalMetricDefinition = function(name) {
-  getMetricDef(name, extMetricsEnv)
+  .getMetricDef(name, envir = extMetricsEnv)
 }
 
-getMetricDef = function(name, envir) {
+.getMetricDef = function(name, envir) {
   if (exists(name, envir = envir, inherits = FALSE)) {
     get(name, envir = envir)
   } else {
