@@ -3,6 +3,7 @@
 ^\.Rproj\.user$
 ^Meta$
 ^LICENSE$
+^CITATION\.cff$
 ^doc$
 ^vignettes\.*_cache$
 ^vignettes\.*R$
