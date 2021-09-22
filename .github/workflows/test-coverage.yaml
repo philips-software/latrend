@@ -3,6 +3,12 @@
 on:
   push:
     branches: [main, master]
+    paths:
+      - '**/test-coverage.yaml'
+      - 'R/**'
+      - 'tests/**'
+      - 'DESCRIPTION'
+      - 'NAMESPACE'
   pull_request:
     branches: [main, master]
 
@@ -18,13 +24,11 @@ jobs:
       - uses: actions/checkout@v2
 
       - uses: r-lib/actions/setup-r@v1
-        with:
-          use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
           extra-packages: covr
 
       - name: Test coverage
-        run: covr::codecov()
         shell: Rscript {0}
+        run: covr::codecov()
