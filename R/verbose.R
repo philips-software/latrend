@@ -11,7 +11,7 @@ as.Verbose = function(x) {
     return(x)
   }
 
-  assert_that(is.scalar(x))
+  assert_that(length(x) <= 1)
 
   if (is.null(x)) {
     Verbose()
