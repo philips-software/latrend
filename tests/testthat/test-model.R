@@ -54,6 +54,22 @@ test_that('default fitted', {
   # removeMethod('predictForCluster', 'lcModelTest')
 })
 
+test_that('clusterTrajectories', {
+  times = time(model)
+  pred = clusterTrajectories(model)
+  expect_equal(nrow(pred), length(times) * 2)
+})
+
+test_that('clusterTrajectories with list data', {
+  times = time(model)
+  pred = clusterTrajectories(model, at = list(Assessment = times))
+  expect_equal(nrow(pred), length(times) * 2)
+})
+
+test_that('clusterTrajectories with invalid data format', {
+  expect_error(clusterTrajectories(model, at = 'a'))
+})
+
 test_that('trajectoryAssignments', {
   trajClus = trajectoryAssignments(model)
   expect_is(trajClus, 'factor')
@@ -167,4 +183,9 @@ test_that('estimationTime', {
 
 test_that('estimationTime in days', {
   expect_equivalent(estimationTime(model, unit = 'days'), estimationTime(model) / 86400)
+})
+
+test_that('confusionMatrix', {
+  expect_true(is_valid_postprob(confusionMatrix(model)))
+  expect_true(is_valid_postprob(confusionMatrix(model, strategy = NULL)))
 })

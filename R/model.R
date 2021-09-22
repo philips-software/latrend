@@ -119,13 +119,15 @@ setMethod('clusterTrajectories', signature('lcModel'), function(object, at = tim
   if (is.numeric(at)) {
     newdata = data.table(
       Cluster = rep(clusterNames(object, factor = TRUE), each = length(at)),
-      Time = at) %>%
+      Time = at
+    ) %>%
       setnames('Time', timeVariable(object))
   } else if (is.list(at)) {
     at = as.data.table(at)
     idx = seq_len(nrow(at)) %>% rep(nClusters(object))
     newdata = data.table(
-      Cluster = rep(clusterNames(object, factor = TRUE), each = nrow(at)), at[idx,])
+      Cluster = rep(clusterNames(object, factor = TRUE), each = nrow(at)), at[idx,]
+    )
   } else {
     stop(
       sprintf(
@@ -133,6 +135,11 @@ setMethod('clusterTrajectories', signature('lcModel'), function(object, at = tim
         class(at)
     ))
   }
+
+  assert_that(
+    has_name(newdata, timeVariable(object)),
+    msg = sprintf('"at" argument of clusterTrajectories() requires time index column of name "%s"', timeVariable(object))
+  )
 
   dfPred = predict(object, newdata = newdata, what = what, ...)
   assert_that(is.data.frame(dfPred), msg = 'invalid output from predict()')
