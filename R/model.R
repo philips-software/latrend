@@ -371,7 +371,9 @@ deviance.lcModel = function(object, ...) {
       is.null(getS3method('deviance', class = class(object@model)[1], optional = TRUE))) {
     as.numeric(NA)
   } else {
+    # nocov start
     deviance(object@model)
+    # nocov end
   }
 }
 
@@ -394,7 +396,9 @@ df.residual.lcModel = function(object, ...) {
       as.numeric(NA)
     }
   } else {
+    # nocov start
     df.residual(object@model)
+    # nocov end
   }
 }
 
@@ -1496,7 +1500,9 @@ sigma.lcModel = function(object, ...) {
       is.null(getS3method('sigma', class = class(object@model)[1], optional = TRUE))) {
     residuals(object, ...) %>% sd()
   } else {
+    # nocov start
     sigma(object@model, ...)
+    # nocov end
   }
 }
 
