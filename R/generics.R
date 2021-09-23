@@ -334,7 +334,7 @@ setGeneric('postprob', function(object, ...) {
 
   colnames(pp) = clusterNames(object)
 
-  valid = validate_that()
+  valid = validate_that(is_valid_postprob(pp))
   if(!isTRUE(valid)) {
     warning(
       sprintf(
