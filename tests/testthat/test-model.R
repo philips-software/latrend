@@ -1,7 +1,7 @@
 context('lcModel')
 rngReset()
 
-model = latrend(lcMethodTestKML(), data=testLongData)
+model = modelTest
 
 test_that('clusterTrajectories', {
   times = time(model)
@@ -184,8 +184,8 @@ test_that('predictForCluster with newdata and Cluster column', {
   newdataClus = copy(newdata)[, Cluster := 'B']
 
   refpred = predictForCluster(model, cluster = 'A', newdata = newdata)
-  options(latrend.warnModelDataClusterColumn = TRUE)
+  options(latrend.warnNewDataClusterColumn = TRUE)
   expect_warning(pred <- predictForCluster(model, cluster = 'A', newdata = newdataClus))
-  options(latrend.warnModelDataClusterColumn = FALSE)
+  options(latrend.warnNewDataClusterColumn = FALSE)
   expect_equal(pred, refpred)
 })

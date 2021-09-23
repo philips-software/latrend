@@ -1,7 +1,7 @@
 context('weighted partition')
 rngReset()
 
-refmodel = latrend(lcMethodTestKML(), testLongData)
+refmodel = modelTest
 
 test_that('default', {
   model = lcModelWeightedPartition(testLongData, response = 'Value', weights=postprob(refmodel))

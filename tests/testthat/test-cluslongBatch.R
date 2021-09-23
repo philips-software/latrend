@@ -137,7 +137,7 @@ test_that('error passing', {
 })
 
 test_that('unique default seeds assigned to method specs', {
-  methods = list(mRandomTest, mRandomTest)
+  methods = list(mTestRandom, mTestRandom)
   models = latrendBatch(methods, data = testLongData)
   seeds = lapply(models, getLcMethod) %>%
     vapply('[[', 'seed', FUN.VALUE = 0)
@@ -146,7 +146,7 @@ test_that('unique default seeds assigned to method specs', {
 })
 
 test_that('method seeds are preserved in method specs', {
-  methods = list(mTest, mRandomTest, update(mTest, seed = 3))
+  methods = list(mTest, mTestRandom, update(mTest, seed = 3))
   models = latrendBatch(methods, data = testLongData)
 
   seeds = lapply(models, getLcMethod) %>%
@@ -159,7 +159,7 @@ test_that('method seeds are preserved in method specs', {
 
 
 test_that('model calls can be used to refit, with identical result', {
-  models = latrendBatch(replicate(2, mRandomTest), data = testLongData)
+  models = latrendBatch(replicate(2, mTestRandom), data = testLongData)
 
   refits = list(
     eval(getCall(models[[1]])),

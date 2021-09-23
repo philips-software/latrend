@@ -6,8 +6,8 @@ rngReset()
 
 externalMetrics = getExternalMetricNames() %>% setdiff('McNemar')
 
-kml1 = latrend(lcMethodTestKML(), testLongData, nClusters=1)
-kml2 = latrend(lcMethodTestKML(), testLongData, nClusters=2)
+kml1 = modelTest1
+kml2 = modelTest2
 lmkm1 = latrend(lcMethodTestLMKM(), testLongData, nClusters=1)
 lmkm2 = latrend(lcMethodTestLMKM(), testLongData, nClusters=2)
 lmkm3 = latrend(lcMethodTestLMKM(), testLongData, nClusters=3)

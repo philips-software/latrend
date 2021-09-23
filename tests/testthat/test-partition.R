@@ -1,7 +1,7 @@
 context('partition')
 rngReset()
 
-refmodel = latrend(lcMethodTestKML(), testLongData)
+refmodel = modelTest
 
 test_that('integer assignments', {
   intAssignments = trajectoryAssignments(refmodel) %>% as.integer()

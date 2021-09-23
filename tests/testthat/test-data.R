@@ -62,6 +62,24 @@ test_that('generateLongData with random intercept', {
   expect_equal(dt[Time == 0, round(log10(sd(Mu))), by=Class]$V1, c(-1, 1))
 })
 
+test_that('generateLongData with scalar random scale', {
+  set.seed(1)
+  dt = generateLongData(
+    sizes=c(10, 10),
+    fixed=Value ~ Time,
+    cluster=~1,
+    random=~1,
+    id='Id',
+    data=data.frame(Time=c(0,.5,1)),
+    fixedCoefs=c(1,2),
+    clusterCoefs=cbind(1,2),
+    randomScales=.1
+  )
+
+  expect_true(has_name(dt, 'Mu.random'))
+  expect_equal(dt[Time == 0, round(log10(sd(Mu))), by=Class]$V1, c(-1, -1))
+})
+
 test_that('generateLongData with multiple terms', {
   set.seed(1)
   dt = generateLongData(

@@ -6,13 +6,7 @@ rngReset()
 
 internalMetrics = getInternalMetricNames() %>% setdiff('deviance')
 
-kml1 = latrend(lcMethodTestKML(), testLongData, nClusters = 1)
-kml2 = latrend(lcMethodTestKML(), testLongData, nClusters = 2)
-gmm = latrend(lcMethodTestLcmmGMM(), testLongData, nClusters = 3)
-
 test_that('two clusters', {
-
-
   for(name in internalMetrics) {
     value = metric(kml2, name=name)
     expect_is(value, 'numeric')

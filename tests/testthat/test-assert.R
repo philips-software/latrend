@@ -1,8 +1,8 @@
 context('assert')
 rngReset()
 
-m1 = latrend(mTest, data = testLongData)
-m2 = latrend(mRandomTest, data = testLongData)
+m1 = modelTest
+m2 = modelTestRandom
 
 test_that('is_named', {
   expect_true(is_named(setNames(1:2, LETTERS[1:2])))
