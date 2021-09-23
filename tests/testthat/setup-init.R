@@ -4,6 +4,7 @@ options(latrend.id = 'Traj')
 options(latrend.time = 'Assessment')
 options(latrend.verbose = R.utils::Verbose())
 options(latrend.warnModelDataClusterColumn = FALSE)
+options(latrend.warnNewDataClusterColumn = FALSE)
 
 foreach::registerDoSEQ()
 
@@ -123,15 +124,18 @@ expect_valid_lcModel = function(object) {
     expect_true('Fit' %in% names(predNul$T1), info='predictNull')
 
     # predictForCluster
-    predClus = predictForCluster(object,
-      newdata=data.frame(Assessment=time(object)[c(1,3)]), cluster = 'T1')
+    predClus = predictForCluster(
+      object,
+      newdata = data.frame(Assessment = time(object)[c(1,3)]),
+      cluster = 'T1'
+    )
     expect_is(predClus, 'numeric', info='predictForCluster')
     expect_length(predClus, 2)
 
     # empty predictForCluster prediction
     predClusNull = predictForCluster(object, cluster = 'T1')
-    predClusNull2 = predictForCluster(object, newdata=NULL, cluster = 'T1')
-    predClusFitted = predictForCluster(object, newdata=model.data(object), cluster = 'T1')
+    predClusNull2 = predictForCluster(object, newdata = NULL, cluster = 'T1')
+    predClusFitted = predictForCluster(object, newdata = model.data(object), cluster = 'T1')
     expect_equal(predClusNull, predClusNull2)
     expect_equal(predClusNull2, predClusFitted)
 

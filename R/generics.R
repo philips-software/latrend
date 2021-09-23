@@ -386,7 +386,7 @@ setGeneric('predictForCluster', function(object, newdata = NULL, cluster, ...) {
     if (nrow(newdata) == 0) {
       warning('called predictForCluster() with empty newdata data.frame (nrow = 0)')
     }
-    if (has_name(newdata, 'Cluster')) {
+    if (has_name(newdata, 'Cluster') && getOption('latrend.warnNewDataClusterColumn', TRUE)) {
       warning('newdata for predictForCluster() contains a "Cluster" column. This column will be ignored.')
     }
   }
