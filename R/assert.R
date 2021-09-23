@@ -1,17 +1,22 @@
 is_named = function(x) {
-  !is.null(names(x))
+  !is.null(names(x)) && noNA(names(x))
 }
 
 assertthat::on_failure(is_named) = function(call, env) {
-  paste0(deparse(call$x), ' is not named')
+  x = call$x
+  if (is.null(x)) {
+    paste0(deparse(call$x), ' is not named')
+  } else {
+    paste0('some elements of ', deparse(call$x), ' are not named')
+  }
 }
 
 is_newdata = function(x) {
-  is.null(x) || is.list(x) && is_named(x)
+  is.null(x) || is.data.frame(x)
 }
 
 assertthat::on_failure(is_newdata) = function(call, env) {
-  paste0(deparse(call$x), ' is not valid newdata (list and named, or null)')
+  paste0(deparse(call$x), ' is not valid newdata (data.frame or NULL)')
 }
 
 is_at = function(x) {

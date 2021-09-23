@@ -1,5 +1,6 @@
 #' @include model.R
 
+# transformFitted ####
 #' @export
 #' @rdname transformFitted
 #' @title Helper function for custom lcModel classes implementing fitted.lcModel()
@@ -37,27 +38,61 @@
 #' @param model The `lcModel` by which the prediction was made.
 #' @param clusters The trajectory cluster assignment per observation. Optional.
 #' @return If the `clusters` argument was specified, a `vector` of fitted values conditional on the given cluster assignment. Else, a `matrix` with the fitted values per cluster per column.
-setGeneric('transformFitted', function(pred, model, clusters) standardGeneric('transformFitted'))
+setGeneric('transformFitted', function(pred, model, clusters = NULL) {
+  if (!is.null(clusters)) {
+    assert_that(
+      is.atomic(clusters),
+      length(clusters) == nIds(model),
+      noNA(clusters),
+      all(clusters %in% clusterNames(model))
+    )
+  }
+
+  out <- standardGeneric('transformFitted')
+
+  if (is.null(clusters)) {
+    assert_that(
+      is.matrix(out),
+      is.numeric(out),
+      ncol(out) == nClusters(model)
+    )
+    colnames(out) = clusterNames(model)
+  } else {
+    assert_that(
+      is.numeric(out)
+    )
+  }
+
+  return (out)
+})
 
 #' @rdname transformFitted
 #' @aliases transformFitted,NULL,lcModel-method
 setMethod('transformFitted', signature('NULL', 'lcModel'), function(pred, model, clusters) {
   suppressWarnings({
-    newpred = matrix(nrow = nobs(model), ncol = nClusters(model))
+    newpred = matrix(NA_real_, nrow = nobs(model), ncol = nClusters(model))
   })
+  colnames(newpred) = clusterNames(model)
+
   transformFitted(newpred, model, clusters)
 })
 
 #' @rdname transformFitted
 #' @aliases transformFitted,matrix,lcModel-method
 setMethod('transformFitted', signature('matrix', 'lcModel'), function(pred, model, clusters) {
-  suppressWarnings(assert_that(
-    is.matrix(pred),
-    ncol(pred) == nClusters(model),
-    nrow(pred) == nobs(model)
-  ))
+  suppressWarnings(
+    assert_that(
+      is.numeric(pred),
+      ncol(pred) == nClusters(model),
+      nrow(pred) == nobs(model),
+      !is.null(colnames(pred)),
+      noNA(colnames(pred)),
+      all(clusterNames(model) %in% colnames(pred))
+    )
+  )
 
-  colnames(pred) = clusterNames(model)
+  newOrder = match(colnames(pred), clusterNames(model))
+  pred = pred[, newOrder, drop = FALSE]
 
   if (is.null(clusters)) {
     pred
@@ -73,22 +108,40 @@ setMethod('transformFitted', signature('matrix', 'lcModel'), function(pred, mode
 #' @rdname transformFitted
 #' @aliases transformFitted,list,lcModel-method
 setMethod('transformFitted', signature('list', 'lcModel'), function(pred, model, clusters) {
-  assert_that(length(pred) == nClusters(model))
+  assert_that(
+    length(pred) == nClusters(model),
+    is_named(pred),
+    has_name(pred, clusterNames(model))
+  )
+
   newpred = lapply(pred, '[[', 'Fit') %>%
     do.call(cbind, .)
+
   transformFitted(newpred, model, clusters)
 })
 
 #' @rdname transformFitted
 #' @aliases transformFitted,data.frame,lcModel-method
 setMethod('transformFitted', signature('data.frame', 'lcModel'), function(pred, model, clusters) {
-  assert_that(has_name(pred, c('Fit', 'Cluster')))
-  newpred = matrix(pred$Fit, ncol = nClusters(model))
-  transformFitted(newpred, model, clusters)
+  assert_that(
+    has_name(pred, c('Fit', 'Cluster')),
+    noNA(pred$Cluster),
+    all(clusterNames(model) %in% pred$Cluster)
+  )
+
+  assert_that(
+    all(aggregate(. ~ Cluster, pred, length)$Fit == nobs(model)),
+    msg = sprintf('The number of rows per cluster does not match the number of models observations: Expecting %d rows per cluster', nobs(model))
+  )
+
+  predmat = unstack(pred, Fit ~ Cluster) %>% as.matrix()
+  assert_that(all(colnames(predmat) == clusterNames(model)))
+
+  transformFitted(predmat, model, clusters)
 })
 
 
-
+# transformPredict ####
 #' @export
 #' @rdname transformPredict
 #' @title Helper function for custom lcModel classes implementing predict.lcModel()
@@ -130,20 +183,68 @@ setMethod('transformFitted', signature('data.frame', 'lcModel'), function(pred, 
 #' @param newdata A `data.frame` containing the input data to predict for.
 #' @return A `data.frame` with the predictions, or a list of cluster-specific prediction `data.frame`s.
 #' @seealso predictForCluster, predict.lcModel
-setGeneric('transformPredict', function(pred, model, newdata) standardGeneric('transformPredict'))
+setGeneric('transformPredict', function(pred, model, newdata) {
+  assert_that(
+    is.data.frame(newdata)
+  )
+
+  out <- standardGeneric('transformPredict')
+
+  df_validate = function(df) {
+    validate_that(
+      has_name(df, 'Fit'),
+      is.numeric(df$Fit),
+      nrow(df) == nrow(newdata)
+    )
+  }
+
+  if (is.data.frame(out)) {
+    valid = df_validate(out)
+
+    if (!isTRUE(valid)) {
+      stop(sprintf(
+        'implementation error in transformPredict(): %s',
+        valid
+      ))
+    }
+  } else {
+    assert_that(
+      is.list(out),
+      all(vapply(out, is.data.frame, FUN.VALUE = TRUE)),
+      msg = 'implementation error in transformPredict(): expecting data.frame or list of data.frames output'
+    )
+    assert_that(all(names(out) == clusterNames(model)), msg = 'expecting list of data.frames named after the clusters')
+
+    valids = sapply(out, df_validate)
+    validMask = vapply(valids, isTRUE, FUN.VALUE = TRUE)
+
+    if (!all(validMask)) {
+      stop(
+        'wrong format for one or more data.frames in the data.frame cluster list output: ',
+        paste0(valids[!validMask], collapse = '+ \n')
+      )
+    }
+  }
+
+  return (out)
+})
 
 #' @rdname transformPredict
 #' @aliases transformPredict,NULL,lcModel-method
 setMethod('transformPredict', signature('NULL', 'lcModel'), function(pred, model, newdata) {
   assert_that(
-    is_newdata(newdata),
-    nrow(newdata) == 0
+    nrow(newdata) == 0,
+    msg = sprintf(
+      '%s implementation error: transformPredict(NULL, ...) can only be used when newdata is empty',
+      class(model)[1]
+    )
   )
 
   if (hasName(newdata, 'Cluster')) {
-    data.frame(Cluster = factor(levels = seq_len(nClusters(model)),
-                                labels = clusterNames(model)),
-               Fit = numeric(0))
+    data.frame(
+      Cluster = factor(levels = seq_len(nClusters(model)), labels = clusterNames(model)),
+      Fit = numeric(0)
+    )
   } else {
     data.frame(Fit = numeric(0))
   }
@@ -152,11 +253,13 @@ setMethod('transformPredict', signature('NULL', 'lcModel'), function(pred, model
 #' @rdname transformPredict
 #' @aliases transformPredict,vector,lcModel-method
 setMethod('transformPredict', signature('vector', 'lcModel'), function(pred, model, newdata) {
-  assert_that(is_newdata(newdata),
-              is.null(newdata) || length(pred) == nrow(newdata))
-  transformPredict(pred = data.frame(Fit = pred),
-                   model = model,
-                   newdata = newdata)
+  assert_that(is.null(newdata) || length(pred) == nrow(newdata))
+
+  transformPredict(
+    pred = data.frame(Fit = pred),
+    model = model,
+    newdata = newdata
+  )
 })
 
 #' @rdname transformPredict
@@ -166,7 +269,6 @@ setMethod('transformPredict', signature('matrix', 'lcModel'), function(pred, mod
   assert_that(
     is.matrix(pred),
     ncol(pred) == nClusters(model),
-    is_newdata(newdata),
     is.null(newdata) || nrow(pred) == nrow(newdata)
   )
 
@@ -175,26 +277,31 @@ setMethod('transformPredict', signature('matrix', 'lcModel'), function(pred, mod
     data.frame(Fit = rowColumns(pred, rowClusters))
   } else {
     data.frame(Fit = as.vector(pred)) %>%
-      split(clusterNames(model, factor = TRUE) %>%
-              rep(each = nrow(pred)))
+      split(clusterNames(model, factor = TRUE) %>% rep(each = nrow(pred)))
   }
 })
 
 #' @rdname transformPredict
 #' @aliases transformPredict,data.frame,lcModel-method
 setMethod('transformPredict', signature('data.frame', 'lcModel'), function(pred, model, newdata) {
-  assert_that(is_newdata(newdata),
-              !is.null(newdata))
+  assert_that(
+    !is.null(newdata),
+    msg = sprintf('%s implementation error: newdata cannot be NULL for data.frame input', class(model)[1])
+  )
+
   # generic form, possibly containing more predictions than newdata. These are filtered
   # if the pred object contains the newdata variables. Else, newdata is replicated.
   pred = as.data.table(pred)
   newdata = as.data.table(newdata)
 
   if (nrow(newdata) == 0) {
-    return(as.data.table(pred)[0, ])
+    return (as.data.table(pred)[0, ])
   }
 
-  assert_that(hasName(pred, 'Fit'), nrow(pred) > 0)
+  assert_that(
+    has_name(pred, 'Fit'),
+    nrow(pred) > 0
+  )
 
   mergevars = intersect(names(pred), names(newdata))
   predvars = setdiff(names(pred), names(newdata))
@@ -221,8 +328,11 @@ setMethod('transformPredict', signature('data.frame', 'lcModel'), function(pred,
     # number of observations per cluster must match the number of predictions per cluster
     obsCounts = pred[, .N, keyby = Cluster] %>%
       .[newdata[, .N, keyby = Cluster]]
-    assert_that(all(obsCounts[is.finite(N) &
-                                is.finite(i.N), N == i.N]), msg = 'number of observations per cluster must match the number of predictions per cluster')
+
+    assert_that(
+      all(obsCounts[is.finite(N) & is.finite(i.N), N == i.N]),
+      msg = 'number of observations per cluster must match the number of predictions per cluster'
+    )
 
     newpred = pred[Cluster %in% unique(newdata$Cluster)]
   }
@@ -243,6 +353,7 @@ setMethod('transformPredict', signature('data.frame', 'lcModel'), function(pred,
     # drop Cluster column
     newpred = subset(newpred, select = setdiff(names(newpred), 'Cluster')) %>%
       as.data.frame()
+
     if (hasName(newdata, 'Cluster')) {
       newpred
     } else {

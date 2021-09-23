@@ -10,13 +10,13 @@
 \usage{
 transformFitted(pred, model, clusters)
 
-\S4method{transformFitted}{`NULL`,lcModel}(pred, model, clusters)
+\S4method{transformFitted}{`NULL`,lcModel}(pred, model, clusters = NULL)
 
-\S4method{transformFitted}{matrix,lcModel}(pred, model, clusters)
+\S4method{transformFitted}{matrix,lcModel}(pred, model, clusters = NULL)
 
-\S4method{transformFitted}{list,lcModel}(pred, model, clusters)
+\S4method{transformFitted}{list,lcModel}(pred, model, clusters = NULL)
 
-\S4method{transformFitted}{data.frame,lcModel}(pred, model, clusters)
+\S4method{transformFitted}{data.frame,lcModel}(pred, model, clusters = NULL)
 }
 \arguments{
 \item{pred}{The cluster-specific predictions for each observation}
