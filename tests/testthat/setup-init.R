@@ -3,6 +3,7 @@ options(deparse.max.lines=5)
 options(latrend.id = 'Traj')
 options(latrend.time = 'Assessment')
 options(latrend.verbose = R.utils::Verbose())
+options(latrend.warnModelDataClusterColumn = FALSE)
 
 foreach::registerDoSEQ()
 

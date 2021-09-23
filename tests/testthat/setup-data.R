@@ -14,4 +14,5 @@ testLongData = generateLongData(
   clusterNames = c('A', 'B'),
   shuffle = TRUE
 ) %>%
-  .[, .(Traj, Assessment, Value, Class)]
+  .[, .(Traj, Assessment, Value, Class)] %>%
+  .[, Cluster := Class]

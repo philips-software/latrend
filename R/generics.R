@@ -378,7 +378,7 @@ setGeneric('predictForCluster', function(object, newdata = NULL, cluster, ...) {
   # special case for when no newdata is provided
   if (is.null(newdata)) {
     newdata = model.data(object)
-    if (has_name(newdata, 'Cluster')) {
+    if (has_name(newdata, 'Cluster') && getOption('latrend.warnModelDataClusterColumn', TRUE)) {
       warning('model data used in predictForCluster() contains a "Cluster" column. This column will be ignored.')
     }
   }

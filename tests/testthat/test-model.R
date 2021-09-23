@@ -184,6 +184,8 @@ test_that('predictForCluster with newdata and Cluster column', {
   newdataClus = copy(newdata)[, Cluster := 'B']
 
   refpred = predictForCluster(model, cluster = 'A', newdata = newdata)
+  options(latrend.warnModelDataClusterColumn = TRUE)
   expect_warning(pred <- predictForCluster(model, cluster = 'A', newdata = newdataClus))
+  options(latrend.warnModelDataClusterColumn = FALSE)
   expect_equal(pred, refpred)
 })
