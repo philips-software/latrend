@@ -7,6 +7,9 @@ test_that('default', {
   expect_is(model, 'lcModel')
   expect_equal(deparse(getCall(model)$data), 'testLongData')
   expect_equal(deparse(getCall(model)$envir), 'NULL')
+
+  expect_error(latrend(), 'missing')
+  expect_error(latrend(lcMethodTestKML()), 'missing')
 })
 
 test_that('method var', {

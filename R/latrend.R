@@ -26,7 +26,8 @@
 latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend.verbose')) {
   assert_that(
     is_class_defined(method),
-    is.lcMethod(method)
+    is.lcMethod(method),
+    !missing(data)
   )
   envir = lcMethod.env(method, parent.frame(), envir)
 
@@ -180,6 +181,7 @@ latrendRep = function(method,
   envir = lcMethod.env(method, parent.frame(), envir)
   assert_that(
     is.lcMethod(method),
+    !missing(data),
     is.count(.rep),
     is.flag(.parallel)
   )
