@@ -213,3 +213,37 @@ test_that('confusionMatrix', {
   expect_true(is_valid_postprob(confusionMatrix(model)))
   expect_true(is_valid_postprob(confusionMatrix(model, strategy = NULL)))
 })
+
+test_that('plotFittedTrajectories', {
+  expect_is(plotFittedTrajectories(model), 'ggplot')
+})
+
+test_that('predictForCluster', {
+  predA = predictForCluster(model, cluster = 'A')
+  expect_is(predA, 'numeric')
+  expect_length(predA, nobs(model))
+
+  predB = predictForCluster(model, cluster = 'B')
+  expect_is(predB, 'numeric')
+  expect_length(predB, nobs(model))
+
+  expect_error(predictForCluster(model, cluster = '.'))
+})
+
+test_that('predictForCluster with newdata', {
+  newdata = data.frame(Assessment = 0)
+  predA = predictForCluster(model, cluster = 'A', newdata = newdata)
+  expect_is(predA, 'numeric')
+  expect_length(predA, nrow(newdata))
+
+  expect_error(predictForCluster(model, cluster = 'A', newdata = data.frame(Zzz = 0)), timeVariable(model))
+})
+
+test_that('predictForCluster with newdata and Cluster column', {
+  newdata = data.table(Assessment = 0)
+  newdataClus = copy(newdata)[, Cluster := 'B']
+
+  refpred = predictForCluster(model, cluster = 'A', newdata = newdata)
+  expect_warning(pred <- predictForCluster(model, cluster = 'A', newdata = newdataClus))
+  expect_equal(pred, refpred)
+})
