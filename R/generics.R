@@ -316,19 +316,29 @@ setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
 setGeneric('postprob', function(object, ...) {
   pp <- standardGeneric('postprob')
 
-  assert_that(
+  valid = validate_that(
     is.numeric(pp),
     ncol(pp) == nClusters(object),
     nrow(pp) == nIds(object)
   )
 
+  if(!isTRUE(valid)) {
+    stop(
+      sprintf(
+        '%1$s implementation error: Output format returned by postprob(%1$s, ...) was not valid: %2$s',
+        class(object)[1],
+        valid
+      )
+    )
+  }
+
   colnames(pp) = clusterNames(object)
 
-  valid = validate_that(is_valid_postprob(pp, object))
+  valid = validate_that()
   if(!isTRUE(valid)) {
     warning(
       sprintf(
-        '%1$s implementation error: Output returned by postprob(%1$s, ...) was not valid: %2$s',
+        '%1$s implementation error: matrix content returned by postprob(%1$s, ...) was not valid: %2$s',
         class(object)[1],
         valid
       )
@@ -399,7 +409,7 @@ setGeneric('predictForCluster', function(object, newdata = NULL, cluster, ...) {
   assert_that(
     is.numeric(out) || is.data.frame(out),
     msg = sprintf(
-      '%1$s implementation error: predictForCluster(%1$s, ...) implementation returned output of type %$2s. Only numeric and data.frame are supported outputs.',
+      '%1$s implementation error: predictForCluster(%1$s, ...) implementation returned output of type %2$s. Only numeric and data.frame are supported outputs.',
       class(object)[1],
       class(out)[1]
     )
