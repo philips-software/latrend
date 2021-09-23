@@ -134,8 +134,10 @@ setMethod('estimationTime', signature('list'), function(object, unit, ...) {
 
 
 .externalMetric.lcModels = function(object, object2, name, drop = TRUE) {
-  assert_that(is.character(name),
-    is.flag(drop))
+  assert_that(
+    is.character(name),
+    is.flag(drop)
+  )
 
   if (length(object) == 0) {
     if (drop) {
@@ -281,10 +283,15 @@ setMethod('metric', signature('lcModels'), .metric.lcModels)
 #' @seealso [max.lcModels] [externalMetric]
 min.lcModels = function(x, name, ...) {
   x = as.lcModels(x)
+
+  if (length(x) == 0) {
+    stop('cannot compute min() on empty list of lcModels')
+  }
+
   values = metric(x, name)
   bestIdx = which.min(values)
   if (length(bestIdx) == 0) {
-    return(as.lcModels(NULL))
+    stop('cannot determine min() on lcModels; none of the models had a valid metric value')
   } else {
     x[[bestIdx]]
   }
@@ -307,10 +314,15 @@ min.lcModels = function(x, name, ...) {
 #' @seealso [min.lcModels] [externalMetric]
 max.lcModels = function(x, name, ...) {
   x = as.lcModels(x)
+
+  if (length(x) == 0) {
+    stop('cannot compute min() on empty list of lcModels')
+  }
+
   values = metric(x, name)
   bestIdx = which.max(values)
   if (length(bestIdx) == 0) {
-    return(as.lcModels(NULL))
+    stop('cannot determine max() on lcModels; none of the models had a valid metric value')
   } else {
     x[[bestIdx]]
   }

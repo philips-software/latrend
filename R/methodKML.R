@@ -79,7 +79,9 @@ setMethod('fit', signature('lcMethodKML'), function(method, data, envir, verbose
   valueColumn = responseVariable(method)
 
   if (.Platform$OS.type != 'windows') {
+    # nocov start
     cldFilePresent = file.exists('cld.Rdata')
+    # nocov end
   }
 
   cat(verbose, 'Running kml()...', level = verboseLevels$finest)
@@ -94,9 +96,11 @@ setMethod('fit', signature('lcMethodKML'), function(method, data, envir, verbose
 
   # cleanup
   if (.Platform$OS.type != 'windows' && !cldFilePresent && file.exists('cld.Rdata')) {
+    # nocov start
     suppressWarnings({
       file.remove('cld.Rdata')
     })
+    # nocov end
   }
 
   new(
