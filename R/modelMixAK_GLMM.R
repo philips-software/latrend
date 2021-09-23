@@ -23,9 +23,11 @@ setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, 
 })
 
 .predictForCluster_GLMM_MCMC = function(model, method, k, newdata, ...) {
-  assert_that(is.finite(k),
-              is.newdata(newdata),
-              !is.null(newdata))
+  assert_that(
+    is.finite(k),
+    is_newdata(newdata),
+    !is.null(newdata)
+  )
 
   # fixed design
   x = dropResponse(method$fixed) %>%

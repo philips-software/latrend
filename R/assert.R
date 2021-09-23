@@ -1,19 +1,33 @@
-is.named = function(x) {
+is_named = function(x) {
   !is.null(names(x))
 }
 
-assertthat::on_failure(is.named) = function(call, env) {
+assertthat::on_failure(is_named) = function(call, env) {
   paste0(deparse(call$x), ' is not named')
 }
 
-is.newdata = function(x) {
-  is.null(x) || is.list(x) && is.named(x)
+is_newdata = function(x) {
+  is.null(x) || is.list(x) && is_named(x)
 }
 
-assertthat::on_failure(is.newdata) = function(call, env) {
+assertthat::on_failure(is_newdata) = function(call, env) {
   paste0(deparse(call$x), ' is not valid newdata (list and named, or null)')
 }
 
+is_at = function(x) {
+  is.numeric(x) && noNA(x) && !any(is.infinite(x))
+}
+
+assertthat::on_failure(is_at) = function(call, env) {
+  x = call$x
+  valid = validate_that(
+    is.numeric(x),
+    noNA(x),
+    !any(is.infinite(x))
+  )
+
+  paste0('"at" argument of ', deparse(call$x), ' is not valid: ', valid)
+}
 
 has_same_ids = function(m1, m2) {
   assert_that(is.lcModel(m1), is.lcModel(m2))

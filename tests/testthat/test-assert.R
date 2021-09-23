@@ -4,26 +4,37 @@ rngReset()
 m1 = latrend(mTest, data = testLongData)
 m2 = latrend(mRandomTest, data = testLongData)
 
-test_that('is.named', {
-  expect_true(is.named(setNames(1:2, LETTERS[1:2])))
-  expect_true(is.named(setNames(character(), character()))) #empty named char vector
+test_that('is_named', {
+  expect_true(is_named(setNames(1:2, LETTERS[1:2])))
+  expect_true(is_named(setNames(character(), character()))) #empty named char vector
 
-  expect_false(is.named(NULL))
-  expect_false(is.named(character()))
-  expect_false(is.named(character(2)))
-  expect_false(is.named(NA))
-  expect_false(is.named(1:2))
-  expect_false(is.named(factor(1:2, levels = LETTERS[1:2])))
+  expect_false(is_named(NULL))
+  expect_false(is_named(character()))
+  expect_false(is_named(character(2)))
+  expect_false(is_named(NA))
+  expect_false(is_named(1:2))
+  expect_false(is_named(factor(1:2, levels = LETTERS[1:2])))
 })
 
-test_that('is.newdata', {
-  expect_true(is.newdata(NULL))
-  expect_true(is.newdata(data.frame()))
+test_that('is_newdata', {
+  expect_true(is_newdata(NULL))
+  expect_true(is_newdata(data.frame()))
 
-  expect_false(is.newdata(numeric()))
-  expect_false(is.newdata(NA))
-  expect_false(is.newdata(numeric(2)))
-  expect_false(is.newdata(list(1, 2)))
+  expect_false(is_newdata(numeric()))
+  expect_false(is_newdata(NA))
+  expect_false(is_newdata(numeric(2)))
+  expect_false(is_newdata(list(1, 2)))
+})
+
+test_that('is_at', {
+  expect_true(is_at(.1))
+  expect_true(is_at(0:1))
+  expect_true(is_at(c(0, 0)))
+  expect_true(is_at(c(-1)))
+
+  expect_false(is_at('0'))
+  expect_false(is_at(c(1, NA)))
+  expect_false(is_at(c(1, Inf)))
 })
 
 test_that('has_same_ids', {

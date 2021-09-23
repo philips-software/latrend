@@ -956,7 +956,7 @@ nobs.lcModel = function(object, ...) {
 #' @seealso [predictForCluster] [stats::predict] [fitted.lcModel] [clusterTrajectories] [trajectories] [predictPostprob] [predictAssignments]
 #' @family model-specific methods
 predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
-  assert_that(is.newdata(newdata))
+  assert_that(is_newdata(newdata))
 
   predMethod = selectMethod('predictForCluster', class(object), optional = TRUE)
   if (is.null(predMethod) || predMethod@defined@.Data == 'lcModel') {

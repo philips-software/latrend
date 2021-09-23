@@ -135,8 +135,11 @@ setGeneric('transformPredict', function(pred, model, newdata) standardGeneric('t
 #' @rdname transformPredict
 #' @aliases transformPredict,NULL,lcModel-method
 setMethod('transformPredict', signature('NULL', 'lcModel'), function(pred, model, newdata) {
-  assert_that(is.newdata(newdata),
-              nrow(newdata) == 0)
+  assert_that(
+    is_newdata(newdata),
+    nrow(newdata) == 0
+  )
+
   if (hasName(newdata, 'Cluster')) {
     data.frame(Cluster = factor(levels = seq_len(nClusters(model)),
                                 labels = clusterNames(model)),
@@ -149,7 +152,7 @@ setMethod('transformPredict', signature('NULL', 'lcModel'), function(pred, model
 #' @rdname transformPredict
 #' @aliases transformPredict,vector,lcModel-method
 setMethod('transformPredict', signature('vector', 'lcModel'), function(pred, model, newdata) {
-  assert_that(is.newdata(newdata),
+  assert_that(is_newdata(newdata),
               is.null(newdata) || length(pred) == nrow(newdata))
   transformPredict(pred = data.frame(Fit = pred),
                    model = model,
@@ -163,7 +166,7 @@ setMethod('transformPredict', signature('matrix', 'lcModel'), function(pred, mod
   assert_that(
     is.matrix(pred),
     ncol(pred) == nClusters(model),
-    is.newdata(newdata),
+    is_newdata(newdata),
     is.null(newdata) || nrow(pred) == nrow(newdata)
   )
 
@@ -180,7 +183,7 @@ setMethod('transformPredict', signature('matrix', 'lcModel'), function(pred, mod
 #' @rdname transformPredict
 #' @aliases transformPredict,data.frame,lcModel-method
 setMethod('transformPredict', signature('data.frame', 'lcModel'), function(pred, model, newdata) {
-  assert_that(is.newdata(newdata),
+  assert_that(is_newdata(newdata),
               !is.null(newdata))
   # generic form, possibly containing more predictions than newdata. These are filtered
   # if the pred object contains the newdata variables. Else, newdata is replicated.

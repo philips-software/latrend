@@ -51,7 +51,7 @@ setGeneric('clusterProportions', function(object, ...) {
 #' @name latrend-generics
 #' @param at A vector of times at which to compute the cluster trajectories.
 setGeneric('clusterTrajectories', function(object, at = time(object), ...) {
-  assert_that(is.numeric(at))
+  assert_that(is_at(at))
 
   dfclus <- standardGeneric('clusterTrajectories')
 
@@ -189,7 +189,12 @@ setGeneric('fittedTrajectories', function(
   at = time(object),
   what = 'mu',
   clusters = trajectoryAssignments(object),
-  ...) standardGeneric('fittedTrajectories'))
+  ...) {
+
+  assert_that(is_at(at))
+
+  standardGeneric('fittedTrajectories')
+})
 
 
 # getLabel ####
@@ -338,7 +343,7 @@ setGeneric('postprob', function(object, ...) {
 #' @export
 #' @name latrend-generics
 setGeneric('predictAssignments', function(object, newdata = NULL, ...) {
-  assert_that(is.newdata(newdata))
+  assert_that(is_newdata(newdata))
 
   assignments <- standardGeneric('predictAssignments')
 
@@ -355,7 +360,7 @@ setGeneric('predictAssignments', function(object, newdata = NULL, ...) {
 #' @name latrend-generics
 setGeneric('predictForCluster', function(object, newdata = NULL, cluster, ...) {
   assert_that(
-    is.newdata(newdata),
+    is_newdata(newdata),
     is.scalar(cluster),
     cluster %in% clusterNames(object)
   )
@@ -432,7 +437,7 @@ setGeneric('predictForCluster', function(object, newdata = NULL, cluster, ...) {
 #' @export
 #' @name latrend-generics
 setGeneric('predictPostprob', function(object, newdata = NULL, ...) {
-  assert_that(is.newdata(newdata))
+  assert_that(is_newdata(newdata))
 
   pp <- standardGeneric('predictPostprob')
 

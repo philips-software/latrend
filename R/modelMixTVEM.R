@@ -9,7 +9,7 @@ setClass('lcModelMixTVEM', contains = 'lcModel')
 predict.lcModelMixTVEM = function(object, ...,
                                   newdata = NULL,
                                   what = 'mu') {
-  assert_that(is.newdata(newdata))
+  assert_that(is_newdata(newdata))
   assert_that(what == 'mu', msg = 'only what="mu" is supported')
 
   if (is.null(newdata)) {
