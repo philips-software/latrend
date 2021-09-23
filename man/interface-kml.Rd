@@ -46,8 +46,7 @@
 
 \item{...}{Additional arguments.}
 
-\item{at}{An optional vector, list or data frame of covariates at which to compute the cluster trajectory predictions.
-If a vector is specified, this is assumed to be the time covariate. Otherwise, a named list or data frame must be provided.}
+\item{at}{An optional vector of the times at which to compute the cluster trajectory predictions.}
 
 \item{newdata}{Optional data frame for which to compute the posterior probability. If omitted, the model training data is used.}
 }

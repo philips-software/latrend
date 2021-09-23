@@ -49,6 +49,7 @@ setGeneric('clusterProportions', function(object, ...) {
 # clusterTrajectories ####
 #' @export
 #' @name latrend-generics
+#' @param at A vector of times at which to compute the cluster trajectories.
 setGeneric('clusterTrajectories', function(object, at = time(object), ...) {
   assert_that(is.numeric(at))
 

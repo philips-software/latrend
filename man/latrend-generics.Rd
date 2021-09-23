@@ -8,7 +8,7 @@
 \usage{
 clusterProportions(object, ...)
 
-clusterTrajectories(object, ...)
+clusterTrajectories(object, at = time(object), ...)
 
 compose(method, envir, ...)
 
@@ -85,6 +85,8 @@ validate(method, data, envir, ...)
 \item{object}{The object.}
 
 \item{...}{Arguments.}
+
+\item{at}{A vector of times at which to compute the cluster trajectories.}
 
 \item{method}{The method.}
 

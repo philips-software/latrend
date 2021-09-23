@@ -80,8 +80,7 @@ Cluster trajectory predictions are made when ids are not specified.}
 
 \item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying \code{what = 'mb'}.}
 
-\item{at}{An optional vector, list or data frame of covariates at which to compute the cluster trajectory predictions.
-If a vector is specified, this is assumed to be the time covariate. Otherwise, a named list or data frame must be provided.}
+\item{at}{An optional vector of the times at which to compute the cluster trajectory predictions.}
 
 \item{se}{Whether to compute the standard error of the prediction.}
 
