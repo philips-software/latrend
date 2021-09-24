@@ -19,13 +19,14 @@ The `latrend` package provides a framework for clustering longitudinal datasets 
 See the [news page](https://github.com/philips-software/latrend/blob/master/NEWS.md) for the latest updates.
 
 # Installation
+The latest release of _latrend_ can be installed by running:
 ```
-remotes::install_github("https://github.com/philips-software/latrend")
+remotes::install_github('philips-software/latrend', ref = remotes::github_release())
 ```
 
-Including vignettes:
+Vignettes are included by running:
 ```
-remotes::install_github("https://github.com/philips-software/latrend", build_vignettes = TRUE)
+remotes::install_github('philips-software/latrend', ref = remotes::github_release(), build_vignettes = TRUE)
 ```
 
 # Usage
