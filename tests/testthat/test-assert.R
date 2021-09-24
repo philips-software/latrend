@@ -37,6 +37,25 @@ test_that('is_at', {
   expect_false(is_at(c(1, Inf)))
 })
 
+test_that('has_colnames', {
+  mat = matrix(1:4, ncol = 2)
+  expect_true(has_colnames(set_colnames(mat, LETTERS[1:2])))
+  expect_true(has_colnames(set_colnames(mat, LETTERS[1:2]), LETTERS[1:2]))
+
+  expect_false(has_colnames(mat))
+  expect_false(has_colnames(mat, LETTERS[1:2]))
+})
+
+test_that('is_valid_cluster_name', {
+  expect_true(is_valid_cluster_name(clusterNames(m1), model = m1))
+  expect_true(is_valid_cluster_name(rep(clusterNames(m1), each = 2), model = m1))
+  expect_true(is_valid_cluster_name(clusterNames(m1), clusters = clusterNames(m1)))
+  expect_true(is_valid_cluster_name(factor(clusterNames(m1)), model = m1))
+
+  expect_false(is_valid_cluster_name('.', model = m1))
+  expect_false(is_valid_cluster_name(c(clusterNames(m1), NA), model = m1))
+})
+
 test_that('has_same_ids', {
   expect_true(has_same_ids(m1, m2))
 })

@@ -19,6 +19,30 @@ assertthat::on_failure(is_newdata) = function(call, env) {
   paste0(deparse(call$x), ' is not valid newdata (data.frame or NULL)')
 }
 
+has_colnames = function(x, which) {
+  if (missing(which)) {
+    !is.null(colnames(x))
+  } else {
+    all(which %in% colnames(x))
+  }
+}
+
+assertthat::on_failure(has_colnames) = function(call, env) {
+  x = eval(call$x, env)
+
+  if (hasName(call, 'which')) {
+    which = eval(call$which, env)
+    paste0(
+      deparse(call$x),
+      ' does not have all of column name(s): "',
+      paste0(which, collapse = '", "'),
+      '"'
+    )
+  } else {
+    paste0(deparse(call$x), ' does not have any column names')
+  }
+}
+
 is_at = function(x) {
   is.numeric(x) && noNA(x) && !any(is.infinite(x))
 }
@@ -32,6 +56,36 @@ assertthat::on_failure(is_at) = function(call, env) {
   )
 
   paste0('"at" argument of ', deparse(call$x), ' is not valid: ', valid)
+}
+
+is_valid_cluster_name = function(x, clusters = clusterNames(model), model) {
+  stopifnot(is.character(clusters))
+
+  if (is.factor(x)) {
+    noNA(x) && all(levels(x) %in% clusters)
+  } else {
+    is.character(x) && all(unique(x) %in% clusters)
+  }
+}
+
+assertthat::on_failure(is_valid_cluster_name) = function(call, env) {
+  x = eval(call$x, env)
+  clusters = eval(call$clusters, env)
+
+  if (is.character(x) || is.factor(x)) {
+    if (anyNA(x)) {
+      sprintf('cluster names vector %s should not contain NAs', deparse(call$x))
+    } else {
+      sprintf(
+        'cluster names vector %s contains unexpected elements: expecting "%s"',
+        deparse(call$x),
+        paste0(clusters, collapse = '", "')
+      )
+    }
+  }
+  else {
+    sprintf('cluster names vector %s should be character or factor', deparse(call$x))
+  }
 }
 
 has_same_ids = function(m1, m2) {

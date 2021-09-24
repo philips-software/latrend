@@ -41,10 +41,8 @@
 setGeneric('transformFitted', function(pred, model, clusters = NULL) {
   if (!is.null(clusters)) {
     assert_that(
-      is.atomic(clusters),
       length(clusters) == nIds(model),
-      noNA(clusters),
-      all(clusters %in% clusterNames(model))
+      is_valid_cluster_name(clusters, model = model)
     )
   }
 
@@ -85,8 +83,8 @@ setMethod('transformFitted', signature('matrix', 'lcModel'), function(pred, mode
       is.numeric(pred),
       ncol(pred) == nClusters(model),
       nrow(pred) == nobs(model),
-      !is.null(colnames(pred)),
-      noNA(colnames(pred)),
+      has_colnames(pred),
+      is_valid_cluster_name(colnames(pred), model = model),
       all(clusterNames(model) %in% colnames(pred))
     )
   )
@@ -289,7 +287,8 @@ setMethod('transformPredict', signature('matrix', 'lcModel'), function(pred, mod
     is.matrix(pred),
     ncol(pred) == nClusters(model),
     nrow(pred) == nrow(newdata),
-    !is.null(colnames(pred)),
+    has_colnames(pred),
+    is_valid_cluster_name(colnames(pred), model = model),
     all(clusterNames(model) %in% colnames(pred))
   )
 
@@ -310,8 +309,7 @@ setMethod('transformPredict', signature('matrix', 'lcModel'), function(pred, mod
 setMethod('transformPredict', signature('data.frame', 'lcModel'), function(pred, model, newdata) {
   assert_that(
     has_name(pred, c('Fit', 'Cluster')),
-    noNA(pred$Cluster),
-    all(unique(pred$Cluster) %in% clusterNames(model))
+    is_valid_cluster_name(pred$Cluster, model = model)
   )
 
   if (hasName(newdata, 'Cluster')) {
