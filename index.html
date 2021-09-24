@@ -112,9 +112,10 @@
 <div id="installation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h1>
-<pre><code>remotes::install_github("https://github.com/philips-software/latrend")</code></pre>
-<p>Including vignettes:</p>
-<pre><code>remotes::install_github("https://github.com/philips-software/latrend", build_vignettes = TRUE)</code></pre>
+<p>The latest release of <em>latrend</em> can be installed by running:</p>
+<pre><code>remotes::install_github('philips-software/latrend', ref = remotes::github_release())</code></pre>
+<p>Vignettes are included by running:</p>
+<pre><code>remotes::install_github('philips-software/latrend', ref = remotes::github_release(), build_vignettes = TRUE)</code></pre>
 </div>
 <div id="usage" class="section level1">
 <h1 class="hasAnchor">
