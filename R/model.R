@@ -56,13 +56,19 @@ setMethod('initialize', 'lcModel', function(.Object, ...) {
   .Object = callNextMethod(.Object, ...)
   method = .Object@method
 
-  assert_that(length(.Object@id) > 0 ||
-                has_name(method, 'id'), msg = '@id not specified, nor defined in lcMethod')
+  assert_that(
+    length(.Object@id) > 0 || has_name(method, 'id'),
+    msg = '@id not specified, nor defined in lcMethod'
+  )
   if (length(.Object@id) == 0) {
     .Object@id = idVariable(method)
   }
-  assert_that(length(.Object@time) > 0 ||
-                has_name(method, 'time'), msg = '@time not specified, nor defined in lcMethod')
+
+  assert_that(
+    length(.Object@time) > 0 || has_name(method, 'time'),
+    msg = '@time not specified, nor defined in lcMethod'
+  )
+
   if (length(.Object@time) == 0) {
     .Object@time = timeVariable(method)
   }
@@ -89,8 +95,10 @@ setValidity('lcModel', function(object) {
   )
 
   data = model.data(object)
-  assert_that(!is.null(data),
-    msg = 'invalid data object for new lcModel. Either specify the data slot or ensure that the model call contains a data argument which correctly evaluates.')
+  assert_that(
+    !is.null(data),
+    msg = 'invalid data object for new lcModel. Either specify the data slot or ensure that the model call contains a data argument which correctly evaluates.'
+  )
   assert_that(has_name(data, c(object@id, object@time, object@response)))
   return (TRUE)
 })
@@ -128,7 +136,10 @@ setMethod('clusterTrajectories', signature('lcModel'), function(object, at = tim
 
   dfPred = predict(object, newdata = newdata, what = what, ...)
   assert_that(is.data.frame(dfPred), msg = 'invalid output from predict()')
-  assert_that(nrow(dfPred) == nrow(newdata), msg = 'invalid output from predict function of lcModel; expected a prediction per newdata row')
+  assert_that(
+    nrow(dfPred) == nrow(newdata),
+    msg = 'invalid output from predict function of lcModel; expected a prediction per newdata row'
+  )
   newdata[, c(responseVariable(object, what = what)) := dfPred$Fit]
 
   return (newdata[])
@@ -218,8 +229,14 @@ clusterSizes = function(object, ...) {
 #' clusterProportions(model)
 setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
   pp = postprob(object, ...)
-  assert_that(!is.null(pp), msg = 'cannot determine cluster assignments because postprob() returned NULL')
-  assert_that(nrow(pp) > 0, msg = 'cannot determine cluster assignments because postprob() returned a matrix without rows')
+  assert_that(
+    !is.null(pp),
+    msg = 'cannot determine cluster assignments because postprob() returned NULL'
+  )
+  assert_that(
+    nrow(pp) > 0,
+    msg = 'cannot determine cluster assignments because postprob() returned a matrix without rows'
+  )
   colMeans(pp)
 })
 
@@ -524,7 +541,10 @@ setMethod('fittedTrajectories', signature('lcModel'), function(object, at, what,
   }
 
   assert_that(is.data.frame(preds))
-  assert_that(nrow(preds) == nrow(newdata), msg = 'invalid output from predict function of lcModel; expected a prediction per newdata row')
+  assert_that(
+    nrow(preds) == nrow(newdata),
+    msg = 'invalid output from predict function of lcModel; expected a prediction per newdata row'
+  )
   newdata[, c(responseVariable(object, what = what)) := preds$Fit]
   return (newdata[])
 })
@@ -1675,7 +1695,10 @@ update.lcModel = function(object, ...) {
   assert_that(is.lcModel(object))
   modelCall = getCall(object)
 
-  assert_that(as.character(modelCall[[1]]) != '<undef>', msg = 'cannot update lcModel because lcMethod call is undefined')
+  assert_that(
+    as.character(modelCall[[1]]) != '<undef>',
+    msg = 'cannot update lcModel because lcMethod call is undefined'
+  )
 
   updateCall = match.call() %>% tail(-2)
   updateNames = names(updateCall)
