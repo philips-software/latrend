@@ -185,16 +185,25 @@ setMethod('transformFitted', signature('data.frame', 'lcModel'), function(pred, 
 #' @seealso predictForCluster, predict.lcModel
 setGeneric('transformPredict', function(pred, model, newdata) {
   assert_that(
-    is.data.frame(newdata)
+    is.data.frame(newdata),
+    has_name(newdata, timeVariable(model)),
+    noNA(newdata[[timeVariable(model)]])
   )
+
+  if (hasName(newdata, 'Cluster')) {
+    assert_that(
+      noNA(newdata$Cluster),
+      all(newdata$Cluster %in% clusterNames(model))
+    )
+  }
 
   out <- standardGeneric('transformPredict')
 
-  df_validate = function(df) {
+  df_validate = function(out_df) {
     validate_that(
-      has_name(df, 'Fit'),
-      is.numeric(df$Fit),
-      nrow(df) == nrow(newdata)
+      has_name(out_df, 'Fit'),
+      is.numeric(out_df$Fit),
+      nrow(out_df) == nrow(newdata)
     )
   }
 
@@ -253,10 +262,20 @@ setMethod('transformPredict', signature('NULL', 'lcModel'), function(pred, model
 #' @rdname transformPredict
 #' @aliases transformPredict,vector,lcModel-method
 setMethod('transformPredict', signature('vector', 'lcModel'), function(pred, model, newdata) {
-  assert_that(is.null(newdata) || length(pred) == nrow(newdata))
+  assert_that(
+    length(pred) == nrow(newdata),
+    msg = sprintf(
+      '%s implementation error: vector pred must match number of rows of newdata',
+      class(model)[1]
+    )
+  )
+  assert_that(
+    has_name(newdata, 'Cluster'),
+    msg = 'newdata$Cluster must be specified for vector-based prediction'
+  )
 
   transformPredict(
-    pred = data.frame(Fit = pred),
+    pred = data.frame(Fit = pred, Cluster = newdata$Cluster),
     model = model,
     newdata = newdata
   )
@@ -269,8 +288,13 @@ setMethod('transformPredict', signature('matrix', 'lcModel'), function(pred, mod
   assert_that(
     is.matrix(pred),
     ncol(pred) == nClusters(model),
-    is.null(newdata) || nrow(pred) == nrow(newdata)
+    nrow(pred) == nrow(newdata),
+    !is.null(colnames(pred)),
+    all(clusterNames(model) %in% colnames(pred))
   )
+
+  newOrder = match(colnames(pred), clusterNames(model))
+  pred = pred[, newOrder, drop = FALSE]
 
   if (hasName(newdata, 'Cluster')) {
     rowClusters = make.clusterIndices(model, newdata$Cluster)
@@ -285,9 +309,20 @@ setMethod('transformPredict', signature('matrix', 'lcModel'), function(pred, mod
 #' @aliases transformPredict,data.frame,lcModel-method
 setMethod('transformPredict', signature('data.frame', 'lcModel'), function(pred, model, newdata) {
   assert_that(
-    !is.null(newdata),
-    msg = sprintf('%s implementation error: newdata cannot be NULL for data.frame input', class(model)[1])
+    has_name(pred, c('Fit', 'Cluster')),
+    noNA(pred$Cluster),
+    all(unique(pred$Cluster) %in% clusterNames(model))
   )
+
+  if (hasName(newdata, 'Cluster')) {
+    assert_that(
+      all(unique(newdata$Cluster) %in% unique(pred$Cluster)),
+      msg = sprintf(
+        '"pred" is missing predictions for clusters %s',
+        paste0(setdiff(unique(newdata$Cluster), unique(pred$Cluster)), collapse = ', ')
+      )
+    )
+  }
 
   # generic form, possibly containing more predictions than newdata. These are filtered
   # if the pred object contains the newdata variables. Else, newdata is replicated.
@@ -298,14 +333,21 @@ setMethod('transformPredict', signature('data.frame', 'lcModel'), function(pred,
     return (as.data.table(pred)[0, ])
   }
 
-  assert_that(
-    has_name(pred, 'Fit'),
-    nrow(pred) > 0
-  )
+  # columns which are relevant to filtering predictions
+  datavars = names(newdata) %>% setdiff('Fit')
+  # columns which can be used for filtering because they're present in pred and newdata
+  mergevars = intersect(names(pred), datavars)
+  # columns which should be present in newpred
+  predvars = setdiff(names(pred), datavars)
 
-  mergevars = intersect(names(pred), names(newdata))
-  predvars = setdiff(names(pred), names(newdata))
+  if (length(predvars) == 0) {
+    stop(sprintf(
+      'possible %s implementation error: Cannot determine prediction variables. Check the "pred" input.',
+      class(model)[1]
+    ))
+  }
 
+  # match pred to newdata
   if (length(mergevars) == 0) {
     if (nrow(pred) == nrow(newdata)) {
       # newdata may have Cluster column, but we assume results are correct since rows match
@@ -320,7 +362,11 @@ setMethod('transformPredict', signature('data.frame', 'lcModel'), function(pred,
       newpred = pred
     }
     else {
-      stop('non-matching rows for pred and newdata, and no shared columns to merge on')
+      stop(sprintf(
+        'non-matching rows for pred and newdata, and no shared columns to merge on.\npred has (%s), newdatahas (%s)',
+        paste0(names(pred), collapse = ', '),
+        paste0(names(newdata), collapse = ', ')
+      ))
     }
   }
   else if (length(mergevars) == 1 && mergevars == 'Cluster') {
@@ -334,32 +380,69 @@ setMethod('transformPredict', signature('data.frame', 'lcModel'), function(pred,
       msg = 'number of observations per cluster must match the number of predictions per cluster'
     )
 
-    newpred = pred[Cluster %in% unique(newdata$Cluster)]
+    newpred = pred[Cluster %in% unique(newdata$Cluster)] %>% subset(select = -Cluster)
   }
   else {
     # attempt to merge pred and newdata to ensure correct filtering of predictions
+    # we merge only on recognized columns to prevent output from being corrupted due to duplicate value columns
+    newdataMerge = subset(newdata, select = mergevars)
+
+    if (anyDuplicated(pred, by = union(mergevars, intersect(names(pred), 'Cluster')))) {
+      # merging with newdata would result in replication of data points
+      id = idVariable(model)
+
+      if (not(id %in% mergevars)) {
+        stop(sprintf(
+          'The predictions in "pred" cannot be merged with newdata because its rows are not uniquely tied to rows in "newdata".
+Merging the data frames would result in data replication.
+In case replications are resulting from trajectory-specific predictions, specify the "%s" column to indicate the respective trajectory of the predictions.',
+          id
+        ))
+      }
+      else {
+        browser()
+        stop(sprintf(
+          'possible %s implementation error: the predictions in "pred" cannot be merged with newdata because its rows are not uniquely tied to rows in "newdata".
+Merging the data frames would result in data replication.',
+          class(model)[1]
+        ))
+      }
+    }
+
     newpred = merge(
-      newdata,
+      newdataMerge,
       pred,
       by = mergevars,
-      sort = FALSE,
-      allow.cartesian = TRUE
+      sort = FALSE
     ) %>%
       subset(select = predvars)
   }
 
-  if (hasName(newpred, 'Cluster')) {
+  if (hasName(newdata, 'Cluster')) {
+    # case where a cluster-specific prediction is requested.
+    assert_that(
+      !has_name(newpred, 'Cluster'),
+      msg = 'implementation error: newdata requests predictions for specific clusters,
+but newpred still has a Cluster column, indicating that merging of results has failed'
+    )
+
+    return (as.data.frame(newpred))
+  }
+  else if (hasName(newpred, 'Cluster')) {
+    # output predictions for each cluster
+    assert_that(has_name(newpred, 'Cluster'))
+
     newpredClusters = newpred$Cluster
     # drop Cluster column
-    newpred = subset(newpred, select = setdiff(names(newpred), 'Cluster')) %>%
-      as.data.frame()
+    newpred = subset(
+      newpred,
+      select = setdiff(names(newpred), 'Cluster')
+    )
 
-    if (hasName(newdata, 'Cluster')) {
-      newpred
-    } else {
-      split(newpred, newpredClusters)
-    }
+    split(as.data.frame(newpred), newpredClusters)
   } else {
+    warning('the model predictions do not include predictions for each cluster')
+    assert_that(nrow(newpred) == nrow(newdata))
     as.data.frame(newpred)
   }
 })

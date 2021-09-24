@@ -982,10 +982,14 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
     # enforce cluster ordering
     newdata[, Cluster := factor(Cluster, levels = clusterNames(object))]
 
-    assert_that(noNA(newdata$Cluster) &
-        all(unique(newdata$Cluster) %in% clusterNames(object)),
-      msg = paste0('The provided newdata "Cluster" column must be complete and only contain cluster names associated with the model (',
-        paste0(shQuote(clusterNames(object)), collapse = ', '), ').'))
+    assert_that(
+      noNA(newdata$Cluster),
+      all(unique(newdata$Cluster) %in% clusterNames(object)),
+      msg = paste0(
+        'The provided newdata "Cluster" column must be complete and only contain cluster names associated with the model (',
+        paste0(shQuote(clusterNames(object)), collapse = ', '), ').'
+      )
+    )
 
     # predictForCluster with newdata subsets
     clusdataList = split(newdata, by = 'Cluster', sorted = TRUE, drop = TRUE) %>%
@@ -997,16 +1001,23 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
     names(clusdataList) = clusterNames(object)
   }
 
-  predList = mapply(function(cname, cdata) {
-    predictForCluster(object, cluster = cname, newdata = cdata, what = what, ...)
-  }, names(clusdataList), clusdataList, SIMPLIFY = FALSE)
+  predList = mapply(
+    function(cname, cdata) {
+      predictForCluster(object, cluster = cname, newdata = cdata, what = what, ...)
+    },
+    names(clusdataList),
+    clusdataList,
+    SIMPLIFY = FALSE
+  )
 
   assert_that(
     length(predList) == length(clusdataList),
-    msg = 'unexpected internal state. please report')
+    msg = 'unexpected internal state. please report'
+  )
   assert_that(
     all(vapply(predList, function(x) is(x, class(predList[[1]])), FUN.VALUE = TRUE)),
-    msg = 'output from predictForCluster() must be same class for all clusters. Check the model implementation.')
+    msg = 'output from predictForCluster() must be same class for all clusters. Check the model implementation.'
+  )
 
 
   if (is.data.frame(predList[[1]])) {
@@ -1016,8 +1027,10 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
   else if (is.numeric(predList[[1]])) {
     clusDataRows = vapply(clusdataList, nrow, FUN.VALUE = 0)
     clusPredRows = vapply(predList, length, FUN.VALUE = 0)
-    assert_that(all(clusDataRows == clusPredRows),
-      msg = 'Numeric output length from predictForCluster() does not match the number of input newdata rows for one or more clusters')
+    assert_that(
+      all(clusDataRows == clusPredRows),
+      msg = 'Numeric output length from predictForCluster() does not match the number of input newdata rows for one or more clusters'
+    )
 
     pred = data.table(
       Cluster = rep(factor(names(clusDataRows), levels = clusterNames(object)), clusDataRows),
@@ -1030,7 +1043,10 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
     )
   }
 
-  preddata = cbind(rbindlist(clusdataList), pred)
+  preddata = cbind(
+    rbindlist(clusdataList),
+    pred
+  )
 
   transformPredict(pred = preddata, model = object, newdata = newdata)
 }
