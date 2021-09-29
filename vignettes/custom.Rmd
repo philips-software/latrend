@@ -30,7 +30,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this vignette we demonstrate how to define new methods, with varying degrees of completeness.
+In this vignette we demonstrate how to define new methods.
 
 # Case study data
 We will generate a dataset comprising two clusters with a different intercept and slope. Firstly, we configure the default id, time, and response variable, so that these do not need to be provided to the other function calls.
@@ -45,16 +45,17 @@ options(latrend.id = "Traj",
 Next, we generate the dataset, with 40 trajectories for cluster A and 60 trajectories for cluster B. Cluster A involves trajectories with a downward slope, whereas cluster B has an upward slope. We define a fixed mean of 1, such that all the cluster trajectories are shifted, placing cluster A at intercept 2, and cluster B at intercept 1.
 ```{r}
 set.seed(1)
-casedata <- generateLongData(sizes = c(40, 60), 
-                        data = data.frame(Time = 0:10),
-                        fixed = Y ~ 1,
-                        fixedCoefs = 1,
-                        cluster = ~ Time, 
-                        clusterCoefs = cbind(c(2, -.1), c(0, .05)),
-                        random = ~ Time,
-                        randomScales = cbind(c(.2, .02), c(.2, .02)),
-                        noiseScales = .05
-                        )
+casedata <- generateLongData(
+  sizes = c(40, 60), 
+  data = data.frame(Time = 0:10),
+  fixed = Y ~ 1,
+  fixedCoefs = 1,
+  cluster = ~ Time, 
+  clusterCoefs = cbind(c(2, -.1), c(0, .05)),
+  random = ~ Time,
+  randomScales = cbind(c(.2, .02), c(.2, .02)),
+  noiseScales = .05
+)
 ```
 
 We plot the data to get a sense of different trajectories that have been generated. Visually, there is little group separation.
@@ -134,12 +135,14 @@ The `lcModelCustom` function creates a `lcModel` object for a given vector of cl
 clusStep <- function(method, data, repMat, envir, verbose) {
   km <- kmeans(repMat, centers = 3)
 
-  lcModelCustom(response = method$response, 
-                method = method,
-                data = data, 
-                trajectoryAssignments = km$cluster,
-                clusterTrajectories = method$center,
-                model = km)
+  lcModelCustom(
+    response = method$response, 
+    method = method,
+    data = data, 
+    trajectoryAssignments = km$cluster,
+    clusterTrajectories = method$center,
+    model = km
+  )
 }
 ```
 
@@ -171,20 +174,24 @@ repStep.gen <- function(method, data, verbose) {
 clusStep.gen <- function(method, data, repMat, envir, verbose) {
   km <- kmeans(repMat, centers = method$nClusters)
 
-  lcModelCustom(response = "Y",
+  lcModelCustom(
+    response = "Y",
     method = method,
     data = data, 
     trajectoryAssignments = km$cluster,
     clusterTrajectories = method$center,
-    model = km)
+    model = km
+  )
 }
 ```
 
 We create a new `lcMethodFeature` instance with the more generic functions. Defining values for `formula` and `nClusters` here makes these arguments values act as default values in a call of `latrend`.
 ```{r}
-m.twostepgen <- lcMethodFeature(response = "Y",
+m.twostepgen <- lcMethodFeature(
+  response = "Y",
   representationStep = repStep.gen, 
-  clusterStep = clusStep.gen)
+  clusterStep = clusStep.gen
+)
 ```
 
 However, because we omitted the specification of `formula` and `nClusters`, these need to be provided in the `latrend` call.
@@ -207,19 +214,21 @@ setClass("lcMethodSimpleGBTM", contains = "lcMethod")
 Note that a `lcMethod` class has a single slot `call`, which stores all the arguments to the method. The other relevant aspects of a `lcMethod` implementation are the `prepareData()` and `fit()` functions, which are called when passing a `lcMethod` object to the `latrend()` function or any other model estimation function.
 
 ```{r}
-lcMethodSimpleGBTM <- function(formula = Value ~ Time,
-                              time = getOption("latrend.time"),
-                              id = getOption("latrend.id"),
-                              nClusters = 2,
-                              nwg = FALSE) {
+lcMethodSimpleGBTM <- function(
+  formula = Value ~ Time,
+  time = getOption("latrend.time"),
+  id = getOption("latrend.id"),
+  nClusters = 2,
+  nwg = FALSE
+) {
   lcMethod.call("lcMethodSimpleGBTM", call = stackoverflow::match.call.defaults())
 }
 ```
 
 Next, we override the `getName()` and `getShortName()` functions in our method class to ensure that the model is easily distinguishable from other methods in the summary output. While we return a simple constant character sequence, the naming functions could be improved by generating a more detailed description of the model based on the arguments of the method object.
 ```{r}
-setMethod("getName", 
-  signature("lcMethodSimpleGBTM"), function(object, ...) "simple group-based trajectory model")
+setMethod("getName", signature("lcMethodSimpleGBTM"), 
+  function(object, ...) "simple group-based trajectory model")
 
 setMethod("getShortName", signature("lcMethodSimpleGBTM"), function(object, ...) "sgbtm")
 ```
@@ -253,11 +262,13 @@ setMethod("fit", signature("lcMethodSimpleGBTM"), function(method, data, envir, 
   
   model <- do.call(lcmm::lcmm, args)
   
-  new("lcModelSimpleGBTM", 
-      method = method,
-      data = data,
-      model = model,
-      clusterNames = LETTERS[seq_len(method$nClusters)])
+  new(
+    "lcModelSimpleGBTM", 
+    method = method,
+    data = data,
+    model = model,
+    clusterNames = LETTERS[seq_len(method$nClusters)]
+  )
 })
 ```
 
