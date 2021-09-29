@@ -1,7 +1,7 @@
 ---
 title: "Validating cluster models"
 author: "Niek Den Teuling"
-date: "`r Sys.Date()`"
+date: "2020-11-06"
 output: 
   rmarkdown::html_vignette:
     toc: true

@@ -1,10 +1,10 @@
 ---
 title: "Implementing new models"
 author: "Niek Den Teuling"
-date: "`r Sys.Date()`"
+date: "2021-01-16"
 output: 
   rmarkdown::html_vignette:
-    toc: true # table of content true
+    toc: true
     toc_depth : 2  
 vignette: >
   %\VignetteIndexEntry{Implementing new models}
