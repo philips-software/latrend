@@ -22,7 +22,7 @@ with some adjustments made in order to improve cluster separation for demonstrat
 
 Mark S. Aloia, Matthew S. Goodwin, Wayne F. Velicer, J. Todd Arnedt, Molly Zimmerman, Jaime Skrekas, Sarah Harris, Richard P. Millman,
 Time Series Analysis of Treatment Adherence Patterns in Individuals with Obstructive Sleep Apnea, Annals of Behavioral Medicine,
-Volume 36, Issue 1, August 2008, Pages 44-53, \link{https://doi.org/10.1007/s12160-008-9052-9}
+Volume 36, Issue 1, August 2008, Pages 44-53, \url{https://doi.org/10.1007/s12160-008-9052-9}
 }
 \usage{
 OSA.adherence
