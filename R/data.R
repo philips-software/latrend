@@ -75,25 +75,33 @@
 #' @param noiseScales Scale of the random noise passed to rnoise. Either scalar or defined per cluster.
 #' @param rnoise Random sampler for generating noise at location 0 with the respective scale.
 #' @param shuffle Whether to randomly reorder the strata in which they appear in the data.frame.
+#' @param seed Optional seed to set for the PRNG. The set PRNG state persists after the function completes.
 #' @examples
 #' longdata <- generateLongData(sizes = c(40, 70), id = "Id",
 #'                             cluster = ~poly(Time, 2, raw = TRUE),
 #'                             clusterCoefs = cbind(c(1, 2, 5), c(-3, 4, .2)))
 #' plotTrajectories(longdata, response = "Value", id = "Id", time = "Time")
-generateLongData = function(sizes = c(40, 60),
-                            fixed = Value ~ 1 + Time,
-                            cluster = ~ 1 + Time,
-                            random = ~ 1,
-                            id = getOption('latrend.id'),
-                            data = data.frame(Time = seq(0, 1, by = .1)),
-                            fixedCoefs = c(0, 0),
-                            clusterCoefs = cbind(c(-2, 1), c(2, -1)),
-                            randomScales = cbind(.1, .1),
-                            rrandom = rnorm,
-                            noiseScales = c(.1, .1),
-                            rnoise = rnorm,
-                            clusterNames = LETTERS[seq_along(sizes)],
-                            shuffle = FALSE) {
+generateLongData = function(
+  sizes = c(40, 60),
+  fixed = Value ~ 1 + Time,
+  cluster = ~ 1 + Time,
+  random = ~ 1,
+  id = getOption('latrend.id'),
+  data = data.frame(Time = seq(0, 1, by = .1)),
+  fixedCoefs = c(0, 0),
+  clusterCoefs = cbind(c(-2, 1), c(2, -1)),
+  randomScales = cbind(.1, .1),
+  rrandom = rnorm,
+  noiseScales = c(.1, .1),
+  rnoise = rnorm,
+  clusterNames = LETTERS[seq_along(sizes)],
+  shuffle = FALSE,
+  seed = NULL
+) {
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+
   nClus = length(sizes)
   assert_that(nClus >= 1, all(sizes > 0))
   assert_that(is.character(id) && nchar(id) > 0)
