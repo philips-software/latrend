@@ -1,0 +1,67 @@
+---
+title: "Conducting a simulation study"
+author: "Niek Den Teuling"
+date: "2021-09-29"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth : 2  
+vignette: >
+  %\VignetteIndexEntry{Conducting a simulation study}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = TRUE
+)
+```
+
+```{r setup, include = FALSE}
+library(ggplot2)
+library(magrittr)
+library(latrend)
+library(simTool)
+knitr::opts_chunk$set(
+  cache = TRUE,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Generating data
+For generating data in a more flexible way, see the simstudy package.
+
+```{r}
+dataGrid = expand_tibble(
+  fun = 'generateLongData',
+  randomScales = c(.1, .5),
+  seed = 1:2
+)
+
+head(dataGrid)
+```
+
+
+# Defining methods
+```{r}
+methodGrid = expand_tibble(
+  fun = 'latrend',
+  method = c('lcMethodKML', 'lcMethodAkmedoids'), 
+  nClusters = 1:2,
+  seed = 1:10,
+  response = 'Y'
+)
+
+head(methodGrid)
+```
+
+# Compute
+```{r}
+result = eval_tibbles(data_grid = dataGrid, proc_grid = methodGrid)
+```
+
+
+# Performance

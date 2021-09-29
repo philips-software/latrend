@@ -70,8 +70,9 @@ plotMetric(models, c("WMAE", "BIC"))
 Further step-by-step instructions on how to use the package are described in the vignettes.
 \itemize{
 \item See \code{vignette("demo", package = "latrend")} for an introduction to conducting a longitudinal cluster analysis on a example case study.
-\item See \code{vignette("implement", package = "latrend")} for examples on constructing your own cluster models.
+\item See \code{vignette("simulation", package = "latrend")} for an example on conducting a simulation study.
 \item See \code{vignette("validation", package = "latrend")} for examples on applying internal cluster validation.
+\item See \code{vignette("implement", package = "latrend")} for examples on constructing your own cluster models.
 }
 }
 

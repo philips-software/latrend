@@ -64,8 +64,9 @@
 #' @section Vignettes:
 #' Further step-by-step instructions on how to use the package are described in the vignettes.
 #' * See `vignette("demo", package = "latrend")` for an introduction to conducting a longitudinal cluster analysis on a example case study.
-#' * See `vignette("implement", package = "latrend")` for examples on constructing your own cluster models.
+#' * See `vignette("simulation", package = "latrend")` for an example on conducting a simulation study.
 #' * See `vignette("validation", package = "latrend")` for examples on applying internal cluster validation.
+#' * See `vignette("implement", package = "latrend")` for examples on constructing your own cluster models.
 #' @section Useful pages:
 #' Method specification:
 #' [lcMethod-class][lcMethod-class]
