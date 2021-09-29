@@ -1,14 +1,23 @@
-#' Artificial longitudinal dataset comprising three classes
-#' @format A `data.frame` describing 200 trajectories originating from one of three classes,
-#' each with a different cluster trajectory. Trajectories randomly deviate in intercept and slope from the reference cluster.
+#' @title Artificial longitudinal dataset comprising three classes
+#' @description
+#' An artificial longitudinal dataset comprising 200 trajectories belonging to one of 3 classes.
+#' Each trajectory deviates in intercept and slope from its respective class trajectory.
+#' @format A `data.frame` comprising longitudinal observations from 200 trajectories.
+#' Each row represents the observed value of a trajectory at a specific moment in time.
 #' \describe{
-#'   \item{Id}{trajectory identifier, `integer`.}
-#'   \item{Time}{measurement time, `numeric`, between 0 and 2.}
-#'   \item{Y}{observed variable, `numeric`.}
-#'   \item{Class}{the reference class, `factor`.}
+#'   \item{Id}{`integer`: The trajectory identifier.}
+#'   \item{Time}{`numeric`: The measurement time, between 0 and 2.}
+#'   \item{Y}{`numeric`: The observed value at the respective time `Time` for trajectory `Id`.}
+#'   \item{Class}{`factor`: The reference class.}
 #' }
 #' @source This dataset was generated using [generateLongData].
 #' @seealso [generateLongData]
+#' @examples
+#' data(latrendData)
+#' plotTrajectories(latrendData, id = "Id", time = "Time", response = "Y")
+#'
+#' # plot according to the reference class
+#' plotTrajectories(latrendData, id = "Id", time = "Time", response = "Y", cluster = "Class")
 "latrendData"
 
 
