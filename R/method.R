@@ -126,6 +126,7 @@ setValidity('lcMethod', function(object) {
   }
 
   if (isArgDefined(object, 'nClusters')) {
+    assert_that(is.scalar(object$nClusters))
     assert_that(is.na(object$nClusters) || is.count(object$nClusters))
   }
 })
@@ -175,7 +176,11 @@ setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL)
   if (eval) {
     # within-method scope
     value = tryCatch({
-      eval(arg, envir = mget(setdiff(names(x@arguments), i), envir = x@arguments))
+      eval(
+        arg,
+        envir = mget(setdiff(names(x@arguments), i), envir = x@arguments),
+        enclos = envir
+      )
     }, error = function(e) {
       tryCatch({
         eval(arg, envir = envir)

@@ -57,6 +57,23 @@ test_that('method argument values', {
   expect_equivalent(m$name, xvar)
 })
 
+test_that('take local over global scope', {
+  m = new('lcMethodTest', a = 1, var = globalVar)
+  assign('globalVar', value = 5, envir = .GlobalEnv)
+  globalVar = 2
+
+  expect_equal(m$var, 2)
+
+  rm('globalVar', envir = .GlobalEnv)
+})
+
+test_that('argument value in global scope', {
+  m = new('lcMethodTest', a = 1, var = globalVar)
+  assign('globalVar', value = 7, envir = .GlobalEnv)
+  expect_equal(m$var, 7)
+  rm('globalVar', envir = .GlobalEnv)
+})
+
 test_that('unevaluated values', {
   expect_null(m[['null', eval = FALSE]])
   expect_true(is.na(m[['vNA', eval = FALSE]]))
