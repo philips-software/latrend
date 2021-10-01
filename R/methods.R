@@ -65,15 +65,41 @@ lcMethods = function(method, ..., envir = NULL) {
   mc = match.call()[-1]
   assert_that(not('' %in% names(mc)), msg = 'method arguments must be named')
   argNames = names(mc) %>% setdiff(c('method', 'envir'))
-  argCalls = mc[argNames]
+  argCalls = as.list(mc)[argNames]
 
   nameMask = vapply(argCalls, is.name, FUN.VALUE = FALSE)
   dotMask = vapply(argCalls, function(x) is.call(x) && x[[1]] == '.', FUN.VALUE = FALSE)
   evalMask = !nameMask & !dotMask
 
-  nameArgs = lapply(which(nameMask), function(i) as.list(argCalls[[i]]))
+  nameArgs = lapply(
+    which(nameMask),
+    function(i) {
+      tryCatch({
+          argVal = eval(argCalls[[i]], envir = envir)
+          as.list(argVal)
+        },
+        error = function(...) argCalls[i]
+      )
+    }
+  )
   dotArgs = lapply(which(dotMask), function(i) as.list(argCalls[[i]][-1]))
-  evalArgs = lapply(argCalls[evalMask], eval, envir = parent.frame())
+
+  evalArgs = lapply(
+    which(evalMask),
+    function(i) {
+      tryCatch({
+          eval(argCalls[[i]], envir = envir)
+        },
+        error = function(e, ...) {
+          stop(sprintf(
+            'Error occurred while evaluating lcMethods argument "%s":\n  "%s"\n',
+            argNames[i],
+            e$message
+          ))
+        }
+      )
+    }
+  )
 
   assert_that(
     all(vapply(nameArgs, is.list, FUN.VALUE = FALSE)),

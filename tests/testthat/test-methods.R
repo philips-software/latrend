@@ -36,9 +36,20 @@ test_that('as.data.frame multi-row different classes', {
 })
 
 test_that('vector argument', {
-  methods = lcMethods(lcMethodTestKML(), nClusters=1:3)
+  methods = lcMethods(lcMethodTestKML(), nClusters = 1:3)
   expect_is(methods, 'list')
   expect_length(methods, 3)
+})
+
+test_that('vector variable argument', {
+  nclus = 1:3
+  methods = lcMethods(lcMethodTestKML(), nClusters = nclus)
+  expect_is(methods, 'list')
+  expect_length(methods, 3)
+})
+
+test_that('error argument', {
+  expect_error(lcMethods(lcMethodTestKML(), fail = stop('no')), 'fail')
 })
 
 test_that('default', {
@@ -56,7 +67,7 @@ test_that('var', {
 
 
 test_that('scalar argument', {
-  methods = lcMethods(lcMethodTestKML(), nClusters=2)
+  methods = lcMethods(lcMethodTestKML(), nClusters = 2)
   expect_is(methods, 'list')
   expect_length(methods, 1)
   expect_equal(methods[[1]]$nClusters, 2)
@@ -64,7 +75,7 @@ test_that('scalar argument', {
 
 
 test_that('char argument', {
-  methods = lcMethods(lcMethodTestKML(), nClusters=2, test = 'a')
+  methods = lcMethods(lcMethodTestKML(), nClusters = 2, test = 'a')
   expect_is(methods, 'list')
   expect_length(methods, 1)
   expect_equal(methods[[1]]$nClusters, 2)
@@ -74,7 +85,7 @@ test_that('char argument', {
 
 test_that('var with vector argument', {
   kml = lcMethodTestKML()
-  methods = lcMethods(kml, nClusters=1:3)
+  methods = lcMethods(kml, nClusters = 1:3)
   expect_is(methods, 'list')
   expect_length(methods, 3)
 })
@@ -82,19 +93,19 @@ test_that('var with vector argument', {
 test_that('.() argument', {
   a = 1
   b = 2
-  methods = lcMethods(lcMethodTestKML(), nClusters=.(a,b))
+  methods = lcMethods(lcMethodTestKML(), nClusters = .(a,b))
   expect_is(methods, 'list')
   expect_length(methods, 2)
 
-  expect_equal(deparse(methods[[1]][['nClusters', eval=FALSE]]), 'a')
-  expect_equal(deparse(methods[[2]][['nClusters', eval=FALSE]]), 'b')
+  expect_equal(deparse(methods[[1]][['nClusters', eval = FALSE]]), 'a')
+  expect_equal(deparse(methods[[2]][['nClusters', eval = FALSE]]), 'b')
 })
 
 
 test_that('cartesian', {
   a = 1
   b = 2
-  methods = lcMethods(lcMethodTestKML(), maxIt = 10, seed = .(a, b), nClusters=1:3)
+  methods = lcMethods(lcMethodTestKML(), maxIt = 10, seed = .(a, b), nClusters = 1:3)
   expect_is(methods, 'list')
   expect_length(methods, 1 * 2 * 3)
 
@@ -106,7 +117,7 @@ test_that('cartesian', {
 
 test_that('do.call', {
   m = lcMethodTestKML() %>% evaluate()
-  methods = do.call(lcMethods, list(m, maxIt = 10, seed = 1:3, nClusters=2))
+  methods = do.call(lcMethods, list(m, maxIt = 10, seed = 1:3, nClusters = 2))
   expect_is(methods, 'list')
   expect_length(methods, 1 * 3 * 1)
 })
