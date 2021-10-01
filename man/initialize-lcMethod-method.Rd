@@ -9,13 +9,7 @@
 \arguments{
 \item{.Object}{The newly allocated \code{lcMethod} object.}
 
-\item{...}{Other method arguments. These take precedence over arguments defined by the \code{.call} argument.}
-
-\item{.call}{A \code{call} containing the method argument expressions, symbols, and values.}
-
-\item{.defaults}{A \code{function} or \code{list} of \code{function}s of which the formal arguments are used as arguments defaults.}
-
-\item{.exclude}{Names of arguments that should be excluded from the resulting \code{lcMethod} object.}
+\item{...}{Other method arguments.}
 }
 \description{
 Initialization of \code{lcMethod} objects, converting arbitrary arguments to arguments as part of an \code{lcMethod} object.

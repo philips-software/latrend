@@ -34,7 +34,7 @@
 #'
 #' @details Because the `lcMethod` arguments may be unevaluated, argument retrieval functions such as `[[` accept an `envir` argument.
 #' A default `environment` can be assigned or obtained from a `lcMethod` object using the `environment()` function.
-#' @seealso [environment] [lcMethod-constructor]
+#' @seealso [environment]
 #' @slot arguments A `list` representing the arguments of the `lcMethod` object. Arguments are not evaluated upon creation of the method object. Instead, arguments are stored similar to a `call` object. Do not modify or access.
 #' @slot sourceCalls A list of calls for tracking the original call after substitution. Used for printing objects which require too many characters (e.g. ,function definitions, matrices).
 #' @family lcMethod implementations
@@ -45,16 +45,10 @@ setClass('lcMethod', slots = c(arguments = 'environment', sourceCalls = 'list'))
 #' @title lcMethod initialization
 #' @description Initialization of `lcMethod` objects, converting arbitrary arguments to arguments as part of an `lcMethod` object.
 #' @param .Object The newly allocated `lcMethod` object.
-#' @param .call A `call` containing the method argument expressions, symbols, and values.
-#' @param .defaults A `function` or `list` of `function`s of which the formal arguments are used as arguments defaults.
-#' @param .exclude Names of arguments that should be excluded from the resulting `lcMethod` object.
-#' @param ... Other method arguments. These take precedence over arguments defined by the `.call` argument.
+#' @param ... Other method arguments.
 #' @examples
 #' new("lcMethodKML", response = "Value")
-setMethod('initialize', 'lcMethod', function(
-  .Object,
-  ...
-) {
+setMethod('initialize', 'lcMethod', function(.Object, ...) {
   .Object <- callNextMethod(.Object)
   .defaults = getArgumentDefaults(.Object)
   .exclude = getArgumentExclusions(.Object)

@@ -52,7 +52,7 @@ The result of the fitting procedure is an \linkS4class{lcModel} object that inhe
 }
 
 \seealso{
-\link{environment} \link{lcMethod-constructor}
+\link{environment}
 
 Other lcMethod implementations: 
 \code{\link{lcMethodAkmedoids}},
