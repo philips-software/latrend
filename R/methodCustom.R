@@ -37,8 +37,7 @@ lcMethodCustom = function(
   center = meanNA,
   time = getOption('latrend.time'),
   id = getOption('latrend.id'),
-  name = 'custom',
-  ...
+  name = 'custom'
 ) {
   mc = match.call.all()
   mc$Class = 'lcMethodCustom'
