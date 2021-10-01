@@ -27,18 +27,34 @@ setClass('lcMethodMixtoolsGMM', contains = 'lcMethod')
 #' @family lcMethod implementations
 #' @references
 #' \insertRef{benaglia2009mixtools}{latrend}
-lcMethodMixtoolsGMM = function(formula,
-                               time = getOption('latrend.time'),
-                               id = getOption('latrend.id'),
-                               nClusters = 2,
-                               ...) {
-  lcMethod.call(
-    'lcMethodMixtoolsGMM',
-    call = match.call.defaults(),
-    defaults = mixtools::regmixEM.mixed,
-    excludeArgs = c('data', 'y', 'x', 'w', 'k', 'addintercept.fixed', 'verb')
-  )
+lcMethodMixtoolsGMM = function(
+  formula,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  nClusters = 2,
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodMixtoolsGMM'
+  do.call(new, as.list(mc))
 }
+
+#' @rdname interface-mixtools
+setMethod('getArgumentDefaults', signature('lcMethodMixtoolsGMM'), function(object) {
+  c(
+    formals(lcMethodMixtoolsGMM),
+    formals(mixtools::regmixEM.mixed),
+    callNextMethod()
+  )
+})
+
+#' @rdname interface-mixtools
+setMethod('getArgumentExclusions', signature('lcMethodMixtoolsGMM'), function(object) {
+  union(
+    callNextMethod(),
+    c('data', 'y', 'x', 'w', 'k', 'addintercept.fixed', 'verb')
+  )
+})
 
 #' @rdname interface-mixtools
 #' @inheritParams getName

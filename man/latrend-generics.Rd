@@ -33,6 +33,10 @@ fittedTrajectories(
   ...
 )
 
+getArgumentDefaults(object, ...)
+
+getArgumentExclusions(object, ...)
+
 getLabel(object, ...)
 
 getName(object, ...)

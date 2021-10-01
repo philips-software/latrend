@@ -4,26 +4,18 @@
 \alias{match.call.all}
 \title{Argument matching with defaults and parent ellipsis expansion}
 \usage{
-match.call.all(
-  definition = sys.function(sys.parent()),
-  call = sys.call(sys.parent()),
-  expand.dots = TRUE,
-  envir = parent.frame(2L)
-)
+match.call.all(n = 1L)
 }
 \arguments{
-\item{definition}{A \code{function}. By default, the calling function is used.}
-
-\item{call}{A \code{call}. By default, the parent call is used.}
-
-\item{expand.dots}{Whether arguments specified in ellipsis should be included, or ellipses be kept as-is.}
-
-\item{envir}{The \code{environment} in which the ellipsis and parent ellipsis are evaluated.}
+\item{n}{The number of frames to go back on the calling stack. See \link[base:sys.parent]{base::sys.parent} for more details.}
+}
+\value{
+A \code{call}
 }
 \description{
-Argument matching with defaults and parent ellipsis expansion
+Returns a call containing all arguments in specified form, including default arguments.
 }
 \seealso{
-\link[stackoverflow:match.call.defaults]{stackoverflow::match.call.defaults}
+\link[base:match.call]{base::match.call} \link[base:sys.parent]{base::sys.parent}
 }
 \keyword{internal}

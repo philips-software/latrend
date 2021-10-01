@@ -207,12 +207,29 @@ setClass("lcMethodSimpleGBTM", contains = "lcMethod")
 Note that a `lcMethod` class has a single slot `call`, which stores all the arguments to the method. The other relevant aspects of a `lcMethod` implementation are the `prepareData()` and `fit()` functions, which are called when passing a `lcMethod` object to the `latrend()` function or any other model estimation function.
 
 ```{r}
-lcMethodSimpleGBTM <- function(formula = Value ~ Time,
-                              time = getOption("latrend.time"),
-                              id = getOption("latrend.id"),
-                              nClusters = 2,
-                              nwg = FALSE) {
-  lcMethod.call("lcMethodSimpleGBTM", call = stackoverflow::match.call.defaults())
+setMethod("initialize", "lcMethodSimpleGBTM",
+  function(
+    .Object,
+    
+  ) {
+    mc <- match.call()
+    .Object <- callNextMethod(.Object, .call = mc)
+    validObject(.Object)
+    .Object
+  }
+)
+
+lcMethodSimpleGBTM <- function(
+  formula = Value ~ Time,
+  time = getOption("latrend.time"),
+  id = getOption("latrend.id"),
+  nClusters = 2,
+  nwg = FALSE,
+  ...
+) {
+  mc = match.call()
+  mc$Class = 'lcMethodSimpleGBTM'
+  do.call(new, as.list(mc))
 }
 ```
 

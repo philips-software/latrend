@@ -10,7 +10,8 @@ lcMethodCustom(
   center = meanNA,
   time = getOption("latrend.time"),
   id = getOption("latrend.id"),
-  name = "custom"
+  name = "custom",
+  ...
 )
 }
 \arguments{

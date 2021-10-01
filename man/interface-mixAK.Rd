@@ -3,6 +3,8 @@
 %   R/modelMixAK_GLMMlist.R
 \name{interface-mixAK}
 \alias{interface-mixAK}
+\alias{getArgumentDefaults,lcMethodMixAK_GLMM-method}
+\alias{getArgumentExclusions,lcMethodMixAK_GLMM-method}
 \alias{getName,lcMethodMixAK_GLMM-method}
 \alias{getShortName,lcMethodMixAK_GLMM-method}
 \alias{responseVariable,lcMethodMixAK_GLMM-method}
@@ -16,6 +18,10 @@
 \alias{predictForCluster,lcModelMixAK_GLMMlist-method}
 \title{mixAK interface}
 \usage{
+\S4method{getArgumentDefaults}{lcMethodMixAK_GLMM}(object)
+
+\S4method{getArgumentExclusions}{lcMethodMixAK_GLMM}(object)
+
 \S4method{getName}{lcMethodMixAK_GLMM}(object)
 
 \S4method{getShortName}{lcMethodMixAK_GLMM}(object)

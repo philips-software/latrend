@@ -3,6 +3,7 @@
 %   R/methodRandom.R, R/modelPartition.R, R/modelStratify.R
 \name{interface-custom}
 \alias{interface-custom}
+\alias{getArgumentDefaults,lcMethodCustom-method}
 \alias{getName,lcMethodCustom-method}
 \alias{getShortName,lcMethodCustom-method}
 \alias{prepareData,lcMethodCustom-method}
@@ -15,6 +16,7 @@
 \alias{predictPostprob,lcModelCustom-method}
 \alias{clusterTrajectories,lcModelCustom-method}
 \alias{fittedTrajectories,lcModelCustom-method}
+\alias{getArgumentDefaults,lcMethodRandom-method}
 \alias{getName,lcMethodRandom-method}
 \alias{getShortName,lcMethodRandom-method}
 \alias{fit,lcMethodRandom-method}
@@ -29,6 +31,8 @@
 \alias{predictPostprob,lcModelStratify-method}
 \title{custom interface}
 \usage{
+\S4method{getArgumentDefaults}{lcMethodCustom}(object)
+
 \S4method{getName}{lcMethodCustom}(object)
 
 \S4method{getShortName}{lcMethodCustom}(object)
@@ -58,6 +62,8 @@
   clusters = trajectoryAssignments(object),
   ...
 )
+
+\S4method{getArgumentDefaults}{lcMethodRandom}(object)
 
 \S4method{getName}{lcMethodRandom}(object)
 

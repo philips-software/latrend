@@ -90,19 +90,35 @@ setValidity('lcMethodMixTVEM', function(object) {
 #' }
 #' @references
 #' \insertRef{dziak2015modeling}{latrend}
-lcMethodMixTVEM = function(formula,
-                           formula.mb =  ~ 1,
-                           time = getOption('latrend.time'),
-                           id = getOption('latrend.id'),
-                           nClusters = 2,
-                           ...) {
-  lcMethod.call(
-    'lcMethodMixTVEM',
-    call = match.call.defaults(),
-    defaults = TVEMMixNormal,
-    excludeArgs = c('doPlot', 'getSEs', 'numClasses')
-  )
+lcMethodMixTVEM = function(
+  formula,
+  formula.mb =  ~ 1,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  nClusters = 2,
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodMixTVEM'
+  do.call(new, as.list(mc))
 }
+
+#' @rdname interface-mixtvem
+setMethod('getArgumentDefaults', signature('lcMethodMixTVEM'), function(object) {
+  c(
+    formals(lcMethodMixTVEM),
+    formals(TVEMMixNormal),
+    callNextMethod()
+  )
+})
+
+#' @rdname interface-mixtvem
+setMethod('getArgumentExclusions', signature('lcMethodMixTVEM'), function(object) {
+  union(
+    callNextMethod(),
+    c('doPlot', 'getSEs', 'numClasses')
+  )
+})
 
 #' @rdname interface-mixtvem
 #' @inheritParams getName

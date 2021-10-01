@@ -31,19 +31,35 @@ setClass('lcMethodFunFEM', contains = 'lcMatrixMethod')
 #' @family lcMethod implementations
 #' @references
 #' \insertRef{bouveyron2015funfem}{latrend}
-lcMethodFunFEM = function(response,
-                          time = getOption('latrend.time'),
-                          id = getOption('latrend.id'),
-                          nClusters = 2,
-                          basis = function(time) fda::create.bspline.basis(time, nbasis = 10, norder = 4),
-                          ...) {
-  lcMethod.call(
-    'lcMethodFunFEM',
-    call = match.call.defaults(),
-    defaults = funFEM::funFEM,
-    excludeArgs = c('fd', 'K', 'disp', 'graph')
-  )
+lcMethodFunFEM = function(
+  response,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  nClusters = 2,
+  basis = function(time) fda::create.bspline.basis(time, nbasis = 10, norder = 4),
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodFunFEM'
+  do.call(new, as.list(mc))
 }
+
+#' @rdname interface-funFEM
+setMethod('getArgumentDefaults', signature('lcMethodFunFEM'), function(object) {
+  c(
+    formals(lcMethodFunFEM),
+    formals(funFEM::funFEM),
+    callNextMethod()
+  )
+})
+
+#' @rdname interface-funFEM
+setMethod('getArgumentExclusions', signature('lcMethodFunFEM'), function(object) {
+  union(
+    callNextMethod(),
+    c('fd', 'K', 'disp', 'graph')
+  )
+})
 
 #' @rdname interface-funFEM
 setMethod('getName', signature('lcMethodFunFEM'), function(object) 'functional subspace clustering with FunFEM')

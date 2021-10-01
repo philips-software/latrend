@@ -3,10 +3,14 @@
 %   R/modelFlexmix.R
 \name{interface-flexmix}
 \alias{interface-flexmix}
+\alias{getArgumentDefaults,lcMethodFlexmix-method}
+\alias{getArgumentExclusions,lcMethodFlexmix-method}
 \alias{getName,lcMethodFlexmix-method}
 \alias{getShortName,lcMethodFlexmix-method}
 \alias{preFit,lcMethodFlexmix-method}
 \alias{fit,lcMethodFlexmix-method}
+\alias{getArgumentDefaults,lcMethodFlexmixGBTM-method}
+\alias{getArgumentExclusions,lcMethodFlexmixGBTM-method}
 \alias{getName,lcMethodFlexmixGBTM-method}
 \alias{getShortName,lcMethodFlexmixGBTM-method}
 \alias{preFit,lcMethodFlexmixGBTM-method}
@@ -18,6 +22,10 @@
 \alias{converged,lcModelFlexmix-method}
 \title{flexmix interface}
 \usage{
+\S4method{getArgumentDefaults}{lcMethodFlexmix}(object)
+
+\S4method{getArgumentExclusions}{lcMethodFlexmix}(object)
+
 \S4method{getName}{lcMethodFlexmix}(object)
 
 \S4method{getShortName}{lcMethodFlexmix}(object)
@@ -25,6 +33,10 @@
 \S4method{preFit}{lcMethodFlexmix}(method, data, envir, verbose, ...)
 
 \S4method{fit}{lcMethodFlexmix}(method, data, envir, verbose, ...)
+
+\S4method{getArgumentDefaults}{lcMethodFlexmixGBTM}(object)
+
+\S4method{getArgumentExclusions}{lcMethodFlexmixGBTM}(object)
 
 \S4method{getName}{lcMethodFlexmixGBTM}(object)
 

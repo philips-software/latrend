@@ -325,6 +325,19 @@ latrendBatch = function(methods,
     msg = 'methods argument must be a list of lcMethod objects'
   )
   assert_that(
+    all(lengths(methods) > 0),
+    msg = sprintf(
+      'the lcMethod object(s) in the "methods" argument at index %s do not have any arguments.',
+      paste0(
+        which(lengths(methods) == 0),
+        ' (',
+        vapply(methods[lengths(methods) == 0], class, FUN.VALUE = ''),
+        ')',
+        collapse = ', '
+      )
+    )
+  )
+  assert_that(
     !missing(data),
     is.flag(cartesian),
     is.flag(parallel)
