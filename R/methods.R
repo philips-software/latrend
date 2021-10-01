@@ -10,8 +10,8 @@ setOldClass('lcMethods')
 #' @param ... Additional arguments.
 #' @return A `data.frame` with each row containing the argument values of a method object.
 #' @family lcMethod functions
-as.data.frame.lcMethods = function(x, ..., eval = FALSE, nullValue = NA, envir = NULL) {
-  df = lapply(x, as.data.frame) %>%
+as.data.frame.lcMethods = function(x, ..., eval = TRUE, nullValue = NA, envir = parent.frame()) {
+  df = lapply(x, as.data.frame, ..., eval = eval, nullValue = nullValue, envir = envir) %>%
     rbindlist(fill = TRUE) %>%
     as.data.frame()
 

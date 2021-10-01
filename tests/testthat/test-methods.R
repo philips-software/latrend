@@ -109,7 +109,7 @@ test_that('cartesian', {
   expect_is(methods, 'list')
   expect_length(methods, 1 * 2 * 3)
 
-  df = as.data.frame(methods)
+  df = as.data.frame(methods, eval = FALSE)
   expect_true(all(df$maxIt == 10))
   expect_equal(df$seed, rep(c('a', 'b'), each = 3))
   expect_equal(df$nClusters, rep(1:3, 2))
