@@ -1117,12 +1117,13 @@ match.call.frame = function(which = sys.parent()) {
   def = sys.function(which)
   envir = sys.frame(which - 1)
 
-  call = match.call.defaults(def, call = sys.call(which), expand.dots = TRUE, envir = envir)
+  call = match.call(def, call = sys.call(which), expand.dots = TRUE, envir = envir)
 
   formals = formals(def)
+
   outCall = call
   for (arg in setdiff(names(formals), c('...', names(call)))) {
-    outCall[[arg]] = formals[[arg]]
+    outCall[arg] = list(formals[[arg]]) # use list() to preserve NULLs
   }
 
   outCall = match.call(def, outCall, TRUE, envir)

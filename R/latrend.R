@@ -1,5 +1,4 @@
 #' @export
-#' @importFrom stackoverflow match.call.defaults
 #' @title Cluster longitudinal data
 #' @description Fit a longitudinal cluster method to the given training data, according to the specification provided by the `lcMethod` object.
 #'
@@ -73,7 +72,7 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
   exit(verbose, level = verboseLevels$finest)
 
   fitTiming = .enterTimed(verbose, 'Fitting the method')
-  mc = match.call.defaults()
+  mc = match.call.all()
   model = fitLatrendMethod(
     cmethod,
     modelData,
@@ -197,7 +196,7 @@ latrendRep = function(method,
   ruler(verbose)
 
 
-  mc = match.call.defaults()
+  mc = match.call.all()
 
   # compose
   enter(verbose, 'Evaluating the method arguments.', suffix = '', level = verboseLevels$fine)
