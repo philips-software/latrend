@@ -203,7 +203,7 @@ setMethod('$', signature('lcMethod'), function(x, name) {
 #' m[["nClusters", eval=FALSE]] # k
 #' @family lcMethod functions
 setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL) {
-  envir = lcMethod.env(x, parent.frame(3), envir)
+  envir = .selectEnvironment(x, parent.frame(3), envir)
   if (is.character(i)) {
     assert_that(has_name(x, i), msg = sprintf('method does not have an argument named "%s"', i))
     arg = get(i, envir = x@arguments)
@@ -282,7 +282,7 @@ as.character.lcMethod = function(x, ..., eval = FALSE, width = 40, prefix = '', 
     is.flag(eval)
   )
 
-  envir = lcMethod.env(x, parent.frame(), envir)
+  envir = .selectEnvironment(x, parent.frame(), envir)
   if (isTRUE(eval)) {
     x = evaluate.lcMethod(x, envir = envir)
   }
@@ -352,7 +352,7 @@ as.list.lcMethod = function(x, ..., args = names(x), eval = TRUE, expand = FALSE
     is.flag(expand)
   )
 
-  envir = lcMethod.env(x, parent.frame(), envir)
+  envir = .selectEnvironment(x, parent.frame(), envir)
 
   if (is.function(args)) {
     argNames = formalArgs(args)
@@ -402,7 +402,7 @@ as.data.frame.lcMethod = function(x, ..., eval = TRUE, nullValue = NA, envir = N
   )
 
   if (isTRUE(eval)) {
-    envir = lcMethod.env(x, parent.frame(), envir)
+    envir = .selectEnvironment(x, parent.frame(), envir)
     evalClasses = c('NULL',
                     'logical',
                     'numeric',
@@ -438,7 +438,7 @@ as.data.frame.lcMethod = function(x, ..., eval = TRUE, nullValue = NA, envir = N
 #' @title Select the preferred environment
 #' @description Returns envir if specified. Otherwise, returns environment(object) if specified. The defaultEnvir is returned when the former two are NULL.
 #' @keywords internal
-lcMethod.env = function(object, defaultEnvir, envir) {
+.selectEnvironment = function(object, defaultEnvir, envir) {
   assert_that(
     is.lcMethod(object),
     is.null(defaultEnvir) || is.environment(defaultEnvir),
@@ -540,7 +540,7 @@ formula.lcMethod = function(x, what = 'mu', envir = NULL, ...) {
     is.character(what)
   )
 
-  envir = lcMethod.env(x, parent.frame(), envir)
+  envir = .selectEnvironment(x, parent.frame(), envir)
 
   if (what == 'mu') {
     f = x$formula
@@ -905,7 +905,7 @@ evaluate.lcMethod = function(object,
   rawObject = as.lcMethod(object)
   assert_that(is.character(classes))
 
-  envir = lcMethod.env(rawObject, parent.frame(), envir)
+  envir = .selectEnvironment(rawObject, parent.frame(), envir)
   argNames = names(rawObject)
   if (isTRUE(try)) {
     evalMask = vapply(
@@ -975,7 +975,7 @@ update.lcMethod = function(object, ..., .eval = FALSE, .remove = character(), en
     is.character(.remove)
   )
 
-  envir = lcMethod.env(object, parent.frame(), envir)
+  envir = .selectEnvironment(object, parent.frame(), envir)
 
   argNames = names(object)
   if (isTRUE(.eval)) {

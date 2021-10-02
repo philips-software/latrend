@@ -60,7 +60,7 @@ as.lcMethods = function(x) {
 lcMethods = function(method, ..., envir = NULL) {
   assert_that(is.lcMethod(method))
 
-  envir = lcMethod.env(method, parent.frame(), envir)
+  envir = .selectEnvironment(method, parent.frame(), envir)
 
   mc = match.call()[-1]
   assert_that(not('' %in% names(mc)), msg = 'method arguments must be named')

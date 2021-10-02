@@ -28,7 +28,7 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
     is.lcMethod(method),
     !missing(data)
   )
-  envir = lcMethod.env(method, parent.frame(), envir)
+  envir = .selectEnvironment(method, parent.frame(), envir)
 
   verbose = as.Verbose(verbose)
   argList = list(...)
@@ -177,7 +177,7 @@ latrendRep = function(method,
                        .parallel = FALSE,
                        envir = NULL,
                        verbose = getOption('latrend.verbose')) {
-  envir = lcMethod.env(method, parent.frame(), envir)
+  envir = .selectEnvironment(method, parent.frame(), envir)
   assert_that(
     is.lcMethod(method),
     !missing(data),
@@ -342,7 +342,7 @@ latrendBatch = function(methods,
     is.flag(parallel)
   )
 
-  envir = lcMethod.env(methods[[1]], parent.frame(), envir)
+  envir = .selectEnvironment(methods[[1]], parent.frame(), envir)
 
   verbose = as.Verbose(verbose)
   nMethods = length(methods)
