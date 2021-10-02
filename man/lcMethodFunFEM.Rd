@@ -48,6 +48,8 @@ method <- lcMethodFunFEM("Y",
 }
 \seealso{
 Other lcMethod implementations: 
+\code{\link{getArgumentDefaults}()},
+\code{\link{getArgumentExclusions}()},
 \code{\link{lcMethod-class}},
 \code{\link{lcMethodAkmedoids}},
 \code{\link{lcMethodCrimCV}},

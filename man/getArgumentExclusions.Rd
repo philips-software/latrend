@@ -36,4 +36,27 @@ Adding `callNextMethod()` to the end of the return vector enables inheriting exc
 
 \seealso{
 \link{lcMethod} \link{getArgumentExclusions}
+
+Other lcMethod implementations: 
+\code{\link{getArgumentDefaults}()},
+\code{\link{lcMethod-class}},
+\code{\link{lcMethodAkmedoids}},
+\code{\link{lcMethodCrimCV}},
+\code{\link{lcMethodCustom}},
+\code{\link{lcMethodDtwclust}},
+\code{\link{lcMethodFeature}},
+\code{\link{lcMethodFunFEM}},
+\code{\link{lcMethodGCKM}},
+\code{\link{lcMethodKML}},
+\code{\link{lcMethodLMKM}},
+\code{\link{lcMethodLcmmGBTM}},
+\code{\link{lcMethodLcmmGMM}},
+\code{\link{lcMethodLongclust}},
+\code{\link{lcMethodMclustLLPA}},
+\code{\link{lcMethodMixAK_GLMM}},
+\code{\link{lcMethodMixtoolsGMM}},
+\code{\link{lcMethodMixtoolsNPRM}},
+\code{\link{lcMethodRandom}},
+\code{\link{lcMethodStratify}}
 }
+\concept{lcMethod implementations}

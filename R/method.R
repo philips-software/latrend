@@ -28,7 +28,7 @@
 #' These steps, as part of the fitting procedure, are executed by [latrend()] in the following order:
 #' \enumerate{
 #'   \item [compose()]: Evaluate and finalize the method argument values.
-#'   \item [validate()]: Check the validity of the method argument values.
+#'   \item [validate()]: Check the validity of the method argument values in relation to the dataset.
 #'   \item [prepareData()]: Process the training data for fitting.
 #'   \item [preFit()]: Prepare environment for estimation, independent of training data.
 #'   \item [fit()]: Estimate the specified method on the training data, outputting an object inheriting from `lcModel`.
@@ -42,6 +42,16 @@
 #'
 #' Subclasses of `lcMethod` differ only in the fitting procedure logic (see above).
 #'
+#' To implement your own `lcMethod` subclass, you'll want to implement at least the following functions:
+#' \itemize{
+#'   \item [fit()]: The main function for estimating your method.
+#'   \item [getName()]: The name of your method.
+#'   \item [getShortName()]: The abbreviated name of your method.
+#'   \item [getArgumentDefaults()]: Sensible default argument values to your method.
+#' }
+#'
+#' For more complex methods, the additional functions as part of the fitting procedure (see the _Fitting procedure_ section above) will be of use.
+#'
 #' @details Because the `lcMethod` arguments may be unevaluated, argument retrieval functions such as `[[` accept an `envir` argument.
 #' A default `environment` can be assigned or obtained from a `lcMethod` object using the `environment()` function.
 #' @seealso [environment]
@@ -52,6 +62,21 @@
 #' @slot sourceCalls A list of calls for tracking the original call after substitution.
 #' Used for printing objects which require too many characters (e.g. ,function definitions, matrices).
 #' Do not modify or access.
+#' @examples
+#' kmlMethod <- lcMethodKML(response = "Value", nClusters = 2)
+#' kmlMethod
+#'
+#' kmlMethod <- new("lcMethodKML", response = "Value", nClusters = 2)
+#'
+#' # create a copy with updated nClusters argument
+#' kmlMethod3 <- update(kmlMethod, nClusters = 3)
+#'
+#' # get argument names
+#' names(kmlMethod)
+#'
+#' # evaluate argument
+#' kmlMethod$nClusters
+#'
 #' @family lcMethod implementations
 #' @family lcMethod functions
 setClass('lcMethod', slots = c(arguments = 'environment', sourceCalls = 'list'))
@@ -561,11 +586,12 @@ getCall.lcMethod = function(x, ...) {
 #'     callNextMethod()
 #'   )
 #' })
+#' }
 #'
 #' It is recommended to add `callNextMethod()` to the end of the list.
 #' This enables inheriting the default arguments from superclasses.
-#' }
 #' @seealso [lcMethod] [getArgumentExclusions]
+#' @family lcMethod implementations
 setMethod('getArgumentDefaults', signature('lcMethod'), function(object) {
   set_names(list(), character(0))
 })
@@ -595,6 +621,7 @@ setMethod('getArgumentDefaults', signature('lcMethod'), function(object) {
 #' Adding `callNextMethod()` to the end of the return vector enables inheriting exclusions from superclasses.
 #' }
 #' @seealso [lcMethod] [getArgumentExclusions]
+#' @family lcMethod implementations
 setMethod('getArgumentExclusions', signature('lcMethod'), function(object) {
   c('verbose', 'envir', 'data')
 })

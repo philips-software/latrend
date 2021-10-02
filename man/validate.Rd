@@ -44,7 +44,7 @@ Each \code{lcMethod} subclass defines a type of methods in terms of a series of 
 These steps, as part of the fitting procedure, are executed by \code{\link[=latrend]{latrend()}} in the following order:
 \enumerate{
 \item \code{\link[=compose]{compose()}}: Evaluate and finalize the method argument values.
-\item \code{\link[=validate]{validate()}}: Check the validity of the method argument values.
+\item \code{\link[=validate]{validate()}}: Check the validity of the method argument values in relation to the dataset.
 \item \code{\link[=prepareData]{prepareData()}}: Process the training data for fitting.
 \item \code{\link[=preFit]{preFit()}}: Prepare environment for estimation, independent of training data.
 \item \code{\link[=fit]{fit()}}: Estimate the specified method on the training data, outputting an object inheriting from \code{lcModel}.

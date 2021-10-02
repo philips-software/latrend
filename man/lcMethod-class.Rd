@@ -51,7 +51,7 @@ Each \code{lcMethod} subclass defines a type of methods in terms of a series of 
 These steps, as part of the fitting procedure, are executed by \code{\link[=latrend]{latrend()}} in the following order:
 \enumerate{
 \item \code{\link[=compose]{compose()}}: Evaluate and finalize the method argument values.
-\item \code{\link[=validate]{validate()}}: Check the validity of the method argument values.
+\item \code{\link[=validate]{validate()}}: Check the validity of the method argument values in relation to the dataset.
 \item \code{\link[=prepareData]{prepareData()}}: Process the training data for fitting.
 \item \code{\link[=preFit]{preFit()}}: Prepare environment for estimation, independent of training data.
 \item \code{\link[=fit]{fit()}}: Estimate the specified method on the training data, outputting an object inheriting from \code{lcModel}.
@@ -66,12 +66,40 @@ The result of the fitting procedure is an \linkS4class{lcModel} object that inhe
 The base class \code{lcMethod} provides the logic for storing, evaluating, and printing the method parameters.
 
 Subclasses of \code{lcMethod} differ only in the fitting procedure logic (see above).
+
+To implement your own \code{lcMethod} subclass, you'll want to implement at least the following functions:
+\itemize{
+\item \code{\link[=fit]{fit()}}: The main function for estimating your method.
+\item \code{\link[=getName]{getName()}}: The name of your method.
+\item \code{\link[=getShortName]{getShortName()}}: The abbreviated name of your method.
+\item \code{\link[=getArgumentDefaults]{getArgumentDefaults()}}: Sensible default argument values to your method.
 }
 
+For more complex methods, the additional functions as part of the fitting procedure (see the \emph{Fitting procedure} section above) will be of use.
+}
+
+\examples{
+kmlMethod <- lcMethodKML(response = "Value", nClusters = 2)
+kmlMethod
+
+kmlMethod <- new("lcMethodKML", response = "Value", nClusters = 2)
+
+# create a copy with updated nClusters argument
+kmlMethod3 <- update(kmlMethod, nClusters = 3)
+
+# get argument names
+names(kmlMethod)
+
+# evaluate argument
+kmlMethod$nClusters
+
+}
 \seealso{
 \link{environment}
 
 Other lcMethod implementations: 
+\code{\link{getArgumentDefaults}()},
+\code{\link{getArgumentExclusions}()},
 \code{\link{lcMethodAkmedoids}},
 \code{\link{lcMethodCrimCV}},
 \code{\link{lcMethodCustom}},

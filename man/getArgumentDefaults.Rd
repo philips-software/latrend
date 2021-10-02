@@ -35,12 +35,35 @@ setMethod("getArgumentDefaults", "lcMethodExample", function(object) {
     callNextMethod()
   )
 })
-
-It is recommended to add `callNextMethod()` to the end of the list.
-This enables inheriting the default arguments from superclasses.
 }
+
+It is recommended to add \code{callNextMethod()} to the end of the list.
+This enables inheriting the default arguments from superclasses.
 }
 
 \seealso{
 \link{lcMethod} \link{getArgumentExclusions}
+
+Other lcMethod implementations: 
+\code{\link{getArgumentExclusions}()},
+\code{\link{lcMethod-class}},
+\code{\link{lcMethodAkmedoids}},
+\code{\link{lcMethodCrimCV}},
+\code{\link{lcMethodCustom}},
+\code{\link{lcMethodDtwclust}},
+\code{\link{lcMethodFeature}},
+\code{\link{lcMethodFunFEM}},
+\code{\link{lcMethodGCKM}},
+\code{\link{lcMethodKML}},
+\code{\link{lcMethodLMKM}},
+\code{\link{lcMethodLcmmGBTM}},
+\code{\link{lcMethodLcmmGMM}},
+\code{\link{lcMethodLongclust}},
+\code{\link{lcMethodMclustLLPA}},
+\code{\link{lcMethodMixAK_GLMM}},
+\code{\link{lcMethodMixtoolsGMM}},
+\code{\link{lcMethodMixtoolsNPRM}},
+\code{\link{lcMethodRandom}},
+\code{\link{lcMethodStratify}}
 }
+\concept{lcMethod implementations}
