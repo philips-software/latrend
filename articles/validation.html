@@ -91,7 +91,7 @@
       <h1 data-toc-skip>Validating cluster models</h1>
                         <h4 class="author">Niek Den Teuling</h4>
             
-            <h4 class="date">2021-09-29</h4>
+            <h4 class="date">2021-10-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/master/vignettes/validation.Rmd"><code>vignettes/validation.Rmd</code></a></small>
       <div class="hidden name"><code>validation.Rmd</code></div>
@@ -128,6 +128,9 @@
 <code class="sourceCode R"><span class="va">kml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span><span class="st">"Y"</span>, nClusters <span class="op">=</span> <span class="fl">3</span>, nbRedrawing <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
 <span class="va">kml</span>
 <span class="co">#&gt; lcMethodKML as "longitudinal k-means (KML)"</span>
+<span class="co">#&gt;  time:           getOption("latrend.time")</span>
+<span class="co">#&gt;  id:             getOption("latrend.id")</span>
+<span class="co">#&gt;  nClusters:      3</span>
 <span class="co">#&gt;  nbRedrawing:    5</span>
 <span class="co">#&gt;  maxIt:          200</span>
 <span class="co">#&gt;  imputationMethod:"copyMean"</span>
@@ -138,10 +141,7 @@
 <span class="co">#&gt;  startingCond:   "nearlyAll"</span>
 <span class="co">#&gt;  nbCriterion:    1000</span>
 <span class="co">#&gt;  scale:          TRUE</span>
-<span class="co">#&gt;  response:       "Y"</span>
-<span class="co">#&gt;  time:           getOption("latrend.time")</span>
-<span class="co">#&gt;  id:             getOption("latrend.id")</span>
-<span class="co">#&gt;  nClusters:      3</span></code></pre></div>
+<span class="co">#&gt;  response:       "Y"</span></code></pre></div>
 </div>
 </div>
 <div id="evaluate-stability-of-the-estimation-through-repeated-estimation" class="section level1">
@@ -153,39 +153,50 @@
 <code class="sourceCode R"><span class="va">repModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendRep.html">latrendRep</a></span><span class="op">(</span><span class="va">kml</span>, data <span class="op">=</span> <span class="va">latrendData</span>, .rep<span class="op">=</span><span class="fl">10</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">repModels</span>, excludeShared <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="co">#&gt; List of 10 lcModels with</span>
-<span class="co">#&gt;    .name .method        data       seed nbRedrawing maxIt imputationMethod</span>
-<span class="co">#&gt; 1      1     kml latrendData 1140350788           5   200         copyMean</span>
-<span class="co">#&gt; 2      2     kml latrendData  312928385           5   200         copyMean</span>
-<span class="co">#&gt; 3      3     kml latrendData  866248189           5   200         copyMean</span>
-<span class="co">#&gt; 4      4     kml latrendData 1909893419           5   200         copyMean</span>
-<span class="co">#&gt; 5      5     kml latrendData  554504146           5   200         copyMean</span>
-<span class="co">#&gt; 6      6     kml latrendData  884616499           5   200         copyMean</span>
-<span class="co">#&gt; 7      7     kml latrendData  803234389           5   200         copyMean</span>
-<span class="co">#&gt; 8      8     kml latrendData 1158971242           5   200         copyMean</span>
-<span class="co">#&gt; 9      9     kml latrendData  934673902           5   200         copyMean</span>
-<span class="co">#&gt; 10    10     kml latrendData 1632225031           5   200         copyMean</span>
-<span class="co">#&gt;    distanceName power       distance                             centerMethod</span>
-<span class="co">#&gt; 1     euclidean     2 function () {} function (x) {    mean(x, na.rm = TRUE)}</span>
-<span class="co">#&gt; 2     euclidean     2 function () {} function (x) {    mean(x, na.rm = TRUE)}</span>
-<span class="co">#&gt; 3     euclidean     2 function () {} function (x) {    mean(x, na.rm = TRUE)}</span>
-<span class="co">#&gt; 4     euclidean     2 function () {} function (x) {    mean(x, na.rm = TRUE)}</span>
-<span class="co">#&gt; 5     euclidean     2 function () {} function (x) {    mean(x, na.rm = TRUE)}</span>
-<span class="co">#&gt; 6     euclidean     2 function () {} function (x) {    mean(x, na.rm = TRUE)}</span>
-<span class="co">#&gt; 7     euclidean     2 function () {} function (x) {    mean(x, na.rm = TRUE)}</span>
-<span class="co">#&gt; 8     euclidean     2 function () {} function (x) {    mean(x, na.rm = TRUE)}</span>
-<span class="co">#&gt; 9     euclidean     2 function () {} function (x) {    mean(x, na.rm = TRUE)}</span>
-<span class="co">#&gt; 10    euclidean     2 function () {} function (x) {    mean(x, na.rm = TRUE)}</span>
-<span class="co">#&gt;    startingCond nbCriterion scale response time id nClusters</span>
-<span class="co">#&gt; 1     nearlyAll        1000  TRUE        Y Time Id         3</span>
-<span class="co">#&gt; 2     nearlyAll        1000  TRUE        Y Time Id         3</span>
-<span class="co">#&gt; 3     nearlyAll        1000  TRUE        Y Time Id         3</span>
-<span class="co">#&gt; 4     nearlyAll        1000  TRUE        Y Time Id         3</span>
-<span class="co">#&gt; 5     nearlyAll        1000  TRUE        Y Time Id         3</span>
-<span class="co">#&gt; 6     nearlyAll        1000  TRUE        Y Time Id         3</span>
-<span class="co">#&gt; 7     nearlyAll        1000  TRUE        Y Time Id         3</span>
-<span class="co">#&gt; 8     nearlyAll        1000  TRUE        Y Time Id         3</span>
-<span class="co">#&gt; 9     nearlyAll        1000  TRUE        Y Time Id         3</span>
-<span class="co">#&gt; 10    nearlyAll        1000  TRUE        Y Time Id         3</span></code></pre></div>
+<span class="co">#&gt;    .name .method        data       seed time id nClusters nbRedrawing maxIt</span>
+<span class="co">#&gt; 1      1     kml latrendData 1140350788 Time Id         3           5   200</span>
+<span class="co">#&gt; 2      2     kml latrendData  312928385 Time Id         3           5   200</span>
+<span class="co">#&gt; 3      3     kml latrendData  866248189 Time Id         3           5   200</span>
+<span class="co">#&gt; 4      4     kml latrendData 1909893419 Time Id         3           5   200</span>
+<span class="co">#&gt; 5      5     kml latrendData  554504146 Time Id         3           5   200</span>
+<span class="co">#&gt; 6      6     kml latrendData  884616499 Time Id         3           5   200</span>
+<span class="co">#&gt; 7      7     kml latrendData  803234389 Time Id         3           5   200</span>
+<span class="co">#&gt; 8      8     kml latrendData 1158971242 Time Id         3           5   200</span>
+<span class="co">#&gt; 9      9     kml latrendData  934673902 Time Id         3           5   200</span>
+<span class="co">#&gt; 10    10     kml latrendData 1632225031 Time Id         3           5   200</span>
+<span class="co">#&gt;    imputationMethod distanceName power       distance</span>
+<span class="co">#&gt; 1          copyMean    euclidean     2 function () {}</span>
+<span class="co">#&gt; 2          copyMean    euclidean     2 function () {}</span>
+<span class="co">#&gt; 3          copyMean    euclidean     2 function () {}</span>
+<span class="co">#&gt; 4          copyMean    euclidean     2 function () {}</span>
+<span class="co">#&gt; 5          copyMean    euclidean     2 function () {}</span>
+<span class="co">#&gt; 6          copyMean    euclidean     2 function () {}</span>
+<span class="co">#&gt; 7          copyMean    euclidean     2 function () {}</span>
+<span class="co">#&gt; 8          copyMean    euclidean     2 function () {}</span>
+<span class="co">#&gt; 9          copyMean    euclidean     2 function () {}</span>
+<span class="co">#&gt; 10         copyMean    euclidean     2 function () {}</span>
+<span class="co">#&gt;                                centerMethod startingCond nbCriterion scale</span>
+<span class="co">#&gt; 1  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
+<span class="co">#&gt; 2  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
+<span class="co">#&gt; 3  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
+<span class="co">#&gt; 4  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
+<span class="co">#&gt; 5  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
+<span class="co">#&gt; 6  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
+<span class="co">#&gt; 7  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
+<span class="co">#&gt; 8  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
+<span class="co">#&gt; 9  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
+<span class="co">#&gt; 10 function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
+<span class="co">#&gt;    response</span>
+<span class="co">#&gt; 1         Y</span>
+<span class="co">#&gt; 2         Y</span>
+<span class="co">#&gt; 3         Y</span>
+<span class="co">#&gt; 4         Y</span>
+<span class="co">#&gt; 5         Y</span>
+<span class="co">#&gt; 6         Y</span>
+<span class="co">#&gt; 7         Y</span>
+<span class="co">#&gt; 8         Y</span>
+<span class="co">#&gt; 9         Y</span>
+<span class="co">#&gt; 10        Y</span></code></pre></div>
 <p>A convenient way to assess the stability across repeated runs is to compare the models on one or more internal model metrics. Similar solutions should yield similar metric scores.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">repSelfMetrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">repModels</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BIC"</span>, <span class="st">"WMAE"</span>, <span class="st">"APPA"</span><span class="op">)</span><span class="op">)</span>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>dtwclust interface — interface-dtwclust • latrend</title>
+<title>Default argument values for lcMethod subclass — getArgumentDefaults • latrend</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="dtwclust interface — interface-dtwclust" />
-<meta property="og:description" content="dtwclust interface" />
+<meta property="og:title" content="Default argument values for lcMethod subclass — getArgumentDefaults" />
+<meta property="og:description" content="Returns the default arguments associated with the respective lcMethod subclass.
+These arguments are automatically included into the lcMethod object during initialization." />
 
 
 
@@ -129,87 +130,77 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>dtwclust interface</h1>
-    <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/methodDtwclust.R'><code>R/methodDtwclust.R</code></a>, <a href='https://github.com/philips-software/latrend/blob/master/R/modelDtwclust.R'><code>R/modelDtwclust.R</code></a></small>
-    <div class="hidden name"><code>interface-dtwclust.Rd</code></div>
+    <h1>Default argument values for lcMethod subclass</h1>
+    <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/method.R'><code>R/method.R</code></a></small>
+    <div class="hidden name"><code>getArgumentDefaults.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>dtwclust interface</p>
+    <p>Returns the default arguments associated with the respective <code>lcMethod</code> subclass.
+These arguments are automatically included into the <code>lcMethod</code> object during initialization.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for lcMethodDtwclust</span>
-<span class='fu'><a href='getArgumentDefaults.html'>getArgumentDefaults</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcMethodDtwclust</span>
-<span class='fu'><a href='getArgumentExclusions.html'>getArgumentExclusions</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcMethodDtwclust</span>
-<span class='fu'><a href='getName.html'>getName</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcMethodDtwclust</span>
-<span class='fu'><a href='getName.html'>getShortName</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcMethodDtwclust</span>
-<span class='fu'><a href='preFit.html'>preFit</a></span><span class='op'>(</span><span class='va'>method</span>, <span class='va'>data</span>, <span class='va'>envir</span>, <span class='va'>verbose</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcMethodDtwclust</span>
-<span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>method</span>, <span class='va'>data</span>, <span class='va'>envir</span>, <span class='va'>verbose</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcModelDtwclust</span>
-<span class='fu'><a href='converged.html'>converged</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcModelDtwclust</span>
-<span class='fu'><a href='postprob.html'>postprob</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcModelDtwclust</span>
-<span class='fu'><a href='predictForCluster.html'>predictForCluster</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>newdata</span>, <span class='va'>cluster</span>, what <span class='op'>=</span> <span class='st'>"mu"</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='co'># S4 method for lcMethod</span>
+<span class='fu'>getArgumentDefaults</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>The <code>lcMethod</code> or <code>lcModel</code> object.</p></td>
-    </tr>
-    <tr>
-      <th>method</th>
-      <td><p>An object inheriting from <code>lcMethod</code> with all its arguments having been evaluated and finalized.</p></td>
-    </tr>
-    <tr>
-      <th>data</th>
-      <td><p>A <code>data.frame</code> representing the transformed training data.</p></td>
-    </tr>
-    <tr>
-      <th>envir</th>
-      <td><p>The <code>environment</code> containing variables generated by <code><a href='prepareData.html'>prepareData()</a></code> and <code><a href='preFit.html'>preFit()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>A <a href='https://rdrr.io/pkg/R.utils/man/Verbose.html'>R.utils::Verbose</a> object indicating the level of verbosity.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Additional arguments.</p></td>
-    </tr>
-    <tr>
-      <th>newdata</th>
-      <td><p>Optional <code>data.frame</code> for which to compute the model predictions. If omitted, the model training data is used.
-Cluster trajectory predictions are made when ids are not specified.</p></td>
-    </tr>
-    <tr>
-      <th>cluster</th>
-      <td><p>The cluster name (as <code>character</code>) to predict for.</p></td>
-    </tr>
-    <tr>
-      <th>what</th>
-      <td><p>The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying <code>what = 'mb'</code>.</p></td>
+      <td><p>The <code>lcMethod</code> object.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A named <code>list</code> of argument values.</p>
+    <h2 class="hasAnchor" id="implementation"><a class="anchor" href="#implementation"></a>Implementation</h2>
+
+    
+
+<p>Although implementing this method is optional, it prevents users from
+having to specify all arguments every time they want to create a method specification.</p>
+<p>In this example, most of the default arguments are defined as arguments of the function
+<code>lcMethodExample</code>, which we can include in the list by calling <a href='https://rdrr.io/r/base/formals.html'>formals</a>. Copying the arguments from functions
+is especially useful when your method implementation is based on an existing function.</p><pre>
+<span class='kw'>setMethod</span><span class='op'>(</span><span class='st'>"getArgumentDefaults"</span>, <span class='st'>"lcMethodExample"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/formals.html'>formals</a></span><span class='op'>(</span><span class='va'>lcMethodExample</span><span class='op'>)</span>,
+    <span class='fu'><a href='https://rdrr.io/r/base/formals.html'>formals</a></span><span class='op'>(</span><span class='fu'>funFEM</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/funFEM/man/funFEM.html'>funFEM</a></span><span class='op'>)</span>,
+    extra <span class='op'>=</span> <span class='va'>Value</span> <span class='op'>~</span> <span class='fl'>1</span>,
+    tol <span class='op'>=</span> <span class='fl'>1e-4</span>,
+    <span class='fu'>callNextMethod</span><span class='op'>(</span><span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>}</span><span class='op'>)</span>
+</pre>
+
+<p>It is recommended to add <code>callNextMethod()</code> to the end of the list.
+This enables inheriting the default arguments from superclasses.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='lcMethodDtwclust.html'>lcMethodDtwclust</a> <a href='https://rdrr.io/pkg/dtwclust/man/dtwclust-package.html'>dtwclust-package</a></p></div>
+    <div class='dont-index'><p><a href='lcMethod-class.html'>lcMethod</a> <a href='getArgumentExclusions.html'>getArgumentExclusions</a></p>
+<p>Other lcMethod implementations: 
+<code><a href='getArgumentExclusions.html'>getArgumentExclusions</a>()</code>,
+<code><a href='lcMethod-class.html'>lcMethod-class</a></code>,
+<code><a href='lcMethodAkmedoids.html'>lcMethodAkmedoids</a></code>,
+<code><a href='lcMethodCrimCV.html'>lcMethodCrimCV</a></code>,
+<code><a href='lcMethodCustom.html'>lcMethodCustom</a></code>,
+<code><a href='lcMethodDtwclust.html'>lcMethodDtwclust</a></code>,
+<code><a href='lcMethodFeature.html'>lcMethodFeature</a></code>,
+<code><a href='lcMethodFunFEM.html'>lcMethodFunFEM</a></code>,
+<code><a href='lcMethodGCKM.html'>lcMethodGCKM</a></code>,
+<code><a href='lcMethodKML.html'>lcMethodKML</a></code>,
+<code><a href='lcMethodLMKM.html'>lcMethodLMKM</a></code>,
+<code><a href='lcMethodLcmmGBTM.html'>lcMethodLcmmGBTM</a></code>,
+<code><a href='lcMethodLcmmGMM.html'>lcMethodLcmmGMM</a></code>,
+<code><a href='lcMethodLongclust.html'>lcMethodLongclust</a></code>,
+<code><a href='lcMethodMclustLLPA.html'>lcMethodMclustLLPA</a></code>,
+<code><a href='lcMethodMixAK_GLMM.html'>lcMethodMixAK_GLMM</a></code>,
+<code><a href='lcMethodMixtoolsGMM.html'>lcMethodMixtoolsGMM</a></code>,
+<code><a href='lcMethodMixtoolsNPRM.html'>lcMethodMixtoolsNPRM</a></code>,
+<code><a href='lcMethodRandom.html'>lcMethodRandom</a></code>,
+<code><a href='lcMethodStratify.html'>lcMethodStratify</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

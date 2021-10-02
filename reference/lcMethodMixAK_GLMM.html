@@ -187,6 +187,8 @@ doi: <a href='https://doi.org/10.1016/j.csda.2009.05.006'>10.1016/j.csda.2009.05
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other lcMethod implementations: 
+<code><a href='getArgumentDefaults.html'>getArgumentDefaults</a>()</code>,
+<code><a href='getArgumentExclusions.html'>getArgumentExclusions</a>()</code>,
 <code><a href='lcMethod-class.html'>lcMethod-class</a></code>,
 <code><a href='lcMethodAkmedoids.html'>lcMethodAkmedoids</a></code>,
 <code><a href='lcMethodCrimCV.html'>lcMethodCrimCV</a></code>,
@@ -217,19 +219,19 @@ doi: <a href='https://doi.org/10.1016/j.csda.2009.05.006'>10.1016/j.csda.2009.05
 <span class='op'>}</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; Longitudinal cluster model using generalized linear mixed model with normal random effects mixture
 #&gt; lcMethodMixAK_GLMM as "generalized linear mixed model with normal random effects mixture"
-#&gt;  nClusters:      3
-#&gt;  id:             "Id"
 #&gt;  time:           "Time"
-#&gt;  random:         ~Time
-#&gt;  fixed:          Y ~ 1
-#&gt;  parallel:       FALSE
-#&gt;  dens.zero:      1e-300
-#&gt;  keep.chains:    TRUE
-#&gt;  PED:            TRUE
-#&gt;  store:          FALSE
-#&gt;  tuneMCMC:       list(alpha = 1, b = 1)
-#&gt;  nMCMC:          10, 10, 1, 10
+#&gt;  id:             "Id"
+#&gt;  nClusters:      3
 #&gt;  dist:           "gaussian"
+#&gt;  nMCMC:          10, 10, 1, 10
+#&gt;  tuneMCMC:       list(alpha = 1, b = 1)
+#&gt;  store:          FALSE
+#&gt;  PED:            TRUE
+#&gt;  keep.chains:    TRUE
+#&gt;  dens.zero:      1e-300
+#&gt;  parallel:       FALSE
+#&gt;  fixed:          Y ~ 1
+#&gt;  random:         ~Time
 #&gt; 
 #&gt; Cluster sizes (K=3):
 #&gt;           A           B           C 

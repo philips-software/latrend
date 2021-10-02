@@ -191,7 +191,16 @@ Alternatively, a <code>function</code> or <code>list</code> of <code>function</c
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>latrendData</span><span class='op'>)</span>
 <span class='va'>method</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lcMethodKML.html'>lcMethodKML</a></span><span class='op'>(</span><span class='st'>"Y"</span>, id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='va'>method</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $nbRedrawing
+</div><div class='output co'>#&gt; $time
+#&gt; [1] "Time"
+#&gt; 
+#&gt; $id
+#&gt; [1] "Id"
+#&gt; 
+#&gt; $nClusters
+#&gt; [1] 2
+#&gt; 
+#&gt; $nbRedrawing
 #&gt; [1] 20
 #&gt; 
 #&gt; $maxIt
@@ -210,14 +219,14 @@ Alternatively, a <code>function</code> or <code>list</code> of <code>function</c
 #&gt; function () 
 #&gt; {
 #&gt; }
-#&gt; &lt;environment: 0x5591ef0d6030&gt;
+#&gt; &lt;environment: 0x558a500d0f90&gt;
 #&gt; 
 #&gt; $centerMethod
 #&gt; function (x) 
 #&gt; {
 #&gt;     mean(x, na.rm = TRUE)
 #&gt; }
-#&gt; &lt;bytecode: 0x5591eecba748&gt;
+#&gt; &lt;bytecode: 0x558a4ff52d70&gt;
 #&gt; &lt;environment: namespace:longitudinalData&gt;
 #&gt; 
 #&gt; $startingCond
@@ -231,15 +240,6 @@ Alternatively, a <code>function</code> or <code>list</code> of <code>function</c
 #&gt; 
 #&gt; $response
 #&gt; [1] "Y"
-#&gt; 
-#&gt; $time
-#&gt; [1] "Time"
-#&gt; 
-#&gt; $id
-#&gt; [1] "Id"
-#&gt; 
-#&gt; $nClusters
-#&gt; [1] 2
 #&gt; </div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='va'>method</span>, args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'id'</span>, <span class='st'>'time'</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $id
@@ -274,14 +274,14 @@ Alternatively, a <code>function</code> or <code>list</code> of <code>function</c
 #&gt; function () 
 #&gt; {
 #&gt; }
-#&gt; &lt;environment: 0x5591ef0d6030&gt;
+#&gt; &lt;environment: 0x558a49e1e9d8&gt;
 #&gt; 
 #&gt; $centerMethod
 #&gt; function (x) 
 #&gt; {
 #&gt;     mean(x, na.rm = TRUE)
 #&gt; }
-#&gt; &lt;bytecode: 0x5591eecba748&gt;
+#&gt; &lt;bytecode: 0x558a4ff52d70&gt;
 #&gt; &lt;environment: namespace:longitudinalData&gt;
 #&gt; 
 #&gt; $startingCond

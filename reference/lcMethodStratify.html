@@ -189,6 +189,8 @@
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other lcMethod implementations: 
+<code><a href='getArgumentDefaults.html'>getArgumentDefaults</a>()</code>,
+<code><a href='getArgumentExclusions.html'>getArgumentExclusions</a>()</code>,
 <code><a href='lcMethod-class.html'>lcMethod-class</a></code>,
 <code><a href='lcMethodAkmedoids.html'>lcMethodAkmedoids</a></code>,
 <code><a href='lcMethodCrimCV.html'>lcMethodCrimCV</a></code>,
@@ -217,14 +219,14 @@
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Longitudinal cluster model using stratify
 #&gt; lcMethodStratify as "stratify"
-#&gt;  name:           "stratify"
-#&gt;  id:             "Id"
-#&gt;  time:           "Time"
-#&gt;  clusterNames:   "Low", "High"
-#&gt;  nClusters:      NaN
 #&gt;  center:         function (x) {    mean(x, na.rm = TRUE)}
-#&gt;  stratify:       mean(Y) &gt; 0
+#&gt;  nClusters:      NaN
+#&gt;  clusterNames:   "Low", "High"
+#&gt;  time:           "Time"
+#&gt;  id:             "Id"
+#&gt;  name:           "stratify"
 #&gt;  response:       "Y"
+#&gt;  stratify:       mean(Y) &gt; 0
 #&gt; 
 #&gt; Cluster sizes (K=2):
 #&gt;       Low      High 

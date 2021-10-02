@@ -91,7 +91,7 @@
       <h1 data-toc-skip>Demonstration of latrend package</h1>
                         <h4 class="author">Niek Den Teuling</h4>
             
-            <h4 class="date">2021-09-29</h4>
+            <h4 class="date">2021-10-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/master/vignettes/demo.Rmd"><code>vignettes/demo.Rmd</code></a></small>
       <div class="hidden name"><code>demo.Rmd</code></div>
@@ -141,6 +141,9 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 
 <span class="va">kmlMethod</span>
 <span class="co">#&gt; lcMethodKML as "longitudinal k-means (KML)"</span>
+<span class="co">#&gt;  time:           getOption("latrend.time")</span>
+<span class="co">#&gt;  id:             getOption("latrend.id")</span>
+<span class="co">#&gt;  nClusters:      2</span>
 <span class="co">#&gt;  nbRedrawing:    1</span>
 <span class="co">#&gt;  maxIt:          200</span>
 <span class="co">#&gt;  imputationMethod:"copyMean"</span>
@@ -151,10 +154,7 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 <span class="co">#&gt;  startingCond:   "nearlyAll"</span>
 <span class="co">#&gt;  nbCriterion:    1000</span>
 <span class="co">#&gt;  scale:          TRUE</span>
-<span class="co">#&gt;  response:       "Y"</span>
-<span class="co">#&gt;  time:           getOption("latrend.time")</span>
-<span class="co">#&gt;  id:             getOption("latrend.id")</span>
-<span class="co">#&gt;  nClusters:      2</span></code></pre></div>
+<span class="co">#&gt;  response:       "Y"</span></code></pre></div>
 <p>As seen in the output from the <code>lcMethodKML</code> object, the KML method is defined by additional arguments. These are specific to the <code>kml</code> package.</p>
 <p>The KML model is estimated on the dataset via the <code>latrend</code> function.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -166,20 +166,20 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 <code class="sourceCode R"><span class="va">kmlModel</span>
 <span class="co">#&gt; Longitudinal cluster model using longitudinal k-means (KML)</span>
 <span class="co">#&gt; lcMethodKML as "longitudinal k-means (KML)"</span>
-<span class="co">#&gt;  nClusters:      2</span>
-<span class="co">#&gt;  id:             "Id"</span>
 <span class="co">#&gt;  time:           "Time"</span>
-<span class="co">#&gt;  response:       "Y"</span>
-<span class="co">#&gt;  scale:          TRUE</span>
-<span class="co">#&gt;  nbCriterion:    1000</span>
-<span class="co">#&gt;  startingCond:   "nearlyAll"</span>
-<span class="co">#&gt;  centerMethod:   function (x) {    mean(x, na.rm = TRUE)}</span>
-<span class="co">#&gt;  distance:       function () {}</span>
-<span class="co">#&gt;  power:          2</span>
-<span class="co">#&gt;  distanceName:   "euclidean"</span>
-<span class="co">#&gt;  imputationMethod:"copyMean"</span>
-<span class="co">#&gt;  maxIt:          200</span>
+<span class="co">#&gt;  id:             "Id"</span>
+<span class="co">#&gt;  nClusters:      2</span>
 <span class="co">#&gt;  nbRedrawing:    1</span>
+<span class="co">#&gt;  maxIt:          200</span>
+<span class="co">#&gt;  imputationMethod:"copyMean"</span>
+<span class="co">#&gt;  distanceName:   "euclidean"</span>
+<span class="co">#&gt;  power:          2</span>
+<span class="co">#&gt;  distance:       function () {}</span>
+<span class="co">#&gt;  centerMethod:   function (x) {    mean(x, na.rm = TRUE)}</span>
+<span class="co">#&gt;  startingCond:   "nearlyAll"</span>
+<span class="co">#&gt;  nbCriterion:    1000</span>
+<span class="co">#&gt;  scale:          TRUE</span>
+<span class="co">#&gt;  response:       "Y"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Cluster sizes (K=2):</span>
 <span class="co">#&gt;         A         B </span>
@@ -199,33 +199,24 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 <code class="sourceCode R"><span class="va">kmlMethods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">kmlMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">kmlMethods</span><span class="op">)</span>
-<span class="co">#&gt;        .class nClusters                      id                      time</span>
-<span class="co">#&gt; 1 lcMethodKML         1 getOption("latrend.id") getOption("latrend.time")</span>
-<span class="co">#&gt; 2 lcMethodKML         2 getOption("latrend.id") getOption("latrend.time")</span>
-<span class="co">#&gt; 3 lcMethodKML         3 getOption("latrend.id") getOption("latrend.time")</span>
-<span class="co">#&gt; 4 lcMethodKML         4 getOption("latrend.id") getOption("latrend.time")</span>
-<span class="co">#&gt; 5 lcMethodKML         5 getOption("latrend.id") getOption("latrend.time")</span>
-<span class="co">#&gt; 6 lcMethodKML         6 getOption("latrend.id") getOption("latrend.time")</span>
-<span class="co">#&gt; 7 lcMethodKML         7 getOption("latrend.id") getOption("latrend.time")</span>
-<span class="co">#&gt; 8 lcMethodKML         8 getOption("latrend.id") getOption("latrend.time")</span>
-<span class="co">#&gt;   response scale nbCriterion startingCond centerMethod      distance power</span>
-<span class="co">#&gt; 1        Y  TRUE        1000    nearlyAll       meanNA function() {}     2</span>
-<span class="co">#&gt; 2        Y  TRUE        1000    nearlyAll       meanNA function() {}     2</span>
-<span class="co">#&gt; 3        Y  TRUE        1000    nearlyAll       meanNA function() {}     2</span>
-<span class="co">#&gt; 4        Y  TRUE        1000    nearlyAll       meanNA function() {}     2</span>
-<span class="co">#&gt; 5        Y  TRUE        1000    nearlyAll       meanNA function() {}     2</span>
-<span class="co">#&gt; 6        Y  TRUE        1000    nearlyAll       meanNA function() {}     2</span>
-<span class="co">#&gt; 7        Y  TRUE        1000    nearlyAll       meanNA function() {}     2</span>
-<span class="co">#&gt; 8        Y  TRUE        1000    nearlyAll       meanNA function() {}     2</span>
-<span class="co">#&gt;   distanceName imputationMethod maxIt nbRedrawing</span>
-<span class="co">#&gt; 1    euclidean         copyMean   200           1</span>
-<span class="co">#&gt; 2    euclidean         copyMean   200           1</span>
-<span class="co">#&gt; 3    euclidean         copyMean   200           1</span>
-<span class="co">#&gt; 4    euclidean         copyMean   200           1</span>
-<span class="co">#&gt; 5    euclidean         copyMean   200           1</span>
-<span class="co">#&gt; 6    euclidean         copyMean   200           1</span>
-<span class="co">#&gt; 7    euclidean         copyMean   200           1</span>
-<span class="co">#&gt; 8    euclidean         copyMean   200           1</span></code></pre></div>
+<span class="co">#&gt;        .class time id nClusters nbRedrawing maxIt imputationMethod distanceName</span>
+<span class="co">#&gt; 1 lcMethodKML Time Id         1           1   200         copyMean    euclidean</span>
+<span class="co">#&gt; 2 lcMethodKML Time Id         2           1   200         copyMean    euclidean</span>
+<span class="co">#&gt; 3 lcMethodKML Time Id         3           1   200         copyMean    euclidean</span>
+<span class="co">#&gt; 4 lcMethodKML Time Id         4           1   200         copyMean    euclidean</span>
+<span class="co">#&gt; 5 lcMethodKML Time Id         5           1   200         copyMean    euclidean</span>
+<span class="co">#&gt; 6 lcMethodKML Time Id         6           1   200         copyMean    euclidean</span>
+<span class="co">#&gt; 7 lcMethodKML Time Id         7           1   200         copyMean    euclidean</span>
+<span class="co">#&gt; 8 lcMethodKML Time Id         8           1   200         copyMean    euclidean</span>
+<span class="co">#&gt;   power      distance centerMethod startingCond nbCriterion scale response</span>
+<span class="co">#&gt; 1     2 function() {}       meanNA    nearlyAll        1000  TRUE        Y</span>
+<span class="co">#&gt; 2     2 function() {}       meanNA    nearlyAll        1000  TRUE        Y</span>
+<span class="co">#&gt; 3     2 function() {}       meanNA    nearlyAll        1000  TRUE        Y</span>
+<span class="co">#&gt; 4     2 function() {}       meanNA    nearlyAll        1000  TRUE        Y</span>
+<span class="co">#&gt; 5     2 function() {}       meanNA    nearlyAll        1000  TRUE        Y</span>
+<span class="co">#&gt; 6     2 function() {}       meanNA    nearlyAll        1000  TRUE        Y</span>
+<span class="co">#&gt; 7     2 function() {}       meanNA    nearlyAll        1000  TRUE        Y</span>
+<span class="co">#&gt; 8     2 function() {}       meanNA    nearlyAll        1000  TRUE        Y</span></code></pre></div>
 <p>The list of <code>lcMethod</code> objects can be fitted using the <code>latrendBatch</code> function, returning a list of <code>lcModel</code> objects.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">kmlModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendBatch.html">latrendBatch</a></span><span class="op">(</span><span class="va">kmlMethods</span>, data <span class="op">=</span> <span class="va">latrendData</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
@@ -285,6 +276,9 @@ Elbow plots of three relevant cluster metrics across the fitted models.
 <span class="co">#&gt; Longitudinal cluster model using longitudinal k-means (KML)</span>
 <span class="co">#&gt; lcMethodKML as "longitudinal k-means (KML)"</span>
 <span class="co">#&gt;  seed:           265368763</span>
+<span class="co">#&gt;  time:           "Time"</span>
+<span class="co">#&gt;  id:             "Id"</span>
+<span class="co">#&gt;  nClusters:      4</span>
 <span class="co">#&gt;  nbRedrawing:    1</span>
 <span class="co">#&gt;  maxIt:          200</span>
 <span class="co">#&gt;  imputationMethod:"copyMean"</span>
@@ -296,9 +290,6 @@ Elbow plots of three relevant cluster metrics across the fitted models.
 <span class="co">#&gt;  nbCriterion:    1000</span>
 <span class="co">#&gt;  scale:          TRUE</span>
 <span class="co">#&gt;  response:       "Y"</span>
-<span class="co">#&gt;  time:           "Time"</span>
-<span class="co">#&gt;  id:             "Id"</span>
-<span class="co">#&gt;  nClusters:      4</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Cluster sizes (K=4):</span>
 <span class="co">#&gt;          A          B          C          D </span>
@@ -377,6 +368,12 @@ Cluster-specific detrended QQ-plot for the selected KML model.
 
 <span class="va">gbtmMethod</span>
 <span class="co">#&gt; lcMethodLcmmGBTM as "group-based trajectory modeling using lcmm"</span>
+<span class="co">#&gt;  mixture:        fixed</span>
+<span class="co">#&gt;  classmb:        ~1</span>
+<span class="co">#&gt;  time:           getOption("latrend.time")</span>
+<span class="co">#&gt;  id:             getOption("latrend.id")</span>
+<span class="co">#&gt;  nClusters:      2</span>
+<span class="co">#&gt;  init:           "lme"</span>
 <span class="co">#&gt;  idiag:          FALSE</span>
 <span class="co">#&gt;  nwg:            FALSE</span>
 <span class="co">#&gt;  cor:            NULL</span>
@@ -387,13 +384,7 @@ Cluster-specific detrended QQ-plot for the selected KML model.
 <span class="co">#&gt;  subset:         NULL</span>
 <span class="co">#&gt;  na.action:      1</span>
 <span class="co">#&gt;  posfix:         NULL</span>
-<span class="co">#&gt;  fixed:          Y ~ bs(Time)</span>
-<span class="co">#&gt;  mixture:        fixed</span>
-<span class="co">#&gt;  classmb:        ~1</span>
-<span class="co">#&gt;  time:           getOption("latrend.time")</span>
-<span class="co">#&gt;  id:             getOption("latrend.id")</span>
-<span class="co">#&gt;  nClusters:      2</span>
-<span class="co">#&gt;  init:           "lme"</span></code></pre></div>
+<span class="co">#&gt;  fixed:          Y ~ bs(Time)</span></code></pre></div>
 <p>We fit the GBTM for 1 to 5 clusters.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gbtmMethods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">gbtmMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>
@@ -436,6 +427,13 @@ Three cluster metrics for each of the GBTMs.
 
 <span class="va">gmmMethod</span>
 <span class="co">#&gt; lcMethodLcmmGMM as "growth mixture model"</span>
+<span class="co">#&gt;  mixture:        fixed</span>
+<span class="co">#&gt;  random:         ~1</span>
+<span class="co">#&gt;  classmb:        ~1</span>
+<span class="co">#&gt;  time:           getOption("latrend.time")</span>
+<span class="co">#&gt;  id:             getOption("latrend.id")</span>
+<span class="co">#&gt;  init:           "lme.random"</span>
+<span class="co">#&gt;  nClusters:      2</span>
 <span class="co">#&gt;  idiag:          TRUE</span>
 <span class="co">#&gt;  nwg:            FALSE</span>
 <span class="co">#&gt;  cor:            NULL</span>
@@ -445,14 +443,7 @@ Three cluster metrics for each of the GBTMs.
 <span class="co">#&gt;  maxiter:        500</span>
 <span class="co">#&gt;  na.action:      1</span>
 <span class="co">#&gt;  posfix:         NULL</span>
-<span class="co">#&gt;  fixed:          Y ~ poly(Time, 2, raw = TRUE)</span>
-<span class="co">#&gt;  mixture:        fixed</span>
-<span class="co">#&gt;  random:         ~1</span>
-<span class="co">#&gt;  classmb:        ~1</span>
-<span class="co">#&gt;  time:           getOption("latrend.time")</span>
-<span class="co">#&gt;  id:             getOption("latrend.id")</span>
-<span class="co">#&gt;  init:           "lme.random"</span>
-<span class="co">#&gt;  nClusters:      2</span></code></pre></div>
+<span class="co">#&gt;  fixed:          Y ~ poly(Time, 2, raw = TRUE)</span></code></pre></div>
 <p>We fit the GMM for 1 to 5 clusters.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gmmMethods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">gmmMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>

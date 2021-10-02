@@ -170,36 +170,36 @@ This makes it easier to work with a set of models in a more structured manner.</
 #&gt; ********************S</div><div class='input'><span class='va'>gmm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='fu'><a href='lcMethodLcmmGMM.html'>lcMethodLcmmGMM</a></span><span class='op'>(</span>fixed <span class='op'>=</span> <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Time</span>, mixture <span class='op'>=</span> <span class='op'>~</span> <span class='va'>Time</span>,
    id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span>, <span class='va'>latrendData</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Be patient, hlme is running ... 
-#&gt; The program took 0.08 seconds 
+#&gt; The program took 0.07 seconds 
 #&gt; Be patient, hlme is running ... 
-#&gt; The program took 0.22 seconds </div><div class='input'><span class='fu'>lcModels</span><span class='op'>(</span><span class='va'>kml</span>, <span class='va'>gmm</span><span class='op'>)</span>
+#&gt; The program took 0.19 seconds </div><div class='input'><span class='fu'>lcModels</span><span class='op'>(</span><span class='va'>kml</span>, <span class='va'>gmm</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; List of 2 lcModels with
-#&gt;   .name .method response scale nbCriterion startingCond
-#&gt; 1     1     kml        Y  TRUE        1000    nearlyAll
-#&gt; 2     2     gmm     &lt;NA&gt;    NA          NA         &lt;NA&gt;
-#&gt;                               centerMethod       distance power distanceName
-#&gt; 1 function (x) {    mean(x, na.rm = TRUE)} function () {}     2    euclidean
-#&gt; 2                                     &lt;NA&gt;           &lt;NA&gt;    NA         &lt;NA&gt;
-#&gt;   imputationMethod maxIt nbRedrawing       init classmb random mixture    fixed
-#&gt; 1         copyMean   200          20       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;    &lt;NA&gt;     &lt;NA&gt;
-#&gt; 2             &lt;NA&gt;    NA          NA lme.random      ~1     ~1   ~Time Y ~ Time
-#&gt;   na.action maxiter convG convL convB   nwg idiag
-#&gt; 1        NA      NA    NA    NA    NA    NA    NA
-#&gt; 2         1     500 1e-04 1e-04 1e-04 FALSE FALSE</div><div class='input'>
+#&gt;   .name .method nbRedrawing maxIt imputationMethod distanceName power
+#&gt; 1     1     kml          20   200         copyMean    euclidean     2
+#&gt; 2     2     gmm          NA    NA             &lt;NA&gt;         &lt;NA&gt;    NA
+#&gt;         distance                             centerMethod startingCond
+#&gt; 1 function () {} function (x) {    mean(x, na.rm = TRUE)}    nearlyAll
+#&gt; 2           &lt;NA&gt;                                     &lt;NA&gt;         &lt;NA&gt;
+#&gt;   nbCriterion scale response mixture random classmb       init idiag   nwg
+#&gt; 1        1000  TRUE        Y    &lt;NA&gt;   &lt;NA&gt;    &lt;NA&gt;       &lt;NA&gt;    NA    NA
+#&gt; 2          NA    NA     &lt;NA&gt;   ~Time     ~1      ~1 lme.random FALSE FALSE
+#&gt;   convB convL convG maxiter na.action    fixed
+#&gt; 1    NA    NA    NA      NA        NA     &lt;NA&gt;
+#&gt; 2 1e-04 1e-04 1e-04     500         1 Y ~ Time</div><div class='input'>
 <span class='fu'>lcModels</span><span class='op'>(</span>defaults <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>kml</span>, <span class='va'>gmm</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; List of 2 lcModels with
-#&gt;       .name .method response scale nbCriterion startingCond
-#&gt; 1 defaults1     kml        Y  TRUE        1000    nearlyAll
-#&gt; 2 defaults2     gmm     &lt;NA&gt;    NA          NA         &lt;NA&gt;
-#&gt;                               centerMethod       distance power distanceName
-#&gt; 1 function (x) {    mean(x, na.rm = TRUE)} function () {}     2    euclidean
-#&gt; 2                                     &lt;NA&gt;           &lt;NA&gt;    NA         &lt;NA&gt;
-#&gt;   imputationMethod maxIt nbRedrawing       init classmb random mixture    fixed
-#&gt; 1         copyMean   200          20       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;    &lt;NA&gt;     &lt;NA&gt;
-#&gt; 2             &lt;NA&gt;    NA          NA lme.random      ~1     ~1   ~Time Y ~ Time
-#&gt;   na.action maxiter convG convL convB   nwg idiag
-#&gt; 1        NA      NA    NA    NA    NA    NA    NA
-#&gt; 2         1     500 1e-04 1e-04 1e-04 FALSE FALSE</div></pre>
+#&gt;       .name .method nbRedrawing maxIt imputationMethod distanceName power
+#&gt; 1 defaults1     kml          20   200         copyMean    euclidean     2
+#&gt; 2 defaults2     gmm          NA    NA             &lt;NA&gt;         &lt;NA&gt;    NA
+#&gt;         distance                             centerMethod startingCond
+#&gt; 1 function () {} function (x) {    mean(x, na.rm = TRUE)}    nearlyAll
+#&gt; 2           &lt;NA&gt;                                     &lt;NA&gt;         &lt;NA&gt;
+#&gt;   nbCriterion scale response mixture random classmb       init idiag   nwg
+#&gt; 1        1000  TRUE        Y    &lt;NA&gt;   &lt;NA&gt;    &lt;NA&gt;       &lt;NA&gt;    NA    NA
+#&gt; 2          NA    NA     &lt;NA&gt;   ~Time     ~1      ~1 lme.random FALSE FALSE
+#&gt;   convB convL convG maxiter na.action    fixed
+#&gt; 1    NA    NA    NA      NA        NA     &lt;NA&gt;
+#&gt; 2 1e-04 1e-04 1e-04     500         1 Y ~ Time</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

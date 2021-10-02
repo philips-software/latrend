@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Argument matching with defaults and parent ellipsis expansion — match.call.all" />
-<meta property="og:description" content="Argument matching with defaults and parent ellipsis expansion" />
+<meta property="og:description" content="Returns a call containing all arguments in specified form, including default arguments." />
 
 
 
@@ -135,40 +135,26 @@
     </div>
 
     <div class="ref-description">
-    <p>Argument matching with defaults and parent ellipsis expansion</p>
+    <p>Returns a call containing all arguments in specified form, including default arguments.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>match.call.all</span><span class='op'>(</span>
-  definition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>sys.function</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>sys.parent</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>,
-  call <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>sys.call</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>sys.parent</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>,
-  expand.dots <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  envir <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='fl'>2L</span><span class='op'>)</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>match.call.all</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>1L</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>definition</th>
-      <td><p>A <code>function</code>. By default, the calling function is used.</p></td>
-    </tr>
-    <tr>
-      <th>call</th>
-      <td><p>A <code>call</code>. By default, the parent call is used.</p></td>
-    </tr>
-    <tr>
-      <th>expand.dots</th>
-      <td><p>Whether arguments specified in ellipsis should be included, or ellipses be kept as-is.</p></td>
-    </tr>
-    <tr>
-      <th>envir</th>
-      <td><p>The <code>environment</code> in which the ellipsis and parent ellipsis are evaluated.</p></td>
+      <th>n</th>
+      <td><p>The number of frames to go back on the calling stack. See <a href='https://rdrr.io/r/base/sys.parent.html'>base::sys.parent</a> for more details.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>call</code></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='https://rdrr.io/pkg/stackoverflow/man/match.call.defaults.html'>stackoverflow::match.call.defaults</a></p></div>
+    <div class='dont-index'><p><a href='https://rdrr.io/r/base/match.call.html'>base::match.call</a> <a href='https://rdrr.io/r/base/sys.parent.html'>base::sys.parent</a></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

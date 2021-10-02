@@ -194,7 +194,7 @@ Therefore, when implementing this method, ensure that you do not discard informa
 <p>Each <code>lcMethod</code> subclass defines a type of methods in terms of a series of steps for estimating the method.
 These steps, as part of the fitting procedure, are executed by <code><a href='latrend.html'>latrend()</a></code> in the following order:</p><ol>
 <li><p><code><a href='compose.html'>compose()</a></code>: Evaluate and finalize the method argument values.</p></li>
-<li><p><code><a href='validate.html'>validate()</a></code>: Check the validity of the method argument values.</p></li>
+<li><p><code><a href='validate.html'>validate()</a></code>: Check the validity of the method argument values in relation to the dataset.</p></li>
 <li><p><code><a href='prepareData.html'>prepareData()</a></code>: Process the training data for fitting.</p></li>
 <li><p><code><a href='preFit.html'>preFit()</a></code>: Prepare environment for estimation, independent of training data.</p></li>
 <li><p><code><a href='fit.html'>fit()</a></code>: Estimate the specified method on the training data, outputting an object inheriting from <code>lcModel</code>.</p></li>

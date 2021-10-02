@@ -40,10 +40,12 @@
 
 
 <meta property="og:title" content="lcMethod class — lcMethod-class" />
-<meta property="og:description" content="Objects of type lcMethod enable the specification and estimation of different methods for longitudinal clustering.
-The base class lcMethod provides the logic for storing, evaluating, and printing the method parameters.
-Subclasses of lcMethod differ only on the fitting procedure logic (see below).
-The intended way for specifying methods is through the method-specific constructor functions, e.g., through lcMethodKML, lcMethodLcmmGBTM, or lcMethodDtwclust." />
+<meta property="og:description" content="lcMethod objects represent the specification of a method for longitudinal clustering.
+Furthermore, the object class contains the logic for estimating the respective method.
+You can specify a longitudinal cluster method through one of the method-specific constructor functions,
+e.g., lcMethodKML(), lcMethodLcmmGBTM(), or lcMethodDtwclust().
+Alternatively, you can instantiate methods through methods::new(), e.g., by calling new(&quot;lcMethodKML&quot;, response = &quot;Value&quot;).
+In both cases, default values are specified for omitted arguments." />
 
 
 
@@ -138,10 +140,12 @@ The intended way for specifying methods is through the method-specific construct
     </div>
 
     <div class="ref-description">
-    <p>Objects of type <code>lcMethod</code> enable the specification and estimation of different methods for longitudinal clustering.
-The base class <code>lcMethod</code> provides the logic for storing, evaluating, and printing the method parameters.</p>
-<p>Subclasses of <code>lcMethod</code> differ only on the fitting procedure logic (see below).</p>
-<p>The intended way for specifying methods is through the method-specific constructor functions, e.g., through <a href='lcMethodKML.html'>lcMethodKML</a>, <a href='lcMethodLcmmGBTM.html'>lcMethodLcmmGBTM</a>, or <a href='lcMethodDtwclust.html'>lcMethodDtwclust</a>.</p>
+    <p><code>lcMethod</code> objects represent the specification of a method for longitudinal clustering.
+Furthermore, the object class contains the logic for estimating the respective method.</p>
+<p>You can specify a longitudinal cluster method through one of the method-specific constructor functions,
+e.g., <code><a href='lcMethodKML.html'>lcMethodKML()</a></code>, <code><a href='lcMethodLcmmGBTM.html'>lcMethodLcmmGBTM()</a></code>, or <code><a href='lcMethodDtwclust.html'>lcMethodDtwclust()</a></code>.
+Alternatively, you can instantiate methods through <code><a href='https://rdrr.io/r/methods/new.html'>methods::new()</a></code>, e.g., by calling <code>new("lcMethodKML", response = "Value")</code>.
+In both cases, default values are specified for omitted arguments.</p>
     </div>
 
 
@@ -155,19 +159,27 @@ A default <code>environment</code> can be assigned or obtained from a <code>lcMe
     
 
 <dl>
-<dt><code>arguments</code></dt><dd><p>A <code>list</code> representing the arguments of the <code>lcMethod</code> object. Arguments are not evaluated upon creation of the method object. Instead, arguments are stored similar to a <code>call</code> object. Do not modify or access.</p></dd>
+<dt><code>arguments</code></dt><dd><p>A <code>list</code> representing the arguments of the <code>lcMethod</code> object.
+Arguments are not evaluated upon creation of the method object.
+Instead, arguments are stored similar to a <code>call</code> object, and are only evaluated when a method is fitted.
+Do not modify or access.</p></dd>
 
-<dt><code>sourceCalls</code></dt><dd><p>A list of calls for tracking the original call after substitution. Used for printing objects which require too many characters (e.g. ,function definitions, matrices).</p></dd>
+<dt><code>sourceCalls</code></dt><dd><p>A list of calls for tracking the original call after substitution.
+Used for printing objects which require too many characters (e.g. ,function definitions, matrices).
+Do not modify or access.</p></dd>
 
 </dl>
     <h2 class="hasAnchor" id="method-arguments"><a class="anchor" href="#method-arguments"></a>Method arguments</h2>
 
     
 
-<p><code>lcMethod</code> objects represent the specification of a method with a set of configurable parameters (referred to as arguments).</p>
-<p>Arguments can be of any type. It is up to the <code>lcMethod</code> implementation of <code><a href='validate.html'>validate()</a></code> to ensure that the required arguments are present and are of the expected type.</p>
-<p>Arguments can have almost any name. Exceptions include the names <code>"data"</code>, <code>"envir"</code>, and <code>"verbose"</code>. Furthermore, argument names may not start with a period (<code>"."</code>).</p>
-<p>Arguments cannot be directly modified, i.e., <code>lcMethod</code> objects are immutable. Modifying an argument involves creating a derivative object through the <a href='update.lcMethod.html'>update.lcMethod</a> method.</p>
+<p>An <code>lcMethod</code> objects represent the specification of a method with a set of configurable parameters (referred to as arguments).</p>
+<p>Arguments can be of any type.
+It is up to the <code>lcMethod</code> implementation of <code><a href='validate.html'>validate()</a></code> to ensure that the required arguments are present and are of the expected type.</p>
+<p>Arguments can have almost any name. Exceptions include the names <code>"data"</code>, <code>"envir"</code>, and <code>"verbose"</code>.
+Furthermore, argument names may not start with a period (<code>"."</code>).</p>
+<p>Arguments cannot be directly modified, i.e., <code>lcMethod</code> objects are immutable.
+Modifying an argument involves creating an altered copy through the <a href='update.lcMethod.html'>update.lcMethod</a> method.</p>
     <h2 class="hasAnchor" id="fitting-procedure"><a class="anchor" href="#fitting-procedure"></a>Fitting procedure</h2>
 
     
@@ -175,7 +187,7 @@ A default <code>environment</code> can be assigned or obtained from a <code>lcMe
 <p>Each <code>lcMethod</code> subclass defines a type of methods in terms of a series of steps for estimating the method.
 These steps, as part of the fitting procedure, are executed by <code><a href='latrend.html'>latrend()</a></code> in the following order:</p><ol>
 <li><p><code><a href='compose.html'>compose()</a></code>: Evaluate and finalize the method argument values.</p></li>
-<li><p><code><a href='validate.html'>validate()</a></code>: Check the validity of the method argument values.</p></li>
+<li><p><code><a href='validate.html'>validate()</a></code>: Check the validity of the method argument values in relation to the dataset.</p></li>
 <li><p><code><a href='prepareData.html'>prepareData()</a></code>: Process the training data for fitting.</p></li>
 <li><p><code><a href='preFit.html'>preFit()</a></code>: Prepare environment for estimation, independent of training data.</p></li>
 <li><p><code><a href='fit.html'>fit()</a></code>: Estimate the specified method on the training data, outputting an object inheriting from <code>lcModel</code>.</p></li>
@@ -183,10 +195,26 @@ These steps, as part of the fitting procedure, are executed by <code><a href='la
 </ol>
 
 <p>The result of the fitting procedure is an <a href='lcModel-class.html'>lcModel</a> object that inherits from the <code>lcModel</code> class.</p>
+    <h2 class="hasAnchor" id="implementation"><a class="anchor" href="#implementation"></a>Implementation</h2>
+
+    
+
+<p>The base class <code>lcMethod</code> provides the logic for storing, evaluating, and printing the method parameters.</p>
+<p>Subclasses of <code>lcMethod</code> differ only in the fitting procedure logic (see above).</p>
+<p>To implement your own <code>lcMethod</code> subclass, you'll want to implement at least the following functions:</p><ul>
+<li><p><code><a href='fit.html'>fit()</a></code>: The main function for estimating your method.</p></li>
+<li><p><code><a href='getName.html'>getName()</a></code>: The name of your method.</p></li>
+<li><p><code><a href='getName.html'>getShortName()</a></code>: The abbreviated name of your method.</p></li>
+<li><p><code><a href='getArgumentDefaults.html'>getArgumentDefaults()</a></code>: Sensible default argument values to your method.</p></li>
+</ul>
+
+<p>For more complex methods, the additional functions as part of the fitting procedure (see the <em>Fitting procedure</em> section above) will be of use.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='https://rdrr.io/r/base/environment.html'>environment</a> <a href='lcMethod-constructor.html'>lcMethod-constructor</a></p>
+    <div class='dont-index'><p><a href='https://rdrr.io/r/base/environment.html'>environment</a></p>
 <p>Other lcMethod implementations: 
+<code><a href='getArgumentDefaults.html'>getArgumentDefaults</a>()</code>,
+<code><a href='getArgumentExclusions.html'>getArgumentExclusions</a>()</code>,
 <code><a href='lcMethodAkmedoids.html'>lcMethodAkmedoids</a></code>,
 <code><a href='lcMethodCrimCV.html'>lcMethodCrimCV</a></code>,
 <code><a href='lcMethodCustom.html'>lcMethodCustom</a></code>,
@@ -216,6 +244,39 @@ These steps, as part of the fitting procedure, are executed by <code><a href='la
 <code><a href='names,lcMethod-method.html'>names,lcMethod-method</a></code>,
 <code><a href='update.lcMethod.html'>update.lcMethod</a>()</code></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>kmlMethod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lcMethodKML.html'>lcMethodKML</a></span><span class='op'>(</span>response <span class='op'>=</span> <span class='st'>"Value"</span>, nClusters <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>kmlMethod</span>
+</div><div class='output co'>#&gt; lcMethodKML as "longitudinal k-means (KML)"
+#&gt;  time:           getOption("latrend.time")
+#&gt;  id:             getOption("latrend.id")
+#&gt;  nClusters:      2
+#&gt;  nbRedrawing:    20
+#&gt;  maxIt:          200
+#&gt;  imputationMethod:"copyMean"
+#&gt;  distanceName:   "euclidean"
+#&gt;  power:          2
+#&gt;  distance:       function() {}
+#&gt;  centerMethod:   meanNA
+#&gt;  startingCond:   "nearlyAll"
+#&gt;  nbCriterion:    1000
+#&gt;  scale:          TRUE
+#&gt;  response:       "Value"</div><div class='input'>
+<span class='va'>kmlMethod</span> <span class='op'>&lt;-</span> <span class='fu'>new</span><span class='op'>(</span><span class='st'>"lcMethodKML"</span>, response <span class='op'>=</span> <span class='st'>"Value"</span>, nClusters <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+
+<span class='co'># create a copy with updated nClusters argument</span>
+<span class='va'>kmlMethod3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/update.html'>update</a></span><span class='op'>(</span><span class='va'>kmlMethod</span>, nClusters <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+
+<span class='co'># get argument names</span>
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>kmlMethod</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] "time"             "id"               "nClusters"        "nbRedrawing"     
+#&gt;  [5] "maxIt"            "imputationMethod" "distanceName"     "power"           
+#&gt;  [9] "distance"         "centerMethod"     "startingCond"     "nbCriterion"     
+#&gt; [13] "scale"            "response"        </div><div class='input'>
+<span class='co'># evaluate argument</span>
+<span class='va'>kmlMethod</span><span class='op'>$</span><span class='va'>nClusters</span>
+</div><div class='output co'>#&gt; [1] 2</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

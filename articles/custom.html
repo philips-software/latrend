@@ -91,7 +91,7 @@
       <h1 data-toc-skip>Implementing new models</h1>
                         <h4 class="author">Niek Den Teuling</h4>
             
-            <h4 class="date">2021-09-29</h4>
+            <h4 class="date">2021-10-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/master/vignettes/custom.Rmd"><code>vignettes/custom.Rmd</code></a></small>
       <div class="hidden name"><code>custom.Rmd</code></div>
@@ -205,13 +205,13 @@
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">model.twostep</span><span class="op">)</span>
 <span class="co">#&gt; Longitudinal cluster model using two-step clustering</span>
 <span class="co">#&gt; lcMethodFeature as "two-step clustering"</span>
-<span class="co">#&gt;  id:             "Traj"</span>
-<span class="co">#&gt;  time:           "Time"</span>
-<span class="co">#&gt;  center:         function (x) {    mean(x, na.rm = TRUE)}</span>
 <span class="co">#&gt;  standardize:    `scale`</span>
-<span class="co">#&gt;  clusterStep:    `clusStep`</span>
-<span class="co">#&gt;  representationStep:`repStep`</span>
+<span class="co">#&gt;  center:         function (x) {    mean(x, na.rm = TRUE)}</span>
+<span class="co">#&gt;  time:           "Time"</span>
+<span class="co">#&gt;  id:             "Traj"</span>
 <span class="co">#&gt;  response:       "Y"</span>
+<span class="co">#&gt;  representationStep:`repStep`</span>
+<span class="co">#&gt;  clusterStep:    `clusStep`</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Cluster sizes (K=3):</span>
 <span class="co">#&gt;        A        B        C </span>
@@ -259,13 +259,13 @@
 <span class="co">#&gt; lcMethodFeature as "two-step clustering"</span>
 <span class="co">#&gt;  nClusters:      2</span>
 <span class="co">#&gt;  formula:        Y ~ Time</span>
-<span class="co">#&gt;  id:             "Traj"</span>
-<span class="co">#&gt;  time:           "Time"</span>
-<span class="co">#&gt;  center:         function (x) {    mean(x, na.rm = TRUE)}</span>
 <span class="co">#&gt;  standardize:    `scale`</span>
-<span class="co">#&gt;  clusterStep:    `clusStep.gen`</span>
-<span class="co">#&gt;  representationStep:`repStep.gen`</span>
+<span class="co">#&gt;  center:         function (x) {    mean(x, na.rm = TRUE)}</span>
+<span class="co">#&gt;  time:           "Time"</span>
+<span class="co">#&gt;  id:             "Traj"</span>
 <span class="co">#&gt;  response:       "Y"</span>
+<span class="co">#&gt;  representationStep:`repStep.gen`</span>
+<span class="co">#&gt;  clusterStep:    `clusStep.gen`</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Cluster sizes (K=2):</span>
 <span class="co">#&gt;        A        B </span>
@@ -291,23 +291,31 @@
 <code class="sourceCode R"><span class="kw">setClass</span><span class="op">(</span><span class="st">"lcMethodSimpleGBTM"</span>, contains <span class="op">=</span> <span class="st">"lcMethod"</span><span class="op">)</span></code></pre></div>
 <p>Note that a <code>lcMethod</code> class has a single slot <code>call</code>, which stores all the arguments to the method. The other relevant aspects of a <code>lcMethod</code> implementation are the <code><a href="../reference/prepareData.html">prepareData()</a></code> and <code><a href="../reference/fit.html">fit()</a></code> functions, which are called when passing a <code>lcMethod</code> object to the <code><a href="../reference/latrend.html">latrend()</a></code> function or any other model estimation function.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lcMethodSimpleGBTM</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">formula</span> <span class="op">=</span> <span class="va">Value</span> <span class="op">~</span> <span class="va">Time</span>,
-                              <span class="va">time</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,
-                              <span class="va">id</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,
-                              <span class="va">nClusters</span> <span class="op">=</span> <span class="fl">2</span>,
-                              <span class="va">nwg</span> <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="../reference/lcMethod.call.html">lcMethod.call</a></span><span class="op">(</span><span class="st">"lcMethodSimpleGBTM"</span>, call <span class="op">=</span> <span class="fu">stackoverflow</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stackoverflow/man/match.call.defaults.html">match.call.defaults</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span class="va">lcMethodSimpleGBTM</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">mc</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/match.call.html">match.call</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="va">mc</span><span class="op">$</span><span class="va">Class</span> <span class="op">=</span> <span class="st">'lcMethodSimpleGBTM'</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">new</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">as.list</a></span><span class="op">(</span><span class="va">mc</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="kw">setMethod</span><span class="op">(</span><span class="st">"getArgumentDefaults"</span>, <span class="st">"lcMethodSimpleGBTM"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+    formula <span class="op">=</span> <span class="va">Value</span> <span class="op">~</span> <span class="va">Time</span>,
+    time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,
+    id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,
+    nClusters <span class="op">=</span> <span class="fl">2</span>,
+    nwg <span class="op">=</span> <span class="cn">FALSE</span>
+  <span class="op">)</span>
+<span class="op">}</span><span class="op">)</span></code></pre></div>
 <p>Next, we override the <code><a href="../reference/getName.html">getName()</a></code> and <code><a href="../reference/getName.html">getShortName()</a></code> functions in our method class to ensure that the model is easily distinguishable from other methods in the summary output. While we return a simple constant character sequence, the naming functions could be improved by generating a more detailed description of the model based on the arguments of the method object.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw">setMethod</span><span class="op">(</span><span class="st">"getName"</span>, 
-  <span class="fu">signature</span><span class="op">(</span><span class="st">"lcMethodSimpleGBTM"</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span> <span class="st">"simple group-based trajectory model"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw">setMethod</span><span class="op">(</span><span class="st">"getName"</span>, <span class="st">"lcMethodSimpleGBTM"</span>, 
+  <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span> <span class="st">"simple group-based trajectory model"</span><span class="op">)</span>
 
-<span class="kw">setMethod</span><span class="op">(</span><span class="st">"getShortName"</span>, <span class="fu">signature</span><span class="op">(</span><span class="st">"lcMethodSimpleGBTM"</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span> <span class="st">"sgbtm"</span><span class="op">)</span></code></pre></div>
+<span class="kw">setMethod</span><span class="op">(</span><span class="st">"getShortName"</span>, <span class="st">"lcMethodSimpleGBTM"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span> <span class="st">"sgbtm"</span><span class="op">)</span></code></pre></div>
 <p>Implementing the <code><a href="../reference/prepareData.html">prepareData()</a></code> function enables the <code>lcMethod</code> to do data processing or transforming the data or other arguments in a structure which is suitable for the model fitting procedure. The prepare function takes a <code>lcMethod</code>, the data as a <code>data.frame</code>, and the verbosity level as inputs. The processing is passed onto the <code>fit</code> function by returning an <code>environment</code> with the relevant variables.</p>
 <p>In this example, we need to ensure that the <code>Id</code> column is an integer.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw">setMethod</span><span class="op">(</span><span class="st">"prepareData"</span>, <span class="fu">signature</span><span class="op">(</span><span class="st">"lcMethodSimpleGBTM"</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+<code class="sourceCode R"><span class="kw">setMethod</span><span class="op">(</span><span class="st">"prepareData"</span>, <span class="st">"lcMethodSimpleGBTM"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">envir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html">new.env</a></span><span class="op">(</span><span class="op">)</span>
   <span class="va">envir</span><span class="op">$</span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
   <span class="va">envir</span><span class="op">$</span><span class="va">data</span><span class="op">[[</span><span class="va">method</span><span class="op">$</span><span class="va">id</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">method</span><span class="op">$</span><span class="va">id</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="op">)</span>
@@ -315,7 +323,7 @@
 <span class="op">}</span><span class="op">)</span></code></pre></div>
 <p>The <code><a href="../reference/fit.html">fit()</a></code> function estimates the model and should return an object that extends the <code>lcModel</code> class. In our implementation, we call the <code>lcmm()</code> with the appropriate arguments, and we construct a <code>lcModelSimpleGBTM</code> instance. The class is defined in the subsection below. The <code>envir</code> argument contains the return value of the <code>prepare()</code> function, which would be <code>NULL</code> here.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw">setMethod</span><span class="op">(</span><span class="st">"fit"</span>, <span class="fu">signature</span><span class="op">(</span><span class="st">"lcMethodSimpleGBTM"</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+<code class="sourceCode R"><span class="kw">setMethod</span><span class="op">(</span><span class="st">"fit"</span>, <span class="st">"lcMethodSimpleGBTM"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">as.list</a></span><span class="op">(</span><span class="va">method</span>, args <span class="op">=</span> <span class="fu">lcmm</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lcmm/man/lcmm.html">lcmm</a></span><span class="op">)</span>
   <span class="va">args</span><span class="op">$</span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">envir</span><span class="op">$</span><span class="va">data</span>
   <span class="va">args</span><span class="op">$</span><span class="va">fixed</span> <span class="op">&lt;-</span> <span class="va">method</span><span class="op">$</span><span class="va">formula</span>
@@ -362,7 +370,7 @@
 <span class="op">}</span></code></pre></div>
 <p>The easiest way to add predictive capability to a model is by implementing the function <code><a href="../reference/predictForCluster.html">predictForCluster()</a></code>. This function returns the predicted values of a specific cluster, for the respective observations. This function is used by <code><a href="../reference/predict.lcModel.html">predict.lcModel(model, newdata)</a></code> function, which also reduces the output of <code><a href="https://rdrr.io/r/stats/fitted.values.html">fitted(model)</a></code> in case of <code>newdata = NULL</code>.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw">setMethod</span><span class="op">(</span><span class="st">'predictForCluster'</span>, <span class="fu">signature</span><span class="op">(</span><span class="st">'lcModelSimpleGBTM'</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span>
+<code class="sourceCode R"><span class="kw">setMethod</span><span class="op">(</span><span class="st">"predictForCluster"</span>, <span class="st">"lcModelSimpleGBTM"</span>, <span class="kw">function</span><span class="op">(</span>
     <span class="va">object</span>, <span class="va">newdata</span>, <span class="va">cluster</span>, <span class="va">what</span> <span class="op">=</span> <span class="st">'mu'</span>, <span class="va">...</span><span class="op">)</span>
 <span class="op">{</span>
   <span class="va">predMat</span> <span class="op">=</span> <span class="fu">lcmm</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lcmm/man/predictY.html">predictY</a></span><span class="op">(</span><span class="va">object</span><span class="op">@</span><span class="va">model</span>, newdata <span class="op">=</span> <span class="va">newdata</span><span class="op">)</span><span class="op">$</span><span class="va">pred</span> <span class="op">%&gt;%</span>
@@ -390,22 +398,22 @@
 <span class="fu">show</span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
 <span class="co">#&gt; lcMethodSimpleGBTM as "simple group-based trajectory model"</span>
 <span class="co">#&gt;  formula:        Y ~ Time</span>
-<span class="co">#&gt;  time:           getOption("latrend.time")</span>
-<span class="co">#&gt;  id:             getOption("latrend.id")</span>
+<span class="co">#&gt;  time:           "Time"</span>
+<span class="co">#&gt;  id:             "Traj"</span>
 <span class="co">#&gt;  nClusters:      2</span>
 <span class="co">#&gt;  nwg:            FALSE</span></code></pre></div>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sgbtm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">casedata</span><span class="op">)</span>
 <span class="co">#&gt; Be patient, lcmm is running ... </span>
-<span class="co">#&gt; The program took 0.14 seconds</span>
+<span class="co">#&gt; The program took 0.13 seconds</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">sgbtm</span><span class="op">)</span>
 <span class="co">#&gt; Longitudinal cluster model using simple group-based trajectory model</span>
 <span class="co">#&gt; lcMethodSimpleGBTM as "simple group-based trajectory model"</span>
-<span class="co">#&gt;  nwg:            FALSE</span>
-<span class="co">#&gt;  nClusters:      2</span>
-<span class="co">#&gt;  id:             "Traj"</span>
-<span class="co">#&gt;  time:           "Time"</span>
 <span class="co">#&gt;  formula:        Y ~ Time</span>
+<span class="co">#&gt;  time:           "Time"</span>
+<span class="co">#&gt;  id:             "Traj"</span>
+<span class="co">#&gt;  nClusters:      2</span>
+<span class="co">#&gt;  nwg:            FALSE</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Cluster sizes (K=2):</span>
 <span class="co">#&gt;        A        B </span>

@@ -205,6 +205,8 @@ R package version: 1.8.1, <a href='https://cran.r-project.org/package=lcmm'>http
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other lcMethod implementations: 
+<code><a href='getArgumentDefaults.html'>getArgumentDefaults</a>()</code>,
+<code><a href='getArgumentExclusions.html'>getArgumentExclusions</a>()</code>,
 <code><a href='lcMethod-class.html'>lcMethod-class</a></code>,
 <code><a href='lcMethodAkmedoids.html'>lcMethodAkmedoids</a></code>,
 <code><a href='lcMethodCrimCV.html'>lcMethodCrimCV</a></code>,
@@ -230,28 +232,28 @@ R package version: 1.8.1, <a href='https://cran.r-project.org/package=lcmm'>http
    id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span>, nClusters <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
 <span class='va'>gbtm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='va'>method</span>, data <span class='op'>=</span> <span class='va'>latrendData</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Be patient, hlme is running ... 
-#&gt; The program took 0.07 seconds 
+#&gt; The program took 0.06 seconds 
 #&gt; Be patient, hlme is running ... 
-#&gt; The program took 0.29 seconds </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>gbtm</span><span class='op'>)</span>
+#&gt; The program took 0.24 seconds </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>gbtm</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Longitudinal cluster model using group-based trajectory modeling using lcmm
 #&gt; lcMethodLcmmGBTM as "group-based trajectory modeling using lcmm"
-#&gt;  init:           "lme"
-#&gt;  nClusters:      3
-#&gt;  id:             "Id"
-#&gt;  time:           "Time"
-#&gt;  classmb:        ~1
 #&gt;  mixture:        ~1
-#&gt;  fixed:          Y ~ Time
-#&gt;  posfix:         NULL
-#&gt;  na.action:      1
-#&gt;  subset:         NULL
-#&gt;  maxiter:        500
-#&gt;  convG:          1e-04
-#&gt;  convL:          1e-04
-#&gt;  convB:          1e-04
-#&gt;  cor:            NULL
-#&gt;  nwg:            FALSE
+#&gt;  classmb:        ~1
+#&gt;  time:           "Time"
+#&gt;  id:             "Id"
+#&gt;  nClusters:      3
+#&gt;  init:           "lme"
 #&gt;  idiag:          FALSE
+#&gt;  nwg:            FALSE
+#&gt;  cor:            NULL
+#&gt;  convB:          1e-04
+#&gt;  convL:          1e-04
+#&gt;  convG:          1e-04
+#&gt;  maxiter:        500
+#&gt;  subset:         NULL
+#&gt;  na.action:      1
+#&gt;  posfix:         NULL
+#&gt;  fixed:          Y ~ Time
 #&gt; 
 #&gt; Cluster sizes (K=3):
 #&gt;           A           B           C 
