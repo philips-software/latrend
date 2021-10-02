@@ -3,7 +3,7 @@ rngReset()
 
 m = lcMethodKML(response = 'Value', nbRedrawing = 1, maxIt = 10)
 test_that('default', {
-  models = latrendRep(lcMethodKML(nbRedrawing = 1, maxIt = 10, response = 'Value'), data=testLongData, .rep = 2)
+  models = latrendRep(lcMethodKML(nbRedrawing = 1, maxIt = 10, response = 'Value'), data = testLongData, .rep = 2)
 
   expect_is(models, 'lcModels')
   expect_length(models, 2)
@@ -17,6 +17,14 @@ test_that('method var', {
 
   expect_is(models, 'lcModels')
   expect_length(models, 2)
+})
+
+test_that('method name', {
+  refMethod = lcMethodKML(response = "Value", nbRedrawing = 1, maxIt = 10)
+  model = latrendRep("lcMethodKML", response = "Value", nbRedrawing = 1, maxIt = 10, data = testLongData, .rep = 1)[[1]]
+  newMethod = getLcMethod(model)
+  expect_equal(newMethod$nbRedrawing, refMethod$nbRedrawing)
+  expect_equal(newMethod$maxIt, refMethod$maxIt)
 })
 
 test_that('single rep', {

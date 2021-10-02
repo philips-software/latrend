@@ -249,7 +249,7 @@ setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL)
 })
 
 
-as.lcMethod = function(x, ...) {
+as.lcMethod = function(x, ..., envir = parent.frame()) {
   assert_that(is.lcMethod(x) || is.character(x))
 
   if (is.character(x)) {
@@ -271,7 +271,8 @@ as.lcMethod = function(x, ...) {
 
     x = new(x, ...)
   } else {
-    update(x, ...)
+    assert_that(is_class_defined(x))
+    update(x, ..., envir = envir)
   }
 }
 

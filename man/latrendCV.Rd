@@ -16,7 +16,7 @@ latrendCV(
 )
 }
 \arguments{
-\item{method}{The \code{lcMethod} object specifying the longitudinal cluster method to apply. See \linkS4class{lcMethod} for details.}
+\item{method}{An \code{lcMethod} object specifying the longitudinal cluster method to apply, or the name (as \code{character}) of an \code{lcMethod} subclass. See \linkS4class{lcMethod} for details.}
 
 \item{data}{A \code{data.frame}.}
 
