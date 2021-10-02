@@ -3,14 +3,16 @@
 \docType{class}
 \name{lcMethod-class}
 \alias{lcMethod-class}
+\alias{lcMethod}
 \title{lcMethod class}
 \description{
-Objects of type \code{lcMethod} enable the specification and estimation of different methods for longitudinal clustering.
-The base class \code{lcMethod} provides the logic for storing, evaluating, and printing the method parameters.
+\code{lcMethod} objects represent the specification of a method for longitudinal clustering.
+Furthermore, the object class contains the logic for estimating the respective method.
 
-Subclasses of \code{lcMethod} differ only on the fitting procedure logic (see below).
-
-The intended way for specifying methods is through the method-specific constructor functions, e.g., through \link{lcMethodKML}, \link{lcMethodLcmmGBTM}, or \link{lcMethodDtwclust}.
+You can specify a longitudinal cluster method through one of the method-specific constructor functions,
+e.g., \code{\link[=lcMethodKML]{lcMethodKML()}}, \code{\link[=lcMethodLcmmGBTM]{lcMethodLcmmGBTM()}}, or \code{\link[=lcMethodDtwclust]{lcMethodDtwclust()}}.
+Alternatively, you can instantiate methods through \code{\link[methods:new]{methods::new()}}, e.g., by calling \code{new("lcMethodKML", response = "Value")}.
+In both cases, default values are specified for omitted arguments.
 }
 \details{
 Because the \code{lcMethod} arguments may be unevaluated, argument retrieval functions such as \code{[[} accept an \code{envir} argument.
@@ -19,20 +21,28 @@ A default \code{environment} can be assigned or obtained from a \code{lcMethod} 
 \section{Slots}{
 
 \describe{
-\item{\code{arguments}}{A \code{list} representing the arguments of the \code{lcMethod} object. Arguments are not evaluated upon creation of the method object. Instead, arguments are stored similar to a \code{call} object. Do not modify or access.}
+\item{\code{arguments}}{A \code{list} representing the arguments of the \code{lcMethod} object.
+Arguments are not evaluated upon creation of the method object.
+Instead, arguments are stored similar to a \code{call} object, and are only evaluated when a method is fitted.
+Do not modify or access.}
 
-\item{\code{sourceCalls}}{A list of calls for tracking the original call after substitution. Used for printing objects which require too many characters (e.g. ,function definitions, matrices).}
+\item{\code{sourceCalls}}{A list of calls for tracking the original call after substitution.
+Used for printing objects which require too many characters (e.g. ,function definitions, matrices).
+Do not modify or access.}
 }}
 
 \section{Method arguments}{
 
-\code{lcMethod} objects represent the specification of a method with a set of configurable parameters (referred to as arguments).
+An \code{lcMethod} objects represent the specification of a method with a set of configurable parameters (referred to as arguments).
 
-Arguments can be of any type. It is up to the \code{lcMethod} implementation of \code{\link[=validate]{validate()}} to ensure that the required arguments are present and are of the expected type.
+Arguments can be of any type.
+It is up to the \code{lcMethod} implementation of \code{\link[=validate]{validate()}} to ensure that the required arguments are present and are of the expected type.
 
-Arguments can have almost any name. Exceptions include the names \code{"data"}, \code{"envir"}, and \code{"verbose"}. Furthermore, argument names may not start with a period (\code{"."}).
+Arguments can have almost any name. Exceptions include the names \code{"data"}, \code{"envir"}, and \code{"verbose"}.
+Furthermore, argument names may not start with a period (\code{"."}).
 
-Arguments cannot be directly modified, i.e., \code{lcMethod} objects are immutable. Modifying an argument involves creating a derivative object through the \link{update.lcMethod} method.
+Arguments cannot be directly modified, i.e., \code{lcMethod} objects are immutable.
+Modifying an argument involves creating an altered copy through the \link{update.lcMethod} method.
 }
 
 \section{Fitting procedure}{
@@ -49,6 +59,13 @@ These steps, as part of the fitting procedure, are executed by \code{\link[=latr
 }
 
 The result of the fitting procedure is an \linkS4class{lcModel} object that inherits from the \code{lcModel} class.
+}
+
+\section{Implementation}{
+
+The base class \code{lcMethod} provides the logic for storing, evaluating, and printing the method parameters.
+
+Subclasses of \code{lcMethod} differ only in the fitting procedure logic (see above).
 }
 
 \seealso{

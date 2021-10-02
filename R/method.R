@@ -1,22 +1,27 @@
 #' @export
 #' @name lcMethod-class
 #' @rdname lcMethod-class
+#' @aliases lcMethod
 #' @title lcMethod class
-#' @description Objects of type `lcMethod` enable the specification and estimation of different methods for longitudinal clustering.
-#' The base class `lcMethod` provides the logic for storing, evaluating, and printing the method parameters.
+#' @description `lcMethod` objects represent the specification of a method for longitudinal clustering.
+#' Furthermore, the object class contains the logic for estimating the respective method.
 #'
-#' Subclasses of `lcMethod` differ only on the fitting procedure logic (see below).
-#'
-#' The intended way for specifying methods is through the method-specific constructor functions, e.g., through [lcMethodKML], [lcMethodLcmmGBTM], or [lcMethodDtwclust].
+#' You can specify a longitudinal cluster method through one of the method-specific constructor functions,
+#' e.g., [lcMethodKML()], [lcMethodLcmmGBTM()], or [lcMethodDtwclust()].
+#' Alternatively, you can instantiate methods through [methods::new()], e.g., by calling `new("lcMethodKML", response = "Value")`.
+#' In both cases, default values are specified for omitted arguments.
 #'
 #' @section Method arguments:
-#' `lcMethod` objects represent the specification of a method with a set of configurable parameters (referred to as arguments).
+#' An `lcMethod` objects represent the specification of a method with a set of configurable parameters (referred to as arguments).
 #'
-#' Arguments can be of any type. It is up to the `lcMethod` implementation of [validate()] to ensure that the required arguments are present and are of the expected type.
+#' Arguments can be of any type.
+#' It is up to the `lcMethod` implementation of [validate()] to ensure that the required arguments are present and are of the expected type.
 #'
-#' Arguments can have almost any name. Exceptions include the names `"data"`, `"envir"`, and `"verbose"`. Furthermore, argument names may not start with a period (`"."`).
+#' Arguments can have almost any name. Exceptions include the names `"data"`, `"envir"`, and `"verbose"`.
+#' Furthermore, argument names may not start with a period (`"."`).
 #'
-#' Arguments cannot be directly modified, i.e., `lcMethod` objects are immutable. Modifying an argument involves creating a derivative object through the [update.lcMethod] method.
+#' Arguments cannot be directly modified, i.e., `lcMethod` objects are immutable.
+#' Modifying an argument involves creating an altered copy through the [update.lcMethod] method.
 #'
 #' @section Fitting procedure:
 #' Each `lcMethod` subclass defines a type of methods in terms of a series of steps for estimating the method.
@@ -32,11 +37,21 @@
 #'
 #' The result of the fitting procedure is an [lcModel-class] object that inherits from the `lcModel` class.
 #'
+#' @section Implementation:
+#' The base class `lcMethod` provides the logic for storing, evaluating, and printing the method parameters.
+#'
+#' Subclasses of `lcMethod` differ only in the fitting procedure logic (see above).
+#'
 #' @details Because the `lcMethod` arguments may be unevaluated, argument retrieval functions such as `[[` accept an `envir` argument.
 #' A default `environment` can be assigned or obtained from a `lcMethod` object using the `environment()` function.
 #' @seealso [environment]
-#' @slot arguments A `list` representing the arguments of the `lcMethod` object. Arguments are not evaluated upon creation of the method object. Instead, arguments are stored similar to a `call` object. Do not modify or access.
-#' @slot sourceCalls A list of calls for tracking the original call after substitution. Used for printing objects which require too many characters (e.g. ,function definitions, matrices).
+#' @slot arguments A `list` representing the arguments of the `lcMethod` object.
+#' Arguments are not evaluated upon creation of the method object.
+#' Instead, arguments are stored similar to a `call` object, and are only evaluated when a method is fitted.
+#' Do not modify or access.
+#' @slot sourceCalls A list of calls for tracking the original call after substitution.
+#' Used for printing objects which require too many characters (e.g. ,function definitions, matrices).
+#' Do not modify or access.
 #' @family lcMethod implementations
 #' @family lcMethod functions
 setClass('lcMethod', slots = c(arguments = 'environment', sourceCalls = 'list'))
@@ -520,11 +535,66 @@ getCall.lcMethod = function(x, ...) {
 }
 
 #. getArgumentDefaults ####
+#' @export
+#' @name getArgumentDefaults
+#' @aliases getArgumentDefaults,lcMethod-method
+#' @title Default argument values for lcMethod subclass
+#' @description Returns the default arguments associated with the respective `lcMethod` subclass.
+#' These arguments are automatically included into the `lcMethod` object during initialization.
+#'
+#' @param object The `lcMethod` object.
+#' @return A named `list` of argument values.
+#' @section Implementation:
+#' Although implementing this method is optional, it prevents users from
+#' having to specify all arguments every time they want to create a method specification.
+#'
+#' In this example, most of the default arguments are defined as arguments of the function
+#' `lcMethodExample`, which we can include in the list by calling [formals]. Copying the arguments from functions
+#' is especially useful when your method implementation is based on an existing function.
+#' \preformatted{
+#' setMethod("getArgumentDefaults", "lcMethodExample", function(object) {
+#'   list(
+#'     formals(lcMethodExample),
+#'     formals(funFEM::funFEM),
+#'     extra = Value ~ 1,
+#'     tol = 1e-4,
+#'     callNextMethod()
+#'   )
+#' })
+#'
+#' It is recommended to add `callNextMethod()` to the end of the list.
+#' This enables inheriting the default arguments from superclasses.
+#' }
+#' @seealso [lcMethod] [getArgumentExclusions]
 setMethod('getArgumentDefaults', signature('lcMethod'), function(object) {
   set_names(list(), character(0))
 })
 
 #. getArgumentExclusions ####
+#' @export
+#' @name getArgumentExclusions
+#' @aliases getArgumentExclusions,lcMethod-method
+#' @title Arguments to be excluded for lcMethod subclass
+#' @description Returns the names of arguments that should be excluded during instantiation of the `lcMethod`.
+#'
+#' @param object The `lcMethod` object.
+#' @return A `character` vector of argument names.
+#' @section Implementation:
+#' This function only needs to be implemented if you want to avoid users from specifying
+#' redundant arguments or arguments that are set automatically or conditionally on other arguments.
+#'
+#' \preformatted{
+#' setMethod("getArgumentExclusions", "lcMethodExample", function(object) {
+#'   c(
+#'     "doPlot",
+#'     "verbose",
+#'     callNextMethod()
+#'   )
+#' })
+#'
+#' Adding `callNextMethod()` to the end of the return vector enables inheriting exclusions from superclasses.
+#' }
+#' @seealso [lcMethod] [getArgumentExclusions]
 setMethod('getArgumentExclusions', signature('lcMethod'), function(object) {
   c('verbose', 'envir', 'data')
 })
