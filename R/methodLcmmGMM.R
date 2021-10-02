@@ -54,29 +54,38 @@ setValidity('lcMethodLcmmGMM', function(object) {
 #' \insertRef{proustlima2017estimation}{latrend}
 #'
 #' \insertRef{proustlima2019lcmm}{latrend}
-lcMethodLcmmGMM = function(fixed,
-                          mixture = ~ 1,
-                          random = ~ 1,
-                          classmb = ~ 1,
-                          time = getOption('latrend.time'),
-                          id = getOption('latrend.id'),
-                          init = 'lme.random',
-                          nClusters = 2,
-                          ...) {
-  lcMethod.call(
-    'lcMethodLcmmGMM',
-    call = match.call.all(),
-    defaults = lcmm::hlme,
-    excludeArgs = c(
-      'data',
-      'subject',
-      'returndata',
-      'ng',
-      'verbose',
-      'subset'
-    )
-  )
+lcMethodLcmmGMM = function(
+  fixed,
+  mixture = ~ 1,
+  random = ~ 1,
+  classmb = ~ 1,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  init = 'lme.random',
+  nClusters = 2,
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodLcmmGMM'
+  do.call(new, as.list(mc))
 }
+
+#' @rdname interface-lcmm
+setMethod('getArgumentDefaults', signature('lcMethodLcmmGMM'), function(object) {
+  c(
+    formals(lcMethodLcmmGMM),
+    formals(lcmm::hlme),
+    callNextMethod()
+  )
+})
+
+#' @rdname interface-lcmm
+setMethod('getArgumentExclusions', signature('lcMethodLcmmGMM'), function(object) {
+  union(
+    callNextMethod(),
+    c('data', 'subject', 'returndata', 'ng', 'verbose', 'subset')
+  )
+})
 
 #' @rdname interface-lcmm
 setMethod('getName', signature('lcMethodLcmmGMM'), function(object) 'growth mixture model')

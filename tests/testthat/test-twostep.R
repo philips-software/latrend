@@ -4,13 +4,13 @@ rngReset()
 
 test_that('specify', {
   repfun = function(method, data, ...) {
-    data[, mean(Value), by=Traj]$V1 %>% cbind()
+    data[, mean(Value), by = Traj]$V1 %>% cbind()
   }
   clusfun = function(method, data, repMat, ...) {
-    clusters = factor(repMat[,1] > 0, levels=c(F,T), labels=c('Low', 'High'))
-    lcModelCustom(response = method$response, data=data, trajectoryAssignments=clusters)
+    clusters = factor(repMat[,1] > 0, levels = c(F,T), labels = c('Low', 'High'))
+    lcModelCustom(response = method$response, data = data, trajectoryAssignments = clusters)
   }
-  method = lcMethodTestTwoStep(representationStep=repfun, clusterStep=clusfun, standardize=scale)
+  method = lcMethodTestTwoStep(representationStep = repfun, clusterStep = clusfun, standardize = scale)
 
   model = expect_silent(latrend(method, testLongData))
 

@@ -21,19 +21,36 @@ setValidity('lcMethodLMKM', function(object) {
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
-lcMethodLMKM = function(formula,
-                        time = getOption('latrend.time'),
-                        id = getOption('latrend.id'),
-                        nClusters = 2,
-                        standardize = scale,
-                        ...) {
-  lcMethod.call(
-    'lcMethodLMKM',
-    call = match.call.defaults(),
-    defaults = c(lm, kmeans),
-    excludeArgs = c('x', 'data', 'control', 'centers', 'trace')
-  )
+lcMethodLMKM = function(
+  formula,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  nClusters = 2,
+  standardize = scale,
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodLMKM'
+  do.call(new, as.list(mc))
 }
+
+#' @rdname interface-featureBased
+setMethod('getArgumentDefaults', signature('lcMethodLMKM'), function(object) {
+  c(
+    formals(lcMethodLMKM),
+    formals(lm),
+    formals(kmeans),
+    callNextMethod()
+  )
+})
+
+#' @rdname interface-featureBased
+setMethod('getArgumentExclusions', signature('lcMethodLMKM'), function(object) {
+  union(
+    callNextMethod(),
+    c('x', 'data', 'control', 'centers', 'trace')
+  )
+})
 
 #' @rdname interface-featureBased
 setMethod('getName', signature('lcMethodLMKM'), function(object) 'glm-kmeans')

@@ -18,21 +18,37 @@ setClass('lcMethodMixtoolsNPRM', contains = 'lcMatrixMethod')
 #' @family lcMethod implementations
 #' @references
 #' \insertRef{benaglia2009mixtools}{latrend}
-lcMethodMixtoolsNPRM = function(response,
-                                time = getOption('latrend.time'),
-                                id = getOption('latrend.id'),
-                                nClusters = 2,
-                                blockid = NULL,
-                                bw = NULL,
-                                h = NULL,
-                                ...) {
-  lcMethod.call(
-    'lcMethodMixtoolsNPRM',
-    call = match.call.defaults(),
-    defaults = mixtools::npEM,
-    excludeArgs = c('data', 'x', 'mu0', 'verb')
-  )
+lcMethodMixtoolsNPRM = function(
+  response,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  nClusters = 2,
+  blockid = NULL,
+  bw = NULL,
+  h = NULL,
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodMixtoolsNPRM'
+  do.call(new, as.list(mc))
 }
+
+#' @rdname interface-mixtools
+setMethod('getArgumentDefaults', signature('lcMethodMixtoolsNPRM'), function(object) {
+  c(
+    formals(lcMethodMixtoolsNPRM),
+    formals(mixtools::npEM),
+    callNextMethod()
+  )
+})
+
+#' @rdname interface-mixtools
+setMethod('getArgumentExclusions', signature('lcMethodMixtoolsNPRM'), function(object) {
+  union(
+    callNextMethod(),
+    c('data', 'x', 'mu0', 'verb')
+  )
+})
 
 #' @rdname interface-mixtools
 setMethod('getName', signature('lcMethodMixtoolsNPRM'), function(object) 'non-parametric estimation for independent repeated measurements using mixtools')

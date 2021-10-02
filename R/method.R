@@ -1,29 +1,34 @@
 #' @export
 #' @name lcMethod-class
 #' @rdname lcMethod-class
+#' @aliases lcMethod
 #' @title lcMethod class
-#' @description Objects of type `lcMethod` enable the specification and estimation of different methods for longitudinal clustering.
-#' The base class `lcMethod` provides the logic for storing, evaluating, and printing the method parameters.
+#' @description `lcMethod` objects represent the specification of a method for longitudinal clustering.
+#' Furthermore, the object class contains the logic for estimating the respective method.
 #'
-#' Subclasses of `lcMethod` differ only on the fitting procedure logic (see below).
-#'
-#' The intended way for specifying methods is through the method-specific constructor functions, e.g., through [lcMethodKML], [lcMethodLcmmGBTM], or [lcMethodDtwclust].
+#' You can specify a longitudinal cluster method through one of the method-specific constructor functions,
+#' e.g., [lcMethodKML()], [lcMethodLcmmGBTM()], or [lcMethodDtwclust()].
+#' Alternatively, you can instantiate methods through [methods::new()], e.g., by calling `new("lcMethodKML", response = "Value")`.
+#' In both cases, default values are specified for omitted arguments.
 #'
 #' @section Method arguments:
-#' `lcMethod` objects represent the specification of a method with a set of configurable parameters (referred to as arguments).
+#' An `lcMethod` objects represent the specification of a method with a set of configurable parameters (referred to as arguments).
 #'
-#' Arguments can be of any type. It is up to the `lcMethod` implementation of [validate()] to ensure that the required arguments are present and are of the expected type.
+#' Arguments can be of any type.
+#' It is up to the `lcMethod` implementation of [validate()] to ensure that the required arguments are present and are of the expected type.
 #'
-#' Arguments can have almost any name. Exceptions include the names `"data"`, `"envir"`, and `"verbose"`. Furthermore, argument names may not start with a period (`"."`).
+#' Arguments can have almost any name. Exceptions include the names `"data"`, `"envir"`, and `"verbose"`.
+#' Furthermore, argument names may not start with a period (`"."`).
 #'
-#' Arguments cannot be directly modified, i.e., `lcMethod` objects are immutable. Modifying an argument involves creating a derivative object through the [update.lcMethod] method.
+#' Arguments cannot be directly modified, i.e., `lcMethod` objects are immutable.
+#' Modifying an argument involves creating an altered copy through the [update.lcMethod] method.
 #'
 #' @section Fitting procedure:
 #' Each `lcMethod` subclass defines a type of methods in terms of a series of steps for estimating the method.
 #' These steps, as part of the fitting procedure, are executed by [latrend()] in the following order:
 #' \enumerate{
 #'   \item [compose()]: Evaluate and finalize the method argument values.
-#'   \item [validate()]: Check the validity of the method argument values.
+#'   \item [validate()]: Check the validity of the method argument values in relation to the dataset.
 #'   \item [prepareData()]: Process the training data for fitting.
 #'   \item [preFit()]: Prepare environment for estimation, independent of training data.
 #'   \item [fit()]: Estimate the specified method on the training data, outputting an object inheriting from `lcModel`.
@@ -32,28 +37,126 @@
 #'
 #' The result of the fitting procedure is an [lcModel-class] object that inherits from the `lcModel` class.
 #'
+#' @section Implementation:
+#' The base class `lcMethod` provides the logic for storing, evaluating, and printing the method parameters.
+#'
+#' Subclasses of `lcMethod` differ only in the fitting procedure logic (see above).
+#'
+#' To implement your own `lcMethod` subclass, you'll want to implement at least the following functions:
+#' \itemize{
+#'   \item [fit()]: The main function for estimating your method.
+#'   \item [getName()]: The name of your method.
+#'   \item [getShortName()]: The abbreviated name of your method.
+#'   \item [getArgumentDefaults()]: Sensible default argument values to your method.
+#' }
+#'
+#' For more complex methods, the additional functions as part of the fitting procedure (see the _Fitting procedure_ section above) will be of use.
+#'
 #' @details Because the `lcMethod` arguments may be unevaluated, argument retrieval functions such as `[[` accept an `envir` argument.
 #' A default `environment` can be assigned or obtained from a `lcMethod` object using the `environment()` function.
-#' @seealso [environment] [lcMethod-constructor]
-#' @slot arguments A `list` representing the arguments of the `lcMethod` object. Arguments are not evaluated upon creation of the method object. Instead, arguments are stored similar to a `call` object. Do not modify or access.
-#' @slot sourceCalls A list of calls for tracking the original call after substitution. Used for printing objects which require too many characters (e.g. ,function definitions, matrices).
+#' @seealso [environment]
+#' @slot arguments A `list` representing the arguments of the `lcMethod` object.
+#' Arguments are not evaluated upon creation of the method object.
+#' Instead, arguments are stored similar to a `call` object, and are only evaluated when a method is fitted.
+#' Do not modify or access.
+#' @slot sourceCalls A list of calls for tracking the original call after substitution.
+#' Used for printing objects which require too many characters (e.g. ,function definitions, matrices).
+#' Do not modify or access.
+#' @examples
+#' kmlMethod <- lcMethodKML(response = "Value", nClusters = 2)
+#' kmlMethod
+#'
+#' kmlMethod <- new("lcMethodKML", response = "Value", nClusters = 2)
+#'
+#' # create a copy with updated nClusters argument
+#' kmlMethod3 <- update(kmlMethod, nClusters = 3)
+#'
+#' # get argument names
+#' names(kmlMethod)
+#'
+#' # evaluate argument
+#' kmlMethod$nClusters
+#'
 #' @family lcMethod implementations
 #' @family lcMethod functions
 setClass('lcMethod', slots = c(arguments = 'environment', sourceCalls = 'list'))
 
 #. initialize ####
+#' @title lcMethod initialization
+#' @description Initialization of `lcMethod` objects, converting arbitrary arguments to arguments as part of an `lcMethod` object.
+#' @param .Object The newly allocated `lcMethod` object.
+#' @param ... Other method arguments.
+#' @examples
+#' new("lcMethodKML", response = "Value")
 setMethod('initialize', 'lcMethod', function(.Object, ...) {
-  .Object = callNextMethod()
+  .Object <- callNextMethod(.Object)
+  .defaults = getArgumentDefaults(.Object)
+  .exclude = getArgumentExclusions(.Object)
+
+  assert_that(
+    is.list(.defaults),
+    is_named(.defaults),
+    msg = sprintf(
+      'Implementation error for %s object: getArgumentDefaults() must return a named list',
+      class(.Object)[1]
+    )
+  )
+
+  assert_that(
+    is.character(.exclude),
+    msg = sprintf(
+      'Implementation error for %s object: getArgumentExclusions() must return character vector',
+      class(.Object)[1]
+    )
+  )
+
+  # drop arguments without defaults (empty symbols)
+  symMask = vapply(.defaults, is.symbol, FUN.VALUE = TRUE)
+  dropSymMask = vapply(.defaults[symMask], nchar, FUN.VALUE = 0) == 0
+  .defaults[which(symMask)[dropSymMask]] = NULL
+
+  # drop default arguments that should be excluded
+  defArgs = .defaults[setdiff(names(.defaults), .exclude)]
+
+  # process user arguments
+  mc = match.call.all()
+  userArgs = as.list(mc) %>%
+    .[nchar(names(.)) > 0]
+  userArgs[names(formals())] = NULL
+
+  if (any(hasName(userArgs, .exclude))) {
+    warning(
+      sprintf(
+        'arguments (%s) cannot be defined for this lcMethod class. These arguments will be ignored.',
+        paste0(intersect(.exclude, names(userArgs)), collapse = ', ')
+      )
+    )
+  }
+
+  args = modifyList(defArgs, userArgs, keep.null = TRUE)
+
+  # construct arguments environment
+  argEnv = list2env(rev(args), hash = FALSE)
+  .Object@arguments = argEnv
+
   validObject(.Object)
   .Object
 })
 
 #. validity ####
 setValidity('lcMethod', function(object) {
-  assert_that(all(vapply(lapply(names(object), nchar), '>', 0, FUN.VALUE = TRUE)),
-    msg = 'lcMethod argument names cannot be empty')
-  assert_that(!any(vapply(names(object), startsWith, '.', FUN.VALUE = TRUE)),
-    msg = 'lcMethod argument names cannot start with "."')
+  assert_that(
+    all(nchar(names(object)) > 0),
+    msg = 'lcMethod argument names cannot be empty'
+  )
+  assert_that(
+    !any(startsWith(names(object), '.')),
+    msg = sprintf(
+      'Cannot construct %s: lcMethod argument names cannot start with "."\nYou should rename argument(s) %s',
+      class(object)[1],
+      paste0('"', names(object)[startsWith(names(object), '.')], '"', collapse = ', ')
+    )
+  )
   assert_that(!has_name(object, 'data'), msg = 'lcMethod argument name cannot be "data"')
   assert_that(!has_name(object, 'envir'), msg = 'lcMethod argument name cannot be "envir"')
   assert_that(!has_name(object, 'verbose'), msg = 'lcMethod argument name cannot be "verbose"')
@@ -63,6 +166,7 @@ setValidity('lcMethod', function(object) {
   }
 
   if (isArgDefined(object, 'nClusters')) {
+    assert_that(is.scalar(object$nClusters))
     assert_that(is.na(object$nClusters) || is.count(object$nClusters))
   }
 })
@@ -112,7 +216,11 @@ setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL)
   if (eval) {
     # within-method scope
     value = tryCatch({
-      eval(arg, envir = mget(setdiff(names(x@arguments), i), envir = x@arguments))
+      eval(
+        arg,
+        envir = mget(setdiff(names(x@arguments), i), envir = x@arguments),
+        enclos = envir
+      )
     }, error = function(e) {
       tryCatch({
         eval(arg, envir = envir)
@@ -141,132 +249,30 @@ setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL)
 })
 
 
-#' @export
-#' @name lcMethod-constructor
-#' @rdname lcMethod-constructor
-#' @title Create a lcMethod object of the specified type and arguments
-#' @description Note, see the [lcMethod-class][lcMethod-class] help page for documentation about the `lcMethod` class.
-#'
-#' Provides a mechanism for creating `lcMethod` objects for an arbitrary class.
-#' However, it is advisable to use the subclass-specific constructors instead (e.g., [lcMethodLcmmGBTM()], [lcMethodKML()], or [lcMethodLMKM()]).
-#' @param .class The type of `lcMethod` class
-#' @param ... Any arguments to assign to the method object.
-#' @param .defaults See `defaults` of [lcMethod.call].
-#' @param .excludeArgs See `excludeArgs` of [lcMethod.call].
-#' @section Implementation:
-#' When creating your own `lcMethod` subclass, it is recommended to provide a constructor function for the subclass.
-#' Sensible default method argument values are are specified through the function arguments.
-#'
-#' The [lcMethod.call()] function provides a convenient way to initialize the method according to the user-specified and default function arguments.
-#'
-#' \preformatted{
-#' lcMethodExample <- function(
-#'   response,
-#'   time = getOption("latrend.time"),
-#'   id = getOption("latrend.id"),
-#'   nClusters = 2,
-#'   # custom method argument defaults
-#'   extraNum = 1,
-#'   myOptAlgo = "EM",
-#'   algoFunction = mean,
-#'   ...
-#' ) {
-#'   lcMethod.call(
-#'     "lcMethodExample",
-#'     call = stackoverflow::match.call.defaults()
-#'   )
-#' }
-#' }
-#'
-#' Users can then specify `lcMethodExample` objects using the `lcMethodExample()` function.
-#' For example, by calling `lcMethodExample(response = "Y", nClusters = 3)`.
-#'
-#' @seealso [lcMethod-class] [lcMethod.call]
-lcMethod = function(.class, ..., .defaults = list(), .excludeArgs = c()) {
-  mc = match.call()
-  mc[[1]] = as.name(.class)
-  mc$.class = NULL
-  mc$.defaults = NULL
-  mc$.excludeArgs = NULL
+as.lcMethod = function(x, ...) {
+  assert_that(is.lcMethod(x) || is.character(x))
 
-  do.call(
-    lcMethod.call,
-    list(
-      Class = .class,
-      call = quote(mc),
-      defaults = .defaults,
-      excludeArgs = .excludeArgs
-    )
-  )
-}
-
-
-#' @export
-#' @title Create a lcMethod object from a call
-#' @description Creates a lcMethod class of the specified type `Class` for the given arguments given in a call, along with any default arguments from reference functions.
-#' This function is intended to be used by classes extending `lcMethod` to provide an easy way to construct the appropriate `call` object.
-#' @param Class The type of \link{lcMethod} class
-#' @param call The arguments to create the `lcMethod` from.
-#' @param defaults List of `function` to obtain defaults from for arguments not defined in `call`.
-#' @param excludeArgs The names of the arguments to exclude from the defaults, provided as a `character vector`.
-#' @return An object of class `Class` that extends `lcMethod`.
-#' @examples
-#' data(latrendData)
-#' lcMethodKML2 <- function(response = "Y", id = "Id", time = "Time", nClusters = 2, ...) {
-#'   lcMethod.call("lcMethodKML", call = stackoverflow::match.call.defaults(),
-#'     defaults = c(kml::kml, kml::parALGO),
-#'     excludeArgs = c("object", "nbClusters", "parAlgo", "toPlot", "saveFreq"))
-#' }
-#' method <- lcMethodKML2(nClusters = 3)
-#' latrend(method, data = latrendData)
-#' @seealso [lcMethod]
-lcMethod.call = function(Class,
-                          call,
-                          defaults = list(),
-                          excludeArgs = c()) {
-  classRep = getClass(Class)
-  assert_that('lcMethod' %in% names(classRep@contains), msg = 'specified class does not inherit from lcMethod')
-  assert_that(
-    is.call(call),
-    is.function(defaults) ||
-      is.list(defaults) &&
-      all(vapply(defaults, is.function, FUN.VALUE = TRUE)),
-    is.null(excludeArgs) || is.character(excludeArgs))
-
-  excludeArgs = union(excludeArgs, c('verbose', 'envir', 'data'))
-
-  if (is.function(defaults)) {
-    defaults = list(defaults)
-  }
-
-  allArgs = lapply(defaults, formals) %>%
-    do.call(c, .) %>%
-    as.list()
-
-  # drop arguments without defaults (empty symbols)
-  symMask = vapply(allArgs, is.symbol, FUN.VALUE = TRUE)
-  dropSymMask = vapply(allArgs[symMask], nchar, FUN.VALUE = 0) == 0
-  allArgs[which(symMask)[dropSymMask]] = NULL
-
-  # update arguments
-  args = allArgs[not(names(allArgs) %in% excludeArgs)] %>%
-    modifyList(as.list(call)[-1], keep.null = TRUE)
-
-  if (any(names(call[-1]) %in% excludeArgs)) {
-    warning(
-      sprintf(
-        'arguments (%s) cannot be defined for this lcMethod class. These arguments will be ignored.',
-        paste0(intersect(excludeArgs, names(call[-1])), collapse = ', ')
+  if (is.character(x)) {
+    assert_that(
+      methods::isClass(x),
+      msg = sprintf(
+        'Cannot instantiate lcMethod object of class "%1$s": Class "%1$s" is not defined',
+        class(x)[1]
       )
     )
+
+    assert_that(
+      methods::extends(x, 'lcMethod'),
+      msg = sprintf(
+        'Cannot instantiate object of class "%1$s" as lcMethod: "%1$s" does not inherit from lcMethod class',
+        class(x)[1]
+      )
+    )
+
+    x = new(x, ...)
+  } else {
+    update(x, ...)
   }
-
-  # exclude arguments
-  argOrder = union(names(call[-1]), setdiff(names(allArgs), excludeArgs))
-
-  argEnv = list2env(rev(args), hash = FALSE)
-
-  new(Class, arguments = argEnv)
 }
 
 
@@ -388,7 +394,7 @@ as.list.lcMethod = function(x, ..., args = names(x), eval = TRUE, expand = FALSE
 #' @param nullValue Value to use to represent the `NULL` type. Must be of length 1.
 #' @return A single-row `data.frame` where each columns represents an argument call or evaluation.
 #' @family lcMethod functions
-as.data.frame.lcMethod = function(x, ..., eval = FALSE, nullValue = NA, envir = NULL) {
+as.data.frame.lcMethod = function(x, ..., eval = TRUE, nullValue = NA, envir = NULL) {
   assert_that(
     is.lcMethod(x),
     is.flag(eval),
@@ -553,6 +559,72 @@ getCall.lcMethod = function(x, ...) {
   do.call(call, c(class(x)[1], eapply(x@arguments, enquote)))
 }
 
+#. getArgumentDefaults ####
+#' @export
+#' @name getArgumentDefaults
+#' @aliases getArgumentDefaults,lcMethod-method
+#' @title Default argument values for lcMethod subclass
+#' @description Returns the default arguments associated with the respective `lcMethod` subclass.
+#' These arguments are automatically included into the `lcMethod` object during initialization.
+#'
+#' @param object The `lcMethod` object.
+#' @return A named `list` of argument values.
+#' @section Implementation:
+#' Although implementing this method is optional, it prevents users from
+#' having to specify all arguments every time they want to create a method specification.
+#'
+#' In this example, most of the default arguments are defined as arguments of the function
+#' `lcMethodExample`, which we can include in the list by calling [formals]. Copying the arguments from functions
+#' is especially useful when your method implementation is based on an existing function.
+#' \preformatted{
+#' setMethod("getArgumentDefaults", "lcMethodExample", function(object) {
+#'   list(
+#'     formals(lcMethodExample),
+#'     formals(funFEM::funFEM),
+#'     extra = Value ~ 1,
+#'     tol = 1e-4,
+#'     callNextMethod()
+#'   )
+#' })
+#' }
+#'
+#' It is recommended to add `callNextMethod()` to the end of the list.
+#' This enables inheriting the default arguments from superclasses.
+#' @seealso [lcMethod] [getArgumentExclusions]
+#' @family lcMethod implementations
+setMethod('getArgumentDefaults', signature('lcMethod'), function(object) {
+  set_names(list(), character(0))
+})
+
+#. getArgumentExclusions ####
+#' @export
+#' @name getArgumentExclusions
+#' @aliases getArgumentExclusions,lcMethod-method
+#' @title Arguments to be excluded for lcMethod subclass
+#' @description Returns the names of arguments that should be excluded during instantiation of the `lcMethod`.
+#'
+#' @param object The `lcMethod` object.
+#' @return A `character` vector of argument names.
+#' @section Implementation:
+#' This function only needs to be implemented if you want to avoid users from specifying
+#' redundant arguments or arguments that are set automatically or conditionally on other arguments.
+#'
+#' \preformatted{
+#' setMethod("getArgumentExclusions", "lcMethodExample", function(object) {
+#'   c(
+#'     "doPlot",
+#'     "verbose",
+#'     callNextMethod()
+#'   )
+#' })
+#'
+#' Adding `callNextMethod()` to the end of the return vector enables inheriting exclusions from superclasses.
+#' }
+#' @seealso [lcMethod] [getArgumentExclusions]
+#' @family lcMethod implementations
+setMethod('getArgumentExclusions', signature('lcMethod'), function(object) {
+  c('verbose', 'envir', 'data')
+})
 
 #. getLabel ####
 #' @export
@@ -664,14 +736,9 @@ isArgDefined = function(object, name, envir = environment(object)) {
   }
   arg = object[[name[1], eval = FALSE]]
 
-
   if (is.language(arg)) {
-    if (is.null(envir)) {
-      return(FALSE)
-    } else {
-      arg = try(object[[name[1], envir = envir]], silent = TRUE)
-      return(!is(arg, 'try-error'))
-    }
+    arg = try(object[[name[1], envir = envir]], silent = TRUE)
+    return(!is(arg, 'try-error'))
   } else {
     return(TRUE)
   }
@@ -835,19 +902,16 @@ evaluate.lcMethod = function(object,
                                try = TRUE,
                                exclude = character(),
                                envir = NULL) {
-  assert_that(
-    is.lcMethod(object),
-    is.character(classes)
-  )
+  rawObject = as.lcMethod(object)
+  assert_that(is.character(classes))
 
-  envir = lcMethod.env(object, parent.frame(), envir)
-
-  argNames = names(object)
+  envir = lcMethod.env(rawObject, parent.frame(), envir)
+  argNames = names(rawObject)
   if (isTRUE(try)) {
     evalMask = vapply(
       argNames,
       isArgDefined,
-      object = object,
+      object = rawObject,
       envir = envir,
       FUN.VALUE = FALSE
     ) & !(argNames %in% exclude)
@@ -855,9 +919,11 @@ evaluate.lcMethod = function(object,
     evalMask = !(argNames %in% exclude)
   }
 
-  evalValues = vector(mode = 'list', length = length(object))
-  evalValues[evalMask] = lapply(argNames[evalMask], function(name)
-    object[[name, eval = TRUE, envir = envir]])
+  evalValues = vector(mode = 'list', length = length(rawObject))
+  evalValues[evalMask] = lapply(
+    argNames[evalMask],
+    function(name) rawObject[[name, eval = TRUE, envir = envir]]
+  )
 
   if ('ANY' %in% classes) {
     updateMask = evalMask
@@ -865,19 +931,18 @@ evaluate.lcMethod = function(object,
     updateMask = evalMask & vapply(evalValues, class, FUN.VALUE = '') %in% classes
   }
 
-  newmethod = object
-  sourceMask = vapply(newmethod@arguments, is.language, FUN.VALUE = FALSE)
+  newObject = rawObject
+  sourceMask = vapply(newObject@arguments, is.language, FUN.VALUE = FALSE)
   sourceNames = argNames[updateMask & sourceMask]
-  newmethod@sourceCalls[sourceNames] = mget(sourceNames, newmethod@arguments)
+  newObject@sourceCalls[sourceNames] = mget(sourceNames, newObject@arguments)
 
   updateNames = argNames[updateMask]
   updateValues = evalValues[updateMask]
-
   for (i in seq_along(updateNames)) {
-    assign(updateNames[i], updateValues[[i]], pos = object@arguments)
+    assign(updateNames[i], updateValues[[i]], pos = rawObject@arguments)
   }
-  # newmethod@arguments = replace(object@arguments, names(object)[updateMask], evalValues[updateMask])
-  return(newmethod)
+  # newObject@arguments = replace(object@arguments, names(object)[updateMask], evalValues[updateMask])
+  return(newObject)
 }
 
 
@@ -938,9 +1003,11 @@ update.lcMethod = function(object, ..., .eval = FALSE, .remove = character(), en
   }
 
   # copy environment
-  object@arguments = list2env(as.list(object@arguments),
-                              hash = FALSE,
-                              parent = parent.env(object@arguments))
+  object@arguments = list2env(
+    rev(as.list(object@arguments)),
+    hash = FALSE,
+    parent = parent.env(object@arguments)
+  )
 
   for (arg in uargNames) {
     assign(arg, ucall[[arg]], pos = object@arguments)
@@ -1096,29 +1163,65 @@ setMethod('validate', signature('lcMethod'), function(method, data, envir = NULL
 
 #' @export
 #' @title Argument matching with defaults and parent ellipsis expansion
-#' @param definition A `function`. By default, the calling function is used.
-#' @param call A `call`. By default, the parent call is used.
-#' @param expand.dots Whether arguments specified in ellipsis should be included, or ellipses be kept as-is.
-#' @param envir The `environment` in which the ellipsis and parent ellipsis are evaluated.
-#' @seealso [stackoverflow::match.call.defaults]
+#' @description Returns a call containing all arguments in specified form, including default arguments.
+#' @param n The number of frames to go back on the calling stack. See [base::sys.parent] for more details.
+#' @seealso [base::match.call] [base::sys.parent]
+#' @return A `call`
 #' @keywords internal
-match.call.all = function(definition = sys.function(sys.parent()),
-                           call = sys.call(sys.parent()),
-                           expand.dots = TRUE,
-                           envir = parent.frame(2L)) {
-  call = stackoverflow::match.call.defaults(definition = definition,
-                                            call = call,
-                                            expand.dots = expand.dots,
-                                            envir = envir)
+match.call.all = function(n = 1L) {
+  which = sys.nframe() - n
+  call = match.call.frame(which)
+
   # search for ..N arguments
   nameMask = vapply(call, is.name, FUN.VALUE = TRUE)
   dotMask = grepl('\\.\\.\\d+', as.character(call[nameMask]))
+  namedDotMask = nchar(names(call)[nameMask][dotMask]) > 0
 
-  if (any(dotMask)) {
-    dotNames = names(call)[nameMask][dotMask]
+  if (any(namedDotMask)) {
+    dotNames = names(call)[nameMask][dotMask][namedDotMask]
+
     for (dotArg in dotNames) {
-      call[[dotArg]] = do.call(substitute, list(as.name(dotArg)), envir = parent.frame())
+      # allCall[[dotArg]] = do.call(substitute, list(as.name(dotArg)), envir = parent.frame(n))
+      val = .match.call.arg(dotArg, which - 1L)
+      # val = dynGet(dotArg, ifnotfound = as.name(dotArg), inherits = TRUE)
+      call[dotArg] = list(val) # list() is needed to preserve NULLs
     }
   }
-  return (call)
+  return(call)
+}
+
+.match.call.arg = function(arg, which = sys.parent()) {
+  if (which == 0) {
+    warning(sprintf('Cannot resolve argument %s', arg))
+    as.name(arg)
+  } else {
+    if (hasName(sys.call(which), arg)) {
+      call = match.call.frame(which)
+      if (hasName(call, arg) &&
+          (!is.name(arg) ||
+          !startsWith(as.character(call[[arg]]), '..'))) {
+        # message(sprintf('Found value %s for argument %s\n', deparse(call[[arg]]), arg))
+        return(call[[arg]])
+      }
+    }
+
+    .match.call.arg(arg, which - 1L)
+  }
+}
+
+match.call.frame = function(which = sys.parent()) {
+  def = sys.function(which)
+  envir = sys.frame(which - 1)
+
+  call = match.call(def, call = sys.call(which), expand.dots = TRUE, envir = envir)
+
+  formals = formals(def)
+
+  outCall = call
+  for (arg in setdiff(names(formals), c('...', names(call)))) {
+    outCall[arg] = list(formals[[arg]]) # use list() to preserve NULLs
+  }
+
+  outCall = match.call(def, outCall, TRUE, envir)
+  outCall
 }

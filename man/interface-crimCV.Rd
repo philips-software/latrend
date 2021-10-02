@@ -2,6 +2,8 @@
 % Please edit documentation in R/methodCrimCV.R, R/modelCrimCV.R
 \name{interface-crimCV}
 \alias{interface-crimCV}
+\alias{getArgumentDefaults,lcMethodCrimCV-method}
+\alias{getArgumentExclusions,lcMethodCrimCV-method}
 \alias{getName,lcMethodCrimCV-method}
 \alias{getShortName,lcMethodCrimCV-method}
 \alias{prepareData,lcMethodCrimCV-method}
@@ -13,6 +15,10 @@
 \alias{converged,lcModelCrimCV-method}
 \title{crimCV interface}
 \usage{
+\S4method{getArgumentDefaults}{lcMethodCrimCV}(object)
+
+\S4method{getArgumentExclusions}{lcMethodCrimCV}(object)
+
 \S4method{getName}{lcMethodCrimCV}(object)
 
 \S4method{getShortName}{lcMethodCrimCV}(object)

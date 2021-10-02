@@ -2,6 +2,8 @@
 % Please edit documentation in R/methodMixTVEM.R, R/modelMixTVEM.R
 \name{interface-mixtvem}
 \alias{interface-mixtvem}
+\alias{getArgumentDefaults,lcMethodMixTVEM-method}
+\alias{getArgumentExclusions,lcMethodMixTVEM-method}
 \alias{getName,lcMethodMixTVEM-method}
 \alias{getShortName,lcMethodMixTVEM-method}
 \alias{preFit,lcMethodMixTVEM-method}
@@ -14,6 +16,10 @@
 \alias{coef.lcModelMixTVEM}
 \title{mixtvem interface}
 \usage{
+\S4method{getArgumentDefaults}{lcMethodMixTVEM}(object)
+
+\S4method{getArgumentExclusions}{lcMethodMixTVEM}(object)
+
 \S4method{getName}{lcMethodMixTVEM}(object)
 
 \S4method{getShortName}{lcMethodMixTVEM}(object)

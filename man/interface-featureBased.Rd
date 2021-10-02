@@ -3,19 +3,25 @@
 %   R/methodLMKM.R, R/methodStratify.R, R/modelFeature.R, R/modelLMKM.R
 \name{interface-featureBased}
 \alias{interface-featureBased}
+\alias{getArgumentDefaults,lcMethodFeature-method}
 \alias{getName,lcMethodFeature-method}
 \alias{getShortName,lcMethodFeature-method}
 \alias{prepareData,lcMethodFeature-method}
 \alias{fit,lcMethodFeature-method}
+\alias{getArgumentDefaults,lcMethodGCKM-method}
+\alias{getArgumentExclusions,lcMethodGCKM-method}
 \alias{getName,lcMethodGCKM-method}
 \alias{getShortName,lcMethodGCKM-method}
 \alias{compose,lcMethodGCKM-method}
 \alias{preFit,lcMethodGCKM-method}
 \alias{fit,lcMethodGCKM-method}
+\alias{getArgumentDefaults,lcMethodLMKM-method}
+\alias{getArgumentExclusions,lcMethodLMKM-method}
 \alias{getName,lcMethodLMKM-method}
 \alias{getShortName,lcMethodLMKM-method}
 \alias{prepareData,lcMethodLMKM-method}
 \alias{fit,lcMethodLMKM-method}
+\alias{getArgumentDefaults,lcMethodStratify-method}
 \alias{getName,lcMethodStratify-method}
 \alias{getShortName,lcMethodStratify-method}
 \alias{compose,lcMethodStratify-method}
@@ -28,6 +34,8 @@
 \alias{postprob,lcModelLMKM-method}
 \title{featureBased interface}
 \usage{
+\S4method{getArgumentDefaults}{lcMethodFeature}(object)
+
 \S4method{getName}{lcMethodFeature}(object)
 
 \S4method{getShortName}{lcMethodFeature}(object)
@@ -35,6 +43,10 @@
 \S4method{prepareData}{lcMethodFeature}(method, data, verbose, ...)
 
 \S4method{fit}{lcMethodFeature}(method, data, envir, verbose, ...)
+
+\S4method{getArgumentDefaults}{lcMethodGCKM}(object)
+
+\S4method{getArgumentExclusions}{lcMethodGCKM}(object)
 
 \S4method{getName}{lcMethodGCKM}(object)
 
@@ -46,6 +58,10 @@
 
 \S4method{fit}{lcMethodGCKM}(method, data, envir, verbose, ...)
 
+\S4method{getArgumentDefaults}{lcMethodLMKM}(object)
+
+\S4method{getArgumentExclusions}{lcMethodLMKM}(object)
+
 \S4method{getName}{lcMethodLMKM}(object)
 
 \S4method{getShortName}{lcMethodLMKM}(object)
@@ -53,6 +69,8 @@
 \S4method{prepareData}{lcMethodLMKM}(method, data, verbose)
 
 \S4method{fit}{lcMethodLMKM}(method, data, envir, verbose, ...)
+
+\S4method{getArgumentDefaults}{lcMethodStratify}(object)
 
 \S4method{getName}{lcMethodStratify}(object)
 

@@ -41,7 +41,6 @@ Imports:
     plyr,
     ggplot2,
     matrixStats,
-    stackoverflow (>= 0.3.0),
     clusterCrit,
     mclustcomp,
     scales,

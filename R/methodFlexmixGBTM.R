@@ -16,19 +16,37 @@ setClass('lcMethodFlexmixGBTM', contains = 'lcMethodFlexmix')
 #' @family lcMethod package interfaces
 #' @references
 #' \insertRef{gruen2008flexmix}{latrend}
-lcMethodFlexmixGBTM = function(formula,
-                               formula.mb =  ~ 1,
-                               time = getOption('latrend.time'),
-                               id = getOption('latrend.id'),
-                               nClusters = 2,
-                               ...) {
-  lcMethod.call(
-    'lcMethodFlexmixGBTM',
-    call = match.call.defaults(),
-    defaults = c(flexmix::flexmix, flexmix::FLXMRglm),
-    excludeArgs = c('data', 'k')
-  )
+lcMethodFlexmixGBTM = function(
+  formula,
+  formula.mb =  ~ 1,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  nClusters = 2,
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodFlexmixGBTM'
+  do.call(new, as.list(mc))
 }
+
+
+#' @rdname interface-flexmix
+setMethod('getArgumentDefaults', signature('lcMethodFlexmixGBTM'), function(object) {
+  c(
+    formals(lcMethodFlexmixGBTM),
+    formals(flexmix::flexmix),
+    formals(flexmix::FLXMRglm),
+    callNextMethod()
+  )
+})
+
+#' @rdname interface-flexmix
+setMethod('getArgumentExclusions', signature('lcMethodFlexmixGBTM'), function(object) {
+  union(
+    callNextMethod(),
+    c('data', 'k')
+  )
+})
 
 #' @rdname interface-flexmix
 setMethod('getName', signature('lcMethodFlexmixGBTM'), function(object) 'group-based trajectory model')

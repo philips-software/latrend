@@ -2,6 +2,8 @@
 % Please edit documentation in R/methodDtwclust.R, R/modelDtwclust.R
 \name{interface-dtwclust}
 \alias{interface-dtwclust}
+\alias{getArgumentDefaults,lcMethodDtwclust-method}
+\alias{getArgumentExclusions,lcMethodDtwclust-method}
 \alias{getName,lcMethodDtwclust-method}
 \alias{getShortName,lcMethodDtwclust-method}
 \alias{preFit,lcMethodDtwclust-method}
@@ -11,6 +13,10 @@
 \alias{predictForCluster,lcModelDtwclust-method}
 \title{dtwclust interface}
 \usage{
+\S4method{getArgumentDefaults}{lcMethodDtwclust}(object)
+
+\S4method{getArgumentExclusions}{lcMethodDtwclust}(object)
+
 \S4method{getName}{lcMethodDtwclust}(object)
 
 \S4method{getShortName}{lcMethodDtwclust}(object)

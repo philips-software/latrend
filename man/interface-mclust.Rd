@@ -2,6 +2,8 @@
 % Please edit documentation in R/methodMclustLLPA.R, R/modelMclustLLPA.R
 \name{interface-mclust}
 \alias{interface-mclust}
+\alias{getArgumentDefaults,lcMethodMclustLLPA-method}
+\alias{getArgumentExclusions,lcMethodMclustLLPA-method}
 \alias{getName,lcMethodMclustLLPA-method}
 \alias{getShortName,lcMethodMclustLLPA-method}
 \alias{prepareData,lcMethodMclustLLPA-method}
@@ -13,6 +15,10 @@
 \alias{converged,lcModelMclustLLPA-method}
 \title{mclust interface}
 \usage{
+\S4method{getArgumentDefaults}{lcMethodMclustLLPA}(object)
+
+\S4method{getArgumentExclusions}{lcMethodMclustLLPA}(object)
+
 \S4method{getName}{lcMethodMclustLLPA}(object)
 
 \S4method{getShortName}{lcMethodMclustLLPA}(object)

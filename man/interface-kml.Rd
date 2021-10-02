@@ -3,6 +3,8 @@
 \docType{class}
 \name{interface-kml}
 \alias{interface-kml}
+\alias{getArgumentDefaults,lcMethodKML-method}
+\alias{getArgumentExclusions,lcMethodKML-method}
 \alias{getName,lcMethodKML-method}
 \alias{getShortName,lcMethodKML-method}
 \alias{preFit,lcMethodKML-method}
@@ -15,6 +17,10 @@
 \alias{predictPostprob,lcModelKML-method}
 \title{kml interface}
 \usage{
+\S4method{getArgumentDefaults}{lcMethodKML}(object)
+
+\S4method{getArgumentExclusions}{lcMethodKML}(object)
+
 \S4method{getName}{lcMethodKML}(object)
 
 \S4method{getShortName}{lcMethodKML}(object)

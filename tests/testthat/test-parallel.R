@@ -25,14 +25,14 @@ if (.Platform$OS.type == 'unix') {
   cl = parallel::makeCluster(2)
 
   # init cl
-  parallel::clusterEvalQ(cl, expr=library(latrend))
+  parallel::clusterEvalQ(cl, expr = library(latrend))
   do.call(parallel::clusterEvalQ, list(cl, init_methodSleep))
 }
 doParallel::registerDoParallel(cl)
 
 newTestData = copy(testLongData)
 
-mSleep = lcMethod('lcMethodSleep',
+mSleep = new('lcMethodSleep',
   response = 'Value',
   alpha = 10,
   sleep = 1,
@@ -40,7 +40,8 @@ mSleep = lcMethod('lcMethodSleep',
   time = 'Assessment',
   id = 'Traj',
   nClusters = 2,
-  name = 'random')
+  name = 'random'
+)
 
 # need a long sleep time to counteract the large start-up overhead time in Windows
 mSleep10 = update(mSleep, sleep = 10)

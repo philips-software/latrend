@@ -3,10 +3,14 @@
 %   R/modelMixtoolsGMM.R, R/modelMixtoolsRM.R
 \name{interface-mixtools}
 \alias{interface-mixtools}
+\alias{getArgumentDefaults,lcMethodMixtoolsGMM-method}
+\alias{getArgumentExclusions,lcMethodMixtoolsGMM-method}
 \alias{getName,lcMethodMixtoolsGMM-method}
 \alias{getShortName,lcMethodMixtoolsGMM-method}
 \alias{preFit,lcMethodMixtoolsGMM-method}
 \alias{fit,lcMethodMixtoolsGMM-method}
+\alias{getArgumentDefaults,lcMethodMixtoolsNPRM-method}
+\alias{getArgumentExclusions,lcMethodMixtoolsNPRM-method}
 \alias{getName,lcMethodMixtoolsNPRM-method}
 \alias{getShortName,lcMethodMixtoolsNPRM-method}
 \alias{fit,lcMethodMixtoolsNPRM-method}
@@ -21,6 +25,10 @@
 \alias{converged,lcModelMixtoolsRM-method}
 \title{mixtools interface}
 \usage{
+\S4method{getArgumentDefaults}{lcMethodMixtoolsGMM}(object)
+
+\S4method{getArgumentExclusions}{lcMethodMixtoolsGMM}(object)
+
 \S4method{getName}{lcMethodMixtoolsGMM}(object)
 
 \S4method{getShortName}{lcMethodMixtoolsGMM}(object)
@@ -28,6 +36,10 @@
 \S4method{preFit}{lcMethodMixtoolsGMM}(method, data, envir, verbose, ...)
 
 \S4method{fit}{lcMethodMixtoolsGMM}(method, data, envir, verbose, ...)
+
+\S4method{getArgumentDefaults}{lcMethodMixtoolsNPRM}(object)
+
+\S4method{getArgumentExclusions}{lcMethodMixtoolsNPRM}(object)
 
 \S4method{getName}{lcMethodMixtoolsNPRM}(object)
 

@@ -30,19 +30,35 @@ setClass('lcMethodMixAK_GLMM', contains = 'lcMethod')
 #' })
 #' @references
 #' \insertRef{komarek2009new}{latrend}
-lcMethodMixAK_GLMM = function(fixed,
-                              random,
-                            time = getOption('latrend.time'),
-                            id = getOption('latrend.id'),
-                            nClusters = 2,
-                            ...) {
-  lcMethod.call(
-    'lcMethodMixAK_GLMM',
-    call = match.call.all(),
-    defaults = mixAK::GLMM_MCMC,
-    excludeArgs = c('y', 'x', 'z', 'random.intercept', 'silent')
-  )
+lcMethodMixAK_GLMM = function(
+  fixed,
+  random,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  nClusters = 2,
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodMixAK_GLMM'
+  do.call(new, as.list(mc))
 }
+
+#' @rdname interface-mixAK
+setMethod('getArgumentDefaults', signature('lcMethodMixAK_GLMM'), function(object) {
+  c(
+    formals(lcMethodMixAK_GLMM),
+    formals(mixAK::GLMM_MCMC),
+    callNextMethod()
+  )
+})
+
+#' @rdname interface-mixAK
+setMethod('getArgumentExclusions', signature('lcMethodMixAK_GLMM'), function(object) {
+  union(
+    callNextMethod(),
+    c('y', 'x', 'z', 'random.intercept', 'silent')
+  )
+})
 
 #' @rdname interface-mixAK
 #' @inheritParams getName

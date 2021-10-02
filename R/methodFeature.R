@@ -32,16 +32,28 @@ setValidity('lcMethodFeature', function(object) {
 #' @param standardize A `function` to standardize the output `matrix` of the representation step. By default, the output is shifted and rescaled to ensure zero mean and unit variance.
 #' @param ... Additional arguments.
 #' @family lcMethod implementations
-lcMethodFeature = function(response,
-                           representationStep,
-                           clusterStep,
-                           standardize = scale,
-                           center = meanNA,
-                           time = getOption('latrend.time'),
-                           id = getOption('latrend.id'),
-                           ...) {
-  lcMethod.call('lcMethodFeature', call = match.call.all(), excludeArgs = c('verbose'))
+lcMethodFeature = function(
+  response,
+  representationStep,
+  clusterStep,
+  standardize = scale,
+  center = meanNA,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodFeature'
+  do.call(new, as.list(mc))
 }
+
+#' @rdname interface-featureBased
+setMethod('getArgumentDefaults', signature('lcMethodFeature'), function(object) {
+  c(
+    formals(lcMethodFeature),
+    callNextMethod()
+  )
+})
 
 #' @rdname interface-featureBased
 #' @inheritParams getName

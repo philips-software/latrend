@@ -31,18 +31,34 @@ setClass('lcMethodCrimCV', contains = 'lcMatrixMethod')
 #' @family lcMethod implementations
 #' @references
 #' \insertRef{nielsen2018crimcv}{latrend}
-lcMethodCrimCV = function(response,
-                          time = getOption('latrend.time'),
-                          id = getOption('latrend.id'),
-                          nClusters = 2,
-                          ...) {
-  lcMethod.call(
-    'lcMethodCrimCV',
-    call = match.call.defaults(),
-    defaults = crimCV::crimCV,
-    excludeArgs = c('Dat', 'ng')
-  )
+lcMethodCrimCV = function(
+  response,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  nClusters = 2,
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodCrimCV'
+  do.call(new, as.list(mc))
 }
+
+#' @rdname interface-crimCV
+setMethod('getArgumentDefaults', signature('lcMethodCrimCV'), function(object) {
+  c(
+    formals(lcMethodCrimCV),
+    formals(crimCV::crimCV),
+    callNextMethod()
+  )
+})
+
+#' @rdname interface-crimCV
+setMethod('getArgumentExclusions', signature('lcMethodCrimCV'), function(object) {
+  union(
+    callNextMethod(),
+    c('Dat', 'ng')
+  )
+})
 
 #' @rdname interface-crimCV
 #' @inheritParams getName

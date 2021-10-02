@@ -52,16 +52,28 @@ setValidity('lcMethodStratify', function(object) {
 #' }
 #' method <- lcMethodStratify("Y", stratfun3, id = "Id", time = "Time")
 #' @family lcMethod implementations
-lcMethodStratify = function(response,
-                            stratify,
-                            center = meanNA,
-                            nClusters = NaN,
-                            clusterNames = NULL,
-                            time = getOption('latrend.time'),
-                            id = getOption('latrend.id'),
-                            name = 'stratify') {
-  lcMethod.call('lcMethodStratify', call = match.call.all())
+lcMethodStratify = function(
+  response,
+  stratify,
+  center = meanNA,
+  nClusters = NaN,
+  clusterNames = NULL,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  name = 'stratify'
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodStratify'
+  do.call(new, as.list(mc))
 }
+
+#' @rdname interface-featureBased
+setMethod('getArgumentDefaults', signature('lcMethodStratify'), function(object) {
+  c(
+    formals(lcMethodStratify),
+    callNextMethod()
+  )
+})
 
 #' @rdname interface-featureBased
 setMethod('getName', signature('lcMethodStratify'), function(object) {

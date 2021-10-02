@@ -119,6 +119,7 @@ setMethod('transformFitted', signature('list', 'lcModel'), function(pred, model,
 })
 
 #' @rdname transformFitted
+#' @importFrom utils unstack
 #' @aliases transformFitted,data.frame,lcModel-method
 setMethod('transformFitted', signature('data.frame', 'lcModel'), function(pred, model, clusters) {
   assert_that(
