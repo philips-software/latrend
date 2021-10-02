@@ -450,7 +450,16 @@ latrendBatch = function(methods,
     .packages = 'latrend',
     .errorhandling = errorHandling) %infix%
   {
-    modelTiming = .enterTimed(verbose, sprintf('Fitting model %d/%d (%d%%)', i, nModels, round(i / nModels * 100), getName(modelMethod)))
+    modelTiming = .enterTimed(
+      verbose,
+      sprintf(
+        'Fitting model %d/%d (%d%%) using %s',
+        i,
+        nModels,
+        round(i / nModels * 100),
+        getName(modelMethod)
+      )
+    )
     on.exit(expr = .exitTimed(modelTiming), add = TRUE)
 
     cat(verbose, as.character(modelMethod, prefix = '- '))
