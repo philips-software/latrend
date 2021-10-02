@@ -247,35 +247,6 @@
 <a href="#evaluating-replicability-and-stability-through-bootstrapping" class="anchor"></a>Evaluating replicability and stability through bootstrapping</h1>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bootModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendBoot.html">latrendBoot</a></span><span class="op">(</span><span class="va">kml</span>, data <span class="op">=</span> <span class="va">latrendData</span>, samples <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
 <span class="va">bootModels</span>
 <span class="co">#&gt; List of 10 lcModels with</span>
 <span class="co">#&gt;    .name .method                                       data       seed</span>
@@ -318,35 +289,6 @@
 <p>Lastly, we can fit models using <span class="math inline">\(k\)</span>-fold cross-validation to validate the models on previously unseen data from the test folds.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">trainModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendCV.html">latrendCV</a></span><span class="op">(</span><span class="va">kml</span>, data <span class="op">=</span> <span class="va">latrendData</span>, folds <span class="op">=</span> <span class="fl">10</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
 <span class="va">trainModels</span>
 <span class="co">#&gt; List of 10 lcModels with</span>
 <span class="co">#&gt;    .name .method                                           data       seed</span>
@@ -367,35 +309,6 @@
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dataFolds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createTrainDataFolds.html">createTrainDataFolds</a></span><span class="op">(</span><span class="va">latrendData</span>, folds <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
 <span class="va">foldModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendBatch.html">latrendBatch</a></span><span class="op">(</span><span class="va">kml</span>, data <span class="op">=</span> <span class="va">dataFolds</span><span class="op">)</span>
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
-
-<span class="co">#&gt; Warning in sprintf("Fitting model %d/%d (%d%%)", i, nModels, round(i/nModels * :</span>
-<span class="co">#&gt; one argument not used by format 'Fitting model %d/%d (%d%%)'</span>
 <span class="va">foldModels</span>
 <span class="co">#&gt; List of 10 lcModels with</span>
 <span class="co">#&gt;    .name .method            data       seed</span>
