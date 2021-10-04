@@ -6,19 +6,19 @@ lcMethodTestKML = function(...) {
 # lcmm ####
 if (requireNamespace('lcmm')) {
   lcMethodTestLcmmGMM = function(..., init = NULL, seed = 1) {
-    mc = match.call.all() %>% as.list()
+    mc = match.call.all()
     mc$fixed = Value ~ 1
     mc$maxiter = 10
 
-    do.call(lcMethodLcmmGMM, mc[-1])
+    do.call(lcMethodLcmmGMM, as.list(mc)[-1])
   }
 
   lcMethodTestLcmmGBTM = function(..., init = NULL, seed = 1) {
-    mc = match.call.all() %>% as.list()
+    mc = match.call.all()
     mc$fixed = Value ~ 1
     mc$maxiter = 10
 
-    do.call(lcMethodLcmmGBTM, mc[-1])
+    do.call(lcMethodLcmmGBTM, as.list(mc)[-1])
   }
 }
 
@@ -177,6 +177,9 @@ lcMethodError = function(
   time = getOption('latrend.time'),
   id = getOption('latrend.id'),
   nClusters = 2,
-  ...) {
-  lcMethod.call('lcMethodError', call = latrend::match.call.all())
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodError'
+  do.call(new, as.list(mc))
 }

@@ -25,21 +25,36 @@ setClass('lcMethodDtwclust', contains = 'lcMethod')
 #' @family lcMethod implementations
 #' @references
 #' \insertRef{sardaespinosa2019time}{latrend}
-lcMethodDtwclust = function(response,
-                       time = getOption('latrend.time'),
-                       id = getOption('latrend.id'),
-                       nClusters = 2,
-                       ...) {
-  .loadOptionalPackage('dtwclust')
+lcMethodDtwclust = function(
+  response,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  nClusters = 2,
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodDtwclust'
+  do.call(new, as.list(mc))
 
-  m = lcMethod.call(
-    'lcMethodDtwclust',
-    call = stackoverflow::match.call.defaults(),
-    defaults = dtwclust::tsclust,
-    excludeArgs = c('series', 'k', 'trace')
-  )
-  return(m)
 }
+
+#' @rdname interface-dtwclust
+setMethod('getArgumentDefaults', signature('lcMethodDtwclust'), function(object) {
+  .loadOptionalPackage('dtwclust')
+  c(
+    formals(lcMethodDtwclust),
+    formals(dtwclust::tsclust),
+    callNextMethod()
+  )
+})
+
+#' @rdname interface-dtwclust
+setMethod('getArgumentExclusions', signature('lcMethodDtwclust'), function(object) {
+  union(
+    callNextMethod(),
+    c('series', 'k', 'trace')
+  )
+})
 
 #' @rdname interface-dtwclust
 #' @inheritParams getName

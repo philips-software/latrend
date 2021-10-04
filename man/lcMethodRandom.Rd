@@ -52,6 +52,8 @@ method <- lcMethodRandom(alpha = c(100, 1, 1, 1), nClusters = 4,
 }
 \seealso{
 Other lcMethod implementations: 
+\code{\link{getArgumentDefaults}()},
+\code{\link{getArgumentExclusions}()},
 \code{\link{lcMethod-class}},
 \code{\link{lcMethodAkmedoids}},
 \code{\link{lcMethodCrimCV}},

@@ -35,20 +35,35 @@ setValidity('lcMethodMclustLLPA', function(object) {
 #' @family lcMethod implementations
 #' @references
 #' \insertRef{scrucca2016mclust}{latrend}
-lcMethodMclustLLPA = function(response,
-                              time = getOption('latrend.time'),
-                              id = getOption('latrend.id'),
-                              nClusters = 2,
-                              ...) {
-  .loadOptionalPackage('mclust')
-
-  lcMethod.call(
-    'lcMethodMclustLLPA',
-    call = match.call.defaults(),
-    defaults = mclust::Mclust,
-    excludeArgs = c('data', 'G', 'verbose')
-  )
+lcMethodMclustLLPA = function(
+  response,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  nClusters = 2,
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodMclustLLPA'
+  do.call(new, as.list(mc))
 }
+
+#' @rdname interface-mclust
+setMethod('getArgumentDefaults', signature('lcMethodMclustLLPA'), function(object) {
+  .loadOptionalPackage('mclust')
+  c(
+    formals(lcMethodMclustLLPA),
+    formals(mclust::Mclust),
+    callNextMethod()
+  )
+})
+
+#' @rdname interface-mclust
+setMethod('getArgumentExclusions', signature('lcMethodMclustLLPA'), function(object) {
+  union(
+    callNextMethod(),
+    c('data', 'G', 'verbose')
+  )
+})
 
 #' @rdname interface-mclust
 #' @inheritParams getName

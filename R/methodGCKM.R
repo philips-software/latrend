@@ -25,21 +25,37 @@ setValidity('lcMethodGCKM', function(object) {
 #' method <- lcMethodGCKM(Y ~ (Time | Id), id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' @family lcMethod implementations
-lcMethodGCKM = function(formula,
-                        time = getOption('latrend.time'),
-                        id = getOption('latrend.id'),
-                        nClusters = 2,
-                        center = meanNA,
-                        ...) {
-  .loadOptionalPackage('lme4')
-
-  lcMethod.call(
-    'lcMethodGCKM',
-    call = match.call.defaults(),
-    defaults = c(lme4::lmer, kmeans),
-    excludeArgs = c('data', 'centers', 'trace')
-  )
+lcMethodGCKM = function(
+  formula,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  nClusters = 2,
+  center = meanNA,
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodGCKM'
+  do.call(new, as.list(mc))
 }
+
+#' @rdname interface-featureBased
+setMethod('getArgumentDefaults', signature('lcMethodGCKM'), function(object) {
+  .loadOptionalPackage('lme4')
+  c(
+    formals(lcMethodGCKM),
+    formals(lme4::lmer),
+    formals(kmeans),
+    callNextMethod()
+  )
+})
+
+#' @rdname interface-featureBased
+setMethod('getArgumentExclusions', signature('lcMethodGCKM'), function(object) {
+  union(
+    callNextMethod(),
+    c('data', 'centers', 'trace')
+  )
+})
 
 #' @rdname interface-featureBased
 setMethod('getName', signature('lcMethodGCKM'), function(object) 'two-step using LME and k-means')
@@ -49,11 +65,15 @@ setMethod('getShortName', signature('lcMethodGCKM'), function(object) 'gckm')
 
 lcMethodGCKM_as_twostep = function(method) {
   call = getCall(method)
+  call$Class = 'lcMethodFeature'
   call$response = getResponse(method$formula)
   call$representationStep = representationStepGCKM
   call$clusterStep = clusterStepGCKM
   call$standardize = scale
-  lcMethod.call('lcMethodFeature', call = call)
+
+  newMethod = do.call(new, as.list(call))
+  assert_that(class(newMethod)[1] == 'lcMethodFeature')
+  newMethod
 }
 
 #' @rdname interface-featureBased

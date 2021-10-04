@@ -17,7 +17,7 @@ latrendRep(
 )
 }
 \arguments{
-\item{method}{The \code{lcMethod} object specifying the longitudinal cluster method to apply. See \linkS4class{lcMethod} for details.}
+\item{method}{An \code{lcMethod} object specifying the longitudinal cluster method to apply, or the name (as \code{character}) of an \code{lcMethod} subclass. See \linkS4class{lcMethod} for details.}
 
 \item{data}{The \code{data.frame} to which to apply the method. Inputs supported by \code{\link[=trajectories]{trajectories()}} can also be used.}
 

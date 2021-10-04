@@ -2,6 +2,8 @@
 % Please edit documentation in R/methodFunFEM.R, R/modelFunFEM.R
 \name{interface-funFEM}
 \alias{interface-funFEM}
+\alias{getArgumentDefaults,lcMethodFunFEM-method}
+\alias{getArgumentExclusions,lcMethodFunFEM-method}
 \alias{getName,lcMethodFunFEM-method}
 \alias{getShortName,lcMethodFunFEM-method}
 \alias{preFit,lcMethodFunFEM-method}
@@ -14,6 +16,10 @@
 \alias{converged,lcModelFunFEM-method}
 \title{funFEM interface}
 \usage{
+\S4method{getArgumentDefaults}{lcMethodFunFEM}(object)
+
+\S4method{getArgumentExclusions}{lcMethodFunFEM}(object)
+
 \S4method{getName}{lcMethodFunFEM}(object)
 
 \S4method{getShortName}{lcMethodFunFEM}(object)

@@ -25,19 +25,35 @@ setClass('lcMethodFlexmix', contains = 'lcMethod')
 #' @family lcMethod package interfaces
 #' @references
 #' \insertRef{gruen2008flexmix}{latrend}
-lcMethodFlexmix = function(formula,
-                           formula.mb =  ~ 1,
-                           time = getOption('latrend.time'),
-                           id = getOption('latrend.id'),
-                           nClusters = 2,
-                           ...) {
-  lcMethod.call(
-    'lcMethodFlexmix',
-    call = match.call.defaults(),
-    defaults = flexmix::flexmix,
-    excludeArgs = c('data', 'concomitant', 'k')
-  )
+lcMethodFlexmix = function(
+  formula,
+  formula.mb =  ~ 1,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  nClusters = 2,
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodFlexmix'
+  do.call(new, as.list(mc))
 }
+
+#' @rdname interface-flexmix
+setMethod('getArgumentDefaults', signature('lcMethodFlexmix'), function(object) {
+  c(
+    formals(lcMethodFlexmix),
+    formals(flexmix::flexmix),
+    callNextMethod()
+  )
+})
+
+#' @rdname interface-flexmix
+setMethod('getArgumentExclusions', signature('lcMethodFlexmix'), function(object) {
+  union(
+    callNextMethod(),
+    c('data', 'concomitant', 'k')
+  )
+})
 
 #' @rdname interface-flexmix
 setMethod('getName', signature('lcMethodFlexmix'), function(object) 'flexmix')

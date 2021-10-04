@@ -46,6 +46,8 @@ model <- latrend(method, data = TO1adj[1:100, ])
 }
 \seealso{
 Other lcMethod implementations: 
+\code{\link{getArgumentDefaults}()},
+\code{\link{getArgumentExclusions}()},
 \code{\link{lcMethod-class}},
 \code{\link{lcMethodAkmedoids}},
 \code{\link{lcMethodCustom}},

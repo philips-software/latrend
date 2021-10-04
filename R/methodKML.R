@@ -16,6 +16,7 @@ setClass('lcMethodKML', contains = 'lcMatrixMethod')
 #' @param id The name of the trajectory identifier variable.
 #' @param nClusters The number of clusters to estimate.
 #' @param ... Arguments passed to [kml::parALGO] and [kml::kml].
+#'
 #' The following external arguments are ignored: object, nbClusters, parAlgo, toPlot, saveFreq
 #' @examples
 #' library(kml)
@@ -25,18 +26,35 @@ setClass('lcMethodKML', contains = 'lcMatrixMethod')
 #' @references
 #' \insertRef{genolini2015kml}{latrend}
 #' @family lcMethod implementations
-lcMethodKML = function(response,
-                       time = getOption('latrend.time'),
-                       id = getOption('latrend.id'),
-                       nClusters = 2,
-                       ...) {
-  lcMethod.call(
-    'lcMethodKML',
-    call = match.call.defaults(),
-    defaults = c(kml::kml, kml::parALGO),
-    excludeArgs = c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq')
-  )
+lcMethodKML = function(
+  response,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  nClusters = 2,
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodKML'
+  do.call(new, as.list(mc))
 }
+
+#' @rdname interface-kml
+setMethod('getArgumentDefaults', signature('lcMethodKML'), function(object) {
+  c(
+    formals(lcMethodKML),
+    formals(kml::kml),
+    formals(kml::parALGO),
+    callNextMethod()
+  )
+})
+
+#' @rdname interface-kml
+setMethod('getArgumentExclusions', signature('lcMethodKML'), function(object) {
+  union(
+    callNextMethod(),
+    c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq')
+  )
+})
 
 #' @rdname interface-kml
 setMethod('getName', signature('lcMethodKML'), function(object) 'longitudinal k-means (KML)')

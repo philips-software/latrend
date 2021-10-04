@@ -3,7 +3,7 @@ rngReset()
 
 test_that('expression', {
   m = lcMethodTestStratify(stratify = mean(Value) > 1)
-  model = latrend(m, data=testLongData)
+  model = latrend(m, data = testLongData)
   expect_valid_lcModel(model)
 
   expect_equal(nClusters(model), 2)

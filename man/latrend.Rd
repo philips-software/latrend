@@ -13,7 +13,7 @@ latrend(
 )
 }
 \arguments{
-\item{method}{The \code{lcMethod} object specifying the longitudinal cluster method to apply. See \linkS4class{lcMethod} for details.}
+\item{method}{An \code{lcMethod} object specifying the longitudinal cluster method to apply, or the name (as \code{character}) of an \code{lcMethod} subclass. See \linkS4class{lcMethod} for details.}
 
 \item{data}{The \code{data.frame} to which to apply the method. Inputs supported by \code{\link[=trajectories]{trajectories()}} can also be used.}
 
@@ -40,6 +40,8 @@ If a seed value is specified in the \code{lcMethod} object or arguments to \code
 \examples{
 data(latrendData)
 model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), data = latrendData)
+
+model <- latrend("lcMethodKML", response = "Y", id = "Id", time = "Time", data = latrendData)
 
 method <- lcMethodKML("Y", id = "Id", time = "Time")
 model <- latrend(method, data = latrendData, nClusters = 3)

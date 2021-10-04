@@ -23,18 +23,34 @@ setClass('lcMethodLongclust', contains = 'lcMatrixMethod')
 #' @family lcMethod implementations
 #' @references
 #' \insertRef{mcnicholas2019longclust}{latrend}
-lcMethodLongclust = function(response,
-                             time = getOption('latrend.time'),
-                             id = getOption('latrend.id'),
-                             nClusters = 2,
-                             ...) {
-  lcMethod.call(
-    'lcMethodLongclust',
-    call = match.call.defaults(),
-    defaults = longclust::longclustEM,
-    excludeArgs = c('data', 'x', 'Gmin', 'Gmax', 'userseed')
-  )
+lcMethodLongclust = function(
+  response,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  nClusters = 2,
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodLongclust'
+  do.call(new, as.list(mc))
 }
+
+#' @rdname interface-longclust
+setMethod('getArgumentDefaults', signature('lcMethodLongclust'), function(object) {
+  c(
+    formals(lcMethodLongclust),
+    formals(longclust::longclustEM),
+    callNextMethod()
+  )
+})
+
+#' @rdname interface-longclust
+setMethod('getArgumentExclusions', signature('lcMethodLongclust'), function(object) {
+  union(
+    callNextMethod(),
+    c('data', 'x', 'Gmin', 'Gmax', 'userseed')
+  )
+})
 
 #' @rdname interface-longclust
 #' @inheritParams getName

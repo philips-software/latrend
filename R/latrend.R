@@ -1,10 +1,9 @@
 #' @export
-#' @importFrom stackoverflow match.call.defaults
 #' @title Cluster longitudinal data
 #' @description Fit a longitudinal cluster method to the given training data, according to the specification provided by the `lcMethod` object.
 #'
 #' This function runs all steps as part of the [method fitting procedure][lcMethod-class].
-#' @param method The `lcMethod` object specifying the longitudinal cluster method to apply. See [lcMethod-class][lcMethod-class] for details.
+#' @param method An `lcMethod` object specifying the longitudinal cluster method to apply, or the name (as `character`) of an `lcMethod` subclass. See [lcMethod-class][lcMethod-class] for details.
 #' @param data The `data.frame` to which to apply the method. Inputs supported by [trajectories()] can also be used.
 #' @param ... Any other arguments to update the `lcMethod` definition with.
 #' @param envir The `environment` in which to evaluate the method arguments (by [compose()]). This environment is also used to evaluate the `data` argument if it is of type `call`.
@@ -18,18 +17,17 @@
 #' data(latrendData)
 #' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), data = latrendData)
 #'
+#' model <- latrend("lcMethodKML", response = "Y", id = "Id", time = "Time", data = latrendData)
+#'
 #' method <- lcMethodKML("Y", id = "Id", time = "Time")
 #' model <- latrend(method, data = latrendData, nClusters = 3)
 #'
 #' model <- latrend(method, data = latrendData, nClusters = 3, seed = 1)
 #' @family longitudinal cluster fit functions
 latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend.verbose')) {
-  assert_that(
-    is_class_defined(method),
-    is.lcMethod(method),
-    !missing(data)
-  )
-  envir = lcMethod.env(method, parent.frame(), envir)
+  method = as.lcMethod(method)
+  assert_that(!missing(data))
+  envir = .selectEnvironment(method, parent.frame(), envir)
 
   verbose = as.Verbose(verbose)
   argList = list(...)
@@ -73,7 +71,7 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
   exit(verbose, level = verboseLevels$finest)
 
   fitTiming = .enterTimed(verbose, 'Fitting the method')
-  mc = match.call.defaults()
+  mc = match.call.all()
   model = fitLatrendMethod(
     cmethod,
     modelData,
@@ -178,9 +176,10 @@ latrendRep = function(method,
                        .parallel = FALSE,
                        envir = NULL,
                        verbose = getOption('latrend.verbose')) {
-  envir = lcMethod.env(method, parent.frame(), envir)
+  method = as.lcMethod(method)
+  envir = .selectEnvironment(method, parent.frame(), envir)
+
   assert_that(
-    is.lcMethod(method),
     !missing(data),
     is.count(.rep),
     is.flag(.parallel)
@@ -191,13 +190,11 @@ latrendRep = function(method,
   argList$envir = envir
   newmethod = do.call(update, c(object = method, argList))
   environment(newmethod) = envir
-
   header(verbose, sprintf('Repeated (%d) longitudinal clustering using "%s"', .rep, getName(method)))
   cat(verbose, c('Method arguments:', as.character(newmethod)[-1]))
   ruler(verbose)
 
-
-  mc = match.call.defaults()
+  mc = match.call.all()
 
   # compose
   enter(verbose, 'Evaluating the method arguments.', suffix = '', level = verboseLevels$fine)
@@ -243,7 +240,7 @@ latrendRep = function(method,
   exit(verbose, level = verboseLevels$finest)
 
   enter(verbose, 'Preparing the training data for fitting')
-  prepEnv = prepareData(method = method,
+  prepEnv = prepareData(method = cmethod,
                         data = modelData,
                         verbose = verbose)
   exit(verbose, level = verboseLevels$finest)
@@ -325,12 +322,25 @@ latrendBatch = function(methods,
     msg = 'methods argument must be a list of lcMethod objects'
   )
   assert_that(
+    all(lengths(methods) > 0),
+    msg = sprintf(
+      'the lcMethod object(s) in the "methods" argument at index %s do not have any arguments.',
+      paste0(
+        which(lengths(methods) == 0),
+        ' (',
+        vapply(methods[lengths(methods) == 0], class, FUN.VALUE = ''),
+        ')',
+        collapse = ', '
+      )
+    )
+  )
+  assert_that(
     !missing(data),
     is.flag(cartesian),
     is.flag(parallel)
   )
 
-  envir = lcMethod.env(methods[[1]], parent.frame(), envir)
+  envir = .selectEnvironment(methods[[1]], parent.frame(), envir)
 
   verbose = as.Verbose(verbose)
   nMethods = length(methods)
@@ -440,7 +450,16 @@ latrendBatch = function(methods,
     .packages = 'latrend',
     .errorhandling = errorHandling) %infix%
   {
-    modelTiming = .enterTimed(verbose, sprintf('Fitting model %d/%d (%d%%)', i, nModels, round(i / nModels * 100), getName(modelMethod)))
+    modelTiming = .enterTimed(
+      verbose,
+      sprintf(
+        'Fitting model %d/%d (%d%%) using %s',
+        i,
+        nModels,
+        round(i / nModels * 100),
+        getName(modelMethod)
+      )
+    )
     on.exit(expr = .exitTimed(modelTiming), add = TRUE)
 
     cat(verbose, as.character(modelMethod, prefix = '- '))

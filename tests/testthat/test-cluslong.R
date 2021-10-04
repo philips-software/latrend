@@ -18,6 +18,15 @@ test_that('method var', {
   expect_is(model, 'lcModel')
 })
 
+test_that('method name', {
+  refMethod = lcMethodKML(response = "Value", nbRedrawing = 1, maxIt = 10, seed = 1)
+  model = latrend("lcMethodKML", response = "Value", nbRedrawing = 1, maxIt = 10, seed = 1, data = testLongData)
+
+  newMethod = getLcMethod(model)
+  expect_equal(newMethod$nbRedrawing, refMethod$nbRedrawing)
+  expect_equal(newMethod$maxIt, refMethod$maxIt)
+})
+
 test_that('overwritten argument', {
   model = latrend(lcMethodTestKML(), data = testLongData, nClusters = 1)
 

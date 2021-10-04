@@ -2,6 +2,8 @@
 % Please edit documentation in R/methodLongclust.R, R/modelLongclust.R
 \name{interface-longclust}
 \alias{interface-longclust}
+\alias{getArgumentDefaults,lcMethodLongclust-method}
+\alias{getArgumentExclusions,lcMethodLongclust-method}
 \alias{getName,lcMethodLongclust-method}
 \alias{getShortName,lcMethodLongclust-method}
 \alias{fit,lcMethodLongclust-method}
@@ -12,6 +14,10 @@
 \alias{BIC.lcModelLongclust}
 \title{longclust interface}
 \usage{
+\S4method{getArgumentDefaults}{lcMethodLongclust}(object)
+
+\S4method{getArgumentExclusions}{lcMethodLongclust}(object)
+
 \S4method{getName}{lcMethodLongclust}(object)
 
 \S4method{getShortName}{lcMethodLongclust}(object)

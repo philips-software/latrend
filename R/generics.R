@@ -197,6 +197,43 @@ setGeneric('fittedTrajectories', function(
 })
 
 
+# getArgumentDefaults ####
+#' @export
+#' @name latrend-generics
+setGeneric('getArgumentDefaults', function(object, ...) {
+  out <- standardGeneric('getArgumentDefaults')
+
+  assert_that(
+    is.list(out),
+    is_named(out),
+    msg = sprintf(
+      'Implementation error for %1$s: getArgumentDefaults(%1$s) must return named list',
+      class(object)[1]
+    )
+  )
+
+  out
+})
+
+# getArgumentExclusions ####
+#' @export
+#' @name latrend-generics
+setGeneric('getArgumentExclusions', function(object, ...) {
+  out <- standardGeneric('getArgumentExclusions')
+
+  assert_that(
+    is.character(out),
+    noNA(out),
+    all(nchar(out) > 0),
+    msg = sprintf(
+      'Implementation error for %1$s: getArgumentExclusions(%1$s) must return character vector with non-empty elements',
+      class(object)[1]
+    )
+  )
+
+  out
+})
+
 # getLabel ####
 #' @export
 #' @name latrend-generics
@@ -208,7 +245,7 @@ setGeneric('getLabel', function(object, ...) {
     length(label) == 1
   )
 
-  return (label)
+  label
 })
 
 
