@@ -2,6 +2,7 @@
 <!-- badges: start -->
   [![R-CMD-check](https://github.com/philips-software/latrend/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/philips-software/latrend/actions/workflows/R-CMD-check.yaml)
   [![CRAN](https://www.r-pkg.org/badges/version/latrend)](https://cran.r-project.org/package=latrend)
+  [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
   [![Codecov test coverage](https://codecov.io/gh/philips-software/latrend/branch/master/graph/badge.svg)](https://codecov.io/gh/philips-software/latrend?branch=master)
   [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/latrend)](https://www.r-pkg.org/pkg/latrend)
 <!-- badges: end -->
