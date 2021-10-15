@@ -75,3 +75,6 @@ The `latrend` package provides interfaces to the relevant methods for longitudin
 * [mclust](https://CRAN.R-project.org/package=mclust)
 * [mixAK](https://CRAN.R-project.org/package=mixAK)
 * [mixtools](https://CRAN.R-project.org/package=mixtools)
+
+# Contributing
+We appreciate any contributions in the form of ideas, feature requests, bug reports, bug fixes, documentation improvements, code reformatting, and code submissions. Please see the [Contribution guidelines](https://github.com/philips-software/latrend/blob/master/CONTRIBUTING.md).
