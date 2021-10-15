@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Quantile-quantile plot — qqPlot • latrend</title>
+<title>Filing issues • latrend</title>
 
 
 <!-- jquery -->
@@ -18,8 +18,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
-<link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script>
+<link rel="stylesheet" href="bootstrap-toc.css">
+<script src="bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
@@ -33,14 +33,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script>
+<link href="pkgdown.css" rel="stylesheet">
+<script src="pkgdown.js"></script>
 
 
 
 
-<meta property="og:title" content="Quantile-quantile plot — qqPlot" />
-<meta property="og:description" content="Plot the quantile-quantile (Q-Q) plot for the fitted lcModel object. This function is based on the qqplotr package." />
+<meta property="og:title" content="Filing issues" />
 
 
 
@@ -59,7 +58,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-topic">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -71,7 +70,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">latrend</a>
+        <a class="navbar-link" href="index.html">latrend</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
@@ -79,13 +78,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
+  <a href="index.html">
     <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -95,18 +94,18 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/custom.html">Implementing new models</a>
+      <a href="articles/custom.html">Implementing new models</a>
     </li>
     <li>
-      <a href="../articles/demo.html">Demonstration of latrend package</a>
+      <a href="articles/demo.html">Demonstration of latrend package</a>
     </li>
     <li>
-      <a href="../articles/validation.html">Validating cluster models</a>
+      <a href="articles/validation.html">Validating cluster models</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -127,60 +126,61 @@
       </header>
 
 <div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-9">
     <div class="page-header">
-    <h1>Quantile-quantile plot</h1>
-    <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/model.R'><code>R/model.R</code></a></small>
-    <div class="hidden name"><code>qqPlot.Rd</code></div>
+      <h1>Filing issues</h1>
     </div>
 
-    <div class="ref-description">
-    <p>Plot the quantile-quantile (Q-Q) plot for the fitted <code>lcModel</code> object. This function is based on the <span class="pkg">qqplotr</span> package.</p>
-    </div>
 
-    <pre class="usage"><span class='co'># S4 method for lcModel</span>
-<span class='fu'>qqPlot</span><span class='op'>(</span><span class='va'>object</span>, byCluster <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<p>Thank you for your interest in contributing to this project. We value any input you may have, as this helps towards making the package even more useful.</p>
+<p>Please read the guidelines below for instructions and criteria on filing issues, making code changes, and submitting PRs.</p>
+<div id="filing-issues" class="section level1">
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>object</th>
-      <td><p>The <code>lcModel</code> object.</p></td>
-    </tr>
-    <tr>
-      <th>byCluster</th>
-      <td><p>Whether to plot the Q-Q line per cluster</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Additional arguments passed to <code><a href='https://rdrr.io/pkg/qqplotr/man/stat_qq_band.html'>qqplotr::geom_qq_band()</a></code>, <code><a href='https://rdrr.io/pkg/qqplotr/man/stat_qq_line.html'>qqplotr::stat_qq_line()</a></code>, and <code><a href='https://rdrr.io/pkg/qqplotr/man/stat_qq_point.html'>qqplotr::stat_qq_point()</a></code>.</p></td>
-    </tr>
-    </table>
+<ul>
+<li>Issues are intended for ideas, suggestions, feature requests, and bug reports. Don’t submit an issue for a coding question or support. Use the <a href="https://github.com/philips-software/latrend/discussions">Discussions</a> area instead.</li>
+<li>Please check the existing issues to see whether your suggestion/feature request/bug has already been discussed.</li>
+<li>An issue should address only a single concept/idea/bug.</li>
+</ul>
+</div>
+<div id="pull-requests-prs" class="section level1">
+<h1 class="hasAnchor">
+<a href="#pull-requests-prs" class="anchor"></a>Pull Requests (PRs)</h1>
+<ol>
+<li>Every new code feature or bug fix should include one or more automatic tests.</li>
+<li>One feature or bugfix per PR. Code format or documentation updates should be restricted to either one file, or an object class (e.g., updating the documentation of the <code>lcModel</code> class functions).</li>
+</ol>
+</div>
+<div id="coding-style" class="section level1">
+<h1 class="hasAnchor">
+<a href="#coding-style" class="anchor"></a>Coding style</h1>
+<ol>
+<li>Use <code><a href="https://rdrr.io/r/base/assignOps.html">=</a></code> for assignment, not <code><a href="https://rdrr.io/r/base/assignOps.html">&lt;-</a></code>.</li>
+<li>Don’t assign variables within a function call or condition. E.g., don’t do <code><a href="https://rdrr.io/r/stats/median.html">median(x &lt;- 5)</a></code> or <code>if (x &lt;- y + 2 == 3)</code>.</li>
+<li>2-space indentation. No tabs.</li>
+<li>Surround the <code><a href="https://rdrr.io/r/base/assignOps.html">=</a></code> of function calls with named arguments with a space, e.g., <code><a href="https://rdrr.io/r/base/sample.html">sample.int(n = 1e3, size = 10, replace = TRUE)</a></code>.</li>
+<li>Use <code>'</code> for strings, e.g., <code>var = 'abc'</code>
+</li>
+<li>Use <code>L</code> suffix for integers.</li>
+</ol>
+<p>As some of these coding styles were introduced later into the project, not all current code may be up to standard. You are invited to submit PRs for formatting improvements.</p>
+<div id="exception-to-the-coding-style" class="section level4">
+<h4 class="hasAnchor">
+<a href="#exception-to-the-coding-style" class="anchor"></a>Exception to the coding style</h4>
+<p>Vignettes and documentation example code use the more popular R coding style. (i.e., using <code><a href="https://rdrr.io/r/base/assignOps.html">&lt;-</a></code> for assignment and <code>"</code> for strings).</p>
+</div>
+</div>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>ggplot</code> object.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><a href='residuals.lcModel.html'>residuals.lcModel</a> <a href='metric.html'>metric</a> <a href='plotClusterTrajectories.html'>plotClusterTrajectories</a></p></div>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>latrendData</span><span class='op'>)</span>
-<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='fu'><a href='lcMethodLcmmGMM.html'>lcMethodLcmmGMM</a></span><span class='op'>(</span>fixed <span class='op'>=</span> <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Time</span>, mixture <span class='op'>=</span> <span class='op'>~</span> <span class='va'>Time</span>,
-   id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>latrendData</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Be patient, hlme is running ... 
-#&gt; The program took 0.07 seconds 
-#&gt; Be patient, hlme is running ... 
-#&gt; The program took 0.23 seconds </div><div class='input'><span class='fu'>qqPlot</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: qqplotr</span></div><div class='img'><img src='qqPlot-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
+
 </div>
+
 
 
       <footer>
