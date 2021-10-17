@@ -93,6 +93,21 @@ setMethod('getName', signature('lcMethodLcmmGMM'), function(object) 'growth mixt
 #' @rdname interface-lcmm
 setMethod('getShortName', signature('lcMethodLcmmGMM'), function(object) 'gmm')
 
+#' @rdname interface-lcmm
+setMethod('validate', 'lcMethodLcmmGMM', function(method, data, envir = NULL, ...) {
+  if (hasCovariates(method$fixed) && not(timeVariable(method) %in% getCovariates(method$fixed))) {
+    warning(
+      sprintf(
+        'The specified time variable "%s" does not occur in the %s argument for "fixed" = %s.',
+        timeVariable(method),
+        class(method)[1],
+        deparse(method$fixed)
+      )
+    )
+  }
+  return(TRUE)
+})
+
 gmm_prepare = function(method, data, envir, verbose, ...) {
   e = new.env()
   e$verbose = as.logical(verbose)
@@ -160,8 +175,9 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
 
   e$args = args
 
-  return (e)
+  return(e)
 }
+
 #' @rdname interface-lcmm
 setMethod('preFit', signature('lcMethodLcmmGMM'), gmm_prepare)
 
@@ -183,7 +199,7 @@ gmm_fit = function(method, data, envir, verbose, ...) {
   model$random = args$random
   model$mb = envir$classmb
 
-  return (model)
+  return(model)
 }
 
 #' @rdname interface-lcmm

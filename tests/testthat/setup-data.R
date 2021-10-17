@@ -15,4 +15,5 @@ testLongData = generateLongData(
   shuffle = TRUE
 ) %>%
   .[, .(Traj, Assessment, Value, Class)] %>%
+  .[, Constant := 1] %>%
   .[, Cluster := Class]

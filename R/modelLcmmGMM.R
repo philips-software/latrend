@@ -16,9 +16,14 @@ fitted.lcModelLcmmGMM = function(object, ..., clusters = trajectoryAssignments(o
 #. predictForCluster ####
 #' @rdname interface-lcmm
 #' @inheritParams predictForCluster
-setMethod('predictForCluster', signature('lcModelLcmmGMM'), function(
-    object, newdata, cluster, what = 'mu', ...)
-{
+setMethod('predictForCluster', signature('lcModelLcmmGMM'),
+  function(
+    object,
+    newdata,
+    cluster,
+    what = 'mu',
+    ...
+  ) {
   assert_that(what == 'mu', msg = 'only what="mu" is supported')
   vars = union(getCovariates(object@model$fixed), getCovariates(object@model$mixture))
   missingVars = setdiff(vars, names(newdata))
@@ -30,7 +35,7 @@ setMethod('predictForCluster', signature('lcModelLcmmGMM'), function(
   if (length(missingVars) > 0) {
     # compute marginal means for unspecified covariates
     missingVarMeans = model.data(object) %>%
-      .[missingVars] %>%
+      subset(select = missingVars) %>%
       vapply(mean, na.rm = TRUE, FUN.VALUE = 0)
     newdata = cbind(newdata, missingVarMeans)
     newdata$Cluster = make.clusterIndices(object, newdata$Cluster)

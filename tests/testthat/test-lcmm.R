@@ -11,13 +11,19 @@ test_that('default gmm', {
 })
 
 test_that('gmm with single cluster', {
-  model = latrend(lcMethodTestLcmmGMM(), testLongData, nClusters=1)
+  model = latrend(lcMethodTestLcmmGMM(), testLongData, nClusters = 1)
   expect_valid_lcModel(model)
 })
 
 test_that('gmm with empty cluster', {
-  model = latrend(lcMethodTestLcmmGMM(), testLongData, nClusters=5)
+  model = latrend(lcMethodTestLcmmGMM(), testLongData, nClusters = 5)
   expect_valid_lcModel(model)
+})
+
+test_that('gmm unspecified time warning', {
+  expect_warning(
+    latrend(lcMethodTestLcmmGMM(), data = testLongData, nClusters = 1, fixed = ~ Constant)
+  )
 })
 
 test_that('default gbtm', {
@@ -29,7 +35,7 @@ test_that('default gbtm', {
 })
 
 test_that('gbtm with nclusters', {
-  model = latrend(lcMethodTestLcmmGBTM(), testLongData, nClusters=1)
+  model = latrend(lcMethodTestLcmmGBTM(), testLongData, nClusters = 1)
   expect_valid_lcModel(model)
 })
 
