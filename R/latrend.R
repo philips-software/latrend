@@ -35,7 +35,7 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
   newmethod = do.call(update, c(object = method, argList))
   environment(newmethod) = envir
 
-  header(verbose, sprintf('Longitudinal clustering using "%s"', getName(newmethod)))
+  header(verbose, sprintf('Longitudinal clustering using: %s', getName(newmethod)))
   cat(verbose, c('Method arguments:', as.character(newmethod)[-1]))
   ruler(verbose)
 

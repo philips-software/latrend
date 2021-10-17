@@ -311,7 +311,7 @@ as.character.lcMethod = function(x, ..., eval = FALSE, width = 40, prefix = '', 
 
   args = vapply(chrValues, strtrim, width = width, FUN.VALUE = '')
 
-  header = sprintf('%s as "%s"', class(x)[1], getName(x))
+  header = sprintf('%s, specifying "%s"', class(x)[1], getName(x))
 
   if (length(args) > 0) {
     body = sprintf('%s%-16s%s', prefix, paste0(argNames, ':'), args)
