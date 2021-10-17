@@ -102,7 +102,8 @@ setMethod('validate', 'lcMethodLcmmGMM', function(method, data, envir = NULL, ..
         timeVariable(method),
         class(method)[1],
         deparse(method$fixed)
-      )
+      ),
+      immediate. = TRUE
     )
   }
   return(TRUE)
