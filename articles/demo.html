@@ -140,7 +140,7 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 <code class="sourceCode R"><span class="va">kmlMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span>response <span class="op">=</span> <span class="st">"Y"</span>, nClusters <span class="op">=</span> <span class="fl">2</span>, nbRedrawing <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
 <span class="va">kmlMethod</span>
-<span class="co">#&gt; lcMethodKML, specifying "longitudinal k-means (KML)"</span>
+<span class="co">#&gt; lcMethodKML specifying "longitudinal k-means (KML)"</span>
 <span class="co">#&gt;  time:           getOption("latrend.time")</span>
 <span class="co">#&gt;  id:             getOption("latrend.id")</span>
 <span class="co">#&gt;  nClusters:      2</span>
@@ -165,7 +165,7 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">kmlModel</span>
 <span class="co">#&gt; Longitudinal cluster model using longitudinal k-means (KML)</span>
-<span class="co">#&gt; lcMethodKML, specifying "longitudinal k-means (KML)"</span>
+<span class="co">#&gt; lcMethodKML specifying "longitudinal k-means (KML)"</span>
 <span class="co">#&gt;  time:           "Time"</span>
 <span class="co">#&gt;  id:             "Id"</span>
 <span class="co">#&gt;  nClusters:      2</span>
@@ -251,7 +251,7 @@ Elbow plots of three relevant cluster metrics across the fitted models.
 
 <span class="va">kmlModel4</span>
 <span class="co">#&gt; Longitudinal cluster model using longitudinal k-means (KML)</span>
-<span class="co">#&gt; lcMethodKML, specifying "longitudinal k-means (KML)"</span>
+<span class="co">#&gt; lcMethodKML specifying "longitudinal k-means (KML)"</span>
 <span class="co">#&gt;  seed:           265368763</span>
 <span class="co">#&gt;  time:           "Time"</span>
 <span class="co">#&gt;  id:             "Id"</span>
@@ -344,7 +344,7 @@ Cluster-specific detrended QQ-plot for the selected KML model.
 <span class="va">gbtmMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodLcmmGBTM.html">lcMethodLcmmGBTM</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/splines/bs.html">bs</a></span><span class="op">(</span><span class="va">Time</span><span class="op">)</span>, mixture <span class="op">=</span> <span class="va">fixed</span><span class="op">)</span>
 
 <span class="va">gbtmMethod</span>
-<span class="co">#&gt; lcMethodLcmmGBTM, specifying "group-based trajectory modeling using lcmm"</span>
+<span class="co">#&gt; lcMethodLcmmGBTM specifying "group-based trajectory modeling using lcmm"</span>
 <span class="co">#&gt;  mixture:        fixed</span>
 <span class="co">#&gt;  classmb:        ~1</span>
 <span class="co">#&gt;  time:           getOption("latrend.time")</span>
@@ -389,7 +389,7 @@ Three cluster metrics for each of the GBTMs.
 <code class="sourceCode R"><span class="va">gmmMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodLcmmGMM.html">lcMethodLcmmGMM</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">Time</span>, <span class="fl">2</span>, raw <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, mixture <span class="op">=</span> <span class="va">fixed</span>, idiag <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="va">gmmMethod</span>
-<span class="co">#&gt; lcMethodLcmmGMM, specifying "growth mixture model"</span>
+<span class="co">#&gt; lcMethodLcmmGMM specifying "growth mixture model"</span>
 <span class="co">#&gt;  mixture:        fixed</span>
 <span class="co">#&gt;  random:         ~1</span>
 <span class="co">#&gt;  classmb:        ~1</span>
@@ -487,7 +487,7 @@ Non-parametric estimates of the cluster trajectories based on the reference assi
 <span class="va">refModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcModelPartition.html">lcModelPartition</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">latrendData</span>, response <span class="op">=</span> <span class="st">"Y"</span>, trajectoryAssignments <span class="op">=</span> <span class="va">refTrajAssigns</span><span class="op">$</span><span class="va">Class</span><span class="op">)</span>
 <span class="va">refModel</span>
 <span class="co">#&gt; Longitudinal cluster model using part</span>
-<span class="co">#&gt; lcMethod, specifying "undefined"</span>
+<span class="co">#&gt; lcMethod specifying "undefined"</span>
 <span class="co">#&gt; no arguments</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Cluster sizes (K=3):</span>
