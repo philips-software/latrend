@@ -65,14 +65,16 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
 
   # prepare
   enter(verbose, 'Preparing the training data for fitting')
-  modelEnv = prepareData(method = cmethod,
-                         data = modelData,
-                         verbose = verbose)
+  modelEnv = prepareData(
+    method = cmethod,
+    data = modelData,
+    verbose = verbose
+  )
   exit(verbose, level = verboseLevels$finest)
 
   fitTiming = .enterTimed(verbose, 'Fitting the method')
   mc = match.call.all()
-  model = fitLatrendMethod(
+  model = .fitLatrendMethod(
     cmethod,
     modelData,
     envir = modelEnv,
@@ -90,7 +92,7 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
 
 
 
-fitLatrendMethod = function(method, data, envir, mc, verbose) {
+.fitLatrendMethod = function(method, data, envir, mc, verbose) {
   assert_that(
     is_class_defined(method),
     is.lcMethod(method),
@@ -126,12 +128,10 @@ fitLatrendMethod = function(method, data, envir, mc, verbose) {
 
   assert_that(is_class_defined(model))
 
-  model@call = do.call(call,
-                       c(
-                         'latrend',
-                         method = quote(getCall(method)),
-                         data = quote(mc$data)
-                       ))
+  model@call = do.call(
+    call,
+    c('latrend', method = quote(getCall(method)), data = quote(mc$data))
+  )
   model@call['envir'] = list(mc$envir)
 
   # postFit
@@ -240,9 +240,11 @@ latrendRep = function(method,
   exit(verbose, level = verboseLevels$finest)
 
   enter(verbose, 'Preparing the training data for fitting')
-  prepEnv = prepareData(method = cmethod,
-                        data = modelData,
-                        verbose = verbose)
+  prepEnv = prepareData(
+    method = cmethod,
+    data = modelData,
+    verbose = verbose
+  )
   exit(verbose, level = verboseLevels$finest)
 
   `%infix%` = ifelse(.parallel, `%dopar%`, `%do%`)
@@ -257,7 +259,7 @@ latrendRep = function(method,
     enter(verbose, sprintf('Fitting model %d/%d (%d%%)', i, .rep, signif(i / .rep * 100, 2)))
     assert_that(is_class_defined(cmethod))
     imethod = update(cmethod, seed = iseed, .eval = TRUE)
-    model = fitLatrendMethod(
+    model = .fitLatrendMethod(
       imethod,
       data = modelData,
       envir = prepEnv,
@@ -392,9 +394,21 @@ latrendBatch = function(methods,
   # transform data
   enter(verbose, sprintf('Checking and transforming the data format for %d datasets.', nData), suffix = '', level = verboseLevels$fine)
   allData = lapply(allDataOpts, eval, envir = envir)
-  allModelData = mapply(function(data, method) {
-    trajectories(data, id = idVariable(method), time = timeVariable(method), response = responseVariable(method), envir = envir)
-  }, allData, allMethods, SIMPLIFY = FALSE)
+  allModelData = mapply(
+    function(data, method) {
+      trajectories(
+        data,
+        id = idVariable(method),
+        time = timeVariable(method),
+        response = responseVariable(method),
+        envir = envir
+      )
+    },
+    allData,
+    allMethods,
+    SIMPLIFY = FALSE
+  )
+
   assert_that(
     is.list(allModelData),
     length(allModelData) == nModels,
@@ -424,7 +438,8 @@ latrendBatch = function(methods,
   # generate calls
   allCalls = vector('list', length(allMethods))
   for (i in seq_along(allMethods)) {
-    allCalls[[i]] = do.call(call,
+    allCalls[[i]] = do.call(
+      call,
       c(
         'latrend',
         method = allMethods[[i]],
@@ -432,7 +447,8 @@ latrendBatch = function(methods,
         seed = allSeeds[[i]],
         envir = quote(envir),
         verbose = quote(verbose)
-      ))
+      )
+    )
   }
 
   `%infix%` = ifelse(parallel, `%dopar%`, `%do%`)
@@ -469,7 +485,7 @@ latrendBatch = function(methods,
       prepareData(method = modelMethod, data = modelData, verbose = verbose)
     })
 
-    model = fitLatrendMethod(
+    model = .fitLatrendMethod(
       method = modelMethod,
       data = modelData,
       mc = modelCall,
@@ -551,9 +567,11 @@ latrendBoot = function(method,
 
   # generate seeds
   localRNG(seed = seed, {
-    sampleSeeds = sample.int(.Machine$integer.max,
-                             size = samples,
-                             replace = FALSE)
+    sampleSeeds = sample.int(
+      .Machine$integer.max,
+      size = samples,
+      replace = FALSE
+    )
   })
 
   id = idVariable(method)
@@ -649,14 +667,17 @@ latrendCV = function(method,
   })
   dataCall = do.call(call, c('.', dataFoldCalls))
 
-  models = do.call(latrendBatch,
-                   list(
-                     method = method,
-                     data = dataCall,
-                     parallel = parallel,
-                     errorHandling = errorHandling,
-                     verbose = verbose
-                   ), envir = parent.frame())
+  models = do.call(
+    latrendBatch,
+    list(
+      method = method,
+      data = dataCall,
+      parallel = parallel,
+      errorHandling = errorHandling,
+      verbose = verbose
+    ),
+    envir = parent.frame()
+  )
 
   return(models)
 }
@@ -681,10 +702,12 @@ createTrainDataFolds = function(data,
                                 folds = 10,
                                 id = getOption('latrend.id'),
                                 seed = NULL) {
-  assert_that(is.count(folds),
+  assert_that(
+    is.count(folds),
     folds > 1,
     is.data.frame(data),
-    has_name(data, id))
+    has_name(data, id)
+  )
 
   ids = unique(data[[id]])
 
@@ -695,8 +718,7 @@ createTrainDataFolds = function(data,
       list = TRUE,
       returnTrain = TRUE
     ) %>%
-      lapply(function(i)
-        ids[i])
+      lapply(function(i) ids[i])
   })
 
   dataList = lapply(foldIdsList, function(foldIds) {

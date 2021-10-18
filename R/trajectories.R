@@ -48,8 +48,6 @@ setMethod('trajectories', signature('call'), function(object, ..., envir) {
 #' @param trajectories Whether to plot the original data in addition to the cluster (i.e., center) trajectories
 #' @param facet Whether to facet by cluster. This is done by default when `trajectories` is enabled.
 #' @param id Id column. Only needed when `trajectories = TRUE`.
-#' @details Instead of passing the plotting arguments through `...`, consider modifying the ggplot2 defaults.
-#' For example, changing the default line size: `update_geom_defaults("line", list(size = 1.5))`
 setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
   response,
   cluster = 'Cluster',
@@ -67,7 +65,7 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
   )
 
   cdata = as.data.table(object) %>%
-    .[, .(Value = center(get(response))), keyby=c(cluster, time)] %>%
+    .[, .(Value = center(get(response))), keyby = c(cluster, time)] %>%
     setnames('Value', response)
 
   .plotClusterTrajs(cdata,
@@ -125,7 +123,7 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
       color = 'black'
     )
 
-    if(is.list(trajectories)) {
+    if (is.list(trajectories)) {
       lineArgs = modifyList(lineArgs, trajectories)
     }
 

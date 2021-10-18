@@ -65,10 +65,6 @@ Plot cluster trajectories
 
 Plot the cluster trajectories of a lcModel
 }
-\details{
-Instead of passing the plotting arguments through \code{...}, consider modifying the ggplot2 defaults.
-For example, changing the default line size: \code{update_geom_defaults("line", list(size = 1.5))}
-}
 \examples{
 data(latrendData)
 model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
