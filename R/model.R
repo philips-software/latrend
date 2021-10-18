@@ -1281,6 +1281,21 @@ setMethod('plotFittedTrajectories', signature('lcModel'), function(object, ...) 
 #' data(latrendData)
 #' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' plotClusterTrajectories(model)
+#'
+#' # show assigned trajectories
+#' plotClusterTrajectories(model, trajectories = TRUE)
+#'
+#' # show 95th percentile observation interval
+#' plotClusterTrajectories(model, trajectories = "95pct")
+#'
+#' # show observation standard deviation
+#' plotClusterTrajectories(model, trajectories = "sd")
+#'
+#' # show observation standard error
+#' plotClusterTrajectories(model, trajectories = "se")
+#'
+#' # show observation range
+#' plotClusterTrajectories(model, trajectories = "range")
 setMethod('plotClusterTrajectories', signature('lcModel'),
   function(object,
     what = 'mu',
@@ -1289,7 +1304,7 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
       clusterNames(object),
       percent(clusterProportions(object))),
     trajectories = FALSE,
-    facet = isTRUE(trajectories),
+    facet = !isFALSE(as.logical(trajectories[1])),
     trajAssignments = trajectoryAssignments(object),
     ...
   ) {
@@ -1313,7 +1328,7 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
     response = responseVariable(object, what = what),
     time = timeVariable(object),
     id = idVariable(object),
-    trajectories = trajectories,
+    trajectories = trajectories[1],
     facet = facet,
     rawdata = rawdata,
     ...

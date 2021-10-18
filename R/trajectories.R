@@ -45,7 +45,11 @@ setMethod('trajectories', signature('call'), function(object, ..., envir) {
 #' @param object The (cluster) trajectory data.
 #' @param cluster The cluster assignment column
 #' @param center A function for aggregating multiple points at the same point in time
-#' @param trajectories Whether to plot the original data in addition to the cluster (i.e., center) trajectories
+#' @param trajectories Whether to additionally plot the original trajectories (`TRUE`),
+#' or to show the expected interval (standard deviation, standard error, range, or percentile range) of the observations at the respective moment in time.
+#'
+#' Note that visualizing the expected intervals is currently only supported for time-aligned trajectories, as the interval is computed at each unique moment in time.
+#' By default (`FALSE`), no information on the underlying trajectories is shown.
 #' @param facet Whether to facet by cluster. This is done by default when `trajectories` is enabled.
 #' @param id Id column. Only needed when `trajectories = TRUE`.
 setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
@@ -53,8 +57,8 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
   cluster = 'Cluster',
   time = getOption('latrend.time'),
   center = meanNA,
-  trajectories = FALSE,
-  facet = isTRUE(trajectories),
+  trajectories = c(FALSE, 'sd', 'se', '80pct', '90pct', '95pct', 'range'),
+  facet = !isFALSE(as.logical(trajectories[1])),
   id = getOption('latrend.id'),
   ...
 ) {
@@ -73,7 +77,7 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     response = response,
     time = time,
     cluster = cluster,
-    trajectories = trajectories,
+    trajectories = trajectories[1],
     facet = facet,
     id = id,
     rawdata = object,
@@ -98,11 +102,13 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     has_name(data, response),
     has_name(data, time),
     has_name(data, cluster),
-    is.flag(trajectories),
+    is.flag(trajectories) || is.character(trajectories),
+    length(trajectories) == 1,
     is.flag(facet)
   )
 
-  if (isTRUE(trajectories)) {
+  if (isTRUE(as.logical(trajectories))) {
+    # show trajectories
     assert_that(
       is.data.frame(rawdata),
       nrow(rawdata) > 0,
@@ -118,11 +124,62 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
       cluster = cluster,
       ...
     )
-  } else {
+  } else if (isFALSE(as.logical(trajectories))) {
+    # don't show trajectories
     p = ggplot()
     if (facet) {
       p = p + facet_wrap(cluster)
     }
+  } else {
+    # ribbon plot
+    p = ggplot()
+    if (facet) {
+      p = p + facet_wrap(cluster)
+    }
+
+    if (grepl('^[0-9]{1,2}pct$', trajectories)) {
+      # percentile range
+      pct = as.integer(substr(trajectories, 0, nchar(trajectories) - 3))
+      assert_that(
+        pct > 0,
+        msg = 'invalid plotClusterTrajectories() argument trajectories = "##pct": ## must be > 0'
+      )
+
+      ribbonFun = function(x) quantile(x, probs = .5 + c(-1, 1) * pct / 200, na.rm = TRUE)
+      ribbonTitle = sprintf('%dth percentile interval', pct)
+    } else {
+      trajectories = match.arg(
+        trajectories,
+        choices = c('sd', 'se', '80pct', '90pct', '95pct', 'range')
+      )
+
+      se = function(x) {
+        sd(x, na.rm = TRUE) / sqrt(sum(is.finite(x)))
+      }
+
+      ribbonFun = switch(trajectories,
+        sd = function(x) c(-1, 1) * sd(x, na.rm = TRUE) + mean(x, na.rm = TRUE),
+        se = function(x) c(-1, 1) * se(x) + mean(x, na.rm = TRUE),
+        range = function(x) range(x, na.rm = TRUE)
+      )
+
+      ribbonTitle = switch(trajectories,
+        sd = 'SD',
+        se = 'standard error',
+        range = 'range'
+      )
+    }
+
+    # compute ribbon
+    ribbonData = as.data.table(rawdata)[, as.list(ribbonFun(get(response))), keyby = c(cluster, time)]
+    assert_that(ncol(ribbonData) == 4, msg = 'ribbon stat implementation error\nplease report.')
+    setnames(ribbonData, c(cluster, time, 'ymin', 'ymax'))
+
+    p = p + geom_ribbon(
+      mapping = aes_string(x = time, ymin = 'ymin', ymax = 'ymax'),
+      data = ribbonData,
+      alpha = .5
+    ) + labs(subtitle = sprintf('Range represents %s of local trajectory observations', ribbonTitle))
   }
 
   if (facet) {

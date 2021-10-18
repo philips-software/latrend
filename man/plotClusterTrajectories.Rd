@@ -12,8 +12,8 @@
   cluster = "Cluster",
   time = getOption("latrend.time"),
   center = meanNA,
-  trajectories = FALSE,
-  facet = isTRUE(trajectories),
+  trajectories = c(FALSE, "sd", "se", "80pct", "90pct", "95pct", "range"),
+  facet = !isFALSE(as.logical(trajectories[1])),
   id = getOption("latrend.id"),
   ...
 )
@@ -25,7 +25,7 @@
   clusterLabels = sprintf("\%s (\%s)", clusterNames(object),
     percent(clusterProportions(object))),
   trajectories = FALSE,
-  facet = isTRUE(trajectories),
+  facet = !isFALSE(as.logical(trajectories[1])),
   trajAssignments = trajectoryAssignments(object),
   ...
 )
@@ -41,7 +41,11 @@
 
 \item{center}{A function for aggregating multiple points at the same point in time}
 
-\item{trajectories}{Whether to plot the original data in addition to the cluster (i.e., center) trajectories}
+\item{trajectories}{Whether to additionally plot the original trajectories (\code{TRUE}),
+or to show the expected interval (standard deviation, standard error, range, or percentile range) of the observations at the respective moment in time.
+
+Note that visualizing the expected intervals is currently only supported for time-aligned trajectories, as the interval is computed at each unique moment in time.
+By default (\code{FALSE}), no information on the underlying trajectories is shown.}
 
 \item{facet}{Whether to facet by cluster. This is done by default when \code{trajectories} is enabled.}
 
@@ -69,6 +73,21 @@ Plot the cluster trajectories of a lcModel
 data(latrendData)
 model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 plotClusterTrajectories(model)
+
+# show assigned trajectories
+plotClusterTrajectories(model, trajectories = TRUE)
+
+# show 95th percentile observation interval
+plotClusterTrajectories(model, trajectories = "95pct")
+
+# show observation standard deviation
+plotClusterTrajectories(model, trajectories = "sd")
+
+# show observation standard error
+plotClusterTrajectories(model, trajectories = "se")
+
+# show observation range
+plotClusterTrajectories(model, trajectories = "range")
 }
 \seealso{
 \link{clusterTrajectories} \link{plotFittedTrajectories} \link{plotTrajectories} \link{plot}
