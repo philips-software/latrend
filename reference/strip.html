@@ -175,7 +175,7 @@
 <span class='kw'>setMethod</span><span class='op'>(</span><span class='st'>"strip"</span>, <span class='st'>"lcModelExt"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span>, <span class='va'>classes</span> <span class='op'>=</span> <span class='st'>"formula"</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>object</span> <span class='op'>&lt;-</span> <span class='fu'>callNextMethod</span><span class='op'>(</span><span class='op'>)</span>
   <span class='co'># further process the object</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span> <span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
+  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
 <span class='op'>}</span><span class='op'>)</span>
 </pre>
 
@@ -187,7 +187,7 @@
 </div><div class='output co'>#&gt; Be patient, hlme is running ... 
 #&gt; The program took 0.07 seconds 
 #&gt; Be patient, hlme is running ... 
-#&gt; The program took 0.21 seconds </div><div class='input'><span class='fu'>strip</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+#&gt; The program took 0.23 seconds </div><div class='input'><span class='fu'>strip</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Longitudinal cluster model using growth mixture model
 #&gt; lcMethodLcmmGMM specifying "growth mixture model"
 #&gt;  fixed:          Y ~ Time

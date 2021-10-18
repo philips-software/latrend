@@ -168,7 +168,7 @@ The default implementation returns an updated object with all arguments having b
 <span class='kw'>setMethod</span><span class='op'>(</span><span class='st'>"compose"</span>, <span class='st'>"lcMethodExample"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>method</span>, <span class='va'>envir</span> <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>newMethod</span> <span class='op'>&lt;-</span> <span class='fu'>callNextMethod</span><span class='op'>(</span><span class='op'>)</span>
   <span class='co'># further processing</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span> <span class='op'>(</span><span class='va'>newMethod</span><span class='op'>)</span>
+  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>newMethod</span><span class='op'>)</span>
 <span class='op'>}</span><span class='op'>)</span>
 </pre>
 
