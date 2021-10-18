@@ -64,11 +64,12 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     is.function(center)
   )
 
-  cdata = as.data.table(object) %>%
+  clusTrajData = as.data.table(object) %>%
     .[, .(Value = center(get(response))), keyby = c(cluster, time)] %>%
     setnames('Value', response)
 
-  .plotClusterTrajs(cdata,
+  .plotClusterTrajs(
+    clusTrajData,
     response = response,
     time = time,
     cluster = cluster,
@@ -76,66 +77,64 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     facet = facet,
     id = id,
     rawdata = object,
-    ...)
+    ...
+  )
 })
 
 
-.plotClusterTrajs = function(data, response, time, cluster = 'Cluster', trajectories = FALSE, facet = FALSE, id, rawdata = NULL, ...) {
+.plotClusterTrajs = function(
+  data,
+  response,
+  time,
+  cluster = 'Cluster',
+  trajectories = FALSE,
+  facet = FALSE,
+  id,
+  rawdata = NULL,
+  ...
+) {
   assert_that(
     is.data.frame(data),
     has_name(data, response),
     has_name(data, time),
     has_name(data, cluster),
-    is.flag(trajectories) || is.list(trajectories),
+    is.flag(trajectories),
     is.flag(facet)
   )
 
-  if (is.factor(data[[cluster]])) {
-    nClus = nlevels(data[[cluster]])
-  } else {
-    nClus = uniqueN(data[[cluster]])
-  }
-
-  p = ggplot(
-    data = data,
-    mapping = aes_string(
-      x = time,
-      y = response)
-  )
-
-  if (isTRUE(trajectories) || is.list(trajectories)) {
+  if (isTRUE(trajectories)) {
     assert_that(
       is.data.frame(rawdata),
-      has_name(rawdata, id),
-      has_name(rawdata, time),
-      has_name(rawdata, response),
-      nrow(rawdata) > 0
+      nrow(rawdata) > 0,
+      !missing(id)
     )
 
-    cols = c(id, time, response)
+    p = plotTrajectories(
+      rawdata,
+      response = response,
+      time = time,
+      id = id,
+      facet = facet,
+      cluster = cluster,
+      ...
+    )
+  } else {
+    p = ggplot()
     if (facet) {
-      cols = c(cols, cluster)
+      p = p + facet_wrap(cluster)
     }
-
-    lineArgs = list(
-      data = subset(rawdata, select = cols),
-      mapping = aes_string(group = id),
-      color = 'black'
-    )
-
-    if (is.list(trajectories)) {
-      lineArgs = modifyList(lineArgs, trajectories)
-    }
-
-    p = p + do.call(geom_line, lineArgs)
   }
 
   if (facet) {
-    p = p + facet_wrap(~ Cluster)
+    p = p + guides(color = 'none')
   }
 
-  p = p + geom_line(aes_string(color = cluster), ...) +
-    labs(title = 'Cluster trajectories')
+  # add cluster trajectories to plot
+  p = p + geom_line(
+    mapping = aes_string(x = time, y = response, color = cluster),
+    data = data,
+    ...
+  ) + labs(title = 'Cluster trajectories')
 
   return(p)
 }
@@ -163,14 +162,16 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
 #' assignments = aggregate(Y ~ Id, latrendData, mean)$Y < 0
 #' plotTrajectories(latrendData,
 #'   response = "Y", id = "Id", time = "Time", cluster = assignments)
-setMethod('plotTrajectories', signature('data.frame'), function(
-  object,
-  response,
-  time = getOption('latrend.time'),
-  id = getOption('latrend.id'),
-  cluster = NULL,
-  facet = TRUE,
-  ...) {
+setMethod('plotTrajectories', signature('data.frame'),
+  function(
+    object,
+    response,
+    time = getOption('latrend.time'),
+    id = getOption('latrend.id'),
+    cluster = NULL,
+    facet = TRUE,
+    ...
+  ) {
 
   assert_that(
     !is.character(response) || has_name(object, response),
@@ -187,14 +188,14 @@ setMethod('plotTrajectories', signature('data.frame'), function(
   }
 
   if (!is.null(cluster) && !facet) {
-    map = aes_string(x = time, y = response, group = id, cluster = cluster, color = cluster)
+    map = aes_string(x = time, y = response, group = id, color = cluster)
   } else {
-    map = aes_string(x = time, y = response, group = id, cluster = cluster)
+    map = aes_string(x = time, y = response, group = id)
   }
 
-  p = ggplot(data = object, mapping = map) +
+  p = ggplot() +
     theme(legend.position = 'top') +
-    geom_line() +
+    geom_line(mapping = map, data = object) +
     labs(title = 'Trajectories')
 
   if (!is.null(cluster) && facet) {
