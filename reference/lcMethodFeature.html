@@ -187,6 +187,58 @@ Alternatively, <code>representationStep</code> is a pre-computed representation 
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="linear-regresion-amp-k-means-example"><a class="anchor" href="#linear-regresion-amp-k-means-example"></a>Linear regresion &amp; k-means example</h2>
+
+    
+
+<p>In this example we define a feature-based approach where each trajectory is represented using a linear regression model.
+The coefficients of the trajectories are then clustered using k-means.</p>
+<p>Note that this method is already implemented as <code><a href='lcMethodLMKM.html'>lcMethodLMKM()</a></code>.</p>
+<p>Representation step:</p><pre>
+repStep &lt;- function(method, data, verbose) {
+  library(data.table)
+  library(magrittr)
+  xdata = as.data.table(data)
+  coefdata &lt;- xdata[,
+    lm(method$formula, .SD) &lt;!-- %&gt;% coef() %&gt;% as.list(), --&gt;
+    keyby = c(method$id)
+  ]
+  # exclude the id column
+  coefmat &lt;- subset(coefdata, select = -1) &lt;!-- %&gt;% as.matrix() --&gt;
+  rownames(coefmat) &lt;- coefdata[[method$id]]
+  return(coefmat)
+}
+</pre>
+
+<p>Cluster step:</p><pre>
+<span class='va'>clusStep</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>method</span>, <span class='va'>data</span>, <span class='va'>repMat</span>, <span class='va'>envir</span>, <span class='va'>verbose</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>km</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/kmeans.html'>kmeans</a></span><span class='op'>(</span><span class='va'>repMat</span>, centers <span class='op'>=</span> <span class='va'>method</span><span class='op'>$</span><span class='va'>nClusters</span><span class='op'>)</span>
+
+  <span class='fu'><a href='lcModelCustom.html'>lcModelCustom</a></span><span class='op'>(</span>
+    response <span class='op'>=</span> <span class='va'>method</span><span class='op'>$</span><span class='va'>response</span>,
+    method <span class='op'>=</span> <span class='va'>method</span>,
+    data <span class='op'>=</span> <span class='va'>data</span>,
+    trajectoryAssignments <span class='op'>=</span> <span class='va'>km</span><span class='op'>$</span><span class='va'>cluster</span>,
+    clusterTrajectories <span class='op'>=</span> <span class='va'>method</span><span class='op'>$</span><span class='va'>center</span>,
+    model <span class='op'>=</span> <span class='va'>km</span>
+   <span class='op'>)</span>
+<span class='op'>}</span>
+</pre>
+
+<p>Now specify the method and fit the model:</p><pre>
+data(latrendData)
+method &lt;- lcMethodFeature(
+  formula = Y ~ Time,
+  response = "Y",
+  id = "Id",
+  time = "Time",
+  representationStep = repStep,
+  clusterStep = clusStep
+
+model &lt;- latrend(method, data = latrendData)
+)
+</pre>
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other lcMethod implementations: 
