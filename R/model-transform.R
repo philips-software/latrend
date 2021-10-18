@@ -61,7 +61,7 @@ setGeneric('transformFitted', function(pred, model, clusters = NULL) {
     )
   }
 
-  return (out)
+  return(out)
 })
 
 #' @rdname transformFitted
@@ -234,7 +234,7 @@ setGeneric('transformPredict', function(pred, model, newdata) {
     }
   }
 
-  return (out)
+  return(out)
 })
 
 #' @rdname transformPredict
@@ -329,7 +329,7 @@ setMethod('transformPredict', signature('data.frame', 'lcModel'), function(pred,
   newdata = as.data.table(newdata)
 
   if (nrow(newdata) == 0) {
-    return (as.data.table(pred)[0, ])
+    return(as.data.table(pred)[0, ])
   }
 
   # columns which are relevant to filtering predictions
@@ -425,7 +425,7 @@ Merging the data frames would result in data replication.',
 but newpred still has a Cluster column, indicating that merging of results has failed'
     )
 
-    return (as.data.frame(newpred))
+    return(as.data.frame(newpred))
   }
   else if (hasName(newpred, 'Cluster')) {
     # output predictions for each cluster

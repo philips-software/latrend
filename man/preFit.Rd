@@ -29,7 +29,7 @@ The work is added to the provided \code{environment}, allowing the \code{\link[=
 setMethod("preFit", "lcMethodExample", function(method, data, envir, verbose) {
   # update envir with additional computed work
   envir$x <- INTENSIVE_OPERATION
-  return (envir)
+  return(envir)
 })
 }
 }

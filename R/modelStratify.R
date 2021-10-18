@@ -20,7 +20,7 @@ setMethod('clusterTrajectories', signature('lcModelStratify'),
     clusTrajs[, Cluster := factor(Cluster,
                                   levels = seq_len(nClusters(object)),
                                   labels = clusterNames(object))]
-    return (clusTrajs[])
+    return(clusTrajs[])
   } else {
     callNextMethod()
   }

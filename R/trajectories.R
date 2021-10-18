@@ -202,7 +202,7 @@ setMethod('plotTrajectories', signature('data.frame'), function(
   if (!is.null(cluster) && facet) {
     p = p + facet_wrap(cluster)
   }
-  return (p)
+  return(p)
 })
 
 

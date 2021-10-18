@@ -84,7 +84,7 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
 
   # done
   ruler(verbose)
-  return (model)
+  return(model)
 }
 
 
@@ -477,7 +477,7 @@ latrendBatch = function(methods,
       verbose = verbose
     )
 
-    return (model)
+    return(model)
   }
 
   .exitTimed(fitTiming)
@@ -495,17 +495,17 @@ latrendBatch = function(methods,
       because %d method estimations produced an error',
       nError
     ))
-    return (models)
+    return(models)
   } else if (length(models) < nModels ) {
     # fewer models were obtained than expected
     nError = nModels - length(models)
     cat(verbose, sprintf('Done, but errors occurred in %d out of %d methods', nError, nModels))
     ruler(verbose)
-    return (as.lcModels(models))
+    return(as.lcModels(models))
   } else {
     # no errors
     ruler(verbose)
-    return (as.lcModels(models))
+    return(as.lcModels(models))
   }
 }
 
@@ -588,7 +588,7 @@ latrendBoot = function(method,
   )
   models = eval(cl, envir = parent.frame())
 
-  return (models)
+  return(models)
 }
 
 

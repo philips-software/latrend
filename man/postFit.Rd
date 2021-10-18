@@ -37,7 +37,7 @@ In this example, the \code{lcModelExample} class is assumed to be defined with a
 setMethod("postFit", "lcMethodExample", function(method, data, model, envir, verbose) {
   # compute and store the cluster centers
   model@centers <- INTENSIVE_COMPUTATION
-  return (model)
+  return(model)
 })
 }
 }

@@ -475,7 +475,7 @@ as.data.frame.lcMethod = function(x, ..., eval = TRUE, nullValue = NA, envir = N
 #' setMethod("compose", "lcMethodExample", function(method, envir = NULL) {
 #'   newMethod <- callNextMethod()
 #'   # further processing
-#'   return (newMethod)
+#'   return(newMethod)
 #' })
 #' }
 #' @seealso [evaluate.lcMethod]
@@ -802,7 +802,7 @@ setMethod('names', signature('lcMethod'), function(x) {
 #' setMethod("preFit", "lcMethodExample", function(method, data, envir, verbose) {
 #'   # update envir with additional computed work
 #'   envir$x <- INTENSIVE_OPERATION
-#'   return (envir)
+#'   return(envir)
 #' })
 #' }
 #' @inheritSection lcMethod-class Fitting procedure
@@ -834,7 +834,7 @@ setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose
 #'   # transform the data to matrix
 #'   envir$dataMat = dcastRepeatedMeasures(data,
 #'     id = idColumn, time = timeColumn, response = valueColumn)
-#'   return (envir)
+#'   return(envir)
 #' })
 #' }
 #' @inheritSection lcMethod-class Fitting procedure
@@ -864,7 +864,7 @@ setMethod('prepareData', signature('lcMethod'), function(method, data, verbose) 
 #' setMethod("postFit", "lcMethodExample", function(method, data, model, envir, verbose) {
 #'   # compute and store the cluster centers
 #'   model@centers <- INTENSIVE_COMPUTATION
-#'   return (model)
+#'   return(model)
 #' })
 #' }
 #' @inheritSection lcMethod-class Fitting procedure

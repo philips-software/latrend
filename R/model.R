@@ -81,11 +81,11 @@ setMethod('initialize', 'lcModel', function(.Object, ...) {
 
 
 setValidity('lcModel', function(object) {
-  return (TRUE)
+  return(TRUE)
 
   if (as.character(object@call[[1]]) == "<undef>") {
     # nothing to validate as lcModel is incomplete
-    return (TRUE)
+    return(TRUE)
   }
 
   assert_that(
@@ -100,7 +100,7 @@ setValidity('lcModel', function(object) {
     msg = 'invalid data object for new lcModel. Either specify the data slot or ensure that the model call contains a data argument which correctly evaluates.'
   )
   assert_that(has_name(data, c(object@id, object@time, object@response)))
-  return (TRUE)
+  return(TRUE)
 })
 
 
@@ -142,7 +142,7 @@ setMethod('clusterTrajectories', signature('lcModel'), function(object, at = tim
   )
   newdata[, c(responseVariable(object, what = what)) := dfPred$Fit]
 
-  return (newdata[])
+  return(newdata[])
 })
 
 
@@ -181,7 +181,7 @@ clusterNames = function(object, factor = FALSE) {
   )
 
   object@clusterNames = value
-  return (object)
+  return(object)
 }
 
 #' @export
@@ -436,13 +436,13 @@ setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, ob
       is.scalar(value) && (is.numeric(value) || is.logical(value)),
       msg = sprintf('invalid output for metric "%s"; expected scalar number or logical value', name)
     )
-    return (value)
+    return(value)
   }, metricFuns, name[funMask])
 
   allMetrics = rep(NA * 0, length(name))
   allMetrics[funMask] = unlist(metricValues)
   names(allMetrics) = name
-  return (allMetrics)
+  return(allMetrics)
 })
 
 
@@ -537,7 +537,7 @@ setMethod('fittedTrajectories', signature('lcModel'), function(object, at, what,
 
   if (is.null(preds)) {
     warning('fitted predictions not supported by the model: got NULL output')
-    return (NULL)
+    return(NULL)
   }
 
   assert_that(is.data.frame(preds))
@@ -546,7 +546,7 @@ setMethod('fittedTrajectories', signature('lcModel'), function(object, at, what,
     msg = 'invalid output from predict function of lcModel; expected a prediction per newdata row'
   )
   newdata[, c(responseVariable(object, what = what)) := preds$Fit]
-  return (newdata[])
+  return(newdata[])
 })
 
 
@@ -771,13 +771,13 @@ setMethod('metric', signature('lcModel'), function(object, name, ...) {
         name
       )
     )
-    return (value)
+    return(value)
   }, metricFuns, name[funMask])
 
   allMetrics = rep(NA * 0, length(name))
   allMetrics[funMask] = unlist(metricValues)
   names(allMetrics) = name
-  return (allMetrics)
+  return(allMetrics)
 })
 
 
@@ -838,7 +838,7 @@ model.data.lcModel = function(object, ...) {
   if (!is.null(object@data)) {
     object@data
     assert_that(is.data.frame(object@data), msg = 'expected data reference to be a data.frame')
-    return (object@data)
+    return(object@data)
   } else if (has_name(getCall(object), 'data')) {
     data = eval(getCall(object)$data, envir = environment(object))
     assert_that(!is.null(data),
@@ -854,10 +854,10 @@ model.data.lcModel = function(object, ...) {
     )
 
     assert_that(is.data.frame(modelData), msg = 'expected data reference to be a data.frame')
-    return (modelData)
+    return(modelData)
   } else {
     warning('Cannot determine data used to train this lcModel. Data not part of model call, and not assigned to the @data slot. Returning NULL.')
-    return (NULL)
+    return(NULL)
   }
 }
 
@@ -919,7 +919,7 @@ nobs.lcModel = function(object, ...) {
   })
 
   if (is.null(data)) {
-    return (0L)
+    return(0L)
   } else {
     nrow(model.data(object))
   }
@@ -1229,7 +1229,7 @@ setMethod('predictAssignments', signature('lcModel'), function(
 setMethod('plot', signature('lcModel'), function(x, y, ...) {
   args = list(...)
 
-  if(!has_name(args, 'trajectories')) {
+  if (!has_name(args, 'trajectories')) {
     args$trajectories = !has_name(args, 'what')
   }
 
@@ -1422,7 +1422,7 @@ setMethod('qqPlot', signature('lcModel'), function(object, byCluster = FALSE, ..
     p = p + facet_wrap(~ Cluster)
   }
 
-  return (p)
+  return(p)
 })
 
 
@@ -1453,7 +1453,7 @@ residuals.lcModel = function(object, ..., clusters = trajectoryAssignments(objec
     assert_that(length(yref) == length(ypred))
     yref - ypred
   } else {
-    return (NULL)
+    return(NULL)
   }
 }
 
@@ -1545,7 +1545,7 @@ sigma.lcModel = function(object, ...) {
 #' setMethod("strip", "lcModelExt", function(object, ..., classes = "formula") {
 #'   object <- callNextMethod()
 #'   # further process the object
-#'   return (object)
+#'   return(object)
 #' })
 #' }
 #' @examples
@@ -1560,7 +1560,7 @@ setMethod('strip', signature('lcModel'), function(object, ..., classes = 'formul
   newObject@method = strip(object@method, ..., classes = classes)
   newObject@call = strip(object@call, ..., classes = classes)
 
-  return (newObject)
+  return(newObject)
 })
 
 
@@ -1653,7 +1653,7 @@ setMethod('trajectories', signature('lcModel'), function(object, ...) {
 #' trajectoryAssignments(model, strategy = which.weight)
 setMethod('trajectoryAssignments', signature('lcModel'), function(object, strategy = which.max, ...) {
   if (suppressWarnings(nIds(object)) == 0) {
-    return (factor(levels = 1:nClusters(object), labels = clusterNames(object)))
+    return(factor(levels = 1:nClusters(object), labels = clusterNames(object)))
   }
 
   pp = postprob(object, ...)

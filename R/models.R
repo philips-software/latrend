@@ -340,7 +340,7 @@ max.lcModels = function(x, name, ...) {
 setMethod('plot', signature('lcModels'), function(x, y, ..., subset, gridArgs = list()) {
   if (length(x) == 0) {
     warning('Cannot plot empty list of models')
-    return (invisible(FALSE))
+    return(invisible(FALSE))
   }
 
   if (!missing(subset)) {
@@ -349,7 +349,7 @@ setMethod('plot', signature('lcModels'), function(x, y, ..., subset, gridArgs = 
 
     if (length(x) == 0) {
       warning('Subsetting resulted in 0 models selected for plotting')
-      return (invisible(FALSE))
+      return(invisible(FALSE))
     }
   }
 
