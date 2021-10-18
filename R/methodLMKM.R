@@ -78,9 +78,11 @@ setMethod('prepareData', signature('lcMethodLMKM'), function(method, data, verbo
 #' @rdname interface-featureBased
 setMethod('fit', signature('lcMethodLMKM'), function(method, data, envir, verbose, ...) {
   cat(verbose, 'Cluster step...')
-  km = kmeans(envir$x,
-              centers = method$nClusters,
-              trace = canShow(verbose, 'fine'))
+  km = kmeans(
+    envir$x,
+    centers = method$nClusters,
+    trace = canShow(verbose, 'fine')
+  )
 
   new(
     'lcModelLMKM',
@@ -88,6 +90,7 @@ setMethod('fit', signature('lcMethodLMKM'), function(method, data, envir, verbos
     data = data,
     model = km,
     coefNames = colnames(envir$x),
+    trajCoefs = envir$x,
     clusterNames = make.clusterNames(method$nClusters)
   )
 })

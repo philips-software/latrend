@@ -30,6 +30,7 @@
 \alias{getShortName,lcModelFeature-method}
 \alias{predictForCluster,lcModelLMKM-method}
 \alias{coef.lcModelLMKM}
+\alias{logLik.lcModelLMKM}
 \alias{converged,lcModelLMKM-method}
 \alias{postprob,lcModelLMKM-method}
 \title{featureBased interface}
@@ -87,6 +88,8 @@
 \S4method{predictForCluster}{lcModelLMKM}(object, newdata, cluster, what = "mu", ...)
 
 \method{coef}{lcModelLMKM}(object, ..., cluster = NULL)
+
+\method{logLik}{lcModelLMKM}(object, ...)
 
 \S4method{converged}{lcModelLMKM}(object, ...)
 

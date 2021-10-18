@@ -186,10 +186,12 @@ standardizeTrajectoryCoefMatrix = function(x, fun) {
 
   if (is.function(fun)) {
     newx = fun(x)
-    assert_that(is.matrix(newx),
-                nrow(newx) == nrow(x),
-                ncol(newx) == ncol(x),
-                msg = 'standardize function changed dimensions of the input matrix')
+    assert_that(
+      is.matrix(newx),
+      nrow(newx) == nrow(x),
+      ncol(newx) == ncol(x),
+      msg = 'standardize function changed dimensions of the input matrix'
+    )
     return(newx)
   } else if (isTRUE(fun)) {
     scale(x)

@@ -1,5 +1,5 @@
 #' @include model.R
-setClass('lcModelLMKM', representation(coefNames = 'character'), contains = 'lcModel')
+setClass('lcModelLMKM', representation(coefNames = 'character', trajCoefs = 'matrix'), contains = 'lcModel')
 
 
 #. predictForCluster ####
@@ -54,10 +54,33 @@ coef.lcModelLMKM = function(object, ..., cluster = NULL) {
   if (is.null(cluster)) {
     return(coefmat)
   } else {
-    assert_that(is.count(cluster) ||
-                  is.character(cluster) && cluster %in% clusterNames(object))
+    assert_that(
+      is.count(cluster) || is.character(cluster) && cluster %in% clusterNames(object)
+    )
     coefmat[, cluster, drop = FALSE]
   }
+}
+
+
+#' @export
+#' @rdname interface-featureBased
+logLik.lcModelLMKM = function(object, ...) {
+  assert_that(ncol(coef(object)) == nClusters(object))
+  assert_that(noNA(object@trajCoefs))
+
+  muMat = t(coef(object))
+
+  # subtract respective cluster center from the trajectory coefficients
+  coefDiffMat = object@trajCoefs - muMat[trajectoryAssignments(object), ]
+
+  # compute density across trajectory, per coefficient
+  ll_coef = apply(coefDiffMat, 2, function(x) sum(dnorm(x, sd = sd(x), log = TRUE)))
+  ll = sum(ll_coef)
+
+  attr(ll, 'nobs') = nIds(object)
+  attr(ll, 'df') = nClusters(object) * ncol(object@model$centers)
+  class(ll) = 'logLik'
+  return(ll)
 }
 
 
