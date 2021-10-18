@@ -134,12 +134,14 @@ The `lcModelCustom` function creates a `lcModel` object for a given vector of cl
 clusStep <- function(method, data, repMat, envir, verbose) {
   km <- kmeans(repMat, centers = 3)
 
-  lcModelCustom(response = method$response, 
-                method = method,
-                data = data, 
-                trajectoryAssignments = km$cluster,
-                clusterTrajectories = method$center,
-                model = km)
+  lcModelCustom(
+    response = method$response, 
+    method = method,
+    data = data, 
+    trajectoryAssignments = km$cluster,
+    clusterTrajectories = method$center,
+    model = km
+  )
 }
 ```
 
@@ -171,20 +173,24 @@ repStep.gen <- function(method, data, verbose) {
 clusStep.gen <- function(method, data, repMat, envir, verbose) {
   km <- kmeans(repMat, centers = method$nClusters)
 
-  lcModelCustom(response = "Y",
+  lcModelCustom(
+    response = method$response,
     method = method,
     data = data, 
     trajectoryAssignments = km$cluster,
     clusterTrajectories = method$center,
-    model = km)
+    model = km
+  )
 }
 ```
 
 We create a new `lcMethodFeature` instance with the more generic functions. Defining values for `formula` and `nClusters` here makes these arguments values act as default values in a call of `latrend`.
 ```{r}
-m.twostepgen <- lcMethodFeature(response = "Y",
+m.twostepgen <- lcMethodFeature(
+  response = "Y",
   representationStep = repStep.gen, 
-  clusterStep = clusStep.gen)
+  clusterStep = clusStep.gen
+)
 ```
 
 However, because we omitted the specification of `formula` and `nClusters`, these need to be provided in the `latrend` call.
@@ -261,11 +267,13 @@ setMethod("fit", "lcMethodSimpleGBTM", function(method, data, envir, verbose, ..
   
   model <- do.call(lcmm::lcmm, args)
   
-  new("lcModelSimpleGBTM", 
-      method = method,
-      data = data,
-      model = model,
-      clusterNames = LETTERS[seq_len(method$nClusters)])
+  new(
+    "lcModelSimpleGBTM", 
+    method = method,
+    data = data,
+    model = model,
+    clusterNames = LETTERS[seq_len(method$nClusters)]
+  )
 })
 ```
 
