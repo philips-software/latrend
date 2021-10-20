@@ -85,7 +85,7 @@ setGeneric('clusterTrajectories', function(object, ...) {
     )
   }
 
-  return(dfclus)
+  as.data.frame(clusTrajs)
 })
 
 
@@ -628,7 +628,7 @@ setGeneric('trajectories', function(object, ...) {
     ncol(data) > 2
   )
 
-  return(data)
+  as.data.frame(data)
 })
 
 
