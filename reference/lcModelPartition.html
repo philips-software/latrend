@@ -145,11 +145,11 @@ As such, this model has no predictive capabilities. The cluster trajectories are
   <span class='va'>response</span>,
   <span class='va'>trajectoryAssignments</span>,
   nClusters <span class='op'>=</span> <span class='cn'>NA</span>,
-  center <span class='op'>=</span> <span class='va'>meanNA</span>,
   clusterNames <span class='op'>=</span> <span class='cn'>NULL</span>,
   time <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"latrend.time"</span><span class='op'>)</span>,
   id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"latrend.id"</span><span class='op'>)</span>,
   name <span class='op'>=</span> <span class='st'>"part"</span>,
+  center <span class='op'>=</span> <span class='va'>meanNA</span>,
   envir <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
@@ -176,10 +176,6 @@ Provide a <code>factor</code> id column for the input data to ensure that the or
       <td><p>The number of clusters. Should be <code>NA</code> for trajectory assignments of type <code>factor</code>.</p></td>
     </tr>
     <tr>
-      <th>center</th>
-      <td><p>The <code>function</code> for computing the longitudinal cluster centers, used for representing the cluster trajectories.</p></td>
-    </tr>
-    <tr>
       <th>clusterNames</th>
       <td><p>The names of the clusters, or a function with input <code>n</code> outputting a <code>character vector</code> of names.
 If unspecified, the names are determined from the <code>trajectoryAssignments</code> argument.</p></td>
@@ -195,6 +191,10 @@ If unspecified, the names are determined from the <code>trajectoryAssignments</c
     <tr>
       <th>name</th>
       <td><p>The name of the method.</p></td>
+    </tr>
+    <tr>
+      <th>center</th>
+      <td><p>The <code>function</code> for computing the longitudinal cluster centers, used for representing the cluster trajectories.</p></td>
     </tr>
     <tr>
       <th>envir</th>

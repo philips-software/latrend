@@ -143,6 +143,7 @@
   time <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"latrend.time"</span><span class='op'>)</span>,
   id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"latrend.id"</span><span class='op'>)</span>,
   nClusters <span class='op'>=</span> <span class='fl'>2</span>,
+  center <span class='op'>=</span> <span class='va'>meanNA</span>,
   standardize <span class='op'>=</span> <span class='va'>scale</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
@@ -165,6 +166,11 @@
     <tr>
       <th>nClusters</th>
       <td><p>The number of clusters to estimate.</p></td>
+    </tr>
+    <tr>
+      <th>center</th>
+      <td><p>A  <code>function</code> that computes the cluster center based on the original trajectories associated with the respective cluster.
+By default, the mean is computed.</p></td>
     </tr>
     <tr>
       <th>standardize</th>

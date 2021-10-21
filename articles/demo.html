@@ -91,7 +91,7 @@
       <h1 data-toc-skip>Demonstration of latrend package</h1>
                         <h4 class="author">Niek Den Teuling</h4>
             
-            <h4 class="date">2021-10-19</h4>
+            <h4 class="date">2021-10-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/master/vignettes/demo.Rmd"><code>vignettes/demo.Rmd</code></a></small>
       <div class="hidden name"><code>demo.Rmd</code></div>
@@ -247,7 +247,7 @@ Elbow plots of three relevant cluster metrics across the fitted models.
 <a href="#investigating-the-preferred-model" class="anchor"></a>Investigating the preferred model</h2>
 <p>We have selected the 4-cluster model as the preferred representation. We will now inspect this solution in more detail. Before we can start, we first obtain the fitted <code>lcModel</code> object from the list of fitted models.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">kmlModel4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">kmlModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">4</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">kmlModel4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html">subset</a></span><span class="op">(</span><span class="va">kmlModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">4</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="va">kmlModel4</span>
 <span class="co">#&gt; Longitudinal cluster model using longitudinal k-means (KML)</span>
@@ -377,7 +377,7 @@ Three cluster metrics for each of the GBTMs.
 </div>
 <p>All metrics clearly point to the 3-cluster solution.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bestGbtmModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">gbtmModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">3</span>, drop<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">bestGbtmModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html">subset</a></span><span class="op">(</span><span class="va">gbtmModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">3</span>, drop<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">bestGbtmModel</span><span class="op">)</span></code></pre></div>
 <p><img src="demo_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
@@ -422,7 +422,7 @@ Three cluster metrics for each of the GMMs.
 </div>
 <p>Similar to the GBTM analysis, the metrics clearly point to the 3-cluster solution.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bestGmmModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">gmmModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">3</span>, drop<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">bestGmmModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html">subset</a></span><span class="op">(</span><span class="va">gmmModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">3</span>, drop<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">bestGmmModel</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Two-step clustering through linear mixed modeling and k-means — lcMethodGCKM • latrend</title>
+<title>Two-step clustering through latent growth curve modeling and k-means — lcMethodGCKM • latrend</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Two-step clustering through linear mixed modeling and k-means — lcMethodGCKM" />
-<meta property="og:description" content="Two-step clustering through linear mixed modeling and k-means." />
+<meta property="og:title" content="Two-step clustering through latent growth curve modeling and k-means — lcMethodGCKM" />
+<meta property="og:description" content="Two-step clustering through latent growth curve modeling and k-means." />
 
 
 
@@ -129,13 +129,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Two-step clustering through linear mixed modeling and k-means</h1>
+    <h1>Two-step clustering through latent growth curve modeling and k-means</h1>
     <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/methodGCKM.R'><code>R/methodGCKM.R</code></a></small>
     <div class="hidden name"><code>lcMethodGCKM.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Two-step clustering through linear mixed modeling and k-means.</p>
+    <p>Two-step clustering through latent growth curve modeling and k-means.</p>
     </div>
 
     <pre class="usage"><span class='fu'>lcMethodGCKM</span><span class='op'>(</span>
@@ -144,6 +144,7 @@
   id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"latrend.id"</span><span class='op'>)</span>,
   nClusters <span class='op'>=</span> <span class='fl'>2</span>,
   center <span class='op'>=</span> <span class='va'>meanNA</span>,
+  standardize <span class='op'>=</span> <span class='va'>scale</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -168,7 +169,12 @@
     </tr>
     <tr>
       <th>center</th>
-      <td><p>Optional <code>function</code> for computing the longitudinal cluster centers, with signature <code>(x)</code>.</p></td>
+      <td><p>A  <code>function</code> that computes the cluster center based on the original trajectories associated with the respective cluster.
+By default, the mean is computed.</p></td>
+    </tr>
+    <tr>
+      <th>standardize</th>
+      <td><p>A <code>function</code> to standardize the output <code>matrix</code> of the representation step. By default, the output is shifted and rescaled to ensure zero mean and unit variance.</p></td>
     </tr>
     <tr>
       <th>...</th>

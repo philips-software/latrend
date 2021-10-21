@@ -144,7 +144,7 @@ functions with signatures of <code>lcMethod</code> or <code>lcModel</code>.</p>
 
     <pre class="usage"><span class='fu'><a href='clusterProportions.html'>clusterProportions</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'><a href='clusterTrajectories.html'>clusterTrajectories</a></span><span class='op'>(</span><span class='va'>object</span>, at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/time.html'>time</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'><a href='clusterTrajectories.html'>clusterTrajectories</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='fu'><a href='compose.html'>compose</a></span><span class='op'>(</span><span class='va'>method</span>, <span class='va'>envir</span>, <span class='va'>...</span><span class='op'>)</span>
 
@@ -235,10 +235,6 @@ functions with signatures of <code>lcMethod</code> or <code>lcModel</code>.</p>
       <td><p>Arguments.</p></td>
     </tr>
     <tr>
-      <th>at</th>
-      <td><p>A vector of times at which to compute the cluster trajectories.</p></td>
-    </tr>
-    <tr>
       <th>method</th>
       <td><p>The method.</p></td>
     </tr>
@@ -265,6 +261,10 @@ functions with signatures of <code>lcMethod</code> or <code>lcModel</code>.</p>
     <tr>
       <th>verbose</th>
       <td><p><a href='https://rdrr.io/pkg/R.utils/man/Verbose.html'>R.utils::Verbose</a>.</p></td>
+    </tr>
+    <tr>
+      <th>at</th>
+      <td><p>A vector of times at which to compute the cluster trajectories.</p></td>
     </tr>
     <tr>
       <th>what</th>

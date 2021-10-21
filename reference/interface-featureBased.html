@@ -130,7 +130,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>featureBased interface</h1>
-    <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/methodFeature.R'><code>R/methodFeature.R</code></a>, <a href='https://github.com/philips-software/latrend/blob/master/R/methodGCKM.R'><code>R/methodGCKM.R</code></a>, <a href='https://github.com/philips-software/latrend/blob/master/R/methodLMKM.R'><code>R/methodLMKM.R</code></a>, and 3 more</small>
+    <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/methodFeature.R'><code>R/methodFeature.R</code></a>, <a href='https://github.com/philips-software/latrend/blob/master/R/methodLMKM.R'><code>R/methodLMKM.R</code></a>, <a href='https://github.com/philips-software/latrend/blob/master/R/methodGCKM.R'><code>R/methodGCKM.R</code></a>, and 3 more</small>
     <div class="hidden name"><code>interface-featureBased.Rd</code></div>
     </div>
 
@@ -153,27 +153,6 @@
 <span class='co'># S4 method for lcMethodFeature</span>
 <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>method</span>, <span class='va'>data</span>, <span class='va'>envir</span>, <span class='va'>verbose</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='co'># S4 method for lcMethodGCKM</span>
-<span class='fu'><a href='getArgumentDefaults.html'>getArgumentDefaults</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcMethodGCKM</span>
-<span class='fu'><a href='getArgumentExclusions.html'>getArgumentExclusions</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcMethodGCKM</span>
-<span class='fu'><a href='getName.html'>getName</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcMethodGCKM</span>
-<span class='fu'><a href='getName.html'>getShortName</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcMethodGCKM</span>
-<span class='fu'><a href='compose.html'>compose</a></span><span class='op'>(</span><span class='va'>method</span>, envir <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcMethodGCKM</span>
-<span class='fu'><a href='preFit.html'>preFit</a></span><span class='op'>(</span><span class='va'>method</span>, <span class='va'>data</span>, <span class='va'>envir</span>, <span class='va'>verbose</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcMethodGCKM</span>
-<span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>method</span>, <span class='va'>data</span>, <span class='va'>envir</span>, <span class='va'>verbose</span>, <span class='va'>...</span><span class='op'>)</span>
-
 <span class='co'># S4 method for lcMethodLMKM</span>
 <span class='fu'><a href='getArgumentDefaults.html'>getArgumentDefaults</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
 
@@ -191,6 +170,21 @@
 
 <span class='co'># S4 method for lcMethodLMKM</span>
 <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>method</span>, <span class='va'>data</span>, <span class='va'>envir</span>, <span class='va'>verbose</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S4 method for lcMethodGCKM</span>
+<span class='fu'><a href='getArgumentDefaults.html'>getArgumentDefaults</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
+
+<span class='co'># S4 method for lcMethodGCKM</span>
+<span class='fu'><a href='getArgumentExclusions.html'>getArgumentExclusions</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
+
+<span class='co'># S4 method for lcMethodGCKM</span>
+<span class='fu'><a href='getName.html'>getName</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
+
+<span class='co'># S4 method for lcMethodGCKM</span>
+<span class='fu'><a href='getName.html'>getShortName</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
+
+<span class='co'># S4 method for lcMethodGCKM</span>
+<span class='fu'><a href='prepareData.html'>prepareData</a></span><span class='op'>(</span><span class='va'>method</span>, <span class='va'>data</span>, <span class='va'>verbose</span><span class='op'>)</span>
 
 <span class='co'># S4 method for lcMethodStratify</span>
 <span class='fu'><a href='getArgumentDefaults.html'>getArgumentDefaults</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
@@ -212,9 +206,6 @@
 
 <span class='co'># S4 method for lcModelFeature</span>
 <span class='fu'><a href='getName.html'>getShortName</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcModelLMKM</span>
-<span class='fu'><a href='predictForCluster.html'>predictForCluster</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>newdata</span>, <span class='va'>cluster</span>, what <span class='op'>=</span> <span class='st'>"mu"</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for lcModelLMKM</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span>, cluster <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
@@ -249,41 +240,15 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Arguments passed on to <code><a href='https://rdrr.io/r/stats/predict.lm.html'>stats::predict.lm</a></code></p><dl>
-    <dt><code>se.fit</code></dt><dd><p>A switch indicating if standard errors are required.</p></dd>
-    <dt><code>scale</code></dt><dd><p>Scale parameter for std.err. calculation.</p></dd>
-    <dt><code>df</code></dt><dd><p>Degrees of freedom for scale.</p></dd>
-    <dt><code>interval</code></dt><dd><p>Type of interval calculation.  Can be abbreviated.</p></dd>
-    <dt><code>level</code></dt><dd><p>Tolerance/confidence level.</p></dd>
-    <dt><code>type</code></dt><dd><p>Type of prediction (response or model term).  Can be abbreviated.</p></dd>
-    <dt><code>terms</code></dt><dd><p>If <code>type = "terms"</code>, which terms (default is all
-    terms), a <code><a href='https://rdrr.io/r/base/character.html'>character</a></code> vector.</p></dd>
-    <dt><code>na.action</code></dt><dd><p>function determining what should be done with missing
-    values in <code>newdata</code>.  The default is to predict <code>NA</code>.</p></dd>
-    <dt><code>pred.var</code></dt><dd><p>the variance(s) for future observations to be assumed
-    for prediction intervals.  See &#8216;Details&#8217;.</p></dd>
-    <dt><code>weights</code></dt><dd><p>variance weights for prediction.  This can be a numeric
-    vector or a one-sided model formula.  In the latter case, it is
-    interpreted as an expression evaluated in <code>newdata</code>.</p></dd>
-  
-</dl></td>
+      <td><p>Additional arguments.</p></td>
     </tr>
     <tr>
       <th>envir</th>
       <td><p>The <code>environment</code> containing variables generated by <code><a href='prepareData.html'>prepareData()</a></code> and <code><a href='preFit.html'>preFit()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>newdata</th>
-      <td><p>Optional <code>data.frame</code> for which to compute the model predictions. If omitted, the model training data is used.
-Cluster trajectory predictions are made when ids are not specified.</p></td>
-    </tr>
-    <tr>
       <th>cluster</th>
       <td><p>The cluster name.</p></td>
-    </tr>
-    <tr>
-      <th>what</th>
-      <td><p>The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying <code>what = 'mb'</code>.</p></td>
     </tr>
     </table>
 

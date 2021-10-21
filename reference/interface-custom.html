@@ -130,7 +130,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>custom interface</h1>
-    <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/methodCustom.R'><code>R/methodCustom.R</code></a>, <a href='https://github.com/philips-software/latrend/blob/master/R/modelCustom.R'><code>R/modelCustom.R</code></a>, <a href='https://github.com/philips-software/latrend/blob/master/R/methodRandom.R'><code>R/methodRandom.R</code></a>, and 2 more</small>
+    <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/methodCustom.R'><code>R/methodCustom.R</code></a>, <a href='https://github.com/philips-software/latrend/blob/master/R/modelCustom.R'><code>R/modelCustom.R</code></a>, <a href='https://github.com/philips-software/latrend/blob/master/R/methodRandom.R'><code>R/methodRandom.R</code></a>, and 3 more</small>
     <div class="hidden name"><code>interface-custom.Rd</code></div>
     </div>
 
@@ -196,7 +196,13 @@
 <span class='fu'><a href='fit.html'>fit</a></span><span class='op'>(</span><span class='va'>method</span>, <span class='va'>data</span>, <span class='va'>envir</span>, <span class='va'>verbose</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S4 method for lcModelPartition</span>
-<span class='fu'><a href='clusterTrajectories.html'>clusterTrajectories</a></span><span class='op'>(</span><span class='va'>object</span>, at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/time.html'>time</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'><a href='clusterTrajectories.html'>clusterTrajectories</a></span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/time.html'>time</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>,
+  center <span class='op'>=</span> <span class='va'>object</span><span class='op'>@</span><span class='va'>center</span>,
+  approxFun <span class='op'>=</span> <span class='va'>approx</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
 <span class='co'># S4 method for lcModelPartition</span>
 <span class='fu'><a href='converged.html'>converged</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -211,16 +217,31 @@
 <span class='fu'><a href='postprob.html'>postprob</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S4 method for lcModelStratify</span>
-<span class='fu'><a href='clusterTrajectories.html'>clusterTrajectories</a></span><span class='op'>(</span><span class='va'>object</span>, at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/time.html'>time</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcModelStratify</span>
 <span class='fu'><a href='converged.html'>converged</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S4 method for lcModelStratify</span>
-<span class='fu'><a href='postprob.html'>postprob</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'><a href='predictPostprob.html'>predictPostprob</a></span><span class='op'>(</span><span class='va'>object</span>, newdata <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='co'># S4 method for lcModelStratify</span>
-<span class='fu'><a href='predictPostprob.html'>predictPostprob</a></span><span class='op'>(</span><span class='va'>object</span>, newdata <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='co'># S4 method for lcModelWeightedPartition</span>
+<span class='fu'><a href='clusterTrajectories.html'>clusterTrajectories</a></span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/time.html'>time</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>,
+  center <span class='op'>=</span> <span class='va'>weighted.meanNA</span>,
+  approxFun <span class='op'>=</span> <span class='va'>approx</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='co'># S4 method for lcModelWeightedPartition</span>
+<span class='fu'><a href='converged.html'>converged</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S4 method for lcModelWeightedPartition</span>
+<span class='fu'><a href='getName.html'>getName</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S4 method for lcModelWeightedPartition</span>
+<span class='fu'><a href='getName.html'>getShortName</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S4 method for lcModelWeightedPartition</span>
+<span class='fu'><a href='postprob.html'>postprob</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -260,6 +281,10 @@
     <tr>
       <th>at</th>
       <td><p>An optional vector of the times at which to compute the cluster trajectory predictions.</p></td>
+    </tr>
+    <tr>
+      <th>center</th>
+      <td><p>The function to use to compute the cluster trajectory center at the respective moment in time.</p></td>
     </tr>
     </table>
 
