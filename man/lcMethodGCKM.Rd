@@ -10,6 +10,7 @@ lcMethodGCKM(
   id = getOption("latrend.id"),
   nClusters = 2,
   center = meanNA,
+  standardize = scale,
   ...
 )
 }
@@ -24,6 +25,8 @@ lcMethodGCKM(
 
 \item{center}{A  \code{function} that computes the cluster center based on the original trajectories associated with the respective cluster.
 By default, the mean is computed.}
+
+\item{standardize}{A \code{function} to standardize the output \code{matrix} of the representation step. By default, the output is shifted and rescaled to ensure zero mean and unit variance.}
 
 \item{...}{Arguments passed to \link[lme4:lmer]{lme4::lmer}.
 The following external arguments are ignored: data, centers, trace.}

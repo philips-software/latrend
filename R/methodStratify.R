@@ -174,6 +174,7 @@ setMethod('fit', signature('lcMethodStratify'), function(method, data, envir, ve
     data = data,
     id = id,
     time = timeVariable(method),
+    center = method$center,
     response = responseVariable(method),
     clusterNames = clusNames,
     trajectoryClusterIndices = intAssignments,

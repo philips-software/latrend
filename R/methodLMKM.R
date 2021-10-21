@@ -56,10 +56,10 @@ setMethod('getArgumentExclusions', signature('lcMethodLMKM'), function(object) {
 })
 
 #' @rdname interface-featureBased
-setMethod('getName', signature('lcMethodLMKM'), function(object) 'glm-kmeans')
+setMethod('getName', signature('lcMethodLMKM'), function(object) 'lm-kmeans')
 
 #' @rdname interface-featureBased
-setMethod('getShortName', signature('lcMethodLMKM'), function(object) 'glmkm')
+setMethod('getShortName', signature('lcMethodLMKM'), function(object) 'lmkm')
 
 #' @rdname interface-featureBased
 setMethod('prepareData', signature('lcMethodLMKM'), function(method, data, verbose) {
@@ -92,7 +92,8 @@ setMethod('fit', signature('lcMethodLMKM'), function(method, data, envir, verbos
     method = method,
     data = data,
     model = km,
-    name = 'gckm',
+    center = method$center,
+    name = 'lmkm',
     coefNames = colnames(envir$x),
     trajectoryCoefs = envir$x,
     clusterNames = make.clusterNames(method$nClusters)

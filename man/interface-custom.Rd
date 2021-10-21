@@ -78,7 +78,7 @@
 \S4method{clusterTrajectories}{lcModelPartition}(
   object,
   at = time(object),
-  center = meanNA,
+  center = object@center,
   approxFun = approx,
   ...
 )

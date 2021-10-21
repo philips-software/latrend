@@ -23,6 +23,7 @@ lcMethodGCKM = function(
   id = getOption('latrend.id'),
   nClusters = 2,
   center = meanNA,
+  standardize = scale,
   ...
 ) {
   mc = match.call.all()

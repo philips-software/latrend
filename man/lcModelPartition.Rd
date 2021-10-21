@@ -13,6 +13,7 @@ lcModelPartition(
   time = getOption("latrend.time"),
   id = getOption("latrend.id"),
   name = "part",
+  center = meanNA,
   envir = parent.frame()
 )
 }
@@ -36,6 +37,8 @@ If unspecified, the names are determined from the \code{trajectoryAssignments} a
 \item{id}{The name of the trajectory identification variable.}
 
 \item{name}{The name of the method.}
+
+\item{center}{The \code{function} for computing the longitudinal cluster centers, used for representing the cluster trajectories.}
 
 \item{envir}{The \code{environment} associated with the model. Used for evaluating the assigned \code{data} object by \link{model.data.lcModel}.}
 }

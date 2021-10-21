@@ -3,6 +3,7 @@ setClass(
   'lcModelPartition',
   representation(
     name = 'character',
+    center = 'function',
     trajectoryClusterIndices = 'integer'
   ),
   contains = 'lcApproxModel'
@@ -40,6 +41,7 @@ lcModelPartition = function(
   time = getOption('latrend.time'),
   id = getOption('latrend.id'),
   name = 'part',
+  center = meanNA,
   envir = parent.frame()
 ) {
   assert_that(
@@ -145,6 +147,7 @@ lcModelPartition = function(
     data = data,
     name = name,
     clusterNames = clusterNames,
+    center = center,
     trajectoryClusterIndices = intAssignments,
     id = id,
     time = time,
@@ -162,14 +165,23 @@ setMethod('clusterTrajectories', 'lcModelPartition',
   function(
     object,
     at = time(object),
-    center = meanNA,
+    center = object@center,
     approxFun = approx,
     ...
   ) {
-
   if (length(at) > 0) {
     return(callNextMethod())
   }
+
+  if (is.null(center)) {
+    center = meanNA
+  }
+
+  assert_that(
+    is.function(center),
+    length(formalArgs(center)) > 0,
+    msg = 'center argument must be a function accepting an input vector'
+  )
 
   data = as.data.table(model.data(object))
   response = responseVariable(object)
