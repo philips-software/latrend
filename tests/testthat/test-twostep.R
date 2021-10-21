@@ -22,3 +22,15 @@ test_that('gckm', {
   model = expect_silent(latrend(method, testLongData))
   expect_valid_lcModel(model)
 })
+
+test_that('gckm with 1 cluster', {
+  method = lcMethodTestGCKM()
+  model = expect_silent(latrend(method, testLongData, nClusters = 1))
+  expect_valid_lcModel(model)
+})
+
+test_that('gckm through latrendBatch', {
+  method = lcMethodTestGCKM()
+  models = latrendBatch(lcMethods(method, nClusters = 1:3), testLongData)
+  expect_length(models, 3)
+})
