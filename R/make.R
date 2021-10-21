@@ -131,6 +131,25 @@ make.clusterNames = function(n) {
 
 
 #' @noRd
+#' @title Generate unique IDs vector from input
+#' @details Used by models to choose the ordering of trajectories in the ids() vector in a standardized manner.
+#' @param x The id data vector (`integer`, `factor`, or `character`). Typically the "Id" column of a dataset.
+#' @return A vector of unique IDs, either `integer` (for `integer` input) or `character`.
+#'
+#' Currently, the output can be `integer`. This might change in the future.
+#' @keywords internal
+make.ids = function(x) {
+  assert_that(noNA(x), msg = "The provided ID data vector contains NAs")
+
+  if (is.factor(x)) {
+    levels(x)[levels(x) %in% x]
+  } else {
+    sort(unique(x))
+  }
+}
+
+
+#' @noRd
 #' @title Generate a vector indicating the id-number (between 1 and numIds()) per row
 #' @details The id order is determined by the output of ids()
 #' @param object The `lcModel` object.

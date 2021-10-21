@@ -96,10 +96,12 @@ setMethod('getShortName', signature('lcMethodStratify'), function(object) 'strat
 
 #' @rdname interface-featureBased
 setMethod('compose', signature('lcMethodStratify'), function(method, envir = NULL, ...) {
-  evaluate.lcMethod(method,
-                      try = FALSE,
-                      exclude = 'stratify',
-                      envir = envir)
+  evaluate.lcMethod(
+    method,
+    try = FALSE,
+    exclude = 'stratify',
+    envir = envir
+  )
 })
 
 
@@ -110,18 +112,18 @@ setMethod('fit', signature('lcMethodStratify'), function(method, data, envir, ve
 
   # Stratify
   strat = method[['stratify', eval = FALSE]]
-  assignments = stratifyTrajectories(strat,
-                                     data = data,
-                                     id = id,
-                                     envir = environment(method))
+  assignments = .stratifyTrajectories(
+    strat,
+    data = data,
+    id = id,
+    envir = environment(method)
+  )
 
   if (is.factor(assignments)) {
-    assert_that(is.na(method$nClusters) ||
-                  nlevels(assignments) == method$nClusters)
+    assert_that(is.na(method$nClusters) || nlevels(assignments) == method$nClusters)
   }
   intAssignments = as.integer(assignments)
-  assert_that(is.na(method$nClusters) ||
-                max(intAssignments) <= method$nClusters)
+  assert_that(is.na(method$nClusters) || max(intAssignments) <= method$nClusters)
 
   # Determine number of clusters
   if (is.na(method$nClusters)) {
@@ -146,40 +148,42 @@ setMethod('fit', signature('lcMethodStratify'), function(method, data, envir, ve
     assert_that(is.character(method$clusterNames))
     clusNames = method$clusterNames
   }
+  assert_that(length(clusNames) == numClus)
 
-  # Generate postprob
-  postprob = postprobFromAssignments(intAssignments, numClus)
-
-  # Compute cluster trajectories
-  clusTrajs = computeCenterClusterTrajectories(
-    data,
-    intAssignments,
-    nClusters = numClus,
-    fun = method$center,
-    id = id,
-    time = timeVariable(method),
-    response = responseVariable(method)
-  )
-
-  setkeyv(clusTrajs, c('Cluster', timeVariable(method)))
-
-  assert_that(uniqueN(clusTrajs$Cluster) == numClus)
+  if (numClus > 1) {
+    clusterSizes = table(intAssignments)
+    if (numClus > 1 && uniqueN(intAssignments) == 1) {
+      warning(
+        sprintf(
+          'Stratification assigned all trajectories to the same cluster ("%s").',
+          clusNames[clusterSizes > 0][1]
+        )
+      )
+    } else if (uniqueN(intAssignments) < numClus) {
+      warning(
+        sprintf(
+          'Cluster(s) "%s" were not assigned any trajectories during stratification.',
+          paste0(clusNames[clusterSizes == 0], collapse = '", "')
+        )
+      )
+    }
+  }
 
   .lcModelStratify(
     method = method,
     data = data,
     id = id,
     time = timeVariable(method),
+    center = method$center,
     response = responseVariable(method),
     clusterNames = clusNames,
-    clusterTrajectories = clusTrajs,
-    postprob = postprob,
+    trajectoryClusterIndices = intAssignments,
     name = method$name
   )
 })
 
 
-stratifyTrajectories = function(strat, data, id, envir = parent.frame()) {
+.stratifyTrajectories = function(strat, data, id, envir = parent.frame()) {
   assert_that(
     is.data.table(data),
     is.call(strat) || is.name(strat)
@@ -187,29 +191,28 @@ stratifyTrajectories = function(strat, data, id, envir = parent.frame()) {
 
   numIds = uniqueN(data[[id]])
 
-  if (is.name(strat) ||
-      is.call(strat) && strat[[1]] == 'function') {
+  if (is.name(strat) || is.call(strat) && strat[[1]] == 'function') {
     # function evaluation
     stratfun = eval(strat, envir = envir)
-    out = data[, stratfun(.SD), by = c(id)]
+    out = data[, .(Cluster = stratfun(.SD)), by = c(id)]
   } else {
     # expression evaluation
-    out = data[, eval(strat), by = c(id)]
+    out = data[, .(Cluster = eval(strat)), by = c(id)]
   }
 
   assert_that(length(out) == 2, msg = 'expected scalar output from the stratification function. got multiple columns as output')
+  assert_that(is.logical(out[['Cluster']]) || is.numeric(out[['Cluster']]) || is.factor(out[['Cluster']]))
+  assert_that(nrow(out) == numIds, msg = 'expected scalar output from the stratification function. got multiple values per id')
+  assert_that(all(is.finite(out[['Cluster']])), msg = 'some ids are assigned to NA')
 
-  assignments = out[[names(out)[2]]]
-  assert_that(is.logical(assignments) ||
-                is.numeric(assignments) || is.factor(assignments))
-  assert_that(length(assignments) == numIds, msg = 'expected scalar output from the stratification function. got multiple values per id')
-  assert_that(all(is.finite(assignments)), msg = 'some ids are assigned to NA')
-
-  if (is.logical(assignments)) {
-    return(as.integer(assignments) + 1L)
-  } else {
-    return(assignments)
+  if (is.logical(out[['Cluster']])) {
+    out[, Cluster := as.integer(Cluster) + 1L]
   }
+
+  # determine output order
+  ids = make.ids(data[[id]])
+
+  out[match(ids, get(id)), Cluster]
 }
 
 

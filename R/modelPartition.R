@@ -2,10 +2,9 @@
 setClass(
   'lcModelPartition',
   representation(
+    name = 'character',
     center = 'function',
-    clusterTrajectories = 'data.frame',
-    postprob = 'matrix',
-    name = 'character'
+    trajectoryClusterIndices = 'integer'
   ),
   contains = 'lcApproxModel'
 )
@@ -33,16 +32,18 @@ setClass(
 #' trajLabels$Cluster <- trajLabels$Class
 #' refModel <- lcModelPartition(latrendData, response = "Y", trajectoryAssignments = trajLabels)
 #' externalMetric(model, refModel, 'adjustedRand') # 0.76
-lcModelPartition = function(data,
-                            response,
-                            trajectoryAssignments,
-                            nClusters = NA,
-                            center = meanNA,
-                            clusterNames = NULL,
-                            time = getOption('latrend.time'),
-                            id = getOption('latrend.id'),
-                            name = 'part',
-                            envir = parent.frame()) {
+lcModelPartition = function(
+  data,
+  response,
+  trajectoryAssignments,
+  nClusters = NA,
+  clusterNames = NULL,
+  time = getOption('latrend.time'),
+  id = getOption('latrend.id'),
+  name = 'part',
+  center = meanNA,
+  envir = parent.frame()
+) {
   assert_that(
     is.data.frame(data),
     has_name(data, response),
@@ -50,8 +51,7 @@ lcModelPartition = function(data,
     has_name(data, id),
     is.character(clusterNames) || is.null(clusterNames),
     is.na(nClusters) || length(clusterNames) %in% c(0, nClusters),
-    noNA(trajectoryAssignments),
-    is.function(center)
+    noNA(trajectoryAssignments)
   )
 
 
@@ -132,37 +132,23 @@ lcModelPartition = function(data,
   }
 
 
-
   intAssignments = as.integer(trajectoryAssignments)
   assert_that(min(intAssignments) >= 1, max(intAssignments) <= numClus)
-
-  pp = postprobFromAssignments(intAssignments, k = numClus)
 
   if (is.null(clusterNames)) {
     clusterNames = make.clusterNames(numClus)
   }
   assert_that(length(clusterNames) == numClus)
 
-  clusTrajs = computeCenterClusterTrajectories(
-    data,
-    assignments = intAssignments,
-    nClusters = numClus,
-    fun = center,
-    id = id,
-    time = time,
-    response = response
-  )
-
   mc = match.call()
   model = new(
     'lcModelPartition',
     call = mc,
     data = data,
-    center = center,
-    clusterTrajectories = clusTrajs,
-    postprob = pp,
     name = name,
     clusterNames = clusterNames,
+    center = center,
+    trajectoryClusterIndices = intAssignments,
     id = id,
     time = time,
     response = response,
@@ -172,89 +158,93 @@ lcModelPartition = function(data,
   return(model)
 }
 
+#. clusterTrajectories
 #' @rdname interface-custom
-setMethod('clusterTrajectories', signature('lcModelPartition'), function(object, at = time(object), ...) {
-  if (length(at) == 0) {
-    clusTrajs = as.data.table(object@clusterTrajectories)
-    clusTrajs[, Cluster := factor(Cluster,
-                                  levels = seq_len(nClusters(object)),
-                                  labels = clusterNames(object))]
-    return(clusTrajs[])
-  } else {
-    callNextMethod()
+#' @param center The function to use to compute the cluster trajectory center at the respective moment in time.
+setMethod('clusterTrajectories', 'lcModelPartition',
+  function(
+    object,
+    at = time(object),
+    center = object@center,
+    approxFun = approx,
+    ...
+  ) {
+  if (length(at) > 0) {
+    return(callNextMethod())
   }
+
+  if (is.null(center)) {
+    center = meanNA
+  }
+
+  assert_that(
+    is.function(center),
+    length(formalArgs(center)) > 0,
+    msg = 'center argument must be a function accepting an input vector'
+  )
+
+  data = as.data.table(model.data(object))
+  response = responseVariable(object)
+  time = timeVariable(object)
+  trajClusters = trajectoryAssignments(object)
+  rowClusters = trajClusters[make.idRowIndices(object)]
+  assert_that(length(rowClusters) == nrow(data))
+
+  # compute cluster trajectories at all moments in time
+  clusTrajs = data[,
+    .(Value = center(get(response))),
+    keyby = .(Cluster = rowClusters, Time = get(time))
+  ]
+
+  if (uniqueN(trajClusters) < nClusters(object)) {
+    emptyMask = clusterSizes(object) == 0
+    warning(
+      sprintf(
+        'Cannot compute cluster trajectory for cluster(s) "%s": no trajectories were assigned to the cluster(s).',
+        paste0(clusterNames(object)[emptyMask], collapse = '", "')
+      )
+    )
+    # add missing clusters
+    emptyClusTraj = clusTrajs[, .(Time = unique(Time), Value = NaN)]
+    clusTrajs = rbind(
+      clusTrajs,
+      data.table(
+        Cluster = rep(
+          setdiff(seq_len(nClusters(object)), unique(rowClusters)),
+          each = nrow(emptyClusTraj)
+        ),
+        emptyClusTraj
+      )
+    )
+  }
+
+  setnames(clusTrajs, 'Value', response)
+  setnames(clusTrajs, 'Time', time)
+
+  as.data.frame(clusTrajs)
 })
 
 
 #. converged ####
 #' @rdname interface-custom
-setMethod('converged', signature('lcModelPartition'), function(object, ...) {
+setMethod('converged', 'lcModelPartition', function(object, ...) {
   TRUE
 })
 
 
 # . getName ####
 #' @rdname interface-custom
-setMethod('getName', signature('lcModelPartition'), function(object, ...) object@name)
+setMethod('getName', 'lcModelPartition', function(object, ...) object@name)
 
 # . getShortName ####
 #' @rdname interface-custom
-setMethod('getShortName', signature('lcModelPartition'), function(object, ...)
-  object@name)
+setMethod('getShortName', 'lcModelPartition', function(object, ...) object@name)
 
 
 #. postprob ####
 #' @rdname interface-custom
-setMethod('postprob', signature('lcModelPartition'), function(object, ...) {
-  pp = object@postprob
+setMethod('postprob', 'lcModelPartition', function(object, ...) {
+  pp = postprobFromAssignments(object@trajectoryClusterIndices, k = nClusters(object))
   colnames(pp) = clusterNames(object)
   return(pp)
 })
-
-
-
-computeCenterClusterTrajectories = function(data,
-                                            assignments,
-                                            nClusters,
-                                            fun = mean,
-                                            id,
-                                            time,
-                                            response) {
-  assert_that(
-    is.data.frame(data),
-    has_name(data, response),
-    has_name(data, time),
-    has_name(data, id)
-  )
-  assert_that(nClusters >= 1)
-  assert_that(
-    is.integer(assignments),
-    all(is.finite(assignments)),
-    all(vapply(assignments, is.count, FUN.VALUE = TRUE)),
-    length(assignments) == uniqueN(data[[id]]),
-    min(assignments) >= 1,
-    max(assignments) <= nClusters
-  )
-  assert_that(is.function(fun))
-
-  rowClusters = assignments[rleidv(data[[id]])]
-  clusTrajs = as.data.table(data) %>%
-    .[, .(Value = fun(get(response))), by = .(Cluster = rowClusters, Time = get(time))]
-
-  if (uniqueN(assignments) < nClusters) {
-    warning(
-      'empty clusters present. cluster trajectory for empty clusters will be set constant at 0'
-    )
-    # add missing clusters
-    emptyClusTraj = clusTrajs[, .(Time = unique(Time), Value = 0)]
-    clusTrajs = rbind(clusTrajs,
-                      data.table(Cluster = rep(
-                        setdiff(seq_len(nClusters), unique(rowClusters)), each = nrow(emptyClusTraj)
-                      ),
-                      emptyClusTraj))
-  }
-
-  setnames(clusTrajs, 'Value', response)
-  setnames(clusTrajs, 'Time', time)
-  return(clusTrajs[])
-}

@@ -50,17 +50,30 @@ setGeneric('clusterProportions', function(object, ...) {
 #' @export
 #' @name latrend-generics
 #' @param at A vector of times at which to compute the cluster trajectories.
-setGeneric('clusterTrajectories', function(object, at = time(object), ...) {
-  assert_that(is_at(at))
+setGeneric('clusterTrajectories', function(object, ...) {
+  # this mechanism is needed because defining "at" as an argument in the
+  # generic function overrides any default value set in a subclass
+  mc = match.call()
+  if (hasName(mc, 'at')) {
+    assert_that(is_at(list(...)[['at']]))
+  }
+  #
 
-  dfclus <- standardGeneric('clusterTrajectories')
+  clusTrajs <- standardGeneric('clusterTrajectories')
 
-  valid = validate_that(
-    is.data.frame(dfclus),
-    names(dfclus)[1] == 'Cluster',
-    names(dfclus)[2] == timeVariable(object),
-    names(dfclus)[3] == responseVariable(object)
-  )
+  if (inherits(object, 'lcModel')) {
+    valid = validate_that(
+      is.data.frame(clusTrajs),
+      names(clusTrajs)[1] == 'Cluster',
+      names(clusTrajs)[2] == timeVariable(object),
+      names(clusTrajs)[3] == responseVariable(object)
+    )
+  } else {
+    valid = validate_that(
+      is.data.frame(clusTrajs),
+      names(clusTrajs)[1] == 'Cluster'
+    )
+  }
 
   if (!isTRUE(valid)) {
     stop(
@@ -72,7 +85,7 @@ setGeneric('clusterTrajectories', function(object, at = time(object), ...) {
     )
   }
 
-  return(dfclus)
+  as.data.frame(clusTrajs)
 })
 
 
@@ -615,7 +628,7 @@ setGeneric('trajectories', function(object, ...) {
     ncol(data) > 2
   )
 
-  return(data)
+  as.data.frame(data)
 })
 
 

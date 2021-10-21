@@ -1,6 +1,7 @@
 #' @include generics.R latrend.R
 
-# Trajectories ####
+
+# trajectories ####
 #' @rdname trajectories
 #' @aliases trajectories,data.frame-method
 setMethod('trajectories', signature('data.frame'), function(object, id, time, response, ...) {
@@ -33,7 +34,8 @@ setMethod('trajectories', signature('call'), function(object, ..., envir) {
 })
 
 
-# Plot cluster trajectories ####
+
+# plotCusterTrajectories ####
 #' @export
 #' @name plotClusterTrajectories
 #' @rdname plotClusterTrajectories
@@ -197,7 +199,7 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
 }
 
 
-# Plot trajectories ####
+# plotTrajectories ####
 #' @export
 #' @name plotTrajectories
 #' @rdname plotTrajectories

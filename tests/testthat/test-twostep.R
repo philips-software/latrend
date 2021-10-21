@@ -4,7 +4,7 @@ rngReset()
 
 test_that('specify', {
   repfun = function(method, data, ...) {
-    data[, mean(Value), by = Traj]$V1 %>% cbind()
+    as.data.table(data)[, mean(Value), by = Traj]$V1 %>% cbind()
   }
   clusfun = function(method, data, repMat, ...) {
     clusters = factor(repMat[,1] > 0, levels = c(F,T), labels = c('Low', 'High'))

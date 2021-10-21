@@ -8,7 +8,7 @@
 \usage{
 clusterProportions(object, ...)
 
-clusterTrajectories(object, at = time(object), ...)
+clusterTrajectories(object, ...)
 
 compose(method, envir, ...)
 
@@ -90,8 +90,6 @@ validate(method, data, envir, ...)
 
 \item{...}{Arguments.}
 
-\item{at}{A vector of times at which to compute the cluster trajectories.}
-
 \item{method}{The method.}
 
 \item{envir}{\code{environment}.}
@@ -105,6 +103,8 @@ validate(method, data, envir, ...)
 \item{data}{\code{data.frame}.}
 
 \item{verbose}{\link[R.utils:Verbose]{R.utils::Verbose}.}
+
+\item{at}{A vector of times at which to compute the cluster trajectories.}
 
 \item{what}{Parameter.}
 

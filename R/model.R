@@ -122,7 +122,7 @@ setValidity('lcModel', function(object) {
 #'
 #' clusterTrajectories(model, at = c(0, .5, 1))
 #' @family model-specific methods
-setMethod('clusterTrajectories', signature('lcModel'), function(object, at = time(object), what = 'mu', ...) {
+setMethod('clusterTrajectories', 'lcModel', function(object, at = time(object), what = 'mu', ...) {
   newdata = data.table(
     Cluster = rep(clusterNames(object, factor = TRUE), each = length(at)),
     Time = at
@@ -668,12 +668,8 @@ setMethod('getShortName',  signature('lcModel'),
 ids = function(object) {
   assert_that(is.lcModel(object))
   if (length(object@ids) == 0) {
-    iddata = model.data(object)[[idVariable(object)]]
-    if (is.factor(iddata)) {
-      levels(iddata)[levels(iddata) %in% iddata]
-    } else {
-      unique(iddata) %>% sort()
-    }
+    idvec = model.data(object)[[idVariable(object)]]
+    make.ids(idvec)
   } else {
     object@ids
   }
