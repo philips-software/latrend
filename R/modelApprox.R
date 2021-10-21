@@ -36,14 +36,29 @@ setMethod('predictForCluster', signature('lcApproxModel'),
 
   time = timeVariable(object)
   resp = responseVariable(object)
+  clusTimes = clusTrajs[[time]]
   newtimes = newdata[[time]]
 
-  dtpred = clusTrajs[, lapply(.SD, function(y)
-        approxFun(
-          x = get(time),
-          y = y,
-          xout = newtimes)$y),
-    keyby = Cluster, .SDcols = -c(time)]
+  # check if we need to do any interpolation
+  if (all(newtimes %in% clusTimes)) {
+    pred = clusTrajs[match(newtimes, get(time)), get(resp)]
+    return(pred)
+  }
+
+  if (sum(is.finite(clusTrajs[[resp]])) < 2) {
+    warning(
+      sprintf(
+        'Cannot interpolate cluster trajectory of cluster %s: need at least two non-NA cluster trajectory values',
+        cluster
+      )
+    )
+    return(rep(NaN, length(newtimes)))
+  }
+
+  dtpred = clusTrajs[,
+    lapply(.SD, function(y) approxFun(x = get(time), y = y, xout = newtimes)$y),
+    keyby = Cluster, .SDcols = -c(time)
+  ]
 
   dtpred[[resp]]
 })
