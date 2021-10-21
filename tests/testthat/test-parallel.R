@@ -1,5 +1,6 @@
 skip_on_cran()
 skip_on_ci()
+skip_on_os('windows')
 skip_if_not_installed('parallel')
 skip_if_not_installed('doParallel')
 skip_if(parallel::detectCores(logical = FALSE) < 2)
