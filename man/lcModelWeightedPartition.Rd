@@ -8,7 +8,6 @@ lcModelWeightedPartition(
   data,
   response,
   weights,
-  center = weighted.meanNA,
   clusterNames = colnames(weights),
   time = getOption("latrend.time"),
   id = getOption("latrend.id"),
@@ -21,8 +20,6 @@ lcModelWeightedPartition(
 \item{response}{The name of the response variable.}
 
 \item{weights}{A \code{numIds} x \code{numClusters} matrix of partition probabilities.}
-
-\item{center}{The \code{function} for computing the longitudinal cluster centers, used for representing the cluster trajectories.}
 
 \item{clusterNames}{The names of the clusters, or a function with input \code{n} outputting a \verb{character vector} of names.}
 

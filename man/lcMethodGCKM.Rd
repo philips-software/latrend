@@ -2,7 +2,7 @@
 % Please edit documentation in R/methodGCKM.R
 \name{lcMethodGCKM}
 \alias{lcMethodGCKM}
-\title{Two-step clustering through linear mixed modeling and k-means}
+\title{Two-step clustering through latent growth curve modeling and k-means}
 \usage{
 lcMethodGCKM(
   formula,
@@ -22,13 +22,14 @@ lcMethodGCKM(
 
 \item{nClusters}{The number of clusters.}
 
-\item{center}{Optional \code{function} for computing the longitudinal cluster centers, with signature \code{(x)}.}
+\item{center}{A  \code{function} that computes the cluster center based on the original trajectories associated with the respective cluster.
+By default, the mean is computed.}
 
 \item{...}{Arguments passed to \link[lme4:lmer]{lme4::lmer}.
 The following external arguments are ignored: data, centers, trace.}
 }
 \description{
-Two-step clustering through linear mixed modeling and k-means.
+Two-step clustering through latent growth curve modeling and k-means.
 }
 \examples{
 library(lme4)

@@ -1,46 +1,11 @@
-#' @include model.R
-setClass('lcModelLMKM', representation(coefNames = 'character', trajCoefs = 'matrix'), contains = 'lcModel')
-
-
-#. predictForCluster ####
-#' @rdname interface-featureBased
-#' @inheritParams predictForCluster
-#' @inheritDotParams stats::predict.lm
-setMethod('predictForCluster', signature('lcModelLMKM'), function(
-  object, newdata, cluster, what = 'mu', ...)
-{
-  assert_that(what == 'mu')
-
-  if (nrow(newdata) == 0) {
-    # predict.lm cannot handle empty data.frame, so return early
-    return(numeric())
-  }
-
-  # create ref lm
-  method = getLcMethod(object)
-  id = idVariable(method)
-  lmArgs = as.list(method, args = lm)
-  data = model.data(object) %>% as.data.table()
-  # take some data just to fit a valid lm as a template
-  refdata = data[get(id) == first(get(id))][1:min(10, .N)]
-  clusmod = do.call(lm, c(lmArgs, data = list(refdata)))
-
-  # construct lm
-  clusmod$coefficients = coef(object, cluster = cluster)
-
-  predfun = function(clusmod, clusdata) {
-    out = predict(clusmod, newdata = clusdata, ...)
-    if (is.numeric(out)) {
-      list(fit = out)
-    } else {
-      out
-    }
-  }
-
-  preds = predict(clusmod, newdata = newdata, ...)
-
-  preds
-})
+#' @include model.R modelPartition.R
+setClass('lcModelLMKM',
+  representation(
+    coefNames = 'character',
+    trajectoryCoefs = 'matrix'
+  ),
+  contains = 'lcModelPartition'
+)
 
 
 #' @export
@@ -66,12 +31,12 @@ coef.lcModelLMKM = function(object, ..., cluster = NULL) {
 #' @rdname interface-featureBased
 logLik.lcModelLMKM = function(object, ...) {
   assert_that(ncol(coef(object)) == nClusters(object))
-  assert_that(noNA(object@trajCoefs))
+  assert_that(noNA(object@trajectoryCoefs))
 
   muMat = t(coef(object))
 
   # subtract respective cluster center from the trajectory coefficients
-  coefDiffMat = object@trajCoefs - muMat[trajectoryAssignments(object), ]
+  coefDiffMat = object@trajectoryCoefs - muMat[trajectoryAssignments(object), ]
 
   # compute density across trajectory, per coefficient
   ll_coef = apply(coefDiffMat, 2, function(x) sum(dnorm(x, sd = sd(x), log = TRUE)))

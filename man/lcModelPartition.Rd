@@ -9,7 +9,6 @@ lcModelPartition(
   response,
   trajectoryAssignments,
   nClusters = NA,
-  center = meanNA,
   clusterNames = NULL,
   time = getOption("latrend.time"),
   id = getOption("latrend.id"),
@@ -28,8 +27,6 @@ The order of the trajectory, and thus the respective assignments, is determined 
 Provide a \code{factor} id column for the input data to ensure that the ordering is as you aspect.}
 
 \item{nClusters}{The number of clusters. Should be \code{NA} for trajectory assignments of type \code{factor}.}
-
-\item{center}{The \code{function} for computing the longitudinal cluster centers, used for representing the cluster trajectories.}
 
 \item{clusterNames}{The names of the clusters, or a function with input \code{n} outputting a \verb{character vector} of names.
 If unspecified, the names are determined from the \code{trajectoryAssignments} argument.}
