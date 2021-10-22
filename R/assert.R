@@ -1,3 +1,8 @@
+# used internally for creating more readable chained validation statements
+`%c%` = function(x, y) {
+  c(x, y)
+}
+
 is_named = function(x) {
   !is.null(names(x)) && noNA(names(x))
 }

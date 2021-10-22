@@ -145,11 +145,11 @@ setMethod('initialize', 'lcMethod', function(.Object, ...) {
 
 #. validity ####
 setValidity('lcMethod', function(object) {
-  assert_that(
+  errors = validate_that(
     all(nchar(names(object)) > 0),
     msg = 'lcMethod argument names cannot be empty'
   )
-  assert_that(
+  errors = errors %c% validate_that(
     !any(startsWith(names(object), '.')),
     msg = sprintf(
       'Cannot construct %s: lcMethod argument names cannot start with "."\nYou should rename argument(s) %s',
@@ -157,18 +157,21 @@ setValidity('lcMethod', function(object) {
       paste0('"', names(object)[startsWith(names(object), '.')], '"', collapse = ', ')
     )
   )
-  assert_that(!has_name(object, 'data'), msg = 'lcMethod argument name cannot be "data"')
-  assert_that(!has_name(object, 'envir'), msg = 'lcMethod argument name cannot be "envir"')
-  assert_that(!has_name(object, 'verbose'), msg = 'lcMethod argument name cannot be "verbose"')
+
+  errors = errors %c% validate_that(!has_name(object, 'data'), msg = 'lcMethod argument name cannot be "data"')
+  errors = errors %c% validate_that(!has_name(object, 'envir'), msg = 'lcMethod argument name cannot be "envir"')
+  errors = errors %c% validate_that(!has_name(object, 'verbose'), msg = 'lcMethod argument name cannot be "verbose"')
 
   if (isArgDefined(object, 'formula')) {
-    assert_that(is.formula(object$formula))
+    errors = errors %c% validate_that(is.formula(object$formula))
   }
 
   if (isArgDefined(object, 'nClusters')) {
-    assert_that(is.scalar(object$nClusters))
-    assert_that(is.na(object$nClusters) || is.count(object$nClusters))
+    errors = errors %c% validate_that(is.scalar(object$nClusters))
+    errors = errors %c% validate_that(is.na(object$nClusters) || is.count(object$nClusters))
   }
+
+  errors[errors != TRUE]
 })
 
 #. $ ####
