@@ -61,9 +61,9 @@ getExternalMetricNames = function() {
 #' @title Define an internal metric for lcModels
 #' @param name The name of the metric.
 #' @param fun The function to compute the metric, accepting a lcModel object as input.
-#' @param warnIfExists Whether to output a warning when the new metric is already defined.
+#' @param warnIfExists Whether to output a warning when the metric is already defined.
 #' @family metric functions
-defineInternalMetric = function(name, fun, warnIfExists = TRUE) {
+defineInternalMetric = function(name, fun, warnIfExists = getOption('latrend.warnMetricOverride', TRUE)) {
   assert_that(is.function(fun))
   assert_that(!is.null(formalArgs(fun)), msg = 'function must accept one argument (a lcModel)')
   .defineMetric(name, fun = fun, warnIfExists = warnIfExists, envir = intMetricsEnv)
@@ -73,9 +73,9 @@ defineInternalMetric = function(name, fun, warnIfExists = TRUE) {
 #' @title Define an external metric for lcModels
 #' @param name The name of the metric.
 #' @param fun The function to compute the metric, accepting a lcModel object as input.
-#' @param warnIfExists Whether to output a warning when the new metric is already defined.
+#' @param warnIfExists Whether to output a warning when the metric is already defined.
 #' @family metric functions
-defineExternalMetric = function(name, fun, warnIfExists = TRUE) {
+defineExternalMetric = function(name, fun, warnIfExists = getOption('latrend.warnMetricOverride', TRUE)) {
   assert_that(is.function(fun))
   assert_that(length(formalArgs(fun)) == 2, msg = 'function must accept two arguments (two lcModels)')
   .defineMetric(name, fun = fun, warnIfExists = warnIfExists, envir = extMetricsEnv)
