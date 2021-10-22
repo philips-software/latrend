@@ -106,15 +106,29 @@ setGeneric('compose', def = function(method, envir, ...) {
 
   assert_that(
     is.character(idVariable(newmethod)),
-    is.character(timeVariable(newmethod)),
-    is.character(responseVariable(newmethod)),
     msg = sprintf(
-      '%1$s implemention error: output of compose(%1$s, ...) must contain id, time, and response variables',
+      'Invalid %1$s specification or implementation:\nidVariable(%1$s) is not character.\nDid you forget to specify the "id" argument?',
       class(method)[1]
     )
   )
 
-  return(newmethod)
+  assert_that(
+    is.character(timeVariable(newmethod)),
+    msg = sprintf(
+      'Invalid %1$s specification or implementation:\ntimeVariable(%1$s) is not character.\nDid you forget to specify the "time" argument?',
+      class(method)[1]
+    )
+  )
+
+  assert_that(
+    is.character(responseVariable(newmethod)),
+    msg = sprintf(
+      'Invalid %1$s specification or implementation:\nresponseVariable(%1$s) is not character.\nDid you forget to specify the "response" argument?',
+      class(method)[1]
+    )
+  )
+
+  newmethod
 })
 
 # converged ####
