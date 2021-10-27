@@ -34,7 +34,7 @@ setMethod("prepareData", "lcMethodExample", function(method, data, verbose) {
   # transform the data to matrix
   envir$dataMat = dcastRepeatedMeasures(data,
     id = idColumn, time = timeColumn, response = valueColumn)
-  return (envir)
+  return(envir)
 })
 }
 }

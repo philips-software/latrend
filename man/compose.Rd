@@ -28,7 +28,7 @@ However, in case there is a need to extend processing or to prevent evaluation o
 setMethod("compose", "lcMethodExample", function(method, envir = NULL) {
   newMethod <- callNextMethod()
   # further processing
-  return (newMethod)
+  return(newMethod)
 })
 }
 }

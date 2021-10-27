@@ -50,17 +50,30 @@ setGeneric('clusterProportions', function(object, ...) {
 #' @export
 #' @name latrend-generics
 #' @param at A vector of times at which to compute the cluster trajectories.
-setGeneric('clusterTrajectories', function(object, at = time(object), ...) {
-  assert_that(is_at(at))
+setGeneric('clusterTrajectories', function(object, ...) {
+  # this mechanism is needed because defining "at" as an argument in the
+  # generic function overrides any default value set in a subclass
+  mc = match.call()
+  if (hasName(mc, 'at')) {
+    assert_that(is_at(list(...)[['at']]))
+  }
+  #
 
-  dfclus <- standardGeneric('clusterTrajectories')
+  clusTrajs <- standardGeneric('clusterTrajectories')
 
-  valid = validate_that(
-    is.data.frame(dfclus),
-    names(dfclus)[1] == 'Cluster',
-    names(dfclus)[2] == timeVariable(object),
-    names(dfclus)[3] == responseVariable(object)
-  )
+  if (inherits(object, 'lcModel')) {
+    valid = validate_that(
+      is.data.frame(clusTrajs),
+      names(clusTrajs)[1] == 'Cluster',
+      names(clusTrajs)[2] == timeVariable(object),
+      names(clusTrajs)[3] == responseVariable(object)
+    )
+  } else {
+    valid = validate_that(
+      is.data.frame(clusTrajs),
+      names(clusTrajs)[1] == 'Cluster'
+    )
+  }
 
   if (!isTRUE(valid)) {
     stop(
@@ -72,7 +85,7 @@ setGeneric('clusterTrajectories', function(object, at = time(object), ...) {
     )
   }
 
-  return (dfclus)
+  as.data.frame(clusTrajs)
 })
 
 
@@ -93,15 +106,29 @@ setGeneric('compose', def = function(method, envir, ...) {
 
   assert_that(
     is.character(idVariable(newmethod)),
-    is.character(timeVariable(newmethod)),
-    is.character(responseVariable(newmethod)),
     msg = sprintf(
-      '%1$s implemention error: output of compose(%1$s, ...) must contain id, time, and response variables',
+      'Invalid %1$s specification or implementation:\nidVariable(%1$s) is not character.\nDid you forget to specify the "id" argument?',
       class(method)[1]
     )
   )
 
-  return (newmethod)
+  assert_that(
+    is.character(timeVariable(newmethod)),
+    msg = sprintf(
+      'Invalid %1$s specification or implementation:\ntimeVariable(%1$s) is not character.\nDid you forget to specify the "time" argument?',
+      class(method)[1]
+    )
+  )
+
+  assert_that(
+    is.character(responseVariable(newmethod)),
+    msg = sprintf(
+      'Invalid %1$s specification or implementation:\nresponseVariable(%1$s) is not character.\nDid you forget to specify the "response" argument?',
+      class(method)[1]
+    )
+  )
+
+  newmethod
 })
 
 # converged ####
@@ -119,7 +146,7 @@ setGeneric('converged', function(object, ...) {
     )
   )
 
-  return (state)
+  return(state)
 })
 
 # externalMetric ####
@@ -148,7 +175,7 @@ setGeneric('estimationTime', function(object, unit = 'secs', ...) {
     is.finite(duration)
   )
 
-  return (duration)
+  return(duration)
 })
 
 
@@ -177,7 +204,7 @@ setGeneric('fit', function(method, data, envir, verbose, ...) {
   model@date = dateStart
   model@estimationTime = as.numeric(estimationTime, 'secs')
 
-  return (model)
+  return(model)
 })
 
 
@@ -261,7 +288,7 @@ setGeneric('getName', function(object, ...) {
     nchar(name) > 0
   )
 
-  return (name)
+  return(name)
 })
 
 
@@ -277,7 +304,7 @@ setGeneric('getShortName', function(object, ...) {
     nchar(name) > 0
   )
 
-  return (name)
+  return(name)
 })
 
 
@@ -293,7 +320,7 @@ setGeneric('idVariable', function(object, ...) {
     nchar(id) > 0
   )
 
-  return (id)
+  return(id)
 })
 
 
@@ -343,7 +370,7 @@ setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
     )
   )
 
-  return (model)
+  return(model)
 })
 
 
@@ -476,7 +503,7 @@ setGeneric('predictForCluster', function(object, newdata = NULL, cluster, ...) {
     }
   }
 
-  return (out)
+  return(out)
 })
 
 
@@ -504,7 +531,7 @@ setGeneric('predictPostprob', function(object, newdata = NULL, ...) {
   }
 
   colnames(pp) = clusterNames(object)
-  return (pp)
+  return(pp)
 })
 
 
@@ -521,7 +548,7 @@ setGeneric('prepareData', function(method, data, verbose, ...) {
     )
   )
 
-  return (envir)
+  return(envir)
 })
 
 
@@ -538,7 +565,7 @@ setGeneric('preFit', function(method, data, envir, verbose, ...) {
     )
   )
 
-  return (modelEnv)
+  return(modelEnv)
 })
 
 
@@ -561,7 +588,7 @@ setGeneric('responseVariable', function(object, ...) {
     nchar(response) > 0
   )
 
-  return (response)
+  return(response)
 })
 
 
@@ -588,7 +615,7 @@ setGeneric('timeVariable', function(object, ...) {
     nchar(time) > 0
   )
 
-  return (time)
+  return(time)
 })
 
 
@@ -615,7 +642,7 @@ setGeneric('trajectories', function(object, ...) {
     ncol(data) > 2
   )
 
-  return (data)
+  as.data.frame(data)
 })
 
 
@@ -629,7 +656,7 @@ setGeneric('trajectoryAssignments', function(object, ...) {
     !is.lcModel(object) || all(levels(clusters) == clusterNames(object))
   )
 
-  return (clusters)
+  return(clusters)
 })
 
 

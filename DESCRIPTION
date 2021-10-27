@@ -1,7 +1,7 @@
 Package: latrend
 Type: Package
 Version: 1.2.0
-Date: 2021-07-26
+Date: 2021-10-22
 Title: A Framework for Clustering Longitudinal Data
 Description: A framework for clustering longitudinal datasets in a standardized way. Provides an interface to existing R packages for clustering longitudinal univariate trajectories, facilitating reproducible and transparent analyses. Additionally, standard tools are provided to support cluster analyses, including repeated estimation, model validation, and model assessment. The interface enables users to compare results between methods, and to implement and evaluate new methods with ease. 
 Maintainer: Niek Den Teuling <niek.den.teuling@philips.com>
@@ -95,9 +95,9 @@ Collate:
     'methodFlexmix.R'
     'methodFlexmixGBTM.R'
     'methodFunFEM.R'
+    'methodLMKM.R'
     'methodGCKM.R'
     'methodKML.R'
-    'methodLMKM.R'
     'methodLcmmGMM.R'
     'methodLcmmGBTM.R'
     'methodLongclust.R'
@@ -119,6 +119,7 @@ Collate:
     'modelFlexmix.R'
     'modelFunFEM.R'
     'modelKML.R'
+    'modelPartition.R'
     'modelLMKM.R'
     'modelLcmmGMM.R'
     'modelLcmmGBTM.R'
@@ -129,7 +130,6 @@ Collate:
     'modelMixTVEM.R'
     'modelMixtoolsGMM.R'
     'modelMixtoolsRM.R'
-    'modelPartition.R'
     'modelStratify.R'
     'modelWeightedPartition.R'
     'models.R'

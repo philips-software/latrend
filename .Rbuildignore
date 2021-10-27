@@ -9,6 +9,8 @@
 ^check\.r$
 ^CITATION\.cff$
 cld\.Rdata
+^CODE_OF_CONDUCT\.md$
+^CONTRIBUTING\.md$
 ^data-raw$
 ^depends\.Rds$
 ^doc$

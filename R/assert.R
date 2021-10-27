@@ -1,3 +1,8 @@
+# used internally for creating more readable chained validation statements
+`%c%` = function(x, y) {
+  c(x, y)
+}
+
 is_named = function(x) {
   !is.null(names(x)) && noNA(names(x))
 }
@@ -184,7 +189,7 @@ assertthat::on_failure(is_valid_postprob) = function(call, env) {
   if (!is.null(model)) {
     clusVal = validate_that(ncol(pp) == nClusters(model))
     if (clusVal) {
-      return (clusVal)
+      return(clusVal)
     }
   }
 

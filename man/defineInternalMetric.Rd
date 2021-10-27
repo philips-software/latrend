@@ -4,14 +4,18 @@
 \alias{defineInternalMetric}
 \title{Define an internal metric for lcModels}
 \usage{
-defineInternalMetric(name, fun, warnIfExists = TRUE)
+defineInternalMetric(
+  name,
+  fun,
+  warnIfExists = getOption("latrend.warnMetricOverride", TRUE)
+)
 }
 \arguments{
 \item{name}{The name of the metric.}
 
 \item{fun}{The function to compute the metric, accepting a lcModel object as input.}
 
-\item{warnIfExists}{Whether to output a warning when the new metric is already defined.}
+\item{warnIfExists}{Whether to output a warning when the metric is already defined.}
 }
 \description{
 Define an internal metric for lcModels

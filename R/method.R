@@ -145,11 +145,11 @@ setMethod('initialize', 'lcMethod', function(.Object, ...) {
 
 #. validity ####
 setValidity('lcMethod', function(object) {
-  assert_that(
+  errors = validate_that(
     all(nchar(names(object)) > 0),
     msg = 'lcMethod argument names cannot be empty'
   )
-  assert_that(
+  errors = errors %c% validate_that(
     !any(startsWith(names(object), '.')),
     msg = sprintf(
       'Cannot construct %s: lcMethod argument names cannot start with "."\nYou should rename argument(s) %s',
@@ -157,18 +157,21 @@ setValidity('lcMethod', function(object) {
       paste0('"', names(object)[startsWith(names(object), '.')], '"', collapse = ', ')
     )
   )
-  assert_that(!has_name(object, 'data'), msg = 'lcMethod argument name cannot be "data"')
-  assert_that(!has_name(object, 'envir'), msg = 'lcMethod argument name cannot be "envir"')
-  assert_that(!has_name(object, 'verbose'), msg = 'lcMethod argument name cannot be "verbose"')
+
+  errors = errors %c% validate_that(!has_name(object, 'data'), msg = 'lcMethod argument name cannot be "data"')
+  errors = errors %c% validate_that(!has_name(object, 'envir'), msg = 'lcMethod argument name cannot be "envir"')
+  errors = errors %c% validate_that(!has_name(object, 'verbose'), msg = 'lcMethod argument name cannot be "verbose"')
 
   if (isArgDefined(object, 'formula')) {
-    assert_that(is.formula(object$formula))
+    errors = errors %c% validate_that(is.formula(object$formula))
   }
 
   if (isArgDefined(object, 'nClusters')) {
-    assert_that(is.scalar(object$nClusters))
-    assert_that(is.na(object$nClusters) || is.count(object$nClusters))
+    errors = errors %c% validate_that(is.scalar(object$nClusters))
+    errors = errors %c% validate_that(is.na(object$nClusters) || is.count(object$nClusters))
   }
+
+  errors[errors != TRUE]
 })
 
 #. $ ####
@@ -311,7 +314,7 @@ as.character.lcMethod = function(x, ..., eval = FALSE, width = 40, prefix = '', 
 
   args = vapply(chrValues, strtrim, width = width, FUN.VALUE = '')
 
-  header = sprintf('%s as "%s"', class(x)[1], getName(x))
+  header = sprintf('%s specifying "%s"', class(x)[1], getName(x))
 
   if (length(args) > 0) {
     body = sprintf('%s%-16s%s', prefix, paste0(argNames, ':'), args)
@@ -475,7 +478,7 @@ as.data.frame.lcMethod = function(x, ..., eval = TRUE, nullValue = NA, envir = N
 #' setMethod("compose", "lcMethodExample", function(method, envir = NULL) {
 #'   newMethod <- callNextMethod()
 #'   # further processing
-#'   return (newMethod)
+#'   return(newMethod)
 #' })
 #' }
 #' @seealso [evaluate.lcMethod]
@@ -802,7 +805,7 @@ setMethod('names', signature('lcMethod'), function(x) {
 #' setMethod("preFit", "lcMethodExample", function(method, data, envir, verbose) {
 #'   # update envir with additional computed work
 #'   envir$x <- INTENSIVE_OPERATION
-#'   return (envir)
+#'   return(envir)
 #' })
 #' }
 #' @inheritSection lcMethod-class Fitting procedure
@@ -834,7 +837,7 @@ setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose
 #'   # transform the data to matrix
 #'   envir$dataMat = dcastRepeatedMeasures(data,
 #'     id = idColumn, time = timeColumn, response = valueColumn)
-#'   return (envir)
+#'   return(envir)
 #' })
 #' }
 #' @inheritSection lcMethod-class Fitting procedure
@@ -864,7 +867,7 @@ setMethod('prepareData', signature('lcMethod'), function(method, data, verbose) 
 #' setMethod("postFit", "lcMethodExample", function(method, data, model, envir, verbose) {
 #'   # compute and store the cluster centers
 #'   model@centers <- INTENSIVE_COMPUTATION
-#'   return (model)
+#'   return(model)
 #' })
 #' }
 #' @inheritSection lcMethod-class Fitting procedure

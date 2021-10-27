@@ -33,7 +33,7 @@ Classes extending \code{lcModel} can override this method to remove additional n
 setMethod("strip", "lcModelExt", function(object, ..., classes = "formula") {
   object <- callNextMethod()
   # further process the object
-  return (object)
+  return(object)
 })
 }
 }

@@ -14,6 +14,8 @@ setValidity('lcMethodLMKM', function(object) {
 #' @inheritParams lcMethodFeature
 #' @inheritParams lcMethodKML
 #' @param formula A `formula` specifying the linear trajectory model.
+#' @param center A  `function` that computes the cluster center based on the original trajectories associated with the respective cluster.
+#' By default, the mean is computed.
 #' @param ... Arguments passed to [stats::lm].
 #' The following external arguments are ignored: x, data, control, centers, trace.
 #' @examples
@@ -26,6 +28,7 @@ lcMethodLMKM = function(
   time = getOption('latrend.time'),
   id = getOption('latrend.id'),
   nClusters = 2,
+  center = meanNA,
   standardize = scale,
   ...
 ) {
@@ -48,15 +51,15 @@ setMethod('getArgumentDefaults', signature('lcMethodLMKM'), function(object) {
 setMethod('getArgumentExclusions', signature('lcMethodLMKM'), function(object) {
   union(
     callNextMethod(),
-    c('x', 'data', 'control', 'centers', 'trace')
+    c('x', 'data', 'centers', 'trace')
   )
 })
 
 #' @rdname interface-featureBased
-setMethod('getName', signature('lcMethodLMKM'), function(object) 'glm-kmeans')
+setMethod('getName', signature('lcMethodLMKM'), function(object) 'lm-kmeans')
 
 #' @rdname interface-featureBased
-setMethod('getShortName', signature('lcMethodLMKM'), function(object) 'glmkm')
+setMethod('getShortName', signature('lcMethodLMKM'), function(object) 'lmkm')
 
 #' @rdname interface-featureBased
 setMethod('prepareData', signature('lcMethodLMKM'), function(method, data, verbose) {
@@ -78,16 +81,21 @@ setMethod('prepareData', signature('lcMethodLMKM'), function(method, data, verbo
 #' @rdname interface-featureBased
 setMethod('fit', signature('lcMethodLMKM'), function(method, data, envir, verbose, ...) {
   cat(verbose, 'Cluster step...')
-  km = kmeans(envir$x,
-              centers = method$nClusters,
-              trace = canShow(verbose, 'fine'))
+  km = kmeans(
+    envir$x,
+    centers = method$nClusters,
+    trace = canShow(verbose, 'fine')
+  )
 
   new(
     'lcModelLMKM',
     method = method,
     data = data,
     model = km,
+    center = method$center,
+    name = 'lmkm',
     coefNames = colnames(envir$x),
+    trajectoryCoefs = envir$x,
     clusterNames = make.clusterNames(method$nClusters)
   )
 })

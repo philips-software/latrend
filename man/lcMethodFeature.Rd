@@ -36,6 +36,62 @@ Alternatively, \code{representationStep} is a pre-computed representation \code{
 \description{
 Feature-based clustering.
 }
+\section{Linear regresion & k-means example}{
+
+In this example we define a feature-based approach where each trajectory is represented using a linear regression model.
+The coefficients of the trajectories are then clustered using k-means.
+
+Note that this method is already implemented as \code{\link[=lcMethodLMKM]{lcMethodLMKM()}}.
+
+Representation step:
+\preformatted{
+repStep <- function(method, data, verbose) {
+  library(data.table)
+  library(magrittr)
+  xdata = as.data.table(data)
+  coefdata <- xdata[,
+    lm(method$formula, .SD) %>% coef() %>% as.list(),
+    keyby = c(method$id)
+  ]
+  # exclude the id column
+  coefmat <- subset(coefdata, select = -1) %>% as.matrix()
+  rownames(coefmat) <- coefdata[[method$id]]
+  return(coefmat)
+}
+}
+
+Cluster step:
+\preformatted{
+clusStep <- function(method, data, repMat, envir, verbose) {
+  km <- kmeans(repMat, centers = method$nClusters)
+
+  lcModelCustom(
+    response = method$response,
+    method = method,
+    data = data,
+    trajectoryAssignments = km$cluster,
+    clusterTrajectories = method$center,
+    model = km
+   )
+}
+}
+
+Now specify the method and fit the model:
+\preformatted{
+data(latrendData)
+method <- lcMethodFeature(
+  formula = Y ~ Time,
+  response = "Y",
+  id = "Id",
+  time = "Time",
+  representationStep = repStep,
+  clusterStep = clusStep
+
+model <- latrend(method, data = latrendData)
+)
+}
+}
+
 \seealso{
 Other lcMethod implementations: 
 \code{\link{getArgumentDefaults}()},

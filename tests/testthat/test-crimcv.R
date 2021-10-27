@@ -1,4 +1,7 @@
 context('crimcv')
+# skip on CI because crimCV fitting fails at random with error "object 'Frtr' not found"
+skip_on_ci()
+skip_on_cran()
 skip_if_not_installed('crimCV')
 rngReset()
 

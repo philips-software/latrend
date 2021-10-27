@@ -9,6 +9,7 @@ lcMethodLMKM(
   time = getOption("latrend.time"),
   id = getOption("latrend.id"),
   nClusters = 2,
+  center = meanNA,
   standardize = scale,
   ...
 )
@@ -21,6 +22,9 @@ lcMethodLMKM(
 \item{id}{The name of the trajectory identification variable.}
 
 \item{nClusters}{The number of clusters to estimate.}
+
+\item{center}{A  \code{function} that computes the cluster center based on the original trajectories associated with the respective cluster.
+By default, the mean is computed.}
 
 \item{standardize}{A \code{function} to standardize the output \code{matrix} of the representation step. By default, the output is shifted and rescaled to ensure zero mean and unit variance.}
 

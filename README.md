@@ -2,6 +2,7 @@
 <!-- badges: start -->
   [![R-CMD-check](https://github.com/philips-software/latrend/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/philips-software/latrend/actions/workflows/R-CMD-check.yaml)
   [![CRAN](https://www.r-pkg.org/badges/version/latrend)](https://cran.r-project.org/package=latrend)
+  [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
   [![Codecov test coverage](https://codecov.io/gh/philips-software/latrend/branch/master/graph/badge.svg)](https://codecov.io/gh/philips-software/latrend?branch=master)
   [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/latrend)](https://www.r-pkg.org/pkg/latrend)
 <!-- badges: end -->
@@ -74,3 +75,6 @@ The `latrend` package provides interfaces to the relevant methods for longitudin
 * [mclust](https://CRAN.R-project.org/package=mclust)
 * [mixAK](https://CRAN.R-project.org/package=mixAK)
 * [mixtools](https://CRAN.R-project.org/package=mixtools)
+
+# Contributing
+We appreciate any contributions in the form of ideas, feature requests, bug reports, bug fixes, documentation improvements, code reformatting, and code submissions. Please see the [Contributing guide](https://philips-software.github.io/latrend/CONTRIBUTING.html).

@@ -21,6 +21,7 @@ knitr::opts_chunk$set(
 
 ```{r setup, include = FALSE}
 library(ggplot2)
+library(data.table)
 library(magrittr)
 library(latrend)
 knitr::opts_chunk$set(
@@ -37,9 +38,12 @@ We will generate a dataset comprising two clusters with a different intercept an
 
 ```{r}
 library(latrend)
-options(latrend.id = "Traj", 
-        latrend.time = "Time",
-        latrend.verbose = TRUE)
+library(data.table)
+options(
+  latrend.id = "Traj", 
+  latrend.time = "Time",
+  latrend.verbose = TRUE
+)
 ```
 
 Next, we generate the dataset, with 40 trajectories for cluster A and 60 trajectories for cluster B. Cluster A involves trajectories with a downward slope, whereas cluster B has an upward slope. We define a fixed mean of 1, such that all the cluster trajectories are shifted, placing cluster A at intercept 2, and cluster B at intercept 1.
@@ -55,7 +59,8 @@ casedata <- generateLongData(
   random = ~ Time,
   randomScales = cbind(c(.2, .02), c(.2, .02)),
   noiseScales = .05
-)
+) %>% 
+  as.data.table()
 ```
 
 We plot the data to get a sense of different trajectories that have been generated. Visually, there is little group separation.
@@ -109,8 +114,11 @@ In case the linear regression step is time-intensive, a more efficient approach 
 ```{r message=TRUE}
 casedata[, Intercept := coef(lm(Y ~ Time, .SD))[1], by = Traj]
 
-m3 <- lcMethodStratify(response = "Y", stratify = Intercept[1] > 1.7, 
-  clusterNames = c("Low", "High"))
+m3 <- lcMethodStratify(
+  response = "Y", 
+  stratify = Intercept[1] > 1.7, 
+  clusterNames = c("Low", "High")
+)
 model3 <- latrend(m3, casedata)
 ```
 
@@ -121,7 +129,8 @@ We can take the approach involving the estimation of a linear model per trajecto
 We first define the representation step, which estimates the model coefficients per trajectory, and outputs a `matrix` with the coefficients per trajectory per row.
 ```{r}
 repStep <- function(method, data, verbose) {
-  coefdata <- data[, lm(Y ~ Time, .SD) %>% coef() %>% as.list(), keyby = Traj]
+  dt <- as.data.table(data)
+  coefdata <- dt[, lm(Y ~ Time, .SD) %>% coef() %>% as.list(), keyby = Traj]
   coefmat <- subset(coefdata, select = -1) %>% as.matrix()
   rownames(coefmat) <- coefdata$Traj
   return(coefmat)
@@ -148,7 +157,11 @@ clusStep <- function(method, data, repMat, envir, verbose) {
 
 We are now ready to create the `lcMethodFeature` method.
 ```{r}
-m.twostep <- lcMethodFeature(response = "Y", representationStep = repStep, clusterStep = clusStep)
+m.twostep <- lcMethodFeature(
+  response = "Y", 
+  representationStep = repStep, 
+  clusterStep = clusStep
+)
 ```
 
 ```{r message=TRUE}
@@ -164,7 +177,8 @@ The two-step model defined above is hard-coded for a given formula and a fixed n
 Note that we can introduce new arguments which are not originally part of `lcMethodFeature` (e.g., `nClusters`) to enable the specification of the number of clusters in our method.
 ```{r}
 repStep.gen <- function(method, data, verbose) {
-  coefdata <- data[, lm(method$formula, .SD) %>% coef() %>% as.list(), keyby = c(method$id)]
+  dt <- as.data.table(data)
+  coefdata <- dt[, lm(method$formula, .SD) %>% coef() %>% as.list(), keyby = c(method$id)]
   # exclude the id column
   coefmat <- subset(coefdata, select = -1) %>% as.matrix()
   rownames(coefmat) <- coefdata[[method$id]]
@@ -175,7 +189,7 @@ clusStep.gen <- function(method, data, repMat, envir, verbose) {
   km <- kmeans(repMat, centers = method$nClusters)
 
   lcModelCustom(
-    response = "Y",
+    response = method$response,
     method = method,
     data = data, 
     trajectoryAssignments = km$cluster,

@@ -18,8 +18,9 @@ setValidity('lcMethodFeature', function(object) {
       is.matrix(object$representationStep)
   )
 
-  assert_that(!isArgDefined(object, 'clusterStep') ||
-                is.function(object$clusterStep))
+  assert_that(
+    !isArgDefined(object, 'clusterStep') || is.function(object$clusterStep)
+  )
 })
 
 #' @export
@@ -31,6 +32,60 @@ setValidity('lcMethodFeature', function(object) {
 #' @param clusterStep A `function` with signature `function(repdata)` that outputs a `lcModel`.
 #' @param standardize A `function` to standardize the output `matrix` of the representation step. By default, the output is shifted and rescaled to ensure zero mean and unit variance.
 #' @param ... Additional arguments.
+#' @section Linear regresion & k-means example:
+#' In this example we define a feature-based approach where each trajectory is represented using a linear regression model.
+#' The coefficients of the trajectories are then clustered using k-means.
+#'
+#' Note that this method is already implemented as [lcMethodLMKM()].
+#'
+#' Representation step:
+#' \preformatted{
+#' repStep <- function(method, data, verbose) {
+#'   library(data.table)
+#'   library(magrittr)
+#'   xdata = as.data.table(data)
+#'   coefdata <- xdata[,
+#'     lm(method$formula, .SD) %>% coef() %>% as.list(),
+#'     keyby = c(method$id)
+#'   ]
+#'   # exclude the id column
+#'   coefmat <- subset(coefdata, select = -1) %>% as.matrix()
+#'   rownames(coefmat) <- coefdata[[method$id]]
+#'   return(coefmat)
+#' }
+#' }
+#'
+#' Cluster step:
+#' \preformatted{
+#' clusStep <- function(method, data, repMat, envir, verbose) {
+#'   km <- kmeans(repMat, centers = method$nClusters)
+#'
+#'   lcModelCustom(
+#'     response = method$response,
+#'     method = method,
+#'     data = data,
+#'     trajectoryAssignments = km$cluster,
+#'     clusterTrajectories = method$center,
+#'     model = km
+#'    )
+#' }
+#' }
+#'
+#' Now specify the method and fit the model:
+#' \preformatted{
+#' data(latrendData)
+#' method <- lcMethodFeature(
+#'   formula = Y ~ Time,
+#'   response = "Y",
+#'   id = "Id",
+#'   time = "Time",
+#'   representationStep = repStep,
+#'   clusterStep = clusStep
+#'
+#' model <- latrend(method, data = latrendData)
+#' )
+#' }
+#'
 #' @family lcMethod implementations
 lcMethodFeature = function(
   response,
@@ -131,10 +186,12 @@ standardizeTrajectoryCoefMatrix = function(x, fun) {
 
   if (is.function(fun)) {
     newx = fun(x)
-    assert_that(is.matrix(newx),
-                nrow(newx) == nrow(x),
-                ncol(newx) == ncol(x),
-                msg = 'standardize function changed dimensions of the input matrix')
+    assert_that(
+      is.matrix(newx),
+      nrow(newx) == nrow(x),
+      ncol(newx) == ncol(x),
+      msg = 'standardize function changed dimensions of the input matrix'
+    )
     return(newx)
   } else if (isTRUE(fun)) {
     scale(x)

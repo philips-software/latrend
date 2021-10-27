@@ -1,6 +1,7 @@
 #' @include generics.R latrend.R
 
-# Trajectories ####
+
+# trajectories ####
 #' @rdname trajectories
 #' @aliases trajectories,data.frame-method
 setMethod('trajectories', signature('data.frame'), function(object, id, time, response, ...) {
@@ -33,7 +34,8 @@ setMethod('trajectories', signature('call'), function(object, ..., envir) {
 })
 
 
-# Plot cluster trajectories ####
+
+# plotCusterTrajectories ####
 #' @export
 #' @name plotClusterTrajectories
 #' @rdname plotClusterTrajectories
@@ -45,18 +47,20 @@ setMethod('trajectories', signature('call'), function(object, ..., envir) {
 #' @param object The (cluster) trajectory data.
 #' @param cluster The cluster assignment column
 #' @param center A function for aggregating multiple points at the same point in time
-#' @param trajectories Whether to plot the original data in addition to the cluster (i.e., center) trajectories
+#' @param trajectories Whether to additionally plot the original trajectories (`TRUE`),
+#' or to show the expected interval (standard deviation, standard error, range, or percentile range) of the observations at the respective moment in time.
+#'
+#' Note that visualizing the expected intervals is currently only supported for time-aligned trajectories, as the interval is computed at each unique moment in time.
+#' By default (`FALSE`), no information on the underlying trajectories is shown.
 #' @param facet Whether to facet by cluster. This is done by default when `trajectories` is enabled.
 #' @param id Id column. Only needed when `trajectories = TRUE`.
-#' @details Instead of passing the plotting arguments through `...`, consider modifying the ggplot2 defaults.
-#' For example, changing the default line size: `update_geom_defaults("line", list(size = 1.5))`
 setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
   response,
   cluster = 'Cluster',
   time = getOption('latrend.time'),
   center = meanNA,
-  trajectories = FALSE,
-  facet = isTRUE(trajectories),
+  trajectories = c(FALSE, 'sd', 'se', '80pct', '90pct', '95pct', 'range'),
+  facet = !isFALSE(as.logical(trajectories[1])),
   id = getOption('latrend.id'),
   ...
 ) {
@@ -66,84 +70,136 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     is.function(center)
   )
 
-  cdata = as.data.table(object) %>%
-    .[, .(Value = center(get(response))), keyby=c(cluster, time)] %>%
+  clusTrajData = as.data.table(object) %>%
+    .[, .(Value = center(get(response))), keyby = c(cluster, time)] %>%
     setnames('Value', response)
 
-  .plotClusterTrajs(cdata,
+  .plotClusterTrajs(
+    clusTrajData,
     response = response,
     time = time,
     cluster = cluster,
-    trajectories = trajectories,
+    trajectories = trajectories[1],
     facet = facet,
     id = id,
     rawdata = object,
-    ...)
+    ...
+  )
 })
 
 
-.plotClusterTrajs = function(data, response, time, cluster = 'Cluster', trajectories = FALSE, facet = FALSE, id, rawdata = NULL, ...) {
+.plotClusterTrajs = function(
+  data,
+  response,
+  time,
+  cluster = 'Cluster',
+  trajectories = FALSE,
+  facet = FALSE,
+  id,
+  rawdata = NULL,
+  ...
+) {
   assert_that(
     is.data.frame(data),
     has_name(data, response),
     has_name(data, time),
     has_name(data, cluster),
-    is.flag(trajectories) || is.list(trajectories),
+    is.flag(trajectories) || is.character(trajectories),
+    length(trajectories) == 1,
     is.flag(facet)
   )
 
-  if (is.factor(data[[cluster]])) {
-    nClus = nlevels(data[[cluster]])
-  } else {
-    nClus = uniqueN(data[[cluster]])
-  }
-
-  p = ggplot(
-    data = data,
-    mapping = aes_string(
-      x = time,
-      y = response)
-  )
-
-  if (isTRUE(trajectories) || is.list(trajectories)) {
+  if (isTRUE(as.logical(trajectories))) {
+    # show trajectories
     assert_that(
       is.data.frame(rawdata),
-      has_name(rawdata, id),
-      has_name(rawdata, time),
-      has_name(rawdata, response),
-      nrow(rawdata) > 0
+      nrow(rawdata) > 0,
+      !missing(id)
     )
 
-    cols = c(id, time, response)
+    p = plotTrajectories(
+      rawdata,
+      response = response,
+      time = time,
+      id = id,
+      facet = facet,
+      cluster = cluster,
+      ...
+    )
+  } else if (isFALSE(as.logical(trajectories))) {
+    # don't show trajectories
+    p = ggplot()
     if (facet) {
-      cols = c(cols, cluster)
+      p = p + facet_wrap(cluster)
+    }
+  } else {
+    # ribbon plot
+    p = ggplot()
+    if (facet) {
+      p = p + facet_wrap(cluster)
     }
 
-    lineArgs = list(
-      data = subset(rawdata, select = cols),
-      mapping = aes_string(group = id),
-      color = 'black'
-    )
+    if (grepl('^[0-9]{1,2}pct$', trajectories)) {
+      # percentile range
+      pct = as.integer(substr(trajectories, 0, nchar(trajectories) - 3))
+      assert_that(
+        pct > 0,
+        msg = 'invalid plotClusterTrajectories() argument trajectories = "##pct": ## must be > 0'
+      )
 
-    if(is.list(trajectories)) {
-      lineArgs = modifyList(lineArgs, trajectories)
+      ribbonFun = function(x) quantile(x, probs = .5 + c(-1, 1) * pct / 200, na.rm = TRUE)
+      ribbonTitle = sprintf('%dth percentile interval', pct)
+    } else {
+      trajectories = match.arg(
+        trajectories,
+        choices = c('sd', 'se', '80pct', '90pct', '95pct', 'range')
+      )
+
+      se = function(x) {
+        sd(x, na.rm = TRUE) / sqrt(sum(is.finite(x)))
+      }
+
+      ribbonFun = switch(trajectories,
+        sd = function(x) c(-1, 1) * sd(x, na.rm = TRUE) + mean(x, na.rm = TRUE),
+        se = function(x) c(-1, 1) * se(x) + mean(x, na.rm = TRUE),
+        range = function(x) range(x, na.rm = TRUE)
+      )
+
+      ribbonTitle = switch(trajectories,
+        sd = 'SD',
+        se = 'standard error',
+        range = 'range'
+      )
     }
 
-    p = p + do.call(geom_line, lineArgs)
+    # compute ribbon
+    ribbonData = as.data.table(rawdata)[, as.list(ribbonFun(get(response))), keyby = c(cluster, time)]
+    assert_that(ncol(ribbonData) == 4, msg = 'ribbon stat implementation error\nplease report.')
+    setnames(ribbonData, c(cluster, time, 'ymin', 'ymax'))
+
+    p = p + geom_ribbon(
+      mapping = aes_string(x = time, ymin = 'ymin', ymax = 'ymax'),
+      data = ribbonData,
+      alpha = .5
+    ) + labs(subtitle = sprintf('Range represents %s of local trajectory observations', ribbonTitle))
   }
 
   if (facet) {
-    p = p + facet_wrap(~ Cluster)
+    p = p + guides(color = 'none')
   }
 
-  p = p + geom_line(aes_string(color = cluster), ...) +
-    labs(title = 'Cluster trajectories')
+  # add cluster trajectories to plot
+  p = p + geom_line(
+    mapping = aes_string(x = time, y = response, color = cluster),
+    data = data,
+    ...
+  ) + labs(title = 'Cluster trajectories')
 
   return(p)
 }
 
 
-# Plot trajectories ####
+# plotTrajectories ####
 #' @export
 #' @name plotTrajectories
 #' @rdname plotTrajectories
@@ -165,14 +221,16 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
 #' assignments = aggregate(Y ~ Id, latrendData, mean)$Y < 0
 #' plotTrajectories(latrendData,
 #'   response = "Y", id = "Id", time = "Time", cluster = assignments)
-setMethod('plotTrajectories', signature('data.frame'), function(
-  object,
-  response,
-  time = getOption('latrend.time'),
-  id = getOption('latrend.id'),
-  cluster = NULL,
-  facet = TRUE,
-  ...) {
+setMethod('plotTrajectories', signature('data.frame'),
+  function(
+    object,
+    response,
+    time = getOption('latrend.time'),
+    id = getOption('latrend.id'),
+    cluster = NULL,
+    facet = TRUE,
+    ...
+  ) {
 
   assert_that(
     !is.character(response) || has_name(object, response),
@@ -189,20 +247,20 @@ setMethod('plotTrajectories', signature('data.frame'), function(
   }
 
   if (!is.null(cluster) && !facet) {
-    map = aes_string(x = time, y = response, group = id, cluster = cluster, color = cluster)
+    map = aes_string(x = time, y = response, group = id, color = cluster)
   } else {
-    map = aes_string(x = time, y = response, group = id, cluster = cluster)
+    map = aes_string(x = time, y = response, group = id)
   }
 
-  p = ggplot(data = object, mapping = map) +
+  p = ggplot() +
     theme(legend.position = 'top') +
-    geom_line() +
+    geom_line(mapping = map, data = object) +
     labs(title = 'Trajectories')
 
   if (!is.null(cluster) && facet) {
     p = p + facet_wrap(cluster)
   }
-  return (p)
+  return(p)
 })
 
 
