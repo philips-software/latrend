@@ -31,19 +31,71 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Generating data
-For generating data in a more flexible way, see the (simstudy)[https://cran.r-project.org/package=simstudy] package.
+# Introduction
+In this vignette we demonstrate how to conduct a simulation study with minimal coding. We show how to do a structural evaluation of methods for clustering longitudinal data, for different specifications, and across various (synthetic) data scenarios.
+
+A typical workflow in a simulation study involves:
+
+1. [Data settings]
+2. [Method settings]
+3. [Evaluating the settings]
+4. [Analyzing the results]
+
+There are many packages available in `R` which facilitate such a workflow. In this vignette, we use the [simTool](https://cran.r-project.org/package=simTool) package.
+
+Due to the relatively large number of models fitted, we will disable all model outputs:
+```{r}
+library(latrend)
+options(latrend.verbose = FALSE)
+```
+
+# Data generation
+Using synthetic data allows us to investigate to performance of the methods under specific conditions of interest (e.g., sensitivity to noise, within-cluster variability, and cluster separation).
+
+For demonstration purposes, we define a trivial dataset comprising two distinct groups with group trajectories represented by a line (i.e., intercept and slope). 
+A trajectory $\textbf{y}_i$ belonging to group $k$ is described by $y_{ij} = \beta_{0k} + \beta_{1k} t_{j} + z_{0i} + e_{ij}$. Here, $\beta_{0k}$ and $\beta_{1k}$ are the intercept and slope for group $k$, respectively. Furthermore, $z_i$ denotes the trajectory-specific random intercept, i.e., its deviation from the group trajectory. Lastly, $e_{ij}$ represents independent random noise with $e_{ij} \sim N(0, \sigma^2)$.
+
+We can generate data according to this model using a utility function named `generateLongData()` that is included in the package. This function generates datasets based on a mixture of linear mixed models. We create a wrapper around this function in order to adapt the function to our needs. Most importantly, we code the shape and coefficients of the group trajectories as fixed, setting $(\beta_{0A},\beta_{1A}) = (0, 0)$ for group A (40%) and $(\beta_{0B},\beta_{1B}) = (1, -1)$ for group B (60%). Other data settings (e.g., the magnitude of perturbation) are passed via `...`.
 
 ```{r}
-dataGen = function(..., data.seed) {
-  generateLongData(..., seed = data.seed)
+dataGen <- function(numTraj, ..., data.seed) {
+  latrend::generateLongData(
+    sizes = c(floor(numTraj * .4), ceiling(numTraj * .6)),
+    fixed = Y ~ 1 + Time,
+    cluster = ~ 1 + Time,
+    random = ~ 1,
+    id = "Traj",
+    clusterCoefs = cbind(c(0, 0), c(1, -1)),
+    seed = data.seed,
+    ...
+  )
 }
 ```
 
+Because the *simTool* package does not appear to support overlapping names between data and method functions, we needed to rename the `seed` argument of our underlying data generating function.
+
+Note that the `generateLongData` is included in the _latrend_ package primarily for demonstration purposes. For generating data in a more flexible way, consider using the [simstudy](https://cran.r-project.org/package=simstudy) package.
+
+Now that we have defined a data generating function, we set the default trajectory id and time column names, so we do not have to specify this in any future calls.
+```{r}
+options(latrend.id = "Traj", latrend.time = "Time")
+```
+
+It's a good idea to inspect the data we are generating.
+```{r}
+exampleData <- dataGen(numTraj = 200, randomScale = .1, data.seed = 1)
+plotTrajectories(exampleData, response = "Y")
+```
+
+# Data settings
+We now specify the data settings of interest. In this example, we evaluate the methods on datasets with varying sample size (50 and 250 trajectories) and random intercept scale (small and large random intercept). Moreover, we evaluate methods repeatedly under these settings by specifying different values for `data.seed`, generating a slightly different dataset for each seed. 
+
+As we intend to evaluate the methods on each combination of data settings, we need to generate a table of all permutations. This can be done using the `expand.grid()` function, or using `expand_tibble()`.
 
 ```{r}
-dataGrid = expand_tibble(
-  fun = 'dataGen',
+dataGrid <- simTool::expand_tibble(
+  fun = "dataGen",
+  numTraj = c(50, 250),
   randomScales = c(.1, .5),
   data.seed = 1:2
 )
@@ -52,24 +104,124 @@ head(dataGrid)
 ```
 
 
-# Defining methods
+# Method settings
+Similarly to the data settings table, we specify a table of all permutations for the method settings. Typically this is done separately for each method, as their settings will usually differ. In this example we evaluate KmL and GCKM only on differing number of clusters so the method settings can be jointly generated. Repeated method evaluation is achieved through specifying several values for the `seed` argument.
+
+The method evaluation function (specified by the `proc` field) here is simply the `latrend()` function, which will fit the specified method type to the generated data.
+## Specfying the KmL method
 ```{r}
-methodGrid <- expand_tibble(
+kmlMethodGrid <- simTool::expand_tibble(
   proc = "latrend",
-  method = c("lcMethodKML"), 
-  nClusters = 1:2,
-  seed = 1:2,
-  time = "Time",
-  response = "Value"
+  method = "lcMethodKML",
+  nClusters = 1:3,
+  seed = 1,
+  response = "Y"
 )
 
+head(kmlMethodGrid)
+```
+
+## Specifying the GCKM method
+Parametric models such as GCKM are more unwieldy to specify in a simulation study due to the need to define the parametric shape through one or more formulas. Formulas are tedious to query or filter in a post-hoc simulation analysis^[Another reason to avoid defining formulas directly in the permutation grid is due to the way `data.frame` and tibbles handle columns containing `formula`, returning a `list` instead of the `formula` element when querying a single row. This results in an invalid method specification when `eval_tibbles()` calls the `proc` argument using this output.].
+
+We can solve this by defining simple keywords representing the different parametric shapes of interest. We then specify a wrapper function for `latrend()` that sets the correct `formula` argument depending on the keyword.
+```{r}
+fitGCKM <- function(type, ...) {
+  form <- switch(type,
+    constant = Y ~ 1 + Time + (1 | Traj),
+    linear = Y ~ 1 + Time + (Time | Traj)
+  )
+  
+  latrend(..., formula = form)
+}
+```
+
+We can then specify our GCKM method settings in a similar way as we did for the KmL method, but with the `proc` argument set to the `fitGCKM` function we have just defined.
+```{r}
+gckmMethodGrid <- simTool::expand_tibble(
+  proc = "fitGCKM",
+  method = "lcMethodGCKM",
+  type = c("constant", "linear"),
+  nClusters = 1:3,
+  seed = 1:2
+)
+```
+
+Finally, we combine our method-specific permutation grids into one large grid. By using the `bind_rows()` function, mismatches in the columns between the grids are handled properly.
+```{r}
+methodGrid <- dplyr::bind_rows(kmlMethodGrid, gckmMethodGrid)
 head(methodGrid)
 ```
 
-# Compute
+# Evaluating the settings
+The `eval_tibbles()` function takes the data and method grids as inputs, and runs the method estimation as intended for each simulation setting. In practice, it is advisable to run evaluations in parallel as the number of simulation settings is likely much greater than in this trivial demonstration.
+
+Before we run the simulations, we first want to define a function for computing our model performance metrics. This function will be run by `eval_tibbles()` for every estimated model. The details on what we are computing here is explained further in the next section.
 ```{r}
-result = eval_tibbles(data_grid = dataGrid, proc_grid = methodGrid)
+analyzeModel <- function(model) {
+  data <- model.data(model)
+  refModel <- lcModelPartition(data, response = "Y", trajectoryAssignments = "Class")
+  
+  tibble::tibble(
+    BIC = BIC(model),
+    APPA = metric(model, "APPA"),
+    WMAE = metric(model, "WMAE"),
+    ARI = externalMetric(model, refModel, "adjustedRand")
+  )
+}
 ```
 
+At last, we can run the simulations and post-hoc summary computations:
+```{r}
+result <- simTool::eval_tibbles(
+  data_grid = dataGrid, 
+  proc_grid = methodGrid,
+  post_analyze = analyzeModel
+)
+```
+The `result` table contains a `results` column containing the fitted models.
+```{r}
+result
+```
 
-# Performance
+# Analyzing the results
+We can now analyze the computed results. We use the [data.table](https://cran.r-project.org/package=data.table) package to handle the filtering and aggregation of the results table.
+```{r}
+library(data.table)
+resultsTable <- as.data.table(result$simulation)
+```
+
+## Recovery of the number of clusters
+Often, researchers are interested in estimating the number of clusters by means of minimizing a metric indicating either model fit, cluster separation, or another factor that helps to determine the preferred number of clusters. Evaluating how many times the correct number of clusters is obtained from a cluster metric can help to decide which metric to use, and which selection approach to take.
+
+In this example, we evaluate the use of the Bayesian information criterion (BIC). For each data scenario, we identify the cluster solution that minimizes the BIC.
+```{r}
+resultsTable[, .(K = nClusters[which.min(BIC)]), keyby = .(numTraj, randomScales, data.seed, method)]
+```
+Column _K_ of the table shows the selected number of clusters for each scenario. This shows that estimating the number of clusters by minimizing the BIC results in a consistent overestimation of the number of clusters in our datasets. As an alternative to minimizing the BIC, we could consider using the elbow method instead. However, in order to conclude whether that is a feasible approach to our data would require more simulations, across a greater number of cluster.
+
+## Trajectory assignment agreement
+Another aspect of interest might be the ability of the cluster model to identify the correct cluster assignment for each of the trajectories. An intuitive metric for assessing this is the adjusted Rand index (ARI). This metric measures the agreement between two partitionings, where a score of 1 indicate a perfect agreement, and a score of 0 indicates an agreement no better than by chance.
+
+We compute the average ARI per data scenario and method to identify in which scenarios the methods were able to recover the reference cluster assignments. 
+```{r}
+resultsTable[nClusters > 1, .(ARI = mean(ARI)), keyby = .(nClusters, numTraj, randomScales, method)]
+```
+The trajectory assignment recovery is affected the most by the magnitude of the random scale (i.e., the amount of overlap between the clusters). Moreover, it is apparent that KmL performs much worse under high random scale than GCKM.
+```{r}
+resultsTable[nClusters > 1, .(ARI = mean(ARI)), keyby = .(randomScales, nClusters, method)]
+```
+
+## Residual error
+Another aspect of interest might be the residual error, i.e., how well our cluster model describes the data. Here, we gauge this by computing the mean absolute error, weighted by the posterior probabilities^[For KmL and GCKM, the WMAE is effectively the same as the MAE.].
+
+Both methods achieve practically the same mean residual error. Another sign of the data comprising two clusters is that the MAE drops down significantly for the two-cluster solution, but hardly any improvement is gained for the three-cluster solution.
+```{r}
+resultsTable[randomScales == .1, .(WMAE = mean(WMAE)), keyby = .(nClusters, method)]
+```
+
+As one would expect, the residual error is strongly affected by the magnitude of the random scale.
+```{r}
+resultsTable[, .(WMAE = mean(WMAE)), keyby = .(randomScales, nClusters)]
+```
+
