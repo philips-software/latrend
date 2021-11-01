@@ -68,7 +68,10 @@ Suggests:
     psych,
     qqplotr,
     doParallel,
-    covr
+    covr,
+    simTool,
+    dplyr,
+    tibble
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 RdMacros: Rdpack
