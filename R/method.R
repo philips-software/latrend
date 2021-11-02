@@ -1052,12 +1052,22 @@ setMethod('responseVariable', signature('lcMethod'), function(object, ...) {
   if (hasName(object, 'response')) {
     object$response
   } else if (hasName(object, 'formula')) {
-    getResponse(object$formula)
+    if (hasSingleResponse(object$formula)) {
+      getResponse(object$formula)
+    } else {
+      stop(
+        sprintf(
+          'Cannot determine the response variable for class %s: the formula of argument "formula" has no response',
+          class(object)[1]
+        )
+      )
+    }
   } else {
     stop(
-      'cannot determine the response variable(s) for class ',
-      class(object)[1],
-      '\nConsider overriding "responseVariable(lcMethod)" to fix this for your lcMethod implementation'
+      sprintf(
+        'cannot determine the response variable(s) for class %s\nConsider overriding "responseVariable(lcMethod)" to fix this for your lcMethod implementation',
+        class(object)[1]
+      )
     )
   }
 })

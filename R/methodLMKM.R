@@ -1,14 +1,5 @@
 setClass('lcMethodLMKM', contains = 'lcMethod')
 
-setValidity('lcMethodLMKM', function(object) {
-  assert_that(has_lcMethod_args(object, formalArgs(lcMethodLMKM)))
-
-  if (isArgDefined(object, 'formula')) {
-    assert_that(hasSingleResponse(object$formula))
-  }
-})
-
-
 #' @export
 #' @title Two-step clustering through linear regression modeling and k-means
 #' @inheritParams lcMethodFeature

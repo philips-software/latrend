@@ -1,15 +1,63 @@
-#' Synthetic longitudinal dataset comprising three classes
-#' @format A `data.frame` describing 200 trajectories originating from one of three classes,
-#' each with a different cluster trajectory. Trajectories randomly deviate in intercept and slope from the reference cluster.
+#' @title Artificial longitudinal dataset comprising three classes
+#' @description
+#' An artificial longitudinal dataset comprising 200 trajectories belonging to one of 3 classes.
+#' Each trajectory deviates in intercept and slope from its respective class trajectory.
+#' @format A `data.frame` comprising longitudinal observations from 200 trajectories.
+#' Each row represents the observed value of a trajectory at a specific moment in time.
 #' \describe{
-#'   \item{Id}{trajectory identifier, `integer`.}
-#'   \item{Time}{measurement time, `numeric` between 0 and 2.}
-#'   \item{Y}{observed variable, `numeric`.}
-#'   \item{Class}{the reference class, `factor`.}
+#'   \item{Id}{`integer`: The trajectory identifier.}
+#'   \item{Time}{`numeric`: The measurement time, between 0 and 2.}
+#'   \item{Y}{`numeric`: The observed value at the respective time `Time` for trajectory `Id`.}
+#'   \item{Class}{`factor`: The reference class.}
 #' }
 #' @source This dataset was generated using [generateLongData].
 #' @seealso [generateLongData]
+#' @examples
+#' data(latrendData)
+#' plotTrajectories(latrendData, id = "Id", time = "Time", response = "Y")
+#'
+#' # plot according to the reference class
+#' plotTrajectories(latrendData, id = "Id", time = "Time", response = "Y", cluster = "Class")
 "latrendData"
+
+
+#' @title Biweekly Mean Treatment Adherence of OSA Patients over 1 Year
+#' @description
+#' A simulated longitudinal dataset comprising 500 patients with obstructive sleep apnea (OSA) during their
+#' first year on CPAP therapy.
+#' The dataset contains the patient usage hours, averaged over 2-week periods.
+#'
+#' The daily usage data underlying the downsampled dataset was simulated based on 7 different adherence patterns.
+#' The defined adherence patterns were inspired by the adherence patterns identified by Aloia et al. (2008), with slight adjustments
+#' @format A `data.frame` comprising longitudinal data of 500 patients, each having 26 observations over a period of 1 year.
+#' Each row represents a patient observation interval (two weeks), with columns:
+#' \describe{
+#'   \item{Patient}{`factor`: The patient identifier, where each level represents a simulated patient.}
+#'   \item{Biweek}{`integer`: Two-week interval index. Starts from 1.}
+#'   \item{MaxDay}{`integer`: The last day used for the aggregation of the respective interval, `integer`}
+#'   \item{UsageHours}{`numeric`: The mean hours of usage in the respective week.
+#'   Greater than or equal to zero, and typically around 4-6 hours.}
+#'   \item{Group}{`factor`: The reference group (i.e., adherence pattern) from which this patient was generated.}
+#' }
+#'
+#' @note This dataset is only intended for demonstration purposes.
+#' While the data format will remain the same, the data content is subject to change in future versions.
+#' @source This dataset was generated based on the cluster-specific descriptive statistics table provided in Aloia et al. (2008),
+#' with some adjustments made in order to improve cluster separation for demonstration purposes.
+#'
+#' Mark S. Aloia, Matthew S. Goodwin, Wayne F. Velicer, J. Todd Arnedt, Molly Zimmerman, Jaime Skrekas, Sarah Harris, Richard P. Millman,
+#' Time Series Analysis of Treatment Adherence Patterns in Individuals with Obstructive Sleep Apnea, Annals of Behavioral Medicine,
+#' Volume 36, Issue 1, August 2008, Pages 44-53, <https://doi.org/10.1007/s12160-008-9052-9>
+#' @examples
+#' library(latrend)
+#' data(OSA.adherence)
+#' plotTrajectories(OSA.adherence, id = "Patient", time = "Biweek", response = "UsageHours")
+#'
+#' # plot according to cluster ground truth
+#' plotTrajectories(OSA.adherence, id = "Patient", time = "Biweek", response = "UsageHours",
+#'   cluster = "Group")
+"OSA.adherence"
+
 
 #' @export
 #' @title Generate longitudinal test data
@@ -27,25 +75,33 @@
 #' @param noiseScales Scale of the random noise passed to rnoise. Either scalar or defined per cluster.
 #' @param rnoise Random sampler for generating noise at location 0 with the respective scale.
 #' @param shuffle Whether to randomly reorder the strata in which they appear in the data.frame.
+#' @param seed Optional seed to set for the PRNG. The set PRNG state persists after the function completes.
 #' @examples
 #' longdata <- generateLongData(sizes = c(40, 70), id = "Id",
 #'                             cluster = ~poly(Time, 2, raw = TRUE),
 #'                             clusterCoefs = cbind(c(1, 2, 5), c(-3, 4, .2)))
 #' plotTrajectories(longdata, response = "Value", id = "Id", time = "Time")
-generateLongData = function(sizes = c(40, 60),
-                            fixed = Value ~ 1 + Time,
-                            cluster = ~ 1 + Time,
-                            random = ~ 1,
-                            id = getOption('latrend.id'),
-                            data = data.frame(Time = seq(0, 1, by = .1)),
-                            fixedCoefs = c(0, 0),
-                            clusterCoefs = cbind(c(-2, 1), c(2, -1)),
-                            randomScales = cbind(.1, .1),
-                            rrandom = rnorm,
-                            noiseScales = c(.1, .1),
-                            rnoise = rnorm,
-                            clusterNames = LETTERS[seq_along(sizes)],
-                            shuffle = FALSE) {
+generateLongData = function(
+  sizes = c(40, 60),
+  fixed = Value ~ 1 + Time,
+  cluster = ~ 1 + Time,
+  random = ~ 1,
+  id = getOption('latrend.id'),
+  data = data.frame(Time = seq(0, 1, by = .1)),
+  fixedCoefs = c(0, 0),
+  clusterCoefs = cbind(c(-2, 1), c(2, -1)),
+  randomScales = cbind(.1, .1),
+  rrandom = rnorm,
+  noiseScales = c(.1, .1),
+  rnoise = rnorm,
+  clusterNames = LETTERS[seq_along(sizes)],
+  shuffle = FALSE,
+  seed = NULL
+) {
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+
   nClus = length(sizes)
   assert_that(nClus >= 1, all(sizes > 0))
   assert_that(is.character(id) && nchar(id) > 0)

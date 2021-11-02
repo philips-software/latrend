@@ -18,7 +18,8 @@ generateLongData(
   noiseScales = c(0.1, 0.1),
   rnoise = rnorm,
   clusterNames = LETTERS[seq_along(sizes)],
-  shuffle = FALSE
+  shuffle = FALSE,
+  seed = NULL
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ generateLongData(
 \item{clusterNames}{A \code{character} vector denoting the names of the generated clusters.}
 
 \item{shuffle}{Whether to randomly reorder the strata in which they appear in the data.frame.}
+
+\item{seed}{Optional seed to set for the PRNG. The set PRNG state persists after the function completes.}
 }
 \description{
 Generate longitudinal test data
