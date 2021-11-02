@@ -95,10 +95,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/custom.html">Implementing new models</a>
+      <a href="../articles/demo.html">Demonstration of latrend package</a>
     </li>
     <li>
-      <a href="../articles/demo.html">Demonstration of latrend package</a>
+      <a href="../articles/implement.html">Implementing new models</a>
+    </li>
+    <li>
+      <a href="../articles/simulation.html">Conducting a simulation study</a>
     </li>
     <li>
       <a href="../articles/validation.html">Validating cluster models</a>
@@ -198,36 +201,39 @@
 <code><a href='time.lcModel.html'>time.lcModel</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>latrendData</span><span class='op'>)</span>
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lcMethodKML.html'>lcMethodKML</a></span><span class='op'>(</span><span class='st'>"Y"</span>, id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span>
-<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span>method <span class='op'>=</span> <span class='va'>m</span>, data <span class='op'>=</span> <span class='va'>latrendData</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  ~ Fast KmL ~
-#&gt; ********************S</div><div class='input'><span class='fu'>fittedTrajectories</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Id Cluster      Time           Y
-#&gt;    1:   1       B 0.0000000 -0.98189066
-#&gt;    2:   1       B 0.2222222 -0.62598349
-#&gt;    3:   1       B 0.4444444 -0.38037545
-#&gt;    4:   1       B 0.6666667 -0.16078630
-#&gt;    5:   1       B 0.8888889  0.06417402
-#&gt;   ---                                  
-#&gt; 1996: 200       A 1.1111111  0.01209756
-#&gt; 1997: 200       A 1.3333333 -0.03916995
-#&gt; 1998: 200       A 1.5555556 -0.08030881
-#&gt; 1999: 200       A 1.7777778 -0.17162641
-#&gt; 2000: 200       A 2.0000000 -0.20624529</div><div class='input'>
-<span class='fu'>fittedTrajectories</span><span class='op'>(</span><span class='va'>model</span>, at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>.5</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;       Id Cluster Time           Y
-#&gt;   1:   1       B  0.0 -0.98189066
-#&gt;   2:   1       B  0.5 -0.32547817
-#&gt;   3:   1       B  1.0  0.12550089
-#&gt;   4:   2       B  0.0 -0.98189066
-#&gt;   5:   2       B  0.5 -0.32547817
-#&gt;  ---                             
-#&gt; 596: 199       A  0.5  0.06556768
-#&gt; 597: 199       A  1.0  0.02472587
-#&gt; 598: 200       A  0.0  0.04839039
-#&gt; 599: 200       A  0.5  0.06556768
-#&gt; 600: 200       A  1.0  0.02472587</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>latrendData</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lcMethodKML.html'>lcMethodKML</a></span><span class='op'>(</span><span class='st'>"Y"</span>, id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span>method <span class='op'>=</span> <span class='va'>m</span>, data <span class='op'>=</span> <span class='va'>latrendData</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ~ Fast KmL ~</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ********************S</span>
+<span class='r-in'><span class='fu'>fittedTrajectories</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        Id Cluster      Time           Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1:   1       B 0.0000000 -0.98189066</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2:   1       B 0.2222222 -0.62598349</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3:   1       B 0.4444444 -0.38037545</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    4:   1       B 0.6666667 -0.16078630</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    5:   1       B 0.8888889  0.06417402</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ---                                  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1996: 200       A 1.1111111  0.01209756</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1997: 200       A 1.3333333 -0.03916995</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1998: 200       A 1.5555556 -0.08030881</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1999: 200       A 1.7777778 -0.17162641</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2000: 200       A 2.0000000 -0.20624529</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>fittedTrajectories</span><span class='op'>(</span><span class='va'>model</span>, at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>.5</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Id Cluster Time           Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:   1       B  0.0 -0.98189066</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:   1       B  0.5 -0.32547817</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:   1       B  1.0  0.12550089</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:   2       B  0.0 -0.98189066</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:   2       B  0.5 -0.32547817</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 596: 199       A  0.5  0.06556768</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 597: 199       A  1.0  0.02472587</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 598: 200       A  0.0  0.04839039</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 599: 200       A  0.5  0.06556768</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 600: 200       A  1.0  0.02472587</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -54,10 +54,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/custom.html">Implementing new models</a>
+      <a href="articles/demo.html">Demonstration of latrend package</a>
     </li>
     <li>
-      <a href="articles/demo.html">Demonstration of latrend package</a>
+      <a href="articles/implement.html">Implementing new models</a>
+    </li>
+    <li>
+      <a href="articles/simulation.html">Conducting a simulation study</a>
     </li>
     <li>
       <a href="articles/validation.html">Validating cluster models</a>
@@ -122,10 +125,10 @@
 <a href="#usage" class="anchor"></a>Usage</h1>
 <pre><code><a href="https://github.com/philips-software/latrend">library(latrend)</a></code></pre>
 <p>Load and view example data.</p>
-<pre><code><a href="https://rdrr.io/r/utils/data.html">data(latrendData)
+<pre><code>data(latrendData)
 head(latrendData)
 options(latrend.id = "Id", latrend.time = "Time")
-plotTrajectories(latrendData, response = "Y")</a></code></pre>
+plotTrajectories(latrendData, response = "Y")</code></pre>
 <p>Cluster the trajectories and plot the results.</p>
 <pre><code>kmlMethod &lt;- lcMethodKML("Y", nClusters = 3)
 model &lt;- latrend(kmlMethod, data = latrendData)
@@ -135,8 +138,8 @@ plot(model)</code></pre>
 <pre><code>kmlMethods &lt;- lcMethods(kmlMethod, nClusters = 1:5)
 models &lt;- latrendBatch(kmlMethods, data = latrendData)</code></pre>
 <p>Determine the number of clusters through one or more internal cluser metrics.</p>
-<pre><code><a href="reference/metric.html">metric(models, c("WMAE", "BIC"))
-plotMetric(models, c("WMAE", "BIC"))</a></code></pre>
+<pre><code>metric(models, c("WMAE", "BIC"))
+plotMetric(models, c("WMAE", "BIC"))</code></pre>
 </div>
 <div id="supported-packages" class="section level1">
 <h1 class="hasAnchor">

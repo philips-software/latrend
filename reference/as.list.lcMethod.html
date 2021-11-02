@@ -95,10 +95,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/custom.html">Implementing new models</a>
+      <a href="../articles/demo.html">Demonstration of latrend package</a>
     </li>
     <li>
-      <a href="../articles/demo.html">Demonstration of latrend package</a>
+      <a href="../articles/implement.html">Implementing new models</a>
+    </li>
+    <li>
+      <a href="../articles/simulation.html">Conducting a simulation study</a>
     </li>
     <li>
       <a href="../articles/validation.html">Validating cluster models</a>
@@ -188,111 +191,115 @@ Alternatively, a <code>function</code> or <code>list</code> of <code>function</c
 <code><a href='update.lcMethod.html'>update.lcMethod</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>latrendData</span><span class='op'>)</span>
-<span class='va'>method</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lcMethodKML.html'>lcMethodKML</a></span><span class='op'>(</span><span class='st'>"Y"</span>, id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='va'>method</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $time
-#&gt; [1] "Time"
-#&gt; 
-#&gt; $id
-#&gt; [1] "Id"
-#&gt; 
-#&gt; $nClusters
-#&gt; [1] 2
-#&gt; 
-#&gt; $nbRedrawing
-#&gt; [1] 20
-#&gt; 
-#&gt; $maxIt
-#&gt; [1] 200
-#&gt; 
-#&gt; $imputationMethod
-#&gt; [1] "copyMean"
-#&gt; 
-#&gt; $distanceName
-#&gt; [1] "euclidean"
-#&gt; 
-#&gt; $power
-#&gt; [1] 2
-#&gt; 
-#&gt; $distance
-#&gt; function () 
-#&gt; {
-#&gt; }
-#&gt; &lt;environment: 0x55b9ad823ad8&gt;
-#&gt; 
-#&gt; $centerMethod
-#&gt; function (x) 
-#&gt; {
-#&gt;     mean(x, na.rm = TRUE)
-#&gt; }
-#&gt; &lt;bytecode: 0x55b9ad6c6908&gt;
-#&gt; &lt;environment: namespace:longitudinalData&gt;
-#&gt; 
-#&gt; $startingCond
-#&gt; [1] "nearlyAll"
-#&gt; 
-#&gt; $nbCriterion
-#&gt; [1] 1000
-#&gt; 
-#&gt; $scale
-#&gt; [1] TRUE
-#&gt; 
-#&gt; $response
-#&gt; [1] "Y"
-#&gt; </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='va'>method</span>, args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'id'</span>, <span class='st'>'time'</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $id
-#&gt; [1] "Id"
-#&gt; 
-#&gt; $time
-#&gt; [1] "Time"
-#&gt; </div><div class='input'>
-<span class='co'># select arguments used by kml()</span>
-<span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='va'>method</span>, args <span class='op'>=</span> <span class='fu'>kml</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/kml/man/kml.html'>kml</a></span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $nbRedrawing
-#&gt; [1] 20
-#&gt; </div><div class='input'>
-<span class='co'># select arguments used by either kml() or parALGO()</span>
-<span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='va'>method</span>, args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'>kml</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/kml/man/kml.html'>kml</a></span>, <span class='fu'>kml</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/kml/man/parKml.html'>parALGO</a></span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $nbRedrawing
-#&gt; [1] 20
-#&gt; 
-#&gt; $maxIt
-#&gt; [1] 200
-#&gt; 
-#&gt; $imputationMethod
-#&gt; [1] "copyMean"
-#&gt; 
-#&gt; $distanceName
-#&gt; [1] "euclidean"
-#&gt; 
-#&gt; $power
-#&gt; [1] 2
-#&gt; 
-#&gt; $distance
-#&gt; function () 
-#&gt; {
-#&gt; }
-#&gt; &lt;environment: 0x55b9ae7ea498&gt;
-#&gt; 
-#&gt; $centerMethod
-#&gt; function (x) 
-#&gt; {
-#&gt;     mean(x, na.rm = TRUE)
-#&gt; }
-#&gt; &lt;bytecode: 0x55b9ad6c6908&gt;
-#&gt; &lt;environment: namespace:longitudinalData&gt;
-#&gt; 
-#&gt; $startingCond
-#&gt; [1] "nearlyAll"
-#&gt; 
-#&gt; $nbCriterion
-#&gt; [1] 1000
-#&gt; 
-#&gt; $scale
-#&gt; [1] TRUE
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>latrendData</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>method</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lcMethodKML.html'>lcMethodKML</a></span><span class='op'>(</span><span class='st'>"Y"</span>, id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='va'>method</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $time</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Time"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $id</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Id"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $nClusters</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $nbRedrawing</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 20</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $maxIt</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 200</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $imputationMethod</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "copyMean"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $distanceName</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "euclidean"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $power</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $distance</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> function () </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> }</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;environment: 0x55d25c15ebb8&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $centerMethod</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> function (x) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     mean(x, na.rm = TRUE)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> }</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;bytecode: 0x55d25cf58a60&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;environment: namespace:longitudinalData&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $startingCond</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "nearlyAll"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $nbCriterion</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $scale</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $response</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Y"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='va'>method</span>, args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'id'</span>, <span class='st'>'time'</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $id</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Id"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $time</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Time"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># select arguments used by kml()</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='va'>method</span>, args <span class='op'>=</span> <span class='fu'>kml</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/kml/man/kml.html'>kml</a></span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $nbRedrawing</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 20</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># select arguments used by either kml() or parALGO()</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='va'>method</span>, args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'>kml</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/kml/man/kml.html'>kml</a></span>, <span class='fu'>kml</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/kml/man/parKml.html'>parALGO</a></span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $nbRedrawing</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 20</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $maxIt</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 200</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $imputationMethod</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "copyMean"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $distanceName</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "euclidean"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $power</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $distance</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> function () </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> }</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;environment: 0x55d2647c0398&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $centerMethod</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> function (x) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     mean(x, na.rm = TRUE)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> }</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;bytecode: 0x55d25cf58a60&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;environment: namespace:longitudinalData&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $startingCond</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "nearlyAll"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $nbCriterion</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $scale</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

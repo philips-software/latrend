@@ -95,10 +95,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/custom.html">Implementing new models</a>
+      <a href="../articles/demo.html">Demonstration of latrend package</a>
     </li>
     <li>
-      <a href="../articles/demo.html">Demonstration of latrend package</a>
+      <a href="../articles/implement.html">Implementing new models</a>
+    </li>
+    <li>
+      <a href="../articles/simulation.html">Conducting a simulation study</a>
     </li>
     <li>
       <a href="../articles/validation.html">Validating cluster models</a>
@@ -201,19 +204,19 @@
 <code><a href='lcMethodStratify.html'>lcMethodStratify</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>latrendData</span><span class='op'>)</span>
-<span class='co'># Stratification based on the mean response level</span>
-<span class='va'>clusfun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>response</span>, <span class='va'>id</span>, <span class='va'>time</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='va'>clusters</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>0</span>, by <span class='op'>=</span> <span class='va'>Id</span><span class='op'>]</span><span class='op'>$</span><span class='va'>V1</span>
-   <span class='fu'><a href='lcModelCustom.html'>lcModelCustom</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>data</span>,
-     trajectoryAssignments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>clusters</span>, levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>FALSE</span>, <span class='cn'>TRUE</span><span class='op'>)</span>, labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Low"</span>, <span class='st'>"High"</span><span class='op'>)</span><span class='op'>)</span>,
-     response <span class='op'>=</span> <span class='va'>response</span>,
-     time <span class='op'>=</span> <span class='va'>time</span>,
-     id <span class='op'>=</span> <span class='va'>id</span><span class='op'>)</span>
-<span class='op'>}</span>
-<span class='va'>method</span> <span class='op'>&lt;-</span> <span class='fu'>lcMethodCustom</span><span class='op'>(</span>response <span class='op'>=</span> <span class='st'>"Y"</span>, fun <span class='op'>=</span> <span class='va'>clusfun</span>, id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span>
-<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='va'>method</span>, data <span class='op'>=</span> <span class='va'>latrendData</span><span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>latrendData</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># Stratification based on the mean response level</span></span>
+<span class='r-in'><span class='va'>clusfun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>response</span>, <span class='va'>id</span>, <span class='va'>time</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>   <span class='va'>clusters</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>0</span>, by <span class='op'>=</span> <span class='va'>Id</span><span class='op'>]</span><span class='op'>$</span><span class='va'>V1</span></span>
+<span class='r-in'>   <span class='fu'><a href='lcModelCustom.html'>lcModelCustom</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>data</span>,</span>
+<span class='r-in'>     trajectoryAssignments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>clusters</span>, levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>FALSE</span>, <span class='cn'>TRUE</span><span class='op'>)</span>, labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Low"</span>, <span class='st'>"High"</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>     response <span class='op'>=</span> <span class='va'>response</span>,</span>
+<span class='r-in'>     time <span class='op'>=</span> <span class='va'>time</span>,</span>
+<span class='r-in'>     id <span class='op'>=</span> <span class='va'>id</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'><span class='va'>method</span> <span class='op'>&lt;-</span> <span class='fu'>lcMethodCustom</span><span class='op'>(</span>response <span class='op'>=</span> <span class='st'>"Y"</span>, fun <span class='op'>=</span> <span class='va'>clusfun</span>, id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='va'>method</span>, data <span class='op'>=</span> <span class='va'>latrendData</span><span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

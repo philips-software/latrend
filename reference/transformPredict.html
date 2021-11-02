@@ -105,10 +105,13 @@ Users can implement support for other prediction formats by defining the transfo
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/custom.html">Implementing new models</a>
+      <a href="../articles/demo.html">Demonstration of latrend package</a>
     </li>
     <li>
-      <a href="../articles/demo.html">Demonstration of latrend package</a>
+      <a href="../articles/implement.html">Implementing new models</a>
+    </li>
+    <li>
+      <a href="../articles/simulation.html">Conducting a simulation study</a>
     </li>
     <li>
       <a href="../articles/validation.html">Validating cluster models</a>
@@ -151,7 +154,7 @@ Note that this function has no use outside of ensuring output for <code>predict.
 <p>By default, <code>transformPredict()</code> accepts one of the following inputs:</p><dl>
 <dt><code>data.frame</code></dt><dd><p>A <code>data.frame</code> in long format providing a cluster-specific prediction for each observation per row, with column names <code>"Fit"</code> and <code>"Cluster"</code>. This <code>data.frame</code> therefore has <code>nobs(object) * nClusters(object)</code> rows.</p></dd>
 <dt><code>matrix</code></dt><dd><p>An N-by-K <code>matrix</code> where each row provides the cluster-specific predictions for the respective observations in <code>newdata</code>. Here, <code>N = nrow(newdata)</code> and <code>K = nClusters(object)</code>.</p></dd>
-<dt><code>vector</code></dt><dd><p>A <code>vector</code> of length <code><a href='https://rdrr.io/r/base/nrow.html'>nrow(newdata)</a></code> with predictions corresponding to the rows of <code>newdata</code>.</p></dd>
+<dt><code>vector</code></dt><dd><p>A <code>vector</code> of length <code>nrow(newdata)</code> with predictions corresponding to the rows of <code>newdata</code>.</p></dd>
 
 </dl>
 
@@ -209,7 +212,7 @@ A common output is a <code>matrix</code> with the cluster-specific predictions.<
 </pre>
 
 <p>However, for ease of implementation it is generally advisable to implement <a href='predictForCluster.html'>predictForCluster</a> instead of <a href='predict.lcModel.html'>predict.lcModel</a>.</p>
-<p>For a complete and runnable example, see the custom models vignette accessible via <code><a href='../articles/custom.html'>vignette("custom", package = "latrend")</a></code>.</p>
+<p>For a complete and runnable example, see the custom models vignette accessible via <code>vignette("custom", package = "latrend")</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>predictForCluster, predict.lcModel</p></div>

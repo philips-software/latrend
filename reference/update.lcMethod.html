@@ -95,10 +95,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/custom.html">Implementing new models</a>
+      <a href="../articles/demo.html">Demonstration of latrend package</a>
     </li>
     <li>
-      <a href="../articles/demo.html">Demonstration of latrend package</a>
+      <a href="../articles/implement.html">Implementing new models</a>
+    </li>
+    <li>
+      <a href="../articles/simulation.html">Conducting a simulation study</a>
     </li>
     <li>
       <a href="../articles/validation.html">Validating cluster models</a>
@@ -186,17 +189,17 @@
 <code><a href='names,lcMethod-method.html'>names,lcMethod-method</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lcMethodMixtoolsGMM.html'>lcMethodMixtoolsGMM</a></span><span class='op'>(</span><span class='va'>Value</span> <span class='op'>~</span> <span class='fl'>1</span><span class='op'>)</span>
-<span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/update.html'>update</a></span><span class='op'>(</span><span class='va'>m</span>, formula <span class='op'>=</span> <span class='op'>~</span> <span class='va'>.</span> <span class='op'>+</span> <span class='va'>Time</span><span class='op'>)</span>
-
-<span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/update.html'>update</a></span><span class='op'>(</span><span class='va'>m2</span>, nClusters <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
-
-<span class='va'>k</span> <span class='op'>&lt;-</span> <span class='fl'>2</span>
-<span class='va'>m4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/update.html'>update</a></span><span class='op'>(</span><span class='va'>m</span>, nClusters <span class='op'>=</span> <span class='va'>k</span><span class='op'>)</span> <span class='co'># nClusters: k</span>
-
-<span class='va'>m5</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/update.html'>update</a></span><span class='op'>(</span><span class='va'>m</span>, nClusters <span class='op'>=</span> <span class='va'>k</span>, .eval <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='co'># nClusters: 2</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lcMethodMixtoolsGMM.html'>lcMethodMixtoolsGMM</a></span><span class='op'>(</span><span class='va'>Value</span> <span class='op'>~</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/update.html'>update</a></span><span class='op'>(</span><span class='va'>m</span>, formula <span class='op'>=</span> <span class='op'>~</span> <span class='va'>.</span> <span class='op'>+</span> <span class='va'>Time</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/update.html'>update</a></span><span class='op'>(</span><span class='va'>m2</span>, nClusters <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>k</span> <span class='op'>&lt;-</span> <span class='fl'>2</span></span>
+<span class='r-in'><span class='va'>m4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/update.html'>update</a></span><span class='op'>(</span><span class='va'>m</span>, nClusters <span class='op'>=</span> <span class='va'>k</span><span class='op'>)</span> <span class='co'># nClusters: k</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>m5</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/update.html'>update</a></span><span class='op'>(</span><span class='va'>m</span>, nClusters <span class='op'>=</span> <span class='va'>k</span>, .eval <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='co'># nClusters: 2</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

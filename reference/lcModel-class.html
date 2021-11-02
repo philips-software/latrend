@@ -95,10 +95,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/custom.html">Implementing new models</a>
+      <a href="../articles/demo.html">Demonstration of latrend package</a>
     </li>
     <li>
-      <a href="../articles/demo.html">Demonstration of latrend package</a>
+      <a href="../articles/implement.html">Implementing new models</a>
+    </li>
+    <li>
+      <a href="../articles/simulation.html">Conducting a simulation study</a>
     </li>
     <li>
       <a href="../articles/validation.html">Validating cluster models</a>
@@ -156,7 +159,7 @@
 
     <p>An extending class must implement the following methods to ensure basic functionality:</p><ul>
 <li><p><code>predict.lcModelExt</code>: Used to obtain the fitted cluster trajectories and trajectories.</p></li>
-<li><p><code><a href='postprob.html'>postprob(lcModelExt)</a></code>: The posterior probability matrix is used to determine the cluster assignments of the trajectories.</p></li>
+<li><p><code>postprob(lcModelExt)</code>: The posterior probability matrix is used to determine the cluster assignments of the trajectories.</p></li>
 </ul>
 
 <p>For predicting the posterior probability for unseen data, the <code><a href='predictPostprob.html'>predictPostprob()</a></code> should be implemented.</p>

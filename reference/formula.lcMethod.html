@@ -95,10 +95,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/custom.html">Implementing new models</a>
+      <a href="../articles/demo.html">Demonstration of latrend package</a>
     </li>
     <li>
-      <a href="../articles/demo.html">Demonstration of latrend package</a>
+      <a href="../articles/implement.html">Implementing new models</a>
+    </li>
+    <li>
+      <a href="../articles/simulation.html">Conducting a simulation study</a>
     </li>
     <li>
       <a href="../articles/validation.html">Validating cluster models</a>
@@ -179,10 +182,11 @@
 <code><a href='update.lcMethod.html'>update.lcMethod</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lcMethodMixtoolsGMM.html'>lcMethodMixtoolsGMM</a></span><span class='op'>(</span>formula <span class='op'>=</span> <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Time</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Id</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/formula.html'>formula</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span> <span class='co'># Y ~ Time + (1 | Id)</span>
-</div><div class='output co'>#&gt; Y ~ Time + (1 | Id)
-#&gt; &lt;environment: 0x55b9b5416e18&gt;</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lcMethodMixtoolsGMM.html'>lcMethodMixtoolsGMM</a></span><span class='op'>(</span>formula <span class='op'>=</span> <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Time</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Id</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/formula.html'>formula</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span> <span class='co'># Y ~ Time + (1 | Id)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Y ~ Time + (1 | Id)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;environment: 0x55d26fcd1918&gt;</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

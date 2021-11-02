@@ -97,10 +97,13 @@ The lcModels() function takes the inputs and generates a named lcModels object c
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/custom.html">Implementing new models</a>
+      <a href="../articles/demo.html">Demonstration of latrend package</a>
     </li>
     <li>
-      <a href="../articles/demo.html">Demonstration of latrend package</a>
+      <a href="../articles/implement.html">Implementing new models</a>
+    </li>
+    <li>
+      <a href="../articles/simulation.html">Conducting a simulation study</a>
     </li>
     <li>
       <a href="../articles/validation.html">Validating cluster models</a>
@@ -164,42 +167,46 @@ This makes it easier to work with a set of models in a more structured manner.</
 <code><a href='subset.lcModels.html'>subset.lcModels</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>latrendData</span><span class='op'>)</span>
-<span class='va'>kml</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='fu'><a href='lcMethodKML.html'>lcMethodKML</a></span><span class='op'>(</span><span class='st'>"Y"</span>, id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span>, <span class='va'>latrendData</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  ~ Fast KmL ~
-#&gt; ********************S</div><div class='input'><span class='va'>gmm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='fu'><a href='lcMethodLcmmGMM.html'>lcMethodLcmmGMM</a></span><span class='op'>(</span>fixed <span class='op'>=</span> <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Time</span>, mixture <span class='op'>=</span> <span class='op'>~</span> <span class='va'>Time</span>,
-   id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span>, <span class='va'>latrendData</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Be patient, hlme is running ... 
-#&gt; The program took 0.08 seconds 
-#&gt; Be patient, hlme is running ... 
-#&gt; The program took 0.21 seconds </div><div class='input'><span class='fu'>lcModels</span><span class='op'>(</span><span class='va'>kml</span>, <span class='va'>gmm</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; List of 2 lcModels with
-#&gt;   .name .method nbRedrawing maxIt imputationMethod distanceName power
-#&gt; 1     1     kml          20   200         copyMean    euclidean     2
-#&gt; 2     2     gmm          NA    NA             &lt;NA&gt;         &lt;NA&gt;    NA
-#&gt;         distance                             centerMethod startingCond
-#&gt; 1 function () {} function (x) {    mean(x, na.rm = TRUE)}    nearlyAll
-#&gt; 2           &lt;NA&gt;                                     &lt;NA&gt;         &lt;NA&gt;
-#&gt;   nbCriterion scale response mixture random classmb       init idiag   nwg
-#&gt; 1        1000  TRUE        Y    &lt;NA&gt;   &lt;NA&gt;    &lt;NA&gt;       &lt;NA&gt;    NA    NA
-#&gt; 2          NA    NA     &lt;NA&gt;   ~Time     ~1      ~1 lme.random FALSE FALSE
-#&gt;   convB convL convG maxiter na.action    fixed
-#&gt; 1    NA    NA    NA      NA        NA     &lt;NA&gt;
-#&gt; 2 1e-04 1e-04 1e-04     500         1 Y ~ Time</div><div class='input'>
-<span class='fu'>lcModels</span><span class='op'>(</span>defaults <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>kml</span>, <span class='va'>gmm</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; List of 2 lcModels with
-#&gt;       .name .method nbRedrawing maxIt imputationMethod distanceName power
-#&gt; 1 defaults1     kml          20   200         copyMean    euclidean     2
-#&gt; 2 defaults2     gmm          NA    NA             &lt;NA&gt;         &lt;NA&gt;    NA
-#&gt;         distance                             centerMethod startingCond
-#&gt; 1 function () {} function (x) {    mean(x, na.rm = TRUE)}    nearlyAll
-#&gt; 2           &lt;NA&gt;                                     &lt;NA&gt;         &lt;NA&gt;
-#&gt;   nbCriterion scale response mixture random classmb       init idiag   nwg
-#&gt; 1        1000  TRUE        Y    &lt;NA&gt;   &lt;NA&gt;    &lt;NA&gt;       &lt;NA&gt;    NA    NA
-#&gt; 2          NA    NA     &lt;NA&gt;   ~Time     ~1      ~1 lme.random FALSE FALSE
-#&gt;   convB convL convG maxiter na.action    fixed
-#&gt; 1    NA    NA    NA      NA        NA     &lt;NA&gt;
-#&gt; 2 1e-04 1e-04 1e-04     500         1 Y ~ Time</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>latrendData</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>kml</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='fu'><a href='lcMethodKML.html'>lcMethodKML</a></span><span class='op'>(</span><span class='st'>"Y"</span>, id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span>, <span class='va'>latrendData</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ~ Fast KmL ~</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ********************S</span>
+<span class='r-in'><span class='va'>gmm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='fu'><a href='lcMethodLcmmGMM.html'>lcMethodLcmmGMM</a></span><span class='op'>(</span>fixed <span class='op'>=</span> <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Time</span>, mixture <span class='op'>=</span> <span class='op'>~</span> <span class='va'>Time</span>,</span>
+<span class='r-in'>   id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span>, <span class='va'>latrendData</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Be patient, hlme is running ... </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> The program took 0.07 seconds </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Be patient, hlme is running ... </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> The program took 0.2 seconds </span>
+<span class='r-in'><span class='fu'>lcModels</span><span class='op'>(</span><span class='va'>kml</span>, <span class='va'>gmm</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> List of 2 lcModels with</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .name .method nbRedrawing maxIt imputationMethod distanceName power</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1     1     kml          20   200         copyMean    euclidean     2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     2     gmm          NA    NA             &lt;NA&gt;         &lt;NA&gt;    NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         distance                             centerMethod startingCond</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 function () {} function (x) {    mean(x, na.rm = TRUE)}    nearlyAll</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2           &lt;NA&gt;                                     &lt;NA&gt;         &lt;NA&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   nbCriterion scale response mixture random classmb       init idiag   nwg</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1        1000  TRUE        Y    &lt;NA&gt;   &lt;NA&gt;    &lt;NA&gt;       &lt;NA&gt;    NA    NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2          NA    NA     &lt;NA&gt;   ~Time     ~1      ~1 lme.random FALSE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   convB convL convG maxiter na.action    fixed</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1    NA    NA    NA      NA        NA     &lt;NA&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 1e-04 1e-04 1e-04     500         1 Y ~ Time</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>lcModels</span><span class='op'>(</span>defaults <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>kml</span>, <span class='va'>gmm</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> List of 2 lcModels with</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       .name .method nbRedrawing maxIt imputationMethod distanceName power</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 defaults1     kml          20   200         copyMean    euclidean     2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 defaults2     gmm          NA    NA             &lt;NA&gt;         &lt;NA&gt;    NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         distance                             centerMethod startingCond</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 function () {} function (x) {    mean(x, na.rm = TRUE)}    nearlyAll</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2           &lt;NA&gt;                                     &lt;NA&gt;         &lt;NA&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   nbCriterion scale response mixture random classmb       init idiag   nwg</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1        1000  TRUE        Y    &lt;NA&gt;   &lt;NA&gt;    &lt;NA&gt;       &lt;NA&gt;    NA    NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2          NA    NA     &lt;NA&gt;   ~Time     ~1      ~1 lme.random FALSE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   convB convL convG maxiter na.action    fixed</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1    NA    NA    NA      NA        NA     &lt;NA&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 1e-04 1e-04 1e-04     500         1 Y ~ Time</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

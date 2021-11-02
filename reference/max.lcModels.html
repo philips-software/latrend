@@ -95,10 +95,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/custom.html">Implementing new models</a>
+      <a href="../articles/demo.html">Demonstration of latrend package</a>
     </li>
     <li>
-      <a href="../articles/demo.html">Demonstration of latrend package</a>
+      <a href="../articles/implement.html">Implementing new models</a>
+    </li>
+    <li>
+      <a href="../articles/simulation.html">Conducting a simulation study</a>
     </li>
     <li>
       <a href="../articles/validation.html">Validating cluster models</a>
@@ -166,43 +169,47 @@
     <div class='dont-index'><p><a href='min.lcModels.html'>min.lcModels</a> <a href='externalMetric,lcModel,lcModel-method.html'>externalMetric</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>latrendData</span><span class='op'>)</span>
-<span class='va'>baseMethod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lcMethodKML.html'>lcMethodKML</a></span><span class='op'>(</span>response <span class='op'>=</span> <span class='st'>"Y"</span>, id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span>
-<span class='va'>kml1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='va'>baseMethod</span>, nClusters <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>latrendData</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  ~ Fast KmL ~
-#&gt; ********************S</div><div class='input'><span class='va'>kml2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='va'>baseMethod</span>, nClusters <span class='op'>=</span> <span class='fl'>2</span>, <span class='va'>latrendData</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  ~ Fast KmL ~
-#&gt; ********************S</div><div class='input'><span class='va'>kml3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='va'>baseMethod</span>, nClusters <span class='op'>=</span> <span class='fl'>3</span>, <span class='va'>latrendData</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  ~ Fast KmL ~
-#&gt; ********************S</div><div class='input'><span class='va'>models</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lcModels.html'>lcModels</a></span><span class='op'>(</span><span class='va'>kml1</span>, <span class='va'>kml2</span>, <span class='va'>kml3</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>models</span>, <span class='st'>'WRSS'</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Longitudinal cluster model using longitudinal k-means (KML)
-#&gt; lcMethodKML specifying "longitudinal k-means (KML)"
-#&gt;  time:           "Time"
-#&gt;  id:             "Id"
-#&gt;  nClusters:      1
-#&gt;  nbRedrawing:    20
-#&gt;  maxIt:          200
-#&gt;  imputationMethod:"copyMean"
-#&gt;  distanceName:   "euclidean"
-#&gt;  power:          2
-#&gt;  distance:       function () {}
-#&gt;  centerMethod:   function (x) {    mean(x, na.rm = TRUE)}
-#&gt;  startingCond:   "nearlyAll"
-#&gt;  nbCriterion:    1000
-#&gt;  scale:          TRUE
-#&gt;  response:       "Y"
-#&gt; 
-#&gt; Cluster sizes (K=1):
-#&gt;          A 
-#&gt; 200 (100%) 
-#&gt; 
-#&gt; Number of obs: 2000, strata (Id): 200
-#&gt; 
-#&gt; Scaled residuals:
-#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-#&gt; -3.53676 -0.62869  0.02795  0.00000  0.70160  3.12099 
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>latrendData</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>baseMethod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lcMethodKML.html'>lcMethodKML</a></span><span class='op'>(</span>response <span class='op'>=</span> <span class='st'>"Y"</span>, id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>kml1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='va'>baseMethod</span>, nClusters <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>latrendData</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ~ Fast KmL ~</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ********************S</span>
+<span class='r-in'><span class='va'>kml2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='va'>baseMethod</span>, nClusters <span class='op'>=</span> <span class='fl'>2</span>, <span class='va'>latrendData</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ~ Fast KmL ~</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ********************S</span>
+<span class='r-in'><span class='va'>kml3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='va'>baseMethod</span>, nClusters <span class='op'>=</span> <span class='fl'>3</span>, <span class='va'>latrendData</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ~ Fast KmL ~</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ********************S</span>
+<span class='r-in'><span class='va'>models</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lcModels.html'>lcModels</a></span><span class='op'>(</span><span class='va'>kml1</span>, <span class='va'>kml2</span>, <span class='va'>kml3</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>models</span>, <span class='st'>'WRSS'</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Longitudinal cluster model using longitudinal k-means (KML)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> lcMethodKML specifying "longitudinal k-means (KML)"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  time:           "Time"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  id:             "Id"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  nClusters:      1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  nbRedrawing:    20</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  maxIt:          200</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  imputationMethod:"copyMean"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  distanceName:   "euclidean"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  power:          2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  distance:       function () {}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  centerMethod:   function (x) {    mean(x, na.rm = TRUE)}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  startingCond:   "nearlyAll"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  nbCriterion:    1000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  scale:          TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  response:       "Y"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Cluster sizes (K=1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          A </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 200 (100%) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Number of obs: 2000, strata (Id): 200</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Scaled residuals:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -3.53676 -0.62869  0.02795  0.00000  0.70160  3.12099 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

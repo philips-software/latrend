@@ -94,10 +94,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="articles/custom.html">Implementing new models</a>
+      <a href="articles/demo.html">Demonstration of latrend package</a>
     </li>
     <li>
-      <a href="articles/demo.html">Demonstration of latrend package</a>
+      <a href="articles/implement.html">Implementing new models</a>
+    </li>
+    <li>
+      <a href="articles/simulation.html">Conducting a simulation study</a>
     </li>
     <li>
       <a href="articles/validation.html">Validating cluster models</a>
@@ -154,10 +157,10 @@
 <h1 class="hasAnchor">
 <a href="#coding-style" class="anchor"></a>Coding style</h1>
 <ol>
-<li>Use <code><a href="https://rdrr.io/r/base/assignOps.html">=</a></code> for assignment, not <code><a href="https://rdrr.io/r/base/assignOps.html">&lt;-</a></code>.</li>
-<li>Don’t assign variables within a function call or condition. E.g., don’t do <code><a href="https://rdrr.io/r/stats/median.html">median(x &lt;- 5)</a></code> or <code>if (x &lt;- y + 2 == 3)</code>.</li>
+<li>Use <code>=</code> for assignment, not <code>&lt;-</code>.</li>
+<li>Don’t assign variables within a function call or condition. E.g., don’t do <code>median(x &lt;- 5)</code> or <code>if (x &lt;- y + 2 == 3)</code>.</li>
 <li>2-space indentation. No tabs.</li>
-<li>Surround the <code><a href="https://rdrr.io/r/base/assignOps.html">=</a></code> of function calls with named arguments with a space, e.g., <code><a href="https://rdrr.io/r/base/sample.html">sample.int(n = 1e3, size = 10, replace = TRUE)</a></code>.</li>
+<li>Surround the <code>=</code> of function calls with named arguments with a space, e.g., <code>sample.int(n = 1e3, size = 10, replace = TRUE)</code>.</li>
 <li>Use <code>'</code> for strings, e.g., <code>var = 'abc'</code>
 </li>
 <li>Use <code>L</code> suffix for integers.</li>
@@ -166,7 +169,7 @@
 <div id="exception-to-the-coding-style" class="section level4">
 <h4 class="hasAnchor">
 <a href="#exception-to-the-coding-style" class="anchor"></a>Exception to the coding style</h4>
-<p>Vignettes and documentation example code use the more popular R coding style. (i.e., using <code><a href="https://rdrr.io/r/base/assignOps.html">&lt;-</a></code> for assignment and <code>"</code> for strings).</p>
+<p>Vignettes and documentation example code use the more popular R coding style. (i.e., using <code>&lt;-</code> for assignment and <code>"</code> for strings).</p>
 </div>
 </div>
 
