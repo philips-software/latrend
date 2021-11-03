@@ -134,7 +134,7 @@ Call getExternalMetricNames() to retrieve the names of the defined internal metr
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Compute external model metric(s)</h1>
-    <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/model.R'><code>R/model.R</code></a>, <a href='https://github.com/philips-software/latrend/blob/master/R/metrics.R'><code>R/metrics.R</code></a>, <a href='https://github.com/philips-software/latrend/blob/master/R/models.R'><code>R/models.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/model.R'><code>R/model.R</code></a>, <a href='https://github.com/philips-software/latrend/blob/master/R/metricsExternal.R'><code>R/metricsExternal.R</code></a>, <a href='https://github.com/philips-software/latrend/blob/master/R/models.R'><code>R/models.R</code></a></small>
     <div class="hidden name"><code>externalMetric.Rd</code></div>
     </div>
 
@@ -246,9 +246,9 @@ R package version 1.9.12, <a href='https://CRAN.R-project.org/package=psych'>htt
 <span class='r-in'><span class='va'>model2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='fu'><a href='lcMethodLcmmGMM.html'>lcMethodLcmmGMM</a></span><span class='op'>(</span>fixed <span class='op'>=</span> <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Time</span>, mixture <span class='op'>=</span> <span class='op'>~</span> <span class='va'>Time</span>,</span>
 <span class='r-in'>   id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span>, <span class='va'>latrendData</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Be patient, hlme is running ... </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> The program took 0.07 seconds </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> The program took 0.08 seconds </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Be patient, hlme is running ... </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> The program took 0.21 seconds </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> The program took 0.26 seconds </span>
 <span class='r-in'><span class='va'>ari</span> <span class='op'>&lt;-</span> <span class='fu'>externalMetric</span><span class='op'>(</span><span class='va'>model1</span>, <span class='va'>model2</span>, <span class='st'>'adjustedRand'</span><span class='op'>)</span></span>
 </pre>
   </div>
