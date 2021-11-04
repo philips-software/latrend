@@ -61,6 +61,121 @@ getInternalMetricDefinition = function(name) {
   }
 }
 
+.defineInternalDistanceMetric = function(
+  name,
+  type = c('traj', 'fitted'),
+  distanceFun,
+  clusterAggregationFun = weighted.mean,
+  assertNonEmpty = TRUE,
+  assertNonSolitary = FALSE,
+  assertNonIdentical = FALSE,
+  ...
+) {
+  type = match.arg(type[1], c('traj', 'fitted'))
+  if (type != 'traj') {
+    fullName = paste(name, type, sep = '.')
+  } else {
+    # traj is the default
+    fullName = name
+  }
+
+  assert_that(
+    is.function(distanceFun),
+    is.function(clusterAggregationFun)
+  )
+
+  trajFun = switch(type,
+    traj = trajectories,
+    fitted = fittedTrajectories,
+  )
+
+  fun = function(m) {
+    nTimes = length(time(m))
+    dfTraj = trajFun(m)
+    trajMat = dcastRepeatedMeasures(
+      dfTraj,
+      id = idVariable(m),
+      time = timeVariable(m),
+      response = responseVariable(m)
+    )
+    assert_that(ncol(trajMat) == nTimes)
+    trajMatList = lapply(split(trajMat, trajectoryAssignments(m)), matrix, ncol = nTimes)
+
+    dtClus = clusterTrajectories(m, at = time(m))
+    clusMat = dcastRepeatedMeasures(
+      dtClus,
+      id = 'Cluster',
+      time = timeVariable(m),
+      response = responseVariable(m)
+    )
+    clusVecList = split(clusMat, row(clusMat))
+    assert_that(all(lengths(clusVecList) == nTimes))
+
+    emptyMask = vapply(trajMatList, nrow, FUN.VALUE = 0) == 0 & !assertNonEmpty
+    solitaryMask = vapply(trajMatList, nrow, FUN.VALUE = 0) == 1 & !assertNonSolitary
+    identicalMask = vapply(
+      trajMatList,
+      function(x) all(x[1,] == t(x)),
+      FUN.VALUE = FALSE
+    ) & !assertNonIdentical
+
+    if (any(emptyMask)) {
+      warning(
+        sprintf(
+          'Cannot compute distance metric "%s" for cluster(s) "%s": No trajectories assigned to the cluster.',
+          fullName,
+          paste0(clusterNames(m)[emptyMask], collapse = '", "')
+        )
+      )
+    }
+
+    if (any(solitaryMask)) {
+      warning(
+        sprintf(
+          'Cannot compute distance metric "%s" for cluster(s) "%s": Only 1 trajectory assigned to the cluster.',
+          fullName,
+          paste0(clusterNames(m)[solitaryMask], collapse = '", "')
+        )
+      )
+    }
+
+    if (any(identicalMask)) {
+      warning(
+        sprintf(
+          'Cannot compute distance metric "%s" for cluster(s) "%s": All trajectories are identical (i.e., zero covariance).',
+          fullName,
+          paste0(clusterNames(m)[identicalMask], collapse = '", "')
+        )
+      )
+    }
+
+    validMask = !emptyMask & !solitaryMask & !identicalMask
+
+    if (!any(validMask)) {
+      return(as.numeric(NA))
+    }
+
+    clusDistances = Map(
+      distanceFun,
+      trajMatList[validMask],
+      clusVecList[validMask],
+      clusterNames(m)[validMask]
+    )
+    clusterAggregationFun(unlist(clusDistances), w = clusterProportions(m)[validMask])
+  }
+
+  defineInternalMetric(fullName, fun = fun, ...)
+}
+
+#' @title Define the distance metrics for multiple types at once
+#' @keywords internal
+.defineInternalDistanceMetrics = Vectorize(
+  FUN = .defineInternalDistanceMetric,
+  vectorize.args = 'type',
+  SIMPLIFY = FALSE
+)
+
+
 # Internal metric definitions ####
 #' @importFrom stats AIC
 intMetricsEnv$AIC = AIC
@@ -93,6 +208,30 @@ intMetricsEnv$logLik = logLik
 intMetricsEnv$MAE = function(m) {
   residuals(m) %>% abs %>% mean
 }
+
+# . Mahalanobis distance ####
+#' @importFrom stats mahalanobis
+.defineInternalDistanceMetric(
+  name = 'Mahalanobis',
+  type = 'traj',
+  distanceFun = function(trajClusMat, clusVec, clusName) {
+    vcovMat = cov(trajClusMat)
+    if (det(vcovMat) == 0) {
+      warning(
+        sprintf(
+          'Cannot compute Mahalanobis distance for cluster "%s": covariance matrix is singular',
+          clusName
+        )
+      )
+      as.numeric(NA)
+    } else {
+      mean(mahalanobis(trajClusMat, center = clusVec, cov = vcovMat))
+    }
+  },
+  clusterAggregationFun = weighted.mean,
+  assertNonSolitary = TRUE,
+  assertNonIdentical = TRUE
+)
 
 intMetricsEnv$MSE = function(m) {
   mean(residuals(m) ^ 2)

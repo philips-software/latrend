@@ -9,5 +9,6 @@ kml2 = latrend(lcMethodTestKML(), data = testLongData, nClusters = 2)
 kml3 = latrend(lcMethodTestKML(), data = testLongData, nClusters = 3)
 kml4 = latrend(lcMethodTestKML(), data = testLongData, nClusters = 4)
 
+gmm1 = latrend(lcMethodTestLcmmGMM(), testLongData, nClusters = 1)
 gmm2 = gmm = latrend(lcMethodTestLcmmGMM(), testLongData, nClusters = 2)
 gmm3 = latrend(lcMethodTestLcmmGMM(), testLongData, nClusters = 3)

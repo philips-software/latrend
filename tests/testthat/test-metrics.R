@@ -7,16 +7,16 @@ rngReset()
 internalMetrics = getInternalMetricNames() %>% setdiff('deviance')
 
 test_that('two clusters', {
-  for(name in internalMetrics) {
-    value = metric(kml2, name=name)
+  for (name in internalMetrics) {
+    value = metric(gmm2, name = name)
     expect_is(value, 'numeric')
-    expect_true(is.finite(value), info=name)
+    expect_true(is.finite(value), info = name)
   }
 })
 
 test_that('single cluster', {
-  for(name in internalMetrics) {
-    value = metric(kml1, name=name)
+  for (name in internalMetrics) {
+    value = metric(gmm1, name = name)
     expect_is(value, 'numeric')
     expect_length(value, 1)
   }
@@ -57,6 +57,10 @@ test_that('WMAE', {
   maeFuzzy = metric(gmm, 'MAE')
 
   expect_gte(wmaeFuzzy, maeFuzzy)
+})
+
+test_that('Mahalanobis', {
+  expect_true('Mahalanobis' %in% getInternalMetricNames())
 })
 
 test_that('missing metric', {
