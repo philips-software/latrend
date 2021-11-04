@@ -82,8 +82,6 @@ expect_valid_lcModel = function(object) {
   expect_gte(min(as.integer(clus)), 1)
   expect_lte(max(as.integer(clus)), nIds(object))
 
-  expect_is(confusionMatrix(object), 'matrix')
-
   # Predict
   if(!is(object, 'lcModelCustom')) {
     # cluster-specific prediction

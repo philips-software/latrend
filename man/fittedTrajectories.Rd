@@ -41,7 +41,7 @@ m <- lcMethodKML("Y", id = "Id", time = "Time")
 model <- latrend(method = m, data = latrendData)
 fittedTrajectories(model)
 
-fittedTrajectories(model, at = c(0, .5, 1))
+fittedTrajectories(model, at = time(model)[c(1, 2)])
 }
 \seealso{
 Other model-specific methods: 

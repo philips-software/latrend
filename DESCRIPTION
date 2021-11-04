@@ -114,6 +114,7 @@ Collate:
     'methods.R'
     'metricsInternal.R'
     'metricsExternal.R'
+    'model-evaluation.R'
     'model-summary.R'
     'model-transform.R'
     'modelApprox.R'

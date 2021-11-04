@@ -149,8 +149,25 @@ test_that('estimationTime in days', {
 })
 
 test_that('confusionMatrix', {
-  expect_true(is_valid_postprob(confusionMatrix(model)))
+  cfMat = confusionMatrix(model)
+  expect_is(cfMat, 'matrix')
+  expect_true(is_valid_postprob(cfMat))
   expect_true(is_valid_postprob(confusionMatrix(model, strategy = NULL)))
+})
+
+test_that('APPA', {
+  appa = APPA(model)
+  expect_is(appa, 'numeric')
+  expect_length(appa, nClusters(model))
+  expect_true(all(appa >= 0))
+  expect_true(all(appa <= 1))
+})
+
+test_that('OCC', {
+  occ = OCC(model)
+  expect_is(occ, 'numeric')
+  expect_length(occ, nClusters(model))
+  expect_true(all(occ >= 0))
 })
 
 test_that('plotFittedTrajectories', {

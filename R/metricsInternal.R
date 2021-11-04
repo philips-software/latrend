@@ -181,15 +181,34 @@ getInternalMetricDefinition = function(name) {
 #' @importFrom stats AIC
 intMetricsEnv$AIC = AIC
 
-#' @importFrom matrixStats rowMaxs
+intMetricsEnv$CAIC = function(m) {
+  ll = logLik(m)
+  df = attr(ll, 'df')
+  - 2 * ll + (log(nIds(m)) + 1) * df
+}
+
+intMetricsEnv$ssBIC = function(m) {
+  ll = logLik(m)
+  df = attr(ll, 'df')
+  - 2 * ll + log((nIds(m) + 2) / 24) * df
+}
+
 intMetricsEnv$APPA = function(m) {
-  postprob(m) %>%
-    rowMaxs() %>%
-    mean()
+  mean(APPA(m))
+}
+
+intMetricsEnv$APPA.lowest = function(m) {
+  min(APPA(m))
 }
 
 #' @importFrom stats BIC
 intMetricsEnv$BIC = BIC
+
+intMetricsEnv$CLC = function(m) {
+  ll = logLik(m)
+  df = attr(ll, 'df')
+  - 2 * ll + 2 * intMetricsEnv$entropy(m)
+}
 
 intMetricsEnv$converged = function(m) {
   converged(m) > 0
@@ -212,8 +231,16 @@ intMetricsEnv$entropy = function(m) {
   - sum(rowSums(pp * log(pp)))
 }
 
+intMetricsEnv$estimationTime = estimationTime
+
 #' @importFrom stats logLik
 intMetricsEnv$logLik = logLik
+
+intMetricsEnv$ICLBIC = function(m) {
+  ll = logLik(m)
+  df = attr(ll, 'df')
+  - 2 * ll + log(nIds(m)) * df + 2 * intMetricsEnv$entropy(m)
+}
 
 intMetricsEnv$MAE = function(m) {
   mean(abs(residuals(m)))
@@ -247,13 +274,13 @@ intMetricsEnv$MSE = function(m) {
   mean(residuals(m) ^ 2)
 }
 
+
+# also referred to as the scaled entropy
 intMetricsEnv$relativeEntropy = function(m) {
   N = nIds(m)
   K = nClusters(m)
   1 - intMetricsEnv$entropy(m) / (N * log(K))
 }
-
-intMetricsEnv$estimationTime = estimationTime
 
 intMetricsEnv$RSS = function(m) {
   sum(residuals(m) ^ 2)
