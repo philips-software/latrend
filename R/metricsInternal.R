@@ -111,13 +111,13 @@ getInternalMetricDefinition = function(name) {
     clusVecList = split(clusMat, row(clusMat))
     assert_that(all(lengths(clusVecList) == nTimes))
 
-    emptyMask = vapply(trajMatList, nrow, FUN.VALUE = 0) == 0 & !assertNonEmpty
-    solitaryMask = vapply(trajMatList, nrow, FUN.VALUE = 0) == 1 & !assertNonSolitary
+    emptyMask = vapply(trajMatList, nrow, FUN.VALUE = 0) == 0 & assertNonEmpty
+    solitaryMask = vapply(trajMatList, nrow, FUN.VALUE = 0) == 1 & assertNonSolitary
     identicalMask = vapply(
       trajMatList,
       function(x) all(x[1,] == t(x)),
       FUN.VALUE = FALSE
-    ) & !assertNonIdentical
+    ) & assertNonIdentical
 
     if (any(emptyMask)) {
       warning(
