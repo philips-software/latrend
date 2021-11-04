@@ -61,6 +61,7 @@ getInternalMetricDefinition = function(name) {
   }
 }
 
+#' @importFrom stats weighted.mean
 .defineInternalDistanceMetric = function(
   name,
   type = c('traj', 'fitted'),

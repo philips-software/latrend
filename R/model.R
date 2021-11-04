@@ -504,7 +504,7 @@ fitted.lcModel = function(object, ..., clusters = trajectoryAssignments(object))
 #' model <- latrend(method = m, data = latrendData)
 #' fittedTrajectories(model)
 #'
-#' fittedTrajectories(model, at = c(0, .5, 1))
+#' fittedTrajectories(model, at = time(model)[c(1, 2)])
 #' @family model-specific methods
 setMethod('fittedTrajectories', signature('lcModel'), function(object, at, what, clusters, ...) {
   assert_that(
