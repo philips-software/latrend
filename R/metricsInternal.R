@@ -197,6 +197,15 @@ intMetricsEnv$converged = function(m) {
 #' @importFrom stats deviance
 intMetricsEnv$deviance = deviance
 
+.defineInternalDistanceMetrics(
+  name = 'Euclidean',
+  type = c('traj', 'fitted'),
+  distanceFun = function(trajClusMat, clusVec, clusName) {
+    mean(sqrt((t(trajClusMat) - clusVec) ^ 2))
+  },
+  clusterAggregationFun = weighted.mean
+)
+
 intMetricsEnv$entropy = function(m) {
   pp = postprob(m) %>% pmax(.Machine$double.xmin)
   - sum(rowSums(pp * log(pp)))
@@ -206,7 +215,7 @@ intMetricsEnv$entropy = function(m) {
 intMetricsEnv$logLik = logLik
 
 intMetricsEnv$MAE = function(m) {
-  residuals(m) %>% abs %>% mean
+  mean(abs(residuals(m)))
 }
 
 # . Mahalanobis distance ####
@@ -250,6 +259,30 @@ intMetricsEnv$RSS = function(m) {
 }
 
 intMetricsEnv$sigma = sigma
+
+# . Standardized Euclidean distance ####
+#' @importFrom stats mahalanobis
+.defineInternalDistanceMetrics(
+  name = 'stdEuclidean',
+  type = c('traj', 'fitted'),
+  distanceFun = function(trajClusMat, clusVec, clusName) {
+    varMat = diag(diag(var(trajClusMat)))
+    if (det(varMat) == 0) {
+      warning(
+        sprintf(
+          'Cannot compute standard Euclidean distance for cluster "%s": variance matrix is singular',
+          clusName
+        )
+      )
+      as.numeric(NA)
+    } else {
+      mean(mahalanobis(trajClusMat, center = clusVec, cov = varMat))
+    }
+  },
+  clusterAggregationFun = weighted.mean,
+  assertNonSolitary = TRUE,
+  assertNonIdentical = TRUE
+)
 
 intMetricsEnv$WMAE = function(m) {
   wMat = postprob(m)[make.idRowIndices(m), ]
