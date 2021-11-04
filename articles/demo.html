@@ -305,11 +305,13 @@ Cluster trajectories for KML model with 4 clusters, along with the assigned traj
 <p>The list of currently supported internal model metrics can be obtained by calling the <code>getInternalMetricNames</code> function.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/getInternalMetricNames.html">getInternalMetricNames</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt;  [1] "AIC"             "APPA"            "BIC"             "converged"      </span>
-<span class="co">#&gt;  [5] "deviance"        "entropy"         "estimationTime"  "logLik"         </span>
-<span class="co">#&gt;  [9] "MAE"             "Mahalanobis"     "MSE"             "relativeEntropy"</span>
-<span class="co">#&gt; [13] "RSS"             "sigma"           "WMAE"            "WMSE"           </span>
-<span class="co">#&gt; [17] "WRSS"</span></code></pre></div>
+<span class="co">#&gt;  [1] "AIC"                 "APPA"                "BIC"                </span>
+<span class="co">#&gt;  [4] "converged"           "deviance"            "entropy"            </span>
+<span class="co">#&gt;  [7] "estimationTime"      "Euclidean"           "Euclidean.fitted"   </span>
+<span class="co">#&gt; [10] "logLik"              "MAE"                 "Mahalanobis"        </span>
+<span class="co">#&gt; [13] "MSE"                 "relativeEntropy"     "RSS"                </span>
+<span class="co">#&gt; [16] "sigma"               "stdEuclidean"        "stdEuclidean.fitted"</span>
+<span class="co">#&gt; [19] "WMAE"                "WMSE"                "WRSS"</span></code></pre></div>
 <p>As an example, we will compute the APPA (a measure of cluster separation), and the WRSS and WMAE metrics (measures of model error).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">kmlModel</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"APPA"</span>, <span class="st">"WRSS"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span>
