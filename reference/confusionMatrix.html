@@ -135,7 +135,7 @@ belonging to cluster \(i\) is assigned to cluster \(j\) under the specified traj
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Compute the posterior confusion matrix</h1>
-    <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/model.R'><code>R/model.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/model-evaluation.R'><code>R/model-evaluation.R</code></a></small>
     <div class="hidden name"><code>confusionMatrix.Rd</code></div>
     </div>
 
@@ -152,7 +152,7 @@ belonging to cluster \(i\) is assigned to cluster \(j\) under the specified traj
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>The object.</p></td>
+      <td><p>The model, of type <code>lcModel</code>.</p></td>
     </tr>
     <tr>
       <th>strategy</th>
@@ -177,7 +177,7 @@ If <code>strategy = NULL</code>, the posterior probabilities are used as weights
     <p>A K-by-K confusion <code>matrix</code> with <code>K = nClusters(object)</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='postprob.html'>postprob</a> <a href='clusterProportions.html'>clusterProportions</a> <a href='trajectoryAssignments.html'>trajectoryAssignments</a></p></div>
+    <div class='dont-index'><p><a href='postprob.html'>postprob</a> <a href='clusterProportions.html'>clusterProportions</a> <a href='trajectoryAssignments.html'>trajectoryAssignments</a> <a href='APPA.html'>APPA</a> <a href='OCC.html'>OCC</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>latrendData</span><span class='op'>)</span></span>
@@ -188,7 +188,7 @@ If <code>strategy = NULL</code>, the posterior probabilities are used as weights
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Be patient, hlme is running ... </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> The program took 0.09 seconds </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Be patient, hlme is running ... </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> The program took 0.34 seconds </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> The program took 0.36 seconds </span>
 <span class='r-in'><span class='fu'>confusionMatrix</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>              A            B</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> A 0.9999999969 3.070111e-09</span>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract residual standard deviation from a lcModel — sigma.lcModel • latrend</title>
+<title>Odds of correct classification (OCC) — OCC • latrend</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Extract residual standard deviation from a lcModel — sigma.lcModel" />
-<meta property="og:description" content="Extracts or estimates the residual standard deviation. If sigma() is not defined for a model, it is estimated from the residual error vector." />
+<meta property="og:title" content="Odds of correct classification (OCC) — OCC" />
+<meta property="og:description" content="Computes the odds of correct classification (OCC) for each cluster." />
 
 
 
@@ -132,68 +132,49 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract residual standard deviation from a lcModel</h1>
-    <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/model.R'><code>R/model.R</code></a></small>
-    <div class="hidden name"><code>sigma.lcModel.Rd</code></div>
+    <h1>Odds of correct classification (OCC)</h1>
+    <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/model-evaluation.R'><code>R/model-evaluation.R</code></a></small>
+    <div class="hidden name"><code>OCC.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Extracts or estimates the residual standard deviation. If <code><a href='https://rdrr.io/pkg/lme4/man/sigma.html'>sigma()</a></code> is not defined for a model, it is estimated from the residual error vector.</p>
+    <p>Computes the odds of correct classification (OCC) for each cluster.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for lcModel</span>
-<span class='fu'><a href='https://rdrr.io/pkg/lme4/man/sigma.html'>sigma</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>OCC</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>The <code>lcModel</code> object.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Additional arguments.</p></td>
+      <td><p>The model, of type <code>lcModel</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>numeric</code> indicating the residual standard deviation.</p>
+    <p>The OCC per cluster, as a <code>numeric vector</code> of length <code>nClusters(object)</code>.
+Empty clusters will output <code>NA</code>.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>An OCC of 1 indicates that the cluster assignment is no better than by random chance.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Nagin DS (2005).
+<em>Group-based modeling of development</em>.
+Harvard University Press.
+ISBN 9780674041318, doi: <a href='https://doi.org/10.4159/9780674041318'>10.4159/9780674041318</a>
+.</p>
+<p>van der Nest G, Lima Passos V, Candel MJ, van Breukelen GJ (2020).
+&#8220;An overview of mixture modelling for latent evolutions in longitudinal data: Modelling approaches, fit statistics and software.&#8221;
+<em>Advances in Life Course Research</em>, <b>43</b>, 100323.
+ISSN 1040-2608, doi: <a href='https://doi.org/10.1016/j.alcr.2019.100323'>10.1016/j.alcr.2019.100323</a>
+, <a href='https://www.sciencedirect.com/science/article/pii/S1040260819301881'>https://www.sciencedirect.com/science/article/pii/S1040260819301881</a>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='coef.lcModel.html'>coef.lcModel</a> <a href='metric.html'>metric</a></p>
-<p>Other model-specific methods: 
-<code><a href='clusterTrajectories.html'>clusterTrajectories</a>()</code>,
-<code><a href='coef.lcModel.html'>coef.lcModel</a>()</code>,
-<code><a href='converged.html'>converged</a>()</code>,
-<code><a href='deviance.lcModel.html'>deviance.lcModel</a>()</code>,
-<code><a href='df.residual.lcModel.html'>df.residual.lcModel</a>()</code>,
-<code><a href='fitted.lcModel.html'>fitted.lcModel</a>()</code>,
-<code><a href='fittedTrajectories.html'>fittedTrajectories</a>()</code>,
-<code><a href='lcModel-class.html'>lcModel-class</a></code>,
-<code><a href='logLik.lcModel.html'>logLik.lcModel</a>()</code>,
-<code><a href='model.frame.lcModel.html'>model.frame.lcModel</a>()</code>,
-<code><a href='nobs.lcModel.html'>nobs.lcModel</a>()</code>,
-<code><a href='postprob.html'>postprob</a>()</code>,
-<code><a href='predict.lcModel.html'>predict.lcModel</a>()</code>,
-<code><a href='predictAssignments.html'>predictAssignments</a>()</code>,
-<code><a href='predictForCluster.html'>predictForCluster</a>()</code>,
-<code><a href='predictPostprob.html'>predictPostprob</a>()</code>,
-<code><a href='residuals.lcModel.html'>residuals.lcModel</a>()</code>,
-<code><a href='time.lcModel.html'>time.lcModel</a>()</code></p></div>
+    <div class='dont-index'><p><a href='confusionMatrix.html'>confusionMatrix</a> <a href='APPA.html'>APPA</a></p></div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>latrendData</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='fu'><a href='lcMethodLcmmGMM.html'>lcMethodLcmmGMM</a></span><span class='op'>(</span>fixed <span class='op'>=</span> <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Time</span>, mixture <span class='op'>=</span> <span class='op'>~</span> <span class='va'>Time</span>,</span>
-<span class='r-in'>   id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>latrendData</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Be patient, hlme is running ... </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> The program took 0.1 seconds </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Be patient, hlme is running ... </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> The program took 0.29 seconds </span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/lme4/man/sigma.html'>sigma</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.2082065</span>
-</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

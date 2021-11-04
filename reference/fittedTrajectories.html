@@ -225,8 +225,19 @@ so fitted values can only be outputted for times at which the model was trained.
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 1999: 200 1.7777778 -0.17162641       A</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 2000: 200 2.0000000 -0.20624529       A</span>
 <span class='r-in'></span>
-<span class='r-in'><span class='fu'>fittedTrajectories</span><span class='op'>(</span><span class='va'>model</span>, at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>.5</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error:</span> Elements 2, 3 of at %in% time(object) are not true</span>
+<span class='r-in'><span class='fu'>fittedTrajectories</span><span class='op'>(</span><span class='va'>model</span>, at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/time.html'>time</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Id      Time           Y Cluster</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:   1 0.0000000 -0.98189066       B</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:   1 0.2222222 -0.62598349       B</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:   2 0.0000000 -0.98189066       B</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:   2 0.2222222 -0.62598349       B</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:   3 0.0000000 -0.98189066       B</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 396: 198 0.2222222  0.05189640       A</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 397: 199 0.0000000  0.04839039       A</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 398: 199 0.2222222  0.05189640       A</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 399: 200 0.0000000  0.04839039       A</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 400: 200 0.2222222  0.05189640       A</span>
 </pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
