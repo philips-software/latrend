@@ -491,10 +491,13 @@ fitted.lcModel = function(object, ..., clusters = trajectoryAssignments(object))
 #' @title Extract the fitted trajectories for all strata
 #' @param object The model.
 #' @param at The time points at which to compute the id-specific trajectories.
+#' The default implementation merely filters the output of `fitted()`,
+#' so fitted values can only be outputted for times at which the model was trained.
 #' @param what The distributional parameter to compute the response for.
 #' @param clusters The cluster assignments for the strata to base the trajectories on.
 #' @param ... Additional arguments.
-#' @return A `data.frame` representing the fitted response per trajectory per moment in time.
+#' @return A `data.frame` representing the fitted response per trajectory per moment in time for the respective cluster.
+#' @details The default implementation uses the output of `fitted()` of the respective model.
 #' @examples
 #' data(latrendData)
 #' m <- lcMethodKML("Y", id = "Id", time = "Time")
@@ -504,49 +507,44 @@ fitted.lcModel = function(object, ..., clusters = trajectoryAssignments(object))
 #' fittedTrajectories(model, at = c(0, .5, 1))
 #' @family model-specific methods
 setMethod('fittedTrajectories', signature('lcModel'), function(object, at, what, clusters, ...) {
-  ids = ids(object)
-  assert_that(length(clusters) == nIds(object))
-
-  if (is.numeric(at)) {
-    newdata = data.table(
-      Id = rep(ids, each = length(at)),
-      Cluster = rep(clusters, each = length(at)),
-      Time = at
-    ) %>%
-      setnames('Id', idVariable(object)) %>%
-      setnames('Time', timeVariable(object))
-  } else if (is.list(at)) {
-    assert_that(has_name(at, timeVariable(object)), msg = 'Named list at must contain the time covariate')
-    assert_that(!has_name(at, c(idVariable(object), 'Cluster')))
-
-    at = as.data.table(at)
-    idx = seq_len(nrow(at)) %>% rep(length(ids))
-    newdata = data.table(Id = rep(ids, each = nrow(at)),
-      Cluster = rep(clusters, each = nrow(at)),
-      at[idx,]) %>%
-      setnames('Id', idVariable(object))
-  } else {
-    stop(
-      sprintf(
-        'The "at" argument of call to fittedTrajectories() is of unsupported type %s',
-        class(at)
-    ))
-  }
-
-  preds = predict(object, newdata = newdata, what = what, ...)
-
-  if (is.null(preds)) {
-    warning('fitted predictions not supported by the model: got NULL output')
-    return(NULL)
-  }
-
-  assert_that(is.data.frame(preds))
   assert_that(
-    nrow(preds) == nrow(newdata),
-    msg = 'invalid output from predict function of lcModel; expected a prediction per newdata row'
+    is.null(clusters) || length(clusters) == nIds(object),
+    is.numeric(at),
+    all(at %in% time(object))
   )
-  newdata[, c(responseVariable(object, what = what)) := preds$Fit]
-  return(newdata[])
+
+  newdata = model.data(object) %>%
+    subset(select = c(idVariable(object), timeVariable(object))) %>%
+    as.data.table()
+
+  fits = fitted(object, what = what, clusters = clusters, ...)
+
+  if (is.matrix(fits)) {
+    # fit per cluster
+    assert_that(
+      is.numeric(fits),
+      nrow(fits) == nobs(object)
+    )
+
+    newdata = cbind(newdata, fits) %>%
+      melt(
+        id.vars = names(newdata)[1:2],
+        variable.name = 'Cluster',
+        value.name = responseVariable(object, what = what)
+      )
+  } else {
+    # fit for assigned cluster only
+    assert_that(
+      is.numeric(fits),
+      length(fits) == nobs(object)
+    )
+
+    newdata[, c(responseVariable(object, what = what)) := fits]
+    newdata[, Cluster := trajectoryAssignments(object)[make.idRowIndices(object)]]
+  }
+
+  # filter times
+  newdata[get(timeVariable(object)) %in% at]
 })
 
 

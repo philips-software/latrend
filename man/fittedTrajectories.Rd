@@ -16,7 +16,9 @@
 \arguments{
 \item{object}{The model.}
 
-\item{at}{The time points at which to compute the id-specific trajectories.}
+\item{at}{The time points at which to compute the id-specific trajectories.
+The default implementation merely filters the output of \code{fitted()},
+so fitted values can only be outputted for times at which the model was trained.}
 
 \item{what}{The distributional parameter to compute the response for.}
 
@@ -25,10 +27,13 @@
 \item{...}{Additional arguments.}
 }
 \value{
-A \code{data.frame} representing the fitted response per trajectory per moment in time.
+A \code{data.frame} representing the fitted response per trajectory per moment in time for the respective cluster.
 }
 \description{
 Extract the fitted trajectories for all strata
+}
+\details{
+The default implementation uses the output of \code{fitted()} of the respective model.
 }
 \examples{
 data(latrendData)
