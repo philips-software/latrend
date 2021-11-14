@@ -116,30 +116,37 @@
 <h1 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h1>
 <p>The latest release of <em>latrend</em> can be installed by running:</p>
-<pre><code>remotes::install_github('philips-software/latrend', ref = remotes::github_release())</code></pre>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'philips-software/latrend'</span>, ref <span class="op">=</span> <span class="fu">remotes</span><span class="fu">::</span><span class="fu">github_release</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Vignettes are included by running:</p>
-<pre><code>remotes::install_github('philips-software/latrend', ref = remotes::github_release(), build_vignettes = TRUE)</code></pre>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'philips-software/latrend'</span>, ref <span class="op">=</span> <span class="fu">remotes</span><span class="fu">::</span><span class="fu">github_release</span><span class="op">(</span><span class="op">)</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="usage" class="section level1">
 <h1 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h1>
-<pre><code><a href="https://github.com/philips-software/latrend">library(latrend)</a></code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/philips-software/latrend">latrend</a></span><span class="op">)</span></code></pre></div>
 <p>Load and view example data.</p>
-<pre><code>data(latrendData)
-head(latrendData)
-options(latrend.id = "Id", latrend.time = "Time")
-plotTrajectories(latrendData, response = "Y")</code></pre>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>latrend.id <span class="op">=</span> <span class="st">"Id"</span>, latrend.time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span>
+<span class="fu"><a href="reference/plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span><span class="va">latrendData</span>, response <span class="op">=</span> <span class="st">"Y"</span><span class="op">)</span></code></pre></div>
 <p>Cluster the trajectories and plot the results.</p>
-<pre><code>kmlMethod &lt;- lcMethodKML("Y", nClusters = 3)
-model &lt;- latrend(kmlMethod, data = latrendData)
-summary(model)
-plot(model)</code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">kmlMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span><span class="st">"Y"</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">kmlMethod</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
 <p>Identify solutions for 1 to 5 clusters.</p>
-<pre><code>kmlMethods &lt;- lcMethods(kmlMethod, nClusters = 1:5)
-models &lt;- latrendBatch(kmlMethods, data = latrendData)</code></pre>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">kmlMethods</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">kmlMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>
+<span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/latrendBatch.html">latrendBatch</a></span><span class="op">(</span><span class="va">kmlMethods</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></code></pre></div>
 <p>Determine the number of clusters through one or more internal cluser metrics.</p>
-<pre><code>metric(models, c("WMAE", "BIC"))
-plotMetric(models, c("WMAE", "BIC"))</code></pre>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/metric.html">metric</a></span><span class="op">(</span><span class="va">models</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"WMAE"</span>, <span class="st">"BIC"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">models</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"WMAE"</span>, <span class="st">"BIC"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="supported-packages" class="section level1">
 <h1 class="hasAnchor">
