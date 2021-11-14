@@ -21,28 +21,28 @@ See the [news page](https://github.com/philips-software/latrend/blob/master/NEWS
 
 # Installation
 The latest release of _latrend_ can be installed by running:
-```
+```R
 remotes::install_github('philips-software/latrend', ref = remotes::github_release())
 ```
 
 Vignettes are included by running:
-```
+```R
 remotes::install_github('philips-software/latrend', ref = remotes::github_release(), build_vignettes = TRUE)
 ```
 
 # Usage
-```
+```R
 library(latrend)
 ```
 Load and view example data.
-```
+```R
 data(latrendData)
 head(latrendData)
 options(latrend.id = "Id", latrend.time = "Time")
 plotTrajectories(latrendData, response = "Y")
 ```
 Cluster the trajectories and plot the results.
-```
+```R
 kmlMethod <- lcMethodKML("Y", nClusters = 3)
 model <- latrend(kmlMethod, data = latrendData)
 summary(model)
@@ -50,13 +50,13 @@ plot(model)
 ```
 
 Identify solutions for 1 to 5 clusters.
-```
+```R
 kmlMethods <- lcMethods(kmlMethod, nClusters = 1:5)
 models <- latrendBatch(kmlMethods, data = latrendData)
 ```
 
 Determine the number of clusters through one or more internal cluser metrics.
-```
+```R
 metric(models, c("WMAE", "BIC"))
 plotMetric(models, c("WMAE", "BIC"))
 ```
