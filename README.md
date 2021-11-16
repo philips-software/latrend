@@ -6,7 +6,7 @@
   [![Codecov test coverage](https://codecov.io/gh/philips-software/latrend/branch/master/graph/badge.svg)](https://codecov.io/gh/philips-software/latrend?branch=master)
   [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/latrend)](https://www.r-pkg.org/pkg/latrend)
 <!-- badges: end -->
-The `latrend` package provides a framework for clustering longitudinal datasets in a standardized way. It provides interfaces to various R packages for longitudinal clustering.
+The `latrend` package provides a framework for clustering longitudinal datasets in a standardized way. The name is short for _latent-class trend (analysis)_, referring to the discovery of hidden trends in the data. The package provides interfaces to various R packages for conducting this type of analysis.
 
 # Features
 * **Unified cluster analysis**, independent of the underlying algorithms used. Enabling users to compare the performance of various longitudinal cluster methods on the case study at hand.
