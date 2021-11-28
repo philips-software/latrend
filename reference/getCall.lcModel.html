@@ -174,9 +174,9 @@
 <span class='r-out co'><span class='r-pr'>#&gt;</span>     nbRedrawing = 20, maxIt = 200, imputationMethod = "copyMean", </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>     distanceName = "euclidean", power = 2, distance = function () </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>     {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     }, centerMethod = function (x) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     }, centerMethod = function (x, ...) </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>     {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>         mean(x, na.rm = TRUE)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         mean(x, ..., na.rm = TRUE)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>     }, startingCond = "nearlyAll", nbCriterion = 1000, scale = TRUE, </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>     response = "Y"), data = latrendData, envir = NULL)</span>
 </pre>

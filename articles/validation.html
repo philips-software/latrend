@@ -129,6 +129,9 @@
 <p>We consider a KML model with 3 clusters to be our candidate model that we will validate. We defined the method with a reduced number of repeated random starts (as indicated by the <code>nbRedrawing</code> argument) in order to reduce the computation time needed in the repeated evaluations below. This is only done for demonstration purposes.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">kml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span><span class="st">"Y"</span>, nClusters <span class="op">=</span> <span class="fl">3</span>, nbRedrawing <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
+<span class="co">#&gt; Warning in rgl.init(initValue, onlyNULL): RGL: unable to open X11 display</span>
+<span class="co">#&gt; Warning: 'rgl.init' failed, running with 'rgl.useNULL = TRUE'.</span>
+<span class="co">#&gt; Warning: no DISPLAY variable so Tk is not available</span>
 <span class="va">kml</span>
 <span class="co">#&gt; lcMethodKML specifying "longitudinal k-means (KML)"</span>
 <span class="co">#&gt;  time:           getOption("latrend.time")</span>
@@ -178,28 +181,28 @@
 <span class="co">#&gt; 8          copyMean    euclidean     2 function () {}</span>
 <span class="co">#&gt; 9          copyMean    euclidean     2 function () {}</span>
 <span class="co">#&gt; 10         copyMean    euclidean     2 function () {}</span>
-<span class="co">#&gt;                                centerMethod startingCond nbCriterion scale</span>
-<span class="co">#&gt; 1  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
-<span class="co">#&gt; 2  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
-<span class="co">#&gt; 3  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
-<span class="co">#&gt; 4  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
-<span class="co">#&gt; 5  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
-<span class="co">#&gt; 6  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
-<span class="co">#&gt; 7  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
-<span class="co">#&gt; 8  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
-<span class="co">#&gt; 9  function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
-<span class="co">#&gt; 10 function (x) {    mean(x, na.rm = TRUE)}    nearlyAll        1000  TRUE</span>
-<span class="co">#&gt;    response</span>
-<span class="co">#&gt; 1         Y</span>
-<span class="co">#&gt; 2         Y</span>
-<span class="co">#&gt; 3         Y</span>
-<span class="co">#&gt; 4         Y</span>
-<span class="co">#&gt; 5         Y</span>
-<span class="co">#&gt; 6         Y</span>
-<span class="co">#&gt; 7         Y</span>
-<span class="co">#&gt; 8         Y</span>
-<span class="co">#&gt; 9         Y</span>
-<span class="co">#&gt; 10        Y</span></code></pre></div>
+<span class="co">#&gt;                                          centerMethod startingCond nbCriterion</span>
+<span class="co">#&gt; 1  function (x, ...) {    mean(x, ..., na.rm = TRUE)}    nearlyAll        1000</span>
+<span class="co">#&gt; 2  function (x, ...) {    mean(x, ..., na.rm = TRUE)}    nearlyAll        1000</span>
+<span class="co">#&gt; 3  function (x, ...) {    mean(x, ..., na.rm = TRUE)}    nearlyAll        1000</span>
+<span class="co">#&gt; 4  function (x, ...) {    mean(x, ..., na.rm = TRUE)}    nearlyAll        1000</span>
+<span class="co">#&gt; 5  function (x, ...) {    mean(x, ..., na.rm = TRUE)}    nearlyAll        1000</span>
+<span class="co">#&gt; 6  function (x, ...) {    mean(x, ..., na.rm = TRUE)}    nearlyAll        1000</span>
+<span class="co">#&gt; 7  function (x, ...) {    mean(x, ..., na.rm = TRUE)}    nearlyAll        1000</span>
+<span class="co">#&gt; 8  function (x, ...) {    mean(x, ..., na.rm = TRUE)}    nearlyAll        1000</span>
+<span class="co">#&gt; 9  function (x, ...) {    mean(x, ..., na.rm = TRUE)}    nearlyAll        1000</span>
+<span class="co">#&gt; 10 function (x, ...) {    mean(x, ..., na.rm = TRUE)}    nearlyAll        1000</span>
+<span class="co">#&gt;    scale response</span>
+<span class="co">#&gt; 1   TRUE        Y</span>
+<span class="co">#&gt; 2   TRUE        Y</span>
+<span class="co">#&gt; 3   TRUE        Y</span>
+<span class="co">#&gt; 4   TRUE        Y</span>
+<span class="co">#&gt; 5   TRUE        Y</span>
+<span class="co">#&gt; 6   TRUE        Y</span>
+<span class="co">#&gt; 7   TRUE        Y</span>
+<span class="co">#&gt; 8   TRUE        Y</span>
+<span class="co">#&gt; 9   TRUE        Y</span>
+<span class="co">#&gt; 10  TRUE        Y</span></code></pre></div>
 <p>A convenient way to assess the stability across repeated runs is to compare the models on one or more internal model metrics. Similar solutions should yield similar metric scores.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">repSelfMetrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">repModels</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BIC"</span>, <span class="st">"WMAE"</span>, <span class="st">"APPA"</span><span class="op">)</span><span class="op">)</span>
