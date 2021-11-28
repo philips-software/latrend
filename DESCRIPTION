@@ -36,7 +36,6 @@ Imports:
     assertthat (>= 0.2.1),
     foreach,
     data.table (>= 1.12.0),
-    longitudinalData,
     magrittr,
     plyr,
     ggplot2,

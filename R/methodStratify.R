@@ -1,5 +1,4 @@
 #' @include method.R
-#' @importFrom longitudinalData meanNA
 setClass('lcMethodStratify', contains = 'lcMethod')
 
 setValidity('lcMethodStratify', function(object) {
@@ -10,8 +9,7 @@ setValidity('lcMethodStratify', function(object) {
   }
 
   if (isArgDefined(object, 'clusterNames')) {
-    assert_that(is.null(object$clusterNames) ||
-                  is.character(object$clusterNames))
+    assert_that(is.null(object$clusterNames) || is.character(object$clusterNames))
   }
 
   if (isArgDefined(object, 'center')) {
@@ -234,6 +232,14 @@ postprobFromAssignments = function(assignments, k) {
   idxMat = cbind(seq_along(assignments), assignments)
   postprob[idxMat] = 1
   return(postprob)
+}
+
+#' @export
+#' @title Mean ignoring NAs
+#' @inheritParams base::mean
+#' @keywords internal
+meanNA = function(x, ...) {
+  mean(x, ..., na.rm = TRUE)
 }
 
 #' @export
