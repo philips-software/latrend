@@ -67,6 +67,11 @@ setMethod('getShortName', signature('lcMethodKML'), function(object) 'kml')
 setMethod('preFit', signature('lcMethodKML'), function(method, data, envir, verbose, ...) {
   e = callNextMethod()
 
+  # workaround for KmL only using the fast version when meanNA() of the longitudinalData package is specified
+  if (identical(method$centerMethod, meanNA)) {
+    method = update(method, centerMethod = longitudinalData::meanNA)
+  }
+
   valueColumn = responseVariable(method)
 
   # Model specification
