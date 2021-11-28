@@ -43,7 +43,6 @@ Imports:
     clusterCrit,
     mclustcomp,
     scales,
-    caret,
     lme4,
     mclust
 Suggests: 
@@ -70,6 +69,7 @@ Suggests:
     covr,
     simTool,
     dplyr,
+    caret,
     tibble
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)

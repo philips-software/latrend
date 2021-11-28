@@ -785,21 +785,22 @@ bootSample = function(data, id, seed = NULL) {
   })
 
   newdata = data[data[[id]] %in% ids[sampleIdx], ]
-  return(newdata)
+  newdata
 }
 
 
 #' @export
 #' @rdname lcModel-data-filters
-#' @importFrom caret createFolds
 #' @param fold The fold to select.
 #' @param folds Total number of folds to create.
 #' @family validation methods
 #' @keywords internal
 trainFold = function(data, fold, id, folds, seed) {
-  assert_that(is.data.frame(data),
+  assert_that(
+    is.data.frame(data),
     has_name(data, id),
-    !is.null(seed))
+    !is.null(seed)
+  )
 
   ids = unique(data[[id]])
   localRNG(seed = seed, {
@@ -812,7 +813,8 @@ trainFold = function(data, fold, id, folds, seed) {
   })
 
   foldIds = ids[foldIdx]
-  return(data[data[[id]] %in% foldIds, ])
+
+  data[data[[id]] %in% foldIds, ]
 }
 
 
@@ -827,5 +829,6 @@ testFold = function(data, fold, id, folds, seed) {
     folds = folds,
     seed = seed
   )
+
   createTestDataFold(data, trainData = trainData, id = id)
 }
