@@ -685,7 +685,6 @@ latrendCV = function(method,
 
 
 #' @export
-#' @importFrom caret createFolds
 #' @title Create the training data for each of the k models in k-fold cross validation evaluation
 #' @param data A `data.frame` representing the complete dataset.
 #' @param folds The number of folds. By default, a 10-fold scheme is used.
@@ -724,7 +723,8 @@ createTrainDataFolds = function(data,
   dataList = lapply(foldIdsList, function(foldIds) {
     data[data[[id]] %in% foldIds, ]
   })
-  return(dataList)
+
+  dataList
 }
 
 
@@ -744,6 +744,7 @@ createTestDataFold = function(data, trainData, id = getOption('latrend.id')) {
   allIds = unique(data[[id]])
   assert_that(all(trainIds %in% allIds))
   testIds = setdiff(allIds, trainIds)
+
   data[data[[id]] %in% testIds, ]
 }
 
