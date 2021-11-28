@@ -40,11 +40,8 @@ Imports:
     plyr,
     ggplot2,
     matrixStats,
-    clusterCrit,
-    mclustcomp,
     scales,
-    lme4,
-    mclust
+    lme4
 Suggests: 
     testthat (>= 3.0.0),
     roxygen2 (>= 7.1.0),
@@ -63,6 +60,9 @@ Suggests:
     akmedoids (>= 1.3.0),
     dtwclust,
     mixAK,
+    clusterCrit,
+    mclust,
+    mclustcomp,
     psych,
     qqplotr,
     doParallel,

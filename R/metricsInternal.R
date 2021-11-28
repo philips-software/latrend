@@ -1,6 +1,4 @@
 #' @include model.R
-#' @importFrom clusterCrit intCriteria
-#' @importFrom mclustcomp mclustcomp
 
 #' @name metric
 #' @rdname metric

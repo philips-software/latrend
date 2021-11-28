@@ -1,6 +1,4 @@
 #' @include model.R metricsInternal.R
-#' @importFrom clusterCrit extCriteria
-#' @importFrom mclustcomp mclustcomp
 
 #' @name externalMetric
 #' @rdname externalMetric
