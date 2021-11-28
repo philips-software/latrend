@@ -72,7 +72,7 @@ Suggests:
     simTool,
     dplyr,
     tibble
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 RdMacros: Rdpack
 VignetteBuilder: knitr
