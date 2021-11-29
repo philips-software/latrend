@@ -85,9 +85,15 @@ jobs:
           brew install --cask xquartz
           sudo /usr/X11/bin/xvfb :1 -screen 1 1024x768x24 -ac &
 
+      # https://github.com/jabenninghoff/rdev/: workaround for vignettes until https://github.com/rstudio/renv/issues/833 is fixed
+      - name: Install vignettes libraries
+        run: |
+          install.packages(c("devtools", "markdown", "miniUI", "rmarkdown"), repos="https://cloud.r-project.org")
+        shell: Rscript "--no-init-file" {0}
+        
       - uses: r-lib/actions/setup-renv@v1
         with:
-          cache-version: 2
+          cache-version: 1
 
       - name: Install rcmdcheck
         shell: Rscript {0}
