@@ -2,15 +2,15 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main, master]
-    paths:
-      - '**/test-coverage.yaml'
-      - 'R/**'
-      - 'tests/**'
-      - 'DESCRIPTION'
-      - 'NAMESPACE'
-  pull_request:
     branches: [main, master, renv]
+    #paths:
+      #- '**/test-coverage.yaml'
+      #- 'R/**'
+      #- 'tests/**'
+      #- 'DESCRIPTION'
+      #- 'NAMESPACE'
+  pull_request:
+    branches: [main, master]
 
 name: test-coverage
 
