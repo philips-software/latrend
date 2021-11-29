@@ -1122,8 +1122,8 @@ setMethod('predictAssignments', signature('lcModel'), function(
 
 #. plot ####
 #' @export
-#' @name plot
-#' @aliases plot,lcModel,ANY-method
+#' @name plot-lcModel-method
+#' @aliases plot,lcModel,ANY-method plot,lcModel-method
 #' @title Plot a lcModel
 #' @description Plot a `lcModel` object. By default, this plots the cluster trajectories of the model, along with the training data.
 #' @param x The `lcModel` object.
@@ -1135,7 +1135,7 @@ setMethod('predictAssignments', signature('lcModel'), function(
 #' data(latrendData)
 #' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 #' plot(model)
-setMethod('plot', signature('lcModel'), function(x, y, ...) {
+setMethod('plot', signature('lcModel', 'ANY'), function(x, y, ...) {
   args = list(...)
 
   if (!has_name(args, 'trajectories')) {

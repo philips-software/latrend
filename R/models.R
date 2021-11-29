@@ -331,13 +331,15 @@ max.lcModels = function(x, name, ...) {
 
 # . plot ####
 #' @export
+#' @name plot-lcModels-method
+#' @aliases plot,lcModels,ANY-method plot,lcModels-method
 #' @title Grid plot for a list of models
 #' @inheritParams subset.lcModels
 #' @param x The `lcModels` object.
 #' @param y Not used.
 #' @param ... Additional parameters passed to the `plot()` call for each `lcModel` object.
 #' @param gridArgs Named list of parameters passed to [gridExtra::arrangeGrob].
-setMethod('plot', signature('lcModels'), function(x, y, ..., subset, gridArgs = list()) {
+setMethod('plot', signature('lcModels', 'ANY'), function(x, y, ..., subset, gridArgs = list()) {
   if (length(x) == 0) {
     warning('Cannot plot empty list of models')
     return(invisible(FALSE))
