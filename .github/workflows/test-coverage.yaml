@@ -28,6 +28,11 @@ jobs:
       - uses: r-lib/actions/setup-renv@v1
         with:
           cache-version: 1
+          
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -yq libcurl4-openssl-dev
 
       - name: Install covr
         shell: Rscript {0}
