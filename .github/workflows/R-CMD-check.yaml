@@ -27,11 +27,11 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'release', pkg-type: 'binary'}
+          # - {os: macOS-latest,   r: 'release', pkg-type: 'binary'}
           - {os: windows-latest, r: 'release', pkg-type: 'binary'}
-          - {os: windows-latest, r: '3.6', pkg-type: 'binary'}
+          # - {os: windows-latest, r: '3.6', pkg-type: 'binary'}
           #- {os: ubuntu-latest,   r: 'devel', pkg-type: 'source'}
-          - {os: ubuntu-latest,   r: 'release', pkg-type: 'source'}
+          # - {os: ubuntu-latest,   r: 'release', pkg-type: 'source'}
           #- {os: ubuntu-latest,   r: 'oldrel-1', pkg-type: 'source'}
 
     env:
@@ -84,27 +84,14 @@ jobs:
         run: |
           brew install --cask xquartz
           sudo /usr/X11/bin/xvfb :1 -screen 1 1024x768x24 -ac &
-        # brew install libgit2
 
-      - name: Gather R package dependencies
-        shell: Rscript {0}
-        run: |
-          install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), "depends.Rds", version = 2)
-
-      - name: Cache R packages
-        if: runner.os != 'Windows'
-        uses: actions/cache@v1
+      - uses: r-lib/actions/setup-renv@v1
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
-          restore-keys: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-
+          cache-version: 2
 
-      - name: Install R packages
+      - name: Install rcmdcheck
         shell: Rscript {0}
-        run: |
-          remotes::install_deps(dependencies = TRUE, type = Sys.getenv("R_PKG_TYPE"), quiet = TRUE)
-          remotes::install_cran("rcmdcheck")
+        run: renv::install("rcmdcheck")
 
       - name: Check
         shell: Rscript {0}

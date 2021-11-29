@@ -10,7 +10,7 @@ on:
       - 'DESCRIPTION'
       - 'NAMESPACE'
   pull_request:
-    branches: [main, master]
+    branches: [main, master, renv]
 
 name: test-coverage
 
@@ -25,9 +25,13 @@ jobs:
 
       - uses: r-lib/actions/setup-r@v1
 
-      - uses: r-lib/actions/setup-r-dependencies@v1
+      - uses: r-lib/actions/setup-renv@v1
         with:
-          extra-packages: covr
+          cache-version: 1
+
+      - name: Install covr
+        shell: Rscript {0}
+        run: renv::install("covr")
 
       - name: Test coverage
         shell: Rscript {0}
