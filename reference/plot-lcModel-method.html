@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract lcModel coefficients — coef.lcModel • latrend</title>
+<title>Plot a lcModel — plot-lcModel-method • latrend</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,8 @@
 
 
 
-<meta property="og:title" content="Extract lcModel coefficients — coef.lcModel" />
-<meta property="og:description" content="Extract the coefficients of the lcModel object, if defined.
-The returned set of coefficients depends on the underlying type of lcModel.
-The default implementation checks for the existence of a coef() function for the internal model as defined in the @model slot, returning the output if available." />
+<meta property="og:title" content="Plot a lcModel — plot-lcModel-method" />
+<meta property="og:description" content="Plot a lcModel object. By default, this plots the cluster trajectories of the model, along with the training data." />
 
 
 
@@ -134,82 +132,52 @@ The default implementation checks for the existence of a coef() function for the
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract lcModel coefficients</h1>
+    <h1>Plot a lcModel</h1>
     <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/model.R'><code>R/model.R</code></a></small>
-    <div class="hidden name"><code>coef.lcModel.Rd</code></div>
+    <div class="hidden name"><code>plot-lcModel-method.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Extract the coefficients of the <code>lcModel</code> object, if defined.
-The returned set of coefficients depends on the underlying type of <code>lcModel</code>.
-The default implementation checks for the existence of a <code><a href='https://rdrr.io/r/stats/coef.html'>coef()</a></code> function for the internal model as defined in the <code>@model</code> slot, returning the output if available.</p>
+    <p>Plot a <code>lcModel</code> object. By default, this plots the cluster trajectories of the model, along with the training data.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for lcModel</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='co'># S4 method for lcModel</span>
+<span class='fu'><a href='https://rdrr.io/pkg/kml/man/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>object</th>
+      <th>x</th>
       <td><p>The <code>lcModel</code> object.</p></td>
     </tr>
     <tr>
+      <th>y</th>
+      <td><p>Not used.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
-      <td><p>Additional arguments.</p></td>
+      <td><p>Arguments passed on to <code><a href='plotClusterTrajectories.html'>plotClusterTrajectories</a></code></p><dl>
+    <dt><code>object</code></dt><dd><p>The (cluster) trajectory data.</p></dd>
+  
+</dl></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named <code>numeric vector</code> with all coefficients, or a <code>matrix</code> with each column containing the cluster-specific coefficients. If <code><a href='https://rdrr.io/r/stats/coef.html'>coef()</a></code> is not defined for the given model, an empty <code>numeric vector</code> is returned.</p>
-    <h2 class="hasAnchor" id="implementation"><a class="anchor" href="#implementation"></a>Implementation</h2>
-
-    
-
-<p>Classes extending <code>lcModel</code> can override this method to return model-specific coefficients.</p><pre>
-<span class='va'>coef.lcModelExt</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='co'># return model coefficients</span>
-<span class='op'>}</span>
-</pre>
-
+    <p>A <code>ggplot</code> object.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other model-specific methods: 
-<code><a href='clusterTrajectories.html'>clusterTrajectories</a>()</code>,
-<code><a href='converged.html'>converged</a>()</code>,
-<code><a href='deviance.lcModel.html'>deviance.lcModel</a>()</code>,
-<code><a href='df.residual.lcModel.html'>df.residual.lcModel</a>()</code>,
-<code><a href='fitted.lcModel.html'>fitted.lcModel</a>()</code>,
-<code><a href='fittedTrajectories.html'>fittedTrajectories</a>()</code>,
-<code><a href='lcModel-class.html'>lcModel-class</a></code>,
-<code><a href='logLik.lcModel.html'>logLik.lcModel</a>()</code>,
-<code><a href='model.frame.lcModel.html'>model.frame.lcModel</a>()</code>,
-<code><a href='nobs.lcModel.html'>nobs.lcModel</a>()</code>,
-<code><a href='postprob.html'>postprob</a>()</code>,
-<code><a href='predict.lcModel.html'>predict.lcModel</a>()</code>,
-<code><a href='predictAssignments.html'>predictAssignments</a>()</code>,
-<code><a href='predictForCluster.html'>predictForCluster</a>()</code>,
-<code><a href='predictPostprob.html'>predictPostprob</a>()</code>,
-<code><a href='residuals.lcModel.html'>residuals.lcModel</a>()</code>,
-<code><a href='sigma.lcModel.html'>sigma.lcModel</a>()</code>,
-<code><a href='time.lcModel.html'>time.lcModel</a>()</code></p></div>
+    <div class='dont-index'><p><a href='plotClusterTrajectories.html'>plotClusterTrajectories</a> <a href='plotFittedTrajectories.html'>plotFittedTrajectories</a> <a href='plotTrajectories.html'>plotTrajectories</a> <a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot2::ggplot</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>latrendData</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>method</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lcMethodLcmmGBTM.html'>lcMethodLcmmGBTM</a></span><span class='op'>(</span>fixed <span class='op'>=</span> <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Time</span>, mixture <span class='op'>=</span> <span class='op'>~</span> <span class='fl'>1</span>,</span>
-<span class='r-in'>  id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span>, nClusters <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>gbtm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='va'>method</span>, data <span class='op'>=</span> <span class='va'>latrendData</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Be patient, hlme is running ... </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> The program took 0.07 seconds </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Be patient, hlme is running ... </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> The program took 0.31 seconds </span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span><span class='op'>(</span><span class='va'>gbtm</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> intercept class1 intercept class2 intercept class1 intercept class2 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>      -0.90377817       1.62577282      -0.75800717      -0.29874493 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> intercept class3             Time           stderr </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       0.09769887       0.24004793       0.35704201 </span>
+<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span>method <span class='op'>=</span> <span class='fu'><a href='lcMethodKML.html'>lcMethodKML</a></span><span class='op'>(</span><span class='st'>"Y"</span>, id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span>, <span class='va'>latrendData</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ~ Fast KmL ~</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ********************S</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/kml/man/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='plot-lcModel-method-1.png' alt='' width='700' height='433' /></span>
 </pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

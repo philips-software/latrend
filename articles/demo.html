@@ -294,7 +294,7 @@ Cluster trajectories for KML model with 4 clusters.
 </div>
 <p>We can get a better sense of the representation of the cluster trajectories when plotted against the trajectories that have been assigned to the respective cluster.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">kmlModel4</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html">plot</a></span><span class="op">(</span><span class="va">kmlModel4</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 Cluster trajectories for KML model with 4 clusters, along with the assigned trajectories.
@@ -389,7 +389,7 @@ Three cluster metrics for each of the GBTMs.
 <p>All metrics clearly point to the 3-cluster solution.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bestGbtmModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">gbtmModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">3</span>, drop<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">bestGbtmModel</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html">plot</a></span><span class="op">(</span><span class="va">bestGbtmModel</span><span class="op">)</span></code></pre></div>
 <p><img src="demo_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div id="growth-mixture-modeling" class="section level2">
@@ -435,7 +435,7 @@ Three cluster metrics for each of the GMMs.
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bestGmmModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">gmmModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">3</span>, drop<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">bestGmmModel</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html">plot</a></span><span class="op">(</span><span class="va">bestGmmModel</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 Cluster trajectories of the selected GMM, including the assigned trajectories.
@@ -511,7 +511,7 @@ Non-parametric estimates of the cluster trajectories based on the reference assi
 <span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
 <span class="co">#&gt; -3.33030 -0.59503 -0.02617  0.00000  0.59606  3.40645</span></code></pre></div>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">refModel</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html">plot</a></span><span class="op">(</span><span class="va">refModel</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 Cluster trajectories of the reference model.

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get the model estimation time — estimationTime • latrend</title>
+<title>Grid plot for a list of models — plot-lcModels-method • latrend</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Get the model estimation time — estimationTime" />
-<meta property="og:description" content="Get the estimation time of the model, determined by the time taken for the associated fit() function to finish." />
+<meta property="og:title" content="Grid plot for a list of models — plot-lcModels-method" />
+<meta property="og:description" content="Grid plot for a list of models" />
 
 
 
@@ -132,59 +132,45 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get the model estimation time</h1>
-    <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/model.R'><code>R/model.R</code></a>, <a href='https://github.com/philips-software/latrend/blob/master/R/models.R'><code>R/models.R</code></a></small>
-    <div class="hidden name"><code>estimationTime.Rd</code></div>
+    <h1>Grid plot for a list of models</h1>
+    <small class="dont-index">Source: <a href='https://github.com/philips-software/latrend/blob/master/R/models.R'><code>R/models.R</code></a></small>
+    <div class="hidden name"><code>plot-lcModels-method.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get the estimation time of the model, determined by the time taken for the associated <code><a href='fit.html'>fit()</a></code> function to finish.</p>
+    <p>Grid plot for a list of models</p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for lcModel</span>
-<span class='fu'>estimationTime</span><span class='op'>(</span><span class='va'>object</span>, unit <span class='op'>=</span> <span class='st'>"secs"</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S4 method for lcModels</span>
-<span class='fu'>estimationTime</span><span class='op'>(</span><span class='va'>object</span>, unit <span class='op'>=</span> <span class='st'>"secs"</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S4 method for list</span>
-<span class='fu'>estimationTime</span><span class='op'>(</span><span class='va'>object</span>, unit <span class='op'>=</span> <span class='st'>"secs"</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='co'># S4 method for lcModels</span>
+<span class='fu'><a href='https://rdrr.io/pkg/kml/man/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>...</span>, <span class='va'>subset</span>, gridArgs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>object</th>
-      <td><p>The list of <code>lcModel</code> objects.</p></td>
+      <th>x</th>
+      <td><p>The <code>lcModels</code> object.</p></td>
     </tr>
     <tr>
-      <th>unit</th>
-      <td><p>The time unit in which the estimation time should be outputted.
-By default, estimation time is in seconds.
-For accepted units, see <a href='https://rdrr.io/r/base/difftime.html'>base::difftime</a>.</p></td>
+      <th>y</th>
+      <td><p>Not used.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments.</p></td>
+      <td><p>Additional parameters passed to the <code><a href='https://rdrr.io/pkg/kml/man/plot.html'>plot()</a></code> call for each <code>lcModel</code> object.</p></td>
+    </tr>
+    <tr>
+      <th>subset</th>
+      <td><p>Logical expression based on the <code>lcModel</code> method arguments, indicating
+which <code>lcModel</code> objects to keep.</p></td>
+    </tr>
+    <tr>
+      <th>gridArgs</th>
+      <td><p>Named list of parameters passed to <a href='https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html'>gridExtra::arrangeGrob</a>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>numeric</code> representing the model estimation time, in the specified unit.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>latrendData</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='latrend.html'>latrend</a></span><span class='op'>(</span><span class='fu'><a href='lcMethodKML.html'>lcMethodKML</a></span><span class='op'>(</span><span class='st'>"Y"</span>, id <span class='op'>=</span> <span class='st'>"Id"</span>, time <span class='op'>=</span> <span class='st'>"Time"</span><span class='op'>)</span>, <span class='va'>latrendData</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  ~ Fast KmL ~</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> ********************S</span>
-<span class='r-in'><span class='fu'>estimationTime</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.554</span>
-<span class='r-in'><span class='fu'>estimationTime</span><span class='op'>(</span><span class='va'>model</span>, unit <span class='op'>=</span> <span class='st'>'mins'</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.009233333</span>
-<span class='r-in'><span class='fu'>estimationTime</span><span class='op'>(</span><span class='va'>model</span>, unit <span class='op'>=</span> <span class='st'>'days'</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 6.412037e-06</span>
-</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
