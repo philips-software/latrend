@@ -13,7 +13,7 @@ on:
       - 'NAMESPACE'
 
   pull_request:
-    branches: [main, master]
+    branches: [main, master, renv]
 
 name: R-CMD-check
 
