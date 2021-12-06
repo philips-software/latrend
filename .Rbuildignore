@@ -19,6 +19,7 @@ cld\.Rdata
 ^\.github$
 ^\.gitignore$
 ^LICENSE$
+^Meta$
 ^MixTVEM\.r$
 README\.md
 ^renv$
