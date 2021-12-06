@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">latrend</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -73,7 +69,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/philips-software/latrend/">
+  <a href="https://github.com/philips-software/latrend/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -92,11 +88,11 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Validating cluster models</h1>
-                        <h4 class="author">Niek Den Teuling</h4>
+                        <h4 data-toc-skip class="author">Niek Den Teuling</h4>
             
-            <h4 class="date">2020-11-06</h4>
+            <h4 data-toc-skip class="date">2020-11-06</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/master/vignettes/validation.Rmd"><code>vignettes/validation.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/vignettes/validation.Rmd" class="external-link"><code>vignettes/validation.Rmd</code></a></small>
       <div class="hidden name"><code>validation.Rmd</code></div>
 
     </div>
@@ -105,14 +101,14 @@
     
 <p>In this vignette we demonstrate different ways in which longitudinal cluster models can be internally validated.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/philips-software/latrend">latrend</a></span><span class="op">)</span></code></pre></div>
-<div id="demonstration" class="section level1">
-<h1 class="hasAnchor">
-<a href="#demonstration" class="anchor"></a>Demonstration</h1>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/philips-software/latrend" class="external-link">latrend</a></span><span class="op">)</span></code></pre></div>
+<div class="section level1">
+<h1 id="demonstration">Demonstration<a class="anchor" aria-label="anchor" href="#demonstration"></a>
+</h1>
 <p>We explore the <code>latrendData</code> dataset. This is a synthetic dataset for which the reference group of each trajectory is available, indicated by the <code>Class</code> column. However, in this vignette we will assume that the true group specification and number of groups are unknown. Instead, we have a candidate model which we wish to validate internally.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
 <span class="co">#&gt;   Id      Time           Y   Class</span>
 <span class="co">#&gt; 1  1 0.0000000 -1.08049205 Class 1</span>
 <span class="co">#&gt; 2  1 0.2222222 -0.68024151 Class 1</span>
@@ -122,10 +118,10 @@
 <span class="co">#&gt; 6  1 1.1111111 -0.02991783 Class 1</span></code></pre></div>
 <p>Specify the package options to adopt the respective column names of the loaded dataset, for convenience.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>latrend.id <span class="op">=</span> <span class="st">"Id"</span>, latrend.time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></code></pre></div>
-<div id="the-candidate-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-candidate-model" class="anchor"></a>The candidate model</h2>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>latrend.id <span class="op">=</span> <span class="st">"Id"</span>, latrend.time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></code></pre></div>
+<div class="section level2">
+<h2 id="the-candidate-model">The candidate model<a class="anchor" aria-label="anchor" href="#the-candidate-model"></a>
+</h2>
 <p>We consider a KML model with 3 clusters to be our candidate model that we will validate. We defined the method with a reduced number of repeated random starts (as indicated by the <code>nbRedrawing</code> argument) in order to reduce the computation time needed in the repeated evaluations below. This is only done for demonstration purposes.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">kml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span><span class="st">"Y"</span>, nClusters <span class="op">=</span> <span class="fl">3</span>, nbRedrawing <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
@@ -150,14 +146,14 @@
 <span class="co">#&gt;  response:       "Y"</span></code></pre></div>
 </div>
 </div>
-<div id="evaluate-stability-of-the-estimation-through-repeated-estimation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#evaluate-stability-of-the-estimation-through-repeated-estimation" class="anchor"></a>Evaluate stability of the estimation through repeated estimation</h1>
+<div class="section level1">
+<h1 id="evaluate-stability-of-the-estimation-through-repeated-estimation">Evaluate stability of the estimation through repeated estimation<a class="anchor" aria-label="anchor" href="#evaluate-stability-of-the-estimation-through-repeated-estimation"></a>
+</h1>
 <p>The purpose of model validation is essentially to identify that the model is robust and generalizes well to unseen data. A necessary condition for these aspects is that the model is reproducible on the original training data. This evaluation helps to ensure that the model estimation procedure is robust, i.e., does not yield spurious model solutions.</p>
 <p>We can fit a method repeatedly using the <code>latrendRep</code> data.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">repModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendRep.html">latrendRep</a></span><span class="op">(</span><span class="va">kml</span>, data <span class="op">=</span> <span class="va">latrendData</span>, .rep<span class="op">=</span><span class="fl">10</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">repModels</span>, excludeShared <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">repModels</span>, excludeShared <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="co">#&gt; List of 10 lcModels with</span>
 <span class="co">#&gt;    .name .method        data       seed time id nClusters nbRedrawing maxIt</span>
 <span class="co">#&gt; 1      1     kml latrendData 1140350788 Time Id         3           5   200</span>
@@ -205,8 +201,8 @@
 <span class="co">#&gt; 10  TRUE        Y</span></code></pre></div>
 <p>A convenient way to assess the stability across repeated runs is to compare the models on one or more internal model metrics. Similar solutions should yield similar metric scores.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">repSelfMetrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">repModels</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BIC"</span>, <span class="st">"WMAE"</span>, <span class="st">"APPA"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">repSelfMetrics</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">repSelfMetrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">repModels</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BIC"</span>, <span class="st">"WMAE"</span>, <span class="st">"APPA"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">repSelfMetrics</span><span class="op">)</span>
 <span class="co">#&gt;        BIC      WMAE      APPA</span>
 <span class="co">#&gt; 1 655.5420 0.1925632 0.9819657</span>
 <span class="co">#&gt; 2 655.5420 0.1925632 0.9819657</span>
@@ -215,23 +211,23 @@
 <span class="co">#&gt; 5 655.5420 0.1925632 0.9819657</span>
 <span class="co">#&gt; 6 655.0419 0.1924808 0.9814748</span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">repSelfMetrics</span><span class="op">[</span>, <span class="st">"WMAE"</span><span class="op">]</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">repSelfMetrics</span><span class="op">[</span>, <span class="st">"WMAE"</span><span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
 <span class="co">#&gt;  0.1925  0.1925  0.1925  0.1925  0.1926  0.1926</span></code></pre></div>
 <p>As can be seen from the numbers, the models are (practically) identical in terms of model fit, measurement error, and cluster separation.</p>
-<div id="comparison-between-fits" class="section level2">
-<h2 class="hasAnchor">
-<a href="#comparison-between-fits" class="anchor"></a>Comparison between fits</h2>
+<div class="section level2">
+<h2 id="comparison-between-fits">Comparison between fits<a class="anchor" aria-label="anchor" href="#comparison-between-fits"></a>
+</h2>
 <p>Alternatively, we can select the model with the best fit, and compare it against the other fitted models.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bestRepModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">repModels</span>, <span class="st">"BIC"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/externalMetric,lcModel,lcModel-method.html">externalMetric</a></span><span class="op">(</span><span class="va">repModels</span>, <span class="va">bestRepModel</span>, name <span class="op">=</span> <span class="st">"adjustedRand"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">bestRepModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">repModels</span>, <span class="st">"BIC"</span><span class="op">)</span>
+<span class="fu"><a href="../reference/externalMetric.html">externalMetric</a></span><span class="op">(</span><span class="va">repModels</span>, <span class="va">bestRepModel</span>, name <span class="op">=</span> <span class="st">"adjustedRand"</span><span class="op">)</span>
 <span class="co">#&gt;  [1] 1 1 1 1 1 1 1 1 1 1</span></code></pre></div>
 <p>As indicated by the adjusted Rand index, the methods are highly similar (a score of 1 indicates a perfect agreement). Note however that there are some discrepancies among the repeated runs on one or two trajectories.</p>
 <p>Similarly, we can compute the pairwise adjusted Rand indices, resulting in a similarity matrix</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">simMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/externalMetric,lcModel,lcModel-method.html">externalMetric</a></span><span class="op">(</span><span class="va">repModels</span>, name <span class="op">=</span> <span class="st">"adjustedRand"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">simMat</span>, <span class="fl">2</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">simMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/externalMetric.html">externalMetric</a></span><span class="op">(</span><span class="va">repModels</span>, name <span class="op">=</span> <span class="st">"adjustedRand"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">simMat</span>, <span class="fl">2</span><span class="op">)</span>
 <span class="co">#&gt;    1 2 3 4 5 6 7 8 9</span>
 <span class="co">#&gt; 2  1                </span>
 <span class="co">#&gt; 3  1 1              </span>
@@ -243,14 +239,14 @@
 <span class="co">#&gt; 9  1 1 1 1 1 1 1 1  </span>
 <span class="co">#&gt; 10 1 1 1 1 1 1 1 1 1</span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">simMat</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">simMat</span><span class="op">)</span>
 <span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
 <span class="co">#&gt;       1       1       1       1       1       1</span></code></pre></div>
 </div>
 </div>
-<div id="evaluating-replicability-and-stability-through-bootstrapping" class="section level1">
-<h1 class="hasAnchor">
-<a href="#evaluating-replicability-and-stability-through-bootstrapping" class="anchor"></a>Evaluating replicability and stability through bootstrapping</h1>
+<div class="section level1">
+<h1 id="evaluating-replicability-and-stability-through-bootstrapping">Evaluating replicability and stability through bootstrapping<a class="anchor" aria-label="anchor" href="#evaluating-replicability-and-stability-through-bootstrapping"></a>
+</h1>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bootModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendBoot.html">latrendBoot</a></span><span class="op">(</span><span class="va">kml</span>, data <span class="op">=</span> <span class="va">latrendData</span>, samples <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
 <span class="va">bootModels</span>
@@ -267,7 +263,7 @@
 <span class="co">#&gt; 9      9     kml bootSample(latrendData, "Id", 2127214623L)  446397691</span>
 <span class="co">#&gt; 10    10     kml  bootSample(latrendData, "Id", 882537923L)   50033203</span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bootMetrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">bootModels</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BIC"</span>, <span class="st">"WMAE"</span>, <span class="st">"APPA"</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">bootMetrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">bootModels</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BIC"</span>, <span class="st">"WMAE"</span>, <span class="st">"APPA"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">bootMetrics</span>
 <span class="co">#&gt;         BIC      WMAE      APPA</span>
 <span class="co">#&gt; 1  386.5510 0.1874964 0.9885190</span>
@@ -281,17 +277,17 @@
 <span class="co">#&gt; 9  466.8833 0.1950178 0.9864469</span>
 <span class="co">#&gt; 10 417.8994 0.1902601 0.9858632</span></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html">colMeans</a></span><span class="op">(</span><span class="va">bootMetrics</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="va">bootMetrics</span><span class="op">)</span>
 <span class="co">#&gt;         BIC        WMAE        APPA </span>
 <span class="co">#&gt; 434.5816773   0.1907985   0.9859552</span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">bootMetrics</span>, <span class="fl">2</span>, <span class="va">sd</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">bootMetrics</span>, <span class="fl">2</span>, <span class="va">sd</span><span class="op">)</span>
 <span class="co">#&gt;          BIC         WMAE         APPA </span>
 <span class="co">#&gt; 54.356727198  0.005065835  0.003265144</span></code></pre></div>
 </div>
-<div id="ten-fold-cross-validation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#ten-fold-cross-validation" class="anchor"></a>Ten-fold cross validation</h1>
+<div class="section level1">
+<h1 id="ten-fold-cross-validation">Ten-fold cross validation<a class="anchor" aria-label="anchor" href="#ten-fold-cross-validation"></a>
+</h1>
 <p>Lastly, we can fit models using <span class="math inline">\(k\)</span>-fold cross-validation to validate the models on previously unseen data from the test folds.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">trainModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendCV.html">latrendCV</a></span><span class="op">(</span><span class="va">kml</span>, data <span class="op">=</span> <span class="va">latrendData</span>, folds <span class="op">=</span> <span class="fl">10</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
@@ -308,9 +304,9 @@
 <span class="co">#&gt; 8      8     kml  trainFold(latrendData, fold = 8, "Id", 10, 1)  564460360</span>
 <span class="co">#&gt; 9      9     kml  trainFold(latrendData, fold = 9, "Id", 10, 1) 1404535239</span>
 <span class="co">#&gt; 10    10     kml trainFold(latrendData, fold = 10, "Id", 10, 1)  779295076</span></code></pre></div>
-<div id="manual-cross-validation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#manual-cross-validation" class="anchor"></a>Manual cross validation</h2>
+<div class="section level2">
+<h2 id="manual-cross-validation">Manual cross validation<a class="anchor" aria-label="anchor" href="#manual-cross-validation"></a>
+</h2>
 <p>Alternatively, we can generate the training data folds ourselves, and fit models using <code>latrendBatch</code>.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dataFolds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createTrainDataFolds.html">createTrainDataFolds</a></span><span class="op">(</span><span class="va">latrendData</span>, folds <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
@@ -346,11 +342,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Niek Den Teuling.</p>
+  <p></p>
+<p>Developed by Niek Den Teuling.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -358,6 +356,8 @@
 
   
 
+
+  
 
   </body>
 </html>

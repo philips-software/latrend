@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">latrend</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -73,7 +69,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/philips-software/latrend/">
+  <a href="https://github.com/philips-software/latrend/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -92,11 +88,11 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Demonstration of latrend package</h1>
-                        <h4 class="author">Niek Den Teuling</h4>
+                        <h4 data-toc-skip class="author">Niek Den Teuling</h4>
             
-            <h4 class="date">2021-01-05</h4>
+            <h4 data-toc-skip class="date">2021-01-05</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/master/vignettes/demo.Rmd"><code>vignettes/demo.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/vignettes/demo.Rmd" class="external-link"><code>vignettes/demo.Rmd</code></a></small>
       <div class="hidden name"><code>demo.Rmd</code></div>
 
     </div>
@@ -105,14 +101,14 @@
     
 <p>This vignette describes the core functionality of the package by identifying common trends in the longitudinal dataset that is included with the package. We begin by loading the required package and the <code>latrendData</code> dataset.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/philips-software/latrend">latrend</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></code></pre></div>
-<div id="initial-data-exploration" class="section level1">
-<h1 class="hasAnchor">
-<a href="#initial-data-exploration" class="anchor"></a>Initial data exploration</h1>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/philips-software/latrend" class="external-link">latrend</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></code></pre></div>
+<div class="section level1">
+<h1 id="initial-data-exploration">Initial data exploration<a class="anchor" aria-label="anchor" href="#initial-data-exploration"></a>
+</h1>
 <p>The <code>latrendData</code> is a synthetic dataset for which the reference group of each trajectory is available, as indicated by the <code>Class</code> column. We will use this column at the end of this vignette to validate the identified model.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
 <span class="co">#&gt;   Id      Time           Y   Class</span>
 <span class="co">#&gt; 1  1 0.0000000 -1.08049205 Class 1</span>
 <span class="co">#&gt; 2  1 0.2222222 -0.68024151 Class 1</span>
@@ -122,7 +118,7 @@
 <span class="co">#&gt; 6  1 1.1111111 -0.02991783 Class 1</span></code></pre></div>
 <p>Many of the functions of the package require the specification of the trajectory identifier variable (named <code>Id</code>) and the time variable (named <code>Time</code>). For convenience, we specify these variables as package options.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>latrend.id <span class="op">=</span> <span class="st">"Id"</span>, latrend.time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>latrend.id <span class="op">=</span> <span class="st">"Id"</span>, latrend.time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></code></pre></div>
 <p>Prior to attempting to model the data, it is worthwhile to visually inspect it.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span><span class="va">latrendData</span>, response <span class="op">=</span> <span class="st">"Y"</span><span class="op">)</span></code></pre></div>
@@ -134,9 +130,9 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 </div>
 <p>The presence of clusters is not apparent from the plot. With any longitudinal analysis, one should first consider whether clustering brings any benefit to the representation of heterogeneity of the data over a single common trend representation, or a multilevel model. In this demonstration, we omit this step under the prior knowledge that the data was generated via distinct mechanisms.</p>
 </div>
-<div id="non-parametric-trajectory-clustering" class="section level1">
-<h1 class="hasAnchor">
-<a href="#non-parametric-trajectory-clustering" class="anchor"></a>Non-parametric trajectory clustering</h1>
+<div class="section level1">
+<h1 id="non-parametric-trajectory-clustering">Non-parametric trajectory clustering<a class="anchor" aria-label="anchor" href="#non-parametric-trajectory-clustering"></a>
+</h1>
 <p>Assuming the appropriate (cluster) trajectory model is not known in advance, non-parametric longitudinal cluster models can provide a suitable starting point.</p>
 <p>As an example, we apply longitudinal <span class="math inline">\(k\)</span>-means (KML). First, we need to define the method. At the very least we need to indicate the response variable the method should operate on. Secondly, we should indicate how many clusters we expect. We do not need to define the <code>id</code> and <code>time</code> arguments as we have set these as package options. We use the <code>nbRedrawing</code> argument provided by the KML package for reducing the number of repeated random starts to only a single model estimation, in order to reduce the run-time of this example.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -196,15 +192,15 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 <span class="co">#&gt; Scaled residuals:</span>
 <span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
 <span class="co">#&gt; -3.83836 -0.60818  0.02327  0.00000  0.64356  3.49294</span></code></pre></div>
-<div id="identifying-the-number-of-clusters" class="section level2">
-<h2 class="hasAnchor">
-<a href="#identifying-the-number-of-clusters" class="anchor"></a>Identifying the number of clusters</h2>
+<div class="section level2">
+<h2 id="identifying-the-number-of-clusters">Identifying the number of clusters<a class="anchor" aria-label="anchor" href="#identifying-the-number-of-clusters"></a>
+</h2>
 <p>As we do not know the best number of clusters needed to represent the data, we should consider fitting the KML model for a range of clusters. We can then select the best representation by comparing the solutions by one or more cluster metrics.</p>
 <p>We can specify a range of <code>lcMethodKML</code> methods based on a prototype method using the <code>lcMethods</code> function. This method outputs a list of <code>lcMethod</code> objects. A structured summary is obtained by calling <code>as.data.frame</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">kmlMethods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">kmlMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">kmlMethods</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">kmlMethods</span><span class="op">)</span>
 <span class="co">#&gt;        .class time id nClusters nbRedrawing maxIt imputationMethod distanceName</span>
 <span class="co">#&gt; 1 lcMethodKML Time Id         1           1   200         copyMean    euclidean</span>
 <span class="co">#&gt; 2 lcMethodKML Time Id         2           1   200         copyMean    euclidean</span>
@@ -240,7 +236,7 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 <span class="co">#&gt; 8     8     kml 2112708938         8</span></code></pre></div>
 <p>We can compare each of the solutions via one or more cluster metrics. Considering the consistent improvements achieved by KML for an increasing number of clusters, identifying the best solution by minimizing a metric would lead to an overestimation. Instead, we perform the selection via a manual elbow method, using the <code>plotMetric</code> function.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">kmlModels</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"logLik"</span>, <span class="st">"BIC"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">kmlModels</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"logLik"</span>, <span class="st">"BIC"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 Elbow plots of three relevant cluster metrics across the fitted models.
@@ -248,12 +244,12 @@ Elbow plots of three relevant cluster metrics across the fitted models.
 <img src="demo_files/figure-html/unnamed-chunk-10-1.png" alt="Elbow plots of three relevant cluster metrics across the fitted models." width="672">
 </div>
 </div>
-<div id="investigating-the-preferred-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#investigating-the-preferred-model" class="anchor"></a>Investigating the preferred model</h2>
+<div class="section level2">
+<h2 id="investigating-the-preferred-model">Investigating the preferred model<a class="anchor" aria-label="anchor" href="#investigating-the-preferred-model"></a>
+</h2>
 <p>We have selected the 4-cluster model as the preferred representation. We will now inspect this solution in more detail. Before we can start, we first obtain the fitted <code>lcModel</code> object from the list of fitted models.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">kmlModel4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">kmlModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">4</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">kmlModel4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">kmlModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">4</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="va">kmlModel4</span>
 <span class="co">#&gt; Longitudinal cluster model using longitudinal k-means (KML)</span>
@@ -294,7 +290,7 @@ Cluster trajectories for KML model with 4 clusters.
 </div>
 <p>We can get a better sense of the representation of the cluster trajectories when plotted against the trajectories that have been assigned to the respective cluster.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html">plot</a></span><span class="op">(</span><span class="va">kmlModel4</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">kmlModel4</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 Cluster trajectories for KML model with 4 clusters, along with the assigned trajectories.
@@ -302,9 +298,9 @@ Cluster trajectories for KML model with 4 clusters, along with the assigned traj
 <img src="demo_files/figure-html/unnamed-chunk-13-1.png" alt="Cluster trajectories for KML model with 4 clusters, along with the assigned trajectories." width="672">
 </div>
 </div>
-<div id="model-adequacy" class="section level2">
-<h2 class="hasAnchor">
-<a href="#model-adequacy" class="anchor"></a>Model adequacy</h2>
+<div class="section level2">
+<h2 id="model-adequacy">Model adequacy<a class="anchor" aria-label="anchor" href="#model-adequacy"></a>
+</h2>
 <p>The list of currently supported internal model metrics can be obtained by calling the <code>getInternalMetricNames</code> function.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/getInternalMetricNames.html">getInternalMetricNames</a></span><span class="op">(</span><span class="op">)</span>
@@ -319,7 +315,7 @@ Cluster trajectories for KML model with 4 clusters, along with the assigned traj
 <span class="co">#&gt; [25] "WMSE"                "WRSS"</span></code></pre></div>
 <p>As an example, we will compute the APPA (a measure of cluster separation), and the WRSS and WMAE metrics (measures of model error).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">kmlModel</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"APPA"</span>, <span class="st">"WRSS"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">kmlModel</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"APPA"</span>, <span class="st">"WRSS"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;        APPA        WRSS        WMAE </span>
 <span class="co">#&gt;   0.9996797 167.8058270   0.2247193</span></code></pre></div>
 <p>The quantile-quantile (QQ) plot can be used to assess the model for structural deviations.</p>
@@ -343,16 +339,16 @@ Cluster-specific detrended QQ-plot for the selected KML model.
 </div>
 </div>
 </div>
-<div id="parametric-trajectory-clustering" class="section level1">
-<h1 class="hasAnchor">
-<a href="#parametric-trajectory-clustering" class="anchor"></a>Parametric trajectory clustering</h1>
-<div id="group-based-trajectory-modeling" class="section level2">
-<h2 class="hasAnchor">
-<a href="#group-based-trajectory-modeling" class="anchor"></a>Group-based trajectory modeling</h2>
+<div class="section level1">
+<h1 id="parametric-trajectory-clustering">Parametric trajectory clustering<a class="anchor" aria-label="anchor" href="#parametric-trajectory-clustering"></a>
+</h1>
+<div class="section level2">
+<h2 id="group-based-trajectory-modeling">Group-based trajectory modeling<a class="anchor" aria-label="anchor" href="#group-based-trajectory-modeling"></a>
+</h2>
 <p>The KML analysis has provided us with clues on an appropriate model for the cluster trajectories. We can use these insights to define a parametric group-based trajectory model (GBTM) with cluster trajectories represented by polynomials of order 2. We will use the GBTM implementation available from the <code>lcmm</code> package, using a B-spline trajectory of degree 3 from the <code>splines</code> package.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">splines</span><span class="op">)</span>
-<span class="va">gbtmMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodLcmmGBTM.html">lcMethodLcmmGBTM</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/splines/bs.html">bs</a></span><span class="op">(</span><span class="va">Time</span><span class="op">)</span>, mixture <span class="op">=</span> <span class="va">fixed</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">splines</span><span class="op">)</span>
+<span class="va">gbtmMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodLcmmGBTM.html">lcMethodLcmmGBTM</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/splines/bs.html" class="external-link">bs</a></span><span class="op">(</span><span class="va">Time</span><span class="op">)</span>, mixture <span class="op">=</span> <span class="va">fixed</span><span class="op">)</span>
 
 <span class="va">gbtmMethod</span>
 <span class="co">#&gt; lcMethodLcmmGBTM specifying "group-based trajectory modeling using lcmm"</span>
@@ -379,7 +375,7 @@ Cluster-specific detrended QQ-plot for the selected KML model.
 
 <span class="va">gbtmModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendBatch.html">latrendBatch</a></span><span class="op">(</span><span class="va">gbtmMethods</span>, data <span class="op">=</span> <span class="va">latrendData</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">gbtmModels</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"logLik"</span>, <span class="st">"BIC"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">gbtmModels</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"logLik"</span>, <span class="st">"BIC"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 Three cluster metrics for each of the GBTMs.
@@ -388,16 +384,16 @@ Three cluster metrics for each of the GBTMs.
 </div>
 <p>All metrics clearly point to the 3-cluster solution.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bestGbtmModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">gbtmModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">3</span>, drop<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html">plot</a></span><span class="op">(</span><span class="va">bestGbtmModel</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">bestGbtmModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">gbtmModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">3</span>, drop<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bestGbtmModel</span><span class="op">)</span></code></pre></div>
 <p><img src="demo_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
-<div id="growth-mixture-modeling" class="section level2">
-<h2 class="hasAnchor">
-<a href="#growth-mixture-modeling" class="anchor"></a>Growth mixture modeling</h2>
+<div class="section level2">
+<h2 id="growth-mixture-modeling">Growth mixture modeling<a class="anchor" aria-label="anchor" href="#growth-mixture-modeling"></a>
+</h2>
 <p>We have identified 3 apparent clusters via GBTM. However, we may wish to obtain a model that betters explains the within-cluster heterogeneity (as seen in the cluster trajectories plot above). We apply a growth mixture model (GMM) using trajectories represented by a second-order polynomial.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">gmmMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodLcmmGMM.html">lcMethodLcmmGMM</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">Time</span>, <span class="fl">2</span>, raw <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, mixture <span class="op">=</span> <span class="va">fixed</span>, idiag <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">gmmMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodLcmmGMM.html">lcMethodLcmmGMM</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">Time</span>, <span class="fl">2</span>, raw <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, mixture <span class="op">=</span> <span class="va">fixed</span>, idiag <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="va">gmmMethod</span>
 <span class="co">#&gt; lcMethodLcmmGMM specifying "growth mixture model"</span>
@@ -424,7 +420,7 @@ Three cluster metrics for each of the GBTMs.
 
 <span class="va">gmmModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendBatch.html">latrendBatch</a></span><span class="op">(</span><span class="va">gmmMethods</span>, <span class="va">latrendData</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">gmmModels</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"logLik"</span>, <span class="st">"BIC"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">gmmModels</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"logLik"</span>, <span class="st">"BIC"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 Three cluster metrics for each of the GMMs.
@@ -433,9 +429,9 @@ Three cluster metrics for each of the GMMs.
 </div>
 <p>Similar to the GBTM analysis, the metrics clearly point to the 3-cluster solution.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bestGmmModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">gmmModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">3</span>, drop<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">bestGmmModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">gmmModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">3</span>, drop<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html">plot</a></span><span class="op">(</span><span class="va">bestGmmModel</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bestGmmModel</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 Cluster trajectories of the selected GMM, including the assigned trajectories.
@@ -452,36 +448,36 @@ Detrended QQ plot for the best GMM.
 </div>
 <p>As can be seen by the scale of the y-axis of the QQ plot, the deviations from the expected normal distributions are negligibly small.</p>
 </div>
-<div id="comparing-models" class="section level2">
-<h2 class="hasAnchor">
-<a href="#comparing-models" class="anchor"></a>Comparing models</h2>
+<div class="section level2">
+<h2 id="comparing-models">Comparing models<a class="anchor" aria-label="anchor" href="#comparing-models"></a>
+</h2>
 <p>Both the GBTM and GMM analysis indicated the data was best represented using 3 clusters. We are interested in identifying the best representation for the data. After all, despite the matching number of clusters, there may be differences between the models in terms of trajectory assignments are shape of the cluster trajectories.</p>
 <p>Firstly, we compare the fit to the data by comparing the BIC, which indicates that the GMM model is marginally better than the GBTM model.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html">BIC</a></span><span class="op">(</span><span class="va">bestGbtmModel</span>, <span class="va">bestGmmModel</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">BIC</a></span><span class="op">(</span><span class="va">bestGbtmModel</span>, <span class="va">bestGmmModel</span><span class="op">)</span>
 <span class="co">#&gt;               df        BIC</span>
 <span class="co">#&gt; bestGbtmModel 15   574.0813</span>
 <span class="co">#&gt; bestGmmModel  13 -1672.9493</span></code></pre></div>
 <p>Secondly, we compare the model fit errors, showing an identical error between models.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">bestGbtmModel</span>, <span class="va">bestGmmModel</span><span class="op">)</span>, <span class="st">'WMAE'</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">bestGbtmModel</span>, <span class="va">bestGmmModel</span><span class="op">)</span>, <span class="st">'WMAE'</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.19225404 0.08855489</span></code></pre></div>
 <p>Thirdly, we can compare the weighted minimum MAE between the cluster trajectories of the models, as a measure of agreement in cluster trajectory shapes.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/externalMetric,lcModel,lcModel-method.html">externalMetric</a></span><span class="op">(</span><span class="va">bestGbtmModel</span>, <span class="va">bestGmmModel</span>, <span class="st">'WMMAE'</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/externalMetric.html">externalMetric</a></span><span class="op">(</span><span class="va">bestGbtmModel</span>, <span class="va">bestGmmModel</span>, <span class="st">'WMMAE'</span><span class="op">)</span>
 <span class="co">#&gt;      WMMAE </span>
 <span class="co">#&gt; 0.05559308</span></code></pre></div>
 <p>Lastly, we evaluate the agreement in trajectory assignments to the clusters using the adjusted Rand index (ARI). This intuitive index considers the co-assignments of trajectories, and corrects for agreements between the partitionings by random chance. A score of zero indicates a match no better than chance, whereas a score of 1 indicates a perfect agreement.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/externalMetric,lcModel,lcModel-method.html">externalMetric</a></span><span class="op">(</span><span class="va">bestGbtmModel</span>, <span class="va">bestGmmModel</span>, <span class="st">'adjustedRand'</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/externalMetric.html">externalMetric</a></span><span class="op">(</span><span class="va">bestGbtmModel</span>, <span class="va">bestGmmModel</span>, <span class="st">'adjustedRand'</span><span class="op">)</span>
 <span class="co">#&gt; adjustedRand </span>
 <span class="co">#&gt;    0.4770003</span></code></pre></div>
 <p>The ARI of 1.0 demonstrates that the cluster assignments of the models are identical.</p>
 </div>
 </div>
-<div id="comparison-to-the-reference" class="section level1">
-<h1 class="hasAnchor">
-<a href="#comparison-to-the-reference" class="anchor"></a>Comparison to the reference</h1>
+<div class="section level1">
+<h1 id="comparison-to-the-reference">Comparison to the reference<a class="anchor" aria-label="anchor" href="#comparison-to-the-reference"></a>
+</h1>
 <p>Since we have established a preferred clustered representation of the data heterogeneity, we can now compare the resulting cluster assignments to the ground truth from which the <code>latrendData</code> data was generated.</p>
 <p>Using the reference assignments, we can also plot a non-parametric estimate of the cluster trajectories. Note how it looks similar to the cluster trajectories found by our model.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
@@ -494,7 +490,7 @@ Non-parametric estimates of the cluster trajectories based on the reference assi
 </div>
 <p>In order to compare the reference assignments to the trajectory assignments generated by our model, we can create a <code>lcModel</code> object based on the reference assignments using the <code>lcModelPartition</code> function.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">refTrajAssigns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html">aggregate</a></span><span class="op">(</span><span class="va">Class</span> <span class="op">~</span> <span class="va">Id</span>, data <span class="op">=</span> <span class="va">latrendData</span>, FUN <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="va"><a href="https://Rdatatable.gitlab.io/data.table/reference/last.html">first</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">refTrajAssigns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">Class</span> <span class="op">~</span> <span class="va">Id</span>, data <span class="op">=</span> <span class="va">latrendData</span>, FUN <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="va"><a href="https://Rdatatable.gitlab.io/data.table/reference/last.html" class="external-link">first</a></span><span class="op">)</span>
 <span class="va">refModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcModelPartition.html">lcModelPartition</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">latrendData</span>, response <span class="op">=</span> <span class="st">"Y"</span>, trajectoryAssignments <span class="op">=</span> <span class="va">refTrajAssigns</span><span class="op">$</span><span class="va">Class</span><span class="op">)</span>
 <span class="va">refModel</span>
 <span class="co">#&gt; Longitudinal cluster model using part</span>
@@ -511,7 +507,7 @@ Non-parametric estimates of the cluster trajectories based on the reference assi
 <span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
 <span class="co">#&gt; -3.33030 -0.59503 -0.02617  0.00000  0.59606  3.40645</span></code></pre></div>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html">plot</a></span><span class="op">(</span><span class="va">refModel</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">refModel</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 Cluster trajectories of the reference model.
@@ -533,7 +529,7 @@ Cluster trajectories of the reference model.
 <span class="co">#&gt; [37] "WMMSE_ref"      "WMSSE"          "WMSSE_ref"</span></code></pre></div>
 <p>Lastly, we compare the agreement in trajectory assignments via the adjusted Rand index.</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/externalMetric,lcModel,lcModel-method.html">externalMetric</a></span><span class="op">(</span><span class="va">bestGmmModel</span>, <span class="va">refModel</span>, <span class="st">"adjustedRand"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/externalMetric.html">externalMetric</a></span><span class="op">(</span><span class="va">bestGmmModel</span>, <span class="va">refModel</span>, <span class="st">"adjustedRand"</span><span class="op">)</span>
 <span class="co">#&gt; adjustedRand </span>
 <span class="co">#&gt;    0.9883837</span></code></pre></div>
 <p>With a score of <code>externalMetric(bestGmmModel, refModel, "adjustedRand")</code>, we have a near-perfect match. This result is expected, as the dataset was generated using a growth mixture model.</p>
@@ -551,11 +547,13 @@ Cluster trajectories of the reference model.
 
 
       <footer><div class="copyright">
-  <p>Developed by Niek Den Teuling.</p>
+  <p></p>
+<p>Developed by Niek Den Teuling.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -563,6 +561,8 @@ Cluster trajectories of the reference model.
 
   
 
+
+  
 
   </body>
 </html>
