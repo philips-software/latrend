@@ -30,6 +30,7 @@
 25. Option for disabling warning on redefining metrics and external metrics [#75](https://github.com/philips-software/latrend/issues/75).
 26. Output warning in default lcModel postprob implementation [#78](https://github.com/philips-software/latrend/issues/78).
 27. default predictAssignments() returns the assignments of trajectoryAssignments() when no newdata is specified [#79](https://github.com/philips-software/latrend/issues/79).
+28. Lowered the number of required dependencies
 
 
 ## Breaking changes
