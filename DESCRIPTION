@@ -71,8 +71,7 @@ Suggests:
     simTool,
     dplyr,
     caret,
-    tibble,
-    simTool
+    tibble
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 RdMacros: Rdpack
