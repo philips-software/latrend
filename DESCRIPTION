@@ -26,6 +26,7 @@ BugReports: https://github.com/philips-software/latrend/issues
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
+Language: en-US
 Depends:
     R (>= 3.6.0)
 Imports:

@@ -16,7 +16,7 @@
 11. Support for `lcModel` objects without training data ([#36](https://github.com/philips-software/latrend/issues/36)).
 12. Made it easier to define new `lcMethod` subclasses by defining better default methods.
 13. `plot()` for `lcModels` ([#48](https://github.com/philips-software/latrend/issues/48))
-14. `latrend()` and derivative methods automatically supress console output when `verbose = FALSE` ([#45](https://github.com/philips-software/latrend/issues/45))
+14. `latrend()` and derivative methods automatically suppress console output when `verbose = FALSE` ([#45](https://github.com/philips-software/latrend/issues/45))
 15. Better automatic axis breaks in metric plots (#44).
 16. `trajectoryAssignments()` signature that accepts a posterior probability matrix ([#34](https://github.com/philips-software/latrend/issues/34))
 17. Added convenient mixture initialization options to `lcMethodLcmmGBTM` and `lcMethodLcmmGMM` based on standard (single cluster) linear mixed model fit.
