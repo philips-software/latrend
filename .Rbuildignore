@@ -18,7 +18,6 @@ cld\.Rdata
 ^\.github$
 ^\.gitignore$
 ^LICENSE$
-^Meta$
 ^MixTVEM\.r$
 ^NEWS\.md$
 README\.md
