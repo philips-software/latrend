@@ -27,3 +27,4 @@ README\.md
 ^vignettes/.*_cache$
 ^vignettes/.*R$
 ^vignettes/.*html$
+^cran-comments\.md$
