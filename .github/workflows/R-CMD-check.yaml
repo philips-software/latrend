@@ -3,6 +3,7 @@
 on:
   push:
     paths:
+      - '**/R-CMD-check.yaml'
       - 'R/**'
       - 'vignettes/**'
       - 'tests/**'
