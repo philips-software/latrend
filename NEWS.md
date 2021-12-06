@@ -1,6 +1,6 @@
-**If you are viewing this file as part of a released version of the package, the latest news can be found [on GitHub](https://github.com/philips-software/latrend/blob/master/NEWS.md).**
+**If you are viewing this file as part of a released version of the package, the latest news can be found [on GitHub](https://philips-software.github.io/latrend/news/).**
 
-# latrend [v1.2.0](https://github.com/philips-software/latrend/milestone/2) (in development)
+# latrend [v1.2.0](https://github.com/philips-software/latrend/milestone/2)
 
 ## New features
 1. Greatly expanded documentation of `lcMethod`, `lcModel`, `transformFitted()`, and `transformPredict()`.
@@ -22,10 +22,20 @@
 17. Added convenient mixture initialization options to `lcMethodLcmmGBTM` and `lcMethodLcmmGMM` based on standard (single cluster) linear mixed model fit.
 18. `lcMethodRandom()` accepts `seed` argument.
 19. Expand trajectory assignment input options for `lcModelPartition`.
+20. Methods can now be initialized by instantiating the `S4` class using `new()` [#56](https://github.com/philips-software/latrend/issues/56), [#57](https://github.com/philips-software/latrend/issues/57). `latrend()` functions accept a character name of the method class.
+21. plotClusterTrajectories() to use logic of plotTrajectories() for showing trajectories [#65](https://github.com/philips-software/latrend/issues/65).
+22. plotClusterTrajectories() with ribbon for trajectory range [#68](https://github.com/philips-software/latrend/issues/68).
+23. `logLik()` for k-means based methods [#70](https://github.com/philips-software/latrend/issues/70).
+24. Standard (interpolated) non-parametric cluster trajectory estimation through lcModelPartition and lcModelWeightedPartition [#72](https://github.com/philips-software/latrend/issues/72).
+25. Option for disabling warning on redefining metrics and external metrics [#75](https://github.com/philips-software/latrend/issues/75).
+26. Output warning in default lcModel postprob implementation [#78](https://github.com/philips-software/latrend/issues/78).
+27. default predictAssignments() returns the assignments of trajectoryAssignments() when no newdata is specified [#79](https://github.com/philips-software/latrend/issues/79).
+
 
 ## Breaking changes
 1. Significant: `trajectories()` now returns the original training data, instead of the fitted (predicted) data ([#32](https://github.com/philips-software/latrend/issues/32)). This was done to improve clarity. 
 Previous uses of `trajectories()` and `plotTrajectories()` should be replaced by `fittedTrajectories()` and `plotFittedTrajectories()`, respectively.
+2. Significant: Reworked `lcMethod` initialization to use the standard `S4` mechanism [#56](https://github.com/philips-software/latrend/issues/56).
 2. Minor: `lcMethod` implementations: `prepareData()` must now return an `environment` ([#39](https://github.com/philips-software/latrend/issues/39)). In the past, `NULL` was allowed, but this increased code complexity further down the process.
 3. Minor: `estimationTime()` is now an S4 generic method. This does not affect existing code.
  
@@ -39,3 +49,8 @@ Previous uses of `trajectories()` and `plotTrajectories()` should be replaced by
 7. Fixed default output of `logLik.lcModel` and other implementations ([#37](https://github.com/philips-software/latrend/issues/37)).
 8. Default `metric()` did not compute any metrics.
 9. Fixed indentation of messages for `latrend()` and derivative methods.
+10. Fixed computation of WMAE and WMSE metrics [#52](https://github.com/philips-software/latrend/issues/52).
+11. sprintf warning when running latrendBoot() or latrendCV() [#53](https://github.com/philips-software/latrend/issues/53).
+12. lcMethodLMKM cluster coefficients are wrong when standardization is enabled [#69](https://github.com/philips-software/latrend/issues/69).
+13. lcMethodGCKM fails to fit for nClusters = 1 in latrendBatch() [#71](https://github.com/philips-software/latrend/issues/71).
+14. fittedTrajectories() now uses output of `fitted()` instead of `predict()` [#82](https://github.com/philips-software/latrend/issues/82).
