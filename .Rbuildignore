@@ -22,7 +22,8 @@ cld\.Rdata
 ^MixTVEM\.r$
 ^NEWS\.md$
 README\.md
-^tests\testthat\_snaps$
-^vignettes\.*_cache$
-^vignettes\.*R$
-^vignettes\.*html$
+^renv$
+^tests/testthat/_snaps$
+^vignettes/.*_cache$
+^vignettes/.*R$
+^vignettes/.*html$
