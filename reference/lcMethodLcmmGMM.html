@@ -156,9 +156,9 @@ R package version: 1.8.1, <a href="https://cran.r-project.org/package=lcmm" clas
 <span class="r-in">   id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, , nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">gmm</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Be patient, hlme is running ... </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.08 seconds </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.07 seconds </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Be patient, hlme is running ... </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.75 seconds </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 18.03 seconds </span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gmm</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Longitudinal cluster model using growth mixture model</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> lcMethodLcmmGMM specifying "growth mixture model"</span>
@@ -181,14 +181,14 @@ R package version: 1.8.1, <a href="https://cran.r-project.org/package=lcmm" clas
 <span class="r-out co"><span class="r-pr">#&gt;</span>  fixed:          Y ~ Time</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Cluster sizes (K=3):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          A          B          C </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   90 (45%) 32 (15.9%) 78 (39.1%) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         A         B         C </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110 (55%)    0 (0%)  90 (45%) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of obs: 2000, strata (Id): 200</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Scaled residuals:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -3.44863 -0.61421  0.06616  0.00000  0.67860  3.26730 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -4.73994 -0.58402  0.08016  0.00000  0.69619  2.93434 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodLcmmGMM</span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>,</span>
