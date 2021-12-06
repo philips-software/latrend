@@ -19,7 +19,6 @@ cld\.Rdata
 ^\.gitignore$
 ^LICENSE$
 ^MixTVEM\.r$
-^NEWS\.md$
 README\.md
 ^renv$
 ^tests/testthat/_snaps$
