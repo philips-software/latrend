@@ -31,7 +31,7 @@
 26. Output warning in default lcModel postprob implementation [#78](https://github.com/philips-software/latrend/issues/78).
 27. default predictAssignments() returns the assignments of trajectoryAssignments() when no newdata is specified [#79](https://github.com/philips-software/latrend/issues/79).
 28. Lowered the number of required dependencies
-
+29. Implemented APPA and OCC metrics. [#81](https://github.com/philips-software/latrend/issues/81).
 
 ## Breaking changes
 1. Significant: `trajectories()` now returns the original training data, instead of the fitted (predicted) data ([#32](https://github.com/philips-software/latrend/issues/32)). This was done to improve clarity. 
