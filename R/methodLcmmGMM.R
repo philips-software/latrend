@@ -149,7 +149,7 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
     args$classmb = NULL
   }
 
-  if (hasName(method, 'init') && method$nClusters > 1 && !hasName(method, 'B')) {
+  if (hasName(method, 'init') && method$nClusters > 1) {
     init = match.arg(method$init, c('default', 'lme', 'lme.random'))
 
     switch(init,
@@ -161,6 +161,10 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
         args1$classmb = NULL
 
         args$B = do.call(lcmm::hlme, args1)
+        assert_that(
+          !is.vector(args$B),
+          class(args$B) == 'hlme'
+        )
       },
       lme.random = {
         cat(verbose, 'Fitting standard linear mixed model for random initialization for the mixture estimation...')
@@ -190,7 +194,12 @@ gmm_fit = function(method, data, envir, verbose, ...) {
     # work-around for eval() of hlme() only considering global and function scope
     .latrend.lme <- envir$lme
     # args$B = quote(random(get('.latrend.lme', envir = parent.frame(3))))
-    args$B = quote(random(dynGet('.latrend.lme')))
+    args$B = quote(random(dynGet('.latrend.lme', inherits = TRUE)))
+    assert_that(
+      is.call(args$B),
+      !is.vector(.latrend.lme),
+      class(.latrend.lme) == 'hlme'
+    )
   }
 
   model = do.call(lcmm::hlme, args)

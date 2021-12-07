@@ -116,7 +116,7 @@ setValidity('lcModel', function(object) {
 #' @param at An optional vector of the times at which to compute the cluster trajectory predictions.
 #' @return A data.frame of the estimated values at the given times. The first column should be named "Cluster". The second column should be time, with the name matching the `timeVariable(object)`. The third column should be the expected value of the observations, named after the `responseVariable(object)`.
 #' @examples
-#' model <- latrend(method = lcMethodLcmmGMM(fixed = Y ~ Time, mixture = fixed),
+#' model <- latrend(method = lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time),
 #'   id = "Id", time = "Time", data = latrendData)
 #' clusterTrajectories(model)
 #'
