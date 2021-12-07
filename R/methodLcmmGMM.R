@@ -161,14 +161,6 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
         args1$classmb = NULL
 
         args$B = do.call(lcmm::hlme, args1)
-        assert_that(
-          !is.vector(args$B),
-          class(args$B) == 'hlme',
-          msg = sprintf(
-            'Unexpected output from lcmm::hlme(). Expected hlme object, but got %s',
-            paste0(capture.output(str(args$B)), collapse = '\n')
-          )
-        )
       },
       lme.random = {
         cat(verbose, 'Fitting standard linear mixed model for random initialization for the mixture estimation...')
@@ -178,16 +170,6 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
         args1$classmb = NULL
         e$lme = do.call(lcmm::hlme, args1)
         args$B = quote(random(lme))
-
-        assert_that(
-          is.call(args$B),
-          !is.vector(e$lme),
-          class(e$lme) == 'hlme',
-          msg = sprintf(
-            'Unexpected output from lcmm::hlme(). Expected hlme object, but got %s',
-            paste0(capture.output(str(e$lme)), collapse = '\n')
-          )
-        )
       }
     )
   }
