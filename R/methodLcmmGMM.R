@@ -163,7 +163,11 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
         args$B = do.call(lcmm::hlme, args1)
         assert_that(
           !is.vector(args$B),
-          class(args$B) == 'hlme'
+          class(args$B) == 'hlme',
+          msg = sprintf(
+            'Unexpected output from lcmm::hlme(). Expected hlme object, but got %s',
+            paste0(capture.output(str(args$B)), collapse = '\n')
+          )
         )
       },
       lme.random = {
@@ -174,6 +178,16 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
         args1$classmb = NULL
         e$lme = do.call(lcmm::hlme, args1)
         args$B = quote(random(lme))
+
+        assert_that(
+          is.call(args$B),
+          !is.vector(e$lme),
+          class(e$lme) == 'hlme',
+          msg = sprintf(
+            'Unexpected output from lcmm::hlme(). Expected hlme object, but got %s',
+            paste0(capture.output(str(e$lme)), collapse = '\n')
+          )
+        )
       }
     )
   }
@@ -195,11 +209,6 @@ gmm_fit = function(method, data, envir, verbose, ...) {
     .latrend.lme <- envir$lme
     # args$B = quote(random(get('.latrend.lme', envir = parent.frame(3))))
     args$B = quote(random(dynGet('.latrend.lme', inherits = TRUE)))
-    assert_that(
-      is.call(args$B),
-      !is.vector(.latrend.lme),
-      class(.latrend.lme) == 'hlme'
-    )
   }
 
   model = do.call(lcmm::hlme, args)
