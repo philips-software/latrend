@@ -4,8 +4,8 @@
 cld.Rdata
 .Rprofile
 *.txt
-doc
-Meta
+/doc/
+/Meta/
 vignettes/*_cache
 vignettes/*.R
 vignettes/*.html
