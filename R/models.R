@@ -379,7 +379,7 @@ setMethod('plot', signature('lcModels', 'ANY'), function(x, y, ..., subset, grid
 #' @examples
 #' data(latrendData)
 #' baseMethod <- lcMethodKML(response = "Y", id = "Id", time = "Time")
-#' methods <- lcMethods(baseMethod, nClusters = 1:6)
+#' methods <- lcMethods(baseMethod, nClusters = 1:3)
 #' models <- latrendBatch(methods, latrendData)
 #' plotMetric(models, c("BIC", "WRSS"))
 plotMetric = function(models,
