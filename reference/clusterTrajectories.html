@@ -119,40 +119,38 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span>method <span class="op">=</span> <span class="fu"><a href="lcMethodLcmmGMM.html">lcMethodLcmmGMM</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, mixture <span class="op">=</span> <span class="op">~</span> <span class="va">Time</span><span class="op">)</span>,</span>
 <span class="r-in">  id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Be patient, hlme is running ... </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.08 seconds </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Be patient, hlme is running ... </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.3 seconds </span>
 <span class="r-in"><span class="fu">clusterTrajectories</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Cluster      Time            Y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        A 0.0000000 -0.729474339</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        A 0.2222222 -0.574460375</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        A 0.4444444 -0.419446412</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        A 0.6666667 -0.264432449</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        A 0.8888889 -0.109418486</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        A 1.1111111  0.045595477</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7        A 1.3333333  0.200609440</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8        A 1.5555556  0.355623403</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9        A 1.7777778  0.510637366</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10       A 2.0000000  0.665651329</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11       B 0.0000000  0.112810502</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12       B 0.2222222  0.082933613</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13       B 0.4444444  0.053056725</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14       B 0.6666667  0.023179836</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15       B 0.8888889 -0.006697053</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16       B 1.1111111 -0.036573941</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17       B 1.3333333 -0.066450830</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18       B 1.5555556 -0.096327719</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19       B 1.7777778 -0.126204607</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20       B 2.0000000 -0.156081496</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        A 0.0000000  0.112810460</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        A 0.2222222  0.082933574</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        A 0.4444444  0.053056688</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        A 0.6666667  0.023179803</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        A 0.8888889 -0.006697083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        A 1.1111111 -0.036573969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        A 1.3333333 -0.066450855</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8        A 1.5555556 -0.096327740</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9        A 1.7777778 -0.126204626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       A 2.0000000 -0.156081512</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11       B 0.0000000 -0.729474282</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12       B 0.2222222 -0.574460323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13       B 0.4444444 -0.419446364</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14       B 0.6666667 -0.264432405</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       B 0.8888889 -0.109418446</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       B 1.1111111  0.045595513</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17       B 1.3333333  0.200609472</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18       B 1.5555556  0.355623431</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19       B 1.7777778  0.510637390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       B 2.0000000  0.665651349</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">clusterTrajectories</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.5</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Cluster Time          Y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       A  0.0 -0.7294743</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       A  0.5 -0.3806929</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       A  1.0 -0.0319115</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       B  0.0  0.1128105</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       B  0.5  0.0455875</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       B  1.0 -0.0216355</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Cluster Time           Y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       A  0.0  0.11281046</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       A  0.5  0.04558747</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       A  1.0 -0.02163553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       B  0.0 -0.72947428</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       B  0.5 -0.38069287</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       B  1.0 -0.03191147</span>
 </code></pre></div>
     </div>
   </div>

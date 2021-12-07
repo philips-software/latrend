@@ -105,9 +105,7 @@ This makes it easier to work with a set of models in a more structured manner.</
 <span class="r-in"><span class="va">gmm</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="fu"><a href="lcMethodLcmmGMM.html">lcMethodLcmmGMM</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, mixture <span class="op">=</span> <span class="op">~</span> <span class="va">Time</span>,</span>
 <span class="r-in">   id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span>, <span class="va">latrendData</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Be patient, hlme is running ... </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.07 seconds </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Be patient, hlme is running ... </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.19 seconds </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.3 seconds </span>
 <span class="r-in"><span class="fu">lcModels</span><span class="op">(</span><span class="va">kml</span>, <span class="va">gmm</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 2 lcModels with</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .name .method nbRedrawing maxIt imputationMethod distanceName power</span>
@@ -116,12 +114,12 @@ This makes it easier to work with a set of models in a more structured manner.</
 <span class="r-out co"><span class="r-pr">#&gt;</span>         distance                             centerMethod startingCond</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 function () {} function (x) {    mean(x, na.rm = TRUE)}    nearlyAll</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2           &lt;NA&gt;                                     &lt;NA&gt;         &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   nbCriterion scale response mixture random classmb       init idiag   nwg</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        1000  TRUE        Y    &lt;NA&gt;   &lt;NA&gt;    &lt;NA&gt;       &lt;NA&gt;    NA    NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          NA    NA     &lt;NA&gt;   ~Time     ~1      ~1 lme.random FALSE FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   convB convL convG maxiter na.action    fixed</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    NA    NA    NA      NA        NA     &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 1e-04 1e-04 1e-04     500         1 Y ~ Time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   nbCriterion scale response mixture random classmb    init idiag   nwg convB</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        1000  TRUE        Y    &lt;NA&gt;   &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          NA    NA     &lt;NA&gt;   ~Time     ~1      ~1 default FALSE FALSE 1e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   convL convG maxiter na.action    fixed</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    NA    NA      NA        NA     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 1e-04 1e-04     500         1 Y ~ Time</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">lcModels</span><span class="op">(</span>defaults <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">kml</span>, <span class="va">gmm</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 2 lcModels with</span>
@@ -131,12 +129,12 @@ This makes it easier to work with a set of models in a more structured manner.</
 <span class="r-out co"><span class="r-pr">#&gt;</span>         distance                             centerMethod startingCond</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 function () {} function (x) {    mean(x, na.rm = TRUE)}    nearlyAll</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2           &lt;NA&gt;                                     &lt;NA&gt;         &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   nbCriterion scale response mixture random classmb       init idiag   nwg</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        1000  TRUE        Y    &lt;NA&gt;   &lt;NA&gt;    &lt;NA&gt;       &lt;NA&gt;    NA    NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          NA    NA     &lt;NA&gt;   ~Time     ~1      ~1 lme.random FALSE FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   convB convL convG maxiter na.action    fixed</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    NA    NA    NA      NA        NA     &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 1e-04 1e-04 1e-04     500         1 Y ~ Time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   nbCriterion scale response mixture random classmb    init idiag   nwg convB</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        1000  TRUE        Y    &lt;NA&gt;   &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          NA    NA     &lt;NA&gt;   ~Time     ~1      ~1 default FALSE FALSE 1e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   convL convG maxiter na.action    fixed</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    NA    NA      NA        NA     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 1e-04 1e-04     500         1 Y ~ Time</span>
 </code></pre></div>
     </div>
   </div>
