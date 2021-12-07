@@ -357,7 +357,7 @@ Cluster-specific detrended QQ-plot for the selected KML model.
 <span class="co">#&gt;  time:           getOption("latrend.time")</span>
 <span class="co">#&gt;  id:             getOption("latrend.id")</span>
 <span class="co">#&gt;  nClusters:      2</span>
-<span class="co">#&gt;  init:           "lme"</span>
+<span class="co">#&gt;  init:           "default"</span>
 <span class="co">#&gt;  idiag:          FALSE</span>
 <span class="co">#&gt;  nwg:            FALSE</span>
 <span class="co">#&gt;  cor:            NULL</span>
@@ -461,12 +461,12 @@ Detrended QQ plot for the best GMM.
 <p>Secondly, we compare the model fit errors, showing an identical error between models.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">bestGbtmModel</span>, <span class="va">bestGmmModel</span><span class="op">)</span>, <span class="st">'WMAE'</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.19225404 0.08855489</span></code></pre></div>
+<span class="co">#&gt; [1] 0.19225405 0.08855489</span></code></pre></div>
 <p>Thirdly, we can compare the weighted minimum MAE between the cluster trajectories of the models, as a measure of agreement in cluster trajectory shapes.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/externalMetric.html">externalMetric</a></span><span class="op">(</span><span class="va">bestGbtmModel</span>, <span class="va">bestGmmModel</span>, <span class="st">'WMMAE'</span><span class="op">)</span>
 <span class="co">#&gt;      WMMAE </span>
-<span class="co">#&gt; 0.05559308</span></code></pre></div>
+<span class="co">#&gt; 0.05559309</span></code></pre></div>
 <p>Lastly, we evaluate the agreement in trajectory assignments to the clusters using the adjusted Rand index (ARI). This intuitive index considers the co-assignments of trajectories, and corrects for agreements between the partitionings by random chance. A score of zero indicates a match no better than chance, whereas a score of 1 indicates a perfect agreement.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/externalMetric.html">externalMetric</a></span><span class="op">(</span><span class="va">bestGbtmModel</span>, <span class="va">bestGmmModel</span>, <span class="st">'adjustedRand'</span><span class="op">)</span>
