@@ -2,10 +2,9 @@
 This is a resubmission. This version is a major update over v1.1. See NEWS.md for a list of changes.
 
 ## Test environments
-* Windows (release and 3.6)
+* Windows (release, devel, 3.6)
 * Ubuntu (release and devel)
 * macOS (release)
-* Rhub
 * win-builder (devel)
 
 ## R CMD check results
