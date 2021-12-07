@@ -61,7 +61,7 @@ lcMethodLcmmGMM = function(
   classmb = ~ 1,
   time = getOption('latrend.time'),
   id = getOption('latrend.id'),
-  init = 'lme.random',
+  init = 'default',
   nClusters = 2,
   ...
 ) {
