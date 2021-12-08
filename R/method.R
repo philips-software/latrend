@@ -162,10 +162,6 @@ setValidity('lcMethod', function(object) {
   errors = errors %c% validate_that(!has_name(object, 'envir'), msg = 'lcMethod argument name cannot be "envir"')
   errors = errors %c% validate_that(!has_name(object, 'verbose'), msg = 'lcMethod argument name cannot be "verbose"')
 
-  if (isArgDefined(object, 'formula')) {
-    errors = errors %c% validate_that(is.formula(object$formula))
-  }
-
   if (isArgDefined(object, 'nClusters')) {
     errors = errors %c% validate_that(is.scalar(object$nClusters))
     errors = errors %c% validate_that(is.na(object$nClusters) || is.count(object$nClusters))
