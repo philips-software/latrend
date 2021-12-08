@@ -30,14 +30,17 @@ A \code{data.frame} with the predictions, or a list of cluster-specific predicti
 }
 \description{
 A helper function for implementing the \link[=predict.lcModel]{predict.lcModel()} method as part of your own \code{lcModel} class, ensuring the correct output type and format (see the Value section).
-Note that this function has no use outside of ensuring output for \code{predict.lcModel}. For implementing \code{lcModel} predictions from scratch, it is advisable to implement \link{predictForCluster} instead of \link{predict.lcModel}.
+Note that this function has no use outside of ensuring valid output for \code{predict.lcModel}.
+For implementing \code{lcModel} predictions from scratch, it is advisable to implement \link{predictForCluster} instead of \link{predict.lcModel}.
 
 The prediction ordering corresponds to the observation ordering of the \code{newdata} argument.
 
 By default, \code{transformPredict()} accepts one of the following inputs:
 \describe{
-\item{\code{data.frame}}{A \code{data.frame} in long format providing a cluster-specific prediction for each observation per row, with column names \code{"Fit"} and \code{"Cluster"}. This \code{data.frame} therefore has \code{nobs(object) * nClusters(object)} rows.}
-\item{\code{matrix}}{An N-by-K \code{matrix} where each row provides the cluster-specific predictions for the respective observations in \code{newdata}. Here, \code{N = nrow(newdata)} and \code{K = nClusters(object)}.}
+\item{\code{data.frame}}{A \code{data.frame} in long format providing a cluster-specific prediction for each observation per row, with column names \code{"Fit"} and \code{"Cluster"}.
+This \code{data.frame} therefore has \code{nobs(object) * nClusters(object)} rows.}
+\item{\code{matrix}}{An N-by-K \code{matrix} where each row provides the cluster-specific predictions for the respective observations in \code{newdata}.
+Here, \code{N = nrow(newdata)} and \code{K = nClusters(object)}.}
 \item{\code{vector}}{A \code{vector} of length \code{nrow(newdata)} with predictions corresponding to the rows of \code{newdata}.}
 }
 
@@ -54,7 +57,8 @@ predict.lcModelExample <- function(object, newdata) {
   transformPredict(
     pred = predictionMatrix,
     model = object,
-    newdata = newdata)
+    newdata = newdata
+  )
 }
 }
 

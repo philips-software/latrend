@@ -3,7 +3,7 @@
 \name{validate}
 \alias{validate}
 \alias{validate,lcMethod-method}
-\title{Validate the argument values of a lcMethod object}
+\title{lcMethod fit process: method argument validation logic}
 \usage{
 \S4method{validate}{lcMethod}(method, data, envir = NULL, ...)
 }
@@ -21,12 +21,23 @@ Either \code{TRUE} if all validation checks passed,
 or a \code{character} containing a description of the failed validation checks.
 }
 \description{
-Validate the argument values of a lcMethod object
+Note: this function should not be called directly, as it is part of the \code{lcMethod} fitting process. For fitting an \code{lcMethod} object to a dataset, see \code{\link[=latrend]{latrend()}}.
+
+The \code{validate()} function of the \code{lcMethod} object validates the method with respect to the training data.
+This enables a method to verify, for example:
+\itemize{
+\item whether the formula covariates are present.
+\item whether the argument combination settings are valid.
+\item whether the data is suitable for training.
+}
+
+By default, the \code{validate()} function checks whether the id, time, and response variables are present as columns in the training data.
 }
 \section{Implementation}{
 
 An example implementation checking for the existence of specific arguments and type:
 \preformatted{
+
 library(assertthat)
 setMethod("validate", "lcMethodExample", function(method, data, envir = NULL, ...) {
   validate_that(

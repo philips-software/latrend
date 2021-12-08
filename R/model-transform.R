@@ -145,14 +145,17 @@ setMethod('transformFitted', signature('data.frame', 'lcModel'), function(pred, 
 #' @rdname transformPredict
 #' @title Helper function for custom lcModel classes implementing predict.lcModel()
 #' @description A helper function for implementing the [predict.lcModel()][predict.lcModel] method as part of your own `lcModel` class, ensuring the correct output type and format (see the Value section).
-#' Note that this function has no use outside of ensuring output for `predict.lcModel`. For implementing `lcModel` predictions from scratch, it is advisable to implement [predictForCluster] instead of [predict.lcModel].
+#' Note that this function has no use outside of ensuring valid output for `predict.lcModel`.
+#' For implementing `lcModel` predictions from scratch, it is advisable to implement [predictForCluster] instead of [predict.lcModel].
 #'
 #' The prediction ordering corresponds to the observation ordering of the `newdata` argument.
 #'
 #' By default, `transformPredict()` accepts one of the following inputs:
 #' \describe{
-#'  \item{`data.frame`}{A `data.frame` in long format providing a cluster-specific prediction for each observation per row, with column names `"Fit"` and `"Cluster"`. This `data.frame` therefore has `nobs(object) * nClusters(object)` rows.}
-#'  \item{`matrix`}{An N-by-K `matrix` where each row provides the cluster-specific predictions for the respective observations in `newdata`. Here, `N = nrow(newdata)` and `K = nClusters(object)`.}
+#'  \item{`data.frame`}{A `data.frame` in long format providing a cluster-specific prediction for each observation per row, with column names `"Fit"` and `"Cluster"`.
+#'  This `data.frame` therefore has `nobs(object) * nClusters(object)` rows.}
+#'  \item{`matrix`}{An N-by-K `matrix` where each row provides the cluster-specific predictions for the respective observations in `newdata`.
+#'  Here, `N = nrow(newdata)` and `K = nClusters(object)`.}
 #'  \item{`vector`}{A `vector` of length `nrow(newdata)` with predictions corresponding to the rows of `newdata`.}
 #' }
 #'
@@ -168,7 +171,8 @@ setMethod('transformFitted', signature('data.frame', 'lcModel'), function(pred, 
 #'   transformPredict(
 #'     pred = predictionMatrix,
 #'     model = object,
-#'     newdata = newdata)
+#'     newdata = newdata
+#'   )
 #' }
 #' }
 #'

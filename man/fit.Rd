@@ -3,7 +3,7 @@
 \name{fit}
 \alias{fit}
 \alias{fit,lcMethod-method}
-\title{Fit an lcMethod object to the processed data}
+\title{lcMethod fit process: logic for fitting the method to the processed data}
 \usage{
 \S4method{fit}{lcMethod}(method, data, envir, verbose)
 }
@@ -20,7 +20,9 @@
 The fitted object inheriting from \code{lcModel}.
 }
 \description{
-Estimates the model as determined by the evaluated method specification, processed training data, and prepared environment.
+Note: this function should not be called directly, as it is part of the \code{lcMethod} fitting process. For fitting an \code{lcMethod} object to a dataset, see \code{\link[=latrend]{latrend()}}.
+
+The \code{fit()} function of the \code{lcMethod} object estimates the model with the evaluated method specification, processed training data, and prepared environment.
 }
 \section{Implementation}{
 

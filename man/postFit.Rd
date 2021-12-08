@@ -3,7 +3,7 @@
 \name{postFit}
 \alias{postFit}
 \alias{postFit,lcMethod-method}
-\title{Post-process the fitted lcModel object}
+\title{lcMethod fit process: logic for post-processing the fitted lcModel}
 \usage{
 \S4method{postFit}{lcMethod}(method, data, model, envir, verbose)
 }
@@ -22,8 +22,17 @@
 The updated \code{lcModel} object.
 }
 \description{
-Post-process the \code{lcModel} object returned by \code{\link[=fit]{fit()}}. This can be used, for example, to (pre)compute additional metrics.
-By default, this method does not do anything and returns the original \code{lcModel} object.
+Note: this function should not be called directly, as it is part of the \code{lcMethod} fitting process. For fitting an \code{lcMethod} object to a dataset, see \code{\link[=latrend]{latrend()}}.
+
+The \code{postFit()} function of the \code{lcMethod} object defines how the \code{lcModel} object returned by \code{\link[=fit]{fit()}} should be post-processed.
+This can be used, for example, to:
+\itemize{
+\item Resolve label switching.
+\item Clean up the internal model representation.
+\item Correct estimation errors.
+\item Compute additional metrics.
+}
+By default, this method does not do anything. It merely returns the original \code{lcModel} object.
 
 This is the last step in the \code{lcMethod} fitting procedure. The \code{postFit} method may be called again on fitted \code{lcModel} objects, allowing post-processing to be updated for existing models.
 }
