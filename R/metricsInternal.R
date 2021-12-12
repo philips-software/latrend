@@ -32,24 +32,23 @@
 #' | `deviance` | The model deviance | [stats::deviance()] |
 #' | `entropy` | Entropy of the posterior probabilities | |
 #' | `estimationTime` | The time needed for fitting the model | [estimationTime()] |
-#' | `ED` | Euclidean distance between the cluster trajectories and the observed trajectories | |
-#' | `ED.fit` | Euclidean distance between the cluster trajectories and the fitted trajectories | |
+#' | `ED` | Euclidean distance between the cluster trajectories and the assigned observed trajectories | |
+#' | `ED.fit` | Euclidean distance between the cluster trajectories and the assigned fitted trajectories | |
 #' | `ICL.BIC` | Integrated classification likelihood (ICL) approximated using the BIC | \insertCite{biernacki2000assessing}{latrend} |
 #' | `logLik` | Model log-likelihood | [stats::logLik()] |
-#' | `MAE` | Mean absolute error of the fitted trajectories to the observed trajectories | |
-#' | `Mahalanobis` | Mahalanobis distance between the cluster trajectories and the observed trajectories | \insertCite{mahalanobis1936generalized}{latrend} |
-#' | `MSE` | Mean squared error | |
+#' | `MAE` | Mean absolute error of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories | |
+#' | `Mahalanobis` | Mahalanobis distance between the cluster trajectories and the assigned observed trajectories | \insertCite{mahalanobis1936generalized}{latrend} |
+#' | `MSE` | Mean squared error of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories | |
 #' | `relativeEntropy`, `RE` | The normalized version of `entropy`, scaled between \[0, 1\]. | \insertCite{ramaswamy1993empirical}{latrend}, \insertCite{muthen2004latent}{latrend} |
 #' | `RSS` | Residual sum of squares under most likely cluster allocation | |
-#' | `scaledEntropy`, `SE` | See `relativeEntropy` | |
-#' | `sigma` | The standard residual error scale, typically denoted by \eqn{\sigma} | [stats::sigma()] |
+#' | `scaledEntropy` | See `relativeEntropy` | |
+#' | `sigma` | The residual standard deviation | [stats::sigma()] |
 #' | `ssBIC` | Sample-size adjusted BIC | \insertCite{sclove1987application}{latrend} |
-#' | `SED` | The cluster-weighted standardized Euclidean distance between the cluster trajectories and the observed trajectories | |
-#' | `SED.fit` | The cluster-weighted standardized Euclidean distance between the cluster trajectories and the fitted trajectories | |
+#' | `SED` | Standardized Euclidean distance between the cluster trajectories and the assigned observed trajectories | |
+#' | `SED.fit` | The cluster-weighted standardized Euclidean distance between the cluster trajectories and the assigned fitted trajectories | |
 #' | `WMAE` | `MAE` weighted by cluster-assignment probability | |
 #' | `WMSE` | `MSE` weighted by cluster-assignment probability | |
 #' | `WRSS` | `RSS` weighted by cluster-assignment probability | |
-#' | `WSED` | `SED.fitted` weighted cluster-assignment probability | |
 #'
 #' @section Implementation:
 #' See the documentation of the [defineInternalMetric()] function for details on how to define your own metrics.
@@ -335,6 +334,8 @@ intMetricsEnv$relativeEntropy = function(m) {
   E = intMetricsEnv$entropy(m)
   1 - E / (N * log(K))
 }
+
+intMetricsEnv$RE = intMetricsEnv$relativeEntropy
 
 intMetricsEnv$RSS = function(m) {
   sum(residuals(m) ^ 2)

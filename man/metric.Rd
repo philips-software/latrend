@@ -7,11 +7,7 @@
 \alias{metric,lcModels-method}
 \title{Compute internal model metric(s)}
 \usage{
-\S4method{metric}{lcModel}(
-  object,
-  name = getOption("latrend.metric", c("WRSS", "APPA", "AIC", "BIC")),
-  ...
-)
+\S4method{metric}{lcModel}(object, name = getOption("latrend.metric", c("WRSS", "APPA")), ...)
 
 \S4method{metric}{list}(object, name, drop = TRUE)
 
@@ -63,24 +59,23 @@ List of currently supported metrics:\tabular{lll}{
    \code{deviance} \tab The model deviance \tab \code{\link[stats:deviance]{stats::deviance()}} \cr
    \code{entropy} \tab Entropy of the posterior probabilities \tab  \cr
    \code{estimationTime} \tab The time needed for fitting the model \tab \code{\link[=estimationTime]{estimationTime()}} \cr
-   \code{ED} \tab Euclidean distance between the cluster trajectories and the observed trajectories \tab  \cr
-   \code{ED.fit} \tab Euclidean distance between the cluster trajectories and the fitted trajectories \tab  \cr
+   \code{ED} \tab Euclidean distance between the cluster trajectories and the assigned observed trajectories \tab  \cr
+   \code{ED.fit} \tab Euclidean distance between the cluster trajectories and the assigned fitted trajectories \tab  \cr
    \code{ICL.BIC} \tab Integrated classification likelihood (ICL) approximated using the BIC \tab \insertCite{biernacki2000assessing}{latrend} \cr
    \code{logLik} \tab Model log-likelihood \tab \code{\link[stats:logLik]{stats::logLik()}} \cr
-   \code{MAE} \tab Mean absolute error of the fitted trajectories to the observed trajectories \tab  \cr
-   \code{Mahalanobis} \tab Mahalanobis distance between the cluster trajectories and the observed trajectories \tab \insertCite{mahalanobis1936generalized}{latrend} \cr
-   \code{MSE} \tab Mean squared error \tab  \cr
+   \code{MAE} \tab Mean absolute error of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories \tab  \cr
+   \code{Mahalanobis} \tab Mahalanobis distance between the cluster trajectories and the assigned observed trajectories \tab \insertCite{mahalanobis1936generalized}{latrend} \cr
+   \code{MSE} \tab Mean squared error of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories \tab  \cr
    \code{relativeEntropy}, \code{RE} \tab The normalized version of \code{entropy}, scaled between [0, 1]. \tab \insertCite{ramaswamy1993empirical}{latrend}, \insertCite{muthen2004latent}{latrend} \cr
    \code{RSS} \tab Residual sum of squares under most likely cluster allocation \tab  \cr
-   \code{scaledEntropy}, \code{SE} \tab See \code{relativeEntropy} \tab  \cr
-   \code{sigma} \tab The standard residual error scale, typically denoted by \eqn{\sigma} \tab \code{\link[stats:sigma]{stats::sigma()}} \cr
+   \code{scaledEntropy} \tab See \code{relativeEntropy} \tab  \cr
+   \code{sigma} \tab The residual standard deviation \tab \code{\link[stats:sigma]{stats::sigma()}} \cr
    \code{ssBIC} \tab Sample-size adjusted BIC \tab \insertCite{sclove1987application}{latrend} \cr
-   \code{SED} \tab The cluster-weighted standardized Euclidean distance between the cluster trajectories and the observed trajectories \tab  \cr
-   \code{SED.fit} \tab The cluster-weighted standardized Euclidean distance between the cluster trajectories and the fitted trajectories \tab  \cr
+   \code{SED} \tab Standardized Euclidean distance between the cluster trajectories and the assigned observed trajectories \tab  \cr
+   \code{SED.fit} \tab The cluster-weighted standardized Euclidean distance between the cluster trajectories and the assigned fitted trajectories \tab  \cr
    \code{WMAE} \tab \code{MAE} weighted by cluster-assignment probability \tab  \cr
    \code{WMSE} \tab \code{MSE} weighted by cluster-assignment probability \tab  \cr
    \code{WRSS} \tab \code{RSS} weighted by cluster-assignment probability \tab  \cr
-   \code{WSED} \tab \code{SED.fitted} weighted cluster-assignment probability \tab  \cr
 }
 }
 \section{Implementation}{

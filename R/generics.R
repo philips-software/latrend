@@ -329,8 +329,9 @@ setGeneric('idVariable', function(object, ...) {
 #' @name latrend-generics
 setGeneric('metric', function(
   object,
-  name = getOption('latrend.metric', c('WRSS', 'APPA', 'AIC', 'BIC')),
-  ...) standardGeneric('metric'))
+  name = getOption('latrend.metric', c('WRSS', 'APPA')),
+  ...) standardGeneric('metric')
+)
 
 
 # plotFittedTrajectories ####
