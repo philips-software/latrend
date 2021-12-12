@@ -304,20 +304,22 @@ Cluster trajectories for KML model with 4 clusters, along with the assigned traj
 <p>The list of currently supported internal model metrics can be obtained by calling the <code>getInternalMetricNames</code> function.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/getInternalMetricNames.html">getInternalMetricNames</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt;  [1] "AIC"                 "APPA"                "APPA.lowest"        </span>
+<span class="co">#&gt;  [1] "AIC"                 "APPA.mean"           "APPA.min"           </span>
 <span class="co">#&gt;  [4] "BIC"                 "CAIC"                "CLC"                </span>
 <span class="co">#&gt;  [7] "converged"           "deviance"            "entropy"            </span>
 <span class="co">#&gt; [10] "estimationTime"      "Euclidean"           "Euclidean.fitted"   </span>
-<span class="co">#&gt; [13] "ICLBIC"              "logLik"              "MAE"                </span>
+<span class="co">#&gt; [13] "ICL.BIC"             "logLik"              "MAE"                </span>
 <span class="co">#&gt; [16] "Mahalanobis"         "MSE"                 "relativeEntropy"    </span>
-<span class="co">#&gt; [19] "RSS"                 "sigma"               "ssBIC"              </span>
-<span class="co">#&gt; [22] "stdEuclidean"        "stdEuclidean.fitted" "WMAE"               </span>
-<span class="co">#&gt; [25] "WMSE"                "WRSS"</span></code></pre></div>
+<span class="co">#&gt; [19] "RSS"                 "scaledEntropy"       "sigma"              </span>
+<span class="co">#&gt; [22] "ssBIC"               "stdEuclidean"        "stdEuclidean.fitted"</span>
+<span class="co">#&gt; [25] "WMAE"                "WMSE"                "WRSS"</span></code></pre></div>
 <p>As an example, we will compute the APPA (a measure of cluster separation), and the WRSS and WMAE metrics (measures of model error).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">kmlModel</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"APPA"</span>, <span class="st">"WRSS"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Warning in metric(kmlModel, c("APPA", "WRSS", "WMAE")): Internal metric(s)</span>
+<span class="co">#&gt; "APPA" are not defined. Returning NA.</span>
 <span class="co">#&gt;        APPA        WRSS        WMAE </span>
-<span class="co">#&gt;   0.9996797 167.8058270   0.2247193</span></code></pre></div>
+<span class="co">#&gt;          NA 167.8058270   0.2247193</span></code></pre></div>
 <p>The quantile-quantile (QQ) plot can be used to assess the model for structural deviations.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/qqPlot.html">qqPlot</a></span><span class="op">(</span><span class="va">kmlModel4</span><span class="op">)</span>

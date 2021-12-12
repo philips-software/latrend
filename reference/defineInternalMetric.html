@@ -100,6 +100,18 @@
 <code><a href="metric.html">metric</a>()</code></p></div>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">defineInternalMetric</span><span class="op">(</span><span class="st">"BIC"</span>, fun <span class="op">=</span> <span class="va">BIC</span><span class="op">)</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>ovewriting existing metric definition for BIC</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">mae</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span class="fu">defineInternalMetric</span><span class="op">(</span><span class="st">"MAE"</span>, fun <span class="op">=</span> <span class="va">mae</span><span class="op">)</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>ovewriting existing metric definition for MAE</span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
