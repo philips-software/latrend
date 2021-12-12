@@ -5,11 +5,59 @@
 #' @title Compute internal model metric(s)
 #' @description Compute one or more internal metrics for the given `lcModel` object.
 #'
+#' Note that there are many metrics available, and there exists no metric that works best in all scenarios.
+#' It is recommended to carefully consider which metric is most appropriate for your use case.
+#'
+#' Recommended overview papers:
+#' \itemize{
+#'   \item \insertCite{vandernest2020overview;textual}{latrend} provide an overview of metrics for mixture models (GBTM, GMM); primarily likelihood-based or posterior probability-based metrics.
+#'   \item \insertCite{henson2007detecting;textual}{latrend} provide an overview of likelihood-based metrics for mixture models.
+#' }
+#'
 #' Call [getInternalMetricNames()] to retrieve the names of the defined internal metrics.
+#'
+#' See the _Details_ section below for a list of supported metrics.
+#' @details
+#' List of currently supported metrics:
+#'
+#' | **Metric name** | **Description** | **Function / Reference** |
+#' | --- | :-------- | :--- |
+#' | `AIC` | Akaike information criterion | [stats::AIC()], \insertCite{akaike1974new}{latrend} |
+#' | `APPA.mean` | Mean of the average posterior probability of assignment (APPA) across clusters | [APPA()], \insertCite{nagin2005group}{latrend} |
+#' | `APPA.min` | Lowest APPA among the clusters | [APPA()], \insertCite{nagin2005group}{latrend} |
+#' | `BIC` | Bayesian information criterion | [stats::BIC()], \insertCite{schwarz1978estimating}{latrend} |
+#' | `CAIC` | Consistent Akaike information criterion | \insertCite{bozdogan1987model}{latrend} |
+#' | `CLC` | Classification likelihood criterion | \insertCite{mclachlan2000finite}{latrend} |
+#' | `converged` | Whether the model converged during estimation | [converged()] |
+#' | `deviance` | The model deviance | [stats::deviance()] |
+#' | `entropy` | Entropy of the posterior probabilities | |
+#' | `estimationTime` | The time needed for fitting the model | [estimationTime()] |
+#' | `ED` | Euclidean distance between the cluster trajectories and the observed trajectories | |
+#' | `ED.fit` | Euclidean distance between the cluster trajectories and the fitted trajectories | |
+#' | `ICL.BIC` | Integrated classification likelihood (ICL) approximated using the BIC | \insertCite{biernacki2000assessing}{latrend} |
+#' | `logLik` | Model log-likelihood | [stats::logLik()] |
+#' | `MAE` | Mean absolute error of the fitted trajectories to the observed trajectories | |
+#' | `Mahalanobis` | Mahalanobis distance between the cluster trajectories and the observed trajectories | \insertCite{mahalanobis1936generalized}{latrend} |
+#' | `MSE` | Mean squared error | |
+#' | `relativeEntropy`, `RE` | The normalized version of `entropy`, scaled between \[0, 1\]. | \insertCite{ramaswamy1993empirical}{latrend}, \insertCite{muthen2004latent}{latrend} |
+#' | `RSS` | Residual sum of squares under most likely cluster allocation | |
+#' | `scaledEntropy`, `SE` | See `relativeEntropy` | |
+#' | `sigma` | The standard residual error scale, typically denoted by \eqn{\sigma} | [stats::sigma()] |
+#' | `ssBIC` | Sample-size adjusted BIC | \insertCite{sclove1987application}{latrend} |
+#' | `SED` | The cluster-weighted standardized Euclidean distance between the cluster trajectories and the observed trajectories | |
+#' | `SED.fit` | The cluster-weighted standardized Euclidean distance between the cluster trajectories and the fitted trajectories | |
+#' | `WMAE` | `MAE` weighted by cluster-assignment probability | |
+#' | `WMSE` | `MSE` weighted by cluster-assignment probability | |
+#' | `WRSS` | `RSS` weighted by cluster-assignment probability | |
+#' | `WSED` | `SED.fitted` weighted cluster-assignment probability | |
+#'
+#' @section Implementation:
+#' See the documentation of the [defineInternalMetric()] function for details on how to define your own metrics.
 #' @param object The `lcModel`, `lcModels`, or `list` of `lcModel` objects to compute the metrics for.
 #' @param name The name(s) of the metric(s) to compute. If no names are given, the names specified in the `latrend.metric` option (WRSS, APPA, AIC, BIC) are used.
 #' @param ... Additional arguments.
 #' @return For `metric(lcModel)`: A named `numeric` vector with the computed model metrics.
+#' @references \insertAllCited{}
 #' @seealso [externalMetric] [min.lcModels] [max.lcModels]
 NULL
 
@@ -28,6 +76,13 @@ getInternalMetricNames = function() {
 #' @param fun The function to compute the metric, accepting a lcModel object as input.
 #' @param warnIfExists Whether to output a warning when the metric is already defined.
 #' @family metric functions
+#' @examples
+#' defineInternalMetric("BIC", fun = BIC)
+#'
+#' mae <- function(object) {
+#'   mean(abs(residuals(object)))
+#' }
+#' defineInternalMetric("MAE", fun = mae)
 defineInternalMetric = function(name, fun, warnIfExists = getOption('latrend.warnMetricOverride', TRUE)) {
   assert_that(is.function(fun))
   assert_that(!is.null(formalArgs(fun)), msg = 'function must accept one argument (a lcModel)')
@@ -277,12 +332,15 @@ intMetricsEnv$MSE = function(m) {
 intMetricsEnv$relativeEntropy = function(m) {
   N = nIds(m)
   K = nClusters(m)
-  1 - intMetricsEnv$entropy(m) / (N * log(K))
+  E = intMetricsEnv$entropy(m)
+  1 - E / (N * log(K))
 }
 
 intMetricsEnv$RSS = function(m) {
   sum(residuals(m) ^ 2)
 }
+
+intMetricsEnv$scaledEntropy = intMetricsEnv$relativeEntropy
 
 intMetricsEnv$sigma = sigma
 

@@ -37,8 +37,57 @@ For \code{metric(lcModels)}: A \code{data.frame} with a metric per column.
 \description{
 Compute one or more internal metrics for the given \code{lcModel} object.
 
-Call \code{\link[=getInternalMetricNames]{getInternalMetricNames()}} to retrieve the names of the defined internal metrics.
+Note that there are many metrics available, and there exists no metric that works best in all scenarios.
+It is recommended to carefully consider which metric is most appropriate for your use case.
+
+Recommended overview papers:
+\itemize{
+\item \insertCite{vandernest2020overview;textual}{latrend} provide an overview of metrics for mixture models (GBTM, GMM); primarily likelihood-based or posterior probability-based metrics.
+\item \insertCite{henson2007detecting;textual}{latrend} provide an overview of likelihood-based metrics for mixture models.
 }
+
+Call \code{\link[=getInternalMetricNames]{getInternalMetricNames()}} to retrieve the names of the defined internal metrics.
+
+See the \emph{Details} section below for a list of supported metrics.
+}
+\details{
+List of currently supported metrics:\tabular{lll}{
+   \strong{Metric name} \tab \strong{Description} \tab \strong{Function / Reference} \cr
+   \code{AIC} \tab Akaike information criterion \tab \code{\link[stats:AIC]{stats::AIC()}}, \insertCite{akaike1974new}{latrend} \cr
+   \code{APPA.mean} \tab Mean of the average posterior probability of assignment (APPA) across clusters \tab \code{\link[=APPA]{APPA()}}, \insertCite{nagin2005group}{latrend} \cr
+   \code{APPA.min} \tab Lowest APPA among the clusters \tab \code{\link[=APPA]{APPA()}}, \insertCite{nagin2005group}{latrend} \cr
+   \code{BIC} \tab Bayesian information criterion \tab \code{\link[stats:AIC]{stats::BIC()}}, \insertCite{schwarz1978estimating}{latrend} \cr
+   \code{CAIC} \tab Consistent Akaike information criterion \tab \insertCite{bozdogan1987model}{latrend} \cr
+   \code{CLC} \tab Classification likelihood criterion \tab \insertCite{mclachlan2000finite}{latrend} \cr
+   \code{converged} \tab Whether the model converged during estimation \tab \code{\link[=converged]{converged()}} \cr
+   \code{deviance} \tab The model deviance \tab \code{\link[stats:deviance]{stats::deviance()}} \cr
+   \code{entropy} \tab Entropy of the posterior probabilities \tab  \cr
+   \code{estimationTime} \tab The time needed for fitting the model \tab \code{\link[=estimationTime]{estimationTime()}} \cr
+   \code{ED} \tab Euclidean distance between the cluster trajectories and the observed trajectories \tab  \cr
+   \code{ED.fit} \tab Euclidean distance between the cluster trajectories and the fitted trajectories \tab  \cr
+   \code{ICL.BIC} \tab Integrated classification likelihood (ICL) approximated using the BIC \tab \insertCite{biernacki2000assessing}{latrend} \cr
+   \code{logLik} \tab Model log-likelihood \tab \code{\link[stats:logLik]{stats::logLik()}} \cr
+   \code{MAE} \tab Mean absolute error of the fitted trajectories to the observed trajectories \tab  \cr
+   \code{Mahalanobis} \tab Mahalanobis distance between the cluster trajectories and the observed trajectories \tab \insertCite{mahalanobis1936generalized}{latrend} \cr
+   \code{MSE} \tab Mean squared error \tab  \cr
+   \code{relativeEntropy}, \code{RE} \tab The normalized version of \code{entropy}, scaled between [0, 1]. \tab \insertCite{ramaswamy1993empirical}{latrend}, \insertCite{muthen2004latent}{latrend} \cr
+   \code{RSS} \tab Residual sum of squares under most likely cluster allocation \tab  \cr
+   \code{scaledEntropy}, \code{SE} \tab See \code{relativeEntropy} \tab  \cr
+   \code{sigma} \tab The standard residual error scale, typically denoted by \eqn{\sigma} \tab \code{\link[stats:sigma]{stats::sigma()}} \cr
+   \code{ssBIC} \tab Sample-size adjusted BIC \tab \insertCite{sclove1987application}{latrend} \cr
+   \code{SED} \tab The cluster-weighted standardized Euclidean distance between the cluster trajectories and the observed trajectories \tab  \cr
+   \code{SED.fit} \tab The cluster-weighted standardized Euclidean distance between the cluster trajectories and the fitted trajectories \tab  \cr
+   \code{WMAE} \tab \code{MAE} weighted by cluster-assignment probability \tab  \cr
+   \code{WMSE} \tab \code{MSE} weighted by cluster-assignment probability \tab  \cr
+   \code{WRSS} \tab \code{RSS} weighted by cluster-assignment probability \tab  \cr
+   \code{WSED} \tab \code{SED.fitted} weighted cluster-assignment probability \tab  \cr
+}
+}
+\section{Implementation}{
+
+See the documentation of the \code{\link[=defineInternalMetric]{defineInternalMetric()}} function for details on how to define your own metrics.
+}
+
 \examples{
 data(latrendData)
 model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
@@ -48,6 +97,9 @@ bic <- metric(model, "BIC")
 ic <- metric(model, c("AIC", "BIC"))
 
 
+}
+\references{
+\insertAllCited{}
 }
 \seealso{
 \link{externalMetric} \link{min.lcModels} \link{max.lcModels}

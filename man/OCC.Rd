@@ -21,7 +21,7 @@ An OCC of 1 indicates that the cluster assignment is no better than by random ch
 }
 \references{
 \insertRef{nagin2005group}{latrend}
-
+\insertRef{klijn2017introducing}{latrend}
 \insertRef{vandernest2020overview}{latrend}
 }
 \seealso{
