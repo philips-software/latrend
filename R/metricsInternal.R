@@ -191,11 +191,11 @@ intMetricsEnv$ssBIC = function(m) {
   - 2 * ll + log((nIds(m) + 2) / 24) * df
 }
 
-intMetricsEnv$APPA = function(m) {
+intMetricsEnv$APPA.mean = function(m) {
   mean(APPA(m))
 }
 
-intMetricsEnv$APPA.lowest = function(m) {
+intMetricsEnv$APPA.min = function(m) {
   min(APPA(m))
 }
 
@@ -234,7 +234,7 @@ intMetricsEnv$estimationTime = estimationTime
 #' @importFrom stats logLik
 intMetricsEnv$logLik = logLik
 
-intMetricsEnv$ICLBIC = function(m) {
+intMetricsEnv$ICL.BIC = function(m) {
   ll = logLik(m)
   df = attr(ll, 'df')
   - 2 * ll + log(nIds(m)) * df + 2 * intMetricsEnv$entropy(m)
