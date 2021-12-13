@@ -57,8 +57,68 @@ containing the computed model metrics.
 \description{
 Compute one or more external metrics for two or more \code{lcModel} objects.
 
+Note that there are many external metrics available, and there exists no external metric that works best in all scenarios.
+It is recommended to carefully consider which metric is most appropriate for your use case.
+
+Many of the external metrics depend on implementations in other packages:
+\itemize{
+\item clusterCrit  \insertCite{desgraupes2018clustercrit}{latrend}
+\item mclustcomp  \insertCite{you2018mclustcomp}{latrend}
+\item igraph  \insertCite{csardi2006igraph}{latrend}
+\item psych  \insertCite{revelle2019psych}{latrend}
+}
+
+See \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} for a grouped overview of similarity metrics.
+
+Call \code{\link[=getInternalMetricNames]{getInternalMetricNames()}} to retrieve the names of the defined internal metrics.
 Call \code{\link[=getExternalMetricNames]{getExternalMetricNames()}} to retrieve the names of the defined internal metrics.
 }
+\details{
+List of currently supported external metrics:\tabular{lll}{
+   \strong{Metric name} \tab \strong{Description} \tab \strong{Function / Reference} \cr
+   \code{adjustedRand} \tab \href{https://en.wikipedia.org/wiki/Rand_index#Adjusted_Rand_index}{Adjusted Rand index} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}}, \insertCite{hubert1985comparing}{latrend} \cr
+   \code{CohensKappa} \tab \href{https://en.wikipedia.org/wiki/Cohen\%27s_kappa}{Cohen's \eqn{\kappa}} \tab \code{\link[psych:kappa]{psych::cohen.kappa()}}, \insertCite{cohen1960coefficient}{latrend} \cr
+   \code{F} \tab \href{https://en.wikipedia.org/wiki/F-score}{F-score} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
+   \code{F1} \tab \href{https://en.wikipedia.org/wiki/F-score}{F1-score}, also referred to as the \href{https://en.wikipedia.org/wiki/S\%C3\%B8rensen\%E2\%80\%93Dice_coefficient}{Sørensen–Dice Coefficient}, or Dice similarity coefficient \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
+   \code{FolkesMallows} \tab \href{https://en.wikipedia.org/wiki/Fowlkes\%E2\%80\%93Mallows_index}{Fowlkes-Mallows index} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
+   \code{Hubert} \tab Hubert index \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr
+   \code{Jaccard} \tab \href{https://en.wikipedia.org/wiki/Jaccard_index}{Jaccard index} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
+   \code{jointEntropy} \tab \href{https://en.wikipedia.org/wiki/Joint_entropy}{Joint entropy} between model assignments \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
+   \code{Kulczynski} \tab Kulczynski index \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr
+   \code{MaximumMatch} \tab Maximum match measure \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
+   \code{McNemar} \tab McNemar statistic \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr
+   \code{MeilaHeckerman} \tab Meila-Heckerman measure \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
+   \code{Mirkin} \tab Mirkin metric \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
+   \code{MI} \tab \href{https://en.wikipedia.org/wiki/Mutual_information}{Mutual information} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
+   \code{NMI} \tab Normalized mutual information \tab \code{\link[igraph:compare]{igraph::compare()}} \cr
+   \code{NSJ} \tab Normalized version of \code{splitJoin}. The proportion of edits relative to the maximum changes (twice the number of ids) \tab  \cr
+   \code{NVI} \tab Normalized variation of information \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
+   \code{Overlap} \tab \href{https://en.wikipedia.org/wiki/Overlap_coefficient}{Overlap coefficient}, also referred to as the Szymkiewicz–Simpson coefficient \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \insertCite{vijaymeena2016survey}{latrend} \cr
+   \code{PD} \tab Partition difference \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
+   \code{Phi} \tab \href{https://en.wikipedia.org/wiki/Phi_coefficient}{Phi coefficient}, denoted by \eqn{\phi}. \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr
+   \code{precision} \tab \href{https://en.wikipedia.org/wiki/Precision_and_recall}{precision} \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr
+   \code{Rand} \tab \href{https://en.wikipedia.org/wiki/Rand_index}{Rand index} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
+   \code{recall} \tab \href{https://en.wikipedia.org/wiki/Precision_and_recall}{recall} \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr
+   \code{RogersTanimoto} \tab Rogers-Tanimoto dissimilarity \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr
+   \code{RusselRao} \tab Russell-Rao dissimilarity \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr
+   \code{SMC} \tab \href{https://en.wikipedia.org/wiki/Simple_matching_coefficient}{Simple matching coefficient} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
+   \code{splitJoin} \tab total split-join index \tab \code{\link[igraph:split_join_distance]{igraph::split_join_distance()}} \cr
+   \code{splitJoin.ref} \tab Split-join index of the first model to the second model \tab  \cr
+   \code{SokalSneath1} \tab Type-1 Sokal-Sneath dissimilarity \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr
+   \code{SokalSneath2} \tab Type-2 Sokal-Sneath dissimilarity \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr
+   \code{VI} \tab \href{https://en.wikipedia.org/wiki/Variation_of_information}{Variation of information} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
+   \code{Wallace1} \tab Type-1 Wallace criterion \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
+   \code{Wallace2} \tab Type-2 Wallace criterion \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
+   \code{WMSSE} \tab Weighted minimum sum of squared errors between cluster trajectories \tab  \cr
+   \code{WMMSE} \tab Weighted minimum mean of squared errors between cluster trajectories \tab  \cr
+   \code{WMMAE} \tab Weighted minimum mean of absolute errors between cluster trajectories \tab  \cr
+}
+}
+\section{Implementation}{
+
+See the documentation of the \code{\link[=defineExternalMetric]{defineExternalMetric()}} function for details on how to define your own external metrics.
+}
+
 \examples{
 data(latrendData)
 model1 <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
@@ -67,17 +127,7 @@ model2 <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
 ari <- externalMetric(model1, model2, 'adjustedRand')
 }
 \references{
-\insertRef{desgraupes2018clustercrit}{latrend}
-
-\insertRef{you2018mclustcomp}{latrend}
-
-\insertRef{csardi2006igraph}{latrend}
-
-\insertRef{hubert1985comparing}{latrend}
-
-\insertRef{revelle2019psych}{latrend}
-
-\insertRef{scrucca2016mclust}{latrend}
+\insertAllCited{}
 }
 \seealso{
 \link{metric}
