@@ -76,7 +76,7 @@ Call \code{\link[=getExternalMetricNames]{getExternalMetricNames()}} to retrieve
 \details{
 List of currently supported external metrics:\tabular{lll}{
    \strong{Metric name} \tab \strong{Description} \tab \strong{Function / Reference} \cr
-   \code{adjustedRand} \tab \href{https://en.wikipedia.org/wiki/Rand_index#Adjusted_Rand_index}{Adjusted Rand index} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}}, \insertCite{hubert1985comparing}{latrend} \cr
+   \code{adjustedRand} \tab \href{https://en.wikipedia.org/wiki/Rand_index\%23Adjusted_Rand_index}{Adjusted Rand index} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}}, \insertCite{hubert1985comparing}{latrend} \cr
    \code{CohensKappa} \tab \href{https://en.wikipedia.org/wiki/Cohen\%27s_kappa}{Cohen's \eqn{\kappa}} \tab \code{\link[psych:kappa]{psych::cohen.kappa()}}, \insertCite{cohen1960coefficient}{latrend} \cr
    \code{F} \tab \href{https://en.wikipedia.org/wiki/F-score}{F-score} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
    \code{F1} \tab \href{https://en.wikipedia.org/wiki/F-score}{F1-score}, also referred to as the \href{https://en.wikipedia.org/wiki/S\%C3\%B8rensen\%E2\%80\%93Dice_coefficient}{Sørensen–Dice Coefficient}, or Dice similarity coefficient \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr

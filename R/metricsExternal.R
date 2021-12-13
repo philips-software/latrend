@@ -29,7 +29,7 @@
 #'
 #' | **Metric name** | **Description** | **Function / Reference** |
 #' | --- | :-------- | :--- |
-#' | `adjustedRand` | [Adjusted Rand index](https://en.wikipedia.org/wiki/Rand_index#Adjusted_Rand_index) | [mclustcomp::mclustcomp()], \insertCite{hubert1985comparing}{latrend} |
+#' | `adjustedRand` | [Adjusted Rand index](https://en.wikipedia.org/wiki/Rand_index%23Adjusted_Rand_index) | [mclustcomp::mclustcomp()], \insertCite{hubert1985comparing}{latrend} |
 #' | `CohensKappa` | [Cohen's \eqn{\kappa}](https://en.wikipedia.org/wiki/Cohen%27s_kappa) | [psych::cohen.kappa()], \insertCite{cohen1960coefficient}{latrend} |
 #' | `F` | [F-score](https://en.wikipedia.org/wiki/F-score) | [mclustcomp::mclustcomp()] |
 #' | `F1` | [F1-score](https://en.wikipedia.org/wiki/F-score), also referred to as the [Sørensen–Dice Coefficient](https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient), or Dice similarity coefficient | [mclustcomp::mclustcomp()] |
