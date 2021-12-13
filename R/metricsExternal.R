@@ -343,7 +343,7 @@ extMetricsEnv$splitJoin = function(m1, m2) {
     sum()
 }
 
-extMetricsEnv$splitJoin_ref = function(m1, m2) {
+extMetricsEnv$splitJoin.ref = function(m1, m2) {
   assert_that(has_same_ids(m1, m2))
   igraph::split_join_distance(
     trajectoryAssignments(m1) %>% as.integer,
@@ -396,7 +396,7 @@ extMetricsEnv$Wallace2 = function(m1, m2) {
   )$scores
 }
 
-.wmsse = function(m1, m2, newdata = union(time(m1), time(m2))) {
+.wmrss = function(m1, m2, newdata = union(time(m1), time(m2))) {
   resp1 = responseVariable(m1)
   resp2 = responseVariable(m2)
 
@@ -419,13 +419,13 @@ extMetricsEnv$Wallace2 = function(m1, m2) {
   c(wmsse1, wmsse2)
 }
 
-extMetricsEnv$WMSSE = function(m1, m2, newdata = union(time(m1), time(m2))) {
-  out = .wmsse(m1, m2, newdata)
+extMetricsEnv$WMRSS = function(m1, m2, newdata = union(time(m1), time(m2))) {
+  out = .wmrss(m1, m2, newdata)
   sum(out)
 }
 
-extMetricsEnv$WMSSE_ref = function(m1, m2, newdata = union(time(m1), time(m2))) {
-  out = .wmsse(m1, m2, newdata)
+extMetricsEnv$WMRSS.ref = function(m1, m2, newdata = union(time(m1), time(m2))) {
+  out = .wmrss(m1, m2, newdata)
   out[2]
 }
 
@@ -436,17 +436,17 @@ extMetricsEnv$WMMSE = function(m1, m2, newdata = union(time(m1), time(m2))) {
     nob = length(newdata)
   }
 
-  extMetricsEnv$WMSSE(m1, m2, newdata) / (2 * nob)
+  extMetricsEnv$WMRSS(m1, m2, newdata) / (2 * nob)
 }
 
-extMetricsEnv$WMMSE_ref = function(m1, m2, newdata = union(time(m1), time(m2))) {
+extMetricsEnv$WMMSE.ref = function(m1, m2, newdata = union(time(m1), time(m2))) {
   if (is.data.frame(newdata) || is.matrix(newdata)) {
     nob = nrow(newdata)
   } else {
     nob = length(newdata)
   }
 
-  extMetricsEnv$WMSSE_ref(m1, m2, newdata) / nob
+  extMetricsEnv$WMRSS.ref(m1, m2, newdata) / nob
 }
 
 .wmmae = function(m1, m2, newdata = union(time(m1), time(m2))) {
@@ -481,7 +481,7 @@ extMetricsEnv$WMMAE = function(m1, m2, newdata = union(time(m1), time(m2))) {
   mean(out)
 }
 
-extMetricsEnv$WMMAE_ref = function(m1, m2, newdata = union(time(m1), time(m2))) {
+extMetricsEnv$WMMAE.ref = function(m1, m2, newdata = union(time(m1), time(m2))) {
   out = .wmmae(m1, m2, newdata)
   out[2]
 }

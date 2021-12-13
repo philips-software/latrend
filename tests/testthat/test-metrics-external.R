@@ -1,5 +1,6 @@
 context('externalMetrics')
-skip_if_not_installed('mclust')
+skip_if_not_installed('mclustcomp')
+skip_if_not_installed('clusterCrit')
 skip_if_not_installed('psych')
 skip_if_not_installed('igraph')
 rngReset()

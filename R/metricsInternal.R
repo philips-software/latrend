@@ -22,25 +22,25 @@
 #'
 #' | **Metric name** | **Description** | **Function / Reference** |
 #' | --- | :-------- | :--- |
-#' | `AIC` | Akaike information criterion | [stats::AIC()], \insertCite{akaike1974new}{latrend} |
+#' | `AIC` | [Akaike information criterion](https://en.wikipedia.org/wiki/Akaike_information_criterion) | [stats::AIC()], \insertCite{akaike1974new}{latrend} |
 #' | `APPA.mean` | Mean of the average posterior probability of assignment (APPA) across clusters | [APPA()], \insertCite{nagin2005group}{latrend} |
 #' | `APPA.min` | Lowest APPA among the clusters | [APPA()], \insertCite{nagin2005group}{latrend} |
-#' | `BIC` | Bayesian information criterion | [stats::BIC()], \insertCite{schwarz1978estimating}{latrend} |
+#' | `BIC` | [Bayesian information criterion](https://en.wikipedia.org/wiki/Bayesian_information_criterion) | [stats::BIC()], \insertCite{schwarz1978estimating}{latrend} |
 #' | `CAIC` | Consistent Akaike information criterion | \insertCite{bozdogan1987model}{latrend} |
 #' | `CLC` | Classification likelihood criterion | \insertCite{mclachlan2000finite}{latrend} |
 #' | `converged` | Whether the model converged during estimation | [converged()] |
-#' | `deviance` | The model deviance | [stats::deviance()] |
+#' | `deviance` | The model [deviance](https://en.wikipedia.org/wiki/Deviance_(statistics)) | [stats::deviance()] |
 #' | `entropy` | Entropy of the posterior probabilities | |
 #' | `estimationTime` | The time needed for fitting the model | [estimationTime()] |
-#' | `ED` | Euclidean distance between the cluster trajectories and the assigned observed trajectories | |
+#' | `ED` | [Euclidean distance](https://en.wikipedia.org/wiki/Euclidean_distance) between the cluster trajectories and the assigned observed trajectories | |
 #' | `ED.fit` | Euclidean distance between the cluster trajectories and the assigned fitted trajectories | |
 #' | `ICL.BIC` | Integrated classification likelihood (ICL) approximated using the BIC | \insertCite{biernacki2000assessing}{latrend} |
-#' | `logLik` | Model log-likelihood | [stats::logLik()] |
-#' | `MAE` | Mean absolute error of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories | |
-#' | `Mahalanobis` | Mahalanobis distance between the cluster trajectories and the assigned observed trajectories | \insertCite{mahalanobis1936generalized}{latrend} |
-#' | `MSE` | Mean squared error of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories | |
+#' | `logLik` | Model log-[likelihood](https://en.wikipedia.org/wiki/Likelihood_function) | [stats::logLik()] |
+#' | `MAE` | [Mean absolute error](https://en.wikipedia.org/wiki/Mean_absolute_error) of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories | |
+#' | `Mahalanobis` | [Mahalanobis distance](https://en.wikipedia.org/wiki/Mahalanobis_distance) between the cluster trajectories and the assigned observed trajectories | \insertCite{mahalanobis1936generalized}{latrend} |
+#' | `MSE` | [Mean squared error](https://en.wikipedia.org/wiki/Mean_squared_error) of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories | |
 #' | `relativeEntropy`, `RE` | The normalized version of `entropy`, scaled between \[0, 1\]. | \insertCite{ramaswamy1993empirical}{latrend}, \insertCite{muthen2004latent}{latrend} |
-#' | `RSS` | Residual sum of squares under most likely cluster allocation | |
+#' | `RSS` | [Residual sum of squares](https://en.wikipedia.org/wiki/Residual_sum_of_squares) under most likely cluster allocation | |
 #' | `scaledEntropy` | See `relativeEntropy` | |
 #' | `sigma` | The residual standard deviation | [stats::sigma()] |
 #' | `ssBIC` | Sample-size adjusted BIC | \insertCite{sclove1987application}{latrend} |
