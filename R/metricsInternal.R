@@ -116,7 +116,7 @@ getInternalMetricDefinition = function(name) {
 #' @importFrom stats weighted.mean
 .defineInternalDistanceMetric = function(
   name,
-  type = c('traj', 'fitted'),
+  type = c('traj', 'fit'),
   distanceFun,
   clusterAggregationFun = weighted.mean,
   assertNonEmpty = TRUE,
@@ -124,7 +124,7 @@ getInternalMetricDefinition = function(name) {
   assertNonIdentical = FALSE,
   ...
 ) {
-  type = match.arg(type[1], c('traj', 'fitted'))
+  type = match.arg(type[1], c('traj', 'fit'))
   if (type != 'traj') {
     fullName = paste(name, type, sep = '.')
   } else {
@@ -139,7 +139,7 @@ getInternalMetricDefinition = function(name) {
 
   trajFun = switch(type,
     traj = trajectories,
-    fitted = fittedTrajectories,
+    fit = fittedTrajectories,
   )
 
   fun = function(m) {
@@ -259,7 +259,8 @@ intMetricsEnv$BIC = BIC
 intMetricsEnv$CLC = function(m) {
   ll = logLik(m)
   df = attr(ll, 'df')
-  - 2 * ll + 2 * intMetricsEnv$entropy(m)
+  E = intMetricsEnv$entropy(m)
+  - 2 * ll + 2 * E
 }
 
 intMetricsEnv$converged = function(m) {
@@ -270,8 +271,8 @@ intMetricsEnv$converged = function(m) {
 intMetricsEnv$deviance = deviance
 
 .defineInternalDistanceMetrics(
-  name = 'Euclidean',
-  type = c('traj', 'fitted'),
+  name = 'ED',
+  type = c('traj', 'fit'),
   distanceFun = function(trajClusMat, clusVec, clusName) {
     mean(sqrt((t(trajClusMat) - clusVec) ^ 2))
   },
@@ -348,8 +349,8 @@ intMetricsEnv$sigma = sigma
 # . Standardized Euclidean distance ####
 #' @importFrom stats mahalanobis
 .defineInternalDistanceMetrics(
-  name = 'stdEuclidean',
-  type = c('traj', 'fitted'),
+  name = 'SED',
+  type = c('traj', 'fit'),
   distanceFun = function(trajClusMat, clusVec, clusName) {
     varMat = diag(diag(var(trajClusMat)))
     if (det(varMat) == 0) {

@@ -6,7 +6,7 @@
 \usage{
 .defineInternalDistanceMetrics(
   name,
-  type = c("traj", "fitted"),
+  type = c("traj", "fit"),
   distanceFun,
   clusterAggregationFun = weighted.mean,
   assertNonEmpty = TRUE,
