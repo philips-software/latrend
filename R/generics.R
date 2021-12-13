@@ -329,7 +329,7 @@ setGeneric('idVariable', function(object, ...) {
 #' @name latrend-generics
 setGeneric('metric', function(
   object,
-  name = getOption('latrend.metric', c('WRSS', 'APPA')),
+  name = getOption('latrend.metric', c('WRSS', 'APPA.mean')),
   ...) standardGeneric('metric')
 )
 

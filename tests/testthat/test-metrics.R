@@ -29,7 +29,7 @@ test_that('error on empty name', {
 test_that('default names', {
   # if this test fails then the documentation needs to be updated
   out = metric(kml2)
-  expect_named(out, c('WRSS', 'APPA', 'AIC', 'BIC'))
+  expect_named(out, c('WRSS', 'APPA.mean'))
 })
 
 test_that('MAE', {
