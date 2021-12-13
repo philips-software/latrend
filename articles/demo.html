@@ -304,16 +304,13 @@ Cluster trajectories for KML model with 4 clusters, along with the assigned traj
 <p>The list of currently supported internal model metrics can be obtained by calling the <code>getInternalMetricNames</code> function.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/getInternalMetricNames.html">getInternalMetricNames</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt;  [1] "AIC"                 "APPA.mean"           "APPA.min"           </span>
-<span class="co">#&gt;  [4] "BIC"                 "CAIC"                "CLC"                </span>
-<span class="co">#&gt;  [7] "converged"           "deviance"            "entropy"            </span>
-<span class="co">#&gt; [10] "estimationTime"      "Euclidean"           "Euclidean.fitted"   </span>
-<span class="co">#&gt; [13] "ICL.BIC"             "logLik"              "MAE"                </span>
-<span class="co">#&gt; [16] "Mahalanobis"         "MSE"                 "RE"                 </span>
-<span class="co">#&gt; [19] "relativeEntropy"     "RSS"                 "scaledEntropy"      </span>
-<span class="co">#&gt; [22] "sigma"               "ssBIC"               "stdEuclidean"       </span>
-<span class="co">#&gt; [25] "stdEuclidean.fitted" "WMAE"                "WMSE"               </span>
-<span class="co">#&gt; [28] "WRSS"</span></code></pre></div>
+<span class="co">#&gt;  [1] "AIC"             "APPA.mean"       "APPA.min"        "BIC"            </span>
+<span class="co">#&gt;  [5] "CAIC"            "CLC"             "converged"       "deviance"       </span>
+<span class="co">#&gt;  [9] "ED"              "ED.fit"          "entropy"         "estimationTime" </span>
+<span class="co">#&gt; [13] "ICL.BIC"         "logLik"          "MAE"             "Mahalanobis"    </span>
+<span class="co">#&gt; [17] "MSE"             "RE"              "relativeEntropy" "RSS"            </span>
+<span class="co">#&gt; [21] "scaledEntropy"   "SED"             "SED.fit"         "sigma"          </span>
+<span class="co">#&gt; [25] "ssBIC"           "WMAE"            "WMSE"            "WRSS"</span></code></pre></div>
 <p>As an example, we will compute the APPA (a measure of cluster separation), and the WRSS and WMAE metrics (measures of model error).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">kmlModel</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"APPA"</span>, <span class="st">"WRSS"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span>
