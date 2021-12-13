@@ -524,9 +524,9 @@ Cluster trajectories of the reference model.
 <span class="co">#&gt; [17] "NVI"            "Overlap"        "PD"             "Phi"           </span>
 <span class="co">#&gt; [21] "precision"      "Rand"           "recall"         "RogersTanimoto"</span>
 <span class="co">#&gt; [25] "RusselRao"      "SMC"            "SokalSneath1"   "SokalSneath2"  </span>
-<span class="co">#&gt; [29] "splitJoin"      "splitJoin_ref"  "VI"             "Wallace1"      </span>
-<span class="co">#&gt; [33] "Wallace2"       "WMMAE"          "WMMAE_ref"      "WMMSE"         </span>
-<span class="co">#&gt; [37] "WMMSE_ref"      "WMSSE"          "WMSSE_ref"</span></code></pre></div>
+<span class="co">#&gt; [29] "splitJoin"      "splitJoin.ref"  "VI"             "Wallace1"      </span>
+<span class="co">#&gt; [33] "Wallace2"       "WMMAE"          "WMMAE.ref"      "WMMSE"         </span>
+<span class="co">#&gt; [37] "WMMSE.ref"      "WMRSS"          "WMRSS.ref"</span></code></pre></div>
 <p>Lastly, we compare the agreement in trajectory assignments via the adjusted Rand index.</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/externalMetric.html">externalMetric</a></span><span class="op">(</span><span class="va">bestGmmModel</span>, <span class="va">refModel</span>, <span class="st">"adjustedRand"</span><span class="op">)</span>
