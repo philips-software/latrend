@@ -7,7 +7,7 @@
 \alias{metric,lcModels-method}
 \title{Compute internal model metric(s)}
 \usage{
-\S4method{metric}{lcModel}(object, name = getOption("latrend.metric", c("WRSS", "APPA")), ...)
+\S4method{metric}{lcModel}(object, name = getOption("latrend.metric", c("WRSS", "APPA.mean")), ...)
 
 \S4method{metric}{list}(object, name, drop = TRUE)
 

@@ -45,7 +45,7 @@ getShortName(object, ...)
 
 idVariable(object, ...)
 
-metric(object, name = getOption("latrend.metric", c("WRSS", "APPA")), ...)
+metric(object, name = getOption("latrend.metric", c("WRSS", "APPA.mean")), ...)
 
 plotFittedTrajectories(object, ...)
 
