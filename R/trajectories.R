@@ -233,9 +233,27 @@ setMethod('plotTrajectories', signature('data.frame'),
   ) {
 
   assert_that(
-    !is.character(response) || has_name(object, response),
     has_name(object, time),
-    has_name(object, id),
+    has_name(object, id)
+  )
+
+  if (missing(response)) {
+    # determine response variable
+    numMask = vapply(object, is.numeric, FUN.VALUE = TRUE)
+    dfNum = subset(object, select = setdiff(names(object)[numMask], c(id, time)))
+
+    counts = vapply(dfNum, uniqueN, FUN.VALUE = 0L)
+    response = names(dfNum)[which.max(counts)]
+    message(
+      sprintf(
+        'Automatically selected "%s" as the response variable. To override this, specify the "response" argument.',
+        response
+      )
+    )
+  }
+
+  assert_that(
+    !is.character(response) || has_name(object, response),
     length(cluster) != 1 || (is.character(cluster) && has_name(object, cluster)),
     is.flag(facet)
   )
