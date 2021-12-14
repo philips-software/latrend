@@ -146,7 +146,7 @@ setGeneric('converged', function(object, ...) {
     )
   )
 
-  return(state)
+  state
 })
 
 # externalMetric ####
@@ -175,7 +175,7 @@ setGeneric('estimationTime', function(object, unit = 'secs', ...) {
     is.finite(duration)
   )
 
-  return(duration)
+  duration
 })
 
 
@@ -204,7 +204,7 @@ setGeneric('fit', function(method, data, envir, verbose, ...) {
   model@date = dateStart
   model@estimationTime = as.numeric(estimationTime, 'secs')
 
-  return(model)
+  model
 })
 
 
@@ -288,7 +288,7 @@ setGeneric('getName', function(object, ...) {
     nchar(name) > 0
   )
 
-  return(name)
+  name
 })
 
 
@@ -304,7 +304,7 @@ setGeneric('getShortName', function(object, ...) {
     nchar(name) > 0
   )
 
-  return(name)
+  name
 })
 
 
@@ -320,7 +320,7 @@ setGeneric('idVariable', function(object, ...) {
     nchar(id) > 0
   )
 
-  return(id)
+  id
 })
 
 
@@ -338,14 +338,16 @@ setGeneric('metric', function(
 #' @export
 #' @name latrend-generics
 setGeneric('plotFittedTrajectories',
-  function(object, ...) standardGeneric('plotFittedTrajectories'))
+  function(object, ...) standardGeneric('plotFittedTrajectories')
+)
 
 
 # plotClusterTrajectories ####
 #' @export
 #' @name latrend-generics
 setGeneric('plotClusterTrajectories',
-  function(object, ...) standardGeneric('plotClusterTrajectories'))
+  function(object, ...) standardGeneric('plotClusterTrajectories')
+)
 
 
 # plotTrajectories ####
@@ -371,7 +373,7 @@ setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
     )
   )
 
-  return(model)
+  model
 })
 
 
@@ -504,7 +506,7 @@ setGeneric('predictForCluster', function(object, newdata = NULL, cluster, ...) {
     }
   }
 
-  return(out)
+  out
 })
 
 
@@ -532,7 +534,7 @@ setGeneric('predictPostprob', function(object, newdata = NULL, ...) {
   }
 
   colnames(pp) = clusterNames(object)
-  return(pp)
+  pp
 })
 
 
@@ -549,7 +551,7 @@ setGeneric('prepareData', function(method, data, verbose, ...) {
     )
   )
 
-  return(envir)
+  envir
 })
 
 
@@ -566,7 +568,7 @@ setGeneric('preFit', function(method, data, envir, verbose, ...) {
     )
   )
 
-  return(modelEnv)
+  modelEnv
 })
 
 
@@ -589,7 +591,7 @@ setGeneric('responseVariable', function(object, ...) {
     nchar(response) > 0
   )
 
-  return(response)
+  response
 })
 
 
@@ -616,7 +618,7 @@ setGeneric('timeVariable', function(object, ...) {
     nchar(time) > 0
   )
 
-  return(time)
+  time
 })
 
 
@@ -657,7 +659,7 @@ setGeneric('trajectoryAssignments', function(object, ...) {
     !is.lcModel(object) || all(levels(clusters) == clusterNames(object))
   )
 
-  return(clusters)
+  clusters
 })
 
 
