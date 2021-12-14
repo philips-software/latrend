@@ -2,7 +2,6 @@
 *.bat
 .Rhistory
 cld.Rdata
-.Rprofile
 *.txt
 doc
 Meta
