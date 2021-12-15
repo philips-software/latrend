@@ -27,11 +27,11 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          # - {os: macOS-latest,   r: 'release', pkg-type: 'binary'}
-          # - {os: windows-latest, r: 'release', pkg-type: 'binary'}
+          - {os: macOS-latest,   r: 'release', pkg-type: 'binary'}
+          - {os: windows-latest, r: 'release', pkg-type: 'binary'}
           - {os: windows-latest, r: '3.6', pkg-type: 'binary'}
-          # - {os: ubuntu-latest,   r: 'devel', pkg-type: 'source'}
-          # - {os: ubuntu-latest,   r: 'release', pkg-type: 'source'}
+          - {os: ubuntu-latest,   r: 'devel', pkg-type: 'source'}
+          - {os: ubuntu-latest,   r: 'release', pkg-type: 'source'}
           #- {os: ubuntu-latest,   r: 'oldrel-1', pkg-type: 'source'}
 
     env:
