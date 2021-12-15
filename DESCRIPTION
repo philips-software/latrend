@@ -47,6 +47,7 @@ Suggests:
     roxygen2 (>= 7.1.0),
     knitr (>= 1.24),
     rmarkdown (>= 1.18),
+    rcmdcheck,
     pkgdown,
     covr,
     lintr,
