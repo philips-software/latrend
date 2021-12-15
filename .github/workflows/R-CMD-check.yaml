@@ -27,11 +27,11 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'release', pkg-type: 'binary'}
-          - {os: windows-latest, r: 'release', pkg-type: 'binary'}
+          # - {os: macOS-latest,   r: 'release', pkg-type: 'binary'}
+          # - {os: windows-latest, r: 'release', pkg-type: 'binary'}
           - {os: windows-latest, r: '3.6', pkg-type: 'binary'}
-          - {os: ubuntu-latest,   r: 'devel', pkg-type: 'source'}
-          - {os: ubuntu-latest,   r: 'release', pkg-type: 'source'}
+          # - {os: ubuntu-latest,   r: 'devel', pkg-type: 'source'}
+          # - {os: ubuntu-latest,   r: 'release', pkg-type: 'source'}
           #- {os: ubuntu-latest,   r: 'oldrel-1', pkg-type: 'source'}
 
     env:
@@ -84,14 +84,10 @@ jobs:
         run: |
           brew install --cask xquartz
           sudo /usr/X11/bin/xvfb :1 -screen 1 1024x768x24 -ac &
-        
+
       - uses: r-lib/actions/setup-renv@v2
         with:
           cache-version: 1
-
-      - name: Install rcmdcheck
-        shell: Rscript {0}
-        run: renv::install("rcmdcheck")
 
       - name: Check
         shell: Rscript {0}
