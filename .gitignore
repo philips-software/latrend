@@ -2,7 +2,6 @@
 *.bat
 .Rhistory
 cld.Rdata
-.Rprofile
 *.txt
 /doc/
 /Meta/
@@ -17,4 +16,5 @@ tests/testthat/*.rds
 /check.R
 .Rproj.user
 *.pdf
+check
 nul

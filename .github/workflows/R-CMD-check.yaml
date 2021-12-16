@@ -14,7 +14,7 @@ on:
       - 'NAMESPACE'
 
   pull_request:
-    branches: [main, master]
+    branches: [main, master, renv]
 
 name: R-CMD-check
 
@@ -28,16 +28,18 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'release', pkg-type: 'binary'}
-          - {os: windows-latest, r: 'release', pkg-type: 'binary'}
-          - {os: windows-latest, r: '3.6', pkg-type: 'binary'}
-          - {os: ubuntu-latest,   r: 'devel', pkg-type: 'source'}
-          - {os: ubuntu-latest,   r: 'release', pkg-type: 'source'}
-          #- {os: ubuntu-latest,   r: 'oldrel-1', pkg-type: 'source'}
+          - {os: macOS-latest,   r: 'release', pkg-type: 'binary', renv: ''}
+          - {os: windows-latest, r: 'release', pkg-type: 'binary', renv: ''}
+          - {os: windows-latest, r: '3.6', pkg-type: 'binary', renv: 'dev3'}
+          - {os: ubuntu-latest,   r: 'devel', pkg-type: 'source', renv: ''}
+          - {os: ubuntu-latest,   r: 'release', pkg-type: 'source', renv: ''}
+          - {os: ubuntu-latest,   r: 'oldrel-1', pkg-type: 'source', renv: ''}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_PKG_TYPE: ${{ matrix.config.pkg-type }}
+      RENV_PROFILE: ${{ matrix.config.renv }}
+      CI: true
       _R_CHECK_FORCE_SUGGESTS_: false
       _R_CHECK_CRAN_INCOMING_REMOTE_: false
       _R_CHECK_CRAN_INCOMING_: false
@@ -77,7 +79,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -yq libglu1-mesa-dev freeglut3-dev mesa-common-dev libcurl4-openssl-dev
+          sudo apt-get install -yq libglu1-mesa-dev freeglut3-dev mesa-common-dev libcurl4-openssl-dev libxml2-dev libharfbuzz-dev libfribidi-dev
           Xvfb :1 -screen 1 1024x768x24 -ac &
 
       - name: Install macOS dependencies
@@ -85,31 +87,14 @@ jobs:
         run: |
           brew install --cask xquartz
           sudo /usr/X11/bin/xvfb :1 -screen 1 1024x768x24 -ac &
-        # brew install libgit2
 
-      - name: Gather R package dependencies
-        shell: Rscript {0}
-        run: |
-          install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), "depends.Rds", version = 2)
-
-      - name: Cache R packages
-        if: runner.os != 'Windows'
-        uses: actions/cache@v1
+      - uses: r-lib/actions/setup-renv@v2
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
-          restore-keys: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-
-
-      - name: Install R packages
-        shell: Rscript {0}
-        run: |
-          remotes::install_deps(dependencies = TRUE, type = Sys.getenv("R_PKG_TYPE"), quiet = TRUE)
-          remotes::install_cran("rcmdcheck")
+          cache-version: 1
 
       - name: Check
         shell: Rscript {0}
-        run: rcmdcheck::rcmdcheck(args = c("--as-cran"), error_on = "warning", check_dir = "check")
+        run: rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-multiarch"), error_on = "warning", check_dir = "check")
 
       - name: Show testthat output
         shell: bash
