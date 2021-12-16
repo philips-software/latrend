@@ -32,12 +32,13 @@ jobs:
           - {os: windows-latest, r: '3.6', pkg-type: 'binary', renv: 'dev3'}
           - {os: ubuntu-latest,   r: 'devel', pkg-type: 'source', renv: ''}
           - {os: ubuntu-latest,   r: 'release', pkg-type: 'source', renv: ''}
-          # - {os: ubuntu-latest,   r: 'oldrel-1', pkg-type: 'source', renv: ''}
+          - {os: ubuntu-latest,   r: 'oldrel-1', pkg-type: 'source', renv: ''}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_PKG_TYPE: ${{ matrix.config.pkg-type }}
       RENV_PROFILE: ${{ matrix.config.renv }}
+      CI: true
       _R_CHECK_FORCE_SUGGESTS_: false
       _R_CHECK_CRAN_INCOMING_REMOTE_: false
       _R_CHECK_CRAN_INCOMING_: false
@@ -92,7 +93,7 @@ jobs:
 
       - name: Check
         shell: Rscript {0}
-        run: rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-multiarch"), error_on = "warning", check_dir = "check")
+        run: rcmdcheck::rcmdcheck(args = c("--as-cran"), error_on = "warning", check_dir = "check")
 
       - name: Show testthat output
         shell: bash
