@@ -89,8 +89,6 @@ jobs:
           sudo /usr/X11/bin/xvfb :1 -screen 1 1024x768x24 -ac &
 
       - uses: r-lib/actions/setup-renv@v1
-        with:
-          cache-version: 1
 
       # - uses: r-lib/actions/check-r-package@v2
       #   with:
