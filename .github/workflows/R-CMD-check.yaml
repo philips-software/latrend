@@ -91,7 +91,7 @@ jobs:
 
       - name: Check
         shell: Rscript {0}
-        run: rcmdcheck::rcmdcheck(args = c("--as-cran"), error_on = "warning", check_dir = "check")
+        run: rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-multiarch"), error_on = "warning", check_dir = "check")
 
       - name: Show testthat output
         shell: bash
