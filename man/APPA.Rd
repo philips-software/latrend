@@ -19,6 +19,8 @@ Computes the average posterior probability of assignment (APPA) for each cluster
 \references{
 \insertRef{nagin2005group}{latrend}
 
+\insertRef{klijn2017introducing}{latrend}
+
 \insertRef{vandernest2020overview}{latrend}
 }
 \seealso{

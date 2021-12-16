@@ -23,7 +23,7 @@ A data.frame of the estimated values at the given times. The first column should
 Extracts a data frame of all cluster trajectories.
 }
 \examples{
-model <- latrend(method = lcMethodLcmmGMM(fixed = Y ~ Time, mixture = fixed),
+model <- latrend(method = lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time),
   id = "Id", time = "Time", data = latrendData)
 clusterTrajectories(model)
 

@@ -3,7 +3,7 @@
 \name{prepareData}
 \alias{prepareData}
 \alias{prepareData,lcMethod-method}
-\title{Prepare the training data for fitting}
+\title{lcMethod fit process: logic for preparing the training data}
 \usage{
 \S4method{prepareData}{lcMethod}(method, data, verbose)
 }
@@ -18,8 +18,16 @@
 An \code{environment} with the prepared data variable(s) that will be passed to \code{\link[=preFit]{preFit()}}.
 }
 \description{
-Post-process the training data to meet the method requirements, such as transforming the data to a matrix, truncating the response variable, or creating additional data objects.
+Note: this function should not be called directly, as it is part of the \code{lcMethod} fitting process. For fitting an \code{lcMethod} object to a dataset, see \code{\link[=latrend]{latrend()}}.
 
+The \code{prepareData()} function of the \code{lcMethod} object processes the training data prior to fitting the method.
+Example uses:
+\itemize{
+\item Transforming the data to another format, e.g., a matrix.
+\item Truncating the response variable.
+\item Computing derived covariates.
+\item Creating additional data objects.
+}
 The computed variables are stored in an \code{environment} which is passed to the \code{\link[=preFit]{preFit()}} function for further processing.
 
 By default, this method does not do anything.

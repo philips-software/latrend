@@ -3,8 +3,8 @@
 .Rhistory
 cld.Rdata
 *.txt
-doc
-Meta
+/doc/
+/Meta/
 vignettes/*_cache
 vignettes/*.R
 vignettes/*.html
@@ -17,3 +17,4 @@ tests/testthat/*.rds
 .Rproj.user
 *.pdf
 check
+nul

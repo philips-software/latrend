@@ -20,6 +20,14 @@ defineInternalMetric(
 \description{
 Define an internal metric for lcModels
 }
+\examples{
+defineInternalMetric("BIC", fun = BIC)
+
+mae <- function(object) {
+  mean(abs(residuals(object)))
+}
+defineInternalMetric("MAE", fun = mae)
+}
 \seealso{
 Other metric functions: 
 \code{\link{defineExternalMetric}()},

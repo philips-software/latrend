@@ -1,6 +1,7 @@
 ^renv$
 ^renv\.lock$
 ^.*\.bak$
+^.*\.sav$
 ^.*\.bat$
 ^.*\.pdf$
 ^.*\.Rproj$
@@ -22,9 +23,10 @@ cld\.Rdata
 ^LICENSE$
 ^Meta$
 ^MixTVEM\.r$
-^NEWS\.md$
 README\.md
-^tests\testthat\_snaps$
-^vignettes\.*_cache$
-^vignettes\.*R$
-^vignettes\.*html$
+^renv$
+^tests/testthat/_snaps$
+^vignettes/.*_cache$
+^vignettes/.*R$
+^vignettes/.*html$
+^cran-comments\.md$

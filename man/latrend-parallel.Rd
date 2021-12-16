@@ -39,15 +39,17 @@ doMC::registerDoMC(nCores)
 }
 
 \examples{
+\donttest{
 data(latrendData)
 
 # parallel latrendRep()
 method <- lcMethodKML(response = "Y")
-models <- latrendRep(method, data = latrendData, .rep = 10, parallel = TRUE)
+models <- latrendRep(method, data = latrendData, .rep = 5, parallel = TRUE)
 
 # parallel latrendBatch()
 methods <- lcMethods(method, nClusters = 1:3)
 models <- latrendBatch(methods, data = latrendData, parallel = TRUE)
+}
 }
 \seealso{
 \link{latrendRep}, \link{latrendBatch}, \link{latrendBoot}, \link{latrendCV}

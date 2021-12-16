@@ -61,7 +61,7 @@ lcMethodLcmmGMM = function(
   classmb = ~ 1,
   time = getOption('latrend.time'),
   id = getOption('latrend.id'),
-  init = 'lme.random',
+  init = 'default',
   nClusters = 2,
   ...
 ) {
@@ -149,7 +149,7 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
     args$classmb = NULL
   }
 
-  if (hasName(method, 'init') && method$nClusters > 1 && !hasName(method, 'B')) {
+  if (hasName(method, 'init') && method$nClusters > 1) {
     init = match.arg(method$init, c('default', 'lme', 'lme.random'))
 
     switch(init,
@@ -190,7 +190,7 @@ gmm_fit = function(method, data, envir, verbose, ...) {
     # work-around for eval() of hlme() only considering global and function scope
     .latrend.lme <- envir$lme
     # args$B = quote(random(get('.latrend.lme', envir = parent.frame(3))))
-    args$B = quote(random(dynGet('.latrend.lme')))
+    args$B = quote(random(dynGet('.latrend.lme', inherits = TRUE)))
   }
 
   model = do.call(lcmm::hlme, args)

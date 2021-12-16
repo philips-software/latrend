@@ -5,11 +5,58 @@
 #' @title Compute internal model metric(s)
 #' @description Compute one or more internal metrics for the given `lcModel` object.
 #'
+#' Note that there are many metrics available, and there exists no metric that works best in all scenarios.
+#' It is recommended to carefully consider which metric is most appropriate for your use case.
+#'
+#' Recommended overview papers:
+#' \itemize{
+#'   \item \insertCite{vandernest2020overview;textual}{latrend} provide an overview of metrics for mixture models (GBTM, GMM); primarily likelihood-based or posterior probability-based metrics.
+#'   \item \insertCite{henson2007detecting;textual}{latrend} provide an overview of likelihood-based metrics for mixture models.
+#' }
+#'
 #' Call [getInternalMetricNames()] to retrieve the names of the defined internal metrics.
+#'
+#' See the _Details_ section below for a list of supported metrics.
+#' @details
+#' List of currently supported metrics:
+#'
+#' | **Metric name** | **Description** | **Function / Reference** |
+#' | --- | :-------- | :--- |
+#' | `AIC` | [Akaike information criterion](https://en.wikipedia.org/wiki/Akaike_information_criterion) | [stats::AIC()], \insertCite{akaike1974new}{latrend} |
+#' | `APPA.mean` | Mean of the average posterior probability of assignment (APPA) across clusters | [APPA()], \insertCite{nagin2005group}{latrend} |
+#' | `APPA.min` | Lowest APPA among the clusters | [APPA()], \insertCite{nagin2005group}{latrend} |
+#' | `BIC` | [Bayesian information criterion](https://en.wikipedia.org/wiki/Bayesian_information_criterion) | [stats::BIC()], \insertCite{schwarz1978estimating}{latrend} |
+#' | `CAIC` | Consistent Akaike information criterion | \insertCite{bozdogan1987model}{latrend} |
+#' | `CLC` | Classification likelihood criterion | \insertCite{mclachlan2000finite}{latrend} |
+#' | `converged` | Whether the model converged during estimation | [converged()] |
+#' | `deviance` | The model [deviance](https://en.wikipedia.org/wiki/Deviance_(statistics)) | [stats::deviance()] |
+#' | `entropy` | Entropy of the posterior probabilities | |
+#' | `estimationTime` | The time needed for fitting the model | [estimationTime()] |
+#' | `ED` | [Euclidean distance](https://en.wikipedia.org/wiki/Euclidean_distance) between the cluster trajectories and the assigned observed trajectories | |
+#' | `ED.fit` | Euclidean distance between the cluster trajectories and the assigned fitted trajectories | |
+#' | `ICL.BIC` | Integrated classification likelihood (ICL) approximated using the BIC | \insertCite{biernacki2000assessing}{latrend} |
+#' | `logLik` | Model log-[likelihood](https://en.wikipedia.org/wiki/Likelihood_function) | [stats::logLik()] |
+#' | `MAE` | [Mean absolute error](https://en.wikipedia.org/wiki/Mean_absolute_error) of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories | |
+#' | `Mahalanobis` | [Mahalanobis distance](https://en.wikipedia.org/wiki/Mahalanobis_distance) between the cluster trajectories and the assigned observed trajectories | \insertCite{mahalanobis1936generalized}{latrend} |
+#' | `MSE` | [Mean squared error](https://en.wikipedia.org/wiki/Mean_squared_error) of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories | |
+#' | `relativeEntropy`, `RE` | The normalized version of `entropy`, scaled between \[0, 1\]. | \insertCite{ramaswamy1993empirical}{latrend}, \insertCite{muthen2004latent}{latrend} |
+#' | `RSS` | [Residual sum of squares](https://en.wikipedia.org/wiki/Residual_sum_of_squares) under most likely cluster allocation | |
+#' | `scaledEntropy` | See `relativeEntropy` | |
+#' | `sigma` | The residual standard deviation | [stats::sigma()] |
+#' | `ssBIC` | Sample-size adjusted BIC | \insertCite{sclove1987application}{latrend} |
+#' | `SED` | Standardized Euclidean distance between the cluster trajectories and the assigned observed trajectories | |
+#' | `SED.fit` | The cluster-weighted standardized Euclidean distance between the cluster trajectories and the assigned fitted trajectories | |
+#' | `WMAE` | `MAE` weighted by cluster-assignment probability | |
+#' | `WMSE` | `MSE` weighted by cluster-assignment probability | |
+#' | `WRSS` | `RSS` weighted by cluster-assignment probability | |
+#'
+#' @section Implementation:
+#' See the documentation of the [defineInternalMetric()] function for details on how to define your own metrics.
 #' @param object The `lcModel`, `lcModels`, or `list` of `lcModel` objects to compute the metrics for.
 #' @param name The name(s) of the metric(s) to compute. If no names are given, the names specified in the `latrend.metric` option (WRSS, APPA, AIC, BIC) are used.
 #' @param ... Additional arguments.
 #' @return For `metric(lcModel)`: A named `numeric` vector with the computed model metrics.
+#' @references \insertAllCited{}
 #' @seealso [externalMetric] [min.lcModels] [max.lcModels]
 NULL
 
@@ -28,6 +75,13 @@ getInternalMetricNames = function() {
 #' @param fun The function to compute the metric, accepting a lcModel object as input.
 #' @param warnIfExists Whether to output a warning when the metric is already defined.
 #' @family metric functions
+#' @examples
+#' defineInternalMetric("BIC", fun = BIC)
+#'
+#' mae <- function(object) {
+#'   mean(abs(residuals(object)))
+#' }
+#' defineInternalMetric("MAE", fun = mae)
 defineInternalMetric = function(name, fun, warnIfExists = getOption('latrend.warnMetricOverride', TRUE)) {
   assert_that(is.function(fun))
   assert_that(!is.null(formalArgs(fun)), msg = 'function must accept one argument (a lcModel)')
@@ -62,7 +116,7 @@ getInternalMetricDefinition = function(name) {
 #' @importFrom stats weighted.mean
 .defineInternalDistanceMetric = function(
   name,
-  type = c('traj', 'fitted'),
+  type = c('traj', 'fit'),
   distanceFun,
   clusterAggregationFun = weighted.mean,
   assertNonEmpty = TRUE,
@@ -70,7 +124,7 @@ getInternalMetricDefinition = function(name) {
   assertNonIdentical = FALSE,
   ...
 ) {
-  type = match.arg(type[1], c('traj', 'fitted'))
+  type = match.arg(type[1], c('traj', 'fit'))
   if (type != 'traj') {
     fullName = paste(name, type, sep = '.')
   } else {
@@ -85,7 +139,7 @@ getInternalMetricDefinition = function(name) {
 
   trajFun = switch(type,
     traj = trajectories,
-    fitted = fittedTrajectories,
+    fit = fittedTrajectories,
   )
 
   fun = function(m) {
@@ -191,11 +245,11 @@ intMetricsEnv$ssBIC = function(m) {
   - 2 * ll + log((nIds(m) + 2) / 24) * df
 }
 
-intMetricsEnv$APPA = function(m) {
+intMetricsEnv$APPA.mean = function(m) {
   mean(APPA(m))
 }
 
-intMetricsEnv$APPA.lowest = function(m) {
+intMetricsEnv$APPA.min = function(m) {
   min(APPA(m))
 }
 
@@ -205,7 +259,8 @@ intMetricsEnv$BIC = BIC
 intMetricsEnv$CLC = function(m) {
   ll = logLik(m)
   df = attr(ll, 'df')
-  - 2 * ll + 2 * intMetricsEnv$entropy(m)
+  E = intMetricsEnv$entropy(m)
+  - 2 * ll + 2 * E
 }
 
 intMetricsEnv$converged = function(m) {
@@ -216,8 +271,8 @@ intMetricsEnv$converged = function(m) {
 intMetricsEnv$deviance = deviance
 
 .defineInternalDistanceMetrics(
-  name = 'Euclidean',
-  type = c('traj', 'fitted'),
+  name = 'ED',
+  type = c('traj', 'fit'),
   distanceFun = function(trajClusMat, clusVec, clusName) {
     mean(sqrt((t(trajClusMat) - clusVec) ^ 2))
   },
@@ -234,7 +289,7 @@ intMetricsEnv$estimationTime = estimationTime
 #' @importFrom stats logLik
 intMetricsEnv$logLik = logLik
 
-intMetricsEnv$ICLBIC = function(m) {
+intMetricsEnv$ICL.BIC = function(m) {
   ll = logLik(m)
   df = attr(ll, 'df')
   - 2 * ll + log(nIds(m)) * df + 2 * intMetricsEnv$entropy(m)
@@ -277,20 +332,25 @@ intMetricsEnv$MSE = function(m) {
 intMetricsEnv$relativeEntropy = function(m) {
   N = nIds(m)
   K = nClusters(m)
-  1 - intMetricsEnv$entropy(m) / (N * log(K))
+  E = intMetricsEnv$entropy(m)
+  1 - E / (N * log(K))
 }
+
+intMetricsEnv$RE = intMetricsEnv$relativeEntropy
 
 intMetricsEnv$RSS = function(m) {
   sum(residuals(m) ^ 2)
 }
+
+intMetricsEnv$scaledEntropy = intMetricsEnv$relativeEntropy
 
 intMetricsEnv$sigma = sigma
 
 # . Standardized Euclidean distance ####
 #' @importFrom stats mahalanobis
 .defineInternalDistanceMetrics(
-  name = 'stdEuclidean',
-  type = c('traj', 'fitted'),
+  name = 'SED',
+  type = c('traj', 'fit'),
   distanceFun = function(trajClusMat, clusVec, clusName) {
     varMat = diag(diag(var(trajClusMat)))
     if (det(varMat) == 0) {

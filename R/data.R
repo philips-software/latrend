@@ -45,9 +45,8 @@
 #' @source This dataset was generated based on the cluster-specific descriptive statistics table provided in Aloia et al. (2008),
 #' with some adjustments made in order to improve cluster separation for demonstration purposes.
 #'
-#' Mark S. Aloia, Matthew S. Goodwin, Wayne F. Velicer, J. Todd Arnedt, Molly Zimmerman, Jaime Skrekas, Sarah Harris, Richard P. Millman,
-#' Time Series Analysis of Treatment Adherence Patterns in Individuals with Obstructive Sleep Apnea, Annals of Behavioral Medicine,
-#' Volume 36, Issue 1, August 2008, Pages 44-53, <https://doi.org/10.1007/s12160-008-9052-9>
+#' \insertRef{aloia2008time}{latrend}
+#'
 #' @examples
 #' library(latrend)
 #' data(OSA.adherence)

@@ -40,12 +40,14 @@ test_that('gbtm with nclusters', {
 })
 
 test_that('gmm with init=lme', {
+  skip_on_cran()
   method = lcMethodTestLcmmGMM(init = 'lme')
   model = latrend(method, testLongData)
   expect_valid_lcModel(model)
 })
 
 test_that('gmm with init=lme.random', {
+  skip_on_cran()
   method = lcMethodTestLcmmGMM(init = 'lme.random')
   model = latrend(method, testLongData)
   expect_valid_lcModel(model)

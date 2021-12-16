@@ -1,7 +1,7 @@
 Package: latrend
 Type: Package
 Version: 1.2.0
-Date: 2021-11-28
+Date: 2021-12-06
 Title: A Framework for Clustering Longitudinal Data
 Description: A framework for clustering longitudinal datasets in a standardized way. Provides an interface to existing R packages for clustering longitudinal univariate trajectories, facilitating reproducible and transparent analyses. Additionally, standard tools are provided to support cluster analyses, including repeated estimation, model validation, and model assessment. The interface enables users to compare results between methods, and to implement and evaluate new methods with ease. 
 Maintainer: Niek Den Teuling <niek.den.teuling@philips.com>
@@ -26,6 +26,7 @@ BugReports: https://github.com/philips-software/latrend/issues
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
+Language: en-US
 Depends:
     R (>= 3.6.0)
 Imports:
@@ -53,9 +54,9 @@ Suggests:
     covr,
     lintr,
     tinytex,
-    longitudinalData,
-    kml,
-    lcmm,
+    longitudinalData (>= 2.4.1),
+    kml (>= 2.4.1),
+    lcmm (>= 1.9.3),
     longclust,
     mixtools,
     flexmix,

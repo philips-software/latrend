@@ -46,7 +46,7 @@ lcMethodLcmmGBTM = function(
   time = getOption('latrend.time'),
   id = getOption('latrend.id'),
   nClusters = 2,
-  init = 'lme',
+  init = 'default',
   ...
 ) {
   mc = match.call.all()

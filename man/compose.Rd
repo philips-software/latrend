@@ -3,7 +3,7 @@
 \name{compose}
 \alias{compose}
 \alias{compose,lcMethod-method}
-\title{Compose an lcMethod object}
+\title{lcMethod fit process: compose an lcMethod object}
 \usage{
 \S4method{compose}{lcMethod}(method, envir = NULL)
 }
@@ -16,7 +16,10 @@
 The evaluated and finalized \code{lcMethod} object.
 }
 \description{
-Evaluate and finalize the arguments of the given object inheriting from \code{lcMethod}.
+Note: this function should not be called directly, as it is part of the \code{lcMethod} fitting process. For fitting an \code{lcMethod} object to a dataset, see \code{\link[=latrend]{latrend()}}.
+
+The \code{compose()} function of the \code{lcMethod} object evaluates and finalizes the \code{lcMethod} arguments.
+
 The default implementation returns an updated object with all arguments having been evaluated.
 }
 \section{Implementation}{

@@ -12,6 +12,8 @@
 #' @references
 #' \insertRef{nagin2005group}{latrend}
 #'
+#' \insertRef{klijn2017introducing}{latrend}
+#'
 #' \insertRef{vandernest2020overview}{latrend}
 APPA = function(object) {
   assert_that(is.lcModel(object))
@@ -124,7 +126,7 @@ logLik.lcModel = function(object, ...) {
 #' Empty clusters will output `NA`.
 #' @references
 #' \insertRef{nagin2005group}{latrend}
-#'
+#' \insertRef{klijn2017introducing}{latrend}
 #' \insertRef{vandernest2020overview}{latrend}
 OCC = function(object) {
   assert_that(is.lcModel(object))
