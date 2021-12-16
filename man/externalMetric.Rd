@@ -77,7 +77,7 @@ Call \code{\link[=getExternalMetricNames]{getExternalMetricNames()}} to retrieve
 List of currently supported external metrics:\tabular{lll}{
    \strong{Metric name} \tab \strong{Description} \tab \strong{Function / Reference} \cr
    \code{adjustedRand} \tab \href{https://en.wikipedia.org/wiki/Rand_index\%23Adjusted_Rand_index}{Adjusted Rand index} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}}, \insertCite{hubert1985comparing}{latrend} \cr
-   \code{CohensKappa} \tab \href{https://en.wikipedia.org/wiki/Cohen\%27s_kappa}{Cohen's \eqn{\kappa}} \tab \code{\link[psych:kappa]{psych::cohen.kappa()}}, \insertCite{cohen1960coefficient}{latrend} \cr
+   \code{CohensKappa} \tab \href{https://en.wikipedia.org/wiki/Cohen\%27s_kappa}{Cohen's kappa} \tab \code{\link[psych:kappa]{psych::cohen.kappa()}}, \insertCite{cohen1960coefficient}{latrend} \cr
    \code{F} \tab \href{https://en.wikipedia.org/wiki/F-score}{F-score} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
    \code{F1} \tab \href{https://en.wikipedia.org/wiki/F-score}{F1-score}, also referred to as the \href{https://en.wikipedia.org/wiki/S\%C3\%B8rensen\%E2\%80\%93Dice_coefficient}{Sørensen–Dice Coefficient}, or Dice similarity coefficient \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
    \code{FolkesMallows} \tab \href{https://en.wikipedia.org/wiki/Fowlkes\%E2\%80\%93Mallows_index}{Fowlkes-Mallows index} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
@@ -95,7 +95,7 @@ List of currently supported external metrics:\tabular{lll}{
    \code{NVI} \tab Normalized variation of information \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
    \code{Overlap} \tab \href{https://en.wikipedia.org/wiki/Overlap_coefficient}{Overlap coefficient}, also referred to as the Szymkiewicz–Simpson coefficient \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \insertCite{vijaymeena2016survey}{latrend} \cr
    \code{PD} \tab Partition difference \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
-   \code{Phi} \tab \href{https://en.wikipedia.org/wiki/Phi_coefficient}{Phi coefficient}, denoted by \eqn{\phi}. \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr
+   \code{Phi} \tab \href{https://en.wikipedia.org/wiki/Phi_coefficient}{Phi coefficient}. \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr
    \code{precision} \tab \href{https://en.wikipedia.org/wiki/Precision_and_recall}{precision} \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr
    \code{Rand} \tab \href{https://en.wikipedia.org/wiki/Rand_index}{Rand index} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
    \code{recall} \tab \href{https://en.wikipedia.org/wiki/Precision_and_recall}{recall} \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr

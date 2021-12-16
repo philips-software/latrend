@@ -30,7 +30,7 @@
 #' | **Metric name** | **Description** | **Function / Reference** |
 #' | --- | :-------- | :--- |
 #' | `adjustedRand` | [Adjusted Rand index](https://en.wikipedia.org/wiki/Rand_index%23Adjusted_Rand_index) | [mclustcomp::mclustcomp()], \insertCite{hubert1985comparing}{latrend} |
-#' | `CohensKappa` | [Cohen's \eqn{\kappa}](https://en.wikipedia.org/wiki/Cohen%27s_kappa) | [psych::cohen.kappa()], \insertCite{cohen1960coefficient}{latrend} |
+#' | `CohensKappa` | [Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa) | [psych::cohen.kappa()], \insertCite{cohen1960coefficient}{latrend} |
 #' | `F` | [F-score](https://en.wikipedia.org/wiki/F-score) | [mclustcomp::mclustcomp()] |
 #' | `F1` | [F1-score](https://en.wikipedia.org/wiki/F-score), also referred to as the [Sørensen–Dice Coefficient](https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient), or Dice similarity coefficient | [mclustcomp::mclustcomp()] |
 #' | `FolkesMallows` | [Fowlkes-Mallows index](https://en.wikipedia.org/wiki/Fowlkes%E2%80%93Mallows_index) | [mclustcomp::mclustcomp()] |
@@ -48,7 +48,7 @@
 #' | `NVI` | Normalized variation of information | [mclustcomp::mclustcomp()] |
 #' | `Overlap` | [Overlap coefficient](https://en.wikipedia.org/wiki/Overlap_coefficient), also referred to as the Szymkiewicz–Simpson coefficient | [mclustcomp::mclustcomp()] \insertCite{vijaymeena2016survey}{latrend} |
 #' | `PD` | Partition difference | [mclustcomp::mclustcomp()] |
-#' | `Phi` | [Phi coefficient](https://en.wikipedia.org/wiki/Phi_coefficient), denoted by \eqn{\phi}. | [clusterCrit::extCriteria()] |
+#' | `Phi` | [Phi coefficient](https://en.wikipedia.org/wiki/Phi_coefficient). | [clusterCrit::extCriteria()] |
 #' | `precision` | [precision](https://en.wikipedia.org/wiki/Precision_and_recall) | [clusterCrit::extCriteria()] |
 #' | `Rand` | [Rand index](https://en.wikipedia.org/wiki/Rand_index) | [mclustcomp::mclustcomp()] |
 #' | `recall` | [recall](https://en.wikipedia.org/wiki/Precision_and_recall) | [clusterCrit::extCriteria()] |
