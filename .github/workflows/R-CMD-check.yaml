@@ -2,15 +2,16 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    # paths:
-      #- 'R/**'
-      #- 'vignettes/**'
-      #- 'tests/**'
-      #- 'data/**'
-      #- 'inst/**'
-      #- 'man/**'
-      #- 'DESCRIPTION'
-      #- 'NAMESPACE'
+    paths:
+      - '**/R-CMD-check.yml'
+      - 'R/**'
+      - 'vignettes/**'
+      - 'tests/**'
+      - 'data/**'
+      - 'inst/**'
+      - 'man/**'
+      - 'DESCRIPTION'
+      - 'NAMESPACE'
 
   pull_request:
     branches: [main, master, renv]
@@ -27,12 +28,12 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          # - {os: macOS-latest,   r: 'release', pkg-type: 'binary', renv: ''}
-          # - {os: windows-latest, r: 'release', pkg-type: 'binary', renv: ''}
+          - {os: macOS-latest,   r: 'release', pkg-type: 'binary', renv: ''}
+          - {os: windows-latest, r: 'release', pkg-type: 'binary', renv: ''}
           - {os: windows-latest, r: '3.6', pkg-type: 'binary', renv: 'dev3'}
-          # - {os: ubuntu-latest,   r: 'devel', pkg-type: 'source', renv: ''}
-          # - {os: ubuntu-latest,   r: 'release', pkg-type: 'source', renv: ''}
-          # - {os: ubuntu-latest,   r: 'oldrel-1', pkg-type: 'source', renv: ''}
+          - {os: ubuntu-latest,   r: 'devel', pkg-type: 'source', renv: ''}
+          - {os: ubuntu-latest,   r: 'release', pkg-type: 'source', renv: ''}
+          - {os: ubuntu-latest,   r: 'oldrel-1', pkg-type: 'source', renv: ''}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
