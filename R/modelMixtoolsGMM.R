@@ -3,7 +3,6 @@ setClass('lcModelMixtoolsGMM', contains = 'lcModel')
 
 
 #. clusterTrajectories ####
-#' @importFrom plyr alply
 #' @rdname interface-mixtools
 #' @inheritParams predictForCluster
 setMethod('predictForCluster', signature('lcModelMixtoolsGMM'), function(
