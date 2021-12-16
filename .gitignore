@@ -16,3 +16,4 @@ tests/testthat/*.rds
 /check.R
 .Rproj.user
 *.pdf
+check

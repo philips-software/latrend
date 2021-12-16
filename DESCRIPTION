@@ -49,6 +49,7 @@ Suggests:
     rmarkdown (>= 1.18),
     rcmdcheck,
     pkgdown,
+    devtools,
     covr,
     lintr,
     tinytex,
