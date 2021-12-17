@@ -99,6 +99,8 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
   rawdata = NULL,
   ...
 ) {
+  .loadOptionalPackage('ggplot2')
+
   assert_that(
     is.data.frame(data),
     has_name(data, response),
@@ -231,6 +233,7 @@ setMethod('plotTrajectories', signature('data.frame'),
     facet = TRUE,
     ...
   ) {
+  .loadOptionalPackage('ggplot2')
 
   assert_that(
     has_name(object, time),

@@ -5,7 +5,6 @@
 #' @import stats
 #' @importFrom Rdpack reprompt
 #' @importFrom foreach foreach %do% %dopar%
-#' @import ggplot2
 #' @importFrom utils hasName capture.output combn getS3method modifyList head tail data
 #' @aliases latrend-package
 #' @rdname latrend-package

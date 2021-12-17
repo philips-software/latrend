@@ -382,11 +382,15 @@ setMethod('plot', signature('lcModels', 'ANY'), function(x, y, ..., subset, grid
 #' methods <- lcMethods(baseMethod, nClusters = 1:3)
 #' models <- latrendBatch(methods, latrendData)
 #' plotMetric(models, c("BIC", "WRSS"))
-plotMetric = function(models,
-                      name,
-                      by = 'nClusters',
-                      subset,
-                      group = character()) {
+plotMetric = function(
+  models,
+  name,
+  by = 'nClusters',
+  subset,
+  group = character()
+) {
+  .loadOptionalPackage('ggplot2')
+
   models = as.lcModels(models)
   assert_that(length(models) > 0, msg = 'need at least 1 lcModel to plot')
   assert_that(is.character(name), length(name) >= 1)

@@ -38,7 +38,6 @@ Imports:
     foreach,
     data.table (>= 1.12.0),
     magrittr,
-    ggplot2,
     matrixStats,
     lme4
 Suggests: 
@@ -74,6 +73,7 @@ Suggests:
     doParallel,
     simTool,
     dplyr,
+    ggplot2,
     caret,
     tibble
 RoxygenNote: 7.1.2

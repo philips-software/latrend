@@ -1,5 +1,9 @@
 set.seed(1)
 
+if (requireNamespace('ggplot2')) {
+  library(ggplot2)
+}
+
 testLongData = generateLongData(
   sizes = c(20, 30),
   fixed = Value ~ 1 + Assessment,

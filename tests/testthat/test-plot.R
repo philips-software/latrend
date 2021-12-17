@@ -1,4 +1,6 @@
 context('plot')
+skip_if_not_installed('ggplot2')
+library('ggplot2')
 rngReset()
 
 test_that('plotTrajectories.data.frame', {
