@@ -1209,14 +1209,19 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
   function(object,
     what = 'mu',
     at = time(object),
-    clusterLabels = sprintf('%s (%s)',
-      clusterNames(object),
-      percent(clusterProportions(object))),
+    clusterLabels = NULL,
     trajectories = FALSE,
     facet = !isFALSE(as.logical(trajectories[1])),
     trajAssignments = trajectoryAssignments(object),
     ...
   ) {
+  if (is.null(clusterLabels)) {
+    clusterLabels = sprintf(
+      '%s (%g%%)',
+      clusterNames(object),
+      round(clusterProportions(object) * 100)
+    )
+  }
   assert_that(length(clusterLabels) == nClusters(object))
 
   clusdata = clusterTrajectories(object, at = at, what = what, ...) %>% as.data.table()

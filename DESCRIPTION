@@ -40,7 +40,6 @@ Imports:
     magrittr,
     ggplot2,
     matrixStats,
-    scales,
     lme4
 Suggests: 
     testthat (>= 3.0.0),
