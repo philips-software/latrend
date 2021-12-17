@@ -137,8 +137,6 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 <p>As an example, we apply longitudinal <span class="math inline">\(k\)</span>-means (KML). First, we need to define the method. At the very least we need to indicate the response variable the method should operate on. Secondly, we should indicate how many clusters we expect. We do not need to define the <code>id</code> and <code>time</code> arguments as we have set these as package options. We use the <code>nbRedrawing</code> argument provided by the KML package for reducing the number of repeated random starts to only a single model estimation, in order to reduce the run-time of this example.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">kmlMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span>response <span class="op">=</span> <span class="st">"Y"</span>, nClusters <span class="op">=</span> <span class="fl">2</span>, nbRedrawing <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="co">#&gt; Warning in rgl.init(initValue, onlyNULL): RGL: unable to open X11 display</span>
-<span class="co">#&gt; Warning: 'rgl.init' failed, running with 'rgl.useNULL = TRUE'.</span>
 <span class="co">#&gt; Warning: no DISPLAY variable so Tk is not available</span>
 
 <span class="va">kmlMethod</span>

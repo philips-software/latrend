@@ -125,8 +125,6 @@
 <p>We consider a KML model with 3 clusters to be our candidate model that we will validate. We defined the method with a reduced number of repeated random starts (as indicated by the <code>nbRedrawing</code> argument) in order to reduce the computation time needed in the repeated evaluations below. This is only done for demonstration purposes.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">kml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span><span class="st">"Y"</span>, nClusters <span class="op">=</span> <span class="fl">3</span>, nbRedrawing <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
-<span class="co">#&gt; Warning in rgl.init(initValue, onlyNULL): RGL: unable to open X11 display</span>
-<span class="co">#&gt; Warning: 'rgl.init' failed, running with 'rgl.useNULL = TRUE'.</span>
 <span class="co">#&gt; Warning: no DISPLAY variable so Tk is not available</span>
 <span class="va">kml</span>
 <span class="co">#&gt; lcMethodKML specifying "longitudinal k-means (KML)"</span>
