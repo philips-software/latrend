@@ -26,9 +26,11 @@ jobs:
         with:
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-renv@v2
-        with:
-          cache-version: 1
+      - uses: r-lib/actions/setup-renv@v1
+
+      - name: Install package
+        shell: Rscript {0}
+        run: devtools::install(quick = TRUE)
 
       - name: Deploy package
         run: |
