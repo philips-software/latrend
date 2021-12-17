@@ -90,7 +90,7 @@ jobs:
 
       - uses: r-lib/actions/setup-renv@v1
 
-      # - uses: r-lib/actions/check-r-package@v2
-      #   with:
-      #     args: 'c("--as-cran", "--no-multiarch")'
-      #     build_args: 'c()'
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          args: 'c("--as-cran", "--no-multiarch")'
+          build_args: 'c()'
