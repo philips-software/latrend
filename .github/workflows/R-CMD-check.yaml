@@ -65,9 +65,7 @@ jobs:
         uses: r-lib/actions/setup-tinytex@v1
 
       - name: Install makeindex
-        run: |
-          tlmgr update --self
-          tlmgr install makeindex
+        run: tlmgr install makeindex
 
       - name: Test latex
         shell: bash
@@ -78,7 +76,6 @@ jobs:
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
         run: |
-          sudo apt-get update
           sudo apt-get install -yq libglu1-mesa-dev freeglut3-dev mesa-common-dev libcurl4-openssl-dev libxml2-dev libharfbuzz-dev libfribidi-dev
           Xvfb :1 -screen 1 1024x768x24 -ac &
 
