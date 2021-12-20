@@ -1331,6 +1331,7 @@ setMethod('postprob', signature('lcModel'), function(object, ...) {
 #'    id = "Id", time = "Time"), data = latrendData)
 #' qqPlot(model)
 setMethod('qqPlot', signature('lcModel'), function(object, byCluster = FALSE, ...) {
+  .loadOptionalPackage('ggplot2')
   assert_that(is.lcModel(object))
 
   res = residuals(object, ...)
