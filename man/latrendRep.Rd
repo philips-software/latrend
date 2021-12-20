@@ -49,7 +49,7 @@ This method is faster than repeatedly calling \link{latrend} as it only prepares
 }
 \examples{
 data(latrendData)
-method <- lcMethodKML("Y", id = "Id", time = "Time")
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 models <- latrendRep(method, data = latrendData, .rep = 5) # 5 repeated runs
 
 models <- latrendRep(method, data = latrendData, .seed = 1, .rep = 3)

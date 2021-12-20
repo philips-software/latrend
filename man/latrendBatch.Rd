@@ -50,12 +50,17 @@ Methods and datasets are evaluated and validated prior to any fitting. This ensu
 }
 \examples{
 data(latrendData)
-methods <- lcMethods(lcMethodKML("Y", id = "Id", time = "Time"), nClusters = 1:3)
+refMethod <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+methods <- lcMethods(refMethod, nClusters = 1:3)
 models <- latrendBatch(methods, data = latrendData)
 
-models <- latrendBatch(lcMethods(lcMethodKML("Y", id = "Id", time = "Time"), nClusters = 1:2),
-   data = .(subset(latrendData, Time > .5),
-            subset(latrendData, Time < .5))) # different data per method
+# different dataset per method
+models <- latrendBatch(lcMethods(refMethod, nClusters = 1:2),
+   data = .(
+     subset(latrendData, Time > .5),
+     subset(latrendData, Time < .5)
+   )
+)
 
 }
 \seealso{

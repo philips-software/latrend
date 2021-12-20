@@ -43,7 +43,7 @@ Performs bootstrapping, generating samples from the given data at the id level, 
 }
 \examples{
 data(latrendData)
-method <- lcMethodKML("Y", id = "Id", time = "Time")
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 model <- latrendBoot(method, latrendData, samples = 10)
 }
 \seealso{

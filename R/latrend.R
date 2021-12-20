@@ -24,7 +24,13 @@
 #'
 #' model <- latrend(method, data = latrendData, nClusters = 3, seed = 1)
 #' @family longitudinal cluster fit functions
-latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend.verbose')) {
+latrend = function(
+  method,
+  data,
+  ...,
+  envir = NULL,
+  verbose = getOption('latrend.verbose')
+) {
   method = as.lcMethod(method)
   assert_that(!missing(data))
   envir = .selectEnvironment(method, parent.frame(), envir)
@@ -86,7 +92,7 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
 
   # done
   ruler(verbose)
-  return(model)
+  model
 }
 
 
@@ -145,7 +151,7 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
     )
   })
 
-  return(model)
+  model
 }
 
 
@@ -162,20 +168,22 @@ latrend = function(method, data, ..., envir = NULL, verbose = getOption('latrend
 #' @return A `lcModels` object containing the resulting models.
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodKML("Y", id = "Id", time = "Time")
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 #' models <- latrendRep(method, data = latrendData, .rep = 5) # 5 repeated runs
 #'
 #' models <- latrendRep(method, data = latrendData, .seed = 1, .rep = 3)
 #' @family longitudinal cluster fit functions
-latrendRep = function(method,
-                       data,
-                       .rep = 10,
-                       ...,
-                       .errorHandling = 'stop',
-                       .seed = NULL,
-                       .parallel = FALSE,
-                       envir = NULL,
-                       verbose = getOption('latrend.verbose')) {
+latrendRep = function(
+  method,
+  data,
+  .rep = 10,
+  ...,
+  .errorHandling = 'stop',
+  .seed = NULL,
+  .parallel = FALSE,
+  envir = NULL,
+  verbose = getOption('latrend.verbose')
+) {
   method = as.lcMethod(method)
   envir = .selectEnvironment(method, parent.frame(), envir)
 
@@ -297,23 +305,30 @@ latrendRep = function(method,
 #' In case of a model fit error under `errorHandling = pass`, a `list` is returned.
 #' @examples
 #' data(latrendData)
-#' methods <- lcMethods(lcMethodKML("Y", id = "Id", time = "Time"), nClusters = 1:3)
+#' refMethod <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' methods <- lcMethods(refMethod, nClusters = 1:3)
 #' models <- latrendBatch(methods, data = latrendData)
 #'
-#' models <- latrendBatch(lcMethods(lcMethodKML("Y", id = "Id", time = "Time"), nClusters = 1:2),
-#'    data = .(subset(latrendData, Time > .5),
-#'             subset(latrendData, Time < .5))) # different data per method
+#' # different dataset per method
+#' models <- latrendBatch(lcMethods(refMethod, nClusters = 1:2),
+#'    data = .(
+#'      subset(latrendData, Time > .5),
+#'      subset(latrendData, Time < .5)
+#'    )
+#' )
 #'
 #' @seealso lcMethods
 #' @family longitudinal cluster fit functions
-latrendBatch = function(methods,
-                         data,
-                         cartesian = TRUE,
-                         seed = NULL,
-                         parallel = FALSE,
-                         errorHandling = 'stop',
-                         envir = NULL,
-                         verbose = getOption('latrend.verbose')) {
+latrendBatch = function(
+  methods,
+  data,
+  cartesian = TRUE,
+  seed = NULL,
+  parallel = FALSE,
+  errorHandling = 'stop',
+  envir = NULL,
+  verbose = getOption('latrend.verbose')
+) {
   if (!is.list(methods)) {
     methods = list(methods)
   }
@@ -536,18 +551,20 @@ latrendBatch = function(methods,
 #' @return A `lcModels` object of length `samples`.
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodKML("Y", id = "Id", time = "Time")
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 #' model <- latrendBoot(method, latrendData, samples = 10)
 #' @family longitudinal cluster fit functions
 #' @family validation methods
-latrendBoot = function(method,
-                        data,
-                        samples = 50,
-                        seed = NULL,
-                        parallel = FALSE,
-                        errorHandling = 'stop',
-                        envir = NULL,
-                        verbose = getOption('latrend.verbose')) {
+latrendBoot = function(
+  method,
+  data,
+  samples = 50,
+  seed = NULL,
+  parallel = FALSE,
+  errorHandling = 'stop',
+  envir = NULL,
+  verbose = getOption('latrend.verbose')
+) {
   assert_that(is.lcMethod(method), msg = 'method must be lcMethod object (e.g., lcMethodKML("Y") )')
   assert_that(!missing(data), msg = 'data must be specified')
   assert_that(is.data.frame(data), msg = 'data must be data.frame')
@@ -622,27 +639,28 @@ latrendBoot = function(method,
 #' @return A `lcModels` object of containing the `folds` training models.
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodKML("Y", id = "Id", time = "Time")
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 #' model <- latrendCV(method, latrendData, folds = 5)
 #'
 #' model <- latrendCV(method, subset(latrendData, Time < .5), folds = 5, seed = 1)
 #' @family longitudinal cluster fit functions
 #' @family validation methods
-latrendCV = function(method,
-                      data,
-                      folds = 10,
-                      seed = NULL,
-                      parallel = FALSE,
-                      errorHandling = 'stop',
-                      envir = NULL,
-                      verbose = getOption('latrend.verbose')) {
+latrendCV = function(
+  method,
+  data,
+  folds = 10,
+  seed = NULL,
+  parallel = FALSE,
+  errorHandling = 'stop',
+  envir = NULL,
+  verbose = getOption('latrend.verbose')
+) {
   assert_that(!missing(data), msg = 'data must be specified')
   assert_that(is.data.frame(data), msg = 'data must be data.frame')
   assert_that(is.count(folds))
 
   verbose = as.Verbose(verbose)
-  header(verbose,
-         sprintf('Longitudinal clustering with %d-fold cross validation', folds))
+  header(verbose, sprintf('Longitudinal clustering with %d-fold cross validation', folds))
   ruler(verbose)
 
   if (is.null(seed)) {
@@ -679,7 +697,7 @@ latrendCV = function(method,
     envir = parent.frame()
   )
 
-  return(models)
+  models
 }
 
 
@@ -697,10 +715,12 @@ latrendCV = function(method,
 #' trainFolds <- createTrainDataFolds(latrendData, folds = 10, id = "Id")
 #'
 #' trainFolds <- createTrainDataFolds(latrendData, folds = 10, id = "Id", seed = 1)
-createTrainDataFolds = function(data,
-                                folds = 10,
-                                id = getOption('latrend.id'),
-                                seed = NULL) {
+createTrainDataFolds = function(
+  data,
+  folds = 10,
+  id = getOption('latrend.id'),
+  seed = NULL
+) {
   assert_that(
     is.count(folds),
     folds > 1,
