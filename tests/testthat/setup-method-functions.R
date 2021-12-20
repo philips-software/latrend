@@ -159,7 +159,7 @@ if (requireNamespace('lme4')) {
 
 
 lcMethodTestLMKM = function(...) {
-  lcMethodLMKM(formula = Value ~ Assessment, ...)
+  lcMethodLMKM(formula = Value ~ Assessment, ..., seed = 1)
 }
 
 

@@ -2,19 +2,18 @@ context('latrend')
 rngReset()
 
 test_that('default', {
-  model = latrend(lcMethodTestKML(), data = testLongData)
+  model = latrend(lcMethodTestLMKM(), data = testLongData)
 
   expect_is(model, 'lcModel')
   expect_equal(deparse(getCall(model)$data), 'testLongData')
   expect_equal(deparse(getCall(model)$envir), 'NULL')
 
   expect_error(latrend(), 'missing')
-  expect_error(latrend(lcMethodTestKML()), 'missing')
+  expect_error(latrend(mTest), 'missing')
 })
 
 test_that('method var', {
-  kml = lcMethodTestKML()
-  model = latrend(kml, data = testLongData)
+  model = latrend(mTest, data = testLongData)
   expect_is(model, 'lcModel')
 })
 
@@ -28,7 +27,7 @@ test_that('method name', {
 })
 
 test_that('overwritten argument', {
-  model = latrend(lcMethodTestKML(), data = testLongData, nClusters = 1)
+  model = latrend(lcMethodTestLMKM(), data = testLongData, nClusters = 1)
 
   expect_equal(nClusters(model), 1)
   expect_equal(getLcMethod(model)$nClusters, 1)
@@ -36,8 +35,7 @@ test_that('overwritten argument', {
 })
 
 test_that('method var with overwritten argument', {
-  kml = lcMethodTestKML()
-  model = latrend(kml, data = testLongData, nClusters = 1)
+  model = latrend(mTest, data = testLongData, nClusters = 1)
 
   expect_equal(nClusters(model), 1)
   expect_equal(getLcMethod(model)$nClusters, 1)
@@ -45,20 +43,20 @@ test_that('method var with overwritten argument', {
 })
 
 test_that('new method arguments', {
-  model = latrend(lcMethodTestKML(), data = testLongData, test = 2)
+  model = latrend(mTest, data = testLongData, test = 2)
 
   expect_equal(getLcMethod(model)$test, 2)
 })
 
 test_that('subset', {
-  model = latrend(lcMethodTestKML(), data = testLongData[Assessment < .5])
+  model = latrend(mTest, data = testLongData[Assessment < .5])
 
   expect_is(model, 'lcModel')
   expect_equal(deparse(getCall(model)$data), 'testLongData[Assessment < 0.5]')
 })
 
 test_that('data call', {
-  model = latrend(lcMethodTestKML(), data = as.data.table(testLongData))
+  model = latrend(mTest, data = as.data.table(testLongData))
 
   expect_is(model, 'lcModel')
   expect_equal(deparse(getCall(model)$data), 'as.data.table(testLongData)')
@@ -84,14 +82,14 @@ test_that('envir', {
 
 test_that('data.frame input', {
   df = as.data.frame(testLongData)
-  model = latrend(lcMethodTestKML(), data = df)
+  model = latrend(mTest, data = df)
 
   expect_is(model, 'lcModel')
 })
 
 test_that('matrix input', {
   mat = dcastRepeatedMeasures(testLongData, response = 'Value')
-  model = latrend(lcMethodTestKML(), data = mat)
+  model = latrend(mTest, data = mat)
 
   expect_is(model, 'lcModel')
 })
@@ -110,14 +108,14 @@ test_that('id with NA', {
   naData = copy(testLongData) %>%
     .[sample(.N, 10), Traj := NA]
 
-  expect_error(latrend(lcMethodTestKML(), data = naData))
+  expect_error(latrend(mTest, data = naData))
 })
 
 test_that('factor id', {
   facData = copy(testLongData) %>%
     .[, Traj := factor(Traj)]
 
-  model = latrend(lcMethodTestKML(), data = facData)
+  model = latrend(mTest, data = facData)
 
   expect_is(model, 'lcModel')
   expect_equal(ids(model), levels(facData$Traj))
@@ -127,7 +125,7 @@ test_that('factor id, out of order', {
   facData = copy(testLongData) %>%
     .[, Traj := factor(Traj, levels = rev(unique(Traj)))]
 
-  model = latrend(lcMethodTestKML(), data = facData)
+  model = latrend(mTest, data = facData)
 
   expect_is(model, 'lcModel')
   expect_equal(ids(model), levels(facData$Traj))
@@ -137,7 +135,7 @@ test_that('factor id with empty levels', {
   facData = copy(testLongData) %>%
     .[, Traj := factor(Traj, levels = seq(0, uniqueN(Traj) + 1))]
 
-  model = latrend(lcMethodTestKML(), data = facData)
+  model = latrend(mTest, data = facData)
 
   expect_is(model, 'lcModel')
 })
@@ -146,7 +144,7 @@ test_that('id with NA', {
   naData = copy(testLongData) %>%
     .[Traj == 1, Traj := NA]
 
-  expect_error(latrend(lcMethodTestKML(), data = naData))
+  expect_error(latrend(mTest, data = naData))
 })
 
 test_that('shuffled data', {
@@ -154,7 +152,7 @@ test_that('shuffled data', {
   shufData = copy(testLongData) %>%
     .[sample(.N)]
 
-  model = latrend(lcMethodTestKML(), data = shufData)
+  model = latrend(mTest, data = shufData)
 
   expect_is(model, 'lcModel')
 })
@@ -164,7 +162,7 @@ test_that('data with NA observations', {
   naData = copy(testLongData) %>%
     .[sample(.N, 10), Value := NA]
 
-  model = latrend(lcMethodTestKML(), data = naData)
+  model = latrend(mTest, data = naData)
 
   expect_is(model, 'lcModel')
 })
@@ -174,7 +172,7 @@ test_that('data with Inf observations', {
   infData = copy(testLongData) %>%
     .[sample(.N, 10), Value := Inf]
 
-  expect_error(latrend(lcMethodTestKML(), data = infData))
+  expect_error(latrend(mTest, data = infData))
 })
 
 test_that('data with missing observations', {

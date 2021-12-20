@@ -69,7 +69,7 @@ test_that('is_class_defined', {
 })
 
 test_that('has_lcMethod_args', {
-  expect_true(has_lcMethod_args(mTest, 'response'))
+  expect_true(has_lcMethod_args(mTest, 'seed'))
   expect_false(has_lcMethod_args(mTest, '..missing'))
 })
 
