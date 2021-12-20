@@ -34,6 +34,7 @@ getResponse = function(f) {
 }
 
 getREterms = function(f) {
+  .loadOptionalPackage('lme4')
   terms = lme4::findbars(f)
 }
 
