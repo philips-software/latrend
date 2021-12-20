@@ -129,26 +129,10 @@ or one of <code>c('info', 'fine', 'finest')</code>.</p></dd>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span><span class="st">"Y"</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu">latrendRep</span><span class="op">(</span><span class="va">method</span>, data <span class="op">=</span> <span class="va">latrendData</span>, .rep <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="co"># 5 repeated runs</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ~ Fast KmL ~</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ********************S</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ~ Fast KmL ~</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ********************S</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ~ Fast KmL ~</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ********************S</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ~ Fast KmL ~</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ********************S</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ~ Fast KmL ~</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ********************S</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu">latrendRep</span><span class="op">(</span><span class="va">method</span>, data <span class="op">=</span> <span class="va">latrendData</span>, .seed <span class="op">=</span> <span class="fl">1</span>, .rep <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ~ Fast KmL ~</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ********************S</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ~ Fast KmL ~</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ********************S</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ~ Fast KmL ~</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ********************S</span>
 </code></pre></div>
     </div>
   </div>
