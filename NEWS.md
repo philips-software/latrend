@@ -1,4 +1,9 @@
 **If you are viewing this file as part of a released version of the package, the latest news can be found [on GitHub](https://philips-software.github.io/latrend/news/).**
+# latrend v1.2.1
+1. Fewer required imports
+2. Reduced test and example time
+3. Documentation of metrics and external metrics
+4. Enabled renv for CI
 
 # latrend [v1.2.0](https://github.com/philips-software/latrend/milestone/2)
 
