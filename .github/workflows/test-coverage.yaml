@@ -2,13 +2,13 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main, master, renv]
-    #paths:
-      #- '**/test-coverage.yaml'
-      #- 'R/**'
-      #- 'tests/**'
-      #- 'DESCRIPTION'
-      #- 'NAMESPACE'
+    branches: [main, master]
+    paths:
+      - '**/test-coverage.yaml'
+      - 'R/**'
+      - 'tests/**'
+      - 'DESCRIPTION'
+      - 'NAMESPACE'
   pull_request:
     branches: [main, master]
 
@@ -29,12 +29,6 @@ jobs:
         run: sudo apt-get install -yq libcurl4-openssl-dev
 
       - uses: r-lib/actions/setup-renv@v1
-        with:
-          cache-version: 1
-          
-      - name: Install covr
-        shell: Rscript {0}
-        run: renv::install("covr")
 
       - name: Test coverage
         shell: Rscript {0}
