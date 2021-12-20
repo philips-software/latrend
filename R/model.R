@@ -1261,7 +1261,8 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
 #' plotTrajectories(model)
 setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
   data = trajectories(object, ...)
-  plotTrajectories(data,
+  plotTrajectories(
+    data,
     id = idVariable(object),
     time = timeVariable(object),
     response = responseVariable(object),
@@ -1297,7 +1298,8 @@ setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
 #' postprob(model)
 setMethod('postprob', signature('lcModel'), function(object, ...) {
   if (nIds(object) > 0) {
-    warning('postprob() not implemented for ',
+    warning(
+      'postprob() not implemented for ',
       class(object)[1],
       '. Returning uniform posterior probability matrix.'
     )
@@ -1305,9 +1307,12 @@ setMethod('postprob', signature('lcModel'), function(object, ...) {
     matrix(1 / nClusters(object), nrow = nIds(object), ncol = nClusters(object))
   }
   else {
-    warning('postprob() not implemented for ',
+    warning(
+      'postprob() not implemented for ',
       class(object)[1],
-      ' and no associated trajectories for this model. Returning empty matrix.')
+      ' and no associated trajectories for this model. Returning empty matrix.'
+    )
+
     matrix(1 / nClusters(object), nrow = 0, ncol = nClusters(object))
   }
 })
@@ -1342,17 +1347,24 @@ setMethod('qqPlot', signature('lcModel'), function(object, byCluster = FALSE, ..
   rowClusters = trajectoryAssignments(object)[idIndexColumn]
 
   requireNamespace('qqplotr')
-  p = ggplot(data = data.frame(Cluster = rowClusters, res = res), aes(sample = res)) +
+  p = ggplot2::ggplot(
+      data = data.frame(Cluster = rowClusters, res = res),
+      mapping = ggplot2::aes(sample = res)
+    ) +
     qqplotr::geom_qq_band(...) +
     qqplotr::stat_qq_line(...) +
     qqplotr::stat_qq_point(...) +
-    labs(x = 'Theoretical quantiles', y = 'Sample quantiles', title = 'Quantile-quantile plot')
+    ggplot2::labs(
+      x = 'Theoretical quantiles',
+      y = 'Sample quantiles',
+      title = 'Quantile-quantile plot'
+    )
 
-  if (byCluster) {
-    p = p + facet_wrap(~ Cluster)
+  if (isTRUE(byCluster)) {
+    p = p + ggplot2::facet_wrap(~ Cluster)
   }
 
-  return(p)
+  p
 })
 
 
@@ -1449,7 +1461,7 @@ setMethod('show', 'lcModel', function(object) {
 sigma.lcModel = function(object, ...) {
   if (is.null(object@model) ||
       is.null(getS3method('sigma', class = class(object@model)[1], optional = TRUE))) {
-    residuals(object, ...) %>% sd()
+    sd(residuals(object, ...))
   } else {
     # nocov start
     sigma(object@model, ...)
@@ -1490,7 +1502,7 @@ setMethod('strip', signature('lcModel'), function(object, ..., classes = 'formul
   newObject@method = strip(object@method, ..., classes = classes)
   newObject@call = strip(object@call, ..., classes = classes)
 
-  return(newObject)
+  newObject
 })
 
 
@@ -1505,8 +1517,6 @@ setMethod('strip', signature('lcModel'), function(object, ..., classes = 'formul
 #' idVariable(model) # "Id"
 #' @family lcModel variables
 setMethod('timeVariable', signature('lcModel'), function(object) object@time)
-
-
 
 
 #' @export

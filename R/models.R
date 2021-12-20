@@ -431,25 +431,31 @@ plotMetric = function(
     setnames('.group', 'Group')
   levels(dtgg$Metric) = name
 
-  p = ggplot(dtgg, aes_string(x = by, y = 'Value', group = 'Group'))
+  p = ggplot2::ggplot(
+    data = dtgg,
+    mapping = ggplot2::aes_string(x = by, y = 'Value', group = 'Group')
+  )
 
   if (is.numeric(dtModelMetrics[[by]]) || is.logical(dtModelMetrics[[by]])) {
-    p = p + geom_line()
+    p = p + ggplot2::geom_line()
   }
-  p = p + geom_point()
+  p = p + ggplot2::geom_point()
 
   if (by == 'nClusters') {
-    p = p + scale_x_continuous(breaks = seq(1, max(dtModelMetrics[[by]])), minor_breaks = NULL)
+    p = p + ggplot2::scale_x_continuous(
+      breaks = seq(1, max(dtModelMetrics[[by]])),
+      minor_breaks = NULL
+    )
   }
 
   if (length(name) == 1) {
-    p = p + ylab(name)
+    p = p + ggplot2::ylab(name)
   } else {
-    p = p + ylab('Value') +
-      facet_wrap( ~ Metric, scales = 'free_y')
+    p = p + ggplot2::ylab('Value') +
+      ggplot2::facet_wrap( ~ Metric, scales = 'free_y')
   }
 
-  return(p)
+  p
 }
 
 #' @export
