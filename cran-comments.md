@@ -1,3 +1,13 @@
+# v1.2.1
+* Fewer required imports
+* Reduced test and example time
+* Added documentation of cluster metrics and external metrics
+
+## Test environments
+* Windows (release, devel, 3.6)
+* Ubuntu (release and devel)
+* macOS (release)
+
 # Resubmission v1.2.0
 This is a resubmission. This version is a major update over v1.1. See NEWS.md for a list of changes.
 
