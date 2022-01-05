@@ -1,5 +1,7 @@
 set.seed(1)
 
+ON_CRAN = isTRUE(!as.logical(Sys.getenv('NOT_CRAN')))
+
 if (requireNamespace('ggplot2')) {
   library(ggplot2)
 }

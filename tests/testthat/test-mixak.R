@@ -1,5 +1,6 @@
 context('mixAK')
 skip_if_not_installed('mixAK')
+skip_on_cran()
 rngReset()
 
 test_that('default', {

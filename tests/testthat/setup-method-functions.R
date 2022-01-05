@@ -133,7 +133,7 @@ if (requireNamespace('mixtools')) {
 }
 
 # mixAK ####
-if (requireNamespace('mixAK')) {
+if (!ON_CRAN && requireNamespace('mixAK')) {
   lcMethodTestMixAK_GLMM = function(...) {
     lcMethodMixAK_GLMM(fixed = Value ~ 1, random = ~ Assessment, ..., seed = 1)
   }
