@@ -27,6 +27,7 @@ A \code{list} with the argument \code{call}s or evaluated results depending on t
 Extract the method arguments as a list
 }
 \examples{
+library(kml)
 data(latrendData)
 method <- lcMethodKML("Y", id = "Id", time = "Time")
 as.list(method)

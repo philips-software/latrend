@@ -333,6 +333,7 @@ as.character.lcMethod = function(x, ..., eval = FALSE, width = 40, prefix = '', 
 #' @param envir The `environment` in which to evaluate the arguments. If `NULL`, the environment associated with the object is used. If not available, the `parent.frame()` is used.
 #' @return A `list` with the argument `call`s or evaluated results depending on the value for `eval`.
 #' @examples
+#' library(kml)
 #' data(latrendData)
 #' method <- lcMethodKML("Y", id = "Id", time = "Time")
 #' as.list(method)
