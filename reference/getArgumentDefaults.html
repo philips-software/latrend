@@ -95,17 +95,17 @@ These arguments are automatically included into the <code>lcMethod</code> object
 having to specify all arguments every time they want to create a method specification.</p>
 <p>In this example, most of the default arguments are defined as arguments of the function
 <code>lcMethodExample</code>, which we can include in the list by calling <a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a>. Copying the arguments from functions
-is especially useful when your method implementation is based on an existing function.</p><div class="sourceCode"><pre><code><span class="kw">setMethod</span><span class="op">(</span><span class="st">"getArgumentDefaults"</span>, <span class="st">"lcMethodExample"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">{</span>
+is especially useful when your method implementation is based on an existing function.</p><div class="sourceCode"><pre><code><span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"getArgumentDefaults"</span>, <span class="st">"lcMethodExample"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
     <span class="fu"><a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a></span><span class="op">(</span><span class="va">lcMethodExample</span><span class="op">)</span>,
     <span class="fu"><a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a></span><span class="op">(</span><span class="fu">funFEM</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/funFEM/man/funFEM.html" class="external-link">funFEM</a></span><span class="op">)</span>,
     extra <span class="op">=</span> <span class="va">Value</span> <span class="op">~</span> <span class="fl">1</span>,
     tol <span class="op">=</span> <span class="fl">1e-4</span>,
-    <span class="fu">callNextMethod</span><span class="op">(</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/methods/NextMethod.html" class="external-link">callNextMethod</a></span><span class="op">(</span><span class="op">)</span>
   <span class="op">)</span>
 <span class="op">}</span><span class="op">)</span></code></pre></div>
 
-<p>It is recommended to add <code>callNextMethod()</code> to the end of the list.
+<p>It is recommended to add <code><a href="https://rdrr.io/r/methods/NextMethod.html" class="external-link">callNextMethod()</a></code> to the end of the list.
 This enables inheriting the default arguments from superclasses.</p>
     </div>
     <div id="see-also">

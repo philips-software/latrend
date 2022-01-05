@@ -98,12 +98,12 @@ The fit() function of the lcMethod object estimates the model with the evaluated
     
 
 <p>This method should be implemented for all <code>lcMethod</code> subclasses.</p>
-<div class="sourceCode"><pre><code><span class="kw">setMethod</span><span class="op">(</span><span class="st">"fit"</span>, <span class="st">"lcMethodExample"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode"><pre><code><span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"fit"</span>, <span class="st">"lcMethodExample"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># estimate the model or cluster parameters</span>
   <span class="va">coefs</span> <span class="op">&lt;-</span> <span class="va">FIT_CODE</span>
 
   <span class="co"># create the lcModel object</span>
-  <span class="fu">new</span><span class="op">(</span><span class="st">"lcModelExample"</span>,
+  <span class="fu"><a href="https://rdrr.io/r/methods/new.html" class="external-link">new</a></span><span class="op">(</span><span class="st">"lcModelExample"</span>,
     method <span class="op">=</span> <span class="va">method</span>,
     data <span class="op">=</span> <span class="va">data</span>,
     model <span class="op">=</span> <span class="va">coefs</span>,

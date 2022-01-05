@@ -97,7 +97,7 @@ By default, the cluster proportions are determined from the cluster-averaged pos
     <h2>Implementation</h2>
     
 
-<p>Classes extending <code>lcModel</code> can override this method to return, for example, the exact estimated mixture proportions based on the model coefficients.</p><div class="sourceCode"><pre><code><span class="kw">setMethod</span><span class="op">(</span><span class="st">"clusterProportions"</span>, <span class="st">"lcModelExt"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+<p>Classes extending <code>lcModel</code> can override this method to return, for example, the exact estimated mixture proportions based on the model coefficients.</p><div class="sourceCode"><pre><code><span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"clusterProportions"</span>, <span class="st">"lcModelExt"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># return cluster proportion vector</span>
 <span class="op">}</span><span class="op">)</span></code></pre></div>
 

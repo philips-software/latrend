@@ -85,7 +85,7 @@ In order to make use of parallel execution, a parallel back-end must be register
 
 <p>If you defined your own <code>lcMethod</code> or <code>lcModel</code> extension classes, make sure to load them on the workers as well.
 This can be done, for example, using:</p><div class="sourceCode"><pre><code><span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/clusterApply.html" class="external-link">clusterEvalQ</a></span><span class="op">(</span><span class="va">cl</span>,
-  expr <span class="op">=</span> <span class="kw">setClass</span><span class="op">(</span><span class="st">'lcMethodMyImpl'</span>, contains <span class="op">=</span> <span class="st">"lcMethod"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+  expr <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/methods/setClass.html" class="external-link">setClass</a></span><span class="op">(</span><span class="st">'lcMethodMyImpl'</span>, contains <span class="op">=</span> <span class="st">"lcMethod"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 
     </div>
     <div id="unix">

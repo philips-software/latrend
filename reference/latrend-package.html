@@ -100,7 +100,7 @@ The <code><a href="plotTrajectories.html">plotTrajectories()</a></code> function
 <p>The specified method is then estimated on the data using the generic estimation procedure function <code><a href="latrend.html">latrend()</a></code>:</p><div class="sourceCode"><pre><code><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">kmlMethod</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></code></pre></div>
 
 <p>Analyze the fitted model</p><div class="sourceCode"><pre><code><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">model</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WMAE"</span>, <span class="st">"BIC"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/qqPlot.html">qqPlot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
 

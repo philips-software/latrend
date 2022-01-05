@@ -102,9 +102,9 @@ The name of the fitted <code>lcModel</code> is determined by its associated <cod
     <h2>Implementation</h2>
     
 
-<p>When implementing your own <code>lcMethod</code> subclass, override these methods to provide full and abbreviated names.</p><div class="sourceCode"><pre><code><span class="kw">setMethod</span><span class="op">(</span><span class="st">"getName"</span>, <span class="st">"lcMethodExample"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="st">"example name"</span><span class="op">)</span>
+<p>When implementing your own <code>lcMethod</code> subclass, override these methods to provide full and abbreviated names.</p><div class="sourceCode"><pre><code><span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"getName"</span>, <span class="st">"lcMethodExample"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="st">"example name"</span><span class="op">)</span>
 
-<span class="kw">setMethod</span><span class="op">(</span><span class="st">"getShortName"</span>, <span class="st">"lcMethodExample"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="st">"EX"</span><span class="op">)</span></code></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"getShortName"</span>, <span class="st">"lcMethodExample"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">object</span><span class="op">)</span> <span class="st">"EX"</span><span class="op">)</span></code></pre></div>
 
 <p>Similar methods can be implemented for your <code>lcModel</code> subclass,
 however in practice this is not needed as the names are determined by default from the <code>lcMethod</code> object that was used to fit the <code>lcModel</code> object.</p>
