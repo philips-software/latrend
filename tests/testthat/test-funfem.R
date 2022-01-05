@@ -6,6 +6,10 @@ library(funFEM)
 data(CanadianWeather)
 femData = CanadianWeather$dailyAv[,,'Temperature.C'] %>% t()
 
+lcMethodTestFunFEM = function(...) {
+  lcMethodFunFEM(response = 'Value', ...)
+}
+
 test_that('default', {
   suppressWarnings({
     model = latrend(lcMethodTestFunFEM(), femData)

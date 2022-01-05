@@ -2,6 +2,19 @@ context('flexmix')
 skip_if_not_installed('flexmix')
 rngReset()
 
+lcMethodTestFlexmixGBTM = function(...) {
+  lcMethodFlexmixGBTM(
+    formula = Value ~ Assessment,
+    ...,
+    control = list(iter.max = 1, tolerance = 1e-3),
+    seed = 1
+  )
+}
+
+lcMethodTestFlexmix = function(...) {
+  lcMethodFlexmix(formula = Value ~ 0, ...)
+}
+
 test_that('default', {
   model = latrend(lcMethodTestFlexmix(), data=testLongData)
   expect_valid_lcModel(model)

@@ -3,6 +3,10 @@ skip_if_not_installed('mixAK')
 skip_on_cran()
 rngReset()
 
+lcMethodTestMixAK_GLMM = function(...) {
+  lcMethodMixAK_GLMM(fixed = Value ~ 1, random = ~ Assessment, ..., seed = 1)
+}
+
 test_that('default', {
   suppressWarnings({
     m = lcMethodTestMixAK_GLMM(PED = FALSE, nClusters = 2)

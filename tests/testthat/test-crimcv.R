@@ -9,6 +9,29 @@ library(crimCV)
 data(TO1adj)
 subTO1adj = TO1adj[1:100, seq(1, ncol(TO1adj), by = 2)]
 
+lcMethodTestCrimCV = function(...) {
+  lcMethodCrimCV(
+    response = 'Value',
+    ...,
+    model = 'ZIP',
+    dpolyp = 2,
+    dpolyl = 1,
+    init = 5,
+    seed = 1
+  )
+}
+
+lcMethodTestCrimCVt = function(...) {
+  lcMethodCrimCV(
+    response = 'Value',
+    ...,
+    model = 'ZIPt',
+    dpolyp = 2,
+    init = 5,
+    seed = 1
+  )
+}
+
 test_that('default tau', {
   suppressWarnings({
     model = latrend(lcMethodTestCrimCVt(), subTO1adj)
