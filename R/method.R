@@ -1020,10 +1020,9 @@ update.lcMethod = function(object, ..., .eval = FALSE, .remove = character(), en
   updateFormulaMask = formulaMask & defMask
 
   if (any(updateFormulaMask)) {
-    oldFormulaArgs = lapply(uargNames[updateFormulaMask], function(name)
-      object[[name]])
+    oldFormulaArgs = lapply(uargNames[updateFormulaMask], function(name) object[[name]])
     ucall[updateFormulaMask] =
-      mapply(update.formula, oldFormulaArgs, uargValues[updateFormulaMask], SIMPLIFY = FALSE) %>%
+      Map(update.formula, oldFormulaArgs, uargValues[updateFormulaMask]) %>%
       lapply(match.call, definition = formula)
   }
 

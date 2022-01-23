@@ -376,14 +376,18 @@ setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, ob
     )
   }
   metricFuns = lapply(name[funMask], getExternalMetricDefinition)
-  metricValues = mapply(function(fun, name) {
-    value = fun(object, object2)
-    assert_that(
-      is.scalar(value) && (is.numeric(value) || is.logical(value)),
-      msg = sprintf('invalid output for metric "%s"; expected scalar number or logical value', name)
-    )
-    return(value)
-  }, metricFuns, name[funMask])
+  metricValues = Map(
+    function(fun, name) {
+      value = fun(object, object2)
+      assert_that(
+        is.scalar(value) && (is.numeric(value) || is.logical(value)),
+        msg = sprintf('invalid output for metric "%s"; expected scalar number or logical value', name)
+      )
+      return(value)
+    },
+    metricFuns,
+    name[funMask]
+  )
 
   allMetrics = rep(NA * 0, length(name))
   allMetrics[funMask] = unlist(metricValues)
@@ -671,17 +675,21 @@ setMethod('metric', signature('lcModel'), function(object, name, ...) {
     )
   }
   metricFuns = lapply(name[funMask], getInternalMetricDefinition)
-  metricValues = mapply(function(fun, name) {
-    value = fun(object)
-    assert_that(
-      is.scalar(value) && (is.numeric(value) || is.logical(value)),
-      msg = sprintf(
-        'invalid output for metric "%s"; expected scalar number or logical value',
-        name
+  metricValues = Map(
+    function(fun, name) {
+      value = fun(object)
+      assert_that(
+        is.scalar(value) && (is.numeric(value) || is.logical(value)),
+        msg = sprintf(
+          'invalid output for metric "%s"; expected scalar number or logical value',
+          name
+        )
       )
-    )
-    return(value)
-  }, metricFuns, name[funMask])
+      return(value)
+    },
+    metricFuns,
+    name[funMask]
+  )
 
   allMetrics = rep(NA * 0, length(name))
   allMetrics[funMask] = unlist(metricValues)
@@ -930,13 +938,12 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
     names(clusdataList) = clusterNames(object)
   }
 
-  predList = mapply(
+  predList = Map(
     function(cname, cdata) {
       predictForCluster(object, cluster = cname, newdata = cdata, what = what, ...)
     },
     names(clusdataList),
-    clusdataList,
-    SIMPLIFY = FALSE
+    clusdataList
   )
 
   assert_that(

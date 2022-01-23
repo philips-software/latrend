@@ -124,7 +124,7 @@ lcMethods = function(method, ..., envir = NULL) {
   }
   else {
     methodList = apply(combIdx, 1, function(idx) {
-      methodArgs = mapply('[[', allArgs, idx, SIMPLIFY = FALSE)
+      methodArgs = Map('[[', allArgs, idx)
       do.call(update, c(object = method, methodArgs, envir = envir))
     })
   }

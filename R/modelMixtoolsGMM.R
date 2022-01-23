@@ -30,7 +30,7 @@ setMethod('predictForCluster', signature('lcModelMixtoolsGMM'), function(
       all(names(XidList) %in% names(ranefList)),
       msg = 'unknown Ids specified in newdata. prediction for new Ids is not supported')
 
-    predMat = mapply('%*%', XidList, ranefList[names(XidList)], SIMPLIFY = FALSE) %>%
+    predMat = Map('%*%', XidList, ranefList[names(XidList)]) %>%
       do.call(rbind, .) + predFix
     assert_that(nrow(predMat) == nrow(newdata))
   } else {

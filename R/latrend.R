@@ -409,7 +409,7 @@ latrendBatch = function(
   # transform data
   enter(verbose, sprintf('Checking and transforming the data format for %d datasets.', nData), suffix = '', level = verboseLevels$fine)
   allData = lapply(allDataOpts, eval, envir = envir)
-  allModelData = mapply(
+  allModelData = Map(
     function(data, method) {
       trajectories(
         data,
@@ -420,8 +420,7 @@ latrendBatch = function(
       )
     },
     allData,
-    allMethods,
-    SIMPLIFY = FALSE
+    allMethods
   )
 
   assert_that(
@@ -433,7 +432,7 @@ latrendBatch = function(
 
   # validate methods on data
   enter(verbose, sprintf('Validating methods against the datasets (%d checks).', nModels), level = verboseLevels$fine, suffix = '')
-  mapply(validate, allMethods, allModelData, SIMPLIFY = FALSE)
+  Map(validate, allMethods, allModelData)
   exit(verbose, level = verboseLevels$finest)
 
   # seeds
@@ -444,7 +443,7 @@ latrendBatch = function(
 
   # update methods that don't have a seed argument
   seedMask = !vapply(allMethods, hasName, 'seed', FUN.VALUE = TRUE)
-  allMethods[seedMask] = mapply(
+  allMethods[seedMask] = Map(
     function(method, seed) update(method, seed = seed, .eval = TRUE),
     allMethods[seedMask],
     allSeeds[seedMask]
@@ -595,7 +594,7 @@ latrendBoot = function(
   assert_that(has_name(data, id))
 
   # fit models
-  methods = replicate(samples, method)
+  methods = replicate(samples, method, simplify = FALSE)
 
   dataCalls = lapply(sampleSeeds, function(s)
     enquote(substitute(

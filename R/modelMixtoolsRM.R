@@ -49,7 +49,7 @@ setMethod('clusterTrajectories', signature('lcModelMixtoolsRM'), function(
       )
     }
 
-    statMat = mapply(statFun, comboMat[, 1], comboMat[, 2], SIMPLIFY = FALSE) %>%
+    statMat = Map(statFun, comboMat[, 1], comboMat[, 2]) %>%
       do.call(rbind, .)
 
     dtStats = cbind(comboMat, statMat) %>%
