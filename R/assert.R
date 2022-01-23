@@ -202,3 +202,26 @@ assertthat::on_failure(is_valid_postprob) = function(call, env) {
     isTRUE(all.equal(rowSums(pp), rep(1, nrow(pp))))
   )
 }
+
+.warnIfTrajLength = function(method, data, n = getOption('latrend.warnTrajectoryLength', default = 1)) {
+  if (n > 0) {
+    id = idVariable(method)
+    time = timeVariable(method)
+    assert_that(has_name(data, c(id, time)))
+    trajObs = subset(data, select = c(id, time)) %>%
+      as.data.table() %>%
+      .[, .(N = uniqueN(get(time))), by = c(id)]
+
+    lowIds = trajObs[N <= n, get(id)]
+    if (length(lowIds) > 0) {
+      warning(
+        sprintf(
+          'Input dataset contains %d trajectories having %d observation(s) or fewer.\nThis warning can be disabled using options(latrend.warnTrajectoryLength = 0).\nFlagged trajectories: %s',
+          length(lowIds),
+          n,
+          paste0('"', lowIds, '"', collapse = ', ')
+        )
+      )
+    }
+  }
+}

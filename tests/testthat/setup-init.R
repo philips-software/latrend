@@ -5,6 +5,7 @@ options(latrend.time = 'Assessment')
 options(latrend.verbose = R.utils::Verbose())
 options(latrend.warnModelDataClusterColumn = FALSE)
 options(latrend.warnNewDataClusterColumn = FALSE)
+options(latrend.warnTrajectoryLength = 0)
 
 foreach::registerDoSEQ()
 

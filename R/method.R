@@ -1199,6 +1199,8 @@ setMethod('timeVariable', signature('lcMethod'), function(object, ...) object$ti
 #' }
 #' @seealso [assertthat::validate_that]
 setMethod('validate', signature('lcMethod'), function(method, data, envir = NULL, ...) {
+  .warnIfTrajLength(method, data)
+
   validate_that(
     hasName(data, idVariable(method)),
     hasName(data, timeVariable(method)),

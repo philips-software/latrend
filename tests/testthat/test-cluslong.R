@@ -214,3 +214,9 @@ test_that('setting different seeds yields different result', {
   expect_true(getLcMethod(model2)$seed == 2)
   expect_true(!isTRUE(all.equal(trajectoryAssignments(model1), trajectoryAssignments(model2))))
 })
+
+test_that('trajectory length warning', {
+  options(latrend.warnTrajectoryLength = 1e3)
+  expect_warning(latrend(mTest, data = testLongData), regexp = 'warnTrajectoryLength')
+  options(latrend.warnTrajectoryLength = 0)
+})

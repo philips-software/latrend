@@ -143,7 +143,8 @@ NULL
     latrend.printOptions = FALSE,
     latrend.printSharedModelArgs = FALSE,
     latrend.warnModelDataClusterColumn = TRUE,
-    latrend.warnNewDataClusterColumn = TRUE
+    latrend.warnNewDataClusterColumn = TRUE,
+    latrend.warnTrajectoryLength = 1
   )
 
   optMask = !(names(opts) %in% names(options()))
