@@ -16,11 +16,11 @@ vignettes/*.R
 vignettes/*.html
 tests/testthat/*.rds
 /MixTVEM.r
-/inst/REFERENCES.bib.bak
-/inst/REFERENCES.bib.sav
-/inst/REFERENCES.bib.sav.bak
 /check.R
 .Rproj.user
 *.pdf
+*.bak
+*.sav
+*.tmp
 check
 nul
