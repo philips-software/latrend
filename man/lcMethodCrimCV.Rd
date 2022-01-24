@@ -28,7 +28,9 @@ The following external arguments are ignored: Dat, ng.}
 Specify a zero-inflated repeated-measures GBTM method
 }
 \examples{
-\donttest{
+# This example is not tested because crimCV sometimes fails
+# to converge and throws the error "object 'Frtr' not found"
+\dontrun{
 library(crimCV)
 data(latrendData)
 method <- lcMethodCrimCV("Y", id = "Id", time = "Time", nClusters = 3, dpolyp = 1, init = 2)
