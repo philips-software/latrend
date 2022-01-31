@@ -315,7 +315,8 @@ test_that('as.data.frame with vector arguments', {
   refDf = data.frame(
     null = NA,
     vec = 'c("a", "b")',
-    ab = 'LETTERS[1:26]'
+    ab = 'LETTERS[1:26]',
+    stringsAsFactors = FALSE
   )
   expect_equal(df, refDf)
 
@@ -323,7 +324,8 @@ test_that('as.data.frame with vector arguments', {
   refDf2 = data.frame(
     null = NA,
     vec = 'c("a", "b")',
-    ab = sprintf('c(%s)', paste0('"', LETTERS[1:26], '"', collapse = ', '))
+    ab = sprintf('c(%s)', paste0('"', LETTERS[1:26], '"', collapse = ', ')),
+    stringsAsFactors = FALSE
   )
   expect_equal(df2, refDf2)
 })
