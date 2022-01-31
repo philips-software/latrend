@@ -308,14 +308,14 @@ test_that('as.data.frame with vector arguments', {
     'lcMethodTest',
     null = NULL,
     vec = c('a', 'b'),
-    ab = LETTERS[1:3]
+    ab = LETTERS[1:26]
   )
 
   df = as.data.frame(m, eval = FALSE)
   refDf = data.frame(
     null = NA,
     vec = 'c("a", "b")',
-    ab = 'LETTERS[1:3]'
+    ab = 'LETTERS[1:26]'
   )
   expect_equal(df, refDf)
 
@@ -323,7 +323,7 @@ test_that('as.data.frame with vector arguments', {
   refDf2 = data.frame(
     null = NA,
     vec = 'c("a", "b")',
-    ab = 'c("A", "B", "C")'
+    ab = sprintf('c(%s)', paste0('"', LETTERS[1:26], '"', collapse = ', '))
   )
   expect_equal(df2, refDf2)
 })

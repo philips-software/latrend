@@ -424,7 +424,7 @@ as.data.frame.lcMethod = function(x, ..., eval = TRUE, nullValue = NA, envir = N
       nullValue
     } else if (is.atomic(a)) {
       if (length(a) > 1) {
-        deparse(a) %>% as.character()
+        deparse(a) %>% as.character() %>% paste0(collapse = '')
       } else {
         a
       }
