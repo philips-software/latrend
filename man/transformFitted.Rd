@@ -39,8 +39,8 @@ The prediction ordering depends on the ordering of the data observations that wa
 By default, \code{transformFitted()} accepts one of the following inputs:
 \describe{
 \item{\code{data.frame}}{A \code{data.frame} in long format providing a cluster-specific prediction for each observation per row, with column names \code{"Fit"} and \code{"Cluster"}. This \code{data.frame} therefore has \code{nobs(object) * nClusters(object)} rows.}
-\item{\code{matrix}}{An N-by-K \code{matrix} where each row provides the cluster-specific predictions for the respective observation. Here, \code{N = nobs(object)} and \code{K = nClusters(object)}.}
-\item{\code{list}}{A \code{list} of cluster-specific prediction \code{vector}s. Each prediction vector should be of length \code{nobs(object)}. The overall (named) list of cluster-specific prediction vectors is of length \code{nClusters(object)}.}
+\item{\code{matrix}}{An N-by-K \code{matrix} where each row provides the cluster-specific predictions for the respective observation. Here, \code{N = nrow(model.data(object))} and \code{K = nClusters(object)}.}
+\item{\code{list}}{A \code{list} of cluster-specific prediction \code{vector}s. Each prediction vector should be of length \code{nrow(model.data(object))}. The overall (named) list of cluster-specific prediction vectors is of length \code{nClusters(object)}.}
 }
 
 Users can implement support for other prediction formats by defining the \code{transformFitted} method with other signatures.

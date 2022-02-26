@@ -14,8 +14,8 @@
 #' By default, `transformFitted()` accepts one of the following inputs:
 #' \describe{
 #'  \item{`data.frame`}{A `data.frame` in long format providing a cluster-specific prediction for each observation per row, with column names `"Fit"` and `"Cluster"`. This `data.frame` therefore has `nobs(object) * nClusters(object)` rows.}
-#'  \item{`matrix`}{An N-by-K `matrix` where each row provides the cluster-specific predictions for the respective observation. Here, `N = nobs(object)` and `K = nClusters(object)`.}
-#'  \item{`list`}{A `list` of cluster-specific prediction `vector`s. Each prediction vector should be of length `nobs(object)`. The overall (named) list of cluster-specific prediction vectors is of length `nClusters(object)`.}
+#'  \item{`matrix`}{An N-by-K `matrix` where each row provides the cluster-specific predictions for the respective observation. Here, `N = nrow(model.data(object))` and `K = nClusters(object)`.}
+#'  \item{`list`}{A `list` of cluster-specific prediction `vector`s. Each prediction vector should be of length `nrow(model.data(object))`. The overall (named) list of cluster-specific prediction vectors is of length `nClusters(object)`.}
 #' }
 #'
 #' Users can implement support for other prediction formats by defining the `transformFitted` method with other signatures.
@@ -68,7 +68,7 @@ setGeneric('transformFitted', function(pred, model, clusters = NULL) {
 #' @aliases transformFitted,NULL,lcModel-method
 setMethod('transformFitted', signature('NULL', 'lcModel'), function(pred, model, clusters) {
   suppressWarnings({
-    newpred = matrix(NA_real_, nrow = nobs(model), ncol = nClusters(model))
+    newpred = matrix(NA_real_, nrow = .ndobs(model), ncol = nClusters(model))
   })
   colnames(newpred) = clusterNames(model)
 
@@ -82,7 +82,7 @@ setMethod('transformFitted', signature('matrix', 'lcModel'), function(pred, mode
     assert_that(
       is.numeric(pred),
       ncol(pred) == nClusters(model),
-      nrow(pred) == nobs(model),
+      nrow(pred) == .ndobs(model),
       has_colnames(pred),
       is_valid_cluster_name(colnames(pred), model = model),
       all(clusterNames(model) %in% colnames(pred))
@@ -129,8 +129,8 @@ setMethod('transformFitted', signature('data.frame', 'lcModel'), function(pred, 
   )
 
   assert_that(
-    all(aggregate(. ~ Cluster, pred, length)$Fit == nobs(model)),
-    msg = sprintf('The number of rows per cluster does not match the number of models observations: Expecting %d rows per cluster', nobs(model))
+    all(aggregate(. ~ Cluster, pred, length)$Fit == .ndobs(model)),
+    msg = sprintf('The number of rows per cluster does not match the number of model observations: Expecting %d rows per cluster', nobs(model))
   )
 
   predmat = unstack(pred, Fit ~ Cluster) %>% as.matrix()
@@ -153,7 +153,7 @@ setMethod('transformFitted', signature('data.frame', 'lcModel'), function(pred, 
 #' By default, `transformPredict()` accepts one of the following inputs:
 #' \describe{
 #'  \item{`data.frame`}{A `data.frame` in long format providing a cluster-specific prediction for each observation per row, with column names `"Fit"` and `"Cluster"`.
-#'  This `data.frame` therefore has `nobs(object) * nClusters(object)` rows.}
+#'  This `data.frame` therefore has `nrow(model.data(object)) * nClusters(object)` rows.}
 #'  \item{`matrix`}{An N-by-K `matrix` where each row provides the cluster-specific predictions for the respective observations in `newdata`.
 #'  Here, `N = nrow(newdata)` and `K = nClusters(object)`.}
 #'  \item{`vector`}{A `vector` of length `nrow(newdata)` with predictions corresponding to the rows of `newdata`.}

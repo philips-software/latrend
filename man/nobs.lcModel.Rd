@@ -2,7 +2,7 @@
 % Please edit documentation in R/model.R
 \name{nobs.lcModel}
 \alias{nobs.lcModel}
-\title{Extract the number of observations from a lcModel}
+\title{Number of observations used for the lcModel fit}
 \usage{
 \method{nobs}{lcModel}(object, ...)
 }
@@ -12,7 +12,8 @@
 \item{...}{Additional arguments.}
 }
 \description{
-Extract the number of observations from a lcModel
+Extracts the number of observations that contributed information towards fitting the cluster trajectories of the respective \code{lcModel} object.
+Therefore, only non-missing response observations count towards the number of observations.
 }
 \examples{
 data(latrendData)
