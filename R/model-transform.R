@@ -99,7 +99,7 @@ setMethod('transformFitted', signature('matrix', 'lcModel'), function(pred, mode
   } else {
     clusters = make.clusterIndices(model, clusters)
     rowClusters = clusters[make.idRowIndices(model)]
-    rowColumns(pred, rowClusters)
+    .rowColumns(pred, rowClusters)
   }
 })
 
@@ -302,7 +302,7 @@ setMethod('transformPredict', signature('matrix', 'lcModel'), function(pred, mod
 
   if (hasName(newdata, 'Cluster')) {
     rowClusters = make.clusterIndices(model, newdata$Cluster)
-    data.frame(Fit = rowColumns(pred, rowClusters))
+    data.frame(Fit = .rowColumns(pred, rowClusters))
   } else {
     data.frame(Fit = as.vector(pred)) %>%
       split(clusterNames(model, factor = TRUE) %>% rep(each = nrow(pred)))
