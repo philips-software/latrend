@@ -1,50 +1,20 @@
 context('KML model')
 skip_if_not_installed('kml')
 rngReset()
+tests = c(DEFAULT_LATREND_TESTS)
 
-test_that('method', {
-  kml = lcMethodTestKML()
-  expect_output(print(kml))
-})
+make.kml = function(...) {
+  lcMethodKML(..., nbRedrawing = 1, maxIt = 10, seed = 1)
+}
 
-test_that('default', {
-  m = lcMethodTestKML()
-  expect_silent({
-    model = latrend(m, testLongData)
-  })
-  expect_valid_lcModel(model)
-})
+test.latrend('lcMethodKML', instantiator = make.kml, tests = tests)
 
-test_that('BIC', {
-  methods = lcMethods(lcMethodTestKML(), nClusters=c(1, 5))
-  models = latrendBatch(methods, testLongData)
-
-  expect_is(BIC(models[[1]]), 'numeric')
-  expect_is(BIC(models[[2]]), 'numeric')
-})
-
-test_that('nclusters', {
-  methods = lcMethods(lcMethodTestKML(), nClusters=c(1, 5))
-  models = latrendBatch(methods, testLongData)
-
-  expect_valid_lcModel(models[[1]])
-  expect_valid_lcModel(models[[2]])
-})
-
-test_that('fitted', {
-  m = lcMethodTestKML()
-  model = latrend(m, testLongData)
-
-  dtft = fittedTrajectories(model) %>% as.data.table()
-  expect_true(all(dtft[, uniqueN(Value), keyby=Cluster]$V1 == length(time(model))))
-})
-
-test_that('predictPostprob', {
-  model = latrend(lcMethodTestKML(), testLongData)
-  testData = testLongData[Traj %in% unique(Traj)[1:3]]
-  pp = predictPostprob(model, newdata = testData)
-  expect_true(is_valid_postprob(pp, model))
-})
+# test_that('predictPostprob', {
+#   model = latrend(lcMethodTestKML(), testLongData)
+#   testData = testLongData[Traj %in% unique(Traj)[1:3]]
+#   pp = predictPostprob(model, newdata = testData)
+#   expect_true(is_valid_postprob(pp, model))
+# })
 
 test_that('cld.Rdata not present', {
   expect_false(file.exists('cld.Rdata'))
