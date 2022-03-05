@@ -3,8 +3,8 @@
 ####
 
 # Prepare data ####
-S = 25
-M = 4
+S = 25 # trajectories per cluster
+M = 4 # number of observations per trajectory
 trajNames = paste0('S', seq_len(S * 2))
 moments = seq_len(M)
 

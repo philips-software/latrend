@@ -1,54 +1,46 @@
 context('LCMM models')
 skip_if_not_installed('lcmm')
 rngReset()
+tests = c(DEFAULT_LATREND_TESTS)
 
-test_that('default gmm', {
-  m = lcMethodTestLcmmGMM()
-  expect_silent({
-    model = latrend(m, testLongData)
-  })
-  expect_valid_lcModel(model)
-})
+# GMM ####
+make.gmm = function(id, time, response, ..., init = NULL) {
+  mc = match.call.all()
+  mc$fixed = as.formula(sprintf('%s ~ 1', response))
+  mc$id = id
+  mc$time = time
+  mc$maxiter = 10
+  mc$seed = 1
 
-test_that('gmm with single cluster', {
-  model = latrend(lcMethodTestLcmmGMM(), testLongData, nClusters = 1)
-  expect_valid_lcModel(model)
-})
+  do.call(lcMethodLcmmGMM, as.list(mc)[-1]) %>% evaluate()
+}
 
-test_that('gmm with empty cluster', {
-  model = latrend(lcMethodTestLcmmGMM(), testLongData, nClusters = 5)
-  expect_valid_lcModel(model)
-})
-
-test_that('gmm unspecified time warning', {
-  expect_warning(
-    latrend(lcMethodTestLcmmGMM(), data = testLongData, nClusters = 1, fixed = ~ Constant)
-  )
-})
-
-test_that('default gbtm', {
-  m = lcMethodTestLcmmGBTM()
-  expect_silent({
-    model = latrend(m, testLongData)
-  })
-  expect_valid_lcModel(model)
-})
-
-test_that('gbtm with nclusters', {
-  model = latrend(lcMethodTestLcmmGBTM(), testLongData, nClusters = 1)
-  expect_valid_lcModel(model)
-})
+test.latrend('lcMethodLcmmGMM', instantiator = make.gmm, tests = tests)
 
 test_that('gmm with init=lme', {
   skip_on_cran()
-  method = lcMethodTestLcmmGMM(init = 'lme')
+  method = make.gmm(id = 'Traj', time = 'Assessment', response = 'Value', init = 'lme')
   model = latrend(method, testLongData)
-  expect_valid_lcModel(model)
+  expect_true(is.lcModel(model))
 })
 
 test_that('gmm with init=lme.random', {
   skip_on_cran()
-  method = lcMethodTestLcmmGMM(init = 'lme.random')
+  method = make.gmm(id = 'Traj', time = 'Assessment', response = 'Value', init = 'lme.random')
   model = latrend(method, testLongData)
-  expect_valid_lcModel(model)
+  expect_true(is.lcModel(model))
 })
+
+# GBTM ####
+make.gbtm = function(id, time, response, ..., init = NULL) {
+  mc = match.call.all()
+  mc$fixed = as.formula(sprintf('%s ~ 1', response))
+  mc$id = id
+  mc$time = time
+  mc$maxiter = 10
+  mc$seed = 1
+
+  do.call(lcMethodLcmmGBTM, as.list(mc)[-1]) %>% evaluate()
+}
+
+test.latrend('lcMethodLcmmGBTM', instantiator = make.gbtm, tests = tests)
