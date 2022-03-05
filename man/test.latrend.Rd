@@ -11,6 +11,7 @@ test.latrend(
   tests = c("method", "basic", "fitted", "predict", "cluster-single", "cluster-three"),
   maxFails = 5L,
   errorOnFail = FALSE,
+  checkClusterRecovery = c("warn", "ignore", "fail"),
   verbose = TRUE
 )
 }
@@ -25,7 +26,12 @@ returning an object inheriting from the \code{lcMethod} specified by the \code{c
 
 \item{tests}{A \code{character} vector indicating the type of tests to run, as defined in the \verb{*.Rraw} files inside the \verb{/test/} folder.}
 
+\item{maxFails}{The maximum number of allowed test condition failures before testing is ended prematurely.}
+
 \item{errorOnFail}{Whether to throw the test errors as an error. This is always enabled while running package tests.}
+
+\item{checkClusterRecovery}{Whether to test for correct recovery/identification of the original clusters in the test data.
+By default, a warning is outputted.}
 
 \item{verbose}{Whether the output testing results. This is always disabled while running package tests.}
 }

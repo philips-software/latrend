@@ -12,6 +12,7 @@ test(
   warning = FALSE,
   runOnly = FALSE,
   text = "",
+  onFail = c("fail", "warn", "ignore", "skip"),
   ...
 )
 }
@@ -30,10 +31,13 @@ test(
 
 \item{text}{Human-readable description of what this test condition is testing.}
 
+\item{onFail}{How to handle a failure of the test condition. By default, this is recorded as a test failure.
+If \code{onFail = "skip"}, the condition is not tested.}
+
 \item{...}{Additional arguments passed to \code{\link[base:all.equal]{base::all.equal()}}}
 }
 \value{
-Whether the test passes.
+Whether the test condition has passed successfully. In case of \code{onFail = "skip"}, \code{NA} is returned.
 }
 \description{
 Evaluate or compare an expression based on a reference expression, or test for errors.
@@ -45,7 +49,10 @@ The original motivation for this function is the lack of R support for a proper 
 which made it practically impossible to identify the offending line in a sourced file.
 }
 \examples{
+\donttest{
 test('gt', 2 > 1)
 test('eq', 1 + 1, 2)
+test('lt', 2 < 1, onFail = "warn")
+}
 }
 \keyword{internal}

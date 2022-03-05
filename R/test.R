@@ -7,7 +7,10 @@
 #' returning an object inheriting from the `lcMethod` specified by the `class` argument.
 #' @param args Other arguments passed to the instantiator function.
 #' @param tests A `character` vector indicating the type of tests to run, as defined in the `*.Rraw` files inside the `/test/` folder.
+#' @param maxFails The maximum number of allowed test condition failures before testing is ended prematurely.
 #' @param errorOnFail Whether to throw the test errors as an error. This is always enabled while running package tests.
+#' @param checkClusterRecovery Whether to test for correct recovery/identification of the original clusters in the test data.
+#' By default, a warning is outputted.
 #' @param verbose Whether the output testing results. This is always disabled while running package tests.
 #' @note This is an experimental function that is subject to large changes in the future.
 #' @examples
@@ -19,6 +22,7 @@ test.latrend = function(
   tests = c('method', 'basic', 'fitted', 'predict', 'cluster-single', 'cluster-three'),
   maxFails = 5L,
   errorOnFail = FALSE,
+  checkClusterRecovery = c('warn', 'ignore', 'fail'),
   verbose = TRUE
 ) {
   if (is.null(instantiator)) {
@@ -65,7 +69,8 @@ test.latrend = function(
 
   cat(sprintf('=== Testing lcMethod class "%s" ===\n', class))
   op = options(
-    latrend.verbose = FALSE
+    latrend.verbose = FALSE,
+    latrend.test.checkClusterRecovery = checkClusterRecovery
   )
   on.exit(options(op))
 
@@ -191,16 +196,31 @@ test.latrend = function(
 #' @param warning Whether to expect a warning, or the pattern that the warning message should match.
 #' @param runOnly Whether to skip the comparison to `y`. If disabled, an error is raised when `y` is not `TRUE`.
 #' @param text Human-readable description of what this test condition is testing.
+#' @param onFail How to handle a failure of the test condition. By default, this is recorded as a test failure.
+#' If `onFail = "skip"`, the condition is not tested.
 #' @param ... Additional arguments passed to [base::all.equal()]
-#' @return Whether the test passes.
+#' @return Whether the test condition has passed successfully. In case of `onFail = "skip"`, `NA` is returned.
 #' @details Inspired by the `data.table` package test mechanism.
 #' The original motivation for this function is the lack of R support for a proper stack trace with line numbers when sourcing files,
 #' which made it practically impossible to identify the offending line in a sourced file.
 #' @keywords internal
 #' @examples
+#' \donttest{
 #' test('gt', 2 > 1)
 #' test('eq', 1 + 1, 2)
-test = function(key = 'test', x, y = TRUE, error = FALSE, warning = FALSE, runOnly = FALSE, text = '', ...) {
+#' test('lt', 2 < 1, onFail = "warn")
+#' }
+test = function(
+    key = 'test',
+    x,
+    y = TRUE,
+    error = FALSE,
+    warning = FALSE,
+    runOnly = FALSE,
+    text = '',
+    onFail = c('fail', 'warn', 'ignore', 'skip'),
+    ...
+) {
   assert_that(
     is.string(key),
     nchar(key) > 0,
@@ -208,6 +228,13 @@ test = function(key = 'test', x, y = TRUE, error = FALSE, warning = FALSE, runOn
     is.flag(runOnly),
     is.string(text)
   )
+
+  # By placing "warn" as the first choice, it becomes the default option when onFail = NULL.
+  # This makes the options() mechanism shorter to write, as we don't have to provide the default value
+  onFail = match.arg(onFail[1], c('warn', 'fail', 'ignore', 'skip'))
+  if (onFail == 'skip') {
+    return (NA)
+  }
 
   assert_that(
     !runOnly || isTRUE(y),
@@ -225,14 +252,23 @@ test = function(key = 'test', x, y = TRUE, error = FALSE, warning = FALSE, runOn
     TRUE
   }
 
-  fail = function() {
-    if (recordFails) {
-      assign(
-        'fails',
-        append(get('fails', parEnv), key),
-        parEnv
-      )
-    }
+  fail = function(msg) {
+    switch(onFail,
+      fail = {
+        cat(msg)
+        if (recordFails) {
+          assign(
+            'fails',
+            append(get('fails', parEnv), key),
+            parEnv
+          )
+        }
+      },
+      warn = {
+        warning(msg)
+      }
+    )
+
     FALSE
   }
 
@@ -266,21 +302,21 @@ test = function(key = 'test', x, y = TRUE, error = FALSE, warning = FALSE, runOn
           # OK, proceed
         } else {
           # FAIL: warning message mismatch
-          cat(sprintf('Test "%s"%s generated warning "%s", but "%s" was expected.\n', key, text, xWarn, warning))
-          return(fail())
+          msg = sprintf('Test "%s"%s generated warning "%s", but "%s" was expected.\n', key, text, xWarn, warning)
+          return(fail(msg))
         }
       } else {
         # OK, proceed
       }
     } else {
       # FAIL: unexpected warning
-      cat(sprintf('Test "%s"%s generated unexpected warning "%s".\n', key, text, xWarn))
-      return(fail())
+      msg = sprintf('Test "%s"%s generated unexpected warning "%s".\n', key, text, xWarn)
+      return(fail(msg))
     }
   } else if (!isFALSE(warning)) {
     # no warning, but was expected
-    cat(sprintf('Test "%s"%s did not generate a warning.\n', key, text))
-    return(fail())
+    msg = sprintf('Test "%s"%s did not generate a warning.\n', key, text)
+    return(fail(msg))
   }
 
   if (length(xError) > 0) {
@@ -294,8 +330,8 @@ test = function(key = 'test', x, y = TRUE, error = FALSE, warning = FALSE, runOn
           success()
         } else {
           # FAIL: error message mismatch
-          cat(sprintf('Test "%s"%s generated error "%s", but "%s" was expected.\n', key, text, xError, error))
-          fail()
+          msg = sprintf('Test "%s"%s generated error "%s", but "%s" was expected.\n', key, text, xError, error)
+          fail(msg)
         }
       } else {
         # OK
@@ -303,14 +339,14 @@ test = function(key = 'test', x, y = TRUE, error = FALSE, warning = FALSE, runOn
       }
     } else {
       # FAIL: Unexpected error occurred
-      cat(sprintf('Test "%s"%s generated unexpected error "%s".\n', key, text, xError))
-      fail()
+      msg = sprintf('Test "%s"%s generated unexpected error "%s".\n', key, text, xError)
+      fail(msg)
     }
   }
   else if (!isFALSE(error)) {
     # no error, but was expected
-    cat(sprintf('Test "%s"%s did not generate an error.\n', key, text))
-    fail()
+    msg = sprintf('Test "%s"%s did not generate an error.\n', key, text)
+    fail(msg)
   } else if (runOnly) {
     # no comparison
     success()
@@ -322,8 +358,8 @@ test = function(key = 'test', x, y = TRUE, error = FALSE, warning = FALSE, runOn
       success()
     } else {
       # FAIL: x != y
-      cat(sprintf('Test "%s"%s did not generate the expected result:\n%s\n', key, text, paste0('  ', comparison, collapse = '\n')))
-      fail()
+      msg = sprintf('Test "%s"%s did not generate the expected result:\n%s\n', key, text, paste0('  ', comparison, collapse = '\n'))
+      fail(msg)
     }
   }
 }

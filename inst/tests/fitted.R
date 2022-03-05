@@ -35,10 +35,10 @@ refModel = lcModelPartition(
 test('converged', converged(model) > 0)
 test('nClusters', nClusters(model), 2)
 test(
-  'trajectoryAssignments.ref',
-  externalMetric(model, refModel, 'adjustedRand') == 1,
-  check.attributes = FALSE,
-  text = 'does trajectory assignment match the reference?'
+  'trajectoryAssignments.uniqueN',
+  uniqueN(trajectoryAssignments(model)),
+  2L,
+  text = 'expecting each cluster to have at least some assigned trajectories'
 )
 
 test('fitted', fitted(model), runOnly = TRUE)

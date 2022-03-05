@@ -51,13 +51,35 @@ test('time', time(model), sort(unique(testData$Moment)))
 test('postprob', postprob(model), runOnly = TRUE) # tests are done by postprob() generic
 test('trajectoryAssignments.nIds', length(trajectoryAssignments(model)), nIds(model))
 test(
-  'trajectoryAssignments.ref',
+  'trajectoryAssignments.uniqueN',
+  uniqueN(trajectoryAssignments(model)),
+  2L,
+  text = 'expecting each cluster to have at least some assigned trajectories'
+)
+test(
+  'trajectoryAssignments.recovery',
   externalMetric(model, refModel, 'adjustedRand') == 1,
   check.attributes = FALSE,
-  text = 'does trajectory assignment match the reference?'
+  text = 'does trajectory assignment match the reference?',
+  onFail = .Options$latrend.test.checkClusterRecovery
 )
-test('clusterSizes', clusterSizes(model), c(S, S), check.attributes = FALSE)
-test('clusterProportions', clusterProportions(model), c(.5, .5), check.attributes = FALSE)
+test('clusterSizes.len', length(clusterSizes(model)), 2)
+test('clusterSizes.total', sum(clusterSizes(model)), S * 2)
+test(
+  'clusterSizes.recovery',
+  clusterSizes(model),
+  c(S, S),
+  check.attributes = FALSE,
+  onFail = .Options$latrend.test.checkClusterRecovery
+)
+test('clusterProportions.len', length(clusterProportions(model)), 2)
+test(
+  'clusterProportions.recovery',
+  clusterProportions(model),
+  c(.5, .5),
+  check.attributes = FALSE,
+  onFail = .Options$latrend.test.checkClusterRecovery
+)
 
 test('model.data', is.data.frame(model.data(model)))
 test('model.data.nrow', nrow(model.data(model)) == nrow(testData))
