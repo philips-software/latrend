@@ -17,7 +17,7 @@ m1 = make.lcMethod(id = 'Traj', time = 'Moment', response = 'Y')
 model = latrend(m1, testData1)
 
 # Tests ####
-test('converged', converged(model) > 0)
+test('converged', !isFALSE(converged(model) > 0))
 test('nClusters', nClusters(model), 1L)
 test(
   'trajectoryAssignments',

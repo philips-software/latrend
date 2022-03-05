@@ -7,7 +7,11 @@ make.kml = function(...) {
   lcMethodKML(..., nbRedrawing = 1, maxIt = 10, seed = 1)
 }
 
-test.latrend('lcMethodKML', instantiator = make.kml, tests = tests)
+test_that('kml', {
+  expect_true({
+    test.latrend('lcMethodKML', instantiator = make.kml, tests = tests)
+  })
+})
 
 # test_that('predictPostprob', {
 #   model = latrend(lcMethodTestKML(), testLongData)

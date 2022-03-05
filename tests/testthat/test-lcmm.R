@@ -15,7 +15,11 @@ make.gmm = function(id, time, response, ..., init = NULL) {
   do.call(lcMethodLcmmGMM, as.list(mc)[-1]) %>% evaluate()
 }
 
-test.latrend('lcMethodLcmmGMM', instantiator = make.gmm, tests = tests)
+test_that('gmm', {
+  expect_true({
+    test.latrend('lcMethodLcmmGMM', instantiator = make.gmm, tests = tests)
+  })
+})
 
 test_that('gmm with init=lme', {
   skip_on_cran()
@@ -43,4 +47,8 @@ make.gbtm = function(id, time, response, ..., init = NULL) {
   do.call(lcMethodLcmmGBTM, as.list(mc)[-1]) %>% evaluate()
 }
 
-test.latrend('lcMethodLcmmGBTM', instantiator = make.gbtm, tests = tests)
+test_that('gbtm', {
+  expect_true({
+    test.latrend('lcMethodLcmmGBTM', instantiator = make.gbtm, tests = tests)
+  })
+})

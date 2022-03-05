@@ -1,15 +1,6 @@
 context('mclust models')
 skip_if_not_installed('mclust')
 rngReset()
+tests = c(DEFAULT_LATREND_TESTS)
 
-lcMethodTestMclustLLPA = function(...) {
-  lcMethodMclustLLPA(response = 'Value', ...)
-}
-
-test_that('default llpa', {
-  m = lcMethodTestMclustLLPA()
-  expect_silent({
-    model = latrend(m, testLongData)
-  })
-  expect_valid_lcModel(model)
-})
+test.latrend('lcMethodMclustLLPA', tests = tests)

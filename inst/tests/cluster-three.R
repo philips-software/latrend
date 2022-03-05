@@ -33,7 +33,7 @@ refModel = lcModelPartition(
 )
 
 # Tests ####
-test('converged', converged(model) > 0)
+test('converged', !isFALSE(converged(model) > 0))
 test('nClusters', nClusters(model), 3L)
 test('clusterNames', length(clusterNames(model)), 3L)
 test('nIds', nIds(model), length(trajNames))

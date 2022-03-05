@@ -21,7 +21,6 @@ refClusters = rep(LETTERS[1:2], each = S)
 
 # Fit model ####
 m = make.lcMethod(id = 'Traj', time = 'Moment', response = 'Y', nClusters = 2)
-
 model = latrend(m, data = testData)
 
 refModel = lcModelPartition(
@@ -40,7 +39,7 @@ test('idVariable', idVariable(model), 'Traj')
 test('timeVariable', timeVariable(model), 'Moment')
 test('responseVariable', responseVariable(model), 'Y')
 test('getCall', is(getCall(model), 'call'))
-test('converged', converged(model) > 0)
+test('converged', !isFALSE(converged(model) > 0))
 test('estimationTime', estimationTime(model) >= 0)
 test('nClusters', nClusters(model), 2L)
 test('clusterNames', length(clusterNames(model)), 2L)

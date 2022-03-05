@@ -7,4 +7,8 @@ make.lmkm = function(id, time, response, ...) {
   lcMethodLMKM(formula = form, time = time, id = id, ..., seed = 1) %>% evaluate()
 }
 
-test.latrend('lcMethodLMKM', instantiator = make.lmkm, tests = tests)
+test_that('tests', {
+  expect_true({
+    test.latrend('lcMethodLMKM', instantiator = make.lmkm, tests = tests)
+  })
+})
