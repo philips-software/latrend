@@ -14,7 +14,7 @@ clusSizes = dataset2[, uniqueN(Id), keyby = Cluster]$V1
 M = uniqueN(dataset2$Time)
 
 # Fit model ####
-testData = copy(dataset2) %>%
+testData = subset(dataset2, select = c('Id', 'Time', 'Value')) %>%
   setnames(c('Id', 'Time', 'Value'), c('Traj', 'Moment', 'Y'))
 m = make.lcMethod(id = 'Traj', time = 'Moment', response = 'Y', nClusters = 2)
 
