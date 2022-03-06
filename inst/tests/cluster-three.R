@@ -2,25 +2,18 @@
 ####
 
 # Prepare data ####
-S = 25
-M = 4
-trajNames = paste0('S', seq_len(S * 3L))
-moments = seq_len(M)
-
-testData = data.table(
-  Traj = rep(trajNames, each = M) %>% factor(levels = trajNames),
-  Moment = rep(moments, S * 3L),
-  Y = c(
-    rnorm(S * M, mean = -1, sd = .1),
-    rnorm(S * M, mean = 0, sd = .1),
-    rnorm(S * M, mean = 1, sd = .1)
-  ),
-  Class = rep(LETTERS[1:3], each = S * M)
-)
-refClusters = rep(LETTERS[1:3], each = S)
+refClusters = dataset[, first(Cluster), keyby = Id]$V1
+S = uniqueN(dataset$Id)
+trajNames = unique(dataset$Id)
+clusSizes = dataset[, uniqueN(Id), keyby = Cluster]$V1
+M = uniqueN(dataset$Time)
 
 # Fit model ####
-m = make.lcMethod(id = 'Traj', time = 'Moment', response = 'Y', nClusters = 3)
+testData = copy(dataset) %>%
+  setnames(c('Id', 'Time', 'Value'), c('Traj', 'Moment', 'Y'))
+
+# Fit model ####
+m = make.lcMethod(id = 'Traj', time = 'Moment', response = 'Y', nClusters = 3L)
 
 model = latrend(m, data = testData)
 
@@ -56,10 +49,11 @@ test(
   onFail = .Options$latrend.test.checkClusterRecovery
 )
 test('clusterSizes.len', length(clusterSizes(model)), 3)
-test('clusterSizes.total', sum(clusterSizes(model)), S * 3)
+test('clusterSizes.total', sum(clusterSizes(model)), S)
 test(
   'clusterSizes.recovery',
-  clusterSizes(model), c(S, S, S),
+  clusterSizes(model),
+  clusSizes,
   check.attributes = FALSE,
   onFail = .Options$latrend.test.checkClusterRecovery
 )
@@ -67,7 +61,7 @@ test('clusterProportions.len', length(clusterProportions(model)), 3)
 test(
   'clusterProportions.recovery',
   clusterProportions(model),
-  c(1/3, 1/3, 1/3),
+  clusSizes / sum(clusSizes),
   check.attributes = FALSE,
   onFail = .Options$latrend.test.checkClusterRecovery
 )

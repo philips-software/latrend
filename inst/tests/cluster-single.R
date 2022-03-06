@@ -2,19 +2,18 @@
 ####
 
 # Prepare data ####
-S = 25
-M = 4
-trajNames = paste0('S', seq_len(S))
-moments = seq_len(M)
-testData1 = data.table(
-  Traj = rep(trajNames, each = M) %>% factor(levels = trajNames),
-  Moment = rep(moments, S),
-  Y = rnorm(S * M)
-)
+dataset1 = dataset[Cluster == Cluster[1]]
+S = uniqueN(dataset1$Id)
+trajNames = unique(dataset1$Id)
+M = uniqueN(dataset1$Time)
 
 # Fit model ####
-m1 = make.lcMethod(id = 'Traj', time = 'Moment', response = 'Y')
-model = latrend(m1, testData1)
+testData = copy(dataset1) %>%
+  setnames(c('Id', 'Time', 'Value'), c('Traj', 'Moment', 'Y'))
+
+# Fit model ####
+m = make.lcMethod(id = 'Traj', time = 'Moment', response = 'Y', nClusters = 1L)
+model = latrend(m, testData)
 
 # Tests ####
 test('converged', !isFALSE(converged(model) > 0))
@@ -25,9 +24,9 @@ test(
   rep(clusterNames(model)[1], S)
 )
 test('nIds', nIds(model), S)
-test('nobs', nobs(model), nrow(testData1))
+test('nobs', nobs(model), nrow(testData))
 test('ids', as.character(ids(model)), trajNames)
-test('time', time(model), sort(unique(testData1$Moment)))
+test('time', time(model), sort(unique(testData$Moment)))
 test('postprob', postprob(model)[, 1], rep(1, S), check.attributes = FALSE)
 test('clusterSizes', clusterSizes(model), S, check.attributes = FALSE)
 test('clusterProportions', clusterProportions(model), 1, check.attributes = FALSE)

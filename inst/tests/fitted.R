@@ -5,20 +5,17 @@
 ####
 
 # Prepare data ####
-S = 25
-M = 4
-trajNames = paste0('S', seq_len(S * 2))
-moments = seq_len(M)
-
-testData = data.table(
-  Traj = rep(trajNames, each = M) %>% factor(levels = trajNames),
-  Moment = rep(moments, S * 2),
-  Y = c(rnorm(S * M, mean = -5), rnorm(S * M, mean = 5)),
-  Class = rep(LETTERS[1:2], each = S * M)
-)
-refClusters = rep(LETTERS[1:2], each = S)
+dataset2 = dataset[Cluster %in% unique(Cluster)[1:2]]
+refClusters = dataset2[, first(Cluster), keyby = Id]$V1
+S = uniqueN(dataset2$Id)
+trajNames = unique(dataset2$Id)
+moments = unique(dataset2$Time)
+clusSizes = dataset2[, uniqueN(Id), keyby = Cluster]$V1
+M = uniqueN(dataset2$Time)
 
 # Fit model ####
+testData = copy(dataset2) %>%
+  setnames(c('Id', 'Time', 'Value'), c('Traj', 'Moment', 'Y'))
 m = make.lcMethod(id = 'Traj', time = 'Moment', response = 'Y', nClusters = 2)
 
 model = latrend(m, data = testData)

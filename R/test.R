@@ -5,24 +5,31 @@
 #' The class should inherit from `lcMethod`.
 #' @param instantiator A `function` with signature `(id, time, response, ...)`,
 #' returning an object inheriting from the `lcMethod` specified by the `class` argument.
+#' @param data An optional dataset comprising three highly distinct constant clusters that will be used for testing, represented by a `data.frame`.
+#' The `data.frame` must contain the columns `"Id", "Time", "Value", "Cluster"` of types `character`, `numeric`, `numeric`, and `character`, respectively.
+#' All trajectories should be of equal length and have observations at the same moments in time.
+#' Trajectory observations are assumed to be independent of time, i.e., all trajectories are constant.
+#' This enables tests to insert additional observations as needed by sampling from the available observations.
 #' @param args Other arguments passed to the instantiator function.
 #' @param tests A `character` vector indicating the type of tests to run, as defined in the `*.Rraw` files inside the `/test/` folder.
 #' @param maxFails The maximum number of allowed test condition failures before testing is ended prematurely.
 #' @param errorOnFail Whether to throw the test errors as an error. This is always enabled while running package tests.
-#' @param checkClusterRecovery Whether to test for correct recovery/identification of the original clusters in the test data.
+#' @param clusterRecovery Whether to test for correct recovery/identification of the original clusters in the test data.
 #' By default, a warning is outputted.
 #' @param verbose Whether the output testing results. This is always disabled while running package tests.
 #' @note This is an experimental function that is subject to large changes in the future.
+#' The default dataset used for testing is subject to change.
 #' @examples
 #' test.latrend("lcMethodRandom")
 test.latrend = function(
   class = 'lcMethodKML',
   instantiator = NULL,
+  data = NULL,
   args = list(),
   tests = c('method', 'basic', 'fitted', 'predict', 'cluster-single', 'cluster-three'),
   maxFails = 5L,
   errorOnFail = FALSE,
-  checkClusterRecovery = c('warn', 'ignore', 'fail'),
+  clusterRecovery = c('warn', 'ignore', 'fail'),
   verbose = TRUE
 ) {
   if (is.null(instantiator)) {
@@ -31,20 +38,67 @@ test.latrend = function(
     }
   }
 
+  if (is.null(data)) {
+    # generate dataset
+    S = 25
+    M = 4
+    trajNames = paste0('S', seq_len(S * 3L))
+    data = data.frame(
+      Id = rep(trajNames, each = M),
+      Time = rep( seq_len(M), S * 3L),
+      Value = c(
+        rnorm(S * M, mean = -1, sd = .1),
+        rnorm(S * M, mean = 0, sd = .1),
+        rnorm(S * M, mean = 1, sd = .1)
+      ),
+      Cluster = rep(LETTERS[1:3], each = S * M),
+      stringsAsFactors = FALSE
+    )
+  }
+
   assert_that(
     is.string(class),
     is.function(instantiator),
     is.list(args),
     is.count(maxFails),
     is.flag(errorOnFail),
-    is.flag(verbose)
+    is.flag(verbose),
+    is.data.frame(data),
+    has_name(data, c('Id', 'Time', 'Value', 'Cluster'))
   )
-
   assert_that(
     has_name(formals(instantiator), '...') || has_name(formals(instantiator), c('id', 'time', 'response')),
     msg = 'instantiator argument must be a function that accepts arguments: id, time, response'
   )
 
+  # Data validation
+  data = as.data.table(data)
+  data[, Id := as.character(Id)]
+  data[, Cluster := as.character(Cluster)]
+  assert_that(
+    is.numeric(data$Time),
+    is.numeric(data$Value),
+    noNA(data$Id),
+    noNA(data$Time),
+    noNA(data$Value),
+    noNA(data$Cluster),
+    all(is.finite(data$Time)),
+    all(is.finite(data$Value))
+  )
+  assert_that(uniqueN(data$Id) >= 10, msg = 'data must comprise at least 10 trajectories')
+  assert_that(uniqueN(data$Cluster) == 3, msg = 'data must comprise 3 clusters')
+  assert_that(
+    all(data[, uniqueN(Cluster) == 1, by = Id]$V1),
+    msg = 'each trajectory can only belong to 1 cluster (current data has multiple Cluster values over time per trajectory)'
+  )
+  assert_that(uniqueN(data$Time) >= 4, msg = 'data trajectories must have at least 4 observations')
+  assert_that(
+    all(data[, uniqueN(Time), by = Id]$V1 == uniqueN(data$Time)),
+    msg = 'all trajectories in the data argument must have the same time'
+  )
+  setkeyv(data, c('Id', 'Time', 'Cluster'))
+
+  # Determine test path
   if (identical(Sys.getenv('TESTTHAT'), 'true')) {
     # testthat mode
     errorOnFail = TRUE
@@ -70,7 +124,7 @@ test.latrend = function(
   cat(sprintf('=== Testing lcMethod class "%s" ===\n', class))
   op = options(
     latrend.verbose = FALSE,
-    latrend.test.checkClusterRecovery = checkClusterRecovery
+    latrend.test.checkClusterRecovery = clusterRecovery
   )
   on.exit(options(op))
 
@@ -133,6 +187,7 @@ test.latrend = function(
     env = new.env(parent = sys.frame())
     assign('fails', NULL, envir = env)
     assign('make.lcMethod', make.lcMethod, envir = env)
+    assign('dataset', data, envir = env)
 
     sys.source(testFilePath, envir = env)
 

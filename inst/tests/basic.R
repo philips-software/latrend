@@ -3,24 +3,18 @@
 ####
 
 # Prepare data ####
-S = 25 # trajectories per cluster
-M = 4 # number of observations per trajectory
-trajNames = paste0('S', seq_len(S * 2))
-moments = seq_len(M)
-
-testData = data.table(
-  Traj = rep(trajNames, each = M) %>% factor(levels = trajNames),
-  Moment = rep(moments, S * 2),
-  Y = c(
-    rnorm(S * M, mean = -5),
-    rnorm(S * M, mean = 5)
-  ),
-  Class = rep(LETTERS[1:2], each = S * M)
-)
-refClusters = rep(LETTERS[1:2], each = S)
+dataset2 = dataset[Cluster %in% unique(Cluster)[1:2]]
+refClusters = dataset2[, first(Cluster), keyby = Id]$V1
+S = uniqueN(dataset2$Id)
+trajNames = unique(dataset2$Id)
+clusSizes = dataset2[, uniqueN(Id), keyby = Cluster]$V1
+M = uniqueN(dataset2$Time)
 
 # Fit model ####
-m = make.lcMethod(id = 'Traj', time = 'Moment', response = 'Y', nClusters = 2)
+testData = copy(dataset2) %>%
+  setnames(c('Id', 'Time', 'Value'), c('Traj', 'Moment', 'Y'))
+
+m = make.lcMethod(id = 'Traj', time = 'Moment', response = 'Y', nClusters = 2L)
 model = latrend(m, data = testData)
 
 refModel = lcModelPartition(
@@ -63,11 +57,11 @@ test(
   onFail = .Options$latrend.test.checkClusterRecovery
 )
 test('clusterSizes.len', length(clusterSizes(model)), 2)
-test('clusterSizes.total', sum(clusterSizes(model)), S * 2)
+test('clusterSizes.total', sum(clusterSizes(model)), S)
 test(
   'clusterSizes.recovery',
   clusterSizes(model),
-  c(S, S),
+  clusSizes,
   check.attributes = FALSE,
   onFail = .Options$latrend.test.checkClusterRecovery
 )
@@ -75,7 +69,7 @@ test('clusterProportions.len', length(clusterProportions(model)), 2)
 test(
   'clusterProportions.recovery',
   clusterProportions(model),
-  c(.5, .5),
+  clusSizes / sum(clusSizes),
   check.attributes = FALSE,
   onFail = .Options$latrend.test.checkClusterRecovery
 )
@@ -91,3 +85,4 @@ test('plotTrajectories', plotTrajectories(model), runOnly = TRUE)
 
 test('summary', is(summary(model), 'lcSummary'))
 test('strip', is(strip(model), class(model)))
+
