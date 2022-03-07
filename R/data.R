@@ -82,12 +82,12 @@
 #' plotTrajectories(longdata, response = "Value", id = "Id", time = "Time")
 generateLongData = function(
   sizes = c(40, 60),
-  fixed = Value ~ 1 + Time,
+  fixed = Value ~ 1,
   cluster = ~ 1 + Time,
   random = ~ 1,
   id = getOption('latrend.id'),
   data = data.frame(Time = seq(0, 1, by = .1)),
-  fixedCoefs = c(0, 0),
+  fixedCoefs = 0,
   clusterCoefs = cbind(c(-2, 1), c(2, -1)),
   randomScales = cbind(.1, .1),
   rrandom = rnorm,
