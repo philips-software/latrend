@@ -7,11 +7,12 @@
 test.latrend(
   class = "lcMethodKML",
   instantiator = NULL,
+  data = NULL,
   args = list(),
   tests = c("method", "basic", "fitted", "predict", "cluster-single", "cluster-three"),
   maxFails = 5L,
   errorOnFail = FALSE,
-  checkClusterRecovery = c("warn", "ignore", "fail"),
+  clusterRecovery = c("warn", "ignore", "fail"),
   verbose = TRUE
 )
 }
@@ -22,6 +23,12 @@ The class should inherit from \code{lcMethod}.}
 \item{instantiator}{A \code{function} with signature \verb{(id, time, response, ...)},
 returning an object inheriting from the \code{lcMethod} specified by the \code{class} argument.}
 
+\item{data}{An optional dataset comprising three highly distinct constant clusters that will be used for testing, represented by a \code{data.frame}.
+The \code{data.frame} must contain the columns \verb{"Id", "Time", "Value", "Cluster"} of types \code{character}, \code{numeric}, \code{numeric}, and \code{character}, respectively.
+All trajectories should be of equal length and have observations at the same moments in time.
+Trajectory observations are assumed to be independent of time, i.e., all trajectories are constant.
+This enables tests to insert additional observations as needed by sampling from the available observations.}
+
 \item{args}{Other arguments passed to the instantiator function.}
 
 \item{tests}{A \code{character} vector indicating the type of tests to run, as defined in the \verb{*.Rraw} files inside the \verb{/test/} folder.}
@@ -30,7 +37,7 @@ returning an object inheriting from the \code{lcMethod} specified by the \code{c
 
 \item{errorOnFail}{Whether to throw the test errors as an error. This is always enabled while running package tests.}
 
-\item{checkClusterRecovery}{Whether to test for correct recovery/identification of the original clusters in the test data.
+\item{clusterRecovery}{Whether to test for correct recovery/identification of the original clusters in the test data.
 By default, a warning is outputted.}
 
 \item{verbose}{Whether the output testing results. This is always disabled while running package tests.}
@@ -40,6 +47,7 @@ Test a \code{lcMethod} subclass implementation and its resulting \code{lcModel} 
 }
 \note{
 This is an experimental function that is subject to large changes in the future.
+The default dataset used for testing is subject to change.
 }
 \examples{
 test.latrend("lcMethodRandom")

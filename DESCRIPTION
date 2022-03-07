@@ -47,6 +47,7 @@ Suggests:
     rcmdcheck,
     pkgdown,
     devtools,
+    evaluate,
     lme4,
     covr,
     lintr,

@@ -99,21 +99,12 @@ test.latrend = function(
   setkeyv(data, c('Id', 'Time', 'Cluster'))
 
   # Determine test path
+  testsDir = system.file('tests', package = 'latrend', mustWork = TRUE)
+
   if (identical(Sys.getenv('TESTTHAT'), 'true')) {
     # testthat mode
     errorOnFail = TRUE
     verbose = FALSE
-    pkgDir = dirname(dirname(getwd()))
-    testsDir = file.path(pkgDir, 'inst', 'tests')
-  } else if (exists('test.latrend', .GlobalEnv, inherits = FALSE) ||
-             identical(devtools::dev_packages(), 'latrend')) {
-    # dev mode
-    pkgDir = getwd()
-    testsDir = file.path(pkgDir, 'inst', 'tests')
-  } else {
-    # install mode
-    pkgDir = getNamespaceInfo('latrend', 'path')
-    testsDir = file.path(pkgDir, 'tests')
   }
 
   if (isFALSE(verbose)) {
@@ -179,23 +170,41 @@ test.latrend = function(
   testFails = list()
 
   for (i in seq_along(tests)) {
-    test = tests[i]
+    testContext = tests[i]
     testFilePath = file.path(testsDir, activeTestFiles[i])
-    cat(sprintf('== Running tests from "%s" ==\n', test))
+    cat(sprintf('== Running tests from "%s" ==\n', testContext))
 
     # prepare test environment
-    env = new.env(parent = sys.frame())
+    env = new.env()
     assign('fails', NULL, envir = env)
     assign('make.lcMethod', make.lcMethod, envir = env)
     assign('dataset', data, envir = env)
 
-    sys.source(testFilePath, envir = env)
+    evalEnv = new.env(parent = baseenv())
+    assign('file', testFilePath, envir = evalEnv)
+    assign('env', env, envir = evalEnv)
 
-    testFails[[test]] = get('fails', envir = env)
+    result = evaluate::try_capture_stack(
+      quote(sys.source(file, envir = env)),
+      evalEnv
+    )
+
+    if (inherits(result, 'simpleError')) {
+      stop(
+        sprintf(
+          'Unexpected error occurred while evaluating test context: "%s"\nError message:\n"%s"\nStack trace:\n%s',
+          testContext,
+          result$message,
+          paste0(capture.output(traceback(result$calls)), collapse = '\n')
+        )
+      )
+    }
+
+    testFails[[testContext]] = get('fails', envir = env)
     nFails = sum(lengths(testFails))
 
-    if (length(testFails[[test]]) > 0) {
-      cat(sprintf('%d test(s) failed.\n', length(testFails[[test]])))
+    if (length(testFails[[testContext]]) > 0) {
+      cat(sprintf('%d test(s) failed.\n', length(testFails[[testContext]])))
     } else {
       cat('Tests succeeded.\n')
     }
