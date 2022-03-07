@@ -3,13 +3,9 @@ skip_if_not_installed('kml')
 rngReset()
 tests = DEFAULT_LATREND_TESTS
 
-make.kml = function(...) {
-  lcMethodKML(..., nbRedrawing = 1, maxIt = 10, seed = 1)
-}
-
 test_that('default', {
   expect_true({
-    test.latrend('lcMethodKML', instantiator = make.kml, tests = tests)
+    test.latrend('lcMethodKML', tests = tests, args = list(nbRedrawing = 1, maxIt = 10, seed = 1))
   })
 })
 
