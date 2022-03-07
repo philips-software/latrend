@@ -1,15 +1,17 @@
 context('dtwclust')
 skip_if_not_installed('dtwclust')
 rngReset()
+# dtwclust does not seem to support fitting 1 cluster
+tests = setdiff(DEFAULT_LATREND_TESTS, 'cluster-single')
 
 test_that('default', {
-  m = lcMethodDtwclust(response = 'Value')
-  model = latrend(m, testLongData)
-  expect_valid_lcModel(model)
+  expect_true({
+    test.latrend('lcMethodDtwclust', tests = tests, clusterRecovery = 'skip')
+  })
 })
 
 test_that('fuzzy default', {
-  m = lcMethodDtwclust(response = 'Value', type = 'fuzzy')
-  model = latrend(m, testLongData)
-  expect_valid_lcModel(model)
+  expect_true({
+    test.latrend('lcMethodDtwclust', tests = tests, args = list(type = 'fuzzy'), clusterRecovery = 'skip')
+  })
 })

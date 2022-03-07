@@ -4,7 +4,7 @@ skip_on_ci()
 skip_on_cran()
 skip_if_not_installed('crimCV')
 rngReset()
-tests = c(DEFAULT_LATREND_TESTS)
+tests = DEFAULT_LATREND_TESTS
 
 library(crimCV)
 
