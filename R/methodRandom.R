@@ -70,23 +70,25 @@ setMethod('getShortName', signature('lcMethodRandom'), function(object) 'rand')
 #' @importFrom stats rgamma
 setMethod('fit', signature('lcMethodRandom'), function(method, data, envir, verbose, ...) {
   nIds = uniqueN(data[[idVariable(method)]])
+  assert_that(nIds > 0, msg = 'cannot fit to data with nIds = 0')
 
   # generate cluster proportions
   y = rgamma(method$nClusters, method$alpha)
   clusProps = y / sum(y)
 
-  propSeq = rep(1:method$nClusters, ceiling(clusProps * nIds))
+  propSeq = rep(seq_len(method$nClusters), ceiling(clusProps * nIds))
 
-  clusAssign = sample(propSeq)[1:nIds]
+  clusAssign = sample(propSeq)[seq_len(nIds)]
 
-  lcModelCustom(
-    method = method,
+  model = lcModelPartition(
+    data = data,
     response = method$response,
     id = method$id,
     time = method$time,
-    data = data,
     trajectoryAssignments = clusAssign,
-    clusterTrajectories = method$center,
-    converged = TRUE
+    center = method$center,
+    method = method
   )
+
+  model
 })
