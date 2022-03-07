@@ -3,4 +3,8 @@ skip_if_not_installed('mclust')
 rngReset()
 tests = c(DEFAULT_LATREND_TESTS)
 
-test.latrend('lcMethodMclustLLPA', tests = tests)
+test_that('default', {
+  expect_true({
+    test.latrend('lcMethodMclustLLPA', tests = tests)
+  })
+})
