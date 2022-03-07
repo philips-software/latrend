@@ -40,20 +40,18 @@ test.latrend = function(
 
   if (is.null(data)) {
     # generate dataset
-    S = 25
-    M = 4
-    trajNames = paste0('S', seq_len(S * 3L))
-    data = data.frame(
-      Id = rep(trajNames, each = M),
-      Time = rep( seq_len(M), S * 3L),
-      Value = c(
-        rnorm(S * M, mean = -1, sd = .1),
-        rnorm(S * M, mean = 0, sd = .1),
-        rnorm(S * M, mean = 1, sd = .1)
-      ),
-      Cluster = rep(LETTERS[1:3], each = S * M),
-      stringsAsFactors = FALSE
-    )
+    data = generateLongData(
+      sizes = rep(25L, 3L),
+      data = data.frame(Time = 1:4),
+      fixed = Value ~ 1,
+      cluster = ~ 1,
+      clusterCoefs = t(c(-1, 0, 1)),
+      random = ~ 1,
+      randomScales = cbind(.1, .1, .1),
+      noiseScales = rep(.1, 3L),
+      id = 'Id'
+    ) %>%
+      setnames('Class', 'Cluster')
   }
 
   assert_that(
