@@ -118,17 +118,19 @@ test.latrend = function(
   on.exit(options(op))
 
   make.lcMethod = function(id = 'Traj', time = 'Moment', response = 'Y', nClusters = 1) {
-    m = do.call(
+    protoMethod = do.call(
       instantiator,
       c(id = id, time = time, response = response, nClusters = nClusters, args)
     )
 
     assert_that(
-      inherits(m, class),
+      inherits(protoMethod, class),
       msg = 'Instantiator returned object that does not inherit from the method to be tested.'
     )
 
-    evaluate(m)
+
+    method = evaluate(protoMethod)
+    method
   }
 
   assert_that(
