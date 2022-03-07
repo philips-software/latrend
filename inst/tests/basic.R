@@ -51,7 +51,7 @@ test(
 )
 test(
   'trajectoryAssignments.recovery',
-  externalMetric(model, refModel, 'adjustedRand') == 1,
+  externalMetric(model, refModel, 'adjustedRand') > .99,
   check.attributes = FALSE,
   text = 'does trajectory assignment match the reference?',
   onFail = .Options$latrend.test.checkClusterRecovery
@@ -63,6 +63,7 @@ test(
   clusterSizes(model),
   clusSizes,
   check.attributes = FALSE,
+  tolerance = 1,
   onFail = .Options$latrend.test.checkClusterRecovery
 )
 test('clusterProportions.len', length(clusterProportions(model)), 2)
@@ -71,6 +72,7 @@ test(
   clusterProportions(model),
   clusSizes / sum(clusSizes),
   check.attributes = FALSE,
+  tolerance = .01,
   onFail = .Options$latrend.test.checkClusterRecovery
 )
 
