@@ -20,7 +20,7 @@
 #' @note This is an experimental function that is subject to large changes in the future.
 #' The default dataset used for testing is subject to change.
 #' @examples
-#' test.latrend("lcMethodRandom")
+#' test.latrend("lcMethodRandom", clusterRecovery = "skip")
 test.latrend = function(
   class = 'lcMethodKML',
   instantiator = NULL,
@@ -269,7 +269,7 @@ test.latrend = function(
 #' which made it practically impossible to identify the offending line in a sourced file.
 #' @keywords internal
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' test('gt', 2 > 1)
 #' test('eq', 1 + 1, 2)
 #' test('lt', 2 < 1, onFail = "warn")

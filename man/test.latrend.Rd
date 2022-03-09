@@ -50,5 +50,5 @@ This is an experimental function that is subject to large changes in the future.
 The default dataset used for testing is subject to change.
 }
 \examples{
-test.latrend("lcMethodRandom")
+test.latrend("lcMethodRandom", clusterRecovery = "skip")
 }

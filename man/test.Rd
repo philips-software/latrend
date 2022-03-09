@@ -49,7 +49,7 @@ The original motivation for this function is the lack of R support for a proper 
 which made it practically impossible to identify the offending line in a sourced file.
 }
 \examples{
-\donttest{
+\dontrun{
 test('gt', 2 > 1)
 test('eq', 1 + 1, 2)
 test('lt', 2 < 1, onFail = "warn")
