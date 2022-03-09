@@ -164,7 +164,7 @@ analyzeModel <- function(model) {
   
   tibble::tibble(
     BIC = BIC(model),
-    APPA = metric(model, "APPA"),
+    APPA = metric(model, "APPA.min"),
     WMAE = metric(model, "WMAE"),
     ARI = externalMetric(model, refModel, "adjustedRand")
   )
