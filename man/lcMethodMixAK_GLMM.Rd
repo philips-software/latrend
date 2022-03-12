@@ -30,6 +30,9 @@ The following external arguments are ignored: y, x, z, random.intercept, silent.
 \description{
 Specify a GLMM iwht a normal mixture in the random effects
 }
+\note{
+This method currently does not appear to work under R 4.2 due to an error triggered by the mixAK package during fitting.
+}
 \examples{
 data(latrendData)
 # this example only runs when the mixAK package is installed
