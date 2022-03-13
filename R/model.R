@@ -778,6 +778,15 @@ model.data.lcModel = function(object, ...) {
   }
 }
 
+# Number of rows used for fitting the model
+.ndobs = function(object, ...) {
+  data = model.data(object)
+  if (is.null(data)) {
+    0L
+  } else {
+    nrow(model.data(object))
+  }
+}
 
 #' @export
 #' @title Number of trajectories
@@ -820,7 +829,9 @@ nClusters = function(object) {
 
 #' @export
 #' @importFrom stats nobs
-#' @title Extract the number of observations from a lcModel
+#' @title Number of observations used for the lcModel fit
+#' @description Extracts the number of observations that contributed information towards fitting the cluster trajectories of the respective `lcModel` object.
+#' Therefore, only non-missing response observations count towards the number of observations.
 #' @param object The `lcModel` object.
 #' @param ... Additional arguments.
 #' @family model-specific methods
@@ -836,9 +847,10 @@ nobs.lcModel = function(object, ...) {
   })
 
   if (is.null(data)) {
-    return(0L)
+    0L
   } else {
-    nrow(model.data(object))
+    x = data[[responseVariable(object)]]
+    sum(is.finite(x))
   }
 }
 

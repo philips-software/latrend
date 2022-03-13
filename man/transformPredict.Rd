@@ -38,7 +38,7 @@ The prediction ordering corresponds to the observation ordering of the \code{new
 By default, \code{transformPredict()} accepts one of the following inputs:
 \describe{
 \item{\code{data.frame}}{A \code{data.frame} in long format providing a cluster-specific prediction for each observation per row, with column names \code{"Fit"} and \code{"Cluster"}.
-This \code{data.frame} therefore has \code{nobs(object) * nClusters(object)} rows.}
+This \code{data.frame} therefore has \code{nrow(model.data(object)) * nClusters(object)} rows.}
 \item{\code{matrix}}{An N-by-K \code{matrix} where each row provides the cluster-specific predictions for the respective observations in \code{newdata}.
 Here, \code{N = nrow(newdata)} and \code{K = nClusters(object)}.}
 \item{\code{vector}}{A \code{vector} of length \code{nrow(newdata)} with predictions corresponding to the rows of \code{newdata}.}

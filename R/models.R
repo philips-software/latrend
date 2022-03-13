@@ -82,19 +82,19 @@ as.list.lcModels = function(x, ...) {
 #' @param excludeShared Whether to exclude columns which have the same value across all methods.
 #' @param ... Arguments passed to [as.data.frame.lcMethod].
 #' @return A `data.frame`.
-as.data.frame.lcModels = function(x, ...,
-                                  excludeShared = FALSE,
-                                  eval = TRUE) {
+as.data.frame.lcModels = function(
+  x,
+  ...,
+  excludeShared = FALSE,
+  eval = TRUE
+) {
   x = as.lcModels(x)
 
   dfs = lapply(x, getLcMethod) %>%
     lapply(as.data.frame, eval = eval, ...)
 
   suppressWarnings({
-    dt = rbindlist(dfs,
-                   use.names = TRUE,
-                   fill = TRUE,
-                   idcol = '.name')
+    dt = rbindlist(dfs, use.names = TRUE, fill = TRUE, idcol = '.name')
   })
 
   if (isTRUE(excludeShared) && nrow(dt) > 1) {
@@ -107,8 +107,11 @@ as.data.frame.lcModels = function(x, ...,
     dt[, `.name` := character()]
   }
 
-  dataNames = vapply(x, function(model)
-    deparse(getCall(model)$data), FUN.VALUE = '')
+  dataNames = vapply(
+    x,
+    function(model) deparse(getCall(model)$data) %>% paste0(collapse = ''),
+    FUN.VALUE = ''
+  )
   if (!excludeShared || uniqueN(dataNames) > 1) {
     dt[, data := dataNames]
   }
@@ -175,6 +178,7 @@ setMethod('estimationTime', signature('list'), function(object, unit, ...) {
 
   m = matrix(NaN, nrow = length(object), ncol = length(object))
   m[do.call(rbind, pairs)] = unlist(result)
+
   as.dist(t(m), diag = FALSE, upper = FALSE)
 }
 

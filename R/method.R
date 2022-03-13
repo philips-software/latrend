@@ -404,13 +404,15 @@ as.data.frame.lcMethod = function(x, ..., eval = TRUE, nullValue = NA, envir = N
 
   if (isTRUE(eval)) {
     envir = .selectEnvironment(x, parent.frame(), envir)
-    evalClasses = c('NULL',
-                    'logical',
-                    'numeric',
-                    'complex',
-                    'integer',
-                    'character',
-                    'factor')
+    evalClasses = c(
+      'NULL',
+      'logical',
+      'numeric',
+      'complex',
+      'integer',
+      'character',
+      'factor'
+    )
     method = evaluate.lcMethod(x, classes = evalClasses, envir = envir)
   } else {
     method = x
@@ -422,7 +424,7 @@ as.data.frame.lcMethod = function(x, ..., eval = TRUE, nullValue = NA, envir = N
       nullValue
     } else if (is.atomic(a)) {
       if (length(a) > 1) {
-        deparse(a) %>% as.character()
+        deparse(a) %>% as.character() %>% paste0(collapse = '')
       } else {
         a
       }
@@ -431,7 +433,18 @@ as.data.frame.lcMethod = function(x, ..., eval = TRUE, nullValue = NA, envir = N
     }
   })
 
-  assert_that(all(vapply(dfList, length, FUN.VALUE = 0) == 1))
+  argValueLengths = vapply(dfList, length, FUN.VALUE = 0)
+  errMask = argValueLengths != 1
+
+  assert_that(
+    all(argValueLengths == 1),
+    msg = sprintf(
+      'as.data.frame.lcMethod(%s) requires all method arguments to be/evaluate to length 1.\nArguments that violate this requirement: %s',
+      class(x)[1],
+      paste0('"', names(argValueLengths)[errMask], '"(', argValueLengths[errMask], ')', collapse = ', ')
+    )
+  )
+
   as.data.frame(dfList, stringsAsFactors = FALSE)
 }
 

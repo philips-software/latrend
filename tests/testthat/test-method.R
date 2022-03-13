@@ -303,6 +303,33 @@ test_that('as.data.frame with symbols', {
   expect_equal(df$name, xvar)
 })
 
+test_that('as.data.frame with vector arguments', {
+  m = new(
+    'lcMethodTest',
+    null = NULL,
+    vec = c('a', 'b'),
+    ab = LETTERS[1:26]
+  )
+
+  df = as.data.frame(m, eval = FALSE)
+  refDf = data.frame(
+    null = NA,
+    vec = 'c("a", "b")',
+    ab = 'LETTERS[1:26]',
+    stringsAsFactors = FALSE
+  )
+  expect_equal(df, refDf)
+
+  df2 = as.data.frame(m, eval = TRUE)
+  refDf2 = data.frame(
+    null = NA,
+    vec = 'c("a", "b")',
+    ab = sprintf('c(%s)', paste0('"', LETTERS[1:26], '"', collapse = ', ')),
+    stringsAsFactors = FALSE
+  )
+  expect_equal(df2, refDf2)
+})
+
 
 # List ####
 test_that('as.list', {
