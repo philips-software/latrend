@@ -86,3 +86,20 @@ test_that('is_valid_postprob', {
   expect_false(is_valid_postprob(matrix(c(1, 1, 1, 0), nrow = 2))) # a row sum > 1
   expect_false(is_valid_postprob(matrix(c(-1, 1, 2, 0), nrow = 2))) # negative entries
 })
+
+test_that('have_trajectories_noNA', {
+  expect_true(have_trajectories_noNA(testLongData, id = 'Traj', response = 'Value'))
+
+  expect_false(
+    have_trajectories_noNA(copy(testLongData)[2, Value := NA], id = 'Traj', response = 'Value')
+  )
+
+  expect_true(
+    have_trajectories_noNA(copy(testLongData)[3, Value := Inf], id = 'Traj', response = 'Value')
+  )
+})
+
+test_that('are_trajectories_equal_length', {
+  expect_true(are_trajectories_equal_length(testLongData, id = 'Traj', time = 'Assessment'))
+  expect_false(are_trajectories_equal_length(testLongData[2:.N], id = 'Traj', time = 'Assessment'))
+})

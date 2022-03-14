@@ -4,11 +4,17 @@
 \alias{latrend-assert}
 \alias{has_lcMethod_args}
 \alias{is_valid_postprob}
+\alias{are_trajectories_equal_length}
+\alias{have_trajectories_noNA}
 \title{latrend-specific assertions}
 \usage{
 has_lcMethod_args(object, which)
 
 is_valid_postprob(pp, model = NULL)
+
+are_trajectories_equal_length(data, id, time)
+
+have_trajectories_noNA(data, id, response)
 }
 \arguments{
 \item{object}{The object to test.}
@@ -18,10 +24,18 @@ is_valid_postprob(pp, model = NULL)
 \item{pp}{The posterior probability \code{matrix}.}
 
 \item{model}{The \code{lcModel} object. Optional.}
+
+\item{id}{The id variable}
+
+\item{time}{The time variable}
 }
 \description{
 Assertions and checks that may be of use for custom model implementations.
 
 Check whether the input is a valid posterior probability matrix (for the given model).
+
+Check whether all trajectories have the same number of observations, and are observed at the same moments in time.
+
+Check whether all trajectories don't contain any NA observations.
 }
 \keyword{internal}
