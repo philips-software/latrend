@@ -205,19 +205,87 @@ assertthat::on_failure(is_valid_postprob) = function(call, env) {
 
 #' @export
 #' @rdname assert
-#' @description Check whether all trajectories have the same number of observations, and are observed at the same moments in time.
+#' @description Check whether the data contains trajectories without any observations. Requires Id column to be factor.
+#' @param ids A `character vector` of trajectory identifiers that are expected to be present in the data.
+no_empty_trajectories = function(data, id, ids = levels(data[[id]])) {
+  assert_that(
+    is.data.frame(data),
+    is.string(id),
+    has_name(data, id),
+    noNA(data[[id]])
+  )
+
+  if (length(ids) == 0) {
+    TRUE
+  } else {
+    all(ids %in% data[[id]])
+  }
+}
+
+assertthat::on_failure(no_empty_trajectories) = function(call, env) {
+  data = eval(call$data, env) %>% as.data.table()
+  id = eval(call$id, env)
+  ids = eval(call$ids, env)
+
+  missingIds = setdiff(ids, unique(data[[id]]))
+
+  sprintf(
+    'Data contains %d trajectories that have no observations:\n  %s',
+    length(missingIds),
+    paste0('"', missingIds, '"', collapse = ', ')
+  )
+}
+
+#' @export
+#' @rdname assert
+#' @description Check the number of observation moments for each trajectory
+#' @param min The minimum required number.
+are_trajectories_length = function(data, min = 1, id, time) {
+  assert_that(
+    is.data.frame(data),
+    is.count(min + 1L),
+    is.string(id),
+    is.string(time),
+    has_name(data, c(id, time)),
+    noNA(data[[time]])
+  )
+
+  all(data[, uniqueN(get(time)), by = c(id)]$V1 >= min)
+}
+
+assertthat::on_failure(are_trajectories_length) = function(call, env) {
+  data = eval(call$data, env) %>% as.data.table()
+  id = eval(call$id, env)
+  time = eval(call$time, env)
+  min = eval(call$min, env)
+
+  dtTraj = data[, .(Moments = uniqueN(get(time))), by = c(id)] %>%
+    .[, Moments < min]
+
+  sprintf(
+    'Data contains %d trajectories that have fewer than %d observations moments.\nList of problematic trajectories:\n  %s',
+    nroW(dtTraj),
+    min,
+    as.character(dtTraj[[id]])
+  )
+}
+
+#' @export
+#' @rdname assert
+#' @description Check whether all trajectories have the same number of observation moments, and are observed at the same moments in time.
 #' @param id The id variable
 #' @param time The time variable
 are_trajectories_equal_length = function(data, id, time) {
   assert_that(
     is.data.frame(data),
     is.string(id),
-    is.string(time)
+    is.string(time),
+    has_name(data, c(id, time))
   )
   data = as.data.table(data)
   stopifnot(noNA(data[[time]]))
   nTimes = uniqueN(data[[time]])
-  all(data[, .N == nTimes, by = c(id)]$V1)
+  all(data[, .N == nTimes && uniqueN(get(time)) == nTimes, by = c(id)]$V1)
 }
 
 assertthat::on_failure(are_trajectories_equal_length) = function(call, env) {
@@ -257,7 +325,8 @@ have_trajectories_noNA = function(data, id, response) {
   assert_that(
     is.data.frame(data),
     is.string(id),
-    is.string(response)
+    is.string(response),
+    has_name(data, c(id, response))
   )
   noNA(data[[response]])
 }

@@ -87,8 +87,39 @@ test_that('is_valid_postprob', {
   expect_false(is_valid_postprob(matrix(c(-1, 1, 2, 0), nrow = 2))) # negative entries
 })
 
+test_that('no_empty_trajectories', {
+  expect_true(
+    no_empty_trajectories(data.frame(Id = 1:3), id = 'Id')
+  )
+
+  expect_true(
+    no_empty_trajectories(data.frame(Id = factor(LETTERS[1:3])), id = 'Id')
+  )
+
+  expect_true(
+    no_empty_trajectories(testLongData, id = 'Traj')
+  )
+
+  expect_true(
+    no_empty_trajectories(data.frame(Id = 1:3), id = 'Id', ids = 1:3)
+  )
+
+  expect_false(
+    no_empty_trajectories(data.frame(Id = 1:3), id = 'Id', ids = 1:4)
+  )
+
+  expect_false(
+    no_empty_trajectories(
+      data.frame(Id = factor(LETTERS[1:3], levels = LETTERS[1:4])),
+      id = 'Id'
+    )
+  )
+})
+
 test_that('have_trajectories_noNA', {
-  expect_true(have_trajectories_noNA(testLongData, id = 'Traj', response = 'Value'))
+  expect_true(
+    have_trajectories_noNA(testLongData, id = 'Traj', response = 'Value')
+  )
 
   expect_false(
     have_trajectories_noNA(copy(testLongData)[2, Value := NA], id = 'Traj', response = 'Value')
@@ -99,7 +130,26 @@ test_that('have_trajectories_noNA', {
   )
 })
 
+test_that('are_trajectories_length', {
+  expect_true(
+    are_trajectories_length(testLongData, id = 'Traj', time = 'Assessment', min = 1L)
+  )
+
+  expect_true(
+    are_trajectories_length(testLongData, id = 'Traj', time = 'Assessment', min = uniqueN(testLongData$Assessment))
+  )
+
+  expect_false(
+    are_trajectories_length(testLongData, id = 'Traj', time = 'Assessment', min = uniqueN(testLongData$Assessment) + 1L)
+  )
+})
+
 test_that('are_trajectories_equal_length', {
-  expect_true(are_trajectories_equal_length(testLongData, id = 'Traj', time = 'Assessment'))
-  expect_false(are_trajectories_equal_length(testLongData[2:.N], id = 'Traj', time = 'Assessment'))
+  expect_true(
+    are_trajectories_equal_length(testLongData, id = 'Traj', time = 'Assessment')
+  )
+
+  expect_false(
+    are_trajectories_equal_length(testLongData[2:.N], id = 'Traj', time = 'Assessment')
+  )
 })
