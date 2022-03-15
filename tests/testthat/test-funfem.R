@@ -2,7 +2,7 @@ context('funfem')
 skip_if_not_installed('funFEM')
 rngReset()
 # funFEM does not support K = 1
-tests = setdiff(DEFAULT_LATREND_TESTS, 'cluster-single')
+tests = setdiff(DEFAULT_LATREND_TESTS, c('cluster-single', 'data-na'))
 
 library(funFEM)
 # data(CanadianWeather)

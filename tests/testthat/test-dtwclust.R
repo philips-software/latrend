@@ -2,7 +2,7 @@ context('dtwclust')
 skip_if_not_installed('dtwclust')
 rngReset()
 # dtwclust does not seem to support fitting 1 cluster
-tests = setdiff(DEFAULT_LATREND_TESTS, 'cluster-single')
+tests = setdiff(DEFAULT_LATREND_TESTS, c('cluster-single', 'data-na'))
 
 test_that('default', {
   expect_true({

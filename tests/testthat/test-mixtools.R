@@ -1,7 +1,7 @@
 context('mixtools')
 skip_if_not_installed('mixtools')
 rngReset()
-tests = DEFAULT_LATREND_TESTS
+tests = setdiff(DEFAULT_LATREND_TESTS, 'data-na')
 
 make.gmm = function(id, time, response, ...) {
   lcMethodMixtoolsGMM(

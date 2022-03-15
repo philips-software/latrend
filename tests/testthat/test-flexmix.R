@@ -1,7 +1,7 @@
 context('flexmix')
 skip_if_not_installed('flexmix')
 rngReset()
-tests = DEFAULT_LATREND_TESTS
+tests = setdiff(DEFAULT_LATREND_TESTS, 'data-na')
 
 make.flexmix = function(response, ...) {
   lcMethodFlexmix(formula = as.formula(sprintf('%s ~ 1', response)), ...)
