@@ -2,7 +2,7 @@ context('longclust')
 skip_if_not_installed('longclust')
 rngReset()
 # longclust does not support K=1
-tests = setdiff(DEFAULT_LATREND_TESTS, c('cluster-single', 'data-na'))
+tests = setdiff(DEFAULT_LATREND_TESTS, c('cluster-single', 'data-na', 'data-varlen'))
 
 test_that('vva', {
   expect_true({

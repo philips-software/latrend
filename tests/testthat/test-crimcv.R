@@ -4,7 +4,7 @@ skip_on_ci()
 skip_on_cran()
 skip_if_not_installed('crimCV')
 rngReset()
-tests = setdiff(DEFAULT_LATREND_TESTS, 'data-na')
+tests = setdiff(DEFAULT_LATREND_TESTS, c('data-na', 'data-varlen'))
 
 library(crimCV)
 

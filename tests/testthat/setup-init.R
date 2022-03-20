@@ -7,7 +7,7 @@ options(latrend.warnModelDataClusterColumn = FALSE)
 options(latrend.warnNewDataClusterColumn = FALSE)
 options(latrend.warnTrajectoryLength = 0)
 
-DEFAULT_LATREND_TESTS = c('method', 'basic', 'fitted', 'predict', 'cluster-single', 'cluster-three', 'data-na')
+DEFAULT_LATREND_TESTS = c('method', 'basic', 'fitted', 'predict', 'cluster-single', 'cluster-three', 'data-na', 'data-varlen')
 
 foreach::registerDoSEQ()
 
