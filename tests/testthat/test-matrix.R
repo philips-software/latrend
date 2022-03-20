@@ -52,6 +52,14 @@ test_that('dcastRepeatedMeasures', {
   expect_equal(as.numeric(mat), as.numeric(m))
 })
 
+test_that('dcastRepeatedMeasures with incomplete trajectories', {
+  m = matrix(1:12, nrow=3)
+  df = meltRepeatedMeasures(m, response = 'Value')
+  mat = dcastRepeatedMeasures(df[-1, ], response = 'Value')
+
+  expect_equal(nrow(mat), nrow(m))
+  expect_equal(ncol(mat), ncol(m))
+})
 
 test_that('trajectoryAssignments,matrix', {
   model = latrend(lcMethodTestKML(), data = testLongData)

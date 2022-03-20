@@ -8,7 +8,8 @@ dcastRepeatedMeasures(
   data,
   response,
   id = getOption("latrend.id"),
-  time = getOption("latrend.time")
+  time = getOption("latrend.time"),
+  fill = NA
 )
 }
 \arguments{
@@ -19,6 +20,9 @@ dcastRepeatedMeasures(
 \item{id}{The id column name.}
 
 \item{time}{The time column name.}
+
+\item{fill}{A \code{scalar} value. If \code{FALSE}, an error is thrown when time series observations are missing in the data frame.
+Otherwise, the value used for representing missing observations.}
 }
 \value{
 A \code{matrix} with a trajectory per row.

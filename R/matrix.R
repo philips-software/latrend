@@ -51,13 +51,15 @@ setMethod('trajectoryAssignments', signature('matrix'), function(object, strateg
 #' @param times A `numeric` `vector` specifying the times of the measurements. Should match the number of columns of `data`.
 #' @param as.data.table Whether to return the result as a `data.table`, or a `data.frame` otherwise.
 #' @return A `data.table` or `data.frame` containing the repeated measures.
-meltRepeatedMeasures = function(data,
-                                response,
-                                id = getOption('latrend.id'),
-                                time = getOption('latrend.time'),
-                                ids = rownames(data),
-                                times = colnames(data),
-                                as.data.table = FALSE) {
+meltRepeatedMeasures = function(
+    data,
+    response,
+    id = getOption('latrend.id'),
+    time = getOption('latrend.time'),
+    ids = rownames(data),
+    times = colnames(data),
+    as.data.table = FALSE
+) {
   assert_that(
     is.matrix(data),
     is.character(id),
@@ -119,26 +121,54 @@ meltRepeatedMeasures = function(data,
 #' @title Cast a longitudinal data.frame to a matrix
 #' @description Converts a longitudinal `data.frame` comprising trajectories with an equal number of observations, measured at identical moments in time, to a `matrix`. Each row of the matrix represents a trajectory.
 #' @inheritParams meltRepeatedMeasures
+#' @param fill A `scalar` value. If `FALSE`, an error is thrown when time series observations are missing in the data frame.
+#' Otherwise, the value used for representing missing observations.
 #' @return A `matrix` with a trajectory per row.
-dcastRepeatedMeasures = function(data,
-                                 response,
-                                 id = getOption('latrend.id'),
-                                 time = getOption('latrend.time')) {
-  assert_that(has_name(data, c(id, time, response)))
+dcastRepeatedMeasures = function(
+    data,
+    response,
+    id = getOption('latrend.id'),
+    time = getOption('latrend.time'),
+    fill = NA
+) {
+  assert_that(
+    is.data.frame(data),
+    has_name(data, c(id, time, response)),
+    nrow(data) > 0,
+    is.scalar(fill),
+    noNA(data[[id]]),
+    noNA(data[[time]])
+  )
 
   dt = as.data.table(data)
   setkeyv(dt, c(id, time))
 
-  numIds = uniqueN(dt[[id]])
-  numTime = uniqueN(dt[[time]])
-  assert_that(all(dt[, .N, by=c(id)]$N == numTime), msg = 'trajectories do not all have the same number of observations')
+  ids = unique(dt[[id]])
+  times = unique(dt[[time]])
 
-  dataMat = matrix(dt[[response]],
-                   byrow = TRUE,
-                   nrow = uniqueN(dt[[id]]),
-                   ncol = uniqueN(dt[[time]]))
+  if (isFALSE(fill)) {
+    assert_that(
+      are_trajectories_equal_length(dt, id = id, time = time)
+    )
+  } else if (!are_trajectories_equal_length(dt, id = id, time = time)) {
+    # insert missing observations
+    dt[, .Fill := FALSE]
+    dtIndex = CJ(ids, times)
+    setnames(dtIndex, c(id, time))
+    dt = dt[dtIndex]
+    dt[is.na(.Fill), c(response) := fill]
+    dt[, .Fill := NULL]
+  }
 
-  rownames(dataMat) = unique(dt[[id]])
-  colnames(dataMat) = unique(dt[[time]])
-  return(dataMat)
+  dataMat = matrix(
+    dt[[response]],
+    byrow = TRUE,
+    nrow = length(ids),
+    ncol = length(times)
+  )
+
+  rownames(dataMat) = ids
+  colnames(dataMat) = times
+
+  dataMat
 }
