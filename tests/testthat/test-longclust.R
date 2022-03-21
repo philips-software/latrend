@@ -1,39 +1,27 @@
 context('longclust')
 skip_if_not_installed('longclust')
 rngReset()
+# longclust does not support K=1
+tests = setdiff(DEFAULT_LATREND_TESTS, c('cluster-single', 'data-na', 'data-varlen'))
 
-lcMethodTestLongclust = function(...) {
-  lcMethodLongclust(
-    response = 'Value',
-    modelSubset = 'VVA',
-    gaussian = TRUE,
-    ...,
-    seed = 1
-  )
-}
-
-lcMethodTestLongclustT = function(...) {
-  lcMethodLongclust(
-    response = 'Value',
-    modelSubset = 'VEI',
-    gaussian = FALSE,
-    ...,
-    seed = 1
-  )
-}
-
-
-test_that('default', {
-  model = latrend(lcMethodTestLongclust(), testLongData)
-  expect_valid_lcModel(model)
+test_that('vva', {
+  expect_true({
+    test.latrend(
+      'lcMethodLongclust',
+      tests = tests,
+      clusterRecovery = 'skip',
+      args = list(modelSubset = 'VVA', gaussian = TRUE, seed = 1)
+    )
+  })
 })
 
-test_that('t', {
-  model = latrend(lcMethodTestLongclustT(), testLongData)
-  expect_valid_lcModel(model)
-})
-
-test_that('many clusters', {
-  model = latrend(lcMethodTestLongclust(nClusters=3), testLongData)
-  expect_valid_lcModel(model)
+test_that('vei', {
+  expect_true({
+    test.latrend(
+      'lcMethodLongclust',
+      tests = tests,
+      clusterRecovery = 'skip',
+      args = list(modelSubset = 'VEI', gaussian = FALSE, seed = 1)
+    )
+  })
 })

@@ -175,18 +175,6 @@ test_that('data with Inf observations', {
   expect_error(latrend(mTest, data = infData))
 })
 
-test_that('data with missing observations', {
-  set.seed(1)
-  naData = copy(testLongData) %>%
-    .[sample(.N, 100)]
-
-  model = latrend(lcMethodTestGCKM(), data = naData)
-  expect_is(model, 'lcModel')
-
-  expect_error(latrend(lcMethodTestKML(), data = naData))
-})
-
-
 test_that('running the same probabilistic method twice without seed yields different results', {
   method = lcMethodTestRandom(alpha = 1, nClusters = 2)
   model1 = latrend(method, data = testLongData)

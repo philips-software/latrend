@@ -6,12 +6,12 @@
 \usage{
 generateLongData(
   sizes = c(40, 60),
-  fixed = Value ~ 1 + Time,
+  fixed = Value ~ 1,
   cluster = ~1 + Time,
   random = ~1,
   id = getOption("latrend.id"),
   data = data.frame(Time = seq(0, 1, by = 0.1)),
-  fixedCoefs = c(0, 0),
+  fixedCoefs = 0,
   clusterCoefs = cbind(c(-2, 1), c(2, -1)),
   randomScales = cbind(0.1, 0.1),
   rrandom = rnorm,

@@ -72,6 +72,8 @@ setMethod('fit', signature('lcMethodAkmedoids'), function(method, data, envir, v
   args$k = method$nClusters
   args$id_field = FALSE
 
+  assert_that(method$nClusters %between% c(3, 20), msg = 'akmedoids only supports nClusters = 3, ..., 20')
+
   model = do.call(akmedoids::akclustr, args)
 
   clusNames = make.clusterNames(method$nClusters)

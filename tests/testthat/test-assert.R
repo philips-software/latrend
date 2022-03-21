@@ -16,6 +16,22 @@ test_that('is_named', {
   expect_false(is_named(factor(1:2, levels = LETTERS[1:2])))
 })
 
+test_that('is_data', {
+  expect_false(is_data(NULL))
+  expect_false(is_data(1))
+  expect_false(is_data(''))
+  expect_false(is_data(data.frame()))
+  expect_false(is_data(data.table(id = numeric()), id = 'id'))
+  expect_false(is_data(list(id = 1, time = 1), id = 'id', time = 'time'))
+  expect_true(is_data(data.frame(a = 1)))
+  expect_false(is_data(data.frame(a = 1), id = 'b')) # missing id column
+  expect_true(is_data(data.frame(id = 1), id = 'id'))
+  expect_false(is_data(data.frame(id = NA), id = 'id'))
+  expect_false(is_data(data.frame(id = 1), id = 'id', time = 'b')) # missing time column
+  expect_false(is_data(data.frame(id = 1, time = NA), id = 'id', time = 'time')) # missing time column
+  expect_false(is_data(data.frame(id = 1, time = 'time'), id = 'id', time = 'time', response = 'b')) # missing response column
+})
+
 test_that('is_newdata', {
   expect_true(is_newdata(NULL))
   expect_true(is_newdata(data.frame()))
@@ -85,4 +101,89 @@ test_that('is_valid_postprob', {
   expect_false(is_valid_postprob(matrix(c(0, 1, 0, 0), nrow = 2))) # a row with sum < 1
   expect_false(is_valid_postprob(matrix(c(1, 1, 1, 0), nrow = 2))) # a row sum > 1
   expect_false(is_valid_postprob(matrix(c(-1, 1, 2, 0), nrow = 2))) # negative entries
+})
+
+test_that('no_trajectories_duplicate_time', {
+  expect_true(
+    no_trajectories_duplicate_time(data.frame(Id = c(1,1,2,2), Time = c(1:2, 1:2)), id = 'Id', time = 'Time')
+  )
+
+  expect_true(
+    no_trajectories_duplicate_time(data.frame(Id = c(1,1,2), Time = c(1:2, 1)), id = 'Id', time = 'Time')
+  )
+
+  expect_true(
+    no_trajectories_duplicate_time(testLongData, id = 'Traj', time = 'Assessment')
+  )
+
+  expect_false(
+    no_trajectories_duplicate_time(data.frame(Id = c(1,1,2,2), Time = c(1, 1, 1:2)), id = 'Id', time = 'Time')
+  )
+})
+
+test_that('no_empty_trajectories', {
+  expect_true(
+    no_empty_trajectories(data.frame(Id = 1:3), id = 'Id')
+  )
+
+  expect_true(
+    no_empty_trajectories(data.frame(Id = factor(LETTERS[1:3])), id = 'Id')
+  )
+
+  expect_true(
+    no_empty_trajectories(testLongData, id = 'Traj')
+  )
+
+  expect_true(
+    no_empty_trajectories(data.frame(Id = 1:3), id = 'Id', ids = 1:3)
+  )
+
+  expect_false(
+    no_empty_trajectories(data.frame(Id = 1:3), id = 'Id', ids = 1:4)
+  )
+
+  expect_false(
+    no_empty_trajectories(
+      data.frame(Id = factor(LETTERS[1:3], levels = LETTERS[1:4])),
+      id = 'Id'
+    )
+  )
+})
+
+test_that('have_trajectories_noNA', {
+  expect_true(
+    have_trajectories_noNA(testLongData, id = 'Traj', response = 'Value')
+  )
+
+  expect_false(
+    have_trajectories_noNA(copy(testLongData)[2, Value := NA], id = 'Traj', response = 'Value')
+  )
+
+  expect_true(
+    have_trajectories_noNA(copy(testLongData)[3, Value := Inf], id = 'Traj', response = 'Value')
+  )
+})
+
+test_that('are_trajectories_length', {
+  expect_true(
+    are_trajectories_length(testLongData, id = 'Traj', time = 'Assessment', min = 1L)
+  )
+
+  expect_true(
+    are_trajectories_length(testLongData, id = 'Traj', time = 'Assessment', min = uniqueN(testLongData$Assessment))
+  )
+
+  expect_false(
+    are_trajectories_length(testLongData, id = 'Traj', time = 'Assessment', min = uniqueN(testLongData$Assessment) + 1L)
+  )
+})
+
+test_that('are_trajectories_equal_length', {
+  expect_true(
+    are_trajectories_equal_length(testLongData, id = 'Traj', time = 'Assessment')
+  )
+
+  expect_false(
+    are_trajectories_equal_length(testLongData[2:.N], id = 'Traj', time = 'Assessment')
+  )
 })

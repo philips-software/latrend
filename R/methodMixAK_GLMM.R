@@ -19,6 +19,7 @@ setClass('lcMethodMixAK_GLMM', contains = 'lcMethod')
 #' @param ... Arguments passed to [mixAK::GLMM_MCMC].
 #' The following external arguments are ignored: y, x, z, random.intercept, silent.
 #' @family lcMethod implementations
+#' @note This method currently does not appear to work under R 4.2 due to an error triggered by the mixAK package during fitting.
 #' @examples
 #' data(latrendData)
 #' # this example only runs when the mixAK package is installed

@@ -4,11 +4,29 @@
 \alias{latrend-assert}
 \alias{has_lcMethod_args}
 \alias{is_valid_postprob}
+\alias{no_empty_trajectories}
+\alias{is_data}
+\alias{no_trajectories_duplicate_time}
+\alias{are_trajectories_length}
+\alias{are_trajectories_equal_length}
+\alias{have_trajectories_noNA}
 \title{latrend-specific assertions}
 \usage{
 has_lcMethod_args(object, which)
 
 is_valid_postprob(pp, model = NULL)
+
+no_empty_trajectories(data, id, ids = levels(data[[id]]))
+
+is_data(data, id, time, response)
+
+no_trajectories_duplicate_time(data, id, time)
+
+are_trajectories_length(data, min = 1, id, time)
+
+are_trajectories_equal_length(data, id, time)
+
+have_trajectories_noNA(data, id, response)
 }
 \arguments{
 \item{object}{The object to test.}
@@ -18,10 +36,33 @@ is_valid_postprob(pp, model = NULL)
 \item{pp}{The posterior probability \code{matrix}.}
 
 \item{model}{The \code{lcModel} object. Optional.}
+
+\item{id}{The id variable}
+
+\item{ids}{A \verb{character vector} of trajectory identifiers that are expected to be present in the data.}
+
+\item{time}{The time variable}
+
+\item{response}{The response column name. Optional.}
+
+\item{min}{The minimum required number.}
 }
 \description{
 Assertions and checks that may be of use for custom model implementations.
 
 Check whether the input is a valid posterior probability matrix (for the given model).
+
+Check whether the dataset does not contain trajectories without any observations.
+Requires Id column to be factor.
+
+Check whether the provided \code{data.frame} represents a longitudinal dataset
+
+Check whether the dataset does not contain trajectories with duplicate observation moments.
+
+Check the number of observation moments for each trajectory
+
+Check whether all trajectories have the same number of observation moments, and are observed at the same moments in time.
+
+Check whether all trajectories don't contain any NA observations.
 }
 \keyword{internal}

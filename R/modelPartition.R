@@ -22,6 +22,7 @@ setClass(
 #' @param nClusters The number of clusters. Should be `NA` for trajectory assignments of type `factor`.
 #' @param clusterNames The names of the clusters, or a function with input `n` outputting a `character vector` of names.
 #' If unspecified, the names are determined from the `trajectoryAssignments` argument.
+#' @param method Optional `lcMethod` object that was used for fitting this model to the data.
 #' @param envir The `environment` associated with the model. Used for evaluating the assigned `data` object by [model.data.lcModel].
 #' @examples
 #' # comparing a model to the ground truth using the adjusted Rand index
@@ -42,6 +43,7 @@ lcModelPartition = function(
   id = getOption('latrend.id'),
   name = 'part',
   center = meanNA,
+  method = NULL,
   envir = parent.frame()
 ) {
   assert_that(
@@ -154,6 +156,11 @@ lcModelPartition = function(
     response = response,
     estimationTime = 0
   )
+
+  if (!is.null(method)) {
+    model@method = method
+  }
+
   environment(model) = envir
   return(model)
 }

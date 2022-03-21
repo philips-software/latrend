@@ -61,7 +61,7 @@ We can generate data according to this model using a utility function named `gen
 dataGen <- function(numTraj, ..., data.seed) {
   latrend::generateLongData(
     sizes = c(floor(numTraj * .4), ceiling(numTraj * .6)),
-    fixed = Y ~ 1 + Time,
+    fixed = Y ~ 0,
     cluster = ~ 1 + Time,
     random = ~ 1,
     id = "Traj",
@@ -164,7 +164,7 @@ analyzeModel <- function(model) {
   
   tibble::tibble(
     BIC = BIC(model),
-    APPA = metric(model, "APPA"),
+    APPA = metric(model, "APPA.min"),
     WMAE = metric(model, "WMAE"),
     ARI = externalMetric(model, refModel, "adjustedRand")
   )

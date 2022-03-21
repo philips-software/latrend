@@ -47,6 +47,7 @@ Suggests:
     rcmdcheck,
     pkgdown,
     devtools,
+    evaluate,
     lme4,
     covr,
     lintr,
@@ -143,6 +144,7 @@ Collate:
     'modelWeightedPartition.R'
     'models.R'
     'random.R'
+    'test.R'
     'timing.R'
     'verbose.R'
     'zzz.R'

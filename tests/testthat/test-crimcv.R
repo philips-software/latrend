@@ -4,16 +4,13 @@ skip_on_ci()
 skip_on_cran()
 skip_if_not_installed('crimCV')
 rngReset()
+tests = setdiff(DEFAULT_LATREND_TESTS, c('data-na', 'data-varlen'))
 
 library(crimCV)
-data(TO1adj)
-subTO1adj = TO1adj[1:100, seq(1, ncol(TO1adj), by = 2)]
 
-lcMethodTestCrimCV = function(...) {
+make.crimcv = function(...) {
   lcMethodCrimCV(
-    response = 'Value',
     ...,
-    model = 'ZIP',
     dpolyp = 2,
     dpolyl = 1,
     init = 5,
@@ -21,41 +18,42 @@ lcMethodTestCrimCV = function(...) {
   )
 }
 
-lcMethodTestCrimCVt = function(...) {
-  lcMethodCrimCV(
-    response = 'Value',
-    ...,
-    model = 'ZIPt',
-    dpolyp = 2,
-    init = 5,
-    seed = 1
-  )
-}
+# Create test dataset
+data(TO1adj)
+subTO1adj = TO1adj[1:99, seq(1, ncol(TO1adj), by = 2)]
+testData = meltRepeatedMeasures(
+  subTO1adj,
+  id = 'Id',
+  time = 'Time',
+  response = 'Value',
+  times = seq_len(ncol(subTO1adj)),
+  as.data.table = TRUE
+) %>%
+  .[, Cluster := rep(LETTERS[1:3], each = 33 * ncol(subTO1adj))]
 
-test_that('default tau', {
-  suppressWarnings({
-    model = latrend(lcMethodTestCrimCVt(), subTO1adj)
-    expect_valid_lcModel(model)
+# Tests ####
+test_that('zip', {
+  expect_true({
+    test.latrend(
+      'lcMethodCrimCV',
+      instantiator = make.crimcv,
+      data = testData,
+      tests = tests,
+      args = list(model = 'ZIP'),
+      clusterRecovery = 'skip'
+    )
   })
-
-  p = plot(model, what = 'nu')
-  expect_is(p, 'ggplot')
 })
 
-test_that('default', {
-  suppressWarnings({
-    model = latrend(lcMethodTestCrimCV(), subTO1adj)
-    expect_valid_lcModel(model)
-  })
-
-  p = plot(model, what = 'nu')
-  expect_is(p, 'ggplot')
-})
-
-test_that('many clusters', {
-  skip_on_cran()
-  suppressWarnings({
-    model = latrend(lcMethodTestCrimCVt(nClusters = 3), subTO1adj)
-    expect_valid_lcModel(model)
+test_that('zipt', {
+  expect_true({
+    test.latrend(
+      'lcMethodCrimCV',
+      instantiator = make.crimcv,
+      data = testData,
+      tests = tests,
+      args = list(model = 'ZIPt'),
+      clusterRecovery = 'skip'
+    )
   })
 })

@@ -1,6 +1,12 @@
 context('twostep models')
 skip_if_not_installed('lme4')
 rngReset()
+tests = DEFAULT_LATREND_TESTS
+
+make.gckm = function(id, response, ...) {
+  m = lcMethodGCKM(formula = as.formula(sprintf('%s ~ (1 | %s)', response, id)), id = id, ...)
+  evaluate(m) # dont chain using magrittr because this leads to a wrongful evaluation of nClusters (no clue why)
+}
 
 test_that('specify', {
   repfun = function(method, data, ...) {
@@ -18,19 +24,13 @@ test_that('specify', {
 })
 
 test_that('gckm', {
-  method = lcMethodTestGCKM()
-  model = expect_silent(latrend(method, testLongData))
-  expect_valid_lcModel(model)
-})
-
-test_that('gckm with 1 cluster', {
-  method = lcMethodTestGCKM()
-  model = expect_silent(latrend(method, testLongData, nClusters = 1))
-  expect_valid_lcModel(model)
+  expect_true({
+    test.latrend('lcMethodGCKM', instantiator = make.gckm, tests = tests)
+  })
 })
 
 test_that('gckm through latrendBatch', {
-  method = lcMethodTestGCKM()
+  method = make.gckm(id = 'Traj', response = 'Value')
   models = latrendBatch(lcMethods(method, nClusters = 1:3), testLongData)
   expect_length(models, 3)
 })

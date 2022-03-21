@@ -3,13 +3,13 @@ rngReset()
 
 test_that('rowColumns', {
   m = matrix(1:12, ncol=3)
-  expect_error(rowColumns(m, 1))
-  expect_equal(rowColumns(m, c(1,1,1,1)), m[,1])
-  expect_equal(rowColumns(m, c(1,2,3,1)), m[cbind(1:4, c(1,2,3,1))])
-  expect_error(rowColumns(m, c(1,2,NA,3)))
-  expect_error(rowColumns(m, c(1,2,Inf,3)))
-  expect_error(rowColumns(m, c(1,4,1,1)))
-  expect_error(rowColumns(m, c(0,1,1,1)))
+  expect_error(.rowColumns(m, 1))
+  expect_equal(.rowColumns(m, c(1,1,1,1)), m[,1])
+  expect_equal(.rowColumns(m, c(1,2,3,1)), m[cbind(1:4, c(1,2,3,1))])
+  expect_error(.rowColumns(m, c(1,2,NA,3)))
+  expect_error(.rowColumns(m, c(1,2,Inf,3)))
+  expect_error(.rowColumns(m, c(1,4,1,1)))
+  expect_error(.rowColumns(m, c(0,1,1,1)))
 })
 
 
@@ -52,6 +52,14 @@ test_that('dcastRepeatedMeasures', {
   expect_equal(as.numeric(mat), as.numeric(m))
 })
 
+test_that('dcastRepeatedMeasures with incomplete trajectories', {
+  m = matrix(1:12, nrow=3)
+  df = meltRepeatedMeasures(m, response = 'Value')
+  mat = dcastRepeatedMeasures(df[-1, ], response = 'Value')
+
+  expect_equal(nrow(mat), nrow(m))
+  expect_equal(ncol(mat), ncol(m))
+})
 
 test_that('trajectoryAssignments,matrix', {
   model = latrend(lcMethodTestKML(), data = testLongData)
