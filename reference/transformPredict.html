@@ -6,7 +6,7 @@ The prediction ordering corresponds to the observation ordering of the newdata a
 By default, transformPredict() accepts one of the following inputs:
 data.frame
 A data.frame in long format providing a cluster-specific prediction for each observation per row, with column names "Fit" and "Cluster".
-This data.frame therefore has nobs(object) * nClusters(object) rows.
+This data.frame therefore has nrow(model.data(object)) * nClusters(object) rows.
 
 matrix
 An N-by-K matrix where each row provides the cluster-specific predictions for the respective observations in newdata.
@@ -93,7 +93,7 @@ For implementing <code>lcModel</code> predictions from scratch, it is advisable 
 <p>The prediction ordering corresponds to the observation ordering of the <code>newdata</code> argument.</p>
 <p>By default, <code>transformPredict()</code> accepts one of the following inputs:</p><dl><dt><code>data.frame</code></dt>
 <dd><p>A <code>data.frame</code> in long format providing a cluster-specific prediction for each observation per row, with column names <code>"Fit"</code> and <code>"Cluster"</code>.
-This <code>data.frame</code> therefore has <code>nobs(object) * nClusters(object)</code> rows.</p></dd>
+This <code>data.frame</code> therefore has <code>nrow(model.data(object)) * nClusters(object)</code> rows.</p></dd>
 
 <dt><code>matrix</code></dt>
 <dd><p>An N-by-K <code>matrix</code> where each row provides the cluster-specific predictions for the respective observations in <code>newdata</code>.

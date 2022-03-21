@@ -126,7 +126,7 @@
 <code class="sourceCode R"><span class="va">dataGen</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">numTraj</span>, <span class="va">...</span>, <span class="va">data.seed</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu">latrend</span><span class="fu">::</span><span class="fu"><a href="../reference/generateLongData.html">generateLongData</a></span><span class="op">(</span>
     sizes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="va">numTraj</span> <span class="op">*</span> <span class="fl">.4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">numTraj</span> <span class="op">*</span> <span class="fl">.6</span><span class="op">)</span><span class="op">)</span>,
-    fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">Time</span>,
+    fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="fl">0</span>,
     cluster <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">Time</span>,
     random <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>,
     id <span class="op">=</span> <span class="st">"Traj"</span>,
@@ -241,7 +241,7 @@
   
   <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>
     BIC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">BIC</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>,
-    APPA <span class="op">=</span> <span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"APPA"</span><span class="op">)</span>,
+    APPA <span class="op">=</span> <span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"APPA.min"</span><span class="op">)</span>,
     WMAE <span class="op">=</span> <span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"WMAE"</span><span class="op">)</span>,
     ARI <span class="op">=</span> <span class="fu"><a href="../reference/externalMetric.html">externalMetric</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">refModel</span>, <span class="st">"adjustedRand"</span><span class="op">)</span>
   <span class="op">)</span>
@@ -256,405 +256,125 @@
 <span class="co">#&gt; Warning in rgl.init(initValue, onlyNULL): RGL: unable to open X11 display</span>
 <span class="co">#&gt; Warning: 'rgl.init' failed, running with 'rgl.useNULL = TRUE'.</span>
 <span class="co">#&gt; Warning: no DISPLAY variable so Tk is not available</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
+
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
+
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
+
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
+
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
+
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
+
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
+
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
+
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
+
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
+
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
+
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
+
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
+
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
+
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
+
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
 <span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
+
 <span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span>
-
-<span class="co">#&gt; Warning in metric(model, "APPA"): Internal metric(s) "APPA" are not defined.</span>
-<span class="co">#&gt; Returning NA.</span></code></pre></div>
+<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span></code></pre></div>
 <p>The <code>result</code> table contains a <code>results</code> column containing the fitted models.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">result</span>
@@ -676,9 +396,9 @@
 <span class="co">#&gt; Number of data generating functions: 8</span>
 <span class="co">#&gt; Number of analyzing procedures: 15</span>
 <span class="co">#&gt; Number of replications: 1</span>
-<span class="co">#&gt; Estimated replications per hour: 120</span>
-<span class="co">#&gt; Start of the simulation: 2022-01-31 14:36:43</span>
-<span class="co">#&gt; End of the simulation: 2022-01-31 14:37:13</span></code></pre></div>
+<span class="co">#&gt; Estimated replications per hour: 102</span>
+<span class="co">#&gt; Start of the simulation: 2022-03-21 22:00:00</span>
+<span class="co">#&gt; End of the simulation: 2022-03-21 22:00:35</span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="analyzing-the-results">Analyzing the results<a class="anchor" aria-label="anchor" href="#analyzing-the-results"></a>

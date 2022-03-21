@@ -154,10 +154,6 @@
         </td>
         <td><p>Create the training data for each of the k models in k-fold cross validation evaluation</p></td>
       </tr><tr><td>
-          <p><code><a href="dcastRepeatedMeasures.html">dcastRepeatedMeasures()</a></code> </p>
-        </td>
-        <td><p>Cast a longitudinal data.frame to a matrix</p></td>
-      </tr><tr><td>
           <p><code><a href="defineExternalMetric.html">defineExternalMetric()</a></code> </p>
         </td>
         <td><p>Define an external metric for lcModels</p></td>
@@ -418,10 +414,6 @@
         </td>
         <td><p>Select the lcModel with the highest metric value</p></td>
       </tr><tr><td>
-          <p><code><a href="meltRepeatedMeasures.html">meltRepeatedMeasures()</a></code> </p>
-        </td>
-        <td><p>Convert a repeated measures data matrix to a data.frame</p></td>
-      </tr><tr><td>
           <p><code><a href="metric.html">metric(<i>&lt;lcModel&gt;</i>)</a></code> <code><a href="metric.html">metric(<i>&lt;list&gt;</i>)</a></code> <code><a href="metric.html">metric(<i>&lt;lcModels&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compute internal model metric(s)</p></td>
@@ -452,7 +444,7 @@
       </tr><tr><td>
           <p><code><a href="nobs.lcModel.html">nobs(<i>&lt;lcModel&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Extract the number of observations from a lcModel</p></td>
+        <td><p>Number of observations used for the lcModel fit</p></td>
       </tr><tr><td>
           <p><code><a href="plot-lcModel-method.html">plot(<i>&lt;lcModel&gt;</i>)</a></code> </p>
         </td>
@@ -550,6 +542,10 @@
         </td>
         <td><p>Summarize a lcModel</p></td>
       </tr><tr><td>
+          <p><code><a href="test.latrend.html">test.latrend()</a></code> </p>
+        </td>
+        <td><p>Test the implementation of an lcMethod and associated lcModel subclasses</p></td>
+      </tr><tr><td>
           <p><code><a href="time.lcModel.html">time(<i>&lt;lcModel&gt;</i>)</a></code> </p>
         </td>
         <td><p>Sampling times of a lcModel</p></td>
@@ -573,6 +569,14 @@
           <p><code><a href="transformPredict.html">transformPredict</a></code> </p>
         </td>
         <td><p>Helper function for custom lcModel classes implementing predict.lcModel()</p></td>
+      </tr><tr><td>
+          <p><code><a href="tsframe.html">tsframe()</a></code> <code><a href="tsframe.html">meltRepeatedMeasures()</a></code> </p>
+        </td>
+        <td><p>Convert a multiple time series matrix to a data.frame</p></td>
+      </tr><tr><td>
+          <p><code><a href="tsmatrix.html">tsmatrix()</a></code> <code><a href="tsmatrix.html">dcastRepeatedMeasures()</a></code> </p>
+        </td>
+        <td><p>Convert a longitudinal data.frame to a matrix</p></td>
       </tr><tr><td>
           <p><code><a href="update.lcMethod.html">update(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
         </td>

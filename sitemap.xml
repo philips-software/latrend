@@ -103,9 +103,6 @@
     <loc>/reference/createTrainDataFolds.html</loc>
   </url>
   <url>
-    <loc>/reference/dcastRepeatedMeasures.html</loc>
-  </url>
-  <url>
     <loc>/reference/defineExternalMetric.html</loc>
   </url>
   <url>
@@ -376,9 +373,6 @@
     <loc>/reference/meanNA.html</loc>
   </url>
   <url>
-    <loc>/reference/meltRepeatedMeasures.html</loc>
-  </url>
-  <url>
     <loc>/reference/metric.html</loc>
   </url>
   <url>
@@ -481,6 +475,12 @@
     <loc>/reference/summary.lcModel.html</loc>
   </url>
   <url>
+    <loc>/reference/test.html</loc>
+  </url>
+  <url>
+    <loc>/reference/test.latrend.html</loc>
+  </url>
+  <url>
     <loc>/reference/time.lcModel.html</loc>
   </url>
   <url>
@@ -497,6 +497,12 @@
   </url>
   <url>
     <loc>/reference/transformPredict.html</loc>
+  </url>
+  <url>
+    <loc>/reference/tsframe.html</loc>
+  </url>
+  <url>
+    <loc>/reference/tsmatrix.html</loc>
   </url>
   <url>
     <loc>/reference/update.lcMethod.html</loc>
