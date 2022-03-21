@@ -15,7 +15,7 @@ setMethod('clusterTrajectories', signature('lcModelMclustLLPA'), function(object
       msg='empty estimate for mean. model probably did not converge'
     )
 
-    dtclus = meltRepeatedMeasures(
+    dtclus = tsframe(
       t(trajMat),
       times = time(object),
       id = 'Cluster',

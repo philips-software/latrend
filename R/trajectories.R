@@ -20,7 +20,7 @@ setMethod('trajectories', signature('data.frame'), function(object, id, time, re
 #' @rdname trajectories
 #' @aliases trajectories,matrix-method
 setMethod('trajectories', signature('matrix'), function(object, id, time, response, ...) {
-  data = meltRepeatedMeasures(object, id = id, time = time, response = response)
+  data = tsframe(object, id = id, time = time, response = response)
   trajectories(data, id = id, time = time, response = response, ...)
 })
 

@@ -15,7 +15,7 @@ setMethod('clusterTrajectories', signature('lcModelLongclust'), function(object,
       msg='empty estimate for mu. model probably did not converge'
     )
 
-    dtclus = meltRepeatedMeasures(
+    dtclus = tsframe(
       trajMat,
       times = time(object),
       id = 'Cluster',

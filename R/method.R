@@ -860,7 +860,7 @@ setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose
 #' setMethod("prepareData", "lcMethodExample", function(method, data, verbose) {
 #'   envir = new.env()
 #'   # transform the data to matrix
-#'   envir$dataMat = dcastRepeatedMeasures(data,
+#'   envir$dataMat = tsmatrix(data,
 #'     id = idColumn, time = timeColumn, response = valueColumn)
 #'   return(envir)
 #' })

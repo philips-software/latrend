@@ -42,7 +42,7 @@ setMethod('trajectoryAssignments', signature('matrix'), function(object, strateg
 
 
 #' @export
-#' @title Convert a repeated measures data matrix to a data.frame
+#' @title Convert a multiple time series matrix to a data.frame
 #' @param data The `matrix` containing a trajectory on each row.
 #' @param id The id column name.
 #' @param time The time column name.
@@ -51,7 +51,8 @@ setMethod('trajectoryAssignments', signature('matrix'), function(object, strateg
 #' @param times A `numeric` `vector` specifying the times of the measurements. Should match the number of columns of `data`.
 #' @param as.data.table Whether to return the result as a `data.table`, or a `data.frame` otherwise.
 #' @return A `data.table` or `data.frame` containing the repeated measures.
-meltRepeatedMeasures = function(
+#' @seealso [tsmatrix]
+tsframe = function(
     data,
     response,
     id = getOption('latrend.id'),
@@ -117,14 +118,19 @@ meltRepeatedMeasures = function(
   }
 }
 
+#' @rdname tsframe
+#' @note The `meltRepeatedMeasures()` function is deprecated and will be removed in a future version, please use `tsframe()` instead.
+meltRepeatedMeasures = tsframe
+
 #' @export
-#' @title Cast a longitudinal data.frame to a matrix
+#' @title Convert a longitudinal data.frame to a matrix
 #' @description Converts a longitudinal `data.frame` comprising trajectories with an equal number of observations, measured at identical moments in time, to a `matrix`. Each row of the matrix represents a trajectory.
-#' @inheritParams meltRepeatedMeasures
+#' @inheritParams tsframe
 #' @param fill A `scalar` value. If `FALSE`, an error is thrown when time series observations are missing in the data frame.
 #' Otherwise, the value used for representing missing observations.
 #' @return A `matrix` with a trajectory per row.
-dcastRepeatedMeasures = function(
+#' @seealso [tsframe]
+tsmatrix = function(
     data,
     response,
     id = getOption('latrend.id'),
@@ -172,3 +178,7 @@ dcastRepeatedMeasures = function(
 
   dataMat
 }
+
+#' @rdname tsmatrix
+#' @note The `dcastRepeatedMeasures()` function is deprecated and will be removed in a future version. Please use `tsmatrix()` instead.
+dcastRepeatedMeasures = tsmatrix

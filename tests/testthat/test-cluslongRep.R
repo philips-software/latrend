@@ -35,7 +35,7 @@ test_that('single rep', {
 })
 
 test_that('matrix input', {
-  mat = dcastRepeatedMeasures(testLongData, response = 'Value')
+  mat = tsmatrix(testLongData, response = 'Value')
   models = latrendRep(m, data = mat, .rep = 2)
 
   expect_is(models, 'lcModels')

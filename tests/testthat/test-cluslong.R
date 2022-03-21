@@ -63,7 +63,7 @@ test_that('data call', {
 })
 
 test_that('specify id and time with matrix input', {
-  mat = dcastRepeatedMeasures(testLongData, response = 'Value')
+  mat = tsmatrix(testLongData, response = 'Value')
   model = latrend(lcMethodTestKML(), id = 'Device', time = 'Observation', data = mat)
 
   expect_is(model, 'lcModel')
@@ -88,7 +88,7 @@ test_that('data.frame input', {
 })
 
 test_that('matrix input', {
-  mat = dcastRepeatedMeasures(testLongData, response = 'Value')
+  mat = tsmatrix(testLongData, response = 'Value')
   model = latrend(mTest, data = mat)
 
   expect_is(model, 'lcModel')

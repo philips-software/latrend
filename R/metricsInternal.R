@@ -145,7 +145,7 @@ getInternalMetricDefinition = function(name) {
   fun = function(m) {
     nTimes = length(time(m))
     dfTraj = trajFun(m)
-    trajMat = dcastRepeatedMeasures(
+    trajMat = tsmatrix(
       dfTraj,
       id = idVariable(m),
       time = timeVariable(m),
@@ -155,7 +155,7 @@ getInternalMetricDefinition = function(name) {
     trajMatList = lapply(split(trajMat, trajectoryAssignments(m)), matrix, ncol = nTimes)
 
     dtClus = clusterTrajectories(m, at = time(m))
-    clusMat = dcastRepeatedMeasures(
+    clusMat = tsmatrix(
       dtClus,
       id = 'Cluster',
       time = timeVariable(m),

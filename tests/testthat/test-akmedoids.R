@@ -13,7 +13,7 @@ capture.output({
 })
 trajMat = as.matrix(impTraj$CompleteData[-1])
 rownames(trajMat) = impTraj$CompleteData[,1]
-trajData = meltRepeatedMeasures(
+trajData = tsframe(
   trajMat,
   id = 'Id',
   time = 'Time',

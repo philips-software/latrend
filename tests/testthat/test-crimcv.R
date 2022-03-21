@@ -21,7 +21,7 @@ make.crimcv = function(...) {
 # Create test dataset
 data(TO1adj)
 subTO1adj = TO1adj[1:99, seq(1, ncol(TO1adj), by = 2)]
-testData = meltRepeatedMeasures(
+testData = tsframe(
   subTO1adj,
   id = 'Id',
   time = 'Time',

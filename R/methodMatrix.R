@@ -31,7 +31,7 @@ setMethod('prepareData', signature('lcMatrixMethod'), function(method, data, ver
     'Transforming data to aligned repeated measures matrix format...',
     level = verboseLevels$fine
   )
-  e$dataMat = dcastRepeatedMeasures(
+  e$dataMat = tsmatrix(
     data,
     id = idColumn,
     time = timeColumn,

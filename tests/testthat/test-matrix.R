@@ -13,9 +13,9 @@ test_that('rowColumns', {
 })
 
 
-test_that('meltRepeatedMeasures', {
+test_that('tsframe', {
   m = matrix(1:12, nrow=3)
-  df = meltRepeatedMeasures(m, response = 'Value')
+  df = tsframe(m, response = 'Value')
   expect_is(df, 'data.frame')
   expect_named(df, c('Traj', 'Assessment', 'Value'))
   expect_equal(nrow(df), length(m))
@@ -25,12 +25,12 @@ test_that('meltRepeatedMeasures', {
   expect_equal(df$Value, as.numeric(t(m)))
 })
 
-test_that('meltRepeatedMeasures with non-numeric colnames', {
+test_that('tsframe with non-numeric colnames', {
   m = matrix(1:12, nrow=3)
   colnames(m) = paste0('Obs', 1:4)
 
   suppressWarnings({
-    df = meltRepeatedMeasures(m, response = 'Value')
+    df = tsframe(m, response = 'Value')
   })
   expect_is(df, 'data.frame')
   expect_named(df, c('Traj', 'Assessment', 'Value'))
@@ -41,10 +41,10 @@ test_that('meltRepeatedMeasures with non-numeric colnames', {
   expect_equal(df$Value, as.numeric(t(m)))
 })
 
-test_that('dcastRepeatedMeasures', {
+test_that('tsmatrix', {
   m = matrix(1:12, nrow=3)
-  df = meltRepeatedMeasures(m, response = 'Value')
-  mat = dcastRepeatedMeasures(df, response = 'Value')
+  df = tsframe(m, response = 'Value')
+  mat = tsmatrix(df, response = 'Value')
 
   expect_is(mat, 'matrix')
   expect_equal(nrow(mat), nrow(m))
@@ -52,10 +52,10 @@ test_that('dcastRepeatedMeasures', {
   expect_equal(as.numeric(mat), as.numeric(m))
 })
 
-test_that('dcastRepeatedMeasures with incomplete trajectories', {
+test_that('tsmatrix with incomplete trajectories', {
   m = matrix(1:12, nrow=3)
-  df = meltRepeatedMeasures(m, response = 'Value')
-  mat = dcastRepeatedMeasures(df[-1, ], response = 'Value')
+  df = tsframe(m, response = 'Value')
+  mat = tsmatrix(df[-1, ], response = 'Value')
 
   expect_equal(nrow(mat), nrow(m))
   expect_equal(ncol(mat), ncol(m))

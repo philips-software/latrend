@@ -9,7 +9,7 @@ setMethod('clusterTrajectories', signature('lcModelKML'), function(object, at = 
   if (length(at) == 0) {
     trajMat = computeKMLCenters(object)
 
-    meltRepeatedMeasures(
+    tsframe(
       trajMat,
       times = time(object),
       id = 'Cluster',
