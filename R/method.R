@@ -1212,13 +1212,31 @@ setMethod('timeVariable', signature('lcMethod'), function(object, ...) object$ti
 #' }
 #' @seealso [assertthat::validate_that]
 setMethod('validate', signature('lcMethod'), function(method, data, envir = NULL, ...) {
-  .warnIfTrajLength(method, data)
+  id = idVariable(method)
+  time = timeVariable(method)
+  response = responseVariable(method)
+
+  if (getOption('latrend.warnTrajectoryLength', default = 1L) > 0) {
+    warn_that(
+      are_trajectories_length(
+        data,
+        min = getOption('latrend.warnTrajectoryLength', default = 1L),
+        id = id, time = time
+      ),
+      append = '\nThis warning can be disabled using options(latrend.warnTrajectoryLength = 0)'
+    )
+  }
+
+  if (isTRUE(getOption('latrend.warnEmptyTrajectories', default = TRUE))) {
+    warn_that(
+      no_empty_trajectories(data, id = id),
+      append = '\nThis warning can be disabled using options(latrend.warnEmptyTrajectories = FALSE)'
+    )
+  }
 
   validate_that(
-    hasName(data, idVariable(method)),
-    hasName(data, timeVariable(method)),
-    hasName(data, responseVariable(method)),
-    is.character(getLabel(method))
+    is_data(data, id = id, time = time, response = response),
+    is.string(getLabel(method))
   )
 })
 
