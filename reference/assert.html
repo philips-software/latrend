@@ -92,7 +92,7 @@ Requires Id column to be factor.</p>
 
 <span class="fu">is_valid_postprob</span><span class="op">(</span><span class="va">pp</span>, model <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
 
-<span class="fu">no_empty_trajectories</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">id</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">no_empty_trajectories</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">ids</span><span class="op">)</span>
 
 <span class="fu">is_data</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">time</span>, <span class="va">response</span><span class="op">)</span>
 
@@ -118,7 +118,7 @@ Requires Id column to be factor.</p>
 <dt>id</dt>
 <dd><p>The id variable</p></dd>
 <dt>ids</dt>
-<dd><p>A <code>character vector</code> of trajectory identifiers that are expected to be present in the data.</p></dd>
+<dd><p>Optional <code>character vector</code> of trajectory identifiers that are expected to be present in the data.</p></dd>
 <dt>time</dt>
 <dd><p>The time variable</p></dd>
 <dt>response</dt>
