@@ -207,14 +207,18 @@ assertthat::on_failure(is_valid_postprob) = function(call, env) {
 #' @rdname assert
 #' @description Check whether the dataset does not contain trajectories without any observations.
 #' Requires Id column to be factor.
-#' @param ids A `character vector` of trajectory identifiers that are expected to be present in the data.
-no_empty_trajectories = function(data, id, ids = levels(data[[id]])) {
+#' @param ids Optional `character vector` of trajectory identifiers that are expected to be present in the data.
+no_empty_trajectories = function(data, id, ids) {
   assert_that(
     is.data.frame(data),
     is.string(id),
     has_name(data, id),
     noNA(data[[id]])
   )
+
+  if (missing(ids)) {
+    ids = levels(data[[id]])
+  }
 
   if (length(ids) == 0) {
     TRUE
@@ -226,7 +230,12 @@ no_empty_trajectories = function(data, id, ids = levels(data[[id]])) {
 assertthat::on_failure(no_empty_trajectories) = function(call, env) {
   data = eval(call$data, env) %>% as.data.table()
   id = eval(call$id, env)
-  ids = eval(call$ids, env)
+
+  if (hasName(call, 'ids')) {
+    ids = eval(call$ids, env)
+  } else {
+    ids = levels(data[[id]])
+  }
 
   missingIds = setdiff(ids, unique(data[[id]]))
 
@@ -330,6 +339,7 @@ are_trajectories_length = function(data, min = 1, id, time) {
     is.count(min + 1L)
   )
 
+  data = as.data.table(data)
   all(data[, uniqueN(get(time)), by = c(id)]$V1 >= min)
 }
 
@@ -340,13 +350,13 @@ assertthat::on_failure(are_trajectories_length) = function(call, env) {
   min = eval(call$min, env)
 
   dtTraj = data[, .(Moments = uniqueN(get(time))), by = c(id)] %>%
-    .[, Moments < min]
+    .[Moments < min]
 
   sprintf(
     'The dataset contains %d trajectories that have fewer than %d observations moments.\n Ids:\n  %s',
-    nroW(dtTraj),
+    nrow(dtTraj),
     min,
-    as.character(dtTraj[[id]])
+    paste0('"', as.character(dtTraj[[id]]), '"', collapse = ', ')
   )
 }
 
@@ -386,7 +396,7 @@ assertthat::on_failure(are_trajectories_equal_length) = function(call, env) {
       .[IsEqualLen == FALSE]
     sprintf(
       'The dataset contains %d trajectories that are of a different length than %d or have different observation times, whereas all trajectories are required to be fully aligned in time and length.\n Ids:\n  %s',
-      nroW(dtLen),
+      nrow(dtLen),
       nTimes,
       as.character(dtLen[[id]])
     )

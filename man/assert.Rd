@@ -16,7 +16,7 @@ has_lcMethod_args(object, which)
 
 is_valid_postprob(pp, model = NULL)
 
-no_empty_trajectories(data, id, ids = levels(data[[id]]))
+no_empty_trajectories(data, id, ids)
 
 is_data(data, id, time, response)
 
@@ -39,7 +39,7 @@ have_trajectories_noNA(data, id, response)
 
 \item{id}{The id variable}
 
-\item{ids}{A \verb{character vector} of trajectory identifiers that are expected to be present in the data.}
+\item{ids}{Optional \verb{character vector} of trajectory identifiers that are expected to be present in the data.}
 
 \item{time}{The time variable}
 
