@@ -3,6 +3,16 @@
   c(x, y)
 }
 
+warn_that = function(..., msg = NULL, prepend = '', append = '', immediate = TRUE, env = parent.frame()) {
+  result = assertthat::see_if(..., env = env, msg = msg)
+
+  if (isTRUE(result)) {
+    invisible(result)
+  } else {
+    warning(prepend, attr(result, 'msg'), append, immediate. = immediate)
+  }
+}
+
 is_named = function(x) {
   !is.null(names(x)) && noNA(names(x))
 }
