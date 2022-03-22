@@ -46,13 +46,12 @@ test(
 testData2 = subset(dataset2, select = c('Id', 'Time', 'Value'))
 testData2[, Value := replace(Value, .GRP %% M + 1L, NA), by = Id]
 
-m2 = make.lcMethod(id = 'Id', time = 'Time', response = 'Value', nClusters = 2L)
-model2 = latrend(m2, data = testData)
+model2 = latrend(m, data = testData2)
 
 # Tests ####
 test('eachTraj.converged', !isFALSE(converged(model2) > 0))
 test('eachTraj.nClusters', nClusters(model2), 2L)
-test('eachTraj.nobs', nobs(model2), nrow(testData) - 1L)
+test('eachTraj.nobs', nobs(model2), sum(is.finite(testData2$Value)))
 test(
   'eachTraj.trajectoryAssignments.uniqueN',
   uniqueN(trajectoryAssignments(model2)),
@@ -66,3 +65,4 @@ test(
   text = 'does trajectory assignment match the reference?',
   onFail = .Options$latrend.test.checkClusterRecovery
 )
+
