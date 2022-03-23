@@ -13,7 +13,9 @@
 \item{...}{
   Arguments passed on to \code{\link[=trajectories]{trajectories}}
   \describe{
-    \item{\code{}}{}
+    \item{\code{id}}{The identifier variable name.}
+    \item{\code{time}}{The time variable name.}
+    \item{\code{response}}{The response variable name.}
   }}
 }
 \description{

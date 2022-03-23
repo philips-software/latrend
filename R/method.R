@@ -1227,13 +1227,6 @@ setMethod('validate', signature('lcMethod'), function(method, data, envir = NULL
     )
   }
 
-  if (isTRUE(getOption('latrend.warnEmptyTrajectories', default = TRUE))) {
-    warn_that(
-      no_empty_trajectories(data, id = id),
-      append = '\nThis warning can be disabled using options(latrend.warnEmptyTrajectories = FALSE)'
-    )
-  }
-
   validate_that(
     is_data(data, id = id, time = time, response = response),
     is.string(getLabel(method))

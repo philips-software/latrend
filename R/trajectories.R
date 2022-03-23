@@ -5,14 +5,6 @@
 #' @rdname trajectories
 #' @aliases trajectories,data.frame-method
 setMethod('trajectories', signature('data.frame'), function(object, id, time, response, ...) {
-  assert_that(
-    has_name(object, id),
-    has_name(object, time),
-    is.numeric(object[[id]]) || is.factor(object[[id]]) || is.character(object[[id]]),
-    noNA(object[[id]]),
-    noNA(object[[time]])
-  )
-
   object
 })
 

@@ -636,14 +636,50 @@ setGeneric('timeVariable', function(object, ...) {
 #' @param response The response variable name.
 #' @param ... Additional arguments.
 #' @return A `data.frame` with columns matching the `id`, `time`, and `response` name arguments.
+#' @details The generic function removes unused factor levels in the Id column, and any trajectories which are only comprised of NAs in the response.
 #' @seealso [plotTrajectories] [latrend]
-setGeneric('trajectories', function(object, ...) {
+setGeneric('trajectories', function(
+    object,
+    id = idVariable(object),
+    time = timeVariable(object),
+    response = responseVariable(object),
+    ...
+) {
   data <- standardGeneric('trajectories')
 
   assert_that(
-    is.data.frame(data),
-    ncol(data) > 2
+    is_data(data)
   )
+
+  if (!no_empty_trajectories(data, id = id)) {
+    # remove empty trajectories
+    warn_that(
+      no_empty_trajectories(data, id = id),
+      prepend = 'NOTE: Empty trajectories will be removed.\n',
+      append = '\nThis warning can be disabled using options(latrend.warnEmptyTrajectories = FALSE)',
+      show = getOption('latrend.warnEmptyTrajectories', default = TRUE)
+    )
+
+    data[[id]] = droplevels(data[[id]], exclude = NULL)
+  }
+
+  if (!no_trajectories_allNA(data, id = id, response = response)) {
+    warn_that(
+      no_trajectories_allNA(data, id = id, response = response),
+      prepend = 'NOTE: Trajectories comprising only NA observations will be removed.\n',
+      append = '\nThis warning can be disabled using options(latrend.warnNaTrajectories = FALSE)',
+      show = getOption('latrend.warnNaTrajectories', default = TRUE)
+    )
+
+    keepIds = as.data.table(data)[, .(AllNA = all(is.na(get(..response)))), by = c(id)] %>%
+      .[AllNA == FALSE, get(..id)]
+
+    data = as.data.table(data)[get(id) %in% keepIds]
+
+    if (is.factor(data)) {
+      data[[id]] = droplevels(data[[id]], exclude = NULL)
+    }
+  }
 
   as.data.frame(data)
 })

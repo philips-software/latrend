@@ -8,7 +8,7 @@
 \alias{trajectories,lcModel-method}
 \title{Extract the trajectories}
 \usage{
-trajectories(object, ...)
+trajectories(object, id, time, response, ...)
 
 \S4method{trajectories}{data.frame}(object, id, time, response, ...)
 
@@ -16,18 +16,18 @@ trajectories(object, ...)
 
 \S4method{trajectories}{call}(object, ..., envir)
 
-\S4method{trajectories}{lcModel}(object, ...)
+\S4method{trajectories}{lcModel}(object, id, time, response, ...)
 }
 \arguments{
 \item{object}{The data or model or extract the trajectories from.}
-
-\item{...}{Additional arguments.}
 
 \item{id}{The identifier variable name.}
 
 \item{time}{The time variable name.}
 
 \item{response}{The response variable name.}
+
+\item{...}{Additional arguments.}
 
 \item{envir}{The \code{environment} used to evaluate the data object in (e.g., in case \code{object} is of type \code{call}).}
 }
@@ -38,6 +38,9 @@ A \code{data.frame} with columns matching the \code{id}, \code{time}, and \code{
 Transform or extract the trajectories from the given object to a standardized format.
 
 The standardized data format is for method estimation by \link{latrend}, and for plotting functions.
+}
+\details{
+The generic function removes unused factor levels in the Id column, and any trajectories which are only comprised of NAs in the response.
 }
 \seealso{
 \link{plotTrajectories} \link{latrend}

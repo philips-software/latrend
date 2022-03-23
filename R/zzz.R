@@ -166,7 +166,7 @@ NULL
 
 globalVariables(
   c(
-    '.', '..time', '.Fill', '.name', '.group', '.method', '.ROW_INDEX', '.Mean', '.Block',
+    '.', '..id', '..time', '..response', '.Fill', '.name', '.group', '.method', '.ROW_INDEX', '.Mean', '.Block',
     'i', 'iseed', 'N', 'i.N', 'g', 'fun', 'method', 'plotTrajs', 'cl',
     'Prob', 'Cluster', 'Class', 'Value', 'Id', 'Time',
     'modelMethod', 'modelData', 'modelCall',
