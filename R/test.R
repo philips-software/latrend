@@ -97,7 +97,7 @@ test.latrend = function(
   setkeyv(data, c('Id', 'Time', 'Cluster'))
 
   # Determine test path
-  testsDir = system.file('tests', package = 'latrend', mustWork = TRUE)
+  testsDir = system.file('test-cases', package = 'latrend', mustWork = TRUE)
 
   if (identical(Sys.getenv('TESTTHAT'), 'true')) {
     # testthat mode
