@@ -193,7 +193,9 @@ test_that('no_trajectories_allNA', {
     no_trajectories_allNA(testLongData, id = 'Traj', response = 'Value')
   )
 
+  naData = copy(testLongData) %>%
+    .[Traj == unique(Traj)[2], Value := NA]
   expect_false(
-    no_trajectories_allNA(testLongData[Traj == unique(Traj)[2], Value := NA], id = 'Traj', response = 'Value')
+    no_trajectories_allNA(naData, id = 'Traj', response = 'Value')
   )
 })
