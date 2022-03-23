@@ -7,7 +7,8 @@ Check whether the provided data.frame represents a longitudinal dataset
 Check whether the dataset does not contain trajectories with duplicate observation moments.
 Check the number of observation moments for each trajectory
 Check whether all trajectories have the same number of observation moments, and are observed at the same moments in time.
-Check whether all trajectories don't contain any NA observations."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
+Check whether all trajectories don't contain any NA observations.
+Check whether there are no trajectories that are only comprised of NA observations"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
@@ -85,6 +86,7 @@ Requires Id column to be factor.</p>
 <p>Check the number of observation moments for each trajectory</p>
 <p>Check whether all trajectories have the same number of observation moments, and are observed at the same moments in time.</p>
 <p>Check whether all trajectories don't contain any NA observations.</p>
+<p>Check whether there are no trajectories that are only comprised of NA observations</p>
     </div>
 
     <div id="ref-usage">
@@ -102,7 +104,9 @@ Requires Id column to be factor.</p>
 
 <span class="fu">are_trajectories_equal_length</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">time</span><span class="op">)</span>
 
-<span class="fu">have_trajectories_noNA</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">response</span><span class="op">)</span></code></pre></div>
+<span class="fu">have_trajectories_noNA</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">response</span><span class="op">)</span>
+
+<span class="fu">no_trajectories_allNA</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">response</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
