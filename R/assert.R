@@ -3,10 +3,18 @@
   c(x, y)
 }
 
-warn_that = function(..., msg = NULL, prepend = '', append = '', immediate = TRUE, env = parent.frame()) {
+warn_that = function(
+    ...,
+    msg = NULL,
+    prepend = '',
+    append = '',
+    immediate = TRUE,
+    show = TRUE,
+    env = parent.frame()
+) {
   result = assertthat::see_if(..., env = env, msg = msg)
 
-  if (isTRUE(result)) {
+  if (isFALSE(show) || isTRUE(result)) {
     invisible(result)
   } else {
     warning(prepend, attr(result, 'msg'), append, immediate. = immediate)
@@ -461,3 +469,4 @@ assertthat::on_failure(no_trajectories_allNA) = function(call, env) {
     response,
     paste0('"', as.character(dtAllNA[[id]]), '"', collapse = ', ')
   )
+}
