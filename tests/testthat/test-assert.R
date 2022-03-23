@@ -187,3 +187,13 @@ test_that('are_trajectories_equal_length', {
     are_trajectories_equal_length(testLongData[2:.N], id = 'Traj', time = 'Assessment')
   )
 })
+
+test_that('no_trajectories_allNA', {
+  expect_true(
+    no_trajectories_allNA(testLongData, id = 'Traj', response = 'Value')
+  )
+
+  expect_false(
+    no_trajectories_allNA(testLongData[Traj == unique(Traj)[2], Value := NA], id = 'Traj', response = 'Value')
+  )
+})

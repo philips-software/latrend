@@ -10,6 +10,7 @@
 \alias{are_trajectories_length}
 \alias{are_trajectories_equal_length}
 \alias{have_trajectories_noNA}
+\alias{no_trajectories_allNA}
 \title{latrend-specific assertions}
 \usage{
 has_lcMethod_args(object, which)
@@ -27,6 +28,8 @@ are_trajectories_length(data, min = 1, id, time)
 are_trajectories_equal_length(data, id, time)
 
 have_trajectories_noNA(data, id, response)
+
+no_trajectories_allNA(data, id, response)
 }
 \arguments{
 \item{object}{The object to test.}
@@ -64,5 +67,7 @@ Check the number of observation moments for each trajectory
 Check whether all trajectories have the same number of observation moments, and are observed at the same moments in time.
 
 Check whether all trajectories don't contain any NA observations.
+
+Check whether there are no trajectories that are only comprised of NA observations
 }
 \keyword{internal}

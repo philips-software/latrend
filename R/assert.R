@@ -438,3 +438,28 @@ assertthat::on_failure(have_trajectories_noNA) = function(call, env) {
     paste0('"', as.character(dtMissing[[id]]), '" (', dtMissing$NaCount, ')', collapse = ', ')
   )
 }
+
+#' @export
+#' @rdname assert
+#' @description Check whether there are no trajectories that are only comprised of NA observations
+no_trajectories_allNA = function(data, id, response) {
+  assert_that(is_data(data, id, response = response))
+
+  data = as.data.table(data)
+  !any(data[, all(is.na(get(..response))), by = c(id)]$V1)
+}
+
+assertthat::on_failure(no_trajectories_allNA) = function(call, env) {
+  data = eval(call$data, env) %>% as.data.table()
+  id = eval(call$id, env)
+  response = eval(call$response, env)
+
+  dtAllNA = data[, .(AllNA = all(is.na(get(..response)))), by = c(id)] %>%
+    .[AllNA == TRUE]
+
+  sprintf(
+    'The dataset contains %d trajectories that only comprise NA observations in "%s". \nList of trajectories that only contain NAs:\n  %s',
+    nrow(dtAllNA),
+    response,
+    paste0('"', as.character(dtAllNA[[id]]), '"', collapse = ', ')
+  )
