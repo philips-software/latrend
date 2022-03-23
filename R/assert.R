@@ -385,7 +385,6 @@ are_trajectories_equal_length = function(data, id, time) {
 
 assertthat::on_failure(are_trajectories_equal_length) = function(call, env) {
   data = eval(call$data, env) %>% as.data.table()
-  method = eval(call$method, env)
   id = eval(call$id, env)
   time = eval(call$time, env)
 
@@ -424,7 +423,6 @@ have_trajectories_noNA = function(data, id, response) {
 
 assertthat::on_failure(have_trajectories_noNA) = function(call, env) {
   data = eval(call$data, env) %>% as.data.table()
-  method = eval(call$method, env)
   id = eval(call$id, env)
   response = eval(call$response, env)
 
