@@ -29,8 +29,8 @@
 #'
 #' | **Metric name** | **Description** | **Function / Reference** |
 #' | --- | :-------- | :--- |
-#' | `adjustedRand` | [Adjusted Rand index](https://en.wikipedia.org/wiki/Rand_index) | [mclustcomp::mclustcomp()], \insertCite{hubert1985comparing}{latrend} |
-#' | `CohensKappa` | [Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa) | [psych::cohen.kappa()], \insertCite{cohen1960coefficient}{latrend} |
+#' | `adjustedRand` | [Adjusted Rand index](https://en.wikipedia.org/wiki/Rand_index). Based on the Rand index, but adjusted for agreements occurring by chance. A score of 1 indicates a perfect agreement, whereas a score of 0 indicates an agreement no better than chance. | [mclustcomp::mclustcomp()], \insertCite{hubert1985comparing}{latrend} |
+#' | `CohensKappa` | [Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa). A partitioning agreement metric correcting for random chance. A score of 1 indicates a perfect agreement, whereas a score of 0 indicates an agreement no better than chance. | [psych::cohen.kappa()], \insertCite{cohen1960coefficient}{latrend} |
 #' | `F` | [F-score](https://en.wikipedia.org/wiki/F-score) | [mclustcomp::mclustcomp()] |
 #' | `F1` | [F1-score](https://en.wikipedia.org/wiki/F-score), also referred to as the [Sørensen–Dice Coefficient](https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient), or Dice similarity coefficient | [mclustcomp::mclustcomp()] |
 #' | `FolkesMallows` | [Fowlkes-Mallows index](https://en.wikipedia.org/wiki/Fowlkes%E2%80%93Mallows_index) | [mclustcomp::mclustcomp()] |
@@ -56,7 +56,7 @@
 #' | `RusselRao` | Russell-Rao dissimilarity | [clusterCrit::extCriteria()] |
 #' | `SMC` | [Simple matching coefficient](https://en.wikipedia.org/wiki/Simple_matching_coefficient) | [mclustcomp::mclustcomp()] |
 #' | `splitJoin` | total split-join index | [igraph::split_join_distance()] |
-#' | `splitJoin.ref` | Split-join index of the first model to the second model | |
+#' | `splitJoin.ref` | Split-join index of the first model to the second model. In other words, it is the edit-distance between the two partitionings. | |
 #' | `SokalSneath1` | Type-1 Sokal-Sneath dissimilarity | [clusterCrit::extCriteria()] |
 #' | `SokalSneath2` | Type-2 Sokal-Sneath dissimilarity | [clusterCrit::extCriteria()] |
 #' | `VI` | [Variation of information](https://en.wikipedia.org/wiki/Variation_of_information) | [mclustcomp::mclustcomp()] |

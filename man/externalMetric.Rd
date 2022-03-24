@@ -76,8 +76,8 @@ Call \code{\link[=getExternalMetricNames]{getExternalMetricNames()}} to retrieve
 \details{
 List of currently supported external metrics:\tabular{lll}{
    \strong{Metric name} \tab \strong{Description} \tab \strong{Function / Reference} \cr
-   \code{adjustedRand} \tab \href{https://en.wikipedia.org/wiki/Rand_index}{Adjusted Rand index} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}}, \insertCite{hubert1985comparing}{latrend} \cr
-   \code{CohensKappa} \tab \href{https://en.wikipedia.org/wiki/Cohen\%27s_kappa}{Cohen's kappa} \tab \code{\link[psych:kappa]{psych::cohen.kappa()}}, \insertCite{cohen1960coefficient}{latrend} \cr
+   \code{adjustedRand} \tab \href{https://en.wikipedia.org/wiki/Rand_index}{Adjusted Rand index}. Based on the Rand index, but adjusted for agreements occurring by chance. A score of 1 indicates a perfect agreement, whereas a score of 0 indicates an agreement no better than chance. \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}}, \insertCite{hubert1985comparing}{latrend} \cr
+   \code{CohensKappa} \tab \href{https://en.wikipedia.org/wiki/Cohen\%27s_kappa}{Cohen's kappa}. A partitioning agreement metric correcting for random chance. A score of 1 indicates a perfect agreement, whereas a score of 0 indicates an agreement no better than chance. \tab \code{\link[psych:kappa]{psych::cohen.kappa()}}, \insertCite{cohen1960coefficient}{latrend} \cr
    \code{F} \tab \href{https://en.wikipedia.org/wiki/F-score}{F-score} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
    \code{F1} \tab \href{https://en.wikipedia.org/wiki/F-score}{F1-score}, also referred to as the \href{https://en.wikipedia.org/wiki/S\%C3\%B8rensen\%E2\%80\%93Dice_coefficient}{Sørensen–Dice Coefficient}, or Dice similarity coefficient \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
    \code{FolkesMallows} \tab \href{https://en.wikipedia.org/wiki/Fowlkes\%E2\%80\%93Mallows_index}{Fowlkes-Mallows index} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
@@ -103,7 +103,7 @@ List of currently supported external metrics:\tabular{lll}{
    \code{RusselRao} \tab Russell-Rao dissimilarity \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr
    \code{SMC} \tab \href{https://en.wikipedia.org/wiki/Simple_matching_coefficient}{Simple matching coefficient} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
    \code{splitJoin} \tab total split-join index \tab \code{\link[igraph:split_join_distance]{igraph::split_join_distance()}} \cr
-   \code{splitJoin.ref} \tab Split-join index of the first model to the second model \tab  \cr
+   \code{splitJoin.ref} \tab Split-join index of the first model to the second model. In other words, it is the edit-distance between the two partitionings. \tab  \cr
    \code{SokalSneath1} \tab Type-1 Sokal-Sneath dissimilarity \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr
    \code{SokalSneath2} \tab Type-2 Sokal-Sneath dissimilarity \tab \code{\link[clusterCrit:extCriteria]{clusterCrit::extCriteria()}} \cr
    \code{VI} \tab \href{https://en.wikipedia.org/wiki/Variation_of_information}{Variation of information} \tab \code{\link[mclustcomp:mclustcomp]{mclustcomp::mclustcomp()}} \cr
