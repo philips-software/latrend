@@ -8,15 +8,39 @@
 \alias{trajectories,lcModel-method}
 \title{Extract the trajectories}
 \usage{
-trajectories(object, id, time, response, ...)
+trajectories(
+  object,
+  id = idVariable(object),
+  time = timeVariable(object),
+  response = responseVariable(object),
+  ...
+)
 
-\S4method{trajectories}{data.frame}(object, id, time, response, ...)
+\S4method{trajectories}{data.frame}(
+  object,
+  id = idVariable(object),
+  time = timeVariable(object),
+  response = responseVariable(object),
+  ...
+)
 
-\S4method{trajectories}{matrix}(object, id, time, response, ...)
+\S4method{trajectories}{matrix}(
+  object,
+  id = idVariable(object),
+  time = timeVariable(object),
+  response = responseVariable(object),
+  ...
+)
 
 \S4method{trajectories}{call}(object, ..., envir)
 
-\S4method{trajectories}{lcModel}(object, id, time, response, ...)
+\S4method{trajectories}{lcModel}(
+  object,
+  id = idVariable(object),
+  time = timeVariable(object),
+  response = responseVariable(object),
+  ...
+)
 }
 \arguments{
 \item{object}{The data or model or extract the trajectories from.}

@@ -15,6 +15,7 @@ Empty clusters will output \code{NA}.
 }
 \description{
 Computes the odds of correct classification (OCC) for each cluster.
+In other words, it computes the proportion of trajectories that can be expected to be correctly classified by the model for each cluster.
 }
 \details{
 An OCC of 1 indicates that the cluster assignment is no better than by random chance.

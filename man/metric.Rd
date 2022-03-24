@@ -49,10 +49,10 @@ See the \emph{Details} section below for a list of supported metrics.
 \details{
 List of currently supported metrics:\tabular{lll}{
    \strong{Metric name} \tab \strong{Description} \tab \strong{Function / Reference} \cr
-   \code{AIC} \tab \href{https://en.wikipedia.org/wiki/Akaike_information_criterion}{Akaike information criterion} \tab \code{\link[stats:AIC]{stats::AIC()}}, \insertCite{akaike1974new}{latrend} \cr
-   \code{APPA.mean} \tab Mean of the average posterior probability of assignment (APPA) across clusters \tab \code{\link[=APPA]{APPA()}}, \insertCite{nagin2005group}{latrend} \cr
+   \code{AIC} \tab \href{https://en.wikipedia.org/wiki/Akaike_information_criterion}{Akaike information criterion}. A goodness-of-fit estimator that adjusts for model complexity (i.e., the number of parameters). Only available for models that support the computation of the model log-likelihood through \link{logLik}. \tab \code{\link[stats:AIC]{stats::AIC()}}, \insertCite{akaike1974new}{latrend} \cr
+   \code{APPA.mean} \tab Mean of the average posterior probability of assignment (APPA) across clusters. A measure of the precision of the trajectory classifications. A score of 1 indicates perfect classification. \tab \code{\link[=APPA]{APPA()}}, \insertCite{nagin2005group}{latrend} \cr
    \code{APPA.min} \tab Lowest APPA among the clusters \tab \code{\link[=APPA]{APPA()}}, \insertCite{nagin2005group}{latrend} \cr
-   \code{BIC} \tab \href{https://en.wikipedia.org/wiki/Bayesian_information_criterion}{Bayesian information criterion} \tab \code{\link[stats:AIC]{stats::BIC()}}, \insertCite{schwarz1978estimating}{latrend} \cr
+   \code{BIC} \tab \href{https://en.wikipedia.org/wiki/Bayesian_information_criterion}{Bayesian information criterion}. A goodness-of-fit estimator that corrects for the degrees of freedom (i.e., the number of parameters) and sample size. Only available for models that support the computation of the model log-likelihood through \link{logLik}. \tab \code{\link[stats:AIC]{stats::BIC()}}, \insertCite{schwarz1978estimating}{latrend} \cr
    \code{CAIC} \tab Consistent Akaike information criterion \tab \insertCite{bozdogan1987model}{latrend} \cr
    \code{CLC} \tab Classification likelihood criterion \tab \insertCite{mclachlan2000finite}{latrend} \cr
    \code{converged} \tab Whether the model converged during estimation \tab \code{\link[=converged]{converged()}} \cr
@@ -66,7 +66,7 @@ List of currently supported metrics:\tabular{lll}{
    \code{MAE} \tab \href{https://en.wikipedia.org/wiki/Mean_absolute_error}{Mean absolute error} of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories \tab  \cr
    \code{Mahalanobis} \tab \href{https://en.wikipedia.org/wiki/Mahalanobis_distance}{Mahalanobis distance} between the cluster trajectories and the assigned observed trajectories \tab \insertCite{mahalanobis1936generalized}{latrend} \cr
    \code{MSE} \tab \href{https://en.wikipedia.org/wiki/Mean_squared_error}{Mean squared error} of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories \tab  \cr
-   \code{relativeEntropy}, \code{RE} \tab The normalized version of \code{entropy}, scaled between [0, 1]. \tab \insertCite{ramaswamy1993empirical}{latrend}, \insertCite{muthen2004latent}{latrend} \cr
+   \code{relativeEntropy}, \code{RE} \tab A measure of the precision of the trajectory classification. A value of 1 indicates perfect classification, whereas a value of 0 indicates a non-informative uniform classification. It is the normalized version of \code{entropy}, scaled between [0, 1]. \tab \insertCite{ramaswamy1993empirical}{latrend}, \insertCite{muthen2004latent}{latrend} \cr
    \code{RSS} \tab \href{https://en.wikipedia.org/wiki/Residual_sum_of_squares}{Residual sum of squares} under most likely cluster allocation \tab  \cr
    \code{scaledEntropy} \tab See \code{relativeEntropy} \tab  \cr
    \code{sigma} \tab The residual standard deviation \tab \code{\link[stats:sigma]{stats::sigma()}} \cr

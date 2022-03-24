@@ -22,10 +22,10 @@
 #'
 #' | **Metric name** | **Description** | **Function / Reference** |
 #' | --- | :-------- | :--- |
-#' | `AIC` | [Akaike information criterion](https://en.wikipedia.org/wiki/Akaike_information_criterion) | [stats::AIC()], \insertCite{akaike1974new}{latrend} |
-#' | `APPA.mean` | Mean of the average posterior probability of assignment (APPA) across clusters | [APPA()], \insertCite{nagin2005group}{latrend} |
+#' | `AIC` | [Akaike information criterion](https://en.wikipedia.org/wiki/Akaike_information_criterion). A goodness-of-fit estimator that adjusts for model complexity (i.e., the number of parameters). Only available for models that support the computation of the model log-likelihood through [logLik]. | [stats::AIC()], \insertCite{akaike1974new}{latrend} |
+#' | `APPA.mean` | Mean of the average posterior probability of assignment (APPA) across clusters. A measure of the precision of the trajectory classifications. A score of 1 indicates perfect classification. | [APPA()], \insertCite{nagin2005group}{latrend} |
 #' | `APPA.min` | Lowest APPA among the clusters | [APPA()], \insertCite{nagin2005group}{latrend} |
-#' | `BIC` | [Bayesian information criterion](https://en.wikipedia.org/wiki/Bayesian_information_criterion) | [stats::BIC()], \insertCite{schwarz1978estimating}{latrend} |
+#' | `BIC` | [Bayesian information criterion](https://en.wikipedia.org/wiki/Bayesian_information_criterion). A goodness-of-fit estimator that corrects for the degrees of freedom (i.e., the number of parameters) and sample size. Only available for models that support the computation of the model log-likelihood through [logLik]. | [stats::BIC()], \insertCite{schwarz1978estimating}{latrend} |
 #' | `CAIC` | Consistent Akaike information criterion | \insertCite{bozdogan1987model}{latrend} |
 #' | `CLC` | Classification likelihood criterion | \insertCite{mclachlan2000finite}{latrend} |
 #' | `converged` | Whether the model converged during estimation | [converged()] |
@@ -39,7 +39,7 @@
 #' | `MAE` | [Mean absolute error](https://en.wikipedia.org/wiki/Mean_absolute_error) of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories | |
 #' | `Mahalanobis` | [Mahalanobis distance](https://en.wikipedia.org/wiki/Mahalanobis_distance) between the cluster trajectories and the assigned observed trajectories | \insertCite{mahalanobis1936generalized}{latrend} |
 #' | `MSE` | [Mean squared error](https://en.wikipedia.org/wiki/Mean_squared_error) of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories | |
-#' | `relativeEntropy`, `RE` | The normalized version of `entropy`, scaled between \[0, 1\]. | \insertCite{ramaswamy1993empirical}{latrend}, \insertCite{muthen2004latent}{latrend} |
+#' | `relativeEntropy`, `RE` | A measure of the precision of the trajectory classification. A value of 1 indicates perfect classification, whereas a value of 0 indicates a non-informative uniform classification. It is the normalized version of `entropy`, scaled between \[0, 1\]. | \insertCite{ramaswamy1993empirical}{latrend}, \insertCite{muthen2004latent}{latrend} |
 #' | `RSS` | [Residual sum of squares](https://en.wikipedia.org/wiki/Residual_sum_of_squares) under most likely cluster allocation | |
 #' | `scaledEntropy` | See `relativeEntropy` | |
 #' | `sigma` | The residual standard deviation | [stats::sigma()] |
