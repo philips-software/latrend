@@ -10,6 +10,7 @@
 #'
 #' Recommended overview papers:
 #' \itemize{
+#'   \item \insertCite{arbelaitz2013extensive;textual}{latrend} provide an extensive overview validity indices for cluster algorithms.
 #'   \item \insertCite{vandernest2020overview;textual}{latrend} provide an overview of metrics for mixture models (GBTM, GMM); primarily likelihood-based or posterior probability-based metrics.
 #'   \item \insertCite{henson2007detecting;textual}{latrend} provide an overview of likelihood-based metrics for mixture models.
 #' }
