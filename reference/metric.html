@@ -3,6 +3,8 @@
 Note that there are many metrics available, and there exists no metric that works best in all scenarios.
 It is recommended to carefully consider which metric is most appropriate for your use case.
 Recommended overview papers:
+Arbelaitz et al. (2013)
+ provide an extensive overview validity indices for cluster algorithms.
 van der Nest et al. (2020)
  provide an overview of metrics for mixture models (GBTM, GMM); primarily likelihood-based or posterior probability-based metrics.
 Henson et al. (2007)
@@ -82,7 +84,9 @@ See the Details section below for a list of supported metrics."><!-- mathjax -->
     <p>Compute one or more internal metrics for the given <code>lcModel</code> object.</p>
 <p>Note that there are many metrics available, and there exists no metric that works best in all scenarios.
 It is recommended to carefully consider which metric is most appropriate for your use case.</p>
-<p>Recommended overview papers:</p><ul><li><p>van der Nest et al. (2020)
+<p>Recommended overview papers:</p><ul><li><p>Arbelaitz et al. (2013)
+ provide an extensive overview validity indices for cluster algorithms.</p></li>
+<li><p>van der Nest et al. (2020)
  provide an overview of metrics for mixture models (GBTM, GMM); primarily likelihood-based or posterior probability-based metrics.</p></li>
 <li><p>Henson et al. (2007)
  provide an overview of likelihood-based metrics for mixture models.</p></li>
@@ -135,6 +139,10 @@ For <code>metric(lcModels)</code>: A <code>data.frame</code> with a metric per c
 “A new look at the statistical model identification.”
 <em>IEEE Transactions on Automatic Control</em>, <b>19</b>(6), 716-723.
 doi: <a href="https://doi.org/10.1109/TAC.1974.1100705" class="external-link">10.1109/TAC.1974.1100705</a>
+.<br><br> Arbelaitz O, Gurrutxaga I, Muguerza J, Pérez JM, Perona I (2013).
+“An extensive comparative study of cluster validity indices.”
+<em>Pattern recognition</em>, <b>46</b>(1), 243--256.
+ISSN 0031-3203, doi: <a href="https://doi.org/10.1016/j.patcog.2012.07.021" class="external-link">10.1016/j.patcog.2012.07.021</a>
 .<br><br> Biernacki C, Celeux G, Govaert G (2000).
 “Assessing a mixture model for clustering with the integrated completed likelihood.”
 <em>IEEE Transactions on Pattern Analysis and Machine Intelligence</em>, <b>22</b>(7), 719-725.
@@ -198,7 +206,7 @@ ISSN 1040-2608, doi: <a href="https://doi.org/10.1016/j.alcr.2019.100323" class=
 <span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="fu"><a href="lcMethodLcmmGMM.html">lcMethodLcmmGMM</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, mixture <span class="op">=</span> <span class="op">~</span> <span class="va">Time</span>,</span>
 <span class="r-in">   id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span>, <span class="va">latrendData</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Be patient, hlme is running ... </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.38 seconds </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.3 seconds </span>
 <span class="r-in"><span class="va">bic</span> <span class="op">&lt;-</span> <span class="fu">metric</span><span class="op">(</span><span class="va">model</span>, <span class="st">"BIC"</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">ic</span> <span class="op">&lt;-</span> <span class="fu">metric</span><span class="op">(</span><span class="va">model</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AIC"</span>, <span class="st">"BIC"</span><span class="op">)</span><span class="op">)</span></span>
