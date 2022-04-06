@@ -9,6 +9,8 @@ staging/
 .Rhistory
 cld.Rdata
 *.txt
+/*.csv
+!*/*.csv
 /doc/
 /Meta/
 vignettes/*_cache
