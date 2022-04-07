@@ -11,6 +11,8 @@ cld.Rdata
 *.txt
 /*.csv
 !*/*.csv
+/*.R
+!*/*.R
 /doc/
 /Meta/
 vignettes/*_cache
