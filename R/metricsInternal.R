@@ -254,8 +254,34 @@ intMetricsEnv$APPA.min = function(m) {
   min(APPA(m))
 }
 
+intMetricsEnv$ASW = function(m) {
+  part = as.integer(trajectoryAssignments(m))
+  tsmat = tsmatrix(
+    data = model.data(m),
+    response = responseVariable(m),
+    id = idVariable(m),
+    time = timeVariable(m),
+    fill = NA_real_
+  )
+
+  clusterCrit::intCriteria(tsmat, part, crit = 'Silhouette')$silhouette
+}
+
 #' @importFrom stats BIC
 intMetricsEnv$BIC = BIC
+
+intMetricsEnv$CalinskiHarabasz = function(m) {
+  part = as.integer(trajectoryAssignments(m))
+  tsmat = tsmatrix(
+    data = model.data(m),
+    response = responseVariable(m),
+    id = idVariable(m),
+    time = timeVariable(m),
+    fill = NA_real_
+  )
+
+  clusterCrit::intCriteria(tsmat, part, crit = 'Calinski_Harabasz')$calinski_harabasz
+}
 
 intMetricsEnv$CLC = function(m) {
   ll = logLik(m)
@@ -266,6 +292,19 @@ intMetricsEnv$CLC = function(m) {
 
 intMetricsEnv$converged = function(m) {
   converged(m) > 0
+}
+
+intMetricsEnv$DaviesBouldin = function(m) {
+  part = as.integer(trajectoryAssignments(m))
+  tsmat = tsmatrix(
+    data = model.data(m),
+    response = responseVariable(m),
+    id = idVariable(m),
+    time = timeVariable(m),
+    fill = NA_real_
+  )
+
+  clusterCrit::intCriteria(tsmat, part, crit = 'Davies_Bouldin')$davies_bouldin
 }
 
 #' @importFrom stats deviance
@@ -279,6 +318,19 @@ intMetricsEnv$deviance = deviance
   },
   clusterAggregationFun = weighted.mean
 )
+
+intMetricsEnv$Dunn = function(m) {
+  part = as.integer(trajectoryAssignments(m))
+  tsmat = tsmatrix(
+    data = model.data(m),
+    response = responseVariable(m),
+    id = idVariable(m),
+    time = timeVariable(m),
+    fill = NA_real_
+  )
+
+  clusterCrit::intCriteria(tsmat, part, crit = 'Dunn')$dunn
+}
 
 intMetricsEnv$entropy = function(m) {
   pp = postprob(m) %>% pmax(.Machine$double.xmin)
