@@ -65,6 +65,21 @@ setMethod('postprob', signature('lcModelKML'), function(object) {
   } else {
     pp = getKMLPartition(object)@postProba
   }
+
+  # bugfix for KML: insert missing rows for uniform postprob
+  if (anyNA(pp)) {
+    naMsk = is.na(pp[, 1L])
+    warning(
+      sprintf(
+        'The kml package has outputted NA posterior probabilities for %d trajectories. Inserting uniform postprob for trajectories: \n%s',
+        sum(naMsk),
+        paste0('  ', ids(object)[naMsk], collapse = '\n')
+      )
+    )
+
+    pp[naMsk, ] = 1 / nClusters(object)
+  }
+
   colnames(pp) = clusterNames(object)
   return(pp)
 })
