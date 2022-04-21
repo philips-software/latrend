@@ -412,6 +412,21 @@ setGeneric('postprob', function(object, ...) {
     )
   }
 
+  if (anyNA(pp)) {
+    naMsk = is.na(pp[, 1L])
+    warning(
+      sprintf(
+        '%s implementation error: postprob(%s) output contains %d trajectories with NA probabilities. Setting uniform postprob for trajectories: \n%s',
+        class(object)[1],
+        class(object)[1],
+        sum(naMsk),
+        paste0('  ', ids(object)[naMsk], collapse = '\n')
+      )
+    )
+
+    pp[naMsk, ] = 1 / nClusters(object)
+  }
+
   pp
 })
 
