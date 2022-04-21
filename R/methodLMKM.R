@@ -78,12 +78,16 @@ setMethod('fit', signature('lcMethodLMKM'), function(method, data, envir, verbos
     trace = canShow(verbose, 'fine')
   )
 
+  kmConv = method$nClusters == 1 || not(km$ifault)
+  conv = kmConv && (!hasName(envir, 'converged') || envir$converged)
+
   new(
     'lcModelLMKM',
     method = method,
     data = data,
     model = km,
     center = method$center,
+    converged = conv,
     name = 'lmkm',
     coefNames = colnames(envir$x),
     trajectoryCoefs = envir$x,

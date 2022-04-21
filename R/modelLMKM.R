@@ -2,7 +2,8 @@
 setClass('lcModelLMKM',
   representation(
     coefNames = 'character',
-    trajectoryCoefs = 'matrix'
+    trajectoryCoefs = 'matrix',
+    converged = 'logical'
   ),
   contains = 'lcModelPartition'
 )
@@ -52,8 +53,8 @@ logLik.lcModelLMKM = function(object, ...) {
 #. converged ####
 #' @rdname interface-featureBased
 setMethod('converged', signature('lcModelLMKM'), function(object, ...) {
-  if (nClusters(object) == 1) {
-    TRUE
+  if (length(object@converged) > 0) {
+    object@converged
   }
   else {
     not(object@model$ifault)

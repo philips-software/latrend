@@ -68,8 +68,10 @@ setMethod('prepareData', signature('lcMethodGCKM'), function(method, data, verbo
     verbose = canShow(verbose, 'fine')
   )
 
-  e = new.env()
-  e$x = lme4::ranef(lmm)[[idVariable(method)]] %>% as.matrix()
-  return(e)
+  envir = new.env()
+  envir$converged = length(lmm@optinfo$conv$lme4) == 0
+  envir$x = lme4::ranef(lmm)[[idVariable(method)]] %>% as.matrix()
+
+  envir
 })
 
