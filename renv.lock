@@ -1424,10 +1424,10 @@
     },
     "locfit": {
       "Package": "locfit",
-      "Version": "1.5-9.4",
+      "Version": "1.5-9.5",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "760b5b542e8435237d1b3c253bfe18e7",
+      "Hash": "ab000f1b849b9378c2b51487c70fe93c",
       "Requirements": [
         "lattice"
       ]
