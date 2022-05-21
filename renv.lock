@@ -1608,10 +1608,10 @@
     },
     "nloptr": {
       "Package": "nloptr",
-      "Version": "2.0.2",
+      "Version": "2.0.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "bb394ebb0d9730f2125ca2c0a152c01e",
+      "Hash": "158916799afe8d32e07b0b1920ea79a8",
       "Requirements": [
         "testthat"
       ]
