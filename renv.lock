@@ -1432,14 +1432,6 @@
         "lattice"
       ]
     },
-    "longclust": {
-      "Package": "longclust",
-      "Version": "1.2.3",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "3dd4c79d90555bed073a19d21058588e",
-      "Requirements": []
-    },
     "longitudinalData": {
       "Package": "longitudinalData",
       "Version": "2.4.1",
