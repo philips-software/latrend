@@ -11,6 +11,8 @@ cld.Rdata
 *.txt
 /*.csv
 !*/*.csv
+/*.rds
+!*/*.rds
 /*.R
 !*/*.R
 /doc/
