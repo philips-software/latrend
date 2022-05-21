@@ -107,7 +107,7 @@ The following external arguments are ignored: y, x, z, random.intercept, silent.
     <p>Komárek A (2009).
 “A New R Package for Bayesian Estimation of Multivariate Normal Mixtures Allowing for Selection of the Number of Components and Interval-Censored Data.”
 <em>Computational Statistics \&amp; Data Analysis</em>, <b>53</b>(12), 3932--3947.
-doi: <a href="https://doi.org/10.1016/j.csda.2009.05.006" class="external-link">10.1016/j.csda.2009.05.006</a>
+<a href="https://doi.org/10.1016/j.csda.2009.05.006" class="external-link">doi:10.1016/j.csda.2009.05.006</a>
 .</p>
     </div>
     <div id="see-also">
@@ -127,7 +127,6 @@ doi: <a href="https://doi.org/10.1016/j.csda.2009.05.006" class="external-link">
 <code><a href="lcMethodLMKM.html">lcMethodLMKM</a></code>,
 <code><a href="lcMethodLcmmGBTM.html">lcMethodLcmmGBTM</a></code>,
 <code><a href="lcMethodLcmmGMM.html">lcMethodLcmmGMM</a></code>,
-<code><a href="lcMethodLongclust.html">lcMethodLongclust</a></code>,
 <code><a href="lcMethodMclustLLPA.html">lcMethodMclustLLPA</a></code>,
 <code><a href="lcMethodMixtoolsGMM.html">lcMethodMixtoolsGMM</a></code>,
 <code><a href="lcMethodMixtoolsNPRM.html">lcMethodMixtoolsNPRM</a></code>,
@@ -145,35 +144,8 @@ doi: <a href="https://doi.org/10.1016/j.csda.2009.05.006" class="external-link">
 <span class="r-in"> <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span>
 <span class="r-in"> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>the condition has length &gt; 1 and only the first element will be used</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>the condition has length &gt; 1 and only the first element will be used</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>the condition has length &gt; 1 and only the first element will be used</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Longitudinal cluster model using generalized linear mixed model with normal random effects mixture</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lcMethodMixAK_GLMM specifying "generalized linear mixed model with normal random effects mixture"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  time:           "Time"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  id:             "Id"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  nClusters:      3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  dist:           "gaussian"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  nMCMC:          10, 10, 1, 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  tuneMCMC:       list(alpha = 1, b = 1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  store:          FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  PED:            TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  keep.chains:    TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  dens.zero:      1e-300</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  parallel:       FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  fixed:          Y ~ 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  random:         ~Time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cluster sizes (K=3):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           A           B           C </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  78 (27.4%)   9 (16.1%) 113 (56.5%) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of obs: 2000, strata (Id): 200</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Scaled residuals:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -4.24257 -0.58708  0.01048  0.00000  0.65141  2.65457 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in if (class(err) == "try-error") stop(paste("Cholesky decomposition of the ",  : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   the condition has length &gt; 1</span>
 </code></pre></div>
     </div>
   </div>

@@ -217,9 +217,6 @@
     <loc>/reference/interface-lcmm.html</loc>
   </url>
   <url>
-    <loc>/reference/interface-longclust.html</loc>
-  </url>
-  <url>
     <loc>/reference/interface-mclust.html</loc>
   </url>
   <url>
@@ -311,9 +308,6 @@
   </url>
   <url>
     <loc>/reference/lcMethodLcmmGMM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodLongclust.html</loc>
   </url>
   <url>
     <loc>/reference/lcMethodMclustLLPA.html</loc>
