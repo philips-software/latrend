@@ -77,7 +77,6 @@ Other lcMethod implementations:
 \code{\link{lcMethodKML}},
 \code{\link{lcMethodLMKM}},
 \code{\link{lcMethodLcmmGBTM}},
-\code{\link{lcMethodLongclust}},
 \code{\link{lcMethodMclustLLPA}},
 \code{\link{lcMethodMixAK_GLMM}},
 \code{\link{lcMethodMixtoolsGMM}},

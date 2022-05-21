@@ -55,7 +55,6 @@ Suggests:
     longitudinalData (>= 2.4.1),
     kml (>= 2.4.1),
     lcmm (>= 1.9.3),
-    longclust,
     mixtools,
     flexmix,
     fda,
@@ -108,7 +107,6 @@ Collate:
     'methodKML.R'
     'methodLcmmGMM.R'
     'methodLcmmGBTM.R'
-    'methodLongclust.R'
     'methodMclustLLPA.R'
     'methodMixAK_GLMM.R'
     'methodMixTVEM.R'
@@ -133,7 +131,6 @@ Collate:
     'modelLMKM.R'
     'modelLcmmGMM.R'
     'modelLcmmGBTM.R'
-    'modelLongclust.R'
     'modelMclustLLPA.R'
     'modelMixAK_GLMM.R'
     'modelMixAK_GLMMlist.R'

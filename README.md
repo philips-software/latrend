@@ -71,7 +71,6 @@ The `latrend` package provides interfaces to the relevant methods for longitudin
 * [funFEM](https://CRAN.R-project.org/package=funFEM)
 * [kml](https://CRAN.R-project.org/package=kml)
 * [lcmm](https://CRAN.R-project.org/package=lcmm)
-* [longclust](https://CRAN.R-project.org/package=longclust)
 * [mclust](https://CRAN.R-project.org/package=mclust)
 * [mixAK](https://CRAN.R-project.org/package=mixAK)
 * [mixtools](https://CRAN.R-project.org/package=mixtools)
