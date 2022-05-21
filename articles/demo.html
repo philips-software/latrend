@@ -43,7 +43,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -103,9 +103,9 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/philips-software/latrend" class="external-link">latrend</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></code></pre></div>
-<div class="section level1">
-<h1 id="initial-data-exploration">Initial data exploration<a class="anchor" aria-label="anchor" href="#initial-data-exploration"></a>
-</h1>
+<div class="section level2">
+<h2 id="initial-data-exploration">Initial data exploration<a class="anchor" aria-label="anchor" href="#initial-data-exploration"></a>
+</h2>
 <p>The <code>latrendData</code> is a synthetic dataset for which the reference group of each trajectory is available, as indicated by the <code>Class</code> column. We will use this column at the end of this vignette to validate the identified model.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
@@ -130,9 +130,9 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 </div>
 <p>The presence of clusters is not apparent from the plot. With any longitudinal analysis, one should first consider whether clustering brings any benefit to the representation of heterogeneity of the data over a single common trend representation, or a multilevel model. In this demonstration, we omit this step under the prior knowledge that the data was generated via distinct mechanisms.</p>
 </div>
-<div class="section level1">
-<h1 id="non-parametric-trajectory-clustering">Non-parametric trajectory clustering<a class="anchor" aria-label="anchor" href="#non-parametric-trajectory-clustering"></a>
-</h1>
+<div class="section level2">
+<h2 id="non-parametric-trajectory-clustering">Non-parametric trajectory clustering<a class="anchor" aria-label="anchor" href="#non-parametric-trajectory-clustering"></a>
+</h2>
 <p>Assuming the appropriate (cluster) trajectory model is not known in advance, non-parametric longitudinal cluster models can provide a suitable starting point.</p>
 <p>As an example, we apply longitudinal <span class="math inline">\(k\)</span>-means (KML). First, we need to define the method. At the very least we need to indicate the response variable the method should operate on. Secondly, we should indicate how many clusters we expect. We do not need to define the <code>id</code> and <code>time</code> arguments as we have set these as package options. We use the <code>nbRedrawing</code> argument provided by the KML package for reducing the number of repeated random starts to only a single model estimation, in order to reduce the run-time of this example.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -192,9 +192,9 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 <span class="co">#&gt; Scaled residuals:</span>
 <span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
 <span class="co">#&gt; -3.83836 -0.60818  0.02327  0.00000  0.64356  3.49294</span></code></pre></div>
-<div class="section level2">
-<h2 id="identifying-the-number-of-clusters">Identifying the number of clusters<a class="anchor" aria-label="anchor" href="#identifying-the-number-of-clusters"></a>
-</h2>
+<div class="section level3">
+<h3 id="identifying-the-number-of-clusters">Identifying the number of clusters<a class="anchor" aria-label="anchor" href="#identifying-the-number-of-clusters"></a>
+</h3>
 <p>As we do not know the best number of clusters needed to represent the data, we should consider fitting the KML model for a range of clusters. We can then select the best representation by comparing the solutions by one or more cluster metrics.</p>
 <p>We can specify a range of <code>lcMethodKML</code> methods based on a prototype method using the <code>lcMethods</code> function. This method outputs a list of <code>lcMethod</code> objects. A structured summary is obtained by calling <code>as.data.frame</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -244,9 +244,9 @@ Elbow plots of three relevant cluster metrics across the fitted models.
 <img src="demo_files/figure-html/unnamed-chunk-10-1.png" alt="Elbow plots of three relevant cluster metrics across the fitted models." width="672">
 </div>
 </div>
-<div class="section level2">
-<h2 id="investigating-the-preferred-model">Investigating the preferred model<a class="anchor" aria-label="anchor" href="#investigating-the-preferred-model"></a>
-</h2>
+<div class="section level3">
+<h3 id="investigating-the-preferred-model">Investigating the preferred model<a class="anchor" aria-label="anchor" href="#investigating-the-preferred-model"></a>
+</h3>
 <p>We have selected the 4-cluster model as the preferred representation. We will now inspect this solution in more detail. Before we can start, we first obtain the fitted <code>lcModel</code> object from the list of fitted models.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">kmlModel4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">kmlModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">4</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -298,9 +298,9 @@ Cluster trajectories for KML model with 4 clusters, along with the assigned traj
 <img src="demo_files/figure-html/unnamed-chunk-13-1.png" alt="Cluster trajectories for KML model with 4 clusters, along with the assigned trajectories." width="672">
 </div>
 </div>
-<div class="section level2">
-<h2 id="model-adequacy">Model adequacy<a class="anchor" aria-label="anchor" href="#model-adequacy"></a>
-</h2>
+<div class="section level3">
+<h3 id="model-adequacy">Model adequacy<a class="anchor" aria-label="anchor" href="#model-adequacy"></a>
+</h3>
 <p>The list of currently supported internal model metrics can be obtained by calling the <code>getInternalMetricNames</code> function.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/getInternalMetricNames.html">getInternalMetricNames</a></span><span class="op">(</span><span class="op">)</span>
@@ -340,12 +340,12 @@ Cluster-specific detrended QQ-plot for the selected KML model.
 </div>
 </div>
 </div>
-<div class="section level1">
-<h1 id="parametric-trajectory-clustering">Parametric trajectory clustering<a class="anchor" aria-label="anchor" href="#parametric-trajectory-clustering"></a>
-</h1>
 <div class="section level2">
-<h2 id="group-based-trajectory-modeling">Group-based trajectory modeling<a class="anchor" aria-label="anchor" href="#group-based-trajectory-modeling"></a>
+<h2 id="parametric-trajectory-clustering">Parametric trajectory clustering<a class="anchor" aria-label="anchor" href="#parametric-trajectory-clustering"></a>
 </h2>
+<div class="section level3">
+<h3 id="group-based-trajectory-modeling">Group-based trajectory modeling<a class="anchor" aria-label="anchor" href="#group-based-trajectory-modeling"></a>
+</h3>
 <p>The KML analysis has provided us with clues on an appropriate model for the cluster trajectories. We can use these insights to define a parametric group-based trajectory model (GBTM) with cluster trajectories represented by polynomials of order 2. We will use the GBTM implementation available from the <code>lcmm</code> package, using a B-spline trajectory of degree 3 from the <code>splines</code> package.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">splines</span><span class="op">)</span>
@@ -369,6 +369,8 @@ Cluster-specific detrended QQ-plot for the selected KML model.
 <span class="co">#&gt;  subset:         NULL</span>
 <span class="co">#&gt;  na.action:      1</span>
 <span class="co">#&gt;  posfix:         NULL</span>
+<span class="co">#&gt;  var.time:       NULL</span>
+<span class="co">#&gt;  partialH:       FALSE</span>
 <span class="co">#&gt;  fixed:          Y ~ bs(Time)</span></code></pre></div>
 <p>We fit the GBTM for 1 to 5 clusters.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
@@ -389,9 +391,9 @@ Three cluster metrics for each of the GBTMs.
 <span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bestGbtmModel</span><span class="op">)</span></code></pre></div>
 <p><img src="demo_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level2">
-<h2 id="growth-mixture-modeling">Growth mixture modeling<a class="anchor" aria-label="anchor" href="#growth-mixture-modeling"></a>
-</h2>
+<div class="section level3">
+<h3 id="growth-mixture-modeling">Growth mixture modeling<a class="anchor" aria-label="anchor" href="#growth-mixture-modeling"></a>
+</h3>
 <p>We have identified 3 apparent clusters via GBTM. However, we may wish to obtain a model that betters explains the within-cluster heterogeneity (as seen in the cluster trajectories plot above). We apply a growth mixture model (GMM) using trajectories represented by a second-order polynomial.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gmmMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodLcmmGMM.html">lcMethodLcmmGMM</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">Time</span>, <span class="fl">2</span>, raw <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, mixture <span class="op">=</span> <span class="va">fixed</span>, idiag <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -414,6 +416,8 @@ Three cluster metrics for each of the GBTMs.
 <span class="co">#&gt;  maxiter:        500</span>
 <span class="co">#&gt;  na.action:      1</span>
 <span class="co">#&gt;  posfix:         NULL</span>
+<span class="co">#&gt;  var.time:       NULL</span>
+<span class="co">#&gt;  partialH:       FALSE</span>
 <span class="co">#&gt;  fixed:          Y ~ poly(Time, 2, raw = TRUE)</span></code></pre></div>
 <p>We fit the GMM for 1 to 5 clusters.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
@@ -449,9 +453,9 @@ Detrended QQ plot for the best GMM.
 </div>
 <p>As can be seen by the scale of the y-axis of the QQ plot, the deviations from the expected normal distributions are negligibly small.</p>
 </div>
-<div class="section level2">
-<h2 id="comparing-models">Comparing models<a class="anchor" aria-label="anchor" href="#comparing-models"></a>
-</h2>
+<div class="section level3">
+<h3 id="comparing-models">Comparing models<a class="anchor" aria-label="anchor" href="#comparing-models"></a>
+</h3>
 <p>Both the GBTM and GMM analysis indicated the data was best represented using 3 clusters. We are interested in identifying the best representation for the data. After all, despite the matching number of clusters, there may be differences between the models in terms of trajectory assignments are shape of the cluster trajectories.</p>
 <p>Firstly, we compare the fit to the data by comparing the BIC, which indicates that the GMM model is marginally better than the GBTM model.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
@@ -476,9 +480,9 @@ Detrended QQ plot for the best GMM.
 <p>The ARI of 1.0 demonstrates that the cluster assignments of the models are identical.</p>
 </div>
 </div>
-<div class="section level1">
-<h1 id="comparison-to-the-reference">Comparison to the reference<a class="anchor" aria-label="anchor" href="#comparison-to-the-reference"></a>
-</h1>
+<div class="section level2">
+<h2 id="comparison-to-the-reference">Comparison to the reference<a class="anchor" aria-label="anchor" href="#comparison-to-the-reference"></a>
+</h2>
 <p>Since we have established a preferred clustered representation of the data heterogeneity, we can now compare the resulting cluster assignments to the ground truth from which the <code>latrendData</code> data was generated.</p>
 <p>Using the reference assignments, we can also plot a non-parametric estimate of the cluster trajectories. Note how it looks similar to the cluster trajectories found by our model.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
@@ -554,7 +558,7 @@ Cluster trajectories of the reference model.
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>

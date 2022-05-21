@@ -26,7 +26,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -144,8 +144,32 @@ The following external arguments are ignored: y, x, z, random.intercept, silent.
 <span class="r-in"> <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span>
 <span class="r-in"> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in if (class(err) == "try-error") stop(paste("Cholesky decomposition of the ",  : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   the condition has length &gt; 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Longitudinal cluster model using generalized linear mixed model with normal random effects mixture</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lcMethodMixAK_GLMM specifying "generalized linear mixed model with normal random effects mixture"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  time:           "Time"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  id:             "Id"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  nClusters:      3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  dist:           "gaussian"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  nMCMC:          10, 10, 1, 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  tuneMCMC:       list(alpha = 1, b = 1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  store:          FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  PED:            TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  keep.chains:    TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  dens.zero:      1e-300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  parallel:       FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  fixed:          Y ~ 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  random:         ~Time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cluster sizes (K=3):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           A           B           C </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  89 (27.9%)   0 (31.6%) 111 (40.4%) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of obs: 2000, strata (Id): 200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Scaled residuals:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -4.02888 -0.60125 -0.01056  0.00000  0.65682  3.24158 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </div>
@@ -160,7 +184,7 @@ The following external arguments are ignored: y, x, z, random.intercept, silent.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

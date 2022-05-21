@@ -43,7 +43,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -102,9 +102,9 @@
 <p>In this vignette we demonstrate different ways in which longitudinal cluster models can be internally validated.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/philips-software/latrend" class="external-link">latrend</a></span><span class="op">)</span></code></pre></div>
-<div class="section level1">
-<h1 id="demonstration">Demonstration<a class="anchor" aria-label="anchor" href="#demonstration"></a>
-</h1>
+<div class="section level2">
+<h2 id="demonstration">Demonstration<a class="anchor" aria-label="anchor" href="#demonstration"></a>
+</h2>
 <p>We explore the <code>latrendData</code> dataset. This is a synthetic dataset for which the reference group of each trajectory is available, indicated by the <code>Class</code> column. However, in this vignette we will assume that the true group specification and number of groups are unknown. Instead, we have a candidate model which we wish to validate internally.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
@@ -119,9 +119,9 @@
 <p>Specify the package options to adopt the respective column names of the loaded dataset, for convenience.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>latrend.id <span class="op">=</span> <span class="st">"Id"</span>, latrend.time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></code></pre></div>
-<div class="section level2">
-<h2 id="the-candidate-model">The candidate model<a class="anchor" aria-label="anchor" href="#the-candidate-model"></a>
-</h2>
+<div class="section level3">
+<h3 id="the-candidate-model">The candidate model<a class="anchor" aria-label="anchor" href="#the-candidate-model"></a>
+</h3>
 <p>We consider a KML model with 3 clusters to be our candidate model that we will validate. We defined the method with a reduced number of repeated random starts (as indicated by the <code>nbRedrawing</code> argument) in order to reduce the computation time needed in the repeated evaluations below. This is only done for demonstration purposes.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">kml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span><span class="st">"Y"</span>, nClusters <span class="op">=</span> <span class="fl">3</span>, nbRedrawing <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
@@ -146,9 +146,9 @@
 <span class="co">#&gt;  response:       "Y"</span></code></pre></div>
 </div>
 </div>
-<div class="section level1">
-<h1 id="evaluate-stability-of-the-estimation-through-repeated-estimation">Evaluate stability of the estimation through repeated estimation<a class="anchor" aria-label="anchor" href="#evaluate-stability-of-the-estimation-through-repeated-estimation"></a>
-</h1>
+<div class="section level2">
+<h2 id="evaluate-stability-of-the-estimation-through-repeated-estimation">Evaluate stability of the estimation through repeated estimation<a class="anchor" aria-label="anchor" href="#evaluate-stability-of-the-estimation-through-repeated-estimation"></a>
+</h2>
 <p>The purpose of model validation is essentially to identify that the model is robust and generalizes well to unseen data. A necessary condition for these aspects is that the model is reproducible on the original training data. This evaluation helps to ensure that the model estimation procedure is robust, i.e., does not yield spurious model solutions.</p>
 <p>We can fit a method repeatedly using the <code>latrendRep</code> data.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -244,9 +244,9 @@
 <span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
 <span class="co">#&gt;  0.1925  0.1925  0.1925  0.1925  0.1926  0.1926</span></code></pre></div>
 <p>As can be seen from the numbers, the models are (practically) identical in terms of model fit, measurement error, and cluster separation.</p>
-<div class="section level2">
-<h2 id="comparison-between-fits">Comparison between fits<a class="anchor" aria-label="anchor" href="#comparison-between-fits"></a>
-</h2>
+<div class="section level3">
+<h3 id="comparison-between-fits">Comparison between fits<a class="anchor" aria-label="anchor" href="#comparison-between-fits"></a>
+</h3>
 <p>Alternatively, we can select the model with the best fit, and compare it against the other fitted models.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bestRepModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">repModels</span>, <span class="st">"BIC"</span><span class="op">)</span>
@@ -273,9 +273,9 @@
 <span class="co">#&gt;       1       1       1       1       1       1</span></code></pre></div>
 </div>
 </div>
-<div class="section level1">
-<h1 id="evaluating-replicability-and-stability-through-bootstrapping">Evaluating replicability and stability through bootstrapping<a class="anchor" aria-label="anchor" href="#evaluating-replicability-and-stability-through-bootstrapping"></a>
-</h1>
+<div class="section level2">
+<h2 id="evaluating-replicability-and-stability-through-bootstrapping">Evaluating replicability and stability through bootstrapping<a class="anchor" aria-label="anchor" href="#evaluating-replicability-and-stability-through-bootstrapping"></a>
+</h2>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bootModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendBoot.html">latrendBoot</a></span><span class="op">(</span><span class="va">kml</span>, data <span class="op">=</span> <span class="va">latrendData</span>, samples <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
 <span class="va">bootModels</span>
@@ -343,9 +343,9 @@
 <span class="co">#&gt;          BIC         WMAE         APPA </span>
 <span class="co">#&gt; 54.356727198  0.005065835           NA</span></code></pre></div>
 </div>
-<div class="section level1">
-<h1 id="ten-fold-cross-validation">Ten-fold cross validation<a class="anchor" aria-label="anchor" href="#ten-fold-cross-validation"></a>
-</h1>
+<div class="section level2">
+<h2 id="ten-fold-cross-validation">Ten-fold cross validation<a class="anchor" aria-label="anchor" href="#ten-fold-cross-validation"></a>
+</h2>
 <p>Lastly, we can fit models using <span class="math inline">\(k\)</span>-fold cross-validation to validate the models on previously unseen data from the test folds.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">trainModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendCV.html">latrendCV</a></span><span class="op">(</span><span class="va">kml</span>, data <span class="op">=</span> <span class="va">latrendData</span>, folds <span class="op">=</span> <span class="fl">10</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
@@ -362,9 +362,9 @@
 <span class="co">#&gt; 8      8     kml  trainFold(latrendData, fold = 8, "Id", 10, 1)  564460360</span>
 <span class="co">#&gt; 9      9     kml  trainFold(latrendData, fold = 9, "Id", 10, 1) 1404535239</span>
 <span class="co">#&gt; 10    10     kml trainFold(latrendData, fold = 10, "Id", 10, 1)  779295076</span></code></pre></div>
-<div class="section level2">
-<h2 id="manual-cross-validation">Manual cross validation<a class="anchor" aria-label="anchor" href="#manual-cross-validation"></a>
-</h2>
+<div class="section level3">
+<h3 id="manual-cross-validation">Manual cross validation<a class="anchor" aria-label="anchor" href="#manual-cross-validation"></a>
+</h3>
 <p>Alternatively, we can generate the training data folds ourselves, and fit models using <code>latrendBatch</code>.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dataFolds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createTrainDataFolds.html">createTrainDataFolds</a></span><span class="op">(</span><span class="va">latrendData</span>, folds <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
@@ -406,7 +406,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
