@@ -168,7 +168,7 @@ globalVariables(
   c(
     '.', '..id', '..time', '..response', '.Fill', '.name', '.group', '.method', '.ROW_INDEX', '.Mean', '.Block',
     'AllNA',
-    'i', 'iseed', 'N', 'i.N', 'g', 'fun', 'method', 'plotTrajs', 'cl',
+    'i', 'iseed', 'Include', 'N', 'i.N', 'g', 'fun', 'method', 'plotTrajs', 'cl',
     'Prob', 'Cluster', 'Class', 'Value', 'Id', 'Time',
     'modelMethod', 'modelData', 'modelCall',
     'weighted.mean',
