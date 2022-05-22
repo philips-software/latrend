@@ -30,3 +30,4 @@ tests/testthat/*.rds
 *.tmp
 check
 nul
+private/
