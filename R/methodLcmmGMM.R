@@ -7,10 +7,14 @@ setValidity('lcMethodLcmmGMM', function(object) {
     assert_that(hasSingleResponse(object$formula))
 
     reTerms = getREterms(f)
-    assert_that(length(reTerms) == 1, msg = 'formula should contain one random-effects component')
-    assert_that(getREGroupName(reTerms[[1]]) %in% c(object$id, 'ID'), msg =
-                  'Group variable in random-effects component should match the id argument, or equal "ID"')
-
+    assert_that(
+      length(reTerms) == 1,
+      msg = 'formula should contain one random-effects component'
+    )
+    assert_that(
+      getREGroupName(reTerms[[1]]) %in% c(object$id, 'ID'),
+      msg = 'Group variable in random-effects component should match the id argument, or equal "ID"'
+    )
   }
 
   if (isArgDefined(object, 'formula.mb')) {

@@ -3,6 +3,22 @@ skip_if_not_installed('lcmm')
 rngReset()
 tests = c(DEFAULT_LATREND_TESTS)
 
+lcmmData = generateLongData(
+  sizes = rep(25L, 3L),
+  data = data.frame(Time = 1:4),
+  fixed = Value ~ 1,
+  cluster = ~ 1,
+  clusterCoefs = t(c(-1, 0, 1)),
+  random = ~ 1,
+  randomScales = cbind(.1, .1, .1),
+  noiseScales = rep(.1, 3L),
+  id = 'Id'
+) %>%
+  setnames('Class', 'Cluster')
+# %>%
+#   .[, Age := 65] %>%
+#   .[c(1, 10, 20), Age := NA] %>%
+
 # GMM ####
 make.gmm = function(id, time, response, ..., init = NULL) {
   mc = match.call.all()
@@ -17,7 +33,7 @@ make.gmm = function(id, time, response, ..., init = NULL) {
 
 test_that('gmm', {
   expect_true({
-    test.latrend('lcMethodLcmmGMM', instantiator = make.gmm, tests = tests)
+    test.latrend('lcMethodLcmmGMM', instantiator = make.gmm, tests = tests, data = lcmmData)
   })
 })
 
@@ -35,6 +51,12 @@ test_that('gmm with init=lme.random', {
   expect_true(is.lcModel(model))
 })
 
+test_that('gmm with NA covariate', {
+  expect_true({
+    test.latrend('lcMethodLcmmGMM', instantiator = make.gmm, tests = tests, data = lcmmData)
+  })
+})
+
 # GBTM ####
 make.gbtm = function(id, time, response, ..., init = NULL) {
   mc = match.call.all()
@@ -49,6 +71,6 @@ make.gbtm = function(id, time, response, ..., init = NULL) {
 
 test_that('gbtm', {
   expect_true({
-    test.latrend('lcMethodLcmmGBTM', instantiator = make.gbtm, tests = tests)
+    test.latrend('lcMethodLcmmGBTM', instantiator = make.gbtm, tests = tests, data = lcmmData)
   })
 })

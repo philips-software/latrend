@@ -23,6 +23,7 @@
 \alias{model.matrix.lcModelLcmmGMM}
 \alias{logLik.lcModelLcmmGMM}
 \alias{sigma.lcModelLcmmGMM}
+\alias{nobs.lcModelLcmmGMM}
 \alias{postprob,lcModelLcmmGMM-method}
 \alias{converged,lcModelLcmmGMM-method}
 \title{lcmm interface}
@@ -66,6 +67,8 @@
 \method{logLik}{lcModelLcmmGMM}(object, ...)
 
 \method{sigma}{lcModelLcmmGMM}(object, ...)
+
+\method{nobs}{lcModelLcmmGMM}(object, ...)
 
 \S4method{postprob}{lcModelLcmmGMM}(object, ...)
 

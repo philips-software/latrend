@@ -6,10 +6,36 @@ setClass('lcModelLcmmGMM', contains = 'lcModel')
 #' @inheritParams fitted.lcModel
 fitted.lcModelLcmmGMM = function(object, ..., clusters = trajectoryAssignments(object)) {
   predNames = paste0('pred_ss', 1:nClusters(object))
+
+  allVars = unique(c(
+    getCovariates(object@method$fixed),
+    getCovariates(object@method$mixture),
+    getCovariates(object@method$classmb)
+  ))
+
+  modelData = model.data(object)
+  dataIndex = data.table(
+    Id = modelData[[idVariable(object)]],
+    Time = modelData[[timeVariable(object)]],
+    Include = TRUE
+  )
+  dataIndex[object@model$na.action, Include := FALSE]
+
   predMat = object@model$pred[predNames] %>%
     as.matrix() %>%
     set_colnames(clusterNames(object))
-  transformFitted(predMat, model = object, clusters = clusters)
+
+  assert_that(
+    sum(dataIndex$Include) == nrow(predMat),
+    msg = 'modelLcmm implementation error: lcmm model returned object of unexpected number of observations. Please report this issue.'
+  )
+
+  dtPred = cbind(dataIndex[Include == TRUE, .(Id, Time)], predMat)
+
+  allPred = dtPred[dataIndex[, .(Id, Time)], on = c('Id', 'Time')]
+  allPredMat = subset(allPred, select = clusterNames(object)) %>% as.matrix()
+
+  transformFitted(allPredMat, model = object, clusters = clusters)
 }
 
 
@@ -37,8 +63,8 @@ setMethod('predictForCluster', signature('lcModelLcmmGMM'),
     missingVarMeans = model.data(object) %>%
       subset(select = missingVars) %>%
       vapply(mean, na.rm = TRUE, FUN.VALUE = 0)
-    newdata = cbind(newdata, missingVarMeans)
-    newdata$Cluster = make.clusterIndices(object, newdata$Cluster)
+    newdata = cbind(newdata, as.data.table(as.list(missingVarMeans))[rep(1L, nrow(newdata))])
+    # newdata$Cluster = make.clusterIndices(object, newdata$Cluster)
   }
 
   predMat = lcmm::predictY(object@model, newdata = newdata)$pred %>%
@@ -79,6 +105,16 @@ logLik.lcModelLcmmGMM = function(object, ...) {
 #' @rdname interface-lcmm
 sigma.lcModelLcmmGMM = function(object, ...) {
   coef(object)['stderr'] %>% unname()
+}
+
+#' @export
+#' @rdname interface-lcmm
+nobs.lcModelLcmmGMM = function(object, ...) {
+  suppressWarnings({
+    data = model.data(object)
+  })
+
+  nrow(data) - length(object@model$na.action)
 }
 
 
