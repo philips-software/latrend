@@ -1,3 +1,12 @@
+# v1.3.0
+* Removed longclust package
+* Added testing framework for longitudinal cluster method implementations
+
+## Test environments
+* Windows (release, devel, 3.6)
+* Ubuntu (release and devel)
+* macOS (release)
+
 # v1.2.1
 * Fewer required imports
 * Reduced test and example time
