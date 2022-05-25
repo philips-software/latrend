@@ -1,4 +1,17 @@
 **If you are viewing this file as part of a released version of the package, the latest news can be found [on GitHub](https://philips-software.github.io/latrend/news/).**
+
+# latrend v.1.3.0
+## New features
+1. Parameterized method testing framework for `lcMethod` and `lcModel` implementations. See `test.latrend()`.
+2. Warnings for missing data observations
+3. Better handling of data with missing observations
+
+## Breaking changes
+1. Removed support for the `longclust` package as it is no longer available on CRAN.
+
+## Other changes
+1. Updated examples, vignettes and tests to pass with `_R_CHECK_DEPENDS_ONLY_ = true`.
+
 # latrend v1.2.1
 1. Fewer required imports
 2. Reduced test and example time
