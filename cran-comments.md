@@ -1,6 +1,7 @@
 # v1.3.0
-* Removed longclust package
+* Removed archived longclust package dependency
 * Added testing framework for longitudinal cluster method implementations
+* Changed examples, vignettes and tests to pass with `_R_CHECK_DEPENDS_ONLY_ = true`
 
 ## Test environments
 * Windows (release, devel, 3.6)

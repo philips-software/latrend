@@ -41,6 +41,7 @@ jobs:
       RENV_PROFILE: ${{ matrix.config.renv }}
       CI: true
       _R_CHECK_FORCE_SUGGESTS_: false
+      _R_CHECK_DEPENDS_ONLY_: true
       _R_CHECK_CRAN_INCOMING_REMOTE_: false
       _R_CHECK_CRAN_INCOMING_: false
       _R_CHECK_RD_XREFS_: true
