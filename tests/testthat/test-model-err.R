@@ -1,7 +1,7 @@
 context('lcModel implementation error')
 
 setClass('lcModelErr', contains = 'lcModel')
-model = modelTest
+model = testModel
 class(model) = 'lcModelErr'
 
 test_that('clusterProportions', {

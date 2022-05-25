@@ -1,7 +1,7 @@
 context('partition')
 rngReset()
 
-refmodel = modelTest
+refmodel = testModel
 
 # assignments ####
 test_that('integer assignments', {

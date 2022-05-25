@@ -2,7 +2,7 @@ context('latrendBoot')
 rngReset()
 
 test_that('latrendBoot', {
-  models = latrendBoot(lcMethodTestKML(), data = testLongData, samples = 3, seed = 1)
+  models = latrendBoot(mRandom, data = testLongData, samples = 3, seed = 1)
 
   expect_is(models, 'lcModels')
   expect_length(models, 3)
@@ -14,22 +14,21 @@ test_that('latrendBoot', {
 })
 
 test_that('latrendBoot without seed', {
-  models = latrendBoot(lcMethodTestKML(), data = testLongData, samples = 2)
+  models = latrendBoot(mRandom, data = testLongData, samples = 2)
 
   expect_is(models, 'lcModels')
   expect_length(models, 2)
 })
 
 test_that('latrendBoot with method var', {
-  kml = lcMethodTestKML()
-  models = latrendBoot(kml, data = testLongData, samples = 2)
+  models = latrendBoot(mRandom, data = testLongData, samples = 2)
 
   expect_is(models, 'lcModels')
   expect_length(models, 2)
 })
 
 test_that('latrendBoot with single sample', {
-  models = latrendBoot(lcMethodTestKML(), data = testLongData, samples = 1)
+  models = latrendBoot(mRandom, data = testLongData, samples = 1)
 
   expect_is(models, 'lcModels')
   expect_length(models, 1)

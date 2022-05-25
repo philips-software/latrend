@@ -1,8 +1,8 @@
 context('assert')
 rngReset()
 
-m1 = modelTest
-m2 = modelTestRandom
+m1 = testModel2
+m2 = rngModel2
 
 test_that('is_named', {
   expect_true(is_named(setNames(1:2, LETTERS[1:2])))

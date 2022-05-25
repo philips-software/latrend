@@ -1,6 +1,6 @@
 context('transform-predict')
 
-model = modelTest
+model = testModel
 
 test_that('NULL', {
   out = transformPredict(NULL, model, newdata = data.frame(Assessment = numeric()))

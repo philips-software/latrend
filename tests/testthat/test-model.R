@@ -1,7 +1,7 @@
 context('lcModel')
 rngReset()
 
-model = modelTest
+model = testModel
 
 test_that('clusterTrajectories', {
   times = time(model)

@@ -1,6 +1,6 @@
 context('transform-fitted')
 
-model = modelTest
+model = testModel
 
 test_that('NULL', {
   out = transformFitted(NULL, model)

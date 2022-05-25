@@ -2,12 +2,16 @@
 setClass('lcMethodRandom', contains = 'lcMethod')
 
 setValidity('lcMethodRandom', function(object) {
-  assert_that(has_lcMethod_args(object, formalArgs(lcMethodRandom)))
+  assert_that(
+    has_lcMethod_args(object, formalArgs(lcMethodRandom))
+  )
 
   if (isArgDefined(object, 'alpha')) {
-    assert_that(is.numeric(object$alpha),
-                all(object$alpha >= 0),
-                all(is.finite(object$alpha)))
+    assert_that(
+      is.numeric(object$alpha),
+      all(object$alpha >= 0),
+      all(is.finite(object$alpha))
+    )
   }
 
   if (isArgDefined(object, 'center')) {
@@ -78,13 +82,12 @@ setMethod('getName', signature('lcMethodRandom'), function(object) 'random')
 setMethod('getShortName', signature('lcMethodRandom'), function(object) 'rand')
 
 #' @rdname interface-custom
-#' @importFrom stats rgamma
 setMethod('fit', signature('lcMethodRandom'), function(method, data, envir, verbose, ...) {
   nIds = uniqueN(data[[idVariable(method)]])
   assert_that(nIds > 0, msg = 'cannot fit to data with nIds = 0')
 
   # generate cluster proportions
-  y = rgamma(method$nClusters, method$alpha)
+  y = stats::rgamma(method$nClusters, method$alpha)
   clusProps = y / sum(y)
 
   propSeq = rep(seq_len(method$nClusters), ceiling(clusProps * nIds))

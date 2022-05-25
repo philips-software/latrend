@@ -1,15 +1,16 @@
 context('latrendFold')
+skip_if_not_installed('caret')
 rngReset()
 
 test_that('2 folds', {
-  models = latrendCV(lcMethodTestKML(), testLongData, folds = 2, seed = 1)
+  models = latrendCV(mRandom, testLongData, folds = 2, seed = 1)
 
   expect_is(models, 'lcModels')
   expect_length(models, 2)
 })
 
 test_that('3 folds', {
-  models = latrendCV(lcMethodTestKML(), testLongData, folds = 3, seed = 1)
+  models = latrendCV(mRandom, testLongData, folds = 3, seed = 1)
 
   expect_is(models, 'lcModels')
   expect_length(models, 3)
@@ -20,24 +21,30 @@ test_that('3 folds', {
 })
 
 test_that('without seed', {
-  models = latrendCV(lcMethodTestKML(), testLongData, folds = 2)
+  models = latrendCV(mRandom, testLongData, folds = 2)
 
   expect_is(models, 'lcModels')
   expect_length(models, 2)
 })
 
 test_that('data subset', {
-  models = latrendCV(lcMethodTestKML(), testLongData[Assessment < .5], folds = 2, seed = 1)
+  models = latrendCV(mRandom, testLongData[Assessment < .5], folds = 2, seed = 1)
 
   expect_is(models, 'lcModels')
   expect_length(models, 2)
 
-  expect_equal(deparse(getCall(models[[1]])$data, width.cutoff = 500), 'trainFold(testLongData[Assessment < 0.5], fold = 1, "Traj", 2, 1)')
-  expect_equal(deparse(getCall(models[[2]])$data, width.cutoff = 500), 'trainFold(testLongData[Assessment < 0.5], fold = 2, "Traj", 2, 1)')
+  expect_equal(
+    deparse(getCall(models[[1]])$data, width.cutoff = 500),
+    'trainFold(testLongData[Assessment < 0.5], fold = 1, "Traj", 2, 1)'
+  )
+  expect_equal(
+    deparse(getCall(models[[2]])$data, width.cutoff = 500),
+    'trainFold(testLongData[Assessment < 0.5], fold = 2, "Traj", 2, 1)'
+  )
 })
 
 test_that('method var', {
-  kml = lcMethodTestKML()
+  kml = mRandom
   models = latrendCV(kml, testLongData, folds = 2, seed = 1)
 
   expect_is(models, 'lcModels')

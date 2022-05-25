@@ -4,11 +4,12 @@ skip_if_not_installed('psych')
 skip_if_not_installed('igraph')
 rngReset()
 
-internalMetrics = getInternalMetricNames() %>% setdiff('deviance')
+internalMetrics = getInternalMetricNames() %>%
+  setdiff(c('deviance', 'SED.fit', 'ED.fit'))
 
 test_that('two clusters', {
   for (name in internalMetrics) {
-    value = metric(gmm2, name = name)
+    value = metric(testModel2, name = name)
     expect_is(value, 'numeric')
     expect_true(is.finite(value), info = name)
   }
@@ -16,45 +17,45 @@ test_that('two clusters', {
 
 test_that('single cluster', {
   for (name in internalMetrics) {
-    value = metric(gmm1, name = name)
+    value = metric(testModel1, name = name)
     expect_is(value, 'numeric')
     expect_length(value, 1)
   }
 })
 
 test_that('error on empty name', {
-  expect_error(metric(kml1, name = NULL))
+  expect_error(metric(testModel1, name = NULL))
 })
 
 test_that('default names', {
   # if this test fails then the documentation needs to be updated
-  out = metric(kml2)
+  out = metric(testModel2)
   expect_named(out, c('WRSS', 'APPA.mean'))
 })
 
 test_that('MAE', {
-  out = metric(kml2, 'MAE')
+  out = metric(testModel2, 'MAE')
 
   expect_gt(out, 0)
-  expect_equivalent(out, mean(abs(residuals(kml2, clusters = trajectoryAssignments(kml2)))))
+  expect_equivalent(out, mean(abs(residuals(testModel2, clusters = trajectoryAssignments(testModel2)))))
 })
 
 test_that('MSE', {
-  out = metric(kml2, 'MSE')
+  out = metric(testModel2, 'MSE')
 
   expect_gt(out, 0)
-  expect_equivalent(out, mean(residuals(kml2, clusters = trajectoryAssignments(kml2))^2))
+  expect_equivalent(out, mean(residuals(testModel2, clusters = trajectoryAssignments(testModel2))^2))
 })
 
 test_that('WMAE', {
-  wmae = metric(kml2, 'WMAE')
-  mae = metric(kml2, 'MAE')
+  wmae = metric(testModel2, 'WMAE')
+  mae = metric(testModel2, 'MAE')
 
   # for kml, WMAE and MAE should yield same result due to modal assignment
   expect_equivalent(wmae, mae)
 
-  wmaeFuzzy = metric(gmm, 'WMAE')
-  maeFuzzy = metric(gmm, 'MAE')
+  wmaeFuzzy = metric(testModel2, 'WMAE') # TODO use fuzzy model
+  maeFuzzy = metric(testModel2, 'MAE')
 
   expect_gte(wmaeFuzzy, maeFuzzy)
 })
@@ -64,7 +65,7 @@ test_that('Mahalanobis', {
 })
 
 test_that('missing metric', {
-  expect_warning(met <- metric(kml2, '.MISSING'))
+  expect_warning(met <- metric(testModel2, '.MISSING'))
   expect_true(is.na(met))
 })
 

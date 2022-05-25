@@ -7,15 +7,9 @@ rngReset()
 
 externalMetrics = getExternalMetricNames() %>% setdiff('McNemar')
 
-kml1 = modelTest1
-kml2 = modelTest2
-lmkm1 = latrend(lcMethodTestLMKM(), testLongData, nClusters=1)
-lmkm2 = latrend(lcMethodTestLMKM(), testLongData, nClusters=2)
-lmkm3 = latrend(lcMethodTestLMKM(), testLongData, nClusters=3)
-
 test_that('two clusters', {
   for(name in externalMetrics) {
-    value = externalMetric(kml2, lmkm2, name=name)
+    value = externalMetric(testModel2, testModel2, name=name)
     expect_is(value, 'numeric')
     expect_length(value, 1)
     expect_true(is.finite(value), info=name)
@@ -25,7 +19,7 @@ test_that('two clusters', {
 test_that('single cluster', {
   for(name in externalMetrics) {
     suppressWarnings({
-      value = externalMetric(kml1, lmkm1, name=name)
+      value = externalMetric(testModel1, testModel1, name=name)
     })
     expect_is(value, 'numeric')
     expect_length(value, 1)
@@ -34,7 +28,7 @@ test_that('single cluster', {
 
 test_that('different clusters', {
   for(name in externalMetrics) {
-    value = externalMetric(kml2, lmkm3, name=name)
+    value = externalMetric(testModel2, testModel3, name=name)
     expect_is(value, 'numeric')
     expect_length(value, 1)
     expect_true(is.finite(value), info=name)
@@ -42,16 +36,16 @@ test_that('different clusters', {
 })
 
 test_that('error on empty name', {
-  expect_error(externalMetric(kml1, kml2, name = NULL))
+  expect_error(externalMetric(testModel1, testModel2, name = NULL))
 })
 
 test_that('default names', {
   # if this test fails then the documentation needs to be updated
-  expect_error(externalMetric(kml1, kml2))
+  expect_error(externalMetric(testModel1, testModel2))
 })
 
 test_that('missing metric', {
-  expect_warning(met <- externalMetric(kml1, kml2, '.MISSING'))
+  expect_warning(met <- externalMetric(testModel1, testModel2, '.MISSING'))
   expect_true(is.na(met))
 })
 

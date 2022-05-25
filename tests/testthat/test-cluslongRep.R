@@ -3,7 +3,7 @@ rngReset()
 
 m = lcMethodKML(response = 'Value', nbRedrawing = 1, maxIt = 10)
 test_that('default', {
-  models = latrendRep(lcMethodKML(nbRedrawing = 1, maxIt = 10, response = 'Value'), data = testLongData, .rep = 2)
+  models = latrendRep(lcMethodLMKM(formula = Value ~ Assessment), data = testLongData, .rep = 2)
 
   expect_is(models, 'lcModels')
   expect_length(models, 2)
@@ -20,11 +20,10 @@ test_that('method var', {
 })
 
 test_that('method name', {
-  refMethod = lcMethodKML(response = "Value", nbRedrawing = 1, maxIt = 10)
-  model = latrendRep("lcMethodKML", response = "Value", nbRedrawing = 1, maxIt = 10, data = testLongData, .rep = 1)[[1]]
+  refMethod = mTest
+  model = latrendRep('lcMethodLMKM', formula = Value ~ Assessment, data = testLongData, .rep = 1)[[1]]
   newMethod = getLcMethod(model)
-  expect_equal(newMethod$nbRedrawing, refMethod$nbRedrawing)
-  expect_equal(newMethod$maxIt, refMethod$maxIt)
+  expect_equal(newMethod$nClusters, refMethod$nClusters)
 })
 
 test_that('single rep', {
@@ -43,9 +42,9 @@ test_that('matrix input', {
 })
 
 test_that('envir', {
-  kml = lcMethodKML(nClusters = a, response = 'Value', nbRedrawing = 1, maxIt = 10)
-  e = list2env(list(a = 1))
-  models = latrendRep(kml, data = testLongData, envir = e, .rep = 2)
+  method = lcMethodLMKM(nClusters = a, formula = Value ~ Assessment)
+  env = list2env(list(a = 1))
+  models = latrendRep(method, data = testLongData, envir = env, .rep = 2)
 
   expect_is(models, 'lcModels')
   expect_length(models, 2)

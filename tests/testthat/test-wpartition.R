@@ -1,7 +1,7 @@
 context('weighted partition')
 rngReset()
 
-refmodel = modelTest
+refmodel = testModel2
 
 test_that('default', {
   model = lcModelWeightedPartition(testLongData, response = 'Value', weights = postprob(refmodel))
