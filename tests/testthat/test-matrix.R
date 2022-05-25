@@ -62,7 +62,7 @@ test_that('tsmatrix with incomplete trajectories', {
 })
 
 test_that('trajectoryAssignments,matrix', {
-  model = latrend(lcMethodTestKML(), data = testLongData)
+  model = latrend(mTest, data = testLongData)
   pp = postprob(model)
 
   refLabels = trajectoryAssignments(model)

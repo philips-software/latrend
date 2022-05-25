@@ -44,8 +44,7 @@ test_that('data subset', {
 })
 
 test_that('method var', {
-  kml = mRandom
-  models = latrendCV(kml, testLongData, folds = 2, seed = 1)
+  models = latrendCV(mRandom, testLongData, folds = 2, seed = 1)
 
   expect_is(models, 'lcModels')
   expect_length(models, 2)

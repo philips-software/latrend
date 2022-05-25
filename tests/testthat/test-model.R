@@ -106,7 +106,10 @@ test_that('metrics', {
   expect_is(value, 'numeric')
   expect_named(value, c('AIC', '@undefined', 'BIC'))
   expect_equal(unname(value[2]), NA*0)
+})
 
+test_that('metrics (deps)', {
+  skip_if_not_installed('clusterCrit')
   value = externalMetric(model, model, 'Jaccard')
   expect_is(value, 'numeric')
   expect_named(value, 'Jaccard')
@@ -171,6 +174,7 @@ test_that('OCC', {
 })
 
 test_that('plotFittedTrajectories', {
+  skip_if_not_installed('ggplot2')
   expect_is(plotFittedTrajectories(model), 'ggplot')
 })
 

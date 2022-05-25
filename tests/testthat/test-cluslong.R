@@ -62,6 +62,8 @@ test_that('data call', {
 })
 
 test_that('specify id and time with matrix input', {
+  skip_if_not_installed('kml')
+
   mat = tsmatrix(testLongData, response = 'Value')
   model = latrend(lcMethodTestKML(), id = 'Device', time = 'Observation', data = mat)
 

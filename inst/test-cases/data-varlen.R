@@ -34,10 +34,13 @@ test(
   2L,
   text = 'expecting each cluster to have at least some assigned trajectories'
 )
-test(
-  'trajectoryAssignments.recovery',
-  externalMetric(model, refModel, 'adjustedRand') > .99,
-  check.attributes = FALSE,
-  text = 'does trajectory assignment match the reference?',
-  onFail = .Options$latrend.test.checkClusterRecovery
-)
+
+if (rlang::is_installed('mclustcomp')) {
+  test(
+    'trajectoryAssignments.recovery',
+    externalMetric(model, refModel, 'adjustedRand') > .99,
+    check.attributes = FALSE,
+    text = 'does trajectory assignment match the reference?',
+    onFail = .Options$latrend.test.checkClusterRecovery
+  )
+}

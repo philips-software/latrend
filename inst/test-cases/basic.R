@@ -49,13 +49,17 @@ test(
   2L,
   text = 'expecting each cluster to have at least some assigned trajectories'
 )
-test(
-  'trajectoryAssignments.recovery',
-  externalMetric(model, refModel, 'adjustedRand') > .99,
-  check.attributes = FALSE,
-  text = 'does trajectory assignment match the reference?',
-  onFail = .Options$latrend.test.checkClusterRecovery
-)
+
+if (rlang::is_installed('mclustcomp')) {
+  test(
+    'trajectoryAssignments.recovery',
+    externalMetric(model, refModel, 'adjustedRand') > .99,
+    check.attributes = FALSE,
+    text = 'does trajectory assignment match the reference?',
+    onFail = .Options$latrend.test.checkClusterRecovery
+  )
+}
+
 test('clusterSizes.len', length(clusterSizes(model)), 2)
 test('clusterSizes.total', sum(clusterSizes(model)), S)
 test(
@@ -82,8 +86,11 @@ test('nobs', nobs(model), nrow(testData))
 test('trajectories', trajectories(model), runOnly = TRUE)
 
 test('clusterTrajectories', clusterTrajectories(model), runOnly = TRUE)
-test('plotClusterTrajectories', plotClusterTrajectories(model), runOnly = TRUE)
-test('plotTrajectories', plotTrajectories(model), runOnly = TRUE)
+
+if (rlang::is_installed('ggplot2')) {
+  test('plotClusterTrajectories', plotClusterTrajectories(model), runOnly = TRUE)
+  test('plotTrajectories', plotTrajectories(model), runOnly = TRUE)
+}
 
 test('summary', is(summary(model), 'lcSummary'))
 test('strip', is(strip(model), class(model)))

@@ -49,6 +49,8 @@ test_that('table assignments', {
 
 
 test_that('data column assignment', {
+  skip_if_not_installed('mclustcomp')
+
   model = lcModelPartition(
     testLongData,
     response = 'Value',

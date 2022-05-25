@@ -69,4 +69,6 @@ test('predictForCluster.cluster=A&newdata=model.data.compare', predClusNull2, pr
 
 test('predict', predict(model, newdata = NULL), runOnly = TRUE)
 
-test('plotFittedTrajectories', plotFittedTrajectories(model), runOnly = TRUE)
+if (rlang::is_installed('ggplot2')) {
+  test('plotFittedTrajectories', plotFittedTrajectories(model), runOnly = TRUE)
+}

@@ -34,13 +34,16 @@ test(
   2L,
   text = 'expecting each cluster to have at least some assigned trajectories'
 )
-test(
-  'oneTraj.trajectoryAssignments.recovery',
-  externalMetric(model, refModel, 'adjustedRand') > .99,
-  check.attributes = FALSE,
-  text = 'does trajectory assignment match the reference?',
-  onFail = .Options$latrend.test.checkClusterRecovery
-)
+
+if (rlang::is_installed('mclustcomp')) {
+  test(
+    'oneTraj.trajectoryAssignments.recovery',
+    externalMetric(model, refModel, 'adjustedRand') > .99,
+    check.attributes = FALSE,
+    text = 'does trajectory assignment match the reference?',
+    onFail = .Options$latrend.test.checkClusterRecovery
+  )
+}
 
 # remove an observation from each trajectory
 testData2 = subset(dataset2, select = c('Id', 'Time', 'Value'))
@@ -58,11 +61,14 @@ test(
   2L,
   text = 'expecting each cluster to have at least some assigned trajectories'
 )
-test(
-  'eachTraj.trajectoryAssignments.recovery',
-  externalMetric(model2, refModel, 'adjustedRand') > .99,
-  check.attributes = FALSE,
-  text = 'does trajectory assignment match the reference?',
-  onFail = .Options$latrend.test.checkClusterRecovery
-)
+
+if (rlang::is_installed('mclustcomp')) {
+  test(
+    'eachTraj.trajectoryAssignments.recovery',
+    externalMetric(model2, refModel, 'adjustedRand') > .99,
+    check.attributes = FALSE,
+    text = 'does trajectory assignment match the reference?',
+    onFail = .Options$latrend.test.checkClusterRecovery
+  )
+}
 

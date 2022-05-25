@@ -343,6 +343,7 @@ test_that('as.list', {
 
 test_that('as.list with function', {
   skip_if_not_installed('kml')
+
   method = lcMethodTestKML()
   lis = as.list(method, args = kml::parALGO)
   expect_length(setdiff(names(lis), formalArgs(kml::parALGO)), 0)
@@ -350,6 +351,7 @@ test_that('as.list with function', {
 
 test_that('as.list with two functions', {
   skip_if_not_installed('kml')
+
   method = lcMethodTestKML()
   funs = c(kml::parALGO, kml::kml)
   lis = as.list(method, args = funs)

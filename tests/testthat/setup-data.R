@@ -1,6 +1,6 @@
 set.seed(1)
 
-if (requireNamespace('ggplot2')) {
+if (requireNamespace('ggplot2', quietly = TRUE)) {
   library(ggplot2)
 }
 

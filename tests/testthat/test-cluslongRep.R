@@ -1,7 +1,7 @@
 context('latrendRep')
 rngReset()
 
-m = lcMethodKML(response = 'Value', nbRedrawing = 1, maxIt = 10)
+m = lcMethodLMKM(formula = Value ~ Assessment)
 test_that('default', {
   models = latrendRep(lcMethodLMKM(formula = Value ~ Assessment), data = testLongData, .rep = 2)
 

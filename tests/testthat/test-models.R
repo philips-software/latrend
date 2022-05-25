@@ -251,7 +251,6 @@ test_that('estimationTime', {
   secs = estimationTime(models)
   expect_is(secs, 'numeric')
   expect_length(secs, 1)
-  expect_gt(secs, estimationTime(models[[1]]))
 
   secs2 = estimationTime(as.list(models))
   expect_equal(secs, secs2)
@@ -262,8 +261,8 @@ test_that('estimationTime with unit argument', {
   mins = estimationTime(models, unit = 'mins')
   days = estimationTime(models, unit = 'days')
 
-  expect_gt(secs, mins)
-  expect_gt(mins, days)
+  expect_equal(secs / 60, mins, tolerance = .01)
+  expect_equal(mins / 60 / 24, days, tolerance = .01)
 })
 
 test_that('print', {
