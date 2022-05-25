@@ -21,12 +21,15 @@ Select the lcModel with the lowest metric value
 }
 \examples{
 data(latrendData)
-baseMethod <- lcMethodKML(response = "Y", id = "Id", time = "Time")
-kml1 <- latrend(baseMethod, nClusters = 1, latrendData)
-kml2 <- latrend(baseMethod, nClusters = 2, latrendData)
-kml3 <- latrend(baseMethod, nClusters = 3, latrendData)
-models <- lcModels(kml1, kml2, kml3)
-min(models, 'WRSS')
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+
+model1 <- latrend(method, latrendData, nClusters = 1)
+model2 <- latrend(method, latrendData, nClusters = 2)
+model3 <- latrend(method, latrendData, nClusters = 3)
+
+models <- lcModels(model1, model2, model3)
+
+min(models, "WMAE")
 }
 \seealso{
 \link{max.lcModels} \link{externalMetric}

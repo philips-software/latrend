@@ -25,15 +25,12 @@ Extracts the response variable from the given \code{object}.
 If the \code{lcMethod} object specifies a \code{formula} argument, then the response is extracted from the response term of the formula.
 }
 \examples{
-method <- lcMethodKML("Value")
-responseVariable(method) # "Value"
-
-method <- lcMethodLcmmGBTM(fixed = Value ~ Time, mixture = ~ Time)
-responseVariable(method) # "Value"
-
+method <- lcMethodLMKM(Y ~ Time)
+responseVariable(method) # "Y"
 data(latrendData)
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-responseVariable(model) # "Value"
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+responseVariable(model) # "Y"
 }
 \seealso{
 Other lcModel variables: 

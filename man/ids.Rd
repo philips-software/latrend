@@ -20,6 +20,7 @@ The order returned by \code{ids(object)} determines the id order for any output 
 }
 \examples{
 data(latrendData)
-model = latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+method <- lcMethodRandom("Y", id = "Id", time = "Time")
+model <- latrend(method, latrendData)
 ids(model) # 1, 2, ..., 200
 }

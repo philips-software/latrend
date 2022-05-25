@@ -40,7 +40,7 @@ setMethod("strip", "lcModelExt", function(object, ..., classes = "formula") {
 
 \examples{
 data(latrendData)
-model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-   id = "Id", time = "Time"), data = latrendData)
-strip(model)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+newModel <- strip(model)
 }

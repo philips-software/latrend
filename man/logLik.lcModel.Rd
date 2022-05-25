@@ -22,10 +22,18 @@ The default implementation checks for the existence of the \code{logLik()} funct
 }
 \examples{
 data(latrendData)
-method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
-  id = "Id", time = "Time", nClusters = 3)
-gbtm <- latrend(method, data = latrendData)
-logLik(gbtm)
+
+if (rlang::is_installed("lcmm")) {
+  method <- lcMethodLcmmGBTM(
+    fixed = Y ~ Time,
+    mixture = ~ 1,
+    id = "Id",
+    time = "Time",
+    nClusters = 3
+  )
+  gbtm <- latrend(method, data = latrendData)
+  logLik(gbtm)
+}
 }
 \seealso{
 \link[stats:logLik]{stats::logLik} \link{metric}

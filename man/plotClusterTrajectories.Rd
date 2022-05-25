@@ -70,23 +70,27 @@ Plot the cluster trajectories of a lcModel
 }
 \examples{
 data(latrendData)
-model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-plotClusterTrajectories(model)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 3)
 
-# show assigned trajectories
-plotClusterTrajectories(model, trajectories = TRUE)
+if (require("ggplot2")) {
+  plotClusterTrajectories(model)
 
-# show 95th percentile observation interval
-plotClusterTrajectories(model, trajectories = "95pct")
+  # show assigned trajectories
+  plotClusterTrajectories(model, trajectories = TRUE)
 
-# show observation standard deviation
-plotClusterTrajectories(model, trajectories = "sd")
+  # show 95th percentile observation interval
+  plotClusterTrajectories(model, trajectories = "95pct")
 
-# show observation standard error
-plotClusterTrajectories(model, trajectories = "se")
+  # show observation standard deviation
+  plotClusterTrajectories(model, trajectories = "sd")
 
-# show observation range
-plotClusterTrajectories(model, trajectories = "range")
+  # show observation standard error
+  plotClusterTrajectories(model, trajectories = "se")
+
+  # show observation range
+  plotClusterTrajectories(model, trajectories = "range")
+}
 }
 \seealso{
 \link{clusterTrajectories} \link{plotFittedTrajectories} \link{plotTrajectories} \link{plot}

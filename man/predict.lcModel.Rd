@@ -48,9 +48,9 @@ predict.lcModelExt <- function(object, newdata = NULL, what = "mu", ...) {
 
 \examples{
 data(latrendData)
-model <- latrend(lcMethodLcmmGMM(
-   fixed = Y ~ Time, mixture = ~ Time,
-   id = "Id", time = "Time"), latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+
 predFitted <- predict(model) # same result as fitted(model)
 
 # Cluster trajectory of cluster A

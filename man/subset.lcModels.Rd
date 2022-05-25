@@ -24,15 +24,18 @@ Subsetting a lcModels list based on method arguments
 }
 \examples{
 data(latrendData)
-mKML <- lcMethodKML(response = "Y", id = "Id", time = "Time")
-kml1 <- latrend(mKML, nClusters = 1, latrendData)
-kml2 <- latrend(mKML, nClusters = 2, latrendData)
-kml3 <- latrend(mKML, nClusters = 3, latrendData)
-gmm <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-   id = "Id", time = "Time"), latrendData)
-models <- lcModels(kml1, kml2, kml3, gmm)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 
-subset(models, nClusters > 1 & .method == 'kml')
+model1 <- latrend(method, latrendData, nClusters = 1)
+model2 <- latrend(method, latrendData, nClusters = 2)
+model3 <- latrend(method, latrendData, nClusters = 3)
+
+rngMethod <- lcMethodRandom("Y", id = "Id", time = "Time")
+rngModel <- latrend(rngMethod, latrendData)
+
+models <- lcModels(model1, model2, model3, rngModel)
+
+subset(models, nClusters > 1 & .method == 'lmkm')
 }
 \seealso{
 Other lcModel list functions: 

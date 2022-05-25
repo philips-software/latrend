@@ -19,7 +19,8 @@ Extract the \code{call} that was used to fit the given \code{lcModel} object.
 }
 \examples{
 data(latrendData)
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+method <- lcMethodRandom("Y", id = "Id", time = "Time")
+model <- latrend(method, latrendData)
 getCall(model)
 }
 \seealso{

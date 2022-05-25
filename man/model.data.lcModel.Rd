@@ -19,9 +19,9 @@ Evaluates the data call in the environment that the model was trained in.
 }
 \examples{
 data(latrendData)
-method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
-kml <- latrend(method, latrendData)
-model.data(kml)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+model.data(model)
 }
 \seealso{
 \link{model.frame.lcModel} \link{time.lcModel}

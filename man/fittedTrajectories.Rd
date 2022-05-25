@@ -37,8 +37,10 @@ The default implementation uses the output of \code{fitted()} of the respective 
 }
 \examples{
 data(latrendData)
-m <- lcMethodKML("Y", id = "Id", time = "Time")
-model <- latrend(method = m, data = latrendData)
+# Note: not a great example because the fitted trajectories
+# are identical to the respective cluster trajectory
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
 fittedTrajectories(model)
 
 fittedTrajectories(model, at = time(model)[c(1, 2)])

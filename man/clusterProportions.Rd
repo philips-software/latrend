@@ -35,7 +35,8 @@ setMethod("clusterProportions", "lcModelExt", function(object, ...) {
 
 \examples{
 data(latrendData)
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 2)
 clusterProportions(model)
 }
 \seealso{

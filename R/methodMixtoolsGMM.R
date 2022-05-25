@@ -16,13 +16,16 @@ setClass('lcMethodMixtoolsGMM', contains = 'lcMethod')
 #' The following arguments are ignored: data, y, x, w, k, addintercept.fixed, verb.
 #' @examples
 #' \donttest{
-#' library(mixtools)
 #' data(latrendData)
-#' method <- lcMethodMixtoolsGMM(
-#'    formula = Y ~ Time + (1 | Id),
-#'    id = "Id", time = "Time",
-#'    nClusters = 3,
-#'    arb.R = FALSE)
+#'
+#' if (require("mixtools")) {
+#'   method <- lcMethodMixtoolsGMM(
+#'     formula = Y ~ Time + (1 | Id),
+#'     id = "Id", time = "Time",
+#'     nClusters = 3,
+#'     arb.R = FALSE
+#'   )
+#' }
 #' }
 #' @family lcMethod implementations
 #' @references

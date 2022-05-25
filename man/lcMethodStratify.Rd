@@ -38,26 +38,35 @@ Specify a stratification method
 \examples{
 data(latrendData)
 # Stratification based on the mean response level
-method <- lcMethodStratify("Y", mean(Y) > 0,
-   clusterNames = c("Low", "High"), id = "Id", time = "Time")
+method <- lcMethodStratify(
+  "Y",
+  mean(Y) > 0,
+  clusterNames = c("Low", "High"),
+  id = "Id",
+  time = "Time"
+)
 model <- latrend(method, latrendData)
 summary(model)
 
 # Stratification function
 stratfun <- function(trajdata) {
    trajmean <- mean(trajdata$Y)
-   factor(trajmean > 1.7,
-      levels = c(FALSE, TRUE),
-      labels = c("Low", "High"))
+   factor(
+     trajmean > 1.7,
+     levels = c(FALSE, TRUE),
+     labels = c("Low", "High")
+   )
 }
 method <- lcMethodStratify("Y", stratfun, id = "Id", time = "Time")
 
 # Multiple clusters
 stratfun3 <- function(trajdata) {
    trajmean <- mean(trajdata$Y)
-   cut(trajmean,
-      c(-Inf, .5, 2, Inf),
-      labels = c("Low", "Medium", "High"))
+   cut(
+     trajmean,
+     c(-Inf, .5, 2, Inf),
+     labels = c("Low", "Medium", "High")
+   )
 }
 method <- lcMethodStratify("Y", stratfun3, id = "Id", time = "Time")
 }

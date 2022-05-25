@@ -27,15 +27,15 @@ Update a method specification
 Updates or adds arguments to a \code{lcMethod} object. The inputs are evaluated in order to determine the presence of \code{formula} objects, which are updated accordingly.
 }
 \examples{
-m <- lcMethodMixtoolsGMM(Value ~ 1)
-m2 <- update(m, formula = ~ . + Time)
+method <- lcMethodLMKM(Y ~ 1, nClusters = 2)
+method2 <- update(method, formula = ~ . + Time)
 
-m3 <- update(m2, nClusters = 3)
+method3 <- update(method2, nClusters = 3)
 
 k <- 2
-m4 <- update(m, nClusters = k) # nClusters: k
+method4 <- update(method, nClusters = k) # nClusters: k
 
-m5 <- update(m, nClusters = k, .eval = TRUE) # nClusters: 2
+method5 <- update(method, nClusters = k, .eval = TRUE) # nClusters: 2
 
 }
 \seealso{

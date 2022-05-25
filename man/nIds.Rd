@@ -18,9 +18,9 @@ The number of trajectories is determined from the number of unique identifiers i
 }
 \examples{
 data(latrendData)
-method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
-kml <- latrend(method, latrendData)
-nIds(kml)
+method <- lcMethodRandom("Y", id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+nIds(model)
 }
 \seealso{
 \link{nobs} \link{nClusters}

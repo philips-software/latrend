@@ -26,7 +26,8 @@ The cluster sizes are computed from the trajectory cluster membership as decided
 }
 \examples{
 data(latrendData)
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 2)
 clusterSizes(model)
 }
 \seealso{

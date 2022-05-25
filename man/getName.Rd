@@ -43,8 +43,10 @@ however in practice this is not needed as the names are determined by default fr
 }
 
 \examples{
-getName(lcMethodKML()) # "longitudinal k-means"
-getShortName(lcMethodKML()) # "KML"
+method <- lcMethodLMKM(Y ~ Time)
+getName(method) # "lm-kmeans"
+method <- lcMethodLMKM(Y ~ Time)
+getShortName(method) # "LMKM"
 }
 \seealso{
 \link{getLabel}

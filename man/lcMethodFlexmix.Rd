@@ -31,10 +31,11 @@ The following arguments are ignored: data, concomitant, k.}
 Wrapper to the \code{flexmix()} method from the \code{flexmix} package.
 }
 \examples{
-library(flexmix)
 data(latrendData)
-method <- lcMethodFlexmix(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
-model <- latrend(method, latrendData)
+if (require("flexmix")) {
+  method <- lcMethodFlexmix(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
+  model <- latrend(method, latrendData)
+}
 }
 \references{
 \insertRef{gruen2008flexmix}{latrend}

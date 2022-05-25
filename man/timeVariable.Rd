@@ -22,9 +22,8 @@ The time variable name, as \code{character}.
 Extracts the time variable (i.e., column name) from the given \code{object}.
 }
 \examples{
-method <- lcMethodKML(time = "Assessment")
-timeVariable(method) # "Assessment"
-
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+timeVariable(method) # "Time"
 data(latrendData)
 model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
 idVariable(model) # "Id"

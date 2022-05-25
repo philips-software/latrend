@@ -46,17 +46,15 @@ as.lcMethods = function(x) {
 #' @return A `list` of `lcMethod` objects.
 #' @examples
 #' data(latrendData)
-#' baseMethod <- lcMethodKML("Y", id = "Id", time = "Time")
+#' baseMethod <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 #' methods <- lcMethods(baseMethod, nClusters = 1:6)
 #'
 #' nclus <- 1:6
 #' methods <- lcMethods(baseMethod, nClusters = nclus)
 #'
-#' methods <- lcMethods(baseMethod, nClusters = 3, center = .(mean, mean, median))
+#' # list notation, useful for providing functions
+#' methods <- lcMethods(baseMethod, nClusters = .(1, 3, 5))
 #' length(methods) # 3
-#'
-#' methods <- lcMethods(baseMethod, nClusters = 1:3, center = .(mean, mean, median))
-#' length(methods) # 9
 lcMethods = function(method, ..., envir = NULL) {
   assert_that(is.lcMethod(method))
 

@@ -30,7 +30,9 @@ Get the estimation time of the model, determined by the time taken for the assoc
 }
 \examples{
 data(latrendData)
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+
 estimationTime(model)
 estimationTime(model, unit = 'mins')
 estimationTime(model, unit = 'days')

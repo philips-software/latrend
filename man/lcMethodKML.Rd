@@ -29,10 +29,12 @@ The following external arguments are ignored: object, nbClusters, parAlgo, toPlo
 Specify a longitudinal k-means (KML) method
 }
 \examples{
-library(kml)
 data(latrendData)
-method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
-model <- latrend(method, latrendData)
+
+if (require("kml")) {
+  method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
+  model <- latrend(method, latrendData)
+}
 }
 \references{
 \insertRef{genolini2015kml}{latrend}

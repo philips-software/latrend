@@ -17,9 +17,9 @@ Therefore, only non-missing response observations count towards the number of ob
 }
 \examples{
 data(latrendData)
-method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
-kml <- latrend(method, latrendData)
-nobs(kml)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+nobs(model)
 }
 \seealso{
 \link{nIds} \link{nClusters}

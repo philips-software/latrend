@@ -30,8 +30,10 @@ The default implementation uses \link{predictPostprob} to determine the cluster 
 \examples{
 \dontrun{
 data(latrendData)
-model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-predictAssignments(model, newdata = data.frame(Id = 999, Y = 0, Time = 0))
+if (require("kml")) {
+  model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+  predictAssignments(model, newdata = data.frame(Id = 999, Y = 0, Time = 0))
+}
 }
 }
 \seealso{

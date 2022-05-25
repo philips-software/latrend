@@ -57,8 +57,13 @@ generateLongData(
 Generate longitudinal test data
 }
 \examples{
-longdata <- generateLongData(sizes = c(40, 70), id = "Id",
-                            cluster = ~poly(Time, 2, raw = TRUE),
-                            clusterCoefs = cbind(c(1, 2, 5), c(-3, 4, .2)))
-plotTrajectories(longdata, response = "Value", id = "Id", time = "Time")
+longdata <- generateLongData(
+  sizes = c(40, 70), id = "Id",
+  cluster = ~poly(Time, 2, raw = TRUE),
+  clusterCoefs = cbind(c(1, 2, 5), c(-3, 4, .2))
+)
+
+if (require("ggplot2")) {
+  plotTrajectories(longdata, response = "Value", id = "Id", time = "Time")
+}
 }

@@ -18,10 +18,11 @@ setClass('lcMethodFlexmix', contains = 'lcMethod')
 #' @param ... Arguments passed to [flexmix::flexmix].
 #' The following arguments are ignored: data, concomitant, k.
 #' @examples
-#' library(flexmix)
 #' data(latrendData)
-#' method <- lcMethodFlexmix(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
-#' model <- latrend(method, latrendData)
+#' if (require("flexmix")) {
+#'   method <- lcMethodFlexmix(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
+#'   model <- latrend(method, latrendData)
+#' }
 #' @family lcMethod package interfaces
 #' @references
 #' \insertRef{gruen2008flexmix}{latrend}

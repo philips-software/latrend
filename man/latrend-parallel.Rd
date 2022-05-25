@@ -43,7 +43,7 @@ doMC::registerDoMC(nCores)
 data(latrendData)
 
 # parallel latrendRep()
-method <- lcMethodKML(response = "Y")
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 models <- latrendRep(method, data = latrendData, .rep = 5, parallel = TRUE)
 
 # parallel latrendBatch()

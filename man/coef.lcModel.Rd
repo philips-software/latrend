@@ -31,10 +31,9 @@ coef.lcModelExt <- function(object, ...) {
 
 \examples{
 data(latrendData)
-method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
-  id = "Id", time = "Time", nClusters = 3)
-gbtm <- latrend(method, data = latrendData)
-coef(gbtm)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 2)
+coef(model)
 }
 \seealso{
 Other model-specific methods: 

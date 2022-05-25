@@ -28,9 +28,12 @@ Create the training data for each of the k models in k-fold cross validation eva
 }
 \examples{
 data(latrendData)
-trainFolds <- createTrainDataFolds(latrendData, folds = 10, id = "Id")
 
-trainFolds <- createTrainDataFolds(latrendData, folds = 10, id = "Id", seed = 1)
+if (require("caret")) {
+  trainFolds <- createTrainDataFolds(latrendData, folds = 10, id = "Id")
+
+  trainFolds <- createTrainDataFolds(latrendData, folds = 10, id = "Id", seed = 1)
+}
 }
 \seealso{
 Other validation methods: 

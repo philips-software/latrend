@@ -79,20 +79,19 @@ For more complex methods, the additional functions as part of the fitting proced
 }
 
 \examples{
-kmlMethod <- lcMethodKML(response = "Value", nClusters = 2)
-kmlMethod
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 2)
+method
 
-kmlMethod <- new("lcMethodKML", response = "Value", nClusters = 2)
-
-# create a copy with updated nClusters argument
-kmlMethod3 <- update(kmlMethod, nClusters = 3)
+method <- new("lcMethodLMKM", formula = Y ~ Time, id = "Id", time = "Time", nClusters = 2)
 
 # get argument names
-names(kmlMethod)
+names(method)
 
 # evaluate argument
-kmlMethod$nClusters
+method$nClusters
 
+# create a copy with updated nClusters argument
+method3 <- update(method, nClusters = 3)
 }
 \seealso{
 \link{environment}

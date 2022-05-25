@@ -18,8 +18,11 @@ Create the test fold data for validation
 }
 \examples{
 data(latrendData)
-trainDataList <- createTrainDataFolds(latrendData, id = "Id", folds = 10)
-testData1 <- createTestDataFold(latrendData, trainDataList[[1]], id = "Id")
+
+if (require("caret")) {
+  trainDataList <- createTrainDataFolds(latrendData, id = "Id", folds = 10)
+  testData1 <- createTestDataFold(latrendData, trainDataList[[1]], id = "Id")
+}
 }
 \seealso{
 createTrainDataFolds

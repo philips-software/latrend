@@ -24,9 +24,10 @@ By default, the label is determined from the \code{"label"} argument of the \cod
 The label of an \code{lcModel} object is set upon estimation by \code{\link[=latrend]{latrend()}} to the label of its associated \code{lcMethod} object.
 }
 \examples{
-getLabel(lcMethodKML()) # ""
+method <- lcMethodLMKM(Y ~ Time, time = "Time")
+getLabel(method) # ""
 
-getLabel(lcMethodKML(label = "v2")) # "v2"
+getLabel(update(method, label = "v2")) # "v2"
 }
 \seealso{
 \link{getName} \link{getShortName}

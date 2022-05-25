@@ -47,19 +47,42 @@ Plots the output of \link{trajectories} for the given object.
 }
 \examples{
 data(latrendData)
-plotTrajectories(latrendData, response = "Y", id = "Id", time = "Time")
 
-plotTrajectories(latrendData, response = quote(exp(Y)), id = "Id", time = "Time")
+if (require("ggplot2")) {
+  plotTrajectories(latrendData, response = "Y", id = "Id", time = "Time")
 
-plotTrajectories(latrendData, response = "Y", id = "Id", time = "Time", cluster = "Class")
+  plotTrajectories(
+    latrendData,
+    response = quote(exp(Y)),
+    id = "Id",
+    time = "Time"
+  )
 
-# compute cluster membership based on the mean being below 0
-assignments = aggregate(Y ~ Id, latrendData, mean)$Y < 0
-plotTrajectories(latrendData,
-  response = "Y", id = "Id", time = "Time", cluster = assignments)
+  plotTrajectories(
+    latrendData,
+    response = "Y",
+    id = "Id",
+    time = "Time",
+    cluster = "Class"
+  )
+
+  # compute cluster membership based on the mean being below 0
+  assignments <- aggregate(Y ~ Id, latrendData, mean)$Y < 0
+  plotTrajectories(
+    latrendData,
+    response = "Y",
+    id = "Id",
+    time = "Time",
+    cluster = assignments
+  )
+}
 data(latrendData)
-model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-plotTrajectories(model)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 3)
+
+if (require("ggplot2")) {
+  plotTrajectories(model)
+}
 }
 \seealso{
 \link{trajectories} \link{plotFittedTrajectories} \link{plotClusterTrajectories}

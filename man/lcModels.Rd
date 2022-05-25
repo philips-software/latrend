@@ -21,12 +21,14 @@ The \code{lcModels()} function takes the inputs and generates a named \code{lcMo
 }
 \examples{
 data(latrendData)
-kml <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-gmm <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-   id = "Id", time = "Time"), latrendData)
-lcModels(kml, gmm)
+lmkmMethod <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+lmkmModel <- latrend(lmkmMethod, latrendData)
+rngMethod <- lcMethodRandom("Y", id = "Id", time = "Time")
+rngModel <- latrend(rngMethod, latrendData)
 
-lcModels(defaults = c(kml, gmm))
+lcModels(lmkmModel, rngModel)
+
+lcModels(defaults = c(lmkmModel, rngModel))
 }
 \seealso{
 Other lcModel list functions: 

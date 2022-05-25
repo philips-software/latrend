@@ -33,9 +33,21 @@ setMethod("postprob", "lcModelExt", function(object, ...) {
 
 \examples{
 data(latrendData)
-model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-   id = "Id", time = "Time"), data = latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+
 postprob(model)
+
+if (rlang::is_installed("lcmm")) {
+  gmmMethod = lcMethodLcmmGMM(
+    fixed = Y ~ Time,
+    mixture = ~ Time,
+    id = "Id",
+    time = "Time"
+  )
+  gmmModel <- latrend(gmmMethod, data = latrendData)
+  postprob(gmmModel)
+}
 }
 \seealso{
 \link{trajectoryAssignments} \link{predictPostprob} \link{predictAssignments}

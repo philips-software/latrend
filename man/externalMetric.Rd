@@ -121,10 +121,13 @@ See the documentation of the \code{\link[=defineExternalMetric]{defineExternalMe
 
 \examples{
 data(latrendData)
-model1 <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-model2 <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-   id = "Id", time = "Time"), latrendData)
-ari <- externalMetric(model1, model2, 'adjustedRand')
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model2 <- latrend(method, latrendData, nClusters = 2)
+model3 <- latrend(method, latrendData, nClusters = 3)
+
+if (require("mclustcomp")) {
+  externalMetric(model2, model3, "adjustedRand")
+}
 }
 \references{
 \insertAllCited{}

@@ -37,10 +37,13 @@ In order to use this method, you must download and source MixTVEM.R. See the ref
 \donttest{
 # this example only runs if you download and place MixTVEM.R in your wd
 try({
-  source('MixTVEM.R')
-  method = lcMethodMixTVEM(Value ~ time(1) - 1,
-                     time='Assessment',
-                     id='Id', nClusters=3)
+  source("MixTVEM.R")
+  method = lcMethodMixTVEM(
+    Value ~ time(1) - 1,
+    time = 'Assessment',
+    id = "Id",
+    nClusters = 3
+  )
 })
 }
 }

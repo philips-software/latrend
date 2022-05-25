@@ -31,10 +31,11 @@ The following arguments are ignored: data, k, trace.}
 Fits a GBTM based on the \link[flexmix:FLXglm]{flexmix::FLXMRglm} driver.
 }
 \examples{
-library(flexmix)
 data(latrendData)
-method <- lcMethodFlexmixGBTM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
-model <- latrend(method, latrendData)
+if (require("flexmix")) {
+  method <- lcMethodFlexmixGBTM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
+  model <- latrend(method, latrendData)
+}
 }
 \references{
 \insertRef{gruen2008flexmix}{latrend}

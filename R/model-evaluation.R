@@ -45,11 +45,18 @@ APPA = function(object) {
 #' @seealso [postprob] [clusterProportions] [trajectoryAssignments] [APPA] [OCC]
 #' @examples
 #' data(latrendData)
-#' model = latrend(lcMethodLcmmGMM(
-#'   fixed = Y ~ Time, mixture = ~ Time, random = ~ 1,
-#'   id = "Id", time = "Time"),
-#'   data=latrendData)
-#' confusionMatrix(model)
+#'
+#' if (rlang::is_installed("lcmm")) {
+#'   method <- lcMethodLcmmGMM(
+#'     fixed = Y ~ Time,
+#'     mixture = ~ Time,
+#'     random = ~ 1,
+#'     id = "Id",
+#'     time = "Time"
+#'   )
+#'   model <- latrend(method, latrendData)
+#'   confusionMatrix(model)
+#' }
 confusionMatrix = function(object, strategy = which.max, scale = TRUE, ...) {
   assert_that(is.lcModel(object))
 
@@ -96,10 +103,18 @@ confusionMatrix = function(object, strategy = which.max, scale = TRUE, ...) {
 #' @family model-specific methods
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
-#'   id = "Id", time = "Time", nClusters = 3)
-#' gbtm <- latrend(method, data = latrendData)
-#' logLik(gbtm)
+#'
+#' if (rlang::is_installed("lcmm")) {
+#'   method <- lcMethodLcmmGBTM(
+#'     fixed = Y ~ Time,
+#'     mixture = ~ 1,
+#'     id = "Id",
+#'     time = "Time",
+#'     nClusters = 3
+#'   )
+#'   gbtm <- latrend(method, data = latrendData)
+#'   logLik(gbtm)
+#' }
 logLik.lcModel = function(object, ...) {
   if (is.null(object@model) ||
       is.null(getS3method('logLik', class = class(object@model)[1], optional = TRUE))) {

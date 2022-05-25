@@ -22,9 +22,12 @@ Plot the quantile-quantile (Q-Q) plot for the fitted \code{lcModel} object. This
 }
 \examples{
 data(latrendData)
-model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-   id = "Id", time = "Time"), data = latrendData)
-qqPlot(model)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
+model <- latrend(method, latrendData)
+
+if (require("ggplot2") && require("qqplotr")) {
+  qqPlot(model)
+}
 }
 \seealso{
 \link{residuals.lcModel} \link{metric} \link{plotClusterTrajectories}

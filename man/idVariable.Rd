@@ -22,12 +22,12 @@ The trajectory identifier name, as \code{character}.
 Extracts the trajectory identifier variable (i.e., column name) from the given \code{object}.
 }
 \examples{
-method <- lcMethodKML(id = "Traj")
+method <- lcMethodLMKM(Y ~ Time, id = "Traj")
 idVariable(method) # "Traj"
 
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+method <- lcMethodRandom("Y", id = "Id", time = "Time")
+model <- latrend(method, latrendData)
 idVariable(model) # "Id"
-
 }
 \seealso{
 Other lcModel variables: 

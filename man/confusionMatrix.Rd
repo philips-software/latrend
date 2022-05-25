@@ -30,11 +30,18 @@ belonging to cluster \eqn{i} is assigned to cluster \eqn{j} under the specified 
 }
 \examples{
 data(latrendData)
-model = latrend(lcMethodLcmmGMM(
-  fixed = Y ~ Time, mixture = ~ Time, random = ~ 1,
-  id = "Id", time = "Time"),
-  data=latrendData)
-confusionMatrix(model)
+
+if (rlang::is_installed("lcmm")) {
+  method <- lcMethodLcmmGMM(
+    fixed = Y ~ Time,
+    mixture = ~ Time,
+    random = ~ 1,
+    id = "Id",
+    time = "Time"
+  )
+  model <- latrend(method, latrendData)
+  confusionMatrix(model)
+}
 }
 \seealso{
 \link{postprob} \link{clusterProportions} \link{trajectoryAssignments} \link{APPA} \link{OCC}

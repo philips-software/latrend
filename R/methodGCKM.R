@@ -12,10 +12,12 @@ setClass('lcMethodGCKM', contains = 'lcMethodLMKM')
 #' @param ... Arguments passed to [lme4::lmer].
 #' The following external arguments are ignored: data, centers, trace.
 #' @examples
-#' library(lme4)
 #' data(latrendData)
-#' method <- lcMethodGCKM(Y ~ (Time | Id), id = "Id", time = "Time", nClusters = 3)
-#' model <- latrend(method, latrendData)
+#'
+#' if (require("lme4")) {
+#'   method <- lcMethodGCKM(Y ~ (Time | Id), id = "Id", time = "Time", nClusters = 3)
+#'   model <- latrend(method, latrendData)
+#' }
 #' @family lcMethod implementations
 lcMethodGCKM = function(
   formula,

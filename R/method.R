@@ -63,20 +63,19 @@
 #' Used for printing objects which require too many characters (e.g. ,function definitions, matrices).
 #' Do not modify or access.
 #' @examples
-#' kmlMethod <- lcMethodKML(response = "Value", nClusters = 2)
-#' kmlMethod
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 2)
+#' method
 #'
-#' kmlMethod <- new("lcMethodKML", response = "Value", nClusters = 2)
-#'
-#' # create a copy with updated nClusters argument
-#' kmlMethod3 <- update(kmlMethod, nClusters = 3)
+#' method <- new("lcMethodLMKM", formula = Y ~ Time, id = "Id", time = "Time", nClusters = 2)
 #'
 #' # get argument names
-#' names(kmlMethod)
+#' names(method)
 #'
 #' # evaluate argument
-#' kmlMethod$nClusters
+#' method$nClusters
 #'
+#' # create a copy with updated nClusters argument
+#' method3 <- update(method, nClusters = 3)
 #' @family lcMethod implementations
 #' @family lcMethod functions
 setClass('lcMethod', slots = c(arguments = 'environment', sourceCalls = 'list'))
@@ -87,7 +86,7 @@ setClass('lcMethod', slots = c(arguments = 'environment', sourceCalls = 'list'))
 #' @param .Object The newly allocated `lcMethod` object.
 #' @param ... Other method arguments.
 #' @examples
-#' new("lcMethodKML", response = "Value")
+#' new("lcMethodLMKM", formula = Y ~ Time, id = "Id", time = "Time")
 setMethod('initialize', 'lcMethod', function(.Object, ...) {
   .Object <- callNextMethod(.Object)
   .defaults = getArgumentDefaults(.Object)
@@ -177,8 +176,8 @@ setValidity('lcMethod', function(object) {
 #' @aliases $,lcMethod-method
 #' @param name The argument name, as `character`.
 #' @examples
-#' m <- lcMethodKML(nClusters = 3)
-#' m$nClusters # 3
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
+#' method$nClusters # 3
 setMethod('$', signature('lcMethod'), function(x, name) {
   x[[name]]
 })
@@ -194,11 +193,11 @@ setMethod('$', signature('lcMethod'), function(x, name) {
 #' @param envir The `environment` in which to evaluate the argument. This argument is only applicable when `eval = TRUE`.
 #' @return The argument `call` or evaluation result.
 #' @examples
-#' m = lcMethodKML(nClusters = 5)
+#' m = lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 5)
 #' m[["nClusters"]] # 5
 #'
 #' k = 2
-#' m = lcMethodKML(nClusters = k)
+#' m = lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = k)
 #' m[["nClusters", eval=FALSE]] # k
 #' @family lcMethod functions
 setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL) {
@@ -333,18 +332,22 @@ as.character.lcMethod = function(x, ..., eval = FALSE, width = 40, prefix = '', 
 #' @param envir The `environment` in which to evaluate the arguments. If `NULL`, the environment associated with the object is used. If not available, the `parent.frame()` is used.
 #' @return A `list` with the argument `call`s or evaluated results depending on the value for `eval`.
 #' @examples
-#' library(kml)
 #' data(latrendData)
-#' method <- lcMethodKML("Y", id = "Id", time = "Time")
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 #' as.list(method)
 #'
-#' as.list(method, args = c('id', 'time'))
+#' as.list(method, args = c("id", "time"))
 #'
-#' # select arguments used by kml()
-#' as.list(method, args = kml::kml)
+#' if (require("kml")) {
+#'   method <- lcMethodKML("Y", id = "Id", time = "Time")
+#'   as.list(method)
 #'
-#' # select arguments used by either kml() or parALGO()
-#' as.list(method, args = c(kml::kml, kml::parALGO))
+#'   # select arguments used by kml()
+#'   as.list(method, args = kml::kml)
+#'
+#'   # select arguments used by either kml() or parALGO()
+#'   as.list(method, args = c(kml::kml, kml::parALGO))
+#' }
 #' @family lcMethod functions
 as.list.lcMethod = function(x, ..., args = names(x), eval = TRUE, expand = FALSE, envir = NULL) {
   assert_that(
@@ -549,8 +552,8 @@ setMethod('fit', signature('lcMethod'), function(method, data, envir, verbose) {
 #' @param what The distributional parameter to which this formula applies. By default, the formula specifies `"mu"`.
 #' @return The `formula` for the given distributional parameter.
 #' @examples
-#' m <- lcMethodMixtoolsGMM(formula = Y ~ Time + (1 | Id))
-#' formula(m) # Y ~ Time + (1 | Id)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' formula(method) # Y ~ Time
 #' @family lcMethod functions
 formula.lcMethod = function(x, what = 'mu', envir = NULL, ...) {
   assert_that(
@@ -659,9 +662,10 @@ setMethod('getArgumentExclusions', signature('lcMethod'), function(object) {
 #' @return The extracted label, as `character`.
 #' @seealso [getName] [getShortName]
 #' @examples
-#' getLabel(lcMethodKML()) # ""
+#' method <- lcMethodLMKM(Y ~ Time, time = "Time")
+#' getLabel(method) # ""
 #'
-#' getLabel(lcMethodKML(label = "v2")) # "v2"
+#' getLabel(update(method, label = "v2")) # "v2"
 setMethod('getLabel', signature('lcMethod'), function(object, ...) {
   if (hasName(object, 'label')) {
     object$label
@@ -695,7 +699,8 @@ setMethod('getLabel', signature('lcMethod'), function(object, ...) {
 #'
 #' @seealso [getLabel]
 #' @examples
-#' getName(lcMethodKML()) # "longitudinal k-means"
+#' method <- lcMethodLMKM(Y ~ Time)
+#' getName(method) # "lm-kmeans"
 setMethod('getName', signature('lcMethod'), function(object, ...) 'undefined')
 
 #' @export
@@ -710,7 +715,8 @@ setMethod('getName', 'NULL', function(object, ...) 'null')
 #' @aliases getShortName,lcMethod-method
 #' @title Extract the short object name
 #' @examples
-#' getShortName(lcMethodKML()) # "KML"
+#' method <- lcMethodLMKM(Y ~ Time)
+#' getShortName(method) # "LMKM"
 setMethod('getShortName', signature('lcMethod'), function(object, ...) getName(object, ...))
 
 #' @export
@@ -730,7 +736,7 @@ setMethod('getShortName', 'NULL', function(object, ...) 'nul')
 #' @param ... Not used.
 #' @return The trajectory identifier name, as `character`.
 #' @examples
-#' method <- lcMethodKML(id = "Traj")
+#' method <- lcMethodLMKM(Y ~ Time, id = "Traj")
 #' idVariable(method) # "Traj"
 #'
 setMethod('idVariable', signature('lcMethod'), function(object, ...) object$id)
@@ -793,9 +799,9 @@ setMethod('length', signature('lcMethod'), function(x) {
 #' @param x The `lcMethod` object.
 #' @return A `character vector` of argument names.
 #' @examples
-#' m = lcMethodKML()
-#' names(m)
-#' length(m)
+#' method <- lcMethodLMKM(Y ~ Time)
+#' names(method)
+#' length(method)
 #' @family lcMethod functions
 setMethod('names', signature('lcMethod'), function(x) {
   argNames = names(x@arguments)
@@ -995,15 +1001,15 @@ evaluate.lcMethod = function(object,
 #' @param .remove Names of arguments that should be removed.
 #' @return The new `lcMethod` object with the additional or updated arguments.
 #' @examples
-#' m <- lcMethodMixtoolsGMM(Value ~ 1)
-#' m2 <- update(m, formula = ~ . + Time)
+#' method <- lcMethodLMKM(Y ~ 1, nClusters = 2)
+#' method2 <- update(method, formula = ~ . + Time)
 #'
-#' m3 <- update(m2, nClusters = 3)
+#' method3 <- update(method2, nClusters = 3)
 #'
 #' k <- 2
-#' m4 <- update(m, nClusters = k) # nClusters: k
+#' method4 <- update(method, nClusters = k) # nClusters: k
 #'
-#' m5 <- update(m, nClusters = k, .eval = TRUE) # nClusters: 2
+#' method5 <- update(method, nClusters = k, .eval = TRUE) # nClusters: 2
 #'
 #' @family lcMethod functions
 update.lcMethod = function(object, ..., .eval = FALSE, .remove = character(), envir = NULL) {
@@ -1075,12 +1081,8 @@ update.lcMethod = function(object, ..., .eval = FALSE, .remove = character(), en
 #' @return The response variable name as a `character`.
 #' @details If the `lcMethod` object specifies a `formula` argument, then the response is extracted from the response term of the formula.
 #' @examples
-#' method <- lcMethodKML("Value")
-#' responseVariable(method) # "Value"
-#'
-#' method <- lcMethodLcmmGBTM(fixed = Value ~ Time, mixture = ~ Time)
-#' responseVariable(method) # "Value"
-#'
+#' method <- lcMethodLMKM(Y ~ Time)
+#' responseVariable(method) # "Y"
 setMethod('responseVariable', signature('lcMethod'), function(object, ...) {
   if (hasName(object, 'response')) {
     object$response
@@ -1137,7 +1139,7 @@ setMethod('strip', signature('lcMethod'), function(object, ..., classes = 'formu
 
   newObject@sourceCalls = lapply(object@sourceCalls, strip, ..., classes = classes)
 
-  return(newObject)
+  newObject
 })
 
 
@@ -1167,9 +1169,8 @@ setMethod('strip', signature('ANY'), function(object, ..., classes = 'formula') 
 #' @param ... Additional arguments.
 #' @return The time variable name, as `character`.
 #' @examples
-#' method <- lcMethodKML(time = "Assessment")
-#' timeVariable(method) # "Assessment"
-#'
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' timeVariable(method) # "Time"
 setMethod('timeVariable', signature('lcMethod'), function(object, ...) object$time)
 
 
@@ -1260,7 +1261,8 @@ match.call.all = function(n = 1L) {
       call[dotArg] = list(val) # list() is needed to preserve NULLs
     }
   }
-  return(call)
+
+  call
 }
 
 .match.call.arg = function(arg, which = sys.parent()) {
@@ -1274,7 +1276,7 @@ match.call.all = function(n = 1L) {
           (!is.name(arg) ||
           !startsWith(as.character(call[[arg]]), '..'))) {
         # message(sprintf('Found value %s for argument %s\n', deparse(call[[arg]]), arg))
-        return(call[[arg]])
+        return (call[[arg]])
       }
     }
 

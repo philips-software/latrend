@@ -210,16 +210,35 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
 #' @seealso [trajectories] [plotFittedTrajectories] [plotClusterTrajectories]
 #' @examples
 #' data(latrendData)
-#' plotTrajectories(latrendData, response = "Y", id = "Id", time = "Time")
 #'
-#' plotTrajectories(latrendData, response = quote(exp(Y)), id = "Id", time = "Time")
+#' if (require("ggplot2")) {
+#'   plotTrajectories(latrendData, response = "Y", id = "Id", time = "Time")
 #'
-#' plotTrajectories(latrendData, response = "Y", id = "Id", time = "Time", cluster = "Class")
+#'   plotTrajectories(
+#'     latrendData,
+#'     response = quote(exp(Y)),
+#'     id = "Id",
+#'     time = "Time"
+#'   )
 #'
-#' # compute cluster membership based on the mean being below 0
-#' assignments = aggregate(Y ~ Id, latrendData, mean)$Y < 0
-#' plotTrajectories(latrendData,
-#'   response = "Y", id = "Id", time = "Time", cluster = assignments)
+#'   plotTrajectories(
+#'     latrendData,
+#'     response = "Y",
+#'     id = "Id",
+#'     time = "Time",
+#'     cluster = "Class"
+#'   )
+#'
+#'   # compute cluster membership based on the mean being below 0
+#'   assignments <- aggregate(Y ~ Id, latrendData, mean)$Y < 0
+#'   plotTrajectories(
+#'     latrendData,
+#'     response = "Y",
+#'     id = "Id",
+#'     time = "Time",
+#'     cluster = assignments
+#'   )
+#' }
 setMethod('plotTrajectories', signature('data.frame'),
   function(
     object,

@@ -35,7 +35,8 @@ The \code{\link[=transformFitted]{transformFitted()}} function takes care of tra
 
 \examples{
 data(latrendData)
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
 fitted(model)
 }
 \seealso{

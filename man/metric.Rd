@@ -86,13 +86,11 @@ See the documentation of the \code{\link[=defineInternalMetric]{defineInternalMe
 
 \examples{
 data(latrendData)
-model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-   id = "Id", time = "Time"), latrendData)
-bic <- metric(model, "BIC")
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+metric(model, "WMAE")
 
-ic <- metric(model, c("AIC", "BIC"))
-
-
+metric(model, c("WMAE", "Dunn"))
 }
 \references{
 \insertAllCited{}

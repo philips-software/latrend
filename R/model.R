@@ -1,7 +1,6 @@
 #' @include method.R trajectories.R latrend.R
 #' @importFrom stats coef deviance df.residual getCall logLik model.frame model.matrix predict residuals sigma time update
 
-
 # Model ####
 #' @export
 #' @name lcModel-class
@@ -100,7 +99,8 @@ setValidity('lcModel', function(object) {
     msg = 'invalid data object for new lcModel. Either specify the data slot or ensure that the model call contains a data argument which correctly evaluates.'
   )
   assert_that(has_name(data, c(object@id, object@time, object@response)))
-  return(TRUE)
+
+  TRUE
 })
 
 
@@ -116,8 +116,9 @@ setValidity('lcModel', function(object) {
 #' @param at An optional vector of the times at which to compute the cluster trajectory predictions.
 #' @return A data.frame of the estimated values at the given times. The first column should be named "Cluster". The second column should be time, with the name matching the `timeVariable(object)`. The third column should be the expected value of the observations, named after the `responseVariable(object)`.
 #' @examples
-#' model <- latrend(method = lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time),
-#'   id = "Id", time = "Time", data = latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
+#'
 #' clusterTrajectories(model)
 #'
 #' clusterTrajectories(model, at = c(0, .5, 1))
@@ -142,7 +143,7 @@ setMethod('clusterTrajectories', 'lcModel', function(object, at = time(object), 
   )
   newdata[, c(responseVariable(object, what = what)) := dfPred$Fit]
 
-  return(newdata[])
+  newdata[]
 })
 
 
@@ -153,7 +154,8 @@ setMethod('clusterTrajectories', 'lcModel', function(object, at = time(object), 
 #' @return A `character` of the cluster names.
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
 #' clusterNames(model) # A, B
 clusterNames = function(object, factor = FALSE) {
   assert_that(is.lcModel(object))
@@ -171,7 +173,8 @@ clusterNames = function(object, factor = FALSE) {
 #' @return The updated `lcModel` object.
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData, nClusters = 2)
 #' clusterNames(model) <- c("Group 1", "Group 2")
 `clusterNames<-` = function(object, value) {
   assert_that(
@@ -181,7 +184,8 @@ clusterNames = function(object, factor = FALSE) {
   )
 
   object@clusterNames = value
-  return(object)
+
+  object
 }
 
 #' @export
@@ -194,7 +198,8 @@ clusterNames = function(object, factor = FALSE) {
 #' @return A named `integer vector` of length `nClusters(object)` with the number of assigned trajectories per cluster.
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData, nClusters = 2)
 #' clusterSizes(model)
 clusterSizes = function(object, ...) {
   assert_that(is.lcModel(object))
@@ -225,7 +230,8 @@ clusterSizes = function(object, ...) {
 #' @seealso [clusterSizes] [postprob]
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData, nClusters = 2)
 #' clusterProportions(model)
 setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
   pp = postprob(object, ...)
@@ -237,6 +243,7 @@ setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
     nrow(pp) > 0,
     msg = 'cannot determine cluster assignments because postprob() returned a matrix without rows'
   )
+
   colMeans(pp)
 })
 
@@ -260,10 +267,9 @@ setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
 #' @family model-specific methods
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
-#'   id = "Id", time = "Time", nClusters = 3)
-#' gbtm <- latrend(method, data = latrendData)
-#' coef(gbtm)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData, nClusters = 2)
+#' coef(model)
 coef.lcModel = function(object, ...) {
   if (is.null(object@model) ||
       is.null(getS3method('coef', class = class(object@model)[1], optional = TRUE))) {
@@ -272,7 +278,6 @@ coef.lcModel = function(object, ...) {
     coef(object@model, ...)
   }
 }
-
 
 
 # . converged ####
@@ -295,10 +300,9 @@ coef.lcModel = function(object, ...) {
 #' @family model-specific methods
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
-#'   id = "Id", time = "Time", nClusters = 3)
-#' gbtm <- latrend(method, data = latrendData)
-#' converged(gbtm)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData, nClusters = 2)
+#' converged(model)
 setMethod('converged', signature('lcModel'), function(object, ...) {
   NA
 })
@@ -355,13 +359,16 @@ df.residual.lcModel = function(object, ...) {
 #' @export
 #' @rdname externalMetric
 #' @aliases externalMetric,lcModel,lcModel-method
+#' @return For `externalMetric(lcModel, lcModel)`: A `numeric` vector of the computed metrics.
 #' @examples
 #' data(latrendData)
-#' model1 <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-#' model2 <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-#'    id = "Id", time = "Time"), latrendData)
-#' ari <- externalMetric(model1, model2, 'adjustedRand')
-#' @return For `externalMetric(lcModel, lcModel)`: A `numeric` vector of the computed metrics.
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model2 <- latrend(method, latrendData, nClusters = 2)
+#' model3 <- latrend(method, latrendData, nClusters = 3)
+#'
+#' if (require("mclustcomp")) {
+#'   externalMetric(model2, model3, "adjustedRand")
+#' }
 #' @family metric functions
 setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, object2, name, ...) {
   assert_that(length(name) > 0, msg = 'no external metric names provided')
@@ -392,7 +399,8 @@ setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, ob
   allMetrics = rep(NA * 0, length(name))
   allMetrics[funMask] = unlist(metricValues)
   names(allMetrics) = name
-  return(allMetrics)
+
+  allMetrics
 })
 
 
@@ -419,7 +427,8 @@ setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, ob
 #' @family model-specific methods
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
 #' fitted(model)
 fitted.lcModel = function(object, ..., clusters = trajectoryAssignments(object)) {
   if (suppressWarnings(nIds(object)) == 0) {
@@ -450,8 +459,10 @@ fitted.lcModel = function(object, ..., clusters = trajectoryAssignments(object))
 #' @details The default implementation uses the output of `fitted()` of the respective model.
 #' @examples
 #' data(latrendData)
-#' m <- lcMethodKML("Y", id = "Id", time = "Time")
-#' model <- latrend(method = m, data = latrendData)
+#' # Note: not a great example because the fitted trajectories
+#' # are identical to the respective cluster trajectory
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
 #' fittedTrajectories(model)
 #'
 #' fittedTrajectories(model, at = time(model)[c(1, 2)])
@@ -510,12 +521,9 @@ setMethod('fittedTrajectories', signature('lcModel'), function(object, at, what,
 #' @seealso [stats::formula]
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
-#' lmkm <- latrend(method, data = latrendData)
-#' formula(lmkm) # Y ~ Time
-#'
-#' kml <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-#' formula(kml) # Y ~ 0
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, data = latrendData)
+#' formula(model) # Y ~ Time
 formula.lcModel = function(x, what = 'mu', ...) {
   method = getLcMethod(x)
   if (what == 'mu') {
@@ -546,7 +554,8 @@ formula.lcModel = function(x, what = 'mu', ...) {
 #' @keywords internal
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+#' method <- lcMethodRandom("Y", id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
 #' getCall(model)
 getCall.lcModel = function(x, ...) {
   x@call
@@ -573,7 +582,8 @@ setMethod('getLabel', signature('lcModel'), function(object, ...) {
 #' @return An `lcMethod` object.
 #' @seealso [getCall.lcModel]
 #' @examples
-#' model = latrend(method=lcMethodKML("Y", id = "Id", time = "Time"), data=latrendData)
+#' method <- lcMethodRandom("Y", id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
 #' getLcMethod(model)
 getLcMethod = function(object) {
   assert_that(is.lcModel(object))
@@ -600,7 +610,8 @@ setMethod('getName', signature('lcModel'), function(object) {
 #' @rdname getName
 #' @aliases getShortName,lcModel-method
 setMethod('getShortName',  signature('lcModel'),
-  function(object) getLcMethod(object) %>% getShortName())
+  function(object) getShortName(getLcMethod(object))
+)
 
 
 # . ids ####
@@ -611,7 +622,8 @@ setMethod('getShortName',  signature('lcModel'),
 #' @return A `character vector` or `integer vector` of the identifier for every fitted trajectory.
 #' @examples
 #' data(latrendData)
-#' model = latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+#' method <- lcMethodRandom("Y", id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
 #' ids(model) # 1, 2, ..., 200
 ids = function(object) {
   assert_that(is.lcModel(object))
@@ -630,9 +642,9 @@ ids = function(object) {
 #' @rdname idVariable
 #' @aliases idVariable,lcModel-method
 #' @examples
-#' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+#' method <- lcMethodRandom("Y", id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
 #' idVariable(model) # "Id"
-#'
 #' @family lcModel variables
 setMethod('idVariable', signature('lcModel'), function(object) object@id)
 
@@ -651,13 +663,11 @@ is.lcModel = function(x) {
 #' @aliases metric,lcModel-method
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-#'    id = "Id", time = "Time"), latrendData)
-#' bic <- metric(model, "BIC")
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
+#' metric(model, "WMAE")
 #'
-#' ic <- metric(model, c("AIC", "BIC"))
-#'
-#'
+#' metric(model, c("WMAE", "Dunn"))
 #' @family metric functions
 setMethod('metric', signature('lcModel'), function(object, name, ...) {
   assert_that(length(name) > 0, msg = 'no metric names provided')
@@ -691,10 +701,11 @@ setMethod('metric', signature('lcModel'), function(object, name, ...) {
     name[funMask]
   )
 
-  allMetrics = rep(NA * 0, length(name))
+  allMetrics = rep(NA_real_, length(name))
   allMetrics[funMask] = unlist(metricValues)
   names(allMetrics) = name
-  return(allMetrics)
+
+  allMetrics
 })
 
 
@@ -709,9 +720,9 @@ setMethod('metric', signature('lcModel'), function(object, name, ...) {
 #' @family model-specific methods
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
-#' lmkm <- latrend(method, data = latrendData)
-#' model.frame(lmkm)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, data = latrendData)
+#' model.frame(model)
 model.frame.lcModel = function(formula, ...) {
   if (is.null(formula@model) ||
       is.null(getS3method('model.frame', class = class(formula@model)[1], optional = TRUE))) {
@@ -748,14 +759,15 @@ model.data = function(object, ...) {
 #' @seealso [model.frame.lcModel] [time.lcModel]
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
-#' kml <- latrend(method, latrendData)
-#' model.data(kml)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
+#' model.data(model)
 model.data.lcModel = function(object, ...) {
   if (!is.null(object@data)) {
     object@data
     assert_that(is.data.frame(object@data), msg = 'expected data reference to be a data.frame')
-    return(object@data)
+
+    object@data
   } else if (has_name(getCall(object), 'data')) {
     data = eval(getCall(object)$data, envir = environment(object))
     assert_that(!is.null(data),
@@ -771,10 +783,12 @@ model.data.lcModel = function(object, ...) {
     )
 
     assert_that(is.data.frame(modelData), msg = 'expected data reference to be a data.frame')
-    return(modelData)
+
+    modelData
   } else {
     warning('Cannot determine data used to train this lcModel. Data not part of model call, and not assigned to the @data slot. Returning NULL.')
-    return(NULL)
+
+    NULL
   }
 }
 
@@ -797,9 +811,9 @@ model.data.lcModel = function(object, ...) {
 #' @seealso [nobs] [nClusters]
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
-#' kml <- latrend(method, latrendData)
-#' nIds(kml)
+#' method <- lcMethodRandom("Y", id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
+#' nIds(model)
 nIds = function(object) {
   modelIds = ids(object)
   length(modelIds)
@@ -813,9 +827,9 @@ nIds = function(object) {
 #' @seealso [nIds] [nobs]
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
-#' kml <- latrend(method, latrendData)
-#' nClusters(kml)
+#' method <- lcMethodRandom("Y", id = "Id", time = "Time", nClusters = 3)
+#' model <- latrend(method, latrendData)
+#' nClusters(model) # 3
 nClusters = function(object) {
   assert_that(is.lcModel(object))
   nClus = length(object@clusterNames)
@@ -838,9 +852,9 @@ nClusters = function(object) {
 #' @seealso [nIds] [nClusters]
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
-#' kml <- latrend(method, latrendData)
-#' nobs(kml)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
+#' nobs(model)
 nobs.lcModel = function(object, ...) {
   suppressWarnings({
     data = model.data(object)
@@ -889,9 +903,9 @@ nobs.lcModel = function(object, ...) {
 #' @param ... Additional arguments.
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodLcmmGMM(
-#'    fixed = Y ~ Time, mixture = ~ Time,
-#'    id = "Id", time = "Time"), latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
+#'
 #' predFitted <- predict(model) # same result as fitted(model)
 #'
 #' # Cluster trajectory of cluster A
@@ -1029,12 +1043,14 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
 #' @family model-specific methods
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 #' model <- latrend(method, latrendData)
 #'
-#' predictForCluster(model,
+#' predictForCluster(
+#'   model,
 #'   newdata = data.frame(Time = c(0, 1)),
-#'   cluster = "B")
+#'   cluster = "B"
+#' )
 #'
 #' # all fitted values under cluster B
 #' predictForCluster(model, cluster = "B")
@@ -1045,8 +1061,10 @@ setMethod('predictForCluster', signature('lcModel'),
   classes = extends(class(object)) %>% setdiff('lcModel')
   methodsAvailable = vapply(classes, function(x) !is.null(getS3method('predict', x, optional = TRUE)), FUN.VALUE = FALSE)
 
-  assert_that(any(methodsAvailable),
-    msg = sprintf('Cannot compute cluster-specific predictions for model of class %1$s because neither predict.%1$s nor predictForCluster(%1$s) are implemented for this model', cls))
+  assert_that(
+    any(methodsAvailable),
+    msg = sprintf('Cannot compute cluster-specific predictions for model of class %1$s because neither predict.%1$s nor predictForCluster(%1$s) are implemented for this model', cls)
+  )
 
   newdata = cbind(newdata, Cluster = cluster)
   pred = predict(object, newdata = newdata, ..., what = what)
@@ -1112,8 +1130,10 @@ setMethod('predictPostprob', signature('lcModel'), function(object, newdata = NU
 #' @examples
 #' \dontrun{
 #' data(latrendData)
-#' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-#' predictAssignments(model, newdata = data.frame(Id = 999, Y = 0, Time = 0))
+#' if (require("kml")) {
+#'   model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+#'   predictAssignments(model, newdata = data.frame(Id = 999, Y = 0, Time = 0))
+#' }
 #' }
 setMethod('predictAssignments', signature('lcModel'), function(
   object,
@@ -1134,8 +1154,7 @@ setMethod('predictAssignments', signature('lcModel'), function(
   )
 
   apply(pp, 1, strategy, ...) %>%
-    factor(levels = 1:nClusters(object),
-           labels = clusterNames(object))
+    factor(levels = 1:nClusters(object), labels = clusterNames(object))
 })
 
 
@@ -1152,8 +1171,12 @@ setMethod('predictAssignments', signature('lcModel'), function(
 #' @seealso [plotClusterTrajectories] [plotFittedTrajectories] [plotTrajectories] [ggplot2::ggplot]
 #' @examples
 #' data(latrendData)
-#' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-#' plot(model)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData, nClusters = 3)
+#'
+#' if (require("ggplot2")) {
+#'   plot(model)
+#' }
 setMethod('plot', signature('lcModel', 'ANY'), function(x, y, ...) {
   args = list(...)
 
@@ -1177,8 +1200,12 @@ setMethod('plot', signature('lcModel', 'ANY'), function(x, y, ...) {
 #' @seealso [fittedTrajectories] [plotClusterTrajectories] [plotTrajectories] [plot]
 #' @examples
 #' data(latrendData)
-#' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-#' plotFittedTrajectories(model)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData, nClusters = 3)
+#'
+#' if (require("ggplot2")) {
+#'   plotFittedTrajectories(model)
+#' }
 setMethod('plotFittedTrajectories', signature('lcModel'), function(object, ...) {
   data = fittedTrajectories(object, ...)
 
@@ -1207,23 +1234,27 @@ setMethod('plotFittedTrajectories', signature('lcModel'), function(object, ...) 
 #' @seealso [clusterTrajectories] [plotFittedTrajectories] [plotTrajectories] [plot]
 #' @examples
 #' data(latrendData)
-#' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-#' plotClusterTrajectories(model)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData, nClusters = 3)
 #'
-#' # show assigned trajectories
-#' plotClusterTrajectories(model, trajectories = TRUE)
+#' if (require("ggplot2")) {
+#'   plotClusterTrajectories(model)
 #'
-#' # show 95th percentile observation interval
-#' plotClusterTrajectories(model, trajectories = "95pct")
+#'   # show assigned trajectories
+#'   plotClusterTrajectories(model, trajectories = TRUE)
 #'
-#' # show observation standard deviation
-#' plotClusterTrajectories(model, trajectories = "sd")
+#'   # show 95th percentile observation interval
+#'   plotClusterTrajectories(model, trajectories = "95pct")
 #'
-#' # show observation standard error
-#' plotClusterTrajectories(model, trajectories = "se")
+#'   # show observation standard deviation
+#'   plotClusterTrajectories(model, trajectories = "sd")
 #'
-#' # show observation range
-#' plotClusterTrajectories(model, trajectories = "range")
+#'   # show observation standard error
+#'   plotClusterTrajectories(model, trajectories = "se")
+#'
+#'   # show observation range
+#'   plotClusterTrajectories(model, trajectories = "range")
+#' }
 setMethod('plotClusterTrajectories', signature('lcModel'),
   function(object,
     what = 'mu',
@@ -1276,8 +1307,12 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
 #' @inheritDotParams trajectories
 #' @examples
 #' data(latrendData)
-#' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-#' plotTrajectories(model)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData, nClusters = 3)
+#'
+#' if (require("ggplot2")) {
+#'   plotTrajectories(model)
+#' }
 setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
   data = trajectories(object, ...)
   plotTrajectories(
@@ -1312,9 +1347,21 @@ setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
 #' @family model-specific methods
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-#'    id = "Id", time = "Time"), data = latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
+#'
 #' postprob(model)
+#'
+#' if (rlang::is_installed("lcmm")) {
+#'   gmmMethod = lcMethodLcmmGMM(
+#'     fixed = Y ~ Time,
+#'     mixture = ~ Time,
+#'     id = "Id",
+#'     time = "Time"
+#'   )
+#'   gmmModel <- latrend(gmmMethod, data = latrendData)
+#'   postprob(gmmModel)
+#' }
 setMethod('postprob', signature('lcModel'), function(object, ...) {
   if (nIds(object) > 0) {
     warning(
@@ -1351,18 +1398,25 @@ setMethod('postprob', signature('lcModel'), function(object, ...) {
 #' @seealso [residuals.lcModel] [metric] [plotClusterTrajectories]
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-#'    id = "Id", time = "Time"), data = latrendData)
-#' qqPlot(model)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
+#' model <- latrend(method, latrendData)
+#'
+#' if (require("ggplot2") && require("qqplotr")) {
+#'   qqPlot(model)
+#' }
 setMethod('qqPlot', signature('lcModel'), function(object, byCluster = FALSE, ...) {
   .loadOptionalPackage('ggplot2')
-  assert_that(is.lcModel(object))
+  assert_that(
+    is.lcModel(object),
+    is.flag(byCluster)
+  )
 
   res = residuals(object, ...)
   mdata = model.data(object)
   assert_that(!is.null(mdata), msg = 'no model data available')
 
-  idIndexColumn = factor(mdata[[idVariable(object)]], levels = ids(object)) %>% as.integer()
+  idIndexColumn = factor(mdata[[idVariable(object)]], levels = ids(object)) %>%
+    as.integer()
   rowClusters = trajectoryAssignments(object)[idIndexColumn]
 
   requireNamespace('qqplotr')
@@ -1397,10 +1451,6 @@ setMethod('qqPlot', signature('lcModel'), function(object, byCluster = FALSE, ..
 #' If the `clusters` argument is unspecified, a `matrix` of cluster-specific residuals per observations is returned.
 #' @family model-specific methods
 #' @seealso [fitted.lcModel] [trajectories]
-#' data(latrendData)
-#' model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-#'    id = "Id", time = "Time"), data = latrendData)
-#' summary(residuals(model))
 residuals.lcModel = function(object, ..., clusters = trajectoryAssignments(object)) {
   ypred = fitted(object, clusters = clusters, ...)
   yref = model.data(object)[[responseVariable(object)]]
@@ -1409,12 +1459,14 @@ residuals.lcModel = function(object, ..., clusters = trajectoryAssignments(objec
     assert_that(length(yref) == nrow(ypred))
     resMat = matrix(yref, nrow = nrow(ypred), ncol = ncol(ypred)) - ypred
     colnames(resMat) = colnames(ypred)
+
     resMat
   } else if (is.numeric(ypred)) {
     assert_that(length(yref) == length(ypred))
+
     yref - ypred
   } else {
-    return(NULL)
+    NULL
   }
 }
 
@@ -1426,8 +1478,9 @@ residuals.lcModel = function(object, ..., clusters = trajectoryAssignments(objec
 #' @title Get the response variable
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-#' responseVariable(model) # "Value"
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
+#' responseVariable(model) # "Y"
 #' @family lcModel variables
 setMethod('responseVariable', signature('lcModel'), function(object, ...) object@response)
 
@@ -1446,7 +1499,9 @@ setMethod('responseVariable', signature('lcModel'), function(object, ...) object
 #' @return A `numeric` representing the model estimation time, in the specified unit.
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
+#'
 #' estimationTime(model)
 #' estimationTime(model, unit = 'mins')
 #' estimationTime(model, unit = 'days')
@@ -1472,11 +1527,6 @@ setMethod('show', 'lcModel', function(object) {
 #' @return A `numeric` indicating the residual standard deviation.
 #' @seealso [coef.lcModel] [metric]
 #' @family model-specific methods
-#' @examples
-#' data(latrendData)
-#' model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-#'    id = "Id", time = "Time"), data = latrendData)
-#' sigma(model)
 sigma.lcModel = function(object, ...) {
   if (is.null(object@model) ||
       is.null(getS3method('sigma', class = class(object@model)[1], optional = TRUE))) {
@@ -1511,9 +1561,9 @@ sigma.lcModel = function(object, ...) {
 #' }
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-#'    id = "Id", time = "Time"), data = latrendData)
-#' strip(model)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
+#' newModel <- strip(model)
 setMethod('strip', signature('lcModel'), function(object, ..., classes = 'formula') {
   newObject = object
 
@@ -1605,7 +1655,8 @@ setMethod('trajectories', signature('lcModel'), function(object, ...) {
 #' @seealso [postprob] [clusterSizes] [predictAssignments]
 #' @examples
 #' data(latrendData)
-#' model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
 #' trajectoryAssignments(model)
 #'
 #' # assign trajectories at random using weighted sampling
@@ -1624,7 +1675,8 @@ setMethod('trajectoryAssignments', signature('lcModel'), function(object, strate
     length(result) == nIds(object),
     all(
       vapply(result, is.count, FUN.VALUE = TRUE) |
-        vapply(result, is.na, FUN.VALUE = TRUE)),
+        vapply(result, is.na, FUN.VALUE = TRUE)
+    ),
     min(result, na.rm = TRUE) >= 1,
     max(result, na.rm = TRUE) <= nClusters(object)
   )
@@ -1646,10 +1698,11 @@ setMethod('trajectoryAssignments', signature('lcModel'), function(object, strate
 #' @seealso [latrend] [getCall]
 #' @examples
 #' data(latrendData)
-#' m <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
-#' model <- latrend(method = m, data = latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model2 <- latrend(method, latrendData, nClusters = 2)
+#'
 #' # fit for a different number of clusters
-#' update(model, nClusters = 2)
+#' model3 <- update(model2, nClusters = 3)
 update.lcModel = function(object, ...) {
   assert_that(is.lcModel(object))
   modelCall = getCall(object)

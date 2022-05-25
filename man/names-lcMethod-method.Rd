@@ -21,9 +21,9 @@ A \verb{character vector} of argument names.
 Extract the argument names or number of arguments from an \code{lcMethod} object.
 }
 \examples{
-m = lcMethodKML()
-names(m)
-length(m)
+method <- lcMethodLMKM(Y ~ Time)
+names(method)
+length(method)
 }
 \seealso{
 Other lcMethod functions: 

@@ -28,10 +28,12 @@ The following arguments are ignored: series, k, trace.}
 Specify time series clustering via dtwclust
 }
 \examples{
-library(dtwclust)
 data(latrendData)
-method <- lcMethodDtwclust("Y", id = "Id", time = "Time", nClusters = 3)
-model <- latrend(method, latrendData)
+
+if (require("dtwclust")) {
+  method <- lcMethodDtwclust("Y", id = "Id", time = "Time", nClusters = 3)
+  model <- latrend(method, latrendData)
+}
 }
 \references{
 \insertRef{sardaespinosa2019time}{latrend}

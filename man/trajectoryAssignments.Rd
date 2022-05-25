@@ -39,7 +39,8 @@ In case \code{object} is a \code{matrix}: the posterior probability \code{matrix
 }
 \examples{
 data(latrendData)
-model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
 trajectoryAssignments(model)
 
 # assign trajectories at random using weighted sampling

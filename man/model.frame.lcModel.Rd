@@ -19,9 +19,9 @@ See \code{\link[stats:model.frame]{stats::model.frame()}} for more details.
 }
 \examples{
 data(latrendData)
-method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
-lmkm <- latrend(method, data = latrendData)
-model.frame(lmkm)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, data = latrendData)
+model.frame(model)
 }
 \seealso{
 \link[stats:model.frame]{stats::model.frame} \link{model.data.lcModel}

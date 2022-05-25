@@ -29,11 +29,22 @@ setValidity('lcMethodRandom', function(object) {
 #' model <- latrend(method, latrendData)
 #'
 #' # uniform clusters
-#' method <- lcMethodRandom(alpha = 1e3, nClusters = 3, response = "Y", id = "Id", time = "Time")
+#' method <- lcMethodRandom(
+#'   alpha = 1e3,
+#'   nClusters = 3,
+#'   response = "Y",
+#'   id = "Id",
+#'   time = "Time"
+#' )
 #'
 #' # single large cluster
-#' method <- lcMethodRandom(alpha = c(100, 1, 1, 1), nClusters = 4,
-#'   response = "Y", id = "Id", time = "Time")
+#' method <- lcMethodRandom(
+#'   alpha = c(100, 1, 1, 1),
+#'   nClusters = 4,
+#'   response = "Y",
+#'   id = "Id",
+#'   time = "Time"
+#' )
 #' @family lcMethod implementations
 #' @references
 #' \insertRef{frigyik2010introduction}{latrend}

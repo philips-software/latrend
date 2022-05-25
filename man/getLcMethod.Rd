@@ -16,7 +16,8 @@ An \code{lcMethod} object.
 Get the \code{lcMethod} specification object that was used for fitting the given \code{lcModel} object.
 }
 \examples{
-model = latrend(method=lcMethodKML("Y", id = "Id", time = "Time"), data=latrendData)
+method <- lcMethodRandom("Y", id = "Id", time = "Time")
+model <- latrend(method, latrendData)
 getLcMethod(model)
 }
 \seealso{

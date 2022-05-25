@@ -39,11 +39,11 @@ If a seed value is specified in the \code{lcMethod} object or arguments to \code
 }
 \examples{
 data(latrendData)
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), data = latrendData)
+model <- latrend(lcMethodLMKM(Y ~ Time, id = "Id", time = "Time"), data = latrendData)
 
-model <- latrend("lcMethodKML", response = "Y", id = "Id", time = "Time", data = latrendData)
+model <- latrend("lcMethodLMKM", formula = Y ~ Time, id = "Id", time = "Time", data = latrendData)
 
-method <- lcMethodKML("Y", id = "Id", time = "Time")
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 model <- latrend(method, data = latrendData, nClusters = 3)
 
 model <- latrend(method, data = latrendData, nClusters = 3, seed = 1)

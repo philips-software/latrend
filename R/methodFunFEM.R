@@ -17,17 +17,18 @@ setClass('lcMethodFunFEM', contains = 'lcMatrixMethod')
 #' @param ... Arguments passed to [funFEM::funFEM].
 #' The following external arguments are ignored: fd, K, disp, graph.
 #' @examples
-#' library(funFEM)
-#' library(fda)
 #' data(latrendData)
-#' method <- lcMethodFunFEM("Y", id = "Id", time = "Time", nClusters = 3)
-#' model <- latrend(method, latrendData)
 #'
-#' method <- lcMethodFunFEM("Y",
+#' if (require("funFEM") && require("fda")) {
+#'   method <- lcMethodFunFEM("Y", id = "Id", time = "Time", nClusters = 3)
+#'   model <- latrend(method, latrendData)
+#'
+#'   method <- lcMethodFunFEM("Y",
 #'    basis = function(time) {
-#'       create.bspline.basis(time,
-#'         nbasis = 10, norder = 4)
-#' })
+#'       create.bspline.basis(time, nbasis = 10, norder = 4)
+#'    }
+#'   )
+#' }
 #' @family lcMethod implementations
 #' @references
 #' \insertRef{bouveyron2015funfem}{latrend}

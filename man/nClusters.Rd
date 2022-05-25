@@ -17,9 +17,9 @@ Get the number of clusters estimated by the given \code{lcModel} object.
 }
 \examples{
 data(latrendData)
-method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
-kml <- latrend(method, latrendData)
-nClusters(kml)
+method <- lcMethodRandom("Y", id = "Id", time = "Time", nClusters = 3)
+model <- latrend(method, latrendData)
+nClusters(model) # 3
 }
 \seealso{
 \link{nIds} \link{nobs}

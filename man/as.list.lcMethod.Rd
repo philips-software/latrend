@@ -27,18 +27,22 @@ A \code{list} with the argument \code{call}s or evaluated results depending on t
 Extract the method arguments as a list
 }
 \examples{
-library(kml)
 data(latrendData)
-method <- lcMethodKML("Y", id = "Id", time = "Time")
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 as.list(method)
 
-as.list(method, args = c('id', 'time'))
+as.list(method, args = c("id", "time"))
 
-# select arguments used by kml()
-as.list(method, args = kml::kml)
+if (require("kml")) {
+  method <- lcMethodKML("Y", id = "Id", time = "Time")
+  as.list(method)
 
-# select arguments used by either kml() or parALGO()
-as.list(method, args = c(kml::kml, kml::parALGO))
+  # select arguments used by kml()
+  as.list(method, args = kml::kml)
+
+  # select arguments used by either kml() or parALGO()
+  as.list(method, args = c(kml::kml, kml::parALGO))
+}
 }
 \seealso{
 Other lcMethod functions: 

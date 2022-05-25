@@ -31,16 +31,20 @@ Specify a zero-inflated repeated-measures GBTM method
 # This example is not tested because crimCV sometimes fails
 # to converge and throws the error "object 'Frtr' not found"
 \dontrun{
-library(crimCV)
 data(latrendData)
-method <- lcMethodCrimCV("Y", id = "Id", time = "Time", nClusters = 3, dpolyp = 1, init = 2)
-model <- latrend(method, data = subset(latrendData, Time > .5))
-plot(model)
+if (require("crimCV")) {
+  method <- lcMethodCrimCV("Y", id = "Id", time = "Time", nClusters = 3, dpolyp = 1, init = 2)
+  model <- latrend(method, data = subset(latrendData, Time > .5))
 
-data(TO1adj)
-method <- lcMethodCrimCV(response = "Offenses", time = "Offense", id = "Subject",
-  nClusters = 2, dpolyp = 1, init = 2)
-model <- latrend(method, data = TO1adj[1:100, ])
+  if (require("ggplot2")) {
+    plot(model)
+  }
+
+  data(TO1adj)
+  method <- lcMethodCrimCV(response = "Offenses", time = "Offense", id = "Subject",
+    nClusters = 2, dpolyp = 1, init = 2)
+  model <- latrend(method, data = TO1adj[1:100, ])
+}
 }
 }
 \references{

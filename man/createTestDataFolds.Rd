@@ -18,8 +18,11 @@ Create all k test folds from the training data
 }
 \examples{
 data(latrendData)
-trainDataList <- createTrainDataFolds(latrendData, folds = 10, id = "Id")
-testDataList <- createTestDataFolds(latrendData, trainDataList)
+
+if (require("caret")) {
+  trainDataList <- createTrainDataFolds(latrendData, folds = 10, id = "Id")
+  testDataList <- createTestDataFolds(latrendData, trainDataList)
+}
 }
 \seealso{
 Other validation methods: 

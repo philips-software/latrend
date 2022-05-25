@@ -22,12 +22,9 @@ This is determined by the \code{formula} argument of the \code{lcMethod} specifi
 }
 \examples{
 data(latrendData)
-method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
-lmkm <- latrend(method, data = latrendData)
-formula(lmkm) # Y ~ Time
-
-kml <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-formula(kml) # Y ~ 0
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, data = latrendData)
+formula(model) # Y ~ Time
 }
 \seealso{
 \link[stats:formula]{stats::formula}

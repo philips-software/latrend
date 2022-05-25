@@ -27,13 +27,13 @@ The argument \code{call} or evaluation result.
 Retrieve and evaluate a lcMethod argument by name
 }
 \examples{
-m <- lcMethodKML(nClusters = 3)
-m$nClusters # 3
-m = lcMethodKML(nClusters = 5)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
+method$nClusters # 3
+m = lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 5)
 m[["nClusters"]] # 5
 
 k = 2
-m = lcMethodKML(nClusters = k)
+m = lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = k)
 m[["nClusters", eval=FALSE]] # k
 }
 \seealso{

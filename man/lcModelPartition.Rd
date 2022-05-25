@@ -52,10 +52,12 @@ As such, this model has no predictive capabilities. The cluster trajectories are
 \examples{
 # comparing a model to the ground truth using the adjusted Rand index
 data(latrendData)
-model <- latrend(lcMethodKML(), data = latrendData, response = "Y")
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 3)
+
 # extract the reference class from the Class column
 trajLabels <- aggregate(Class ~ Id, head, 1, data = latrendData)
 trajLabels$Cluster <- trajLabels$Class
 refModel <- lcModelPartition(latrendData, response = "Y", trajectoryAssignments = trajLabels)
-externalMetric(model, refModel, 'adjustedRand') # 0.76
+externalMetric(model, refModel, "adjustedRand")
 }

@@ -15,5 +15,5 @@
 Initialization of \code{lcMethod} objects, converting arbitrary arguments to arguments as part of an \code{lcMethod} object.
 }
 \examples{
-new("lcMethodKML", response = "Value")
+new("lcMethodLMKM", formula = Y ~ Time, id = "Id", time = "Time")
 }

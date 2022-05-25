@@ -35,10 +35,12 @@ The following external arguments are ignored: data, centers, trace.}
 Two-step clustering through latent growth curve modeling and k-means.
 }
 \examples{
-library(lme4)
 data(latrendData)
-method <- lcMethodGCKM(Y ~ (Time | Id), id = "Id", time = "Time", nClusters = 3)
-model <- latrend(method, latrendData)
+
+if (require("lme4")) {
+  method <- lcMethodGCKM(Y ~ (Time | Id), id = "Id", time = "Time", nClusters = 3)
+  model <- latrend(method, latrendData)
+}
 }
 \seealso{
 Other lcMethod implementations: 

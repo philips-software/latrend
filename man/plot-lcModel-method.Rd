@@ -27,8 +27,12 @@ Plot a \code{lcModel} object. By default, this plots the cluster trajectories of
 }
 \examples{
 data(latrendData)
-model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-plot(model)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 3)
+
+if (require("ggplot2")) {
+  plot(model)
+}
 }
 \seealso{
 \link{plotClusterTrajectories} \link{plotFittedTrajectories} \link{plotTrajectories} \link[ggplot2:ggplot]{ggplot2::ggplot}

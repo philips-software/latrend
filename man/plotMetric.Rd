@@ -30,8 +30,11 @@ Plot one or more internal metrics for all lcModels
 }
 \examples{
 data(latrendData)
-baseMethod <- lcMethodKML(response = "Y", id = "Id", time = "Time")
-methods <- lcMethods(baseMethod, nClusters = 1:3)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+methods <- lcMethods(method, nClusters = 1:3)
 models <- latrendBatch(methods, latrendData)
-plotMetric(models, c("BIC", "WRSS"))
+
+if (require("ggplot2")) {
+  plotMetric(models, c("WMAE", "Dunn"))
+}
 }

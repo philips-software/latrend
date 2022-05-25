@@ -34,10 +34,11 @@ The following external arguments are ignored: traj, id_field, k}
 Specify AKMedoids method
 }
 \examples{
-library(akmedoids)
 data(latrendData)
-method <- lcMethodAkmedoids(response = "Y", time = "Time", id = "Id", nClusters = 3)
-model <- latrend(method, data = latrendData)
+if (require("akmedoids")) {
+  method <- lcMethodAkmedoids(response = "Y", time = "Time", id = "Id", nClusters = 3)
+  model <- latrend(method, data = latrendData)
+}
 }
 \references{
 \insertRef{adepeju2020akmedoids}{latrend}

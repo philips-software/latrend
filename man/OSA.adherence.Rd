@@ -38,12 +38,14 @@ This dataset is only intended for demonstration purposes.
 While the data format will remain the same, the data content is subject to change in future versions.
 }
 \examples{
-library(latrend)
 data(OSA.adherence)
-plotTrajectories(OSA.adherence, id = "Patient", time = "Biweek", response = "UsageHours")
 
-# plot according to cluster ground truth
-plotTrajectories(OSA.adherence, id = "Patient", time = "Biweek", response = "UsageHours",
-  cluster = "Group")
+if (require(ggplot2)) {
+  plotTrajectories(OSA.adherence, id = "Patient", time = "Biweek", response = "UsageHours")
+
+  # plot according to cluster ground truth
+  plotTrajectories(OSA.adherence, id = "Patient", time = "Biweek", response = "UsageHours",
+    cluster = "Group")
+}
 }
 \keyword{datasets}

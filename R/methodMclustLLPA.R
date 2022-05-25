@@ -28,10 +28,11 @@ setValidity('lcMethodMclustLLPA', function(object) {
 #' @param ... Arguments passed to [mclust::Mclust].
 #' The following external arguments are ignored: data, G, verbose.
 #' @examples
-#' library(mclust)
 #' data(latrendData)
-#' method <- lcMethodMclustLLPA("Y", id = "Id", time = "Time", nClusters = 3)
-#' model <- latrend(method, latrendData)
+#' if (require("mclust")) {
+#'   method <- lcMethodMclustLLPA("Y", id = "Id", time = "Time", nClusters = 3)
+#'   model <- latrend(method, latrendData)
+#' }
 #' @family lcMethod implementations
 #' @references
 #' \insertRef{scrucca2016mclust}{latrend}

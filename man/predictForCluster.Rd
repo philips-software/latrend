@@ -45,12 +45,14 @@ setMethod("predictForCluster", "lcModelExt",
 
 \examples{
 data(latrendData)
-method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 model <- latrend(method, latrendData)
 
-predictForCluster(model,
+predictForCluster(
+  model,
   newdata = data.frame(Time = c(0, 1)),
-  cluster = "B")
+  cluster = "B"
+)
 
 # all fitted values under cluster B
 predictForCluster(model, cluster = "B")

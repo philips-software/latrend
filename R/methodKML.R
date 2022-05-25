@@ -19,10 +19,12 @@ setClass('lcMethodKML', contains = 'lcMatrixMethod')
 #'
 #' The following external arguments are ignored: object, nbClusters, parAlgo, toPlot, saveFreq
 #' @examples
-#' library(kml)
 #' data(latrendData)
-#' method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
-#' model <- latrend(method, latrendData)
+#'
+#' if (require("kml")) {
+#'   method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
+#'   model <- latrend(method, latrendData)
+#' }
 #' @references
 #' \insertRef{genolini2015kml}{latrend}
 #' @family lcMethod implementations
