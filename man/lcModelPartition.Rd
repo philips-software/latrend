@@ -59,5 +59,8 @@ model <- latrend(method, latrendData, nClusters = 3)
 trajLabels <- aggregate(Class ~ Id, head, 1, data = latrendData)
 trajLabels$Cluster <- trajLabels$Class
 refModel <- lcModelPartition(latrendData, response = "Y", trajectoryAssignments = trajLabels)
-externalMetric(model, refModel, "adjustedRand")
+
+if (require("mclustcomp")) {
+  externalMetric(model, refModel, "adjustedRand")
+}
 }

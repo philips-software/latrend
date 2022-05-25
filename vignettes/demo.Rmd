@@ -10,6 +10,10 @@ vignette: >
   %\VignetteIndexEntry{Demonstration of latrend package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{ggplot2}
+  %\VignetteDepends{kml}
+  %\VignetteDepends{lcmm}
+  %\VignetteDepends{mclustcomp}
 ---
 
 ```{r setup, include = FALSE}

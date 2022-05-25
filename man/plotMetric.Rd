@@ -35,6 +35,10 @@ methods <- lcMethods(method, nClusters = 1:3)
 models <- latrendBatch(methods, latrendData)
 
 if (require("ggplot2")) {
+  plotMetric(models, "WMAE")
+}
+
+if (require("ggplot2") && require("clusterCrit")) {
   plotMetric(models, c("WMAE", "Dunn"))
 }
 }

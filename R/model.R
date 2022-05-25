@@ -667,7 +667,9 @@ is.lcModel = function(x) {
 #' model <- latrend(method, latrendData)
 #' metric(model, "WMAE")
 #'
-#' metric(model, c("WMAE", "Dunn"))
+#' if (require("clusterCrit")) {
+#'   metric(model, c("WMAE", "Dunn"))
+#' }
 #' @family metric functions
 setMethod('metric', signature('lcModel'), function(object, name, ...) {
   assert_that(length(name) > 0, msg = 'no metric names provided')
@@ -1343,6 +1345,10 @@ setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
 #'   # return trajectory-specific posterior probability matrix
 #' })
 #' }
+#' @section Troubleshooting:
+#' If you are getting errors about undefined model signatures when calling postprob(model),
+#' check whether the postprob() function is still the one defined by the latrend package.
+#' It may have been overridden when attaching another package (e.g., lcmm). If you need to attach conflicting packages, load them first.
 #' @seealso [trajectoryAssignments] [predictPostprob] [predictAssignments]
 #' @family model-specific methods
 #' @examples
@@ -1582,7 +1588,8 @@ setMethod('strip', signature('lcModel'), function(object, ..., classes = 'formul
 #' @aliases timeVariable,lcModel-method
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
 #' idVariable(model) # "Id"
 #' @family lcModel variables
 setMethod('timeVariable', signature('lcModel'), function(object) object@time)

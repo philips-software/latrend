@@ -90,7 +90,9 @@ method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 model <- latrend(method, latrendData)
 metric(model, "WMAE")
 
-metric(model, c("WMAE", "Dunn"))
+if (require("clusterCrit")) {
+  metric(model, c("WMAE", "Dunn"))
+}
 }
 \references{
 \insertAllCited{}

@@ -14,10 +14,13 @@
 #' @seealso [generateLongData]
 #' @examples
 #' data(latrendData)
-#' plotTrajectories(latrendData, id = "Id", time = "Time", response = "Y")
 #'
-#' # plot according to the reference class
-#' plotTrajectories(latrendData, id = "Id", time = "Time", response = "Y", cluster = "Class")
+#' if (require("ggplot2")) {
+#'   plotTrajectories(latrendData, id = "Id", time = "Time", response = "Y")
+#'
+#'   # plot according to the reference class
+#'   plotTrajectories(latrendData, id = "Id", time = "Time", response = "Y", cluster = "Class")
+#' }
 "latrendData"
 
 
@@ -50,7 +53,7 @@
 #' @examples
 #' data(OSA.adherence)
 #'
-#' if (require(ggplot2)) {
+#' if (require("ggplot2")) {
 #'   plotTrajectories(OSA.adherence, id = "Patient", time = "Biweek", response = "UsageHours")
 #'
 #'   # plot according to cluster ground truth

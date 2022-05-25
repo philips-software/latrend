@@ -29,7 +29,9 @@ model3 <- latrend(method, latrendData, nClusters = 3)
 
 models <- lcModels(model1, model2, model3)
 
-max(models, "Dunn")
+if (require("clusterCrit")) {
+  max(models, "Dunn")
+}
 }
 \seealso{
 \link{min.lcModels} \link{externalMetric}

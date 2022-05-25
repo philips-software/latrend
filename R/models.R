@@ -322,7 +322,9 @@ min.lcModels = function(x, name, ...) {
 #'
 #' models <- lcModels(model1, model2, model3)
 #'
-#' max(models, "Dunn")
+#' if (require("clusterCrit")) {
+#'   max(models, "Dunn")
+#' }
 #' @seealso [min.lcModels] [externalMetric]
 max.lcModels = function(x, name, ...) {
   x = as.lcModels(x)
@@ -395,6 +397,10 @@ setMethod('plot', signature('lcModels', 'ANY'), function(x, y, ..., subset, grid
 #' models <- latrendBatch(methods, latrendData)
 #'
 #' if (require("ggplot2")) {
+#'   plotMetric(models, "WMAE")
+#' }
+#'
+#' if (require("ggplot2") && require("clusterCrit")) {
 #'   plotMetric(models, c("WMAE", "Dunn"))
 #' }
 plotMetric = function(

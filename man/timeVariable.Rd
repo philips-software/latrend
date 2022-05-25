@@ -25,7 +25,8 @@ Extracts the time variable (i.e., column name) from the given \code{object}.
 method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 timeVariable(method) # "Time"
 data(latrendData)
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
 idVariable(model) # "Id"
 }
 \seealso{

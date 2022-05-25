@@ -40,7 +40,7 @@ While the data format will remain the same, the data content is subject to chang
 \examples{
 data(OSA.adherence)
 
-if (require(ggplot2)) {
+if (require("ggplot2")) {
   plotTrajectories(OSA.adherence, id = "Patient", time = "Biweek", response = "UsageHours")
 
   # plot according to cluster ground truth

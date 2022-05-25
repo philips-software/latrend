@@ -10,6 +10,10 @@ vignette: >
   %\VignetteIndexEntry{Conducting a simulation study}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{ggplot2}
+  %\VignetteDepends{simTool}
+  %\VignetteDepends{dplyr}
+  %\VignetteDepends{mclustcomp}
 ---
 ```{r, include = FALSE}
 knitr::opts_chunk$set(

@@ -10,6 +10,9 @@ vignette: >
   %\VignetteIndexEntry{Implementing new models}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{ggplot2}
+  %\VignetteDepends{kml}
+  %\VignetteDepends{lcmm}
 ---
 ```{r, include = FALSE}
 knitr::opts_chunk$set(

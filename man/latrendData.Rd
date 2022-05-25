@@ -26,10 +26,13 @@ Each trajectory deviates in intercept and slope from its respective class trajec
 }
 \examples{
 data(latrendData)
-plotTrajectories(latrendData, id = "Id", time = "Time", response = "Y")
 
-# plot according to the reference class
-plotTrajectories(latrendData, id = "Id", time = "Time", response = "Y", cluster = "Class")
+if (require("ggplot2")) {
+  plotTrajectories(latrendData, id = "Id", time = "Time", response = "Y")
+
+  # plot according to the reference class
+  plotTrajectories(latrendData, id = "Id", time = "Time", response = "Y", cluster = "Class")
+}
 }
 \seealso{
 \link{generateLongData}

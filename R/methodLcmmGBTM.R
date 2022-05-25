@@ -27,13 +27,25 @@ setValidity('lcMethodLcmmGBTM', function(object) {
 #' @inheritParams lcMethodLcmmGMM
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
-#'    id = "Id", time = "Time", nClusters = 3)
-#' gbtm <- latrend(method, data = latrendData)
-#' summary(gbtm)
+#' if (rlang::is_installed("lcmm")) {
+#'   method <- lcMethodLcmmGBTM(
+#'     fixed = Y ~ Time,
+#'     mixture = ~ 1,
+#'    id = "Id",
+#'    time = "Time",
+#'    nClusters = 3
+#'   )
+#'   gbtm <- latrend(method, data = latrendData)
+#'   summary(gbtm)
 #'
-#' method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ Time,
-#'     id = "Id", time = "Time", nClusters = 3)
+#'   method <- lcMethodLcmmGBTM(
+#'     fixed = Y ~ Time,
+#'     mixture = ~ Time,
+#'     id = "Id",
+#'     time = "Time",
+#'     nClusters = 3
+#'   )
+#' }
 #' @family lcMethod implementations
 #' @references
 #' \insertRef{proustlima2017estimation}{latrend}
