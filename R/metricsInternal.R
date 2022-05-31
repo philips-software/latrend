@@ -31,6 +31,7 @@
 #' | `CLC` | Classification likelihood criterion | \insertCite{mclachlan2000finite}{latrend} |
 #' | `converged` | Whether the model converged during estimation | [converged()] |
 #' | `deviance` | The model [deviance](https://en.wikipedia.org/wiki/Deviance_(statistics)) | [stats::deviance()] |
+#' | `Dunn` | The [Dunn index](https://en.wikipedia.org/wiki/Dunn_index) | |
 #' | `entropy` | Entropy of the posterior probabilities | |
 #' | `estimationTime` | The time needed for fitting the model | [estimationTime()] |
 #' | `ED` | [Euclidean distance](https://en.wikipedia.org/wiki/Euclidean_distance) between the cluster trajectories and the assigned observed trajectories | |
@@ -320,6 +321,11 @@ intMetricsEnv$deviance = deviance
 )
 
 intMetricsEnv$Dunn = function(m) {
+  if (nClusters(m) == 1L) {
+    # not defined for K=1
+    return (NA_real_)
+  }
+
   part = as.integer(trajectoryAssignments(m))
   tsmat = tsmatrix(
     data = model.data(m),
