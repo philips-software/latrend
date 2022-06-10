@@ -137,7 +137,9 @@ test_that('factor id with empty levels', {
   facData = copy(testLongData) %>%
     .[, Traj := factor(Traj, levels = seq(0, uniqueN(Traj) + 1))]
 
-  model = latrend(mTest, data = facData)
+  expect_warning({
+    model = latrend(mTest, data = facData)
+  }, regexp = 'mpty traj')
 
   expect_is(model, 'lcModel')
 })
