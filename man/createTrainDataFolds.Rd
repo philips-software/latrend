@@ -6,7 +6,7 @@
 \usage{
 createTrainDataFolds(
   data,
-  folds = 10,
+  folds = 10L,
   id = getOption("latrend.id"),
   seed = NULL
 )

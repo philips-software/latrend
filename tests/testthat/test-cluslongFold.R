@@ -3,7 +3,9 @@ skip_if_not_installed('caret')
 rngReset()
 
 test_that('2 folds', {
-  models = latrendCV(mRandom, testLongData, folds = 2, seed = 1)
+  expect_silent({
+    models = latrendCV(mRandom, testLongData, folds = 2, seed = 1)
+  })
 
   expect_is(models, 'lcModels')
   expect_length(models, 2)

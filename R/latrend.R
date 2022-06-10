@@ -622,7 +622,7 @@ latrendBoot = function(
   )
   models = eval(cl, envir = parent.frame())
 
-  return(models)
+  models
 }
 
 
@@ -724,13 +724,13 @@ latrendCV = function(
 #' }
 createTrainDataFolds = function(
   data,
-  folds = 10,
+  folds = 10L,
   id = getOption('latrend.id'),
   seed = NULL
 ) {
   assert_that(
     is.count(folds),
-    folds > 1,
+    folds > 1L,
     is.data.frame(data),
     has_name(data, id)
   )
@@ -748,7 +748,7 @@ createTrainDataFolds = function(
   })
 
   dataList = lapply(foldIdsList, function(foldIds) {
-    data[data[[id]] %in% foldIds, ]
+    .trajSubset(data, ids = foldIds, id = id)
   })
 
   dataList
@@ -775,7 +775,7 @@ createTestDataFold = function(data, trainData, id = getOption('latrend.id')) {
   assert_that(all(trainIds %in% allIds))
   testIds = setdiff(allIds, trainIds)
 
-  data[data[[id]] %in% testIds, ]
+  .trajSubset(data, ids = testIds, id = id)
 }
 
 
@@ -793,8 +793,10 @@ createTestDataFold = function(data, trainData, id = getOption('latrend.id')) {
 #'   testDataList <- createTestDataFolds(latrendData, trainDataList)
 #' }
 createTestDataFolds = function(data, trainDataList, ...) {
-  lapply(trainDataList, function(trainData)
-    createTestDataFold(data = data, trainData = trainData, ...))
+  lapply(
+    trainDataList,
+    function(trainData) createTestDataFold(data = data, trainData = trainData, ...)
+  )
 }
 
 
@@ -818,8 +820,7 @@ bootSample = function(data, id, seed = NULL) {
     sampleIdx = sample.int(length(ids), replace = TRUE)
   })
 
-  newdata = data[data[[id]] %in% ids[sampleIdx], ]
-  newdata
+  .trajSubset(data, ids = ids[sampleIdx], id = id)
 }
 
 
@@ -846,9 +847,7 @@ trainFold = function(data, fold, id, folds, seed) {
     )[[fold]]
   })
 
-  foldIds = ids[foldIdx]
-
-  data[data[[id]] %in% foldIds, ]
+  .trajSubset(data, ids = ids[foldIdx], id = id)
 }
 
 
@@ -865,4 +864,27 @@ testFold = function(data, fold, id, folds, seed) {
   )
 
   createTestDataFold(data, trainData = trainData, id = id)
+}
+
+#' @title Select trajectories
+#' @description Create a subset of the data with the given trajectories
+#' @param data The longitudinal dataset, a `data.frame`
+#' @param ids The trajectory identifiers, `vector`
+#' @param id The name of the id column
+#' @keywords internal
+.trajSubset = function(data, ids, id) {
+  assert_that(
+    is.data.frame(data),
+    has_name(data, id),
+    length(ids) > 0L,
+    noNA(ids),
+    all(ids %in% data[[id]])
+  )
+
+  newdata = data[data[[id]] %in% ids, ]
+  if (is.factor(data[[id]])) {
+    newdata[[id]] = droplevels(newdata[[id]])
+  }
+
+  newdata
 }

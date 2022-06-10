@@ -2,7 +2,9 @@ context('latrendBoot')
 rngReset()
 
 test_that('latrendBoot', {
-  models = latrendBoot(mRandom, data = testLongData, samples = 3, seed = 1)
+  expect_silent({
+    models = latrendBoot(mRandom, data = testLongData, samples = 3, seed = 1)
+  })
 
   expect_is(models, 'lcModels')
   expect_length(models, 3)

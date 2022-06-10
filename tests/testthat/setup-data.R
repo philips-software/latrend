@@ -5,7 +5,7 @@ if (requireNamespace('ggplot2', quietly = TRUE)) {
 }
 
 testLongData = generateLongData(
-  sizes = c(20, 30),
+  sizes = c(20L, 30L),
   fixed = Value ~ 1 + Assessment,
   cluster = ~ 1 + Assessment,
   random = ~ 1,
@@ -20,4 +20,6 @@ testLongData = generateLongData(
 ) %>%
   .[, .(Traj, Assessment, Value, Class)] %>%
   .[, Constant := 1] %>%
-  .[, Cluster := Class]
+  .[, Cluster := Class] %>%
+  .[, Traj := factor(Traj)] %>%
+  .[]
