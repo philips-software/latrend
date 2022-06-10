@@ -69,6 +69,7 @@ List of currently supported metrics:\tabular{lll}{
    \code{Mahalanobis} \tab \href{https://en.wikipedia.org/wiki/Mahalanobis_distance}{Mahalanobis distance} between the cluster trajectories and the assigned observed trajectories \tab \insertCite{mahalanobis1936generalized}{latrend} \cr
    \code{MSE} \tab \href{https://en.wikipedia.org/wiki/Mean_squared_error}{Mean squared error} of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories \tab  \cr
    \code{relativeEntropy}, \code{RE} \tab A measure of the precision of the trajectory classification. A value of 1 indicates perfect classification, whereas a value of 0 indicates a non-informative uniform classification. It is the normalized version of \code{entropy}, scaled between [0, 1]. \tab \insertCite{ramaswamy1993empirical}{latrend}, \insertCite{muthen2004latent}{latrend} \cr
+   \code{RMSE} \tab \href{https://en.wikipedia.org/wiki/Root-mean-square_deviation}{Root mean squared error} of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories \tab  \cr
    \code{RSS} \tab \href{https://en.wikipedia.org/wiki/Residual_sum_of_squares}{Residual sum of squares} under most likely cluster allocation \tab  \cr
    \code{scaledEntropy} \tab See \code{relativeEntropy} \tab  \cr
    \code{sigma} \tab The residual standard deviation \tab \code{\link[stats:sigma]{stats::sigma()}} \cr
@@ -77,6 +78,7 @@ List of currently supported metrics:\tabular{lll}{
    \code{SED.fit} \tab The cluster-weighted standardized Euclidean distance between the cluster trajectories and the assigned fitted trajectories \tab  \cr
    \code{WMAE} \tab \code{MAE} weighted by cluster-assignment probability \tab  \cr
    \code{WMSE} \tab \code{MSE} weighted by cluster-assignment probability \tab  \cr
+   \code{WRMSE} \tab \code{RMSE} weighted by cluster-assignment probability \tab  \cr
    \code{WRSS} \tab \code{RSS} weighted by cluster-assignment probability \tab  \cr
 }
 }
