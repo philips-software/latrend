@@ -245,5 +245,13 @@ plotTrajectories(dataset, id = 'Patient', time = 'Biweek', response = 'UsageHour
 dataset[, Biweek := as.integer(Biweek)]
 dataset[, MaxDay := as.integer(MaxDay)]
 
-OSA.adherence = as.data.frame(dataset)
-usethis::use_data(OSA.adherence, overwrite = TRUE)
+PAP.adh = as.data.frame(dataset)
+usethis::use_data(PAP.adh, overwrite = TRUE)
+
+# PAP.adh1y
+PAP.adh1y = as.data.frame(
+  dataset[not(Group %in% c('Early drop-outs', 'Non-users'))]
+)
+PAP.adh1y$Patient = factor(PAP.adh1y$Patient)
+PAP.adh1y$Group = factor(PAP.adh1y$Group)
+usethis::use_data(PAP.adh1y, overwrite = TRUE)

@@ -24,7 +24,8 @@
 "latrendData"
 
 
-#' @title Biweekly Mean Treatment Adherence of OSA Patients over 1 Year
+#' @name PAP.adh
+#' @title Biweekly Mean Therapy Adherence of OSA Patients over 1 Year
 #' @description
 #' A simulated longitudinal dataset comprising 500 patients with obstructive sleep apnea (OSA) during their
 #' first year on CPAP therapy.
@@ -51,17 +52,30 @@
 #' \insertRef{aloia2008time}{latrend}
 #'
 #' @examples
-#' data(OSA.adherence)
+#' data(PAP.adh)
 #'
 #' if (require("ggplot2")) {
-#'   plotTrajectories(OSA.adherence, id = "Patient", time = "Biweek", response = "UsageHours")
+#'   plotTrajectories(PAP.adh, id = "Patient", time = "Biweek", response = "UsageHours")
 #'
 #'   # plot according to cluster ground truth
-#'   plotTrajectories(OSA.adherence, id = "Patient", time = "Biweek", response = "UsageHours",
-#'     cluster = "Group")
+#'   plotTrajectories(
+#'     PAP.adh,
+#'     id = "Patient",
+#'     time = "Biweek",
+#'     response = "UsageHours",
+#'     cluster = "Group"
+#'   )
 #' }
-"OSA.adherence"
+"PAP.adh"
 
+#' @rdname PAP.adh
+#' @description The `PAP.adh1y` dataset is a subset of `PAP.adh`, comprising only patients who used therapy for at least 1 year.
+#' The subset does not contain the Non-users and Early drop-out groups.
+"PAP.adh1y"
+
+#' @title Biweekly Mean Treatment Adherence of OSA Patients over 1 Year
+#' @description Deprecated, renamed to [PAP.adh].
+"OSA.adherence"
 
 #' @export
 #' @title Generate longitudinal test data
