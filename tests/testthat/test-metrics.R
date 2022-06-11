@@ -83,3 +83,17 @@ test_that('define metric', {
 
   expect_equal(getInternalMetricDefinition('.NEW'), force)
 })
+
+test_that('plot single model', {
+  expect_is(
+    plotMetric(testModel, 'WMAE'),
+    'gg'
+  )
+})
+
+test_that('plot single model, multiple metrics', {
+  expect_is(
+    plotMetric(testModel, c('WMAE', 'RMSE')),
+    'gg'
+  )
+})

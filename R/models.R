@@ -413,7 +413,7 @@ plotMetric = function(
   .loadOptionalPackage('ggplot2')
 
   models = as.lcModels(models)
-  assert_that(length(models) > 0, msg = 'need at least 1 lcModel to plot')
+  assert_that(length(models) > 0L, msg = 'need at least 1 lcModel to plot')
   assert_that(is.character(name), length(name) >= 1)
 
   if (!missing(subset)) {
@@ -429,12 +429,15 @@ plotMetric = function(
     as.data.table()
 
   assert_that(
-    nrow(dtModels) == nrow(dtMetrics),
-    is.null(group) || has_name(dtModels, group)
+    nrow(dtModels) == nrow(dtMetrics)
+  )
+  assert_that(
+    length(group) == 0L || has_name(dtModels, group),
+    msg = 'plotMetric() group argument contains names which are not columns of `as.data.frame(models)`'
   )
 
   dtModelMetrics = cbind(dtModels, dtMetrics)
-  if (length(group) == 0) {
+  if (length(group) == 0L) {
     dtModelMetrics[, .group := 'All']
   } else {
     dtModelMetrics[, .group := do.call(interaction, base::subset(dtModelMetrics, select = group))]
@@ -452,10 +455,13 @@ plotMetric = function(
     setnames('.group', 'Group')
   levels(dtgg$Metric) = name
 
-  p = ggplot2::ggplot(
-    data = dtgg,
-    mapping = ggplot2::aes_string(x = by, y = 'Value', group = 'Group')
-  )
+  if (length(group) == 0L) {
+    map = ggplot2::aes_string(x = by, y = 'Value')
+  } else {
+    map = ggplot2::aes_string(x = by, y = 'Value', group = 'Group', color = 'Group')
+  }
+
+  p = ggplot2::ggplot(data = dtgg, mapping = map)
 
   if (is.numeric(dtModelMetrics[[by]]) || is.logical(dtModelMetrics[[by]])) {
     p = p + ggplot2::geom_line()
@@ -464,12 +470,12 @@ plotMetric = function(
 
   if (by == 'nClusters') {
     p = p + ggplot2::scale_x_continuous(
-      breaks = seq(1, max(dtModelMetrics[[by]])),
+      breaks = seq(1L, max(dtModelMetrics[[by]])),
       minor_breaks = NULL
     )
   }
 
-  if (length(name) == 1) {
+  if (is.scalar(name)) {
     p = p + ggplot2::ylab(name)
   } else {
     p = p + ggplot2::ylab('Value') +

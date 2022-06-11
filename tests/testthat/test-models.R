@@ -194,13 +194,16 @@ test_that('plot subset with no results', {
 test_that('plotMetric', {
   skip_if_not_installed('ggplot2')
 
-  plotMetric(models, name='BIC', subset=.method == 'lmkm') %>%
+  plotMetric(models, name = 'BIC', subset = .method == 'lmkm') %>%
     expect_is('gg')
 
-  plotMetric(models, name=c('logLik', 'BIC'), subset=.method == 'lmkm') %>%
+  plotMetric(models, name = c('logLik', 'BIC'), subset = .method == 'lmkm') %>%
     expect_is('gg')
 
-  plotMetric(models, name=c('logLik', 'BIC'), by='nClusters', group=character()) %>%
+  plotMetric(models, name = c('logLik', 'BIC'), by = 'nClusters', group = character()) %>%
+    expect_is('gg')
+
+  plotMetric(models, name = c('WMAE', 'RMSE', 'BIC'), by = 'nClusters', group = '.method') %>%
     expect_is('gg')
 })
 
