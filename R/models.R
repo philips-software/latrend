@@ -167,21 +167,25 @@ setMethod('estimationTime', signature('list'), function(object, unit, ...) {
 }
 
 .externalMetricDist.lcModels = function(object, name) {
-  assert_that(length(name) > 0, msg = 'no external metric names provided')
+  assert_that(length(name) > 0L, msg = 'no external metric names provided')
   assert_that(
-    is.character(name),
-    length(name) == 1
+    is.string(name)
   )
 
-  pairs = combn(seq_along(object), m = 2, simplify = FALSE)
+  pairs = combn(seq_along(object), m = 2L, simplify = FALSE)
 
-  result = lapply(pairs, function(idx)
-    externalMetric(object[[idx[1]]], object[[idx[2]]], name = name) %>% unname())
+  result = lapply(
+    pairs,
+    function(idx) unname(externalMetric(object[[idx[1]]], object[[idx[2]]], name = name))
+  )
 
   m = matrix(NaN, nrow = length(object), ncol = length(object))
   m[do.call(rbind, pairs)] = unlist(result)
 
-  as.dist(t(m), diag = FALSE, upper = FALSE)
+  distMat = as.dist(t(m), diag = FALSE, upper = FALSE)
+  names(distMat) = names(object)
+
+  distMat
 }
 
 # . externalMetric ####
