@@ -113,28 +113,31 @@ assertthat::on_failure(is_valid_cluster_name) = function(call, env) {
 
 has_same_ids = function(m1, m2) {
   assert_that(is.lcModel(m1), is.lcModel(m2))
-  all.equal(ids(m1), ids(m2)) %>% isTRUE()
+  isTRUE(all.equal(ids(m1), ids(m2)))
 }
 
 assertthat::on_failure(has_same_ids) = function(call, env) {
   m1 = eval(call$m1, env)
   m2 = eval(call$m2, env)
-  paste0('models were not trained on the same ids, or in a different order: ',
-         all.equal(ids(m1), ids(m2)))
+  paste0(
+    'models were not trained on the same ids, or in a different order: ',
+    paste0(all.equal(ids(m1), ids(m2)), collapse = '\n')
+  )
 }
 
 
 has_same_modelData = function(m1, m2) {
   assert_that(is.lcModel(m1), is.lcModel(m2))
-  all.equal(model.data(m1), model.data(m2)) %>%
-    isTRUE()
+  isTRUE(all.equal(model.data(m1), model.data(m2)))
 }
 
 assertthat::on_failure(has_same_modelData) = function(call, env) {
   m1 = eval(call$m1, env)
   m2 = eval(call$m2, env)
-  paste0('models were not trained on the same dataset: ',
-         all.equal(model.data(m1), model.data(m2)))
+  paste0(
+    'models were not trained on the same dataset: ',
+    paste0(all.equal(model.data(m1), model.data(m2)), collapse = '\n')
+  )
 }
 
 
