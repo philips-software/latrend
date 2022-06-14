@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">latrend</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -131,8 +131,13 @@
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
 <span class="r-in"><span class="co"># Stratification based on the mean response level</span></span>
-<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodStratify</span><span class="op">(</span><span class="st">"Y"</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>,</span>
-<span class="r-in">   clusterNames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="st">"High"</span><span class="op">)</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodStratify</span><span class="op">(</span></span>
+<span class="r-in">  <span class="st">"Y"</span>,</span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>,</span>
+<span class="r-in">  clusterNames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="st">"High"</span><span class="op">)</span>,</span>
+<span class="r-in">  id <span class="op">=</span> <span class="st">"Id"</span>,</span>
+<span class="r-in">  time <span class="op">=</span> <span class="st">"Time"</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Longitudinal cluster model using stratify</span>
@@ -160,18 +165,22 @@
 <span class="r-in"><span class="co"># Stratification function</span></span>
 <span class="r-in"><span class="va">stratfun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">trajdata</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">   <span class="va">trajmean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">trajdata</span><span class="op">$</span><span class="va">Y</span><span class="op">)</span></span>
-<span class="r-in">   <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">trajmean</span> <span class="op">&gt;</span> <span class="fl">1.7</span>,</span>
-<span class="r-in">      levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span class="r-in">      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="st">"High"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">   <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span>
+<span class="r-in">     <span class="va">trajmean</span> <span class="op">&gt;</span> <span class="fl">1.7</span>,</span>
+<span class="r-in">     levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span class="r-in">     labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="st">"High"</span><span class="op">)</span></span>
+<span class="r-in">   <span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodStratify</span><span class="op">(</span><span class="st">"Y"</span>, <span class="va">stratfun</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Multiple clusters</span></span>
 <span class="r-in"><span class="va">stratfun3</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">trajdata</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">   <span class="va">trajmean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">trajdata</span><span class="op">$</span><span class="va">Y</span><span class="op">)</span></span>
-<span class="r-in">   <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">trajmean</span>,</span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">.5</span>, <span class="fl">2</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
-<span class="r-in">      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="st">"Medium"</span>, <span class="st">"High"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">   <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span></span>
+<span class="r-in">     <span class="va">trajmean</span>,</span>
+<span class="r-in">     <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">.5</span>, <span class="fl">2</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
+<span class="r-in">     labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="st">"Medium"</span>, <span class="st">"High"</span><span class="op">)</span></span>
+<span class="r-in">   <span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodStratify</span><span class="op">(</span><span class="st">"Y"</span>, <span class="va">stratfun3</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
 </code></pre></div>

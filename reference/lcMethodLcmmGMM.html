@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">latrend</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -150,49 +150,30 @@ R package version: 1.8.1, <a href="https://cran.r-project.org/package=lcmm" clas
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodLcmmGMM</span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>,</span>
-<span class="r-in">   mixture <span class="op">=</span> <span class="op">~</span> <span class="va">Time</span>, random <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>,</span>
-<span class="r-in">   id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, , nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">gmm</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Be patient, hlme is running ... </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.73 seconds </span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gmm</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Longitudinal cluster model using growth mixture model</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lcMethodLcmmGMM specifying "growth mixture model"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  mixture:        ~Time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  random:         ~1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  classmb:        ~1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  time:           "Time"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  id:             "Id"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  init:           "default"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  nClusters:      3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  idiag:          FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  nwg:            FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  cor:            NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  convB:          1e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  convL:          1e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  convG:          1e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  maxiter:        500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  na.action:      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  posfix:         NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  var.time:       NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  partialH:       FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  fixed:          Y ~ Time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cluster sizes (K=3):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          A          B          C </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32 (15.9%) 78 (39.1%)   90 (45%) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of obs: 2000, strata (Id): 200</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Scaled residuals:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -3.44863 -0.61421  0.06616  0.00000  0.67860  3.26730 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodLcmmGMM</span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>,</span>
-<span class="r-in">    mixture <span class="op">=</span> <span class="op">~</span> <span class="va">Time</span>, random <span class="op">=</span> <span class="op">~</span> <span class="va">Time</span>,</span>
-<span class="r-in">    id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/is_installed.html" class="external-link">is_installed</a></span><span class="op">(</span><span class="st">"lcmm"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodLcmmGMM</span><span class="op">(</span></span>
+<span class="r-in">    fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>,</span>
+<span class="r-in">    mixture <span class="op">=</span> <span class="op">~</span> <span class="va">Time</span>,</span>
+<span class="r-in">    random <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>,</span>
+<span class="r-in">    id <span class="op">=</span> <span class="st">"Id"</span>,</span>
+<span class="r-in">    time <span class="op">=</span> <span class="st">"Time"</span>, ,</span>
+<span class="r-in">    nClusters <span class="op">=</span> <span class="fl">2</span></span>
+<span class="r-in">  <span class="op">)</span></span>
+<span class="r-in">  <span class="va">gmm</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gmm</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in">  <span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodLcmmGMM</span><span class="op">(</span></span>
+<span class="r-in">    fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>,</span>
+<span class="r-in">    mixture <span class="op">=</span> <span class="op">~</span> <span class="va">Time</span>,</span>
+<span class="r-in">    random <span class="op">=</span> <span class="op">~</span> <span class="va">Time</span>,</span>
+<span class="r-in">    id <span class="op">=</span> <span class="st">"Id"</span>,</span>
+<span class="r-in">    time <span class="op">=</span> <span class="st">"Time"</span>,</span>
+<span class="r-in">    nClusters <span class="op">=</span> <span class="fl">3</span></span>
+<span class="r-in">  <span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Be patient, hlme is running ... </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.3 seconds </span>
 </code></pre></div>
     </div>
   </div>

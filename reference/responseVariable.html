@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">latrend</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -103,19 +103,13 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span><span class="st">"Value"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">responseVariable</span><span class="op">(</span><span class="va">method</span><span class="op">)</span> <span class="co"># "Value"</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Value"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLcmmGBTM.html">lcMethodLcmmGBTM</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Value</span> <span class="op">~</span> <span class="va">Time</span>, mixture <span class="op">=</span> <span class="op">~</span> <span class="va">Time</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">responseVariable</span><span class="op">(</span><span class="va">method</span><span class="op">)</span> <span class="co"># "Value"</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Value"</span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">responseVariable</span><span class="op">(</span><span class="va">method</span><span class="op">)</span> <span class="co"># "Y"</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Y"</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="fu"><a href="lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span><span class="st">"Y"</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span>, <span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ~ Fast KmL ~</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ********************S</span>
-<span class="r-in"><span class="fu">responseVariable</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="co"># "Value"</span></span>
+<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">responseVariable</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="co"># "Y"</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Y"</span>
 </code></pre></div>
     </div>

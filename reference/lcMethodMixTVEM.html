@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">latrend</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -117,10 +117,13 @@ ISSN 1939-1463, <a href="https://doi.org/10.1037/met0000048" class="external-lin
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
 <span class="r-in"><span class="co"># this example only runs if you download and place MixTVEM.R in your wd</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">{</span></span>
-<span class="r-in">  <span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">'MixTVEM.R'</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">method</span> <span class="op">=</span> <span class="fu">lcMethodMixTVEM</span><span class="op">(</span><span class="va">Value</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,</span>
-<span class="r-in">                     time<span class="op">=</span><span class="st">'Assessment'</span>,</span>
-<span class="r-in">                     id<span class="op">=</span><span class="st">'Id'</span>, nClusters<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in">  <span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"MixTVEM.R"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">method</span> <span class="op">=</span> <span class="fu">lcMethodMixTVEM</span><span class="op">(</span></span>
+<span class="r-in">    <span class="va">Value</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,</span>
+<span class="r-in">    time <span class="op">=</span> <span class="st">'Assessment'</span>,</span>
+<span class="r-in">    id <span class="op">=</span> <span class="st">"Id"</span>,</span>
+<span class="r-in">    nClusters <span class="op">=</span> <span class="fl">3</span></span>
+<span class="r-in">  <span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span><span class="op">)</span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>cannot open file 'MixTVEM.R': No such file or directory</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in file(filename, "r", encoding = encoding) : </span>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">latrend</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -95,18 +95,13 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="fu"><a href="lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span><span class="st">"Y"</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span>, <span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ~ Fast KmL ~</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ********************S</span>
+<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodRandom.html">lcMethodRandom</a></span><span class="op">(</span><span class="st">"Y"</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">getCall</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> latrend(method = lcMethodKML(time = "Time", id = "Id", nClusters = 2, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     nbRedrawing = 20, maxIt = 200, imputationMethod = "copyMean", </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     distanceName = "euclidean", power = 2, distance = function () </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     }, centerMethod = function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         mean(x, na.rm = TRUE)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     }, startingCond = "nearlyAll", nbCriterion = 1000, scale = TRUE, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> latrend(method = lcMethodRandom(alpha = 10, center = function (x) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     mean(x, na.rm = TRUE)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> }, time = "Time", id = "Id", nClusters = 2, name = "random", </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     response = "Y"), data = latrendData, envir = NULL)</span>
 </code></pre></div>
     </div>

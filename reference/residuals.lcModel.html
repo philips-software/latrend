@@ -18,7 +18,7 @@ By default, residuals are computed under the most likely cluster assignment for 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">latrend</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -94,11 +94,7 @@ If the <code>clusters</code> argument is unspecified, a <code>matrix</code> of c
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><a href="fitted.lcModel.html">fitted.lcModel</a> <a href="trajectories.html">trajectories</a>
-data(latrendData)
-model &lt;- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-id = "Id", time = "Time"), data = latrendData)
-summary(residuals(model))</p>
+    <div class="dont-index"><p><a href="fitted.lcModel.html">fitted.lcModel</a> <a href="trajectories.html">trajectories</a></p>
 <p>Other model-specific methods: 
 <code><a href="clusterTrajectories.html">clusterTrajectories</a>()</code>,
 <code><a href="coef.lcModel.html">coef.lcModel</a>()</code>,

@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">latrend</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -102,13 +102,14 @@
 <p>This vignette describes the core functionality of the package by identifying common trends in the longitudinal dataset that is included with the package. We begin by loading the required package and the <code>latrendData</code> dataset.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/philips-software/latrend" class="external-link">latrend</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></code></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></code></pre></div>
 <div class="section level2">
 <h2 id="initial-data-exploration">Initial data exploration<a class="anchor" aria-label="anchor" href="#initial-data-exploration"></a>
 </h2>
 <p>The <code>latrendData</code> is a synthetic dataset for which the reference group of each trajectory is available, as indicated by the <code>Class</code> column. We will use this column at the end of this vignette to validate the identified model.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
 <span class="co">#&gt;   Id      Time           Y   Class</span>
 <span class="co">#&gt; 1  1 0.0000000 -1.08049205 Class 1</span>
 <span class="co">#&gt; 2  1 0.2222222 -0.68024151 Class 1</span>
@@ -137,9 +138,6 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 <p>As an example, we apply longitudinal <span class="math inline">\(k\)</span>-means (KML). First, we need to define the method. At the very least we need to indicate the response variable the method should operate on. Secondly, we should indicate how many clusters we expect. We do not need to define the <code>id</code> and <code>time</code> arguments as we have set these as package options. We use the <code>nbRedrawing</code> argument provided by the KML package for reducing the number of repeated random starts to only a single model estimation, in order to reduce the run-time of this example.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">kmlMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span>response <span class="op">=</span> <span class="st">"Y"</span>, nClusters <span class="op">=</span> <span class="fl">2</span>, nbRedrawing <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="co">#&gt; Warning in rgl.init(initValue, onlyNULL): RGL: unable to open X11 display</span>
-<span class="co">#&gt; Warning: 'rgl.init' failed, running with 'rgl.useNULL = TRUE'.</span>
-<span class="co">#&gt; Warning: no DISPLAY variable so Tk is not available</span>
 
 <span class="va">kmlMethod</span>
 <span class="co">#&gt; lcMethodKML specifying "longitudinal k-means (KML)"</span>
@@ -309,9 +307,10 @@ Cluster trajectories for KML model with 4 clusters, along with the assigned traj
 <span class="co">#&gt;  [9] "converged"        "DaviesBouldin"    "deviance"         "Dunn"            </span>
 <span class="co">#&gt; [13] "ED"               "ED.fit"           "entropy"          "estimationTime"  </span>
 <span class="co">#&gt; [17] "ICL.BIC"          "logLik"           "MAE"              "Mahalanobis"     </span>
-<span class="co">#&gt; [21] "MSE"              "RE"               "relativeEntropy"  "RSS"             </span>
-<span class="co">#&gt; [25] "scaledEntropy"    "SED"              "SED.fit"          "sigma"           </span>
-<span class="co">#&gt; [29] "ssBIC"            "WMAE"             "WMSE"             "WRSS"</span></code></pre></div>
+<span class="co">#&gt; [21] "MSE"              "RE"               "relativeEntropy"  "RMSE"            </span>
+<span class="co">#&gt; [25] "RSS"              "scaledEntropy"    "SED"              "SED.fit"         </span>
+<span class="co">#&gt; [29] "sigma"            "ssBIC"            "WMAE"             "WMSE"            </span>
+<span class="co">#&gt; [33] "WRMSE"            "WRSS"</span></code></pre></div>
 <p>As an example, we will compute the APPA (a measure of cluster separation), and the WRSS and WMAE metrics (measures of model error).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">kmlModel</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"APPA"</span>, <span class="st">"WRSS"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span>

@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">latrend</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -101,7 +101,8 @@
     
 <p>In this vignette we demonstrate different ways in which longitudinal cluster models can be internally validated.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/philips-software/latrend" class="external-link">latrend</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/philips-software/latrend" class="external-link">latrend</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></code></pre></div>
 <div class="section level2">
 <h2 id="demonstration">Demonstration<a class="anchor" aria-label="anchor" href="#demonstration"></a>
 </h2>
@@ -125,9 +126,6 @@
 <p>We consider a KML model with 3 clusters to be our candidate model that we will validate. We defined the method with a reduced number of repeated random starts (as indicated by the <code>nbRedrawing</code> argument) in order to reduce the computation time needed in the repeated evaluations below. This is only done for demonstration purposes.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">kml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span><span class="st">"Y"</span>, nClusters <span class="op">=</span> <span class="fl">3</span>, nbRedrawing <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
-<span class="co">#&gt; Warning in rgl.init(initValue, onlyNULL): RGL: unable to open X11 display</span>
-<span class="co">#&gt; Warning: 'rgl.init' failed, running with 'rgl.useNULL = TRUE'.</span>
-<span class="co">#&gt; Warning: no DISPLAY variable so Tk is not available</span>
 <span class="va">kml</span>
 <span class="co">#&gt; lcMethodKML specifying "longitudinal k-means (KML)"</span>
 <span class="co">#&gt;  time:           getOption("latrend.time")</span>
