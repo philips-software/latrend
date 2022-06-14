@@ -3,7 +3,7 @@
 #' @name interface-mixAK
 #' @rdname interface-mixAK
 #' @title mixAK interface
-#' @seealso [lcMethodMixAK_GLMM] \link[mixAK]{GLMM_MCMC}
+#' @seealso [lcMethodMixAK_GLMM] [mixAK::GLMM_MCMC]
 #' @keywords internal
 NULL
 

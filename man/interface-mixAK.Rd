@@ -72,6 +72,6 @@ Cluster trajectory predictions are made when ids are not specified.}
 mixAK interface
 }
 \seealso{
-\link{lcMethodMixAK_GLMM} \link[mixAK]{GLMM_MCMC}
+\link{lcMethodMixAK_GLMM} \link[mixAK:GLMMMCMC]{mixAK::GLMM_MCMC}
 }
 \keyword{internal}
