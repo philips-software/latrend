@@ -26,6 +26,12 @@ trajData[, Cluster := LETTERS[as.integer(Id) %% 3 + 1]]
 # Tests ####
 test_that('default', {
   expect_true({
-    test.latrend('lcMethodAkmedoids', tests = tests, data = trajData, clusterRecovery = 'skip')
+    test.latrend(
+      'lcMethodAkmedoids',
+      tests = tests,
+      data = trajData,
+      clusterRecovery = 'skip',
+      args = list(seed = 1)
+    )
   })
 })

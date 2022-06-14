@@ -6,12 +6,22 @@ tests = setdiff(DEFAULT_LATREND_TESTS, c('cluster-single', 'data-na', 'data-varl
 
 test_that('default', {
   expect_true({
-    test.latrend('lcMethodDtwclust', tests = tests, clusterRecovery = 'skip')
+    test.latrend(
+      'lcMethodDtwclust',
+      tests = tests,
+      clusterRecovery = 'skip',
+      args = list(seed = 1)
+    )
   })
 })
 
 test_that('fuzzy default', {
   expect_true({
-    test.latrend('lcMethodDtwclust', tests = tests, args = list(type = 'fuzzy'), clusterRecovery = 'skip')
+    test.latrend(
+      'lcMethodDtwclust',
+      tests = tests,
+      args = list(type = 'fuzzy', seed = 1),
+      clusterRecovery = 'skip'
+    )
   })
 })

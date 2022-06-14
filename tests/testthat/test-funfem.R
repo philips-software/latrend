@@ -14,7 +14,7 @@ test_that('default', {
       'lcMethodFunFEM',
       tests = tests,
       clusterRecovery = 'skip',
-      args = list(basis = function(time) fda::create.bspline.basis(time, nbasis = 4L, norder = 2L))
+      args = list(basis = function(time) fda::create.bspline.basis(time, nbasis = 4L, norder = 2L), seed = 1L)
     )
   })
 })
