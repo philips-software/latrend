@@ -61,7 +61,7 @@ setGeneric('transformFitted', function(pred, model, clusters = NULL) {
     )
   }
 
-  return(out)
+  out
 })
 
 #' @rdname transformFitted
@@ -78,8 +78,8 @@ setMethod('transformFitted', signature('NULL', 'lcModel'), function(pred, model,
 #' @rdname transformFitted
 #' @aliases transformFitted,matrix,lcModel-method
 setMethod('transformFitted', signature('matrix', 'lcModel'), function(pred, model, clusters) {
-  suppressWarnings(
-    assert_that(
+  suppressWarnings({
+    err = validate_that(
       is.numeric(pred),
       ncol(pred) == nClusters(model),
       nrow(pred) == .ndobs(model),
@@ -87,7 +87,10 @@ setMethod('transformFitted', signature('matrix', 'lcModel'), function(pred, mode
       is_valid_cluster_name(colnames(pred), model = model),
       all(clusterNames(model) %in% colnames(pred))
     )
-  )
+  })
+  if (!isTRUE(err)) {
+    stop(class(model)[1], ' implementation error in fitted(): ', paste0(err, collapse = ', and '))
+  }
 
   newOrder = match(colnames(pred), clusterNames(model))
   pred = pred[, newOrder, drop = FALSE]
