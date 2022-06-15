@@ -13,13 +13,12 @@ setClass('lcApproxModel', contains = 'lcModel')
 #' @rdname lcApproxModel-class
 #' @inheritParams fitted.lcModel
 fitted.lcApproxModel = function(object, ..., clusters = trajectoryAssignments(object)) {
-  times = time(object)
-  newdata = data.table(Id = rep(ids(object), each = length(times)), Time = times) %>%
-    setnames('Id', idVariable(object)) %>%
-    setnames('Time', timeVariable(object))
-
-  predict(object, newdata = newdata) %>%
-    transformFitted(model = object, clusters = clusters)
+  newdata = subset(
+    model.data(object),
+    select = c(idVariable(object), timeVariable(object), responseVariable(object))
+  )
+  pred = predict(object, newdata = newdata)
+  transformFitted(pred, model = object, clusters = clusters)
 }
 
 #. predictForCluster ####
