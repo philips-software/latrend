@@ -13,7 +13,7 @@ setClass('lcMethodAkmedoids', contains = 'lcMatrixMethod')
 #' @export
 #' @title Specify AKMedoids method
 #' @inheritParams lcMatrixMethod-class
-#' @inheritParams lcMethodCustom
+#' @inheritParams lcMethodFunction
 #' @inheritParams lcMethodKML
 #' @param clusterCenter A function for computing the cluster center representation.
 #' @param crit Criterion to apply for internal model selection. Not applicable.

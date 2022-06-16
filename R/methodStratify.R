@@ -19,7 +19,7 @@ setValidity('lcMethodStratify', function(object) {
 
 #' @export
 #' @title Specify a stratification method
-#' @inheritParams lcMethodCustom
+#' @inheritParams lcMethodFunction
 #' @param stratify An `expression` returning a `number` or `factor` value per trajectory, representing the cluster assignment. Alternatively, a `function` can be provided that takes separate trajectory `data.frame` as input.
 #' @param center The `function` for computing the longitudinal cluster centers, used for representing the cluster trajectories.
 #' @param nClusters The number of clusters. This is optional, as this can be derived from the largest assignment number by default, or the number of `factor` levels.

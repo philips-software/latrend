@@ -1,17 +1,17 @@
 #' @include method.R
 
 #' @name interface-custom
-#' @rdname interface-custom
 #' @title function interface
 #' @seealso [lcMethodRandom] [lcMethodStratify] [lcModelPartition] [lcModelWeightedPartition]
 #' @keywords internal
 NULL
 
-setClass('lcMethodCustom', contains = 'lcMethod')
+setClass('lcMethodFunction', contains = 'lcMethod')
+
 
 #' @export
-#' @title Specify a custom method based on a model function
-#' @param fun The cluster `function` with signature `(method, data)`.
+#' @title Specify a custom method based on a function
+#' @param fun The cluster `function` with signature `(method, data)` that returns a `lcModel` object.
 #' @param center Optional `function` for computing the longitudinal cluster centers, with signature `(x)`.
 #' @param response The name of the response variable.
 #' @param time The name of the time variable.
@@ -34,10 +34,10 @@ setClass('lcMethodCustom', contains = 'lcMethod')
 #'     id = id
 #'   )
 #' }
-#' method <- lcMethodCustom(response = "Y", fun = clusfun, id = "Id", time = "Time")
+#' method <- lcMethodFunction(response = "Y", fun = clusfun, id = "Id", time = "Time")
 #' model <- latrend(method, data = latrendData)
 #' @family lcMethod implementations
-lcMethodCustom = function(
+lcMethodFunction = function(
   response,
   fun,
   center = meanNA,
@@ -46,12 +46,12 @@ lcMethodCustom = function(
   name = 'custom'
 ) {
   mc = match.call.all()
-  mc$Class = 'lcMethodCustom'
+  mc$Class = 'lcMethodFunction'
   do.call(new, as.list(mc))
 }
 
-setValidity('lcMethodCustom', function(object) {
-  assert_that(has_lcMethod_args(object, formalArgs(lcMethodCustom)))
+setValidity('lcMethodFunction', function(object) {
+  assert_that(has_lcMethod_args(object, formalArgs(lcMethodFunction)))
 
   if (isArgDefined(object, 'fun')) {
     assert_that(is.function(object$fun))
@@ -63,47 +63,52 @@ setValidity('lcMethodCustom', function(object) {
 })
 
 #' @rdname interface-custom
-setMethod('getArgumentDefaults', signature('lcMethodCustom'), function(object) {
+setMethod('getArgumentDefaults', signature('lcMethodFunction'), function(object) {
   c(
-    formals(lcMethodCustom),
+    formals(lcMethodFunction),
     callNextMethod()
   )
 })
 
 #' @rdname interface-custom
 #' @inheritParams getName
-setMethod('getName', signature('lcMethodCustom'), function(object) {
+setMethod('getName', signature('lcMethodFunction'), function(object) {
   if (isArgDefined(object, 'name') && !is.null(object$name)) {
-    return(object$name)
+    return (object$name)
   }
 
   if (isArgDefined(object, 'fun')) {
     fun = object[['fun', eval = FALSE]]
     if (is.name(fun)) {
-      return(paste('custom function ', fun))
+      return (paste('custom function ', fun))
     }
   }
 
-  return('custom function')
+  'custom function'
 })
 
 #' @rdname interface-custom
-setMethod('getShortName', signature('lcMethodCustom'), function(object) 'custom')
+setMethod('getShortName', signature('lcMethodFunction'), function(object) 'custom')
 
 #' @rdname interface-custom
-setMethod('prepareData', signature('lcMethodCustom'), function(method, data, verbose) {
+setMethod('prepareData', signature('lcMethodFunction'), function(method, data, verbose) {
   assert_that(has_name(data, responseVariable(method)))
   callNextMethod()
 })
 
 #' @rdname interface-custom
 #' @inheritParams fit
-setMethod('fit', signature('lcMethodCustom'), function(method, data, envir, verbose) {
+setMethod('fit', signature('lcMethodFunction'), function(method, data, envir, verbose) {
   args = as.list(method)
   args$data = data
 
   model = do.call(method$fun, args)
+  assert_that(
+    is.lcModel(model),
+    msg = 'Invalid output from the function defined for this lcMethodFunction object. The function should return an object of class lcModel'
+  )
+
   model@method = method
-  assert_that(is.lcModel(model))
-  return(model)
+
+  model
 })

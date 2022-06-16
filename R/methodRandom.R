@@ -23,7 +23,7 @@ setValidity('lcMethodRandom', function(object) {
 #' @export
 #' @title Specify a random-partitioning method
 #' @description Creates a model with random cluster assignments according to the random cluster proportions drawn from a Dirichlet distribution.
-#' @inheritParams lcMethodCustom
+#' @inheritParams lcMethodFunction
 #' @param nClusters The number of clusters.
 #' @param alpha The Dirichlet parameters. Either `scalar` or of length `nClusters`. The higher alpha, the more uniform the clusters will be.
 #' @param ... Additional arguments, such as the seed.
