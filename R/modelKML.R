@@ -53,7 +53,8 @@ logLik.lcModelKML = function(object, ...) {
   attr(ll, 'nobs') = N
   attr(ll, 'df') = df
   class(ll) = 'logLik'
-  return(ll)
+
+  ll
 }
 
 
@@ -63,7 +64,11 @@ setMethod('postprob', signature('lcModelKML'), function(object) {
   if (nClusters(object) == 1) {
     pp = matrix(1, nrow = nIds(object), ncol = 1)
   } else {
-    pp = getKMLPartition(object)@postProba
+    ppRaw = getKMLPartition(object)@postProba
+    trajClusters = kml::getClusters(object@model, nbCluster = nClusters(object), asInteger = TRUE)
+
+    pp = matrix(NA_real_, nrow = nIds(object), ncol = nClusters(object))
+    pp[which(is.finite(trajClusters)), ] = ppRaw
   }
 
   # bugfix for KML: insert missing rows for uniform postprob
@@ -81,7 +86,8 @@ setMethod('postprob', signature('lcModelKML'), function(object) {
   }
 
   colnames(pp) = clusterNames(object)
-  return(pp)
+
+  pp
 })
 
 
@@ -89,9 +95,11 @@ setMethod('postprob', signature('lcModelKML'), function(object) {
 #' @rdname interface-kml
 #' @inheritParams predictPostprob
 setMethod('predictPostprob', signature('lcModelKML'), function(object, newdata, ...) {
-  assert_that(has_name(newdata, idVariable(object)),
-              has_name(newdata, timeVariable(object)),
-              all(newdata[[timeVariable(object)]] %in% time(object)))
+  assert_that(
+    has_name(newdata, idVariable(object)),
+    has_name(newdata, timeVariable(object)),
+    all(newdata[[timeVariable(object)]] %in% time(object))
+  )
 
   valueColumn = responseVariable(object)
   centerMat = computeKMLCenters(object)
@@ -129,15 +137,18 @@ getKMLPartition = function(object) {
 }
 
 computeKMLCenters = function(object) {
+  trajClusters = kml::getClusters(object@model, nbCluster = nClusters(object))
+
   centerMat = kml::calculTrajMean(
     traj = object@model@traj,
-    clust = kml::getClusters(object@model, nbCluster = nClusters(object)),
+    clust = na.omit(trajClusters),
     centerMethod = getLcMethod(object)$centerMethod
   )
 
   if (!is.matrix(centerMat)) {
-    centerMat = matrix(centerMat, nrow = 1)
+    centerMat = matrix(centerMat, nrow = 1L)
   }
   rownames(centerMat) = clusterNames(object)
-  return(centerMat)
+
+  centerMat
 }

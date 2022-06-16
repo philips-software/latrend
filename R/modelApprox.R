@@ -17,7 +17,7 @@ fitted.lcApproxModel = function(object, ..., clusters = trajectoryAssignments(ob
     model.data(object),
     select = c(idVariable(object), timeVariable(object), responseVariable(object))
   )
-  pred = predict(object, newdata = newdata)
+  pred = predict(object, newdata = newdata, useCluster = FALSE)
   transformFitted(pred, model = object, clusters = clusters)
 }
 
