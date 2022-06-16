@@ -80,19 +80,20 @@ setMethod('fit', signature('lcMethodAkmedoids'), function(method, data, envir, v
   clusNames = make.clusterNames(method$nClusters)
 
   trajAssignments = model$solutions[[1]]
-  assert_that(length(trajAssignments) > 0, msg = 'no membership output returned')
+  assert_that(length(trajAssignments) > 0, msg = 'akmedoids package returned an unexpected result: no membership output returned')
 
-  lcModelCustom(
+  lcModelPartition(
     data,
-    trajectoryAssignments = factor(trajAssignments,
+    trajectoryAssignments = factor(
+      trajAssignments,
       levels = LETTERS[1:method$nClusters],
-      labels = clusNames),
-    clusterTrajectories = method$clusterCenter,
+      labels = clusNames
+    ),
+    center = method$clusterCenter,
     response = responseVariable(method),
     time = timeVariable(method),
     id = idVariable(method),
     clusterNames = clusNames,
-    converged = TRUE,
     method = method,
     model = model,
     name = 'akmedoids'

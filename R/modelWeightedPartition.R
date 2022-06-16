@@ -10,7 +10,7 @@ setClass('lcModelWeightedPartition',
 #' @export
 #' @title Create a lcModel with pre-defined weighted partitioning
 #' @inheritParams lcMethodStratify
-#' @inheritParams lcModelCustom
+#' @inheritParams lcModelPartition
 #' @param weights A `numIds` x `numClusters` matrix of partition probabilities.
 #' @param clusterNames The names of the clusters, or a function with input `n` outputting a `character vector` of names.
 lcModelWeightedPartition = function(

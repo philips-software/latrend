@@ -9,12 +9,13 @@ lcModelPartition(
   response,
   trajectoryAssignments,
   nClusters = NA,
-  clusterNames = NULL,
+  clusterNames = character(),
   time = getOption("latrend.time"),
   id = getOption("latrend.id"),
   name = "part",
   center = meanNA,
   method = NULL,
+  model = NULL,
   envir = parent.frame()
 )
 }
@@ -42,6 +43,8 @@ If unspecified, the names are determined from the \code{trajectoryAssignments} a
 \item{center}{The \code{function} for computing the longitudinal cluster centers, used for representing the cluster trajectories.}
 
 \item{method}{Optional \code{lcMethod} object that was used for fitting this model to the data.}
+
+\item{model}{An optional object to attach to the \code{lcModelPartition} object, representing the internal model that was used for obtaining the partition.}
 
 \item{envir}{The \code{environment} associated with the model. Used for evaluating the assigned \code{data} object by \link{model.data.lcModel}.}
 }

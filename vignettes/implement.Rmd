@@ -143,17 +143,17 @@ repStep <- function(method, data, verbose) {
 
 The cluster step takes the coefficient matrix as input. A cross-sectional cluster algorithm can then be applied to the matrix. In this example, we apply $k$-means. The cluster step should output a `lcModel` object.
 
-The `lcModelCustom` function creates a `lcModel` object for a given vector of cluster assignments. 
+The `lcModelPartition` function creates a `lcModel` object for a given vector of cluster assignments. 
 ```{r}
 clusStep <- function(method, data, repMat, envir, verbose) {
   km <- kmeans(repMat, centers = 3)
 
-  lcModelCustom(
+  lcModelPartition(
     response = method$response, 
-    method = method,
     data = data, 
     trajectoryAssignments = km$cluster,
-    clusterTrajectories = method$center,
+    center = method$center,
+    method = method,
     model = km
   )
 }
@@ -192,12 +192,12 @@ repStep.gen <- function(method, data, verbose) {
 clusStep.gen <- function(method, data, repMat, envir, verbose) {
   km <- kmeans(repMat, centers = method$nClusters)
 
-  lcModelCustom(
+  lcModelPartition(
     response = method$response,
-    method = method,
     data = data, 
     trajectoryAssignments = km$cluster,
-    clusterTrajectories = method$center,
+    center = method$center,
+    method = method,
     model = km
   )
 }

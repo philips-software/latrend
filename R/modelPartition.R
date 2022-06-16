@@ -23,6 +23,7 @@ setClass(
 #' @param clusterNames The names of the clusters, or a function with input `n` outputting a `character vector` of names.
 #' If unspecified, the names are determined from the `trajectoryAssignments` argument.
 #' @param method Optional `lcMethod` object that was used for fitting this model to the data.
+#' @param model An optional object to attach to the `lcModelPartition` object, representing the internal model that was used for obtaining the partition.
 #' @param envir The `environment` associated with the model. Used for evaluating the assigned `data` object by [model.data.lcModel].
 #' @examples
 #' # comparing a model to the ground truth using the adjusted Rand index
@@ -43,12 +44,13 @@ lcModelPartition = function(
   response,
   trajectoryAssignments,
   nClusters = NA,
-  clusterNames = NULL,
+  clusterNames = character(),
   time = getOption('latrend.time'),
   id = getOption('latrend.id'),
   name = 'part',
   center = meanNA,
   method = NULL,
+  model = NULL,
   envir = parent.frame()
 ) {
   assert_that(
@@ -56,11 +58,13 @@ lcModelPartition = function(
     has_name(data, response),
     has_name(data, time),
     has_name(data, id),
-    is.character(clusterNames) || is.null(clusterNames),
+    is.character(clusterNames),
+    noNA(clusterNames),
+    is.scalar(nClusters),
+    is.na(nClusters) || nClusters >= 1L,
     is.na(nClusters) || length(clusterNames) %in% c(0, nClusters),
     noNA(trajectoryAssignments)
   )
-
 
   if (is.na(nClusters) && length(clusterNames) > 0) {
     nClusters = length(clusterNames)
@@ -117,7 +121,7 @@ lcModelPartition = function(
       numClus = nClusters
     }
 
-    if (is.null(clusterNames)) {
+    if (length(clusterNames) == 0L) {
       trajectoryAssignments = factor(trajectoryAssignments)
       clusterNames = levels(trajectoryAssignments)
     } else {
@@ -126,8 +130,11 @@ lcModelPartition = function(
     }
   } else if (is.factor(trajectoryAssignments)) {
     # factor
-    assert_that(is.na(nClusters), msg = 'nClusters cannot be specified for trajectoryAssignments of type factor')
-    if (is.null(clusterNames)) {
+    assert_that(
+      is.na(nClusters) || nClusters == nlevels(trajectoryAssignments),
+      msg = 'nClusters should be NA or match the number of levels of the trajectoryAssignments argument'
+    )
+    if (length(clusterNames) == 0L) {
       clusterNames = levels(trajectoryAssignments)
     } else {
       assert_that(nlevels(trajectoryAssignments) == length(clusterNames))
@@ -140,15 +147,18 @@ lcModelPartition = function(
 
 
   intAssignments = as.integer(trajectoryAssignments)
-  assert_that(min(intAssignments) >= 1, max(intAssignments) <= numClus)
+  assert_that(
+    min(intAssignments) >= 1L,
+    max(intAssignments) <= numClus
+  )
 
-  if (is.null(clusterNames)) {
+  if (length(clusterNames) == 0L) {
     clusterNames = make.clusterNames(numClus)
   }
   assert_that(length(clusterNames) == numClus)
 
   mc = match.call()
-  model = new(
+  partModel = new(
     'lcModelPartition',
     call = mc,
     data = data,
@@ -163,12 +173,16 @@ lcModelPartition = function(
   )
 
   if (!is.null(method)) {
-    model@method = method
+    partModel@method = method
   }
 
-  environment(model) = envir
+  if (!is.null(model)) {
+    partModel@model = model
+  }
 
-  model
+  environment(partModel) = envir
+
+  partModel
 }
 
 #. clusterTrajectories

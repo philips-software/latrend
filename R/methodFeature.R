@@ -1,4 +1,4 @@
-#' @include modelCustom.R
+#' @include modelPartition.R
 
 #' @name interface-featureBased
 #' @rdname interface-featureBased
@@ -26,7 +26,7 @@ setValidity('lcMethodFeature', function(object) {
 #' @export
 #' @title Feature-based clustering
 #' @description Feature-based clustering.
-#' @inheritParams lcMethodCustom
+#' @inheritParams lcModelPartition
 #' @param representationStep A `function` with signature `function(method, data)` that computes the representation per strata, returned as a `matrix`.
 #' Alternatively, `representationStep` is a pre-computed representation `matrix`.
 #' @param clusterStep A `function` with signature `function(repdata)` that outputs a `lcModel`.
@@ -60,14 +60,11 @@ setValidity('lcMethodFeature', function(object) {
 #' clusStep <- function(method, data, repMat, envir, verbose) {
 #'   km <- kmeans(repMat, centers = method$nClusters)
 #'
-#'   lcModelCustom(
+#'   lcModelPartition(
 #'     response = method$response,
-#'     method = method,
 #'     data = data,
-#'     trajectoryAssignments = km$cluster,
-#'     clusterTrajectories = method$center,
-#'     model = km
-#'    )
+#'     trajectoryAssignments = km$cluster
+#'   )
 #' }
 #' }
 #'
@@ -163,21 +160,16 @@ setMethod('fit', signature('lcMethodFeature'), function(method, data, envir, ver
     verbose = verbose
   )
 
-  assert_that(is.lcModelCustom(model), msg = 'invalid output from the clusterStep function; expected object of class lcModelCustom. See the documentation of ?lcMethodFeature for help.')
+  assert_that(
+    is.lcModel(model),
+    msg = 'invalid output from the clusterStep function; expected object of class lcModel. See the documentation of ?lcMethodFeature for help.'
+  )
 
+  model@data = data
+  model@call = getCall(method) # will be updated by latrend
+  model@method = method
 
-  # convert lcModelCustom to a lcModelFeature with the appropriate call
-  slots = slotNames(model) %>%
-    lapply(slot, object = model) %>%
-    setNames(slotNames(model))
-
-  slots$Class = 'lcModelFeature'
-  slots$data = data
-  slots$call = getCall(method) # will be updated by latrend
-  slots$method = method
-
-  newmodel = do.call(new, slots, quote = TRUE)
-  return(newmodel)
+  model
 })
 
 

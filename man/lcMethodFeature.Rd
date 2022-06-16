@@ -25,7 +25,7 @@ Alternatively, \code{representationStep} is a pre-computed representation \code{
 
 \item{standardize}{A \code{function} to standardize the output \code{matrix} of the representation step. By default, the output is shifted and rescaled to ensure zero mean and unit variance.}
 
-\item{center}{Optional \code{function} for computing the longitudinal cluster centers, with signature \code{(x)}.}
+\item{center}{The \code{function} for computing the longitudinal cluster centers, used for representing the cluster trajectories.}
 
 \item{time}{The name of the time variable.}
 
@@ -65,14 +65,11 @@ Cluster step:
 clusStep <- function(method, data, repMat, envir, verbose) {
   km <- kmeans(repMat, centers = method$nClusters)
 
-  lcModelCustom(
+  lcModelPartition(
     response = method$response,
-    method = method,
     data = data,
-    trajectoryAssignments = km$cluster,
-    clusterTrajectories = method$center,
-    model = km
-   )
+    trajectoryAssignments = km$cluster
+  )
 }
 }
 

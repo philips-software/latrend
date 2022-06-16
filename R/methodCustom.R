@@ -2,8 +2,8 @@
 
 #' @name interface-custom
 #' @rdname interface-custom
-#' @title custom interface
-#' @seealso [lcMethodCustom] [lcModelCustom] [lcMethodRandom] [lcMethodStratify] [lcModelPartition] [lcModelWeightedPartition]
+#' @title function interface
+#' @seealso [lcMethodRandom] [lcMethodStratify] [lcModelPartition] [lcModelWeightedPartition]
 #' @keywords internal
 NULL
 
@@ -21,12 +21,18 @@ setClass('lcMethodCustom', contains = 'lcMethod')
 #' data(latrendData)
 #' # Stratification based on the mean response level
 #' clusfun <- function(data, response, id, time, ...) {
-#'    clusters <- data.table::as.data.table(data)[, mean(Y) > 0, by = Id]$V1
-#'    lcModelCustom(data = data,
-#'      trajectoryAssignments = factor(clusters, levels = c(FALSE, TRUE), labels = c("Low", "High")),
-#'      response = response,
-#'      time = time,
-#'      id = id)
+#'   clusters <- data.table::as.data.table(data)[, mean(Y) > 0, by = Id]$V1
+#'   lcModelPartition(
+#'     data = data,
+#'     trajectoryAssignments = factor(
+#'       clusters,
+#'       levels = c(FALSE, TRUE),
+#'       labels = c("Low", "High")
+#'     ),
+#'     response = response,
+#'     time = time,
+#'     id = id
+#'   )
 #' }
 #' method <- lcMethodCustom(response = "Y", fun = clusfun, id = "Id", time = "Time")
 #' model <- latrend(method, data = latrendData)

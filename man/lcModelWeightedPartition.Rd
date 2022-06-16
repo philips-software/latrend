@@ -15,7 +15,7 @@ lcModelWeightedPartition(
 )
 }
 \arguments{
-\item{data}{The data on which the cluster result is based, a data.frame.}
+\item{data}{A \code{data.frame} representing the trajectory data.}
 
 \item{response}{The name of the response variable.}
 

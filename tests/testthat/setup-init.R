@@ -86,66 +86,63 @@ expect_valid_lcModel = function(object) {
   expect_lte(max(as.integer(clus)), nIds(object))
 
   # Predict
-  if(!is(object, 'lcModelCustom')) {
-    # cluster-specific prediction
-    pred = predict(object, newdata=data.frame(Cluster='T1', Assessment=time(object)[c(1,3)]))
-    expect_is(pred, 'data.frame', info='predictClusterTime')
-    expect_true('Fit' %in% names(pred), info='predictClusterTime')
-    expect_equal(nrow(pred), 2, info='predictClusterTime')
+  # cluster-specific prediction
+  pred = predict(object, newdata=data.frame(Cluster='T1', Assessment=time(object)[c(1,3)]))
+  expect_is(pred, 'data.frame', info='predictClusterTime')
+  expect_true('Fit' %in% names(pred), info='predictClusterTime')
+  expect_equal(nrow(pred), 2, info='predictClusterTime')
 
-    # prediction for all clusters; list of data.frames
-    pred2 = predict(object, newdata=data.frame(Assessment=time(object)[c(1,3)]))
-    expect_is(pred2, 'list', info='predictTime')
-    expect_length(pred2, nClusters(object))
-    expect_true('Fit' %in% names(pred2$T1), info='predictTime')
+  # prediction for all clusters; list of data.frames
+  pred2 = predict(object, newdata=data.frame(Assessment=time(object)[c(1,3)]))
+  expect_is(pred2, 'list', info='predictTime')
+  expect_length(pred2, nClusters(object))
+  expect_true('Fit' %in% names(pred2$T1), info='predictTime')
 
-    # id-specific prediction for a specific cluster; data.frame
-    pred3 = predict(object, newdata=data.frame(Cluster=rep('T1', 4),
-                                       Traj=c(ids(object)[c(1,1,2)], tail(ids(object), 1)),
-                                       Assessment=c(time(object)[c(1,3,1,1)])))
-    expect_is(pred3, 'data.frame', info='predictClusterIdTime')
-    expect_true('Fit' %in% names(pred3), info='predictClusterIdTime')
-    expect_equal(nrow(pred3), 4, info='predictClusterIdTime')
+  # id-specific prediction for a specific cluster; data.frame
+  pred3 = predict(object, newdata=data.frame(Cluster=rep('T1', 4),
+                                     Traj=c(ids(object)[c(1,1,2)], tail(ids(object), 1)),
+                                     Assessment=c(time(object)[c(1,3,1,1)])))
+  expect_is(pred3, 'data.frame', info='predictClusterIdTime')
+  expect_true('Fit' %in% names(pred3), info='predictClusterIdTime')
+  expect_equal(nrow(pred3), 4, info='predictClusterIdTime')
 
-    # id-specific prediction for all clusters; list of data.frames
-    pred4 = predict(object, newdata=data.frame(Traj=c(ids(object)[c(1,1,2)], tail(ids(object), 1)),
-                                       Assessment=c(time(object)[c(1,3,1,1)])))
-    expect_is(pred4, 'list', info='predictIdTime')
-    expect_length(pred4, nClusters(object))
-    expect_true('Fit' %in% names(pred4$T1), info='predictIdTime')
+  # id-specific prediction for all clusters; list of data.frames
+  pred4 = predict(object, newdata=data.frame(Traj=c(ids(object)[c(1,1,2)], tail(ids(object), 1)),
+                                     Assessment=c(time(object)[c(1,3,1,1)])))
+  expect_is(pred4, 'list', info='predictIdTime')
+  expect_length(pred4, nClusters(object))
+  expect_true('Fit' %in% names(pred4$T1), info='predictIdTime')
 
-    fitted(object, clusters=trajectoryAssignments(object)) %>%
-      expect_is(c('NULL', 'numeric'), info='fittedClusters')
-    fitted(object, clusters=NULL) %>%
-      expect_is(c('NULL', 'matrix'), info='fittedNull')
+  fitted(object, clusters=trajectoryAssignments(object)) %>%
+    expect_is(c('NULL', 'numeric'), info='fittedClusters')
+  fitted(object, clusters=NULL) %>%
+    expect_is(c('NULL', 'matrix'), info='fittedNull')
 
-    predNul = predict(object, newdata=NULL)
-    expect_is(predNul, 'list', info='predictNull')
-    expect_length(predNul, nClusters(object))
-    expect_true('Fit' %in% names(predNul$T1), info='predictNull')
+  predNul = predict(object, newdata=NULL)
+  expect_is(predNul, 'list', info='predictNull')
+  expect_length(predNul, nClusters(object))
+  expect_true('Fit' %in% names(predNul$T1), info='predictNull')
 
-    # predictForCluster
-    predClus = predictForCluster(
-      object,
-      newdata = data.frame(Assessment = time(object)[c(1,3)]),
-      cluster = 'T1'
-    )
-    expect_is(predClus, 'numeric', info='predictForCluster')
-    expect_length(predClus, 2)
+  # predictForCluster
+  predClus = predictForCluster(
+    object,
+    newdata = data.frame(Assessment = time(object)[c(1,3)]),
+    cluster = 'T1'
+  )
+  expect_is(predClus, 'numeric', info='predictForCluster')
+  expect_length(predClus, 2)
 
-    # empty predictForCluster prediction
-    predClusNull = predictForCluster(object, cluster = 'T1')
-    predClusNull2 = predictForCluster(object, newdata = NULL, cluster = 'T1')
-    predClusFitted = predictForCluster(object, newdata = model.data(object), cluster = 'T1')
-    expect_equal(predClusNull, predClusNull2)
-    expect_equal(predClusNull2, predClusFitted)
+  # empty predictForCluster prediction
+  predClusNull = predictForCluster(object, cluster = 'T1')
+  predClusNull2 = predictForCluster(object, newdata = NULL, cluster = 'T1')
+  predClusFitted = predictForCluster(object, newdata = model.data(object), cluster = 'T1')
+  expect_equal(predClusNull, predClusNull2)
+  expect_equal(predClusNull2, predClusFitted)
 
-    residuals(object, clusters=trajectoryAssignments(object)) %>%
-      expect_is(c('NULL', 'numeric'), label='residuals')
-    residuals(object, clusters=NULL) %>%
-      expect_is(c('NULL', 'matrix'), label='residuals')
-  }
-
+  residuals(object, clusters=trajectoryAssignments(object)) %>%
+    expect_is(c('NULL', 'numeric'), label='residuals')
+  residuals(object, clusters=NULL) %>%
+    expect_is(c('NULL', 'matrix'), label='residuals')
 
   # Derivative predict
   ctPred = clusterTrajectories(object)
