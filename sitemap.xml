@@ -283,9 +283,6 @@
     <loc>/reference/lcMethodCrimCV.html</loc>
   </url>
   <url>
-    <loc>/reference/lcMethodCustom.html</loc>
-  </url>
-  <url>
     <loc>/reference/lcMethodDtwclust.html</loc>
   </url>
   <url>
@@ -299,6 +296,9 @@
   </url>
   <url>
     <loc>/reference/lcMethodFunFEM.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lcMethodFunction.html</loc>
   </url>
   <url>
     <loc>/reference/lcMethodGCKM.html</loc>
@@ -347,9 +347,6 @@
   </url>
   <url>
     <loc>/reference/lcModel-make.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcModelCustom.html</loc>
   </url>
   <url>
     <loc>/reference/lcModelPartition.html</loc>

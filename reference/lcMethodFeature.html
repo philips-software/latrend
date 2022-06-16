@@ -96,7 +96,7 @@ Alternatively, <code>representationStep</code> is a pre-computed representation 
 <dt>standardize</dt>
 <dd><p>A <code>function</code> to standardize the output <code>matrix</code> of the representation step. By default, the output is shifted and rescaled to ensure zero mean and unit variance.</p></dd>
 <dt>center</dt>
-<dd><p>Optional <code>function</code> for computing the longitudinal cluster centers, with signature <code>(x)</code>.</p></dd>
+<dd><p>The <code>function</code> for computing the longitudinal cluster centers, used for representing the cluster trajectories.</p></dd>
 <dt>time</dt>
 <dd><p>The name of the time variable.</p></dd>
 <dt>id</dt>
@@ -130,14 +130,11 @@ repStep &lt;- function(method, data, verbose) {
 <p>Cluster step:</p><div class="sourceCode"><pre><code><span class="va">clusStep</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">repMat</span>, <span class="va">envir</span>, <span class="va">verbose</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">km</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">kmeans</a></span><span class="op">(</span><span class="va">repMat</span>, centers <span class="op">=</span> <span class="va">method</span><span class="op">$</span><span class="va">nClusters</span><span class="op">)</span>
 
-  <span class="fu"><a href="../reference/lcModelCustom.html">lcModelCustom</a></span><span class="op">(</span>
+  <span class="fu"><a href="../reference/lcModelPartition.html">lcModelPartition</a></span><span class="op">(</span>
     response <span class="op">=</span> <span class="va">method</span><span class="op">$</span><span class="va">response</span>,
-    method <span class="op">=</span> <span class="va">method</span>,
     data <span class="op">=</span> <span class="va">data</span>,
-    trajectoryAssignments <span class="op">=</span> <span class="va">km</span><span class="op">$</span><span class="va">cluster</span>,
-    clusterTrajectories <span class="op">=</span> <span class="va">method</span><span class="op">$</span><span class="va">center</span>,
-    model <span class="op">=</span> <span class="va">km</span>
-   <span class="op">)</span>
+    trajectoryAssignments <span class="op">=</span> <span class="va">km</span><span class="op">$</span><span class="va">cluster</span>
+  <span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 
 <p>Now specify the method and fit the model:</p><div class="sourceCode"><pre><code>
@@ -163,9 +160,9 @@ model &lt;- latrend(method, data = latrendData)
 <code><a href="lcMethod-class.html">lcMethod-class</a></code>,
 <code><a href="lcMethodAkmedoids.html">lcMethodAkmedoids</a></code>,
 <code><a href="lcMethodCrimCV.html">lcMethodCrimCV</a></code>,
-<code><a href="lcMethodCustom.html">lcMethodCustom</a></code>,
 <code><a href="lcMethodDtwclust.html">lcMethodDtwclust</a></code>,
 <code><a href="lcMethodFunFEM.html">lcMethodFunFEM</a></code>,
+<code><a href="lcMethodFunction.html">lcMethodFunction</a></code>,
 <code><a href="lcMethodGCKM.html">lcMethodGCKM</a></code>,
 <code><a href="lcMethodKML.html">lcMethodKML</a></code>,
 <code><a href="lcMethodLMKM.html">lcMethodLMKM</a></code>,

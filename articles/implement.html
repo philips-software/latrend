@@ -193,17 +193,17 @@
   <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">coefmat</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>The cluster step takes the coefficient matrix as input. A cross-sectional cluster algorithm can then be applied to the matrix. In this example, we apply <span class="math inline">\(k\)</span>-means. The cluster step should output a <code>lcModel</code> object.</p>
-<p>The <code>lcModelCustom</code> function creates a <code>lcModel</code> object for a given vector of cluster assignments.</p>
+<p>The <code>lcModelPartition</code> function creates a <code>lcModel</code> object for a given vector of cluster assignments.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">clusStep</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">repMat</span>, <span class="va">envir</span>, <span class="va">verbose</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">km</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">kmeans</a></span><span class="op">(</span><span class="va">repMat</span>, centers <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 
-  <span class="fu"><a href="../reference/lcModelCustom.html">lcModelCustom</a></span><span class="op">(</span>
+  <span class="fu"><a href="../reference/lcModelPartition.html">lcModelPartition</a></span><span class="op">(</span>
     response <span class="op">=</span> <span class="va">method</span><span class="op">$</span><span class="va">response</span>, 
-    method <span class="op">=</span> <span class="va">method</span>,
     data <span class="op">=</span> <span class="va">data</span>, 
     trajectoryAssignments <span class="op">=</span> <span class="va">km</span><span class="op">$</span><span class="va">cluster</span>,
-    clusterTrajectories <span class="op">=</span> <span class="va">method</span><span class="op">$</span><span class="va">center</span>,
+    center <span class="op">=</span> <span class="va">method</span><span class="op">$</span><span class="va">center</span>,
+    method <span class="op">=</span> <span class="va">method</span>,
     model <span class="op">=</span> <span class="va">km</span>
   <span class="op">)</span>
 <span class="op">}</span></code></pre></div>
@@ -217,7 +217,7 @@
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model.twostep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">m.twostep</span>, data <span class="op">=</span> <span class="va">casedata</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model.twostep</span><span class="op">)</span>
-<span class="co">#&gt; Longitudinal cluster model using two-step clustering</span>
+<span class="co">#&gt; Longitudinal cluster model using part</span>
 <span class="co">#&gt; lcMethodFeature specifying "two-step clustering"</span>
 <span class="co">#&gt;  standardize:    `scale`</span>
 <span class="co">#&gt;  center:         `meanNA`</span>
@@ -234,8 +234,8 @@
 <span class="co">#&gt; Number of obs: 1100, strata (Traj): 100</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Scaled residuals:</span>
-<span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's </span>
-<span class="co">#&gt;      NA      NA      NA     NaN      NA      NA    1100</span></code></pre></div>
+<span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
+<span class="co">#&gt; -3.08943 -0.67260  0.03618  0.00000  0.73723  2.64516</span></code></pre></div>
 <div class="section level3">
 <h3 id="general-approach">General approach<a class="anchor" aria-label="anchor" href="#general-approach"></a>
 </h3>
@@ -254,12 +254,12 @@
 <span class="va">clusStep.gen</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">repMat</span>, <span class="va">envir</span>, <span class="va">verbose</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">km</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">kmeans</a></span><span class="op">(</span><span class="va">repMat</span>, centers <span class="op">=</span> <span class="va">method</span><span class="op">$</span><span class="va">nClusters</span><span class="op">)</span>
 
-  <span class="fu"><a href="../reference/lcModelCustom.html">lcModelCustom</a></span><span class="op">(</span>
+  <span class="fu"><a href="../reference/lcModelPartition.html">lcModelPartition</a></span><span class="op">(</span>
     response <span class="op">=</span> <span class="va">method</span><span class="op">$</span><span class="va">response</span>,
-    method <span class="op">=</span> <span class="va">method</span>,
     data <span class="op">=</span> <span class="va">data</span>, 
     trajectoryAssignments <span class="op">=</span> <span class="va">km</span><span class="op">$</span><span class="va">cluster</span>,
-    clusterTrajectories <span class="op">=</span> <span class="va">method</span><span class="op">$</span><span class="va">center</span>,
+    center <span class="op">=</span> <span class="va">method</span><span class="op">$</span><span class="va">center</span>,
+    method <span class="op">=</span> <span class="va">method</span>,
     model <span class="op">=</span> <span class="va">km</span>
   <span class="op">)</span>
 <span class="op">}</span></code></pre></div>
@@ -274,7 +274,7 @@
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model.twostepgen</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">m.twostepgen</span>, formula <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, nClusters <span class="op">=</span> <span class="fl">2</span>, <span class="va">casedata</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model.twostepgen</span><span class="op">)</span>
-<span class="co">#&gt; Longitudinal cluster model using two-step clustering</span>
+<span class="co">#&gt; Longitudinal cluster model using part</span>
 <span class="co">#&gt; lcMethodFeature specifying "two-step clustering"</span>
 <span class="co">#&gt;  nClusters:      2</span>
 <span class="co">#&gt;  formula:        Y ~ Time</span>
@@ -293,8 +293,8 @@
 <span class="co">#&gt; Number of obs: 1100, strata (Traj): 100</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Scaled residuals:</span>
-<span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's </span>
-<span class="co">#&gt;      NA      NA      NA     NaN      NA      NA    1100</span></code></pre></div>
+<span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
+<span class="co">#&gt; -2.9747 -0.6992  0.0589  0.0000  0.6958  2.9260</span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -426,7 +426,7 @@
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sgbtm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">casedata</span><span class="op">)</span>
 <span class="co">#&gt; Be patient, lcmm is running ... </span>
-<span class="co">#&gt; The program took 0.15 seconds</span>
+<span class="co">#&gt; The program took 0.12 seconds</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">sgbtm</span><span class="op">)</span>
 <span class="co">#&gt; Longitudinal cluster model using simple group-based trajectory model</span>
 <span class="co">#&gt; lcMethodSimpleGBTM specifying "simple group-based trajectory model"</span>
