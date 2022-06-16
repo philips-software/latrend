@@ -73,7 +73,7 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for lcModel</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">object</span>, newdata <span class="op">=</span> <span class="cn">NULL</span>, what <span class="op">=</span> <span class="st">"mu"</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">object</span>, newdata <span class="op">=</span> <span class="cn">NULL</span>, what <span class="op">=</span> <span class="st">"mu"</span>, <span class="va">...</span>, useCluster <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -87,6 +87,9 @@ Cluster trajectory predictions are made when ids are not specified.</p></dd>
 <dd><p>The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying <code>what = 'mb'</code>.</p></dd>
 <dt>...</dt>
 <dd><p>Additional arguments.</p></dd>
+<dt>useCluster</dt>
+<dd><p>Whether to use the "Cluster" column in the newdata argument for computing predictions conditional on the respective cluster.
+If <code>useCluster = NA</code>, the feature is enabled if newdata contains the "Cluster" column.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
