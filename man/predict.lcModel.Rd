@@ -4,7 +4,7 @@
 \alias{predict.lcModel}
 \title{lcModel predictions}
 \usage{
-\method{predict}{lcModel}(object, newdata = NULL, what = "mu", ...)
+\method{predict}{lcModel}(object, newdata = NULL, what = "mu", ..., useCluster = NA)
 }
 \arguments{
 \item{object}{The \code{lcModel} object.}
@@ -15,6 +15,9 @@ Cluster trajectory predictions are made when ids are not specified.}
 \item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying \code{what = 'mb'}.}
 
 \item{...}{Additional arguments.}
+
+\item{useCluster}{Whether to use the "Cluster" column in the newdata argument for computing predictions conditional on the respective cluster.
+If \code{useCluster = NA}, the feature is enabled if newdata contains the "Cluster" column.}
 }
 \value{
 If \code{newdata} specifies the cluster membership; a \code{data.frame} of cluster-specific predictions. Otherwise, a \code{list} of \code{data.frame} of cluster-specific predictions is returned.

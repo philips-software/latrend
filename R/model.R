@@ -903,6 +903,8 @@ nobs.lcModel = function(object, ...) {
 #' @param what The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying `what = 'mb'`.
 #' @return If `newdata` specifies the cluster membership; a `data.frame` of cluster-specific predictions. Otherwise, a `list` of `data.frame` of cluster-specific predictions is returned.
 #' @param ... Additional arguments.
+#' @param useCluster Whether to use the "Cluster" column in the newdata argument for computing predictions conditional on the respective cluster.
+#' For `useCluster = NA` (the default), the feature is enabled if newdata contains the "Cluster" column.
 #' @examples
 #' data(latrendData)
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
@@ -920,8 +922,17 @@ nobs.lcModel = function(object, ...) {
 #' predIdAll <- predict(model, newdata = data.frame(Id = "S1", Time = time(model)))
 #' @seealso [predictForCluster] [stats::predict] [fitted.lcModel] [clusterTrajectories] [trajectories] [predictPostprob] [predictAssignments]
 #' @family model-specific methods
-predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
-  assert_that(is_newdata(newdata))
+predict.lcModel = function(object, newdata = NULL, what = 'mu', ..., useCluster = NA) {
+  assert_that(
+    is_newdata(newdata),
+    is.string(what),
+    nzchar(what),
+    is.flag(useCluster)
+  )
+
+  if (is.na(useCluster)) {
+    useCluster = hasName(newdata, 'Cluster')
+  }
 
   predMethod = selectMethod('predictForCluster', class(object), optional = TRUE)
   if (is.null(predMethod) || predMethod@defined@.Data == 'lcModel') {
@@ -943,7 +954,11 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ...) {
 
   newdata = as.data.table(newdata)
 
-  if (hasName(newdata, 'Cluster')) {
+  if (useCluster) {
+    assert_that(
+      hasName(newdata, 'Cluster'),
+      msg = 'newdata must contain a "Cluster" column when useCluster = TRUE'
+    )
     # enforce cluster ordering
     newdata[, Cluster := factor(Cluster, levels = clusterNames(object))]
 
