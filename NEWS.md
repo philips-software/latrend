@@ -4,6 +4,7 @@
 
 ## New features
 
+-   Added RMSE and WRMSE metrics
 -   `plotMetric()` now shows legend when grouping
 -   `externalMetric(lcModels)` returns a named distance matrix
 
@@ -16,7 +17,6 @@
 
 -   Removed redundant `lcModelCustom` in favor of `lcModelPartition`
 -   Renamed `lcMethodCustom` to `lcMethodFunction` for clarity
--   Added RMSE and WRMSE metrics
 
 # latrend v.1.3.0
 
