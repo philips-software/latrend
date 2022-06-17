@@ -6,7 +6,7 @@
 \alias{_PACKAGE}
 \title{latrend: A Framework for Clustering Longitudinal Data}
 \description{
-A framework for clustering longitudinal datasets in a standardized way. The package provides an interface to existing R packages for clustering longitudinal univariate trajectories, facilitating reproducible and transparent analyses. Additionally, standard tools are provided to support cluster analyses, including repeated estimation, model validation, and model assessment. The interface enables users to compare results between methods, and to implement and evaluate new methods with ease. The following packages for longitudinal clustering are supported: akmedoids (Adepeju et al. (2020) \doi{10.21105/joss.02379}), crimCV (Nielsen, 2018), dtwclust (Sardá-Espinosa (2019) \doi{10.32614/RJ-2019-023}), funFEM (Bouveyron et al. (2015) \url{https://hal.archives-ouvertes.fr/hal-01383951}), KmL (Genolini et al. (2015) \doi{10.18637/jss.v065.i04}), lcmm (Proust-Lima et al. (2017) \doi{10.18637/jss.v078.i02}), mclust (Scrucca et al. (2016) \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5096736}), mixAK (Komárek (2009) \doi{10.1016/j.csda.2009.05.006}), mixtools (Benaglia (2009) \doi{10.18637/jss.v032.i06}).
+A framework for clustering longitudinal datasets in a standardized way. The package provides an interface to existing R packages for clustering longitudinal univariate trajectories, facilitating reproducible and transparent analyses. Additionally, standard tools are provided to support cluster analyses, including repeated estimation, model validation, and model assessment. The interface enables users to compare results between methods, and to implement and evaluate new methods with ease.
 }
 \section{Features}{
 

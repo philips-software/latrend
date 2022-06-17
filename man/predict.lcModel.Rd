@@ -17,7 +17,7 @@ Cluster trajectory predictions are made when ids are not specified.}
 \item{...}{Additional arguments.}
 
 \item{useCluster}{Whether to use the "Cluster" column in the newdata argument for computing predictions conditional on the respective cluster.
-If \code{useCluster = NA}, the feature is enabled if newdata contains the "Cluster" column.}
+For \code{useCluster = NA} (the default), the feature is enabled if newdata contains the "Cluster" column.}
 }
 \value{
 If \code{newdata} specifies the cluster membership; a \code{data.frame} of cluster-specific predictions. Otherwise, a \code{list} of \code{data.frame} of cluster-specific predictions is returned.

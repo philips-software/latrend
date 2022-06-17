@@ -1,3 +1,18 @@
+# v1.4.0
+* Resolved CRAN error
+* Resolved warnings from `latrendBoot()` and `latrendCV()`
+* Removed redundant `lcModelCustom` in favor of `lcModelPartition`
+* Renamed `lcMethodCustom` to `lcMethodFunction` for clarity
+* Added RMSE and WRMSE metrics
+* Improved kml package compatibility; fixed errors on datasets with variable-length short trajectories
+* Improved some error messages
+* `plotMetric()` now shows legend when grouping
+
+## Test environments
+* Windows (release, devel, 3.6)
+* Ubuntu (release and devel)
+* macOS (release)
+
 # v1.3.0
 * Removed archived longclust package dependency
 * Added testing framework for longitudinal cluster method implementations

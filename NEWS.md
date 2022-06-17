@@ -1,4 +1,17 @@
 **If you are viewing this file as part of a released version of the package, the latest news can be found [on GitHub](https://philips-software.github.io/latrend/news/).**
+# latrend v1.4.0
+## New features
+* `plotMetric()` now shows legend when grouping
+* `externalMetric(lcModels)` returns a named distance matrix
+
+## Bug fixes
+* Improved kml package compatibility; fixed errors on datasets with variable-length short trajectories
+* Resolved warnings from `latrendBoot()` and `latrendCV()`
+
+## Breaking changes
+* Removed redundant `lcModelCustom` in favor of `lcModelPartition`
+* Renamed `lcMethodCustom` to `lcMethodFunction` for clarity
+* Added RMSE and WRMSE metrics
 
 # latrend v.1.3.0
 ## New features
