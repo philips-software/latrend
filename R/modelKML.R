@@ -67,22 +67,27 @@ setMethod('postprob', signature('lcModelKML'), function(object) {
     ppRaw = getKMLPartition(object)@postProba
     trajClusters = kml::getClusters(object@model, nbCluster = nClusters(object), asInteger = TRUE)
 
-    pp = matrix(NA_real_, nrow = nIds(object), ncol = nClusters(object))
-    pp[which(is.finite(trajClusters)), ] = ppRaw
-  }
-
-  # bugfix for KML: insert missing rows for uniform postprob
-  if (anyNA(pp)) {
-    naMsk = is.na(pp[, 1L])
-    warning(
-      sprintf(
-        'The kml package has outputted NA posterior probabilities for %d trajectories. Inserting uniform postprob for trajectories: \n%s',
-        sum(naMsk),
-        paste0('  ', ids(object)[naMsk], collapse = '\n')
-      )
+    assert_that(
+      length(trajClusters) == nIds(object),
+      msg = sprintf('kml package returned fewer cluster assignments than expected: %d instead of %d', length(trajClusters), nIds(object))
     )
 
-    pp[naMsk, ] = 1 / nClusters(object)
+    pp = matrix(NA_real_, nrow = nIds(object), ncol = nClusters(object))
+    pp[which(is.finite(trajClusters)), ] = ppRaw
+
+    # bugfix for KML: insert missing rows for uniform postprob
+    if (anyNA(pp)) {
+      naMsk = is.na(pp[, 1L])
+      warning(
+        sprintf(
+          'The kml package has outputted NA posterior probabilities for %d trajectories. Inserting uniform postprob for trajectories: \n%s',
+          sum(naMsk),
+          paste0('  ', ids(object)[naMsk], collapse = '\n')
+        )
+      )
+
+      pp[naMsk, ] = 1 / nClusters(object)
+    }
   }
 
   colnames(pp) = clusterNames(object)
