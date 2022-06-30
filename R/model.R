@@ -976,6 +976,11 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ..., useCluster 
       lapply(function(cdata) cdata[, Cluster := NULL])
   }
   else {
+    # drop Cluster column because it is not being used in order to prevent merge issues in transformPredict()
+    if (hasName(newdata, 'Cluster')) {
+      newdata[, Cluster := NULL]
+    }
+
     # predictForCluster with newdata for each cluster
     clusdataList = replicate(nClusters(object), newdata, simplify = FALSE)
     names(clusdataList) = clusterNames(object)

@@ -398,20 +398,23 @@ setMethod('transformPredict', signature('data.frame', 'lcModel'), function(pred,
       id = idVariable(model)
 
       if (not(id %in% mergevars)) {
-        stop(sprintf(
-          'The predictions in "pred" cannot be merged with newdata because its rows are not uniquely tied to rows in "newdata".
+        stop(
+          sprintf(
+            'The predictions in "pred" cannot be merged with newdata because its rows are not uniquely tied to rows in "newdata".
 Merging the data frames would result in data replication.
 In case replications are resulting from trajectory-specific predictions, specify the "%s" column to indicate the respective trajectory of the predictions.',
-          id
-        ))
+            id
+          )
+        )
       }
       else {
-        browser()
-        stop(sprintf(
-          'possible %s implementation error: the predictions in "pred" cannot be merged with newdata because its rows are not uniquely tied to rows in "newdata".
+        stop(
+          sprintf(
+            'possible %s implementation error: the predictions in "pred" cannot be merged with newdata because its rows are not uniquely tied to rows in "newdata".
 Merging the data frames would result in data replication.',
-          class(model)[1]
-        ))
+            class(model)[1]
+          )
+        )
       }
     }
 
