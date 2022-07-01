@@ -1,5 +1,12 @@
 **If you are viewing this file as part of a released version of the package, the latest news can be found [on GitHub](https://philips-software.github.io/latrend/news/).**
 
+# latrend v1.4.1
+
+## Bug fixes
+
+* Fixed bug in `predict.lcModel()` introduced by #116
+* Attempt to fix the documentation warning about how the escaped ampersand is not escaped
+
 # latrend v1.4.0
 
 ## New features
