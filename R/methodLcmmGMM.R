@@ -78,7 +78,7 @@ lcMethodLcmmGMM = function(
   classmb = ~ 1,
   time = getOption('latrend.time'),
   id = getOption('latrend.id'),
-  init = 'default',
+  init = 'lme',
   nClusters = 2,
   ...
 ) {
@@ -123,12 +123,13 @@ setMethod('validate', 'lcMethodLcmmGMM', function(method, data, envir = NULL, ..
       immediate. = TRUE
     )
   }
-  return(TRUE)
+
+  TRUE
 })
 
 gmm_prepare = function(method, data, envir, verbose, ...) {
-  e = new.env()
-  e$verbose = as.logical(verbose)
+  prepEnv = new.env()
+  prepEnv$verbose = as.logical(verbose)
 
   # Check & process data
   id = idVariable(method)
@@ -139,7 +140,7 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
   args = as.list(method, args = lcmm::hlme)
   args$data = as.data.frame(trainData)
   args$subject = idVariable(method)
-  args$classmb = e$classmb = dropIntercept(method$classmb) # drop intercept from formula.mb
+  args$classmb = prepEnv$classmb = dropIntercept(method$classmb) # drop intercept from formula.mb
   args$ng = method$nClusters
   args$verbose = envir$verbose
   args$returndata = TRUE
@@ -168,6 +169,9 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
 
   if (hasName(method, 'init') && method$nClusters > 1) {
     init = match.arg(method$init, c('default', 'lme', 'lme.random'))
+    if (init == 'default') {
+      init = 'lme'
+    }
 
     switch(init,
       lme = {
@@ -185,15 +189,14 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
         args1$ng = 1
         args1$mixture = NULL
         args1$classmb = NULL
-        e$lme = do.call(lcmm::hlme, args1)
+        prepEnv$lme = do.call(lcmm::hlme, args1)
         args$B = quote(random(lme))
       }
     )
   }
 
-  e$args = args
-
-  return(e)
+  prepEnv$args = args
+  prepEnv
 }
 
 #' @rdname interface-lcmm
@@ -216,8 +219,7 @@ gmm_fit = function(method, data, envir, verbose, ...) {
   model$mixture = args$mixture
   model$random = args$random
   model$mb = envir$classmb
-
-  return(model)
+  model
 }
 
 #' @rdname interface-lcmm

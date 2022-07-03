@@ -2,6 +2,7 @@
 * Fixed bug in `predict.lcModel()` introduced by #116
 * Added check to lcModelKML `postprob()`
 * Attempt to fix the warning about how the escaped ampersand is not escaped
+* Ensured compatibility with lcmm 2.0.0
 
 # v1.4.0
 * Resolved CRAN error

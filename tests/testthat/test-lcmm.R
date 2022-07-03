@@ -20,7 +20,7 @@ lcmmData = generateLongData(
 #   .[c(1, 10, 20), Age := NA] %>%
 
 # GMM ####
-make.gmm = function(id, time, response, ..., init = NULL) {
+make.gmm = function(id, time, response, ..., init = 'default') {
   mc = match.call.all()
   mc$fixed = as.formula(sprintf('%s ~ 1', response))
   mc$id = id

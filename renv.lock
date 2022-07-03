@@ -1336,11 +1336,12 @@
     },
     "lcmm": {
       "Package": "lcmm",
-      "Version": "1.9.5",
+      "Version": "2.0.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "fce3f39f6f737fa5260109db49675491",
+      "Hash": "8b0c90b597d4bb879b7d852ab29a5562",
       "Requirements": [
+        "marqLevAlg",
         "mvtnorm",
         "nlme",
         "randtoolbox",
@@ -1446,6 +1447,17 @@
       "Repository": "CRAN",
       "Hash": "7ce2733a9826b3aeb1775d56fd305472",
       "Requirements": []
+    },
+    "marqLevAlg": {
+      "Package": "marqLevAlg",
+      "Version": "2.0.6",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "bcf96447f8c3f58fefadd8765e0ed20b",
+      "Requirements": [
+        "doParallel",
+        "foreach"
+      ]
     },
     "matrixStats": {
       "Package": "matrixStats",

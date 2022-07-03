@@ -11,7 +11,7 @@ lcMethodLcmmGMM(
   classmb = ~1,
   time = getOption("latrend.time"),
   id = getOption("latrend.id"),
-  init = "default",
+  init = "lme",
   nClusters = 2,
   ...
 )

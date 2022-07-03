@@ -7,6 +7,9 @@
 * Fixed bug in `predict.lcModel()` introduced by #116
 * Attempt to fix the documentation warning about how the escaped ampersand is not escaped
 
+## Breaking changes
+* Default initialization of `lcMethodLcmmGMM` and `lcMethodLcmmGBTM` is set to `init = "lme"` to support lcmm v2.0.0 #121
+
 # latrend v1.4.0
 
 ## New features
