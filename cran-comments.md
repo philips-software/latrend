@@ -1,7 +1,7 @@
 # v1.4.1
 * Fixed bug in `predict.lcModel()` introduced by #116
-* Added check to lcModelKML `postprob()`
-* Attempt to fix the warning about how the escaped ampersand is not escaped
+* Added check to the `postprob()` method of the `lcModelKML` class.
+* Fixed Rd ampersand NOTE
 * Ensured compatibility with lcmm 2.0.0
 
 # v1.4.0
