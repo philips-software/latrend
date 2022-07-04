@@ -158,9 +158,7 @@
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">stratfun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">int</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, <span class="va">data</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">int</span> <span class="op">&gt;</span> <span class="fl">1.7</span>, 
-         levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>, 
-         labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="st">"High"</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">int</span> <span class="op">&gt;</span> <span class="fl">1.7</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="st">"High"</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
 <span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodStratify.html">lcMethodStratify</a></span><span class="op">(</span>response <span class="op">=</span> <span class="st">"Y"</span>, stratify <span class="op">=</span> <span class="va">stratfun</span>, center <span class="op">=</span> <span class="va">mean</span><span class="op">)</span>
 <span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">m2</span>, <span class="va">casedata</span><span class="op">)</span>
@@ -190,7 +188,7 @@
   <span class="va">coefdata</span> <span class="op">&lt;-</span> <span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, <span class="va">.SD</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="va">Traj</span><span class="op">]</span>
   <span class="va">coefmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">coefdata</span>, select <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="op">)</span>
   <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">coefmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">coefdata</span><span class="op">$</span><span class="va">Traj</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">coefmat</span><span class="op">)</span>
+  <span class="va">coefmat</span>
 <span class="op">}</span></code></pre></div>
 <p>The cluster step takes the coefficient matrix as input. A cross-sectional cluster algorithm can then be applied to the matrix. In this example, we apply <span class="math inline">\(k\)</span>-means. The cluster step should output a <code>lcModel</code> object.</p>
 <p>The <code>lcModelPartition</code> function creates a <code>lcModel</code> object for a given vector of cluster assignments.</p>
@@ -248,7 +246,7 @@
   <span class="co"># exclude the id column</span>
   <span class="va">coefmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">coefdata</span>, select <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="op">)</span>
   <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">coefmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">coefdata</span><span class="op">[[</span><span class="va">method</span><span class="op">$</span><span class="va">id</span><span class="op">]</span><span class="op">]</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">coefmat</span><span class="op">)</span>
+  <span class="va">coefmat</span>
 <span class="op">}</span>
 
 <span class="va">clusStep.gen</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">repMat</span>, <span class="va">envir</span>, <span class="va">verbose</span><span class="op">)</span> <span class="op">{</span>
@@ -337,13 +335,13 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"prepareData"</span>, <span class="st">"lcMethodSimpleGBTM"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">envir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">new.env</a></span><span class="op">(</span><span class="op">)</span>
   <span class="va">envir</span><span class="op">$</span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
-  <span class="va">envir</span><span class="op">$</span><span class="va">data</span><span class="op">[[</span><span class="va">method</span><span class="op">$</span><span class="va">id</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">method</span><span class="op">$</span><span class="va">id</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">envir</span><span class="op">)</span>
+  <span class="va">envir</span><span class="op">$</span><span class="va">data</span><span class="op">[[</span><span class="va">method</span><span class="op">$</span><span class="va">id</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">method</span><span class="op">$</span><span class="va">id</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">envir</span>
 <span class="op">}</span><span class="op">)</span></code></pre></div>
-<p>The <code><a href="../reference/fit.html">fit()</a></code> function estimates the model and should return an object that extends the <code>lcModel</code> class. In our implementation, we call the <code>lcmm()</code> with the appropriate arguments, and we construct a <code>lcModelSimpleGBTM</code> instance. The class is defined in the subsection below. The <code>envir</code> argument contains the return value of the <code>prepare()</code> function, which would be <code>NULL</code> here.</p>
+<p>The <code><a href="../reference/fit.html">fit()</a></code> function estimates the model and should return an object that extends the <code>lcModel</code> class. In our implementation, we call the <code>hlme()</code> with the appropriate arguments, and we construct a <code>lcModelSimpleGBTM</code> instance. The class is defined in the subsection below. The <code>envir</code> argument contains the return value of the <code>prepare()</code> function, which would be <code>NULL</code> here.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"fit"</span>, <span class="st">"lcMethodSimpleGBTM"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="va">method</span>, args <span class="op">=</span> <span class="fu">lcmm</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lcmm/man/lcmm.html" class="external-link">lcmm</a></span><span class="op">)</span>
+  <span class="va">args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="va">method</span>, args <span class="op">=</span> <span class="fu">lcmm</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lcmm/man/hlme.html" class="external-link">hlme</a></span><span class="op">)</span>
   <span class="va">args</span><span class="op">$</span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">envir</span><span class="op">$</span><span class="va">data</span>
   <span class="va">args</span><span class="op">$</span><span class="va">fixed</span> <span class="op">&lt;-</span> <span class="va">method</span><span class="op">$</span><span class="va">formula</span>
   <span class="kw">if</span> <span class="op">(</span><span class="va">method</span><span class="op">$</span><span class="va">nClusters</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span>
@@ -354,8 +352,11 @@
   <span class="va">args</span><span class="op">$</span><span class="va">subject</span> <span class="op">&lt;-</span> <span class="va">method</span><span class="op">$</span><span class="va">id</span>
   <span class="va">args</span><span class="op">$</span><span class="va">ng</span> <span class="op">&lt;-</span> <span class="va">method</span><span class="op">$</span><span class="va">nClusters</span>
   <span class="va">args</span><span class="op">$</span><span class="va">returndata</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span>
-  
-  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="fu">lcmm</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lcmm/man/lcmm.html" class="external-link">lcmm</a></span>, <span class="va">args</span><span class="op">)</span>
+  <span class="co"># initialization, with a work-around for lcmm's dynamic evaluation</span>
+  <span class="va">.m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="fu">lcmm</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lcmm/man/hlme.html" class="external-link">hlme</a></span>, <span class="fu"><a href="https://rdrr.io/r/utils/modifyList.html" class="external-link">modifyList</a></span><span class="op">(</span><span class="va">args</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ng <span class="op">=</span> <span class="fl">1</span>, mixture <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">args</span><span class="op">$</span><span class="va">B</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="fu">random</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">dynGet</a></span><span class="op">(</span><span class="st">'.m1'</span>, inherits <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+  <span class="co"># fit latent-class model</span>
+  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="fu">lcmm</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lcmm/man/hlme.html" class="external-link">hlme</a></span>, <span class="va">args</span><span class="op">)</span>
   
   <span class="fu"><a href="https://rdrr.io/r/methods/new.html" class="external-link">new</a></span><span class="op">(</span>
     <span class="st">"lcModelSimpleGBTM"</span>, 
@@ -425,8 +426,271 @@
 <span class="co">#&gt;  nwg:            FALSE</span></code></pre></div>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sgbtm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">casedata</span><span class="op">)</span>
-<span class="co">#&gt; Be patient, lcmm is running ... </span>
-<span class="co">#&gt; The program took 0.12 seconds</span>
+<span class="co">#&gt; ------------------ iteration  0 ------------------</span>
+<span class="co">#&gt; Function value  -20633.88 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 1.0001 </span>
+<span class="co">#&gt;                     : function stability= 1.0001 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 1.0001 </span>
+<span class="co">#&gt;                coef    SE.coef     Var.coef</span>
+<span class="co">#&gt; parameter1 1.767509   5.759015     33.16625</span>
+<span class="co">#&gt; parameter2 1.000000  10.241137    104.88089</span>
+<span class="co">#&gt; parameter3 1.000000 341.454838 116591.40619</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  1 ------------------</span>
+<span class="co">#&gt; Function value  -20633.73 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0 </span>
+<span class="co">#&gt;                     : function stability= 0.142273 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 1.0001 </span>
+<span class="co">#&gt;                 coef    SE.coef     Var.coef</span>
+<span class="co">#&gt; parameter1 1.7674992   5.759023     33.16634</span>
+<span class="co">#&gt; parameter2 0.9999947  10.241152    104.88120</span>
+<span class="co">#&gt; parameter3 0.9999969 341.454672 116591.29332</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  2 ------------------</span>
+<span class="co">#&gt; Function value  -3610.327 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 5.25559 </span>
+<span class="co">#&gt;                     : function stability= 17023.41 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 1.0001 </span>
+<span class="co">#&gt;                  coef    SE.coef    Var.coef</span>
+<span class="co">#&gt; parameter1 -0.3359932   6.861143    47.07529</span>
+<span class="co">#&gt; parameter2  0.1376645  12.201022   148.86494</span>
+<span class="co">#&gt; parameter3  0.7045363 183.979743 33848.54595</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  3 ------------------</span>
+<span class="co">#&gt; Function value  -3610.314 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0 </span>
+<span class="co">#&gt;                     : function stability= 0.01315729 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 1.0001 </span>
+<span class="co">#&gt;                  coef    SE.coef   Var.coef</span>
+<span class="co">#&gt; parameter1 -0.3359832   6.861152    47.0754</span>
+<span class="co">#&gt; parameter2  0.1376641  12.201044   148.8655</span>
+<span class="co">#&gt; parameter3  0.7045343 183.979909 33848.6069</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  4 ------------------</span>
+<span class="co">#&gt; Function value  -3610.296 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0 </span>
+<span class="co">#&gt;                     : function stability= 0.01810068 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 1.0001 </span>
+<span class="co">#&gt;                  coef    SE.coef    Var.coef</span>
+<span class="co">#&gt; parameter1 -0.3359731   6.861164    47.07557</span>
+<span class="co">#&gt; parameter2  0.1376639  12.201071   148.86614</span>
+<span class="co">#&gt; parameter3  0.7045328 183.979808 33848.56965</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  5 ------------------</span>
+<span class="co">#&gt; Function value  -1729.07 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 2.184653 </span>
+<span class="co">#&gt;                     : function stability= 1881.226 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 364.4379 </span>
+<span class="co">#&gt;                 coef    SE.coef   Var.coef</span>
+<span class="co">#&gt; parameter1 1.1339175 0.03982233 0.00158582</span>
+<span class="co">#&gt; parameter2 0.1532237 0.00793766 0.00006301</span>
+<span class="co">#&gt; parameter3 0.5501563 0.01002606 0.00010052</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  6 ------------------</span>
+<span class="co">#&gt; Function value  -1238.211 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0.2981123 </span>
+<span class="co">#&gt;                     : function stability= 490.8581 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 43.33083 </span>
+<span class="co">#&gt;                  coef    SE.coef   Var.coef</span>
+<span class="co">#&gt; parameter1 1.66206514 0.03080617 0.00094902</span>
+<span class="co">#&gt; parameter2 0.01517586 0.00520224 0.00002706</span>
+<span class="co">#&gt; parameter3 0.53942962 0.00829838 0.00006886</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  7 ------------------</span>
+<span class="co">#&gt; Function value  -1160.566 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0.01811566 </span>
+<span class="co">#&gt;                     : function stability= 77.64567 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 7.149929 </span>
+<span class="co">#&gt;                   coef    SE.coef   Var.coef</span>
+<span class="co">#&gt; parameter1  1.76620108 0.03520603 0.00123946</span>
+<span class="co">#&gt; parameter2 -0.00170179 0.00595092 0.00003541</span>
+<span class="co">#&gt; parameter3  0.62301498 0.01154771 0.00013335</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  8 ------------------</span>
+<span class="co">#&gt; Function value  -1148.588 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0.00452068 </span>
+<span class="co">#&gt;                     : function stability= 11.97804 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 0.3094911 </span>
+<span class="co">#&gt;                   coef    SE.coef   Var.coef</span>
+<span class="co">#&gt; parameter1  1.81009024 0.03798904 0.00144317</span>
+<span class="co">#&gt; parameter2 -0.00883937 0.00642130 0.00004123</span>
+<span class="co">#&gt; parameter3  0.67344788 0.01393836 0.00019428</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  9 ------------------</span>
+<span class="co">#&gt; Function value  -1148.109 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0.00024124 </span>
+<span class="co">#&gt;                     : function stability= 0.4785324 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 0.00073164 </span>
+<span class="co">#&gt;                   coef    SE.coef   Var.coef</span>
+<span class="co">#&gt; parameter1  1.81843804 0.03872259 0.00149944</span>
+<span class="co">#&gt; parameter2 -0.01019779 0.00654533 0.00004284</span>
+<span class="co">#&gt; parameter3  0.68647512 0.01461783 0.00021368</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  10 ------------------</span>
+<span class="co">#&gt; Function value  -1148.108 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 5.6e-07 </span>
+<span class="co">#&gt;                     : function stability= 0.00109858 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 0 </span>
+<span class="co">#&gt;                   coef    SE.coef   Var.coef</span>
+<span class="co">#&gt; parameter1  1.81876844 0.03876025 0.00150236</span>
+<span class="co">#&gt; parameter2 -0.01025184 0.00655167 0.00004292</span>
+<span class="co">#&gt; parameter3  0.68714788 0.01465366 0.00021473</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  11 ------------------</span>
+<span class="co">#&gt; Function value  -1148.108 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0 </span>
+<span class="co">#&gt;                     : function stability= 0 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 0 </span>
+<span class="co">#&gt;                   coef    SE.coef   Var.coef</span>
+<span class="co">#&gt; parameter1  1.81876852 0.03876048 0.00150238</span>
+<span class="co">#&gt; parameter2 -0.01025187 0.00655172 0.00004293</span>
+<span class="co">#&gt; parameter3  0.68714919 0.01465374 0.00021473</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; The program took 0.13 seconds </span>
+<span class="co">#&gt; ------------------ iteration  0 ------------------</span>
+<span class="co">#&gt; Function value  -1135.184 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 1.0001 </span>
+<span class="co">#&gt;                     : function stability= 1.0001 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 1.0001 </span>
+<span class="co">#&gt;                   coef    SE.coef    Var.coef</span>
+<span class="co">#&gt; parameter1  0.00000000   3.976795     15.8149</span>
+<span class="co">#&gt; parameter2  1.82147999  52.862084  -2794.3999</span>
+<span class="co">#&gt; parameter3  1.77842030  51.701762  -2673.0722</span>
+<span class="co">#&gt; parameter4 -0.00260985 142.546570 -20319.5245</span>
+<span class="co">#&gt; parameter5 -0.01073129 128.704625 -16564.8804</span>
+<span class="co">#&gt; parameter6  0.66831800  69.107331   4775.8233</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  1 ------------------</span>
+<span class="co">#&gt; Function value  -1109.112 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0.00013837 </span>
+<span class="co">#&gt;                     : function stability= 26.07158 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 1.0001 </span>
+<span class="co">#&gt;                   coef   SE.coef   Var.coef</span>
+<span class="co">#&gt; parameter1 -0.00001132   0.00000     0.0000</span>
+<span class="co">#&gt; parameter2  1.82377436  27.39797  -750.6488</span>
+<span class="co">#&gt; parameter3  1.77616317  19.42025  -377.1459</span>
+<span class="co">#&gt; parameter4  0.00532231 106.58460 11360.2769</span>
+<span class="co">#&gt; parameter5 -0.01878620 146.35207 21418.9277</span>
+<span class="co">#&gt; parameter6  0.66786357  63.98615  4094.2278</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  2 ------------------</span>
+<span class="co">#&gt; Function value  -1037.083 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0.00552034 </span>
+<span class="co">#&gt;                     : function stability= 72.02933 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 1.0001 </span>
+<span class="co">#&gt;                   coef   SE.coef    Var.coef</span>
+<span class="co">#&gt; parameter1 -0.00490621  2.182051    4.761348</span>
+<span class="co">#&gt; parameter2  1.86080932  4.798913   23.029565</span>
+<span class="co">#&gt; parameter3  1.71278021  5.685525   32.325195</span>
+<span class="co">#&gt; parameter4  0.01370861  9.578693   91.751368</span>
+<span class="co">#&gt; parameter5 -0.02291505  9.391523   88.200702</span>
+<span class="co">#&gt; parameter6  0.66338987 55.416972 3071.040772</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  3 ------------------</span>
+<span class="co">#&gt; Function value  -802.8879 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0.08221898 </span>
+<span class="co">#&gt;                     : function stability= 234.195 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 1.0001 </span>
+<span class="co">#&gt;                   coef   SE.coef   Var.coef</span>
+<span class="co">#&gt; parameter1 -0.03601449  2.224965    4.95047</span>
+<span class="co">#&gt; parameter2  2.10308186  5.945289   35.34646</span>
+<span class="co">#&gt; parameter3  1.59007196  6.599512   43.55356</span>
+<span class="co">#&gt; parameter4  0.02444832 10.702268  114.53853</span>
+<span class="co">#&gt; parameter5 -0.02880232 11.786627  138.92458</span>
+<span class="co">#&gt; parameter6  0.57766968 50.772525 2577.84926</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  4 ------------------</span>
+<span class="co">#&gt; Function value  -802.8766 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0 </span>
+<span class="co">#&gt;                     : function stability= 0.01131964 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 1.0001 </span>
+<span class="co">#&gt;                   coef   SE.coef    Var.coef</span>
+<span class="co">#&gt; parameter1 -0.03601544  2.226128    4.955648</span>
+<span class="co">#&gt; parameter2  2.10309186  5.945332   35.346970</span>
+<span class="co">#&gt; parameter3  1.59006564  6.599558   43.554169</span>
+<span class="co">#&gt; parameter4  0.02444747 10.702349  114.540278</span>
+<span class="co">#&gt; parameter5 -0.02880176 11.786696  138.926200</span>
+<span class="co">#&gt; parameter6  0.57766229 50.773669 2577.965481</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  5 ------------------</span>
+<span class="co">#&gt; Function value  -486.757 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0.2436012 </span>
+<span class="co">#&gt;                     : function stability= 316.1196 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 1.0001 </span>
+<span class="co">#&gt;                   coef    SE.coef     Var.coef</span>
+<span class="co">#&gt; parameter1 -0.07824161   2.235159     4.995937</span>
+<span class="co">#&gt; parameter2  2.44101402   8.460175    71.574568</span>
+<span class="co">#&gt; parameter3  1.37549296   9.362729    87.660686</span>
+<span class="co">#&gt; parameter4  0.00429267  15.044598   226.339934</span>
+<span class="co">#&gt; parameter5 -0.01521719  16.649542   277.207254</span>
+<span class="co">#&gt; parameter6  0.29306689 200.212579 40085.076632</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  6 ------------------</span>
+<span class="co">#&gt; Function value  21.00824 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0.3206699 </span>
+<span class="co">#&gt;                     : function stability= 507.7652 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 10.02194 </span>
+<span class="co">#&gt;                   coef    SE.coef   Var.coef</span>
+<span class="co">#&gt; parameter1 -0.13700015 0.20046810 0.04018746</span>
+<span class="co">#&gt; parameter2  2.90434720 0.01904396 0.00036267</span>
+<span class="co">#&gt; parameter3  1.08608931 0.01533896 0.00023528</span>
+<span class="co">#&gt; parameter4 -0.08627462 0.00318065 0.00001012</span>
+<span class="co">#&gt; parameter5  0.04177020 0.00257520 0.00000663</span>
+<span class="co">#&gt; parameter6  0.20742096 0.00418958 0.00001755</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  7 ------------------</span>
+<span class="co">#&gt; Function value  51.5374 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0.02660172 </span>
+<span class="co">#&gt;                     : function stability= 30.52916 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 0.4484829 </span>
+<span class="co">#&gt;                   coef    SE.coef   Var.coef</span>
+<span class="co">#&gt; parameter1 -0.25493575 0.20162697 0.04065344</span>
+<span class="co">#&gt; parameter2  3.00059665 0.01892609 0.00035820</span>
+<span class="co">#&gt; parameter3  1.02938472 0.01544891 0.00023867</span>
+<span class="co">#&gt; parameter4 -0.09828278 0.00319875 0.00001023</span>
+<span class="co">#&gt; parameter5  0.04867298 0.00261118 0.00000682</span>
+<span class="co">#&gt; parameter6  0.21207990 0.00437476 0.00001914</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  8 ------------------</span>
+<span class="co">#&gt; Function value  52.91617 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0.01650014 </span>
+<span class="co">#&gt;                     : function stability= 1.37877 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 0.00380866 </span>
+<span class="co">#&gt;                   coef    SE.coef   Var.coef</span>
+<span class="co">#&gt; parameter1 -0.38208405 0.20366005 0.04147742</span>
+<span class="co">#&gt; parameter2  3.01578402 0.01931419 0.00037304</span>
+<span class="co">#&gt; parameter3  1.02068312 0.01576999 0.00024869</span>
+<span class="co">#&gt; parameter4 -0.10059053 0.00326469 0.00001066</span>
+<span class="co">#&gt; parameter5  0.04998647 0.00266561 0.00000711</span>
+<span class="co">#&gt; parameter6  0.21655516 0.00460656 0.00002122</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  9 ------------------</span>
+<span class="co">#&gt; Function value  52.92761 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 0.00052055 </span>
+<span class="co">#&gt;                     : function stability= 0.01144183 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 1.45e-06 </span>
+<span class="co">#&gt;                   coef    SE.coef   Var.coef</span>
+<span class="co">#&gt; parameter1 -0.40487091 0.20411111 0.04166134</span>
+<span class="co">#&gt; parameter2  3.01671053 0.01934637 0.00037428</span>
+<span class="co">#&gt; parameter3  1.02014145 0.01579624 0.00024952</span>
+<span class="co">#&gt; parameter4 -0.10073544 0.00327013 0.00001069</span>
+<span class="co">#&gt; parameter5  0.05007042 0.00267005 0.00000713</span>
+<span class="co">#&gt; parameter6  0.21691600 0.00462577 0.00002140</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ------------------ iteration  10 ------------------</span>
+<span class="co">#&gt; Function value  52.92761 </span>
+<span class="co">#&gt; Convergence criteria: parameters stability= 3.5e-07 </span>
+<span class="co">#&gt;                     : function stability= 4.35e-06 </span>
+<span class="co">#&gt;                     : relative distance to maximum(RDM)= 0 </span>
+<span class="co">#&gt;                   coef    SE.coef   Var.coef</span>
+<span class="co">#&gt; parameter1 -0.40546306 0.20412341 0.04166637</span>
+<span class="co">#&gt; parameter2  3.01671454 0.01934652 0.00037429</span>
+<span class="co">#&gt; parameter3  1.02013784 0.01579636 0.00024952</span>
+<span class="co">#&gt; parameter4 -0.10073613 0.00327016 0.00001069</span>
+<span class="co">#&gt; parameter5  0.05007098 0.00267007 0.00000713</span>
+<span class="co">#&gt; parameter6  0.21691766 0.00462586 0.00002140</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; The program took 0.21 seconds</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">sgbtm</span><span class="op">)</span>
 <span class="co">#&gt; Longitudinal cluster model using simple group-based trajectory model</span>
 <span class="co">#&gt; lcMethodSimpleGBTM specifying "simple group-based trajectory model"</span>
@@ -443,8 +707,8 @@
 <span class="co">#&gt; Number of obs: 1100, strata (Traj): 100</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Scaled residuals:</span>
-<span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span class="co">#&gt; -2.1126 -0.9295  0.4772  0.0000  0.8352  1.3507</span></code></pre></div>
+<span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
+<span class="co">#&gt; -2.98015 -0.69195  0.05702  0.00000  0.69910  2.91739</span></code></pre></div>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sgbtm</span><span class="op">)</span></code></pre></div>
 <p><img src="implement_files/figure-html/unnamed-chunk-31-1.png" width="700"></p>
