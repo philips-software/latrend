@@ -2,6 +2,7 @@
 ^renv\.lock$
 ^.*\.bak$
 ^.*\.sav$
+^.*\.tmp$
 ^.*\.bat$
 ^.*\.pdf$
 ^.*\.Rproj$
