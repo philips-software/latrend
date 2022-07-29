@@ -28,7 +28,7 @@
 -   Removed redundant `lcModelCustom` in favor of `lcModelPartition`
 -   Renamed `lcMethodCustom` to `lcMethodFunction` for clarity
 
-# latrend v.1.3.0
+# latrend v1.3.0
 
 ## New features
 
