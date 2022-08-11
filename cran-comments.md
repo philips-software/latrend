@@ -1,3 +1,9 @@
+# v1.4.2
+* Fixed minor bug in `evaluate.lcMethod()`
+* Resolved lcmm test error
+* Shortened runtime of vignettes
+* Shortened runtime of tests
+
 # v1.4.1
 * Fixed bug in `predict.lcModel()` introduced by #116
 * Added check to the `postprob()` method of the `lcModelKML` class.
