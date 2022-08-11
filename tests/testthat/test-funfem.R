@@ -1,5 +1,6 @@
 context('funfem')
 skip_if_not_installed('funFEM')
+skip_on_cran()
 rngReset()
 # funFEM does not support K = 1
 tests = setdiff(DEFAULT_LATREND_TESTS, c('cluster-single', 'data-na', 'data-varlen'))

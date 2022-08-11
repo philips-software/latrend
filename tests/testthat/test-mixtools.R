@@ -1,5 +1,6 @@
 context('mixtools')
 skip_if_not_installed('mixtools')
+skip_on_cran()
 rngReset()
 tests = setdiff(DEFAULT_LATREND_TESTS, c('data-na', 'data-varlen'))
 

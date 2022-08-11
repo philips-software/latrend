@@ -1,5 +1,6 @@
 context('LCMM models')
 skip_if_not_installed('lcmm')
+skip_on_cran()
 rngReset()
 tests = c(DEFAULT_LATREND_TESTS)
 

@@ -1,5 +1,6 @@
 context('flexmix')
 skip_if_not_installed('flexmix')
+skip_on_cran()
 rngReset()
 tests = setdiff(DEFAULT_LATREND_TESTS, 'data-na')
 
