@@ -89,10 +89,6 @@ jobs:
       - uses: r-lib/actions/setup-renv@v1
         with:
           cache-version: 2
-        
-      - name: Force-install rmarkdown dependency (no clue why this is not done during renv::restore)
-        shell: Rscript {0}
-        run: renv::install('rmarkdown')
 
       - uses: r-lib/actions/check-r-package@v2
         with:
