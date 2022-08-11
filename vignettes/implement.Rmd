@@ -1,5 +1,5 @@
 ---
-title: "Implementing new models"
+title: "Implementing new methods"
 author: "Niek Den Teuling"
 date: "2021-01-16"
 output: 

@@ -61,12 +61,12 @@ The purpose of model validation is essentially to identify that the model is rob
 
 We can fit a method repeatedly using the `latrendRep` data.
 ```{r}
-repModels <- latrendRep(kml, data = latrendData, .rep=10)
+repModels <- latrendRep(kml, data = latrendData, .rep = 5)
 print(repModels, excludeShared = FALSE)
 ```
 A convenient way to assess the stability across repeated runs is to compare the models on one or more internal model metrics. Similar solutions should yield similar metric scores.
 ```{r}
-repSelfMetrics <- metric(repModels, name = c("BIC", "WMAE", "APPA"))
+repSelfMetrics <- metric(repModels, name = c("BIC", "WMAE", "APPA.mean"))
 head(repSelfMetrics)
 ```
 
@@ -100,7 +100,7 @@ bootModels
 ```
 
 ```{r}
-bootMetrics <- metric(bootModels, name = c("BIC", "WMAE", "APPA"))
+bootMetrics <- metric(bootModels, name = c("BIC", "WMAE", "APPA.mean"))
 bootMetrics
 ```
 ```{r}
@@ -112,11 +112,11 @@ apply(bootMetrics, 2, sd)
 ```
 
 
-# Ten-fold cross validation
+# $k$-fold cross validation
 Lastly, we can fit models using $k$-fold cross-validation to validate the models on previously unseen data from the test folds.
 
 ```{r}
-trainModels <- latrendCV(kml, data = latrendData, folds = 10, seed = 1)
+trainModels <- latrendCV(kml, data = latrendData, folds = 5, seed = 1)
 trainModels
 ```
 
@@ -124,12 +124,12 @@ trainModels
 ## Manual cross validation
 Alternatively, we can generate the training data folds ourselves, and fit models using `latrendBatch`.
 ```{r}
-dataFolds <- createTrainDataFolds(latrendData, folds = 10)
+dataFolds <- createTrainDataFolds(latrendData, folds = 5)
 foldModels <- latrendBatch(kml, data = dataFolds)
 foldModels
 ```
 The list of test data folds is obtained using
-```{r}
+```{r, eval = FALSE}
 testDataFolds <- createTestDataFolds(latrendData, dataFolds)
 ```
 
