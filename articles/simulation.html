@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">latrend</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.2</span>
       </span>
     </div>
 
@@ -53,13 +53,10 @@
       <a href="../articles/demo.html">Demonstration of latrend package</a>
     </li>
     <li>
-      <a href="../articles/implement.html">Implementing new models</a>
+      <a href="../articles/implement.html">Implementing new methods</a>
     </li>
     <li>
       <a href="../articles/simulation.html">Conducting a simulation study</a>
-    </li>
-    <li>
-      <a href="../articles/validation.html">Validating cluster models</a>
     </li>
   </ul>
 </li>
@@ -179,18 +176,17 @@
 <code class="sourceCode R"><span class="va">kmlMethodGrid</span> <span class="op">&lt;-</span> <span class="fu">simTool</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/simTool/man/expand_tibble.html" class="external-link">expand_tibble</a></span><span class="op">(</span>
   proc <span class="op">=</span> <span class="st">"latrend"</span>,
   method <span class="op">=</span> <span class="st">"lcMethodKML"</span>,
-  nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,
+  nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,
   seed <span class="op">=</span> <span class="fl">1</span>,
   response <span class="op">=</span> <span class="st">"Y"</span>
 <span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">kmlMethodGrid</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 5</span></span>
 <span class="co">#&gt;   proc    method      nClusters  seed response</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span> latrend lcMethodKML         1     1 Y       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> latrend lcMethodKML         2     1 Y       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> latrend lcMethodKML         3     1 Y</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> latrend lcMethodKML         2     1 Y</span></code></pre></div>
 <div class="section level3">
 <h3 id="specifying-the-gckm-method">Specifying the GCKM method<a class="anchor" aria-label="anchor" href="#specifying-the-gckm-method"></a>
 </h3>
@@ -199,8 +195,8 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fitGCKM</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">type</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">form</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span><span class="va">type</span>,
-    constant <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">Time</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Traj</span><span class="op">)</span>,
-    linear <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">Time</span> <span class="op">+</span> <span class="op">(</span><span class="va">Time</span> <span class="op">|</span> <span class="va">Traj</span><span class="op">)</span>
+    constant <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Traj</span><span class="op">)</span>,
+    linear <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span> <span class="op">+</span> <span class="op">(</span><span class="va">Time</span> <span class="op">|</span> <span class="va">Traj</span><span class="op">)</span>
   <span class="op">)</span>
   
   <span class="fu"><a href="../reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">...</span>, formula <span class="op">=</span> <span class="va">form</span><span class="op">)</span>
@@ -211,8 +207,8 @@
   proc <span class="op">=</span> <span class="st">"fitGCKM"</span>,
   method <span class="op">=</span> <span class="st">"lcMethodGCKM"</span>,
   type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"constant"</span>, <span class="st">"linear"</span><span class="op">)</span>,
-  nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,
-  seed <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>
+  nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,
+  seed <span class="op">=</span> <span class="fl">1</span>
 <span class="op">)</span></code></pre></div>
 <p>Finally, we combine our method-specific permutation grids into one large grid. By using the <code>bind_rows()</code> function, mismatches in the columns between the grids are handled properly.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -223,10 +219,10 @@
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span> latrend lcMethodKML          1     1 Y        <span style="color: #BB0000;">NA</span>      </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">2</span> latrend lcMethodKML          2     1 Y        <span style="color: #BB0000;">NA</span>      </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> latrend lcMethodKML          3     1 Y        <span style="color: #BB0000;">NA</span>      </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> fitGCKM lcMethodGCKM         1     1 <span style="color: #BB0000;">NA</span>       constant</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> fitGCKM lcMethodGCKM         1     1 <span style="color: #BB0000;">NA</span>       linear  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> fitGCKM lcMethodGCKM         2     1 <span style="color: #BB0000;">NA</span>       constant</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> fitGCKM lcMethodGCKM         1     1 <span style="color: #BB0000;">NA</span>       constant</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> fitGCKM lcMethodGCKM         1     1 <span style="color: #BB0000;">NA</span>       linear  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> fitGCKM lcMethodGCKM         2     1 <span style="color: #BB0000;">NA</span>       constant</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> fitGCKM lcMethodGCKM         2     1 <span style="color: #BB0000;">NA</span>       linear</span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -252,153 +248,31 @@
   data_grid <span class="op">=</span> <span class="va">dataGrid</span>, 
   proc_grid <span class="op">=</span> <span class="va">methodGrid</span>,
   post_analyze <span class="op">=</span> <span class="va">analyzeModel</span>
-<span class="op">)</span>
-<span class="co">#&gt; Warning in rgl.init(initValue, onlyNULL): RGL: unable to open X11 display</span>
-<span class="co">#&gt; Warning: 'rgl.init' failed, running with 'rgl.useNULL = TRUE'.</span>
-<span class="co">#&gt; Warning: no DISPLAY variable so Tk is not available</span>
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span>
-
-<span class="co">#&gt; Warning in mclustcomp::mclustcomp(trajectoryAssignments(m1) %&gt;% as.integer, : *</span>
-<span class="co">#&gt; mclustcomp : 'x' is a trivial clustering.</span></code></pre></div>
+<span class="op">)</span></code></pre></div>
 <p>The <code>result</code> table contains a <code>results</code> column containing the fitted models.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">result</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 120 × 15</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 48 × 15</span></span>
 <span class="co">#&gt;    fun     numTraj randomScales data.seed replications proc    method  nClusters</span>
 <span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
 <span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> dataGen      50          0.1         1            1 latrend lcMeth…         1</span>
 <span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> dataGen      50          0.1         1            1 latrend lcMeth…         2</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> dataGen      50          0.1         1            1 latrend lcMeth…         3</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> dataGen      50          0.1         1            1 fitGCKM lcMeth…         1</span>
 <span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> dataGen      50          0.1         1            1 fitGCKM lcMeth…         1</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> dataGen      50          0.1         1            1 fitGCKM lcMeth…         1</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> dataGen      50          0.1         1            1 fitGCKM lcMeth…         2</span>
 <span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> dataGen      50          0.1         1            1 fitGCKM lcMeth…         2</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> dataGen      50          0.1         1            1 fitGCKM lcMeth…         2</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> dataGen      50          0.1         1            1 fitGCKM lcMeth…         3</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> dataGen      50          0.1         1            1 fitGCKM lcMeth…         3</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> dataGen      50          0.1         1            1 fitGCKM lcMeth…         1</span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 110 more rows, and 7 more variables: seed &lt;dbl&gt;, response &lt;chr&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> dataGen     250          0.1         1            1 latrend lcMeth…         1</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> dataGen     250          0.1         1            1 latrend lcMeth…         2</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> dataGen     250          0.1         1            1 fitGCKM lcMeth…         1</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> dataGen     250          0.1         1            1 fitGCKM lcMeth…         1</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 38 more rows, and 7 more variables: seed &lt;dbl&gt;, response &lt;chr&gt;,</span></span>
 <span class="co">#&gt; <span style="color: #949494;">#   type &lt;chr&gt;, BIC &lt;dbl&gt;, APPA &lt;dbl&gt;, WMAE &lt;dbl&gt;, ARI &lt;dbl&gt;</span></span>
 <span class="co">#&gt; Number of data generating functions: 8</span>
-<span class="co">#&gt; Number of analyzing procedures: 15</span>
+<span class="co">#&gt; Number of analyzing procedures: 6</span>
 <span class="co">#&gt; Number of replications: 1</span>
-<span class="co">#&gt; Estimated replications per hour: 108</span>
-<span class="co">#&gt; Start of the simulation: 2022-07-29 09:40:22</span>
-<span class="co">#&gt; End of the simulation: 2022-07-29 09:40:56</span></code></pre></div>
+<span class="co">#&gt; Estimated replications per hour: 236</span>
+<span class="co">#&gt; Start of the simulation: 2022-08-11 19:08:26</span>
+<span class="co">#&gt; End of the simulation: 2022-08-11 19:08:41</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="analyzing-the-results">Analyzing the results<a class="anchor" aria-label="anchor" href="#analyzing-the-results"></a>
@@ -415,22 +289,22 @@
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">resultsTable</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>K <span class="op">=</span> <span class="va">nClusters</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.min</a></span><span class="op">(</span><span class="va">BIC</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">numTraj</span>, <span class="va">randomScales</span>, <span class="va">data.seed</span>, <span class="va">method</span><span class="op">)</span><span class="op">]</span>
 <span class="co">#&gt;     numTraj randomScales data.seed       method K</span>
-<span class="co">#&gt;  1:      50          0.1         1 lcMethodGCKM 3</span>
-<span class="co">#&gt;  2:      50          0.1         1  lcMethodKML 3</span>
-<span class="co">#&gt;  3:      50          0.1         2 lcMethodGCKM 3</span>
-<span class="co">#&gt;  4:      50          0.1         2  lcMethodKML 3</span>
-<span class="co">#&gt;  5:      50          0.5         1 lcMethodGCKM 3</span>
-<span class="co">#&gt;  6:      50          0.5         1  lcMethodKML 3</span>
-<span class="co">#&gt;  7:      50          0.5         2 lcMethodGCKM 3</span>
-<span class="co">#&gt;  8:      50          0.5         2  lcMethodKML 3</span>
-<span class="co">#&gt;  9:     250          0.1         1 lcMethodGCKM 3</span>
-<span class="co">#&gt; 10:     250          0.1         1  lcMethodKML 3</span>
-<span class="co">#&gt; 11:     250          0.1         2 lcMethodGCKM 3</span>
-<span class="co">#&gt; 12:     250          0.1         2  lcMethodKML 3</span>
-<span class="co">#&gt; 13:     250          0.5         1 lcMethodGCKM 3</span>
-<span class="co">#&gt; 14:     250          0.5         1  lcMethodKML 3</span>
-<span class="co">#&gt; 15:     250          0.5         2 lcMethodGCKM 3</span>
-<span class="co">#&gt; 16:     250          0.5         2  lcMethodKML 3</span></code></pre></div>
+<span class="co">#&gt;  1:      50          0.1         1 lcMethodGCKM 2</span>
+<span class="co">#&gt;  2:      50          0.1         1  lcMethodKML 2</span>
+<span class="co">#&gt;  3:      50          0.1         2 lcMethodGCKM 2</span>
+<span class="co">#&gt;  4:      50          0.1         2  lcMethodKML 2</span>
+<span class="co">#&gt;  5:      50          0.5         1 lcMethodGCKM 2</span>
+<span class="co">#&gt;  6:      50          0.5         1  lcMethodKML 2</span>
+<span class="co">#&gt;  7:      50          0.5         2 lcMethodGCKM 2</span>
+<span class="co">#&gt;  8:      50          0.5         2  lcMethodKML 2</span>
+<span class="co">#&gt;  9:     250          0.1         1 lcMethodGCKM 2</span>
+<span class="co">#&gt; 10:     250          0.1         1  lcMethodKML 2</span>
+<span class="co">#&gt; 11:     250          0.1         2 lcMethodGCKM 2</span>
+<span class="co">#&gt; 12:     250          0.1         2  lcMethodKML 2</span>
+<span class="co">#&gt; 13:     250          0.5         1 lcMethodGCKM 2</span>
+<span class="co">#&gt; 14:     250          0.5         1  lcMethodKML 2</span>
+<span class="co">#&gt; 15:     250          0.5         2 lcMethodGCKM 2</span>
+<span class="co">#&gt; 16:     250          0.5         2  lcMethodKML 2</span></code></pre></div>
 <p>Column <em>K</em> of the table shows the selected number of clusters for each scenario. This shows that estimating the number of clusters by minimizing the BIC results in a consistent overestimation of the number of clusters in our datasets. As an alternative to minimizing the BIC, we could consider using the elbow method instead. However, in order to conclude whether that is a feasible approach to our data would require more simulations, across a greater number of cluster.</p>
 </div>
 <div class="section level3">
@@ -440,35 +314,23 @@
 <p>We compute the average ARI per data scenario and method to identify in which scenarios the methods were able to recover the reference cluster assignments.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">resultsTable</span><span class="op">[</span><span class="va">nClusters</span> <span class="op">&gt;</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span>ARI <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">ARI</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">nClusters</span>, <span class="va">numTraj</span>, <span class="va">randomScales</span>, <span class="va">method</span><span class="op">)</span><span class="op">]</span>
-<span class="co">#&gt;     nClusters numTraj randomScales       method        ARI</span>
-<span class="co">#&gt;  1:         2      50          0.1 lcMethodGCKM 1.00000000</span>
-<span class="co">#&gt;  2:         2      50          0.1  lcMethodKML 1.00000000</span>
-<span class="co">#&gt;  3:         2      50          0.5 lcMethodGCKM 0.47196922</span>
-<span class="co">#&gt;  4:         2      50          0.5  lcMethodKML 0.13740619</span>
-<span class="co">#&gt;  5:         2     250          0.1 lcMethodGCKM 0.98808217</span>
-<span class="co">#&gt;  6:         2     250          0.1  lcMethodKML 1.00000000</span>
-<span class="co">#&gt;  7:         2     250          0.5 lcMethodGCKM 0.45216886</span>
-<span class="co">#&gt;  8:         2     250          0.5  lcMethodKML 0.13230255</span>
-<span class="co">#&gt;  9:         3      50          0.1 lcMethodGCKM 0.77143848</span>
-<span class="co">#&gt; 10:         3      50          0.1  lcMethodKML 0.64328345</span>
-<span class="co">#&gt; 11:         3      50          0.5 lcMethodGCKM 0.39826188</span>
-<span class="co">#&gt; 12:         3      50          0.5  lcMethodKML 0.04807953</span>
-<span class="co">#&gt; 13:         3     250          0.1 lcMethodGCKM 0.63260781</span>
-<span class="co">#&gt; 14:         3     250          0.1  lcMethodKML 0.66598327</span>
-<span class="co">#&gt; 15:         3     250          0.5 lcMethodGCKM 0.31915680</span>
-<span class="co">#&gt; 16:         3     250          0.5  lcMethodKML 0.10838125</span></code></pre></div>
+<span class="co">#&gt;    nClusters numTraj randomScales       method       ARI</span>
+<span class="co">#&gt; 1:         2      50          0.1 lcMethodGCKM 1.0000000</span>
+<span class="co">#&gt; 2:         2      50          0.1  lcMethodKML 1.0000000</span>
+<span class="co">#&gt; 3:         2      50          0.5 lcMethodGCKM 0.4740203</span>
+<span class="co">#&gt; 4:         2      50          0.5  lcMethodKML 0.1374062</span>
+<span class="co">#&gt; 5:         2     250          0.1 lcMethodGCKM 0.9880822</span>
+<span class="co">#&gt; 6:         2     250          0.1  lcMethodKML 1.0000000</span>
+<span class="co">#&gt; 7:         2     250          0.5 lcMethodGCKM 0.4521689</span>
+<span class="co">#&gt; 8:         2     250          0.5  lcMethodKML 0.1323025</span></code></pre></div>
 <p>The trajectory assignment recovery is affected the most by the magnitude of the random scale (i.e., the amount of overlap between the clusters). Moreover, it is apparent that KmL performs much worse under high random scale than GCKM.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">resultsTable</span><span class="op">[</span><span class="va">nClusters</span> <span class="op">&gt;</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span>ARI <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">ARI</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">randomScales</span>, <span class="va">nClusters</span>, <span class="va">method</span><span class="op">)</span><span class="op">]</span>
-<span class="co">#&gt;    randomScales nClusters       method        ARI</span>
-<span class="co">#&gt; 1:          0.1         2 lcMethodGCKM 0.99404109</span>
-<span class="co">#&gt; 2:          0.1         2  lcMethodKML 1.00000000</span>
-<span class="co">#&gt; 3:          0.1         3 lcMethodGCKM 0.70202315</span>
-<span class="co">#&gt; 4:          0.1         3  lcMethodKML 0.65463336</span>
-<span class="co">#&gt; 5:          0.5         2 lcMethodGCKM 0.46206904</span>
-<span class="co">#&gt; 6:          0.5         2  lcMethodKML 0.13485437</span>
-<span class="co">#&gt; 7:          0.5         3 lcMethodGCKM 0.35870934</span>
-<span class="co">#&gt; 8:          0.5         3  lcMethodKML 0.07823039</span></code></pre></div>
+<span class="co">#&gt;    randomScales nClusters       method       ARI</span>
+<span class="co">#&gt; 1:          0.1         2 lcMethodGCKM 0.9940411</span>
+<span class="co">#&gt; 2:          0.1         2  lcMethodKML 1.0000000</span>
+<span class="co">#&gt; 3:          0.5         2 lcMethodGCKM 0.4630946</span>
+<span class="co">#&gt; 4:          0.5         2  lcMethodKML 0.1348544</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="residual-error">Residual error<a class="anchor" aria-label="anchor" href="#residual-error"></a>
@@ -477,23 +339,19 @@
 <p>Both methods achieve practically the same mean residual error. Another sign of the data comprising two clusters is that the MAE drops down significantly for the two-cluster solution, but hardly any improvement is gained for the three-cluster solution.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">resultsTable</span><span class="op">[</span><span class="va">randomScales</span> <span class="op">==</span> <span class="fl">.1</span>, <span class="fu">.</span><span class="op">(</span>WMAE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">WMAE</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">nClusters</span>, <span class="va">method</span><span class="op">)</span><span class="op">]</span>
-<span class="co">#&gt;    nClusters       method       WMAE</span>
-<span class="co">#&gt; 1:         1 lcMethodGCKM 0.26270832</span>
-<span class="co">#&gt; 2:         1  lcMethodKML 0.26270832</span>
-<span class="co">#&gt; 3:         2 lcMethodGCKM 0.11204813</span>
-<span class="co">#&gt; 4:         2  lcMethodKML 0.11192675</span>
-<span class="co">#&gt; 5:         3 lcMethodGCKM 0.10389798</span>
-<span class="co">#&gt; 6:         3  lcMethodKML 0.09871263</span></code></pre></div>
+<span class="co">#&gt;    nClusters       method      WMAE</span>
+<span class="co">#&gt; 1:         1 lcMethodGCKM 0.2627083</span>
+<span class="co">#&gt; 2:         1  lcMethodKML 0.2627083</span>
+<span class="co">#&gt; 3:         2 lcMethodGCKM 0.1120481</span>
+<span class="co">#&gt; 4:         2  lcMethodKML 0.1119268</span></code></pre></div>
 <p>As one would expect, the residual error is strongly affected by the magnitude of the random scale.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">resultsTable</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>WMAE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">WMAE</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">randomScales</span>, <span class="va">nClusters</span><span class="op">)</span><span class="op">]</span>
 <span class="co">#&gt;    randomScales nClusters      WMAE</span>
 <span class="co">#&gt; 1:          0.1         1 0.2627083</span>
-<span class="co">#&gt; 2:          0.1         2 0.1120239</span>
-<span class="co">#&gt; 3:          0.1         3 0.1028609</span>
-<span class="co">#&gt; 4:          0.5         1 0.4563443</span>
-<span class="co">#&gt; 5:          0.5         2 0.3312032</span>
-<span class="co">#&gt; 6:          0.5         3 0.2602839</span></code></pre></div>
+<span class="co">#&gt; 2:          0.1         2 0.1120077</span>
+<span class="co">#&gt; 3:          0.5         1 0.4563443</span>
+<span class="co">#&gt; 4:          0.5         2 0.3257807</span></code></pre></div>
 </div>
 </div>
 <div class="footnotes">

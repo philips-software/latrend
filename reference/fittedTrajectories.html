@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">latrend</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.2</span>
       </span>
     </div>
 
@@ -35,13 +35,10 @@
       <a href="../articles/demo.html">Demonstration of latrend package</a>
     </li>
     <li>
-      <a href="../articles/implement.html">Implementing new models</a>
+      <a href="../articles/implement.html">Implementing new methods</a>
     </li>
     <li>
       <a href="../articles/simulation.html">Conducting a simulation study</a>
-    </li>
-    <li>
-      <a href="../articles/validation.html">Validating cluster models</a>
     </li>
   </ul></li>
 <li>
@@ -137,31 +134,31 @@ so fitted values can only be outputted for times at which the model was trained.
 <span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">fittedTrajectories</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Id      Time           Y Cluster</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    1:   1 0.0000000 -0.98189066       B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2:   1 0.2222222 -0.62598349       B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3:   1 0.4444444 -0.38037545       B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4:   1 0.6666667 -0.16078630       B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    5:   1 0.8888889  0.06417402       B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:   1 0.0000000 -0.97975135       B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2:   1 0.2222222 -0.63534769       B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3:   1 0.4444444 -0.38525328       B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:   1 0.6666667 -0.16233773       B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:   1 0.8888889  0.05903586       B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1996: 200 1.1111111  0.01209756       A</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1997: 200 1.3333333 -0.03916995       A</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1998: 200 1.5555556 -0.08030881       A</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1999: 200 1.7777778 -0.17162641       A</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2000: 200 2.0000000 -0.20624529       A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1996: 200 1.1111111  0.01318545       A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1997: 200 1.3333333 -0.05804444       A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1998: 200 1.5555556 -0.13662404       A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1999: 200 1.7777778 -0.24801613       A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2000: 200 2.0000000 -0.34779054       A</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">fittedTrajectories</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       Id      Time           Y Cluster</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1 0.0000000 -0.98189066       B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   1 0.2222222 -0.62598349       B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   2 0.0000000 -0.98189066       B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   2 0.2222222 -0.62598349       B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   3 0.0000000 -0.98189066       B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1 0.0000000 -0.97975135       B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   1 0.2222222 -0.63534769       B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   2 0.0000000 -0.97975135       B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   2 0.2222222 -0.63534769       B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   3 0.0000000 -0.97975135       B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 396: 198 0.2222222  0.05189640       A</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 397: 199 0.0000000  0.04839039       A</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 398: 199 0.2222222  0.05189640       A</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 399: 200 0.0000000  0.04839039       A</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 400: 200 0.2222222  0.05189640       A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 396: 198 0.2222222  0.10921565       A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 397: 199 0.0000000  0.09202386       A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 398: 199 0.2222222  0.10921565       A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 399: 200 0.0000000  0.09202386       A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 400: 200 0.2222222  0.10921565       A</span>
 </code></pre></div>
     </div>
   </div>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">latrend</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.2</span>
       </span>
     </div>
 
@@ -35,13 +35,10 @@
       <a href="../articles/demo.html">Demonstration of latrend package</a>
     </li>
     <li>
-      <a href="../articles/implement.html">Implementing new models</a>
+      <a href="../articles/implement.html">Implementing new methods</a>
     </li>
     <li>
       <a href="../articles/simulation.html">Conducting a simulation study</a>
-    </li>
-    <li>
-      <a href="../articles/validation.html">Validating cluster models</a>
     </li>
   </ul></li>
 <li>
@@ -131,302 +128,268 @@
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik</a></span><span class="op">(</span><span class="va">gbtm</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  0 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -3236.988 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -3305.592 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 1.0001 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 1.0001 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   coef   SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.02626082  6.687442   44.72189</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  1.00000000  5.342833   28.54586</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  1.00000000 79.948167 6391.70944</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.03295723  6.687450   44.72198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  1.00000000  5.342837   28.54591</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  1.00000000 82.481329 6803.16962</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  1 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1641.944 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.4794574 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 1595.044 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1734.439 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.4549852 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 1571.153 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  coef   SE.coef  Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.4733827  7.675149  58.90792</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.5293172  6.131886  37.60003</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.7591741 15.032362 225.97191</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.4572794  7.563604  57.20810</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.5232458  6.042769  36.51505</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.7817312 23.370405 546.17585</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  2 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1641.926 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1734.421 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.01839313 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.01789124 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  coef   SE.coef  Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.4733828  7.675200  58.90870</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.5293152  6.131926  37.60052</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.7591641 15.035399 226.06323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.4572795  7.563653  57.20884</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.5232431  6.042808  36.51553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.7817212 23.372253 546.26219</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  3 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1641.907 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.01804602 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef   SE.coef  Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.4733831  7.675251  58.90947</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.5293138  6.131967  37.60102</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.7591541 15.038404 226.15358</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1514.243 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 2.098398 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 220.1778 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 4093.049 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.5198895 0.05696642 0.00324517</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.2393904 0.02634452 0.00069403</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.6374000 0.04692978 0.00220240</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  4 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1641.89 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1514.22 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.01774322 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef   SE.coef  Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.4733835  7.675300  58.91023</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.5293129  6.132007  37.60151</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.7591441 15.041479 226.24610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.02332214 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 4090.921 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.5198816 0.05695432 0.00324379</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.2393909 0.02634241 0.00069392</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.6373901 0.04691769 0.00220127</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  5 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1641.872 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1514.197 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.01751268 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef   SE.coef  Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.4733838  7.675352  58.91102</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.5293123  6.132048  37.60201</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.7591341 15.044767 226.34502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.02332088 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 4088.837 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.5198747 0.05694269 0.00324247</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.2393924 0.02634048 0.00069382</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.6373800 0.04690584 0.00220016</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  6 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1572.704 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.2070615 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 69.16839 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 260.8259 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1383.633 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.155725 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 130.5639 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 149.4479 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.4839071 0.01357611 0.00018431</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.5092916 0.01227396 0.00015065</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.3046565 0.00342945 0.00001176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.3091971 0.01329500 0.00017676</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.3138116 0.01155819 0.00013359</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.3121082 0.00345187 0.00001192</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  7 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1368.127 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00138633 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 204.5767 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 170.5737 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1140.381 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00852576 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 243.2518 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 41.51194 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.4882755 0.01445842 0.00020905</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.4774404 0.01268166 0.00016082</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.3234379 0.00388005 0.00001505</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.2705361 0.01499935 0.00022498</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.2424892 0.01273472 0.00016217</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.3562011 0.00461531 0.00002130</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  8 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1142.83 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00908887 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 225.2967 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 64.22842 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef  Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.4405171 0.01571312 2.469e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.4036922 0.01339039 1.793e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.3604406 0.00490796 2.409e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1069.856 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.01032877 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 70.52481 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 4.209667 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.2060939 0.01633440 0.00026681</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1727871 0.01377562 0.00018977</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.3924999 0.00578726 0.00003349</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  9 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1040.808 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.02660229 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 102.0227 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 7.337037 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1063.11 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00158953 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 6.746472 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 0.06222483 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.3246307 0.01616458 0.00026129</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.2919675 0.01363459 0.00018590</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.3867128 0.00572969 0.00003283</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1803781 0.01700743 0.00028925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1473150 0.01433610 0.00020552</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.4092151 0.00641010 0.00004109</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  10 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1029.112 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00504075 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 11.69597 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 0.1363509 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1063.015 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 2.256e-05 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.09433224 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.788e-05 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.2728270 0.01669294 0.00027865</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.2457638 0.01407102 0.00019799</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.4016243 0.00627880 0.00003942</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1774510 0.01710914 0.00029272</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1444913 0.01442175 0.00020799</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.4116683 0.00650638 0.00004233</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  11 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1028.905 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 8.14e-05 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.2072104 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 7.265e-05 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.2664429 0.01681838 0.00028286</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.2401646 0.01417667 0.00020098</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.4046723 0.00639819 0.00004094</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  12 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1028.905 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 4e-08 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.00010898 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1063.015 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 1e-08 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 2.683e-05 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.2663089 0.01682159 0.00028297</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.2400481 0.01417938 0.00020105</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.4047497 0.00640125 0.00004098</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1774070 0.01711095 0.00029278</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1444497 0.01442328 0.00020803</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.4117121 0.00650811 0.00004236</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  13 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1028.905 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.2663087 0.01682159 0.00028297</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.2400479 0.01417938 0.00020105</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.4047498 0.00640126 0.00004098</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.2 seconds </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.15 seconds </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  0 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1026.27 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1060.942 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 1.0001 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 1.0001 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef    Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.0000000   8.259062   -68.21210</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.0000000   6.743496    45.47474</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.2831303  63.734506 -4062.08720</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2663087  68.982481 -4758.58265</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5 -0.2494872  64.584579 -4171.16787</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.2400479 130.559087 17045.67513</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.4047498 154.941511 24006.87170</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.0000000   3.265334    10.66240</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.0000000   3.232179    10.44698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.1945179  53.495770 -2861.79745</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.1774070  57.823727 -3343.58342</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5 -0.1602960  53.354566 -2846.70975</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.1444497 128.349232 16473.52546</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7 -0.4117121 152.599555 23286.62429</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  1 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -956.0388 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.02285062 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 70.23141 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1040.277 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00439791 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 20.6654 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   coef    SE.coef     Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.00043624   3.417613    11.680077</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.00108898   2.434925     5.928859</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.37923255   6.879311    47.324915</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.28495974  13.454482   181.023086</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5 -0.13493035  51.458614  2647.988939</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.23993870 117.900014 13900.413206</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.39281357 145.912831 21290.554148</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.00023465   3.672464    13.486992</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.00045418   2.843443     8.085167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.24152489   5.298465    28.073731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.17692004  38.629517 -1492.239572</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5 -0.11377959  21.784984   474.585538</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.14445231 124.331144 15458.233451</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7 -0.40681583 149.108385 22233.310468</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  2 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -942.0304 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00152312 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 14.0084 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -993.7736 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.03849861 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 46.5031 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   coef    SE.coef     Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.00243707   2.422769     5.869812</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.00918748   1.595478     2.545549</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.39924939   6.555062    42.968836</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.30762683  25.439361   647.161064</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5 -0.11216873  54.925525  3016.813322</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.24049041 114.679565 13151.402553</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.38826820 147.639791 21797.507748</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.00650092   1.970094     3.881272</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.01971082   1.449795     2.101906</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.32285769  44.891869  2015.279875</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.21896099  39.799983  1584.038674</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.05840982  44.373984  1969.050470</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.14185636 102.985932 10606.102182</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7 -0.39973532 141.922797 20142.080172</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  3 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -925.2262 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.03480229 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 16.80425 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -983.4672 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.05513769 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 10.3064 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   coef    SE.coef     Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.09389055   2.352119     5.532465</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.01398510   1.707941     2.917061</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.50113656   5.555037    30.858434</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.19570462  42.051675  1768.343375</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5 -0.05682425  38.634437  1492.619712</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.24113454 100.253855 10050.835464</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.36718433 164.394991 27025.713204</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.02714328   2.109782     4.451182</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.20456900   1.829782     3.348103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.36668886  45.889449  2105.841523</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.18010908  52.668051  2773.923545</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.05940519  42.592876  1814.153094</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.14173240 103.084869 10626.490219</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7 -0.38322232 155.329897 24127.376955</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  4 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -925.2257 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -983.4671 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.00044741 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.0001445 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   coef    SE.coef     Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.09388640   2.352147     5.532593</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.01397510   1.635883     2.676112</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.50113731   5.228913    27.341529</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.19570630  42.052503  1768.413025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5 -0.05682292  38.634566  1492.629693</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.24113439 100.253792 10050.822792</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.36718421 164.394990 27025.712606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.02714951   2.111591     4.458815</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.20457900   1.829640     3.347583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.36668985  45.889162  2105.815208</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.18010934  52.668355  2773.955670</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.05940559  42.593116  1814.173494</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.14173237 103.084854 10626.487068</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7 -0.38322226 155.329908 24127.380233</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  5 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -906.741 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.1337967 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 18.48475 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef    SE.coef     Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.02210043   2.229236     4.969492</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.32459499   2.047375     4.191743</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.50595717   3.247530    10.546454</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.28486601  63.948622  4089.426302</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.02049704  42.207445  1781.468393</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.23722364 100.291454 10058.375752</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.36030020 168.781331 28487.137767</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -967.6235 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 2.02493 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 15.84353 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.131383 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.5824433 0.66324932 0.43989966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  1.5075284 0.37354755 0.13953777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.4869535 0.05033031 0.00253314</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2032992 0.02504848 0.00062743</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.1204690 0.04188773 0.00175458</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.1387673 0.01297878 0.00016845</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7 -0.3704416 0.00601708 0.00003621</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  6 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -890.7368 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 5.523537 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 16.00416 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 2.747751 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -963.2659 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.0544265 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 4.357653 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 0.2916272 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.8244579 0.63298977 0.40067605</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  2.5002434 0.36246013 0.13137735</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.7408270 0.04406908 0.00194208</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2884020 0.01646407 0.00027107</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.1550190 0.03620434 0.00131075</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.2360427 0.01218550 0.00014849</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.3478163 0.00540948 0.00002926</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.7906077 0.66538638 0.44273904</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  1.5438908 0.35152426 0.12356930</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.5837541 0.07194599 0.00517622</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2045180 0.02391926 0.00057213</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.1397605 0.04464294 0.00199299</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.1438441 0.01302819 0.00016973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7 -0.3718892 0.00604106 0.00003649</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  7 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -883.2225 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.8614301 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 7.514296 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 0.1861671 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -962.2846 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.4451523 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.9812986 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 0.00878651 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.5967116 0.40611738 0.16493132</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  1.6014142 0.29380636 0.08632218</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.7448678 0.05096139 0.00259706</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2925786 0.01834999 0.00033672</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.1155492 0.04388711 0.00192608</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.2394306 0.01246626 0.00015541</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.3558483 0.00571731 0.00003269</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -1.4330421 0.64318492 0.41368684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  1.3909273 0.35074760 0.12302388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.6746616 0.07477559 0.00559139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2230504 0.02275129 0.00051762</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.1191933 0.04298579 0.00184778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.1442983 0.01307380 0.00017092</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7 -0.3731912 0.00609611 0.00003716</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  8 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -882.5454 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.06700964 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.6771088 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 0.0029959 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -962.2536 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00174615 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.03101885 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 7.43e-06 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.8525454 0.44769854 0.20043398</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  1.6336113 0.31351803 0.09829356</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.7582006 0.04822534 0.00232568</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2984322 0.01871005 0.00035007</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.0979872 0.04380724 0.00191907</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.2400050 0.01250541 0.00015639</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.3569665 0.00577124 0.00003331</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -1.4604543 0.63759497 0.40652734</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  1.3611574 0.34502346 0.11904119</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.6849029 0.07741063 0.00599241</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2227449 0.02271041 0.00051576</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.1173345 0.04260285 0.00181500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.1444489 0.01307802 0.00017103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7 -0.3733110 0.00610239 0.00003724</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  9 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -882.5348 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00252938 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.01062605 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 2.15e-06 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.90225646 0.45371263 0.20585515</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  1.62599750 0.31271004 0.09778757</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.75795363 0.04805944 0.00230971</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.29872910 0.01874108 0.00035123</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.09773208 0.04393013 0.00192986</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.24004770 0.01250802 0.00015645</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.35704107 0.00577488 0.00003335</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  10 ------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -882.5348 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 2.36e-06 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 7.55e-06 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -962.2536 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 7.17e-06 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 2.606e-05 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.90377582 0.45391107 0.20603526</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  1.62577349 0.31272756 0.09779853</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.75800710 0.04805548 0.00230933</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.29874490 0.01874293 0.00035130</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.09769893 0.04393471 0.00193026</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.24004793 0.01250806 0.00015645</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.35704201 0.00577496 0.00003335</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -1.4630262 0.63798184 0.40702082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  1.3606610 0.34504755 0.11905781</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.6854437 0.07752316 0.00600984</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2228127 0.02271418 0.00051593</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.1172473 0.04259761 0.00181456</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.1444497 0.01307835 0.00017104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7 -0.3733210 0.00610291 0.00003725</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.42 seconds </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 'log Lik.' -882.5348 (df=7)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.34 seconds </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 'log Lik.' -962.2536 (df=7)</span>
 </code></pre></div>
     </div>
   </div>

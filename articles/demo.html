@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">latrend</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.2</span>
       </span>
     </div>
 
@@ -53,13 +53,10 @@
       <a href="../articles/demo.html">Demonstration of latrend package</a>
     </li>
     <li>
-      <a href="../articles/implement.html">Implementing new models</a>
+      <a href="../articles/implement.html">Implementing new methods</a>
     </li>
     <li>
       <a href="../articles/simulation.html">Conducting a simulation study</a>
-    </li>
-    <li>
-      <a href="../articles/validation.html">Validating cluster models</a>
     </li>
   </ul>
 </li>
@@ -183,20 +180,20 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Cluster sizes (K=2):</span>
 <span class="co">#&gt;         A         B </span>
-<span class="co">#&gt; 110 (55%)  90 (45%) </span>
+<span class="co">#&gt; 120 (60%)  80 (40%) </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Number of obs: 2000, strata (Id): 200</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Scaled residuals:</span>
 <span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
-<span class="co">#&gt; -3.83836 -0.60818  0.02327  0.00000  0.64356  3.49294</span></code></pre></div>
+<span class="co">#&gt; -3.57615 -0.62971  0.05638  0.00000  0.65400  3.20251</span></code></pre></div>
 <div class="section level3">
 <h3 id="identifying-the-number-of-clusters">Identifying the number of clusters<a class="anchor" aria-label="anchor" href="#identifying-the-number-of-clusters"></a>
 </h3>
 <p>As we do not know the best number of clusters needed to represent the data, we should consider fitting the KML model for a range of clusters. We can then select the best representation by comparing the solutions by one or more cluster metrics.</p>
 <p>We can specify a range of <code>lcMethodKML</code> methods based on a prototype method using the <code>lcMethods</code> function. This method outputs a list of <code>lcMethod</code> objects. A structured summary is obtained by calling <code>as.data.frame</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">kmlMethods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">kmlMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">kmlMethods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">kmlMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">kmlMethods</span><span class="op">)</span>
 <span class="co">#&gt;        .class time id nClusters nbRedrawing maxIt imputationMethod distanceName</span>
@@ -207,7 +204,6 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 <span class="co">#&gt; 5 lcMethodKML Time Id         5           1   200         copyMean    euclidean</span>
 <span class="co">#&gt; 6 lcMethodKML Time Id         6           1   200         copyMean    euclidean</span>
 <span class="co">#&gt; 7 lcMethodKML Time Id         7           1   200         copyMean    euclidean</span>
-<span class="co">#&gt; 8 lcMethodKML Time Id         8           1   200         copyMean    euclidean</span>
 <span class="co">#&gt;   power      distance centerMethod startingCond nbCriterion scale response</span>
 <span class="co">#&gt; 1     2 function() {}       meanNA    nearlyAll        1000  TRUE        Y</span>
 <span class="co">#&gt; 2     2 function() {}       meanNA    nearlyAll        1000  TRUE        Y</span>
@@ -215,14 +211,13 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 <span class="co">#&gt; 4     2 function() {}       meanNA    nearlyAll        1000  TRUE        Y</span>
 <span class="co">#&gt; 5     2 function() {}       meanNA    nearlyAll        1000  TRUE        Y</span>
 <span class="co">#&gt; 6     2 function() {}       meanNA    nearlyAll        1000  TRUE        Y</span>
-<span class="co">#&gt; 7     2 function() {}       meanNA    nearlyAll        1000  TRUE        Y</span>
-<span class="co">#&gt; 8     2 function() {}       meanNA    nearlyAll        1000  TRUE        Y</span></code></pre></div>
+<span class="co">#&gt; 7     2 function() {}       meanNA    nearlyAll        1000  TRUE        Y</span></code></pre></div>
 <p>The list of <code>lcMethod</code> objects can be fitted using the <code>latrendBatch</code> function, returning a list of <code>lcModel</code> objects.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">kmlModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendBatch.html">latrendBatch</a></span><span class="op">(</span><span class="va">kmlMethods</span>, data <span class="op">=</span> <span class="va">latrendData</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="va">kmlModels</span>
-<span class="co">#&gt; List of 8 lcModels with</span>
+<span class="co">#&gt; List of 7 lcModels with</span>
 <span class="co">#&gt;   .name .method       seed nClusters</span>
 <span class="co">#&gt; 1     1     kml 1753232290         1</span>
 <span class="co">#&gt; 2     2     kml 1711075799         2</span>
@@ -230,8 +225,7 @@ Visualizing the trajectories of the <code>latrend</code> dataset.
 <span class="co">#&gt; 4     4     kml  265368763         4</span>
 <span class="co">#&gt; 5     5     kml  758296545         5</span>
 <span class="co">#&gt; 6     6     kml 1649722645         6</span>
-<span class="co">#&gt; 7     7     kml 2137634742         7</span>
-<span class="co">#&gt; 8     8     kml 2112708938         8</span></code></pre></div>
+<span class="co">#&gt; 7     7     kml 2137634742         7</span></code></pre></div>
 <p>We can compare each of the solutions via one or more cluster metrics. Considering the consistent improvements achieved by KML for an increasing number of clusters, identifying the best solution by minimizing a metric would lead to an overestimation. Instead, we perform the selection via a manual elbow method, using the <code>plotMetric</code> function.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">kmlModels</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"logLik"</span>, <span class="st">"BIC"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -270,13 +264,13 @@ Elbow plots of three relevant cluster metrics across the fitted models.
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Cluster sizes (K=4):</span>
 <span class="co">#&gt;          A          B          C          D </span>
-<span class="co">#&gt;  100 (50%) 54 (27.3%) 25 (12.4%) 21 (10.3%) </span>
+<span class="co">#&gt;   70 (35%)   50 (25%) 45 (22.5%) 35 (17.5%) </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Number of obs: 2000, strata (Id): 200</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Scaled residuals:</span>
 <span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
-<span class="co">#&gt; -4.58872 -0.60854  0.04235  0.00000  0.65970  3.23364</span></code></pre></div>
+<span class="co">#&gt; -3.22269 -0.61623 -0.05837  0.00000  0.62240  3.63398</span></code></pre></div>
 <p>The <code>plotClusterTrajectories</code> function shows the estimated cluster trajectories of the model.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotClusterTrajectories.html">plotClusterTrajectories</a></span><span class="op">(</span><span class="va">kmlModel4</span><span class="op">)</span></code></pre></div>
@@ -313,11 +307,9 @@ Cluster trajectories for KML model with 4 clusters, along with the assigned traj
 <span class="co">#&gt; [33] "WRMSE"            "WRSS"</span></code></pre></div>
 <p>As an example, we will compute the APPA (a measure of cluster separation), and the WRSS and WMAE metrics (measures of model error).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">kmlModel</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"APPA"</span>, <span class="st">"WRSS"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Warning in metric(kmlModel, c("APPA", "WRSS", "WMAE")): Internal metric(s)</span>
-<span class="co">#&gt; "APPA" are not defined. Returning NA.</span>
-<span class="co">#&gt;        APPA        WRSS        WMAE </span>
-<span class="co">#&gt;          NA 167.8058270   0.2247193</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">kmlModel</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"APPA.mean"</span>, <span class="st">"WRSS"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;   APPA.mean        WRSS        WMAE </span>
+<span class="co">#&gt;   0.9999979 152.7557738   0.2158131</span></code></pre></div>
 <p>The quantile-quantile (QQ) plot can be used to assess the model for structural deviations.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/qqPlot.html">qqPlot</a></span><span class="op">(</span><span class="va">kmlModel4</span><span class="op">)</span>
@@ -342,164 +334,61 @@ Cluster-specific detrended QQ-plot for the selected KML model.
 <div class="section level2">
 <h2 id="parametric-trajectory-clustering">Parametric trajectory clustering<a class="anchor" aria-label="anchor" href="#parametric-trajectory-clustering"></a>
 </h2>
-<div class="section level3">
-<h3 id="group-based-trajectory-modeling">Group-based trajectory modeling<a class="anchor" aria-label="anchor" href="#group-based-trajectory-modeling"></a>
-</h3>
-<p>The KML analysis has provided us with clues on an appropriate model for the cluster trajectories. We can use these insights to define a parametric group-based trajectory model (GBTM) with cluster trajectories represented by polynomials of order 2. We will use the GBTM implementation available from the <code>lcmm</code> package, using a B-spline trajectory of degree 3 from the <code>splines</code> package.</p>
+<p>The KML analysis has provided us with clues on an appropriate model for the cluster trajectories. We can use these insights to define a parametric representation of each of the trajectories and cluster them using k-means.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">splines</span><span class="op">)</span>
-<span class="va">gbtmMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodLcmmGBTM.html">lcMethodLcmmGBTM</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/splines/bs.html" class="external-link">bs</a></span><span class="op">(</span><span class="va">Time</span><span class="op">)</span>, mixture <span class="op">=</span> <span class="va">fixed</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">lmkmMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span><span class="op">)</span>
 
-<span class="va">gbtmMethod</span>
-<span class="co">#&gt; lcMethodLcmmGBTM specifying "group-based trajectory modeling using lcmm"</span>
-<span class="co">#&gt;  mixture:        fixed</span>
-<span class="co">#&gt;  classmb:        ~1</span>
+<span class="va">lmkmMethod</span>
+<span class="co">#&gt; lcMethodLMKM specifying "lm-kmeans"</span>
 <span class="co">#&gt;  time:           getOption("latrend.time")</span>
 <span class="co">#&gt;  id:             getOption("latrend.id")</span>
 <span class="co">#&gt;  nClusters:      2</span>
-<span class="co">#&gt;  init:           "default"</span>
-<span class="co">#&gt;  idiag:          FALSE</span>
-<span class="co">#&gt;  nwg:            FALSE</span>
-<span class="co">#&gt;  cor:            NULL</span>
-<span class="co">#&gt;  convB:          1e-04</span>
-<span class="co">#&gt;  convL:          1e-04</span>
-<span class="co">#&gt;  convG:          1e-04</span>
-<span class="co">#&gt;  pprior:         NULL</span>
-<span class="co">#&gt;  maxiter:        500</span>
-<span class="co">#&gt;  subset:         NULL</span>
-<span class="co">#&gt;  na.action:      1</span>
-<span class="co">#&gt;  posfix:         NULL</span>
-<span class="co">#&gt;  var.time:       NULL</span>
-<span class="co">#&gt;  partialH:       FALSE</span>
-<span class="co">#&gt;  nproc:          1</span>
-<span class="co">#&gt;  clustertype:    NULL</span>
-<span class="co">#&gt;  fixed:          Y ~ bs(Time)</span></code></pre></div>
-<p>We fit the GBTM for 1 to 5 clusters.</p>
+<span class="co">#&gt;  center:         meanNA</span>
+<span class="co">#&gt;  standardize:    scale</span>
+<span class="co">#&gt;  method:         "qr"</span>
+<span class="co">#&gt;  model:          TRUE</span>
+<span class="co">#&gt;  y:              FALSE</span>
+<span class="co">#&gt;  qr:             TRUE</span>
+<span class="co">#&gt;  singular.ok:    TRUE</span>
+<span class="co">#&gt;  contrasts:      NULL</span>
+<span class="co">#&gt;  iter.max:       10</span>
+<span class="co">#&gt;  nstart:         1</span>
+<span class="co">#&gt;  algorithm:      c("Hartigan-Wong", "Lloyd", "Forgy", "Ma</span>
+<span class="co">#&gt;  formula:        Y ~ Time</span></code></pre></div>
+<p>We fit LMKM for 1 to 4 clusters.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">gbtmMethods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">gbtmMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">lmkmMethods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">lmkmMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>
 
-<span class="va">gbtmModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendBatch.html">latrendBatch</a></span><span class="op">(</span><span class="va">gbtmMethods</span>, data <span class="op">=</span> <span class="va">latrendData</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<span class="va">lmkmModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendBatch.html">latrendBatch</a></span><span class="op">(</span><span class="va">lmkmMethods</span>, data <span class="op">=</span> <span class="va">latrendData</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">gbtmModels</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"logLik"</span>, <span class="st">"BIC"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">lmkmModels</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"logLik"</span>, <span class="st">"BIC"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 Three cluster metrics for each of the GBTMs.
 </p>
 <img src="demo_files/figure-html/unnamed-chunk-20-1.png" alt="Three cluster metrics for each of the GBTMs." width="672">
 </div>
-<p>All metrics clearly point to the 3-cluster solution.</p>
+<p>All metrics clearly point to the three-cluster solution.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bestGbtmModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">gbtmModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">3</span>, drop<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bestGbtmModel</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">bestLmkmModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">lmkmModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">3</span>, drop<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bestLmkmModel</span><span class="op">)</span></code></pre></div>
 <p><img src="demo_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;"></p>
-</div>
-<div class="section level3">
-<h3 id="growth-mixture-modeling">Growth mixture modeling<a class="anchor" aria-label="anchor" href="#growth-mixture-modeling"></a>
-</h3>
-<p>We have identified 3 apparent clusters via GBTM. However, we may wish to obtain a model that betters explains the within-cluster heterogeneity (as seen in the cluster trajectories plot above). We apply a growth mixture model (GMM) using trajectories represented by a second-order polynomial.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">gmmMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodLcmmGMM.html">lcMethodLcmmGMM</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">Time</span>, <span class="fl">2</span>, raw <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, mixture <span class="op">=</span> <span class="va">fixed</span>, idiag <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="va">gmmMethod</span>
-<span class="co">#&gt; lcMethodLcmmGMM specifying "growth mixture model"</span>
-<span class="co">#&gt;  mixture:        fixed</span>
-<span class="co">#&gt;  random:         ~1</span>
-<span class="co">#&gt;  classmb:        ~1</span>
-<span class="co">#&gt;  time:           getOption("latrend.time")</span>
-<span class="co">#&gt;  id:             getOption("latrend.id")</span>
-<span class="co">#&gt;  init:           "lme"</span>
-<span class="co">#&gt;  nClusters:      2</span>
-<span class="co">#&gt;  idiag:          TRUE</span>
-<span class="co">#&gt;  nwg:            FALSE</span>
-<span class="co">#&gt;  cor:            NULL</span>
-<span class="co">#&gt;  convB:          1e-04</span>
-<span class="co">#&gt;  convL:          1e-04</span>
-<span class="co">#&gt;  convG:          1e-04</span>
-<span class="co">#&gt;  pprior:         NULL</span>
-<span class="co">#&gt;  maxiter:        500</span>
-<span class="co">#&gt;  na.action:      1</span>
-<span class="co">#&gt;  posfix:         NULL</span>
-<span class="co">#&gt;  var.time:       NULL</span>
-<span class="co">#&gt;  partialH:       FALSE</span>
-<span class="co">#&gt;  nproc:          1</span>
-<span class="co">#&gt;  clustertype:    NULL</span>
-<span class="co">#&gt;  fixed:          Y ~ poly(Time, 2, raw = TRUE)</span></code></pre></div>
-<p>We fit the GMM for 1 to 5 clusters.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">gmmMethods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">gmmMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>
-
-<span class="va">gmmModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendBatch.html">latrendBatch</a></span><span class="op">(</span><span class="va">gmmMethods</span>, <span class="va">latrendData</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">gmmModels</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"logLik"</span>, <span class="st">"BIC"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="figure" style="text-align: center">
-<p class="caption">
-Three cluster metrics for each of the GMMs.
-</p>
-<img src="demo_files/figure-html/unnamed-chunk-24-1.png" alt="Three cluster metrics for each of the GMMs." width="672">
-</div>
-<p>Similar to the GBTM analysis, the metrics clearly point to the 3-cluster solution.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bestGmmModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">gmmModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">3</span>, drop<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bestGmmModel</span><span class="op">)</span></code></pre></div>
-<div class="figure" style="text-align: center">
-<p class="caption">
-Cluster trajectories of the selected GMM, including the assigned trajectories.
-</p>
-<img src="demo_files/figure-html/unnamed-chunk-26-1.png" alt="Cluster trajectories of the selected GMM, including the assigned trajectories." width="672">
-</div>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/qqPlot.html">qqPlot</a></span><span class="op">(</span><span class="va">bestGmmModel</span>, detrend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<div class="figure" style="text-align: center">
-<p class="caption">
-Detrended QQ plot for the best GMM.
-</p>
-<img src="demo_files/figure-html/unnamed-chunk-27-1.png" alt="Detrended QQ plot for the best GMM." width="480">
-</div>
-<p>As can be seen by the scale of the y-axis of the QQ plot, the deviations from the expected normal distributions are negligibly small.</p>
-</div>
-<div class="section level3">
-<h3 id="comparing-models">Comparing models<a class="anchor" aria-label="anchor" href="#comparing-models"></a>
-</h3>
-<p>Both the GBTM and GMM analysis indicated the data was best represented using 3 clusters. We are interested in identifying the best representation for the data. After all, despite the matching number of clusters, there may be differences between the models in terms of trajectory assignments are shape of the cluster trajectories.</p>
-<p>Firstly, we compare the fit to the data by comparing the BIC, which indicates that the GMM model is marginally better than the GBTM model.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">BIC</a></span><span class="op">(</span><span class="va">bestGbtmModel</span>, <span class="va">bestGmmModel</span><span class="op">)</span>
-<span class="co">#&gt;               df        BIC</span>
-<span class="co">#&gt; bestGbtmModel 15   574.0813</span>
-<span class="co">#&gt; bestGmmModel  13 -1672.9493</span></code></pre></div>
-<p>Secondly, we compare the model fit errors, showing an identical error between models.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">bestGbtmModel</span>, <span class="va">bestGmmModel</span><span class="op">)</span>, <span class="st">'WMAE'</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.19225404 0.08855489</span></code></pre></div>
-<p>Thirdly, we can compare the weighted minimum MAE between the cluster trajectories of the models, as a measure of agreement in cluster trajectory shapes.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/externalMetric.html">externalMetric</a></span><span class="op">(</span><span class="va">bestGbtmModel</span>, <span class="va">bestGmmModel</span>, <span class="st">'WMMAE'</span><span class="op">)</span>
-<span class="co">#&gt;      WMMAE </span>
-<span class="co">#&gt; 0.05559308</span></code></pre></div>
-<p>Lastly, we evaluate the agreement in trajectory assignments to the clusters using the adjusted Rand index (ARI). This intuitive index considers the co-assignments of trajectories, and corrects for agreements between the partitionings by random chance. A score of zero indicates a match no better than chance, whereas a score of 1 indicates a perfect agreement.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/externalMetric.html">externalMetric</a></span><span class="op">(</span><span class="va">bestGbtmModel</span>, <span class="va">bestGmmModel</span>, <span class="st">'adjustedRand'</span><span class="op">)</span>
-<span class="co">#&gt; adjustedRand </span>
-<span class="co">#&gt;    0.4770003</span></code></pre></div>
-<p>The ARI of 1.0 demonstrates that the cluster assignments of the models are identical.</p>
-</div>
 </div>
 <div class="section level2">
 <h2 id="comparison-to-the-reference">Comparison to the reference<a class="anchor" aria-label="anchor" href="#comparison-to-the-reference"></a>
 </h2>
 <p>Since we have established a preferred clustered representation of the data heterogeneity, we can now compare the resulting cluster assignments to the ground truth from which the <code>latrendData</code> data was generated.</p>
 <p>Using the reference assignments, we can also plot a non-parametric estimate of the cluster trajectories. Note how it looks similar to the cluster trajectories found by our model.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotClusterTrajectories.html">plotClusterTrajectories</a></span><span class="op">(</span><span class="va">latrendData</span>, response <span class="op">=</span> <span class="st">"Y"</span>, cluster <span class="op">=</span> <span class="st">"Class"</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 Non-parametric estimates of the cluster trajectories based on the reference assignments.
 </p>
-<img src="demo_files/figure-html/unnamed-chunk-32-1.png" alt="Non-parametric estimates of the cluster trajectories based on the reference assignments." width="480">
+<img src="demo_files/figure-html/unnamed-chunk-22-1.png" alt="Non-parametric estimates of the cluster trajectories based on the reference assignments." width="480">
 </div>
 <p>In order to compare the reference assignments to the trajectory assignments generated by our model, we can create a <code>lcModel</code> object based on the reference assignments using the <code>lcModelPartition</code> function.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">refTrajAssigns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">Class</span> <span class="op">~</span> <span class="va">Id</span>, data <span class="op">=</span> <span class="va">latrendData</span>, FUN <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="va"><a href="https://Rdatatable.gitlab.io/data.table/reference/last.html" class="external-link">first</a></span><span class="op">)</span>
 <span class="va">refModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcModelPartition.html">lcModelPartition</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">latrendData</span>, response <span class="op">=</span> <span class="st">"Y"</span>, trajectoryAssignments <span class="op">=</span> <span class="va">refTrajAssigns</span><span class="op">$</span><span class="va">Class</span><span class="op">)</span>
 <span class="va">refModel</span>
@@ -509,23 +398,23 @@ Non-parametric estimates of the cluster trajectories based on the reference assi
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Cluster sizes (K=3):</span>
 <span class="co">#&gt;  Class 1  Class 2  Class 3 </span>
-<span class="co">#&gt; 90 (45%) 80 (40%) 30 (15%) </span>
+<span class="co">#&gt; 80 (40%) 70 (35%) 50 (25%) </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Number of obs: 2000, strata (Id): 200</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Scaled residuals:</span>
 <span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
-<span class="co">#&gt; -3.33030 -0.59503 -0.02617  0.00000  0.59606  3.40645</span></code></pre></div>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<span class="co">#&gt; -3.67125 -0.55452 -0.04079  0.00000  0.58663  3.76931</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">refModel</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 Cluster trajectories of the reference model.
 </p>
-<img src="demo_files/figure-html/unnamed-chunk-34-1.png" alt="Cluster trajectories of the reference model." width="672">
+<img src="demo_files/figure-html/unnamed-chunk-24-1.png" alt="Cluster trajectories of the reference model." width="672">
 </div>
 <p>By constructing a reference model, we can make use of the standardized way in which <code>lcModel</code> objects can be compared. A list of supported comparison metrics can be obtained via the <code>getExternalMetricNames</code> function.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/getExternalMetricNames.html">getExternalMetricNames</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt;  [1] "adjustedRand"   "CohensKappa"    "F"              "F1"            </span>
 <span class="co">#&gt;  [5] "FolkesMallows"  "Hubert"         "Jaccard"        "jointEntropy"  </span>
@@ -538,11 +427,11 @@ Cluster trajectories of the reference model.
 <span class="co">#&gt; [33] "Wallace2"       "WMMAE"          "WMMAE.ref"      "WMMSE"         </span>
 <span class="co">#&gt; [37] "WMMSE.ref"      "WMRSS"          "WMRSS.ref"</span></code></pre></div>
 <p>Lastly, we compare the agreement in trajectory assignments via the adjusted Rand index.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/externalMetric.html">externalMetric</a></span><span class="op">(</span><span class="va">bestGmmModel</span>, <span class="va">refModel</span>, <span class="st">"adjustedRand"</span><span class="op">)</span>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/externalMetric.html">externalMetric</a></span><span class="op">(</span><span class="va">bestLmkmModel</span>, <span class="va">refModel</span>, <span class="st">"adjustedRand"</span><span class="op">)</span>
 <span class="co">#&gt; adjustedRand </span>
-<span class="co">#&gt;    0.9883837</span></code></pre></div>
-<p>With a score of <code>externalMetric(bestGmmModel, refModel, "adjustedRand")</code>, we have a near-perfect match. This result is expected, as the dataset was generated using a growth mixture model.</p>
+<span class="co">#&gt;    0.9669189</span></code></pre></div>
+<p>With a score of <code>externalMetric(bestLmkmModel, refModel, "adjustedRand")</code>, we have a near-perfect match. This result is expected, as the dataset was generated using a growth mixture model.</p>
 </div>
   </div>
 
