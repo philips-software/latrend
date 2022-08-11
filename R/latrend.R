@@ -551,7 +551,11 @@ latrendBatch = function(
 #' @examples
 #' data(latrendData)
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
-#' model <- latrendBoot(method, latrendData, samples = 10)
+#' bootModels <- latrendBoot(method, latrendData, samples = 10)
+#'
+#' bootMAE <- metric(bootModels, name = "MAE")
+#' mean(bootMAE)
+#' sd(bootMAE)
 #' @family longitudinal cluster fit functions
 #' @family validation methods
 latrendBoot = function(
@@ -716,11 +720,13 @@ latrendCV = function(
 #' @family validation methods
 #' @examples
 #' data(latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 #'
 #' if (require("caret")) {
-#'   trainFolds <- createTrainDataFolds(latrendData, folds = 10, id = "Id")
+#'   trainFolds <- createTrainDataFolds(latrendData, folds = 5, id = "Id", seed = 1)
 #'
-#'   trainFolds <- createTrainDataFolds(latrendData, folds = 10, id = "Id", seed = 1)
+#'   foldModels <- latrendBatch(method, data = trainFolds)
+#'   testDataFolds <- createTestDataFolds(latrendData, trainFolds)
 #' }
 createTrainDataFolds = function(
   data,

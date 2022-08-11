@@ -44,7 +44,11 @@ Performs bootstrapping, generating samples from the given data at the id level, 
 \examples{
 data(latrendData)
 method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
-model <- latrendBoot(method, latrendData, samples = 10)
+bootModels <- latrendBoot(method, latrendData, samples = 10)
+
+bootMAE <- metric(bootModels, name = "MAE")
+mean(bootMAE)
+sd(bootMAE)
 }
 \seealso{
 Other longitudinal cluster fit functions: 

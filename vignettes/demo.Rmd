@@ -12,7 +12,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
   %\VignetteDepends{ggplot2}
   %\VignetteDepends{kml}
-  %\VignetteDepends{lcmm}
   %\VignetteDepends{mclustcomp}
 ---
 

@@ -28,11 +28,13 @@ Create the training data for each of the k models in k-fold cross validation eva
 }
 \examples{
 data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 
 if (require("caret")) {
-  trainFolds <- createTrainDataFolds(latrendData, folds = 10, id = "Id")
+  trainFolds <- createTrainDataFolds(latrendData, folds = 5, id = "Id", seed = 1)
 
-  trainFolds <- createTrainDataFolds(latrendData, folds = 10, id = "Id", seed = 1)
+  foldModels <- latrendBatch(method, data = trainFolds)
+  testDataFolds <- createTestDataFolds(latrendData, trainFolds)
 }
 }
 \seealso{

@@ -177,7 +177,7 @@ analyzeModel <- function(model) {
 ```
 
 At last, we can run the simulations and post-hoc summary computations:
-```{r}
+```{r warning=FALSE}
 result <- simTool::eval_tibbles(
   data_grid = dataGrid, 
   proc_grid = methodGrid,
