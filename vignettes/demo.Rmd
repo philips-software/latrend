@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
   fig.align = "center",
   fig.topcaption = TRUE,
   comment = "#>",
-  eval = all(vapply(c('ggplot2', 'kml', 'lcmm', 'mclustcomp'), requireNamespace, FUN.VALUE = TRUE, quietly = TRUE)) # needed to prevent errors for _R_CHECK_DEPENDS_ONLY_=true despite VignetteDepends declaration
+  eval = all(vapply(c('ggplot2', 'kml', 'lme4', 'mclustcomp'), requireNamespace, FUN.VALUE = TRUE, quietly = TRUE)) # needed to prevent errors for _R_CHECK_DEPENDS_ONLY_=true despite VignetteDepends declaration
 )
 ```
 
@@ -83,7 +83,7 @@ As we do not know the best number of clusters needed to represent the data, we s
 
 We can specify a range of `lcMethodKML` methods based on a prototype method using the `lcMethods` function. This method outputs a list of `lcMethod` objects. A structured summary is obtained by calling `as.data.frame`.
 ```{r}
-kmlMethods <- lcMethods(kmlMethod, nClusters = 1:8)
+kmlMethods <- lcMethods(kmlMethod, nClusters = 1:7)
 
 as.data.frame(kmlMethods)
 ```
@@ -124,7 +124,7 @@ getInternalMetricNames()
 ```
 As an example, we will compute the APPA (a measure of cluster separation), and the WRSS and WMAE metrics (measures of model error).
 ```{r}
-metric(kmlModel, c("APPA", "WRSS", "WMAE"))
+metric(kmlModel, c("APPA.mean", "WRSS", "WMAE"))
 ```
 The quantile-quantile (QQ) plot can be used to assess the model for structural deviations.
 ```{r, fig.width = 5, fig.cap = 'QQ-plot of the selected KML model.'}
@@ -136,86 +136,31 @@ qqPlot(kmlModel4, byCluster = TRUE, detrend = TRUE)
 ```
 
 # Parametric trajectory clustering
-## Group-based trajectory modeling
-The KML analysis has provided us with clues on an appropriate model for the cluster trajectories. We can use these insights to define a parametric group-based trajectory model (GBTM) with cluster trajectories represented by polynomials of order 2. We will use the GBTM implementation available from the `lcmm` package, using a B-spline trajectory of degree 3 from the `splines` package.
+The KML analysis has provided us with clues on an appropriate model for the cluster trajectories. 
+We can use these insights to define a parametric representation of each of the trajectories and cluster them using k-means.
 
 ```{r}
-library(splines)
-gbtmMethod <- lcMethodLcmmGBTM(fixed = Y ~ bs(Time), mixture = fixed)
+lmkmMethod <- lcMethodLMKM(formula = Y ~ Time)
 
-gbtmMethod
+lmkmMethod
 ```
 
-We fit the GBTM for 1 to 5 clusters.
-```{r}
-gbtmMethods <- lcMethods(gbtmMethod, nClusters = 1:5)
+We fit LMKM for 1 to 4 clusters.
+```{r, echo=TRUE, results='hide'}
+lmkmMethods <- lcMethods(lmkmMethod, nClusters = 1:5)
 
-gbtmModels <- latrendBatch(gbtmMethods, data = latrendData, verbose = FALSE)
+lmkmModels <- latrendBatch(lmkmMethods, data = latrendData, verbose = FALSE)
 ```
 
 ```{r warning=FALSE, fig.cap = 'Three cluster metrics for each of the GBTMs.'}
-plotMetric(gbtmModels, c("logLik", "BIC", "WMAE"))
+plotMetric(lmkmModels, c("logLik", "BIC", "WMAE"))
 ```
-All metrics clearly point to the 3-cluster solution.
+All metrics clearly point to the three-cluster solution.
 
 ```{r}
-bestGbtmModel <- subset(gbtmModels, nClusters == 3, drop=TRUE)
-plot(bestGbtmModel)
+bestLmkmModel <- subset(lmkmModels, nClusters == 3, drop=TRUE)
+plot(bestLmkmModel)
 ```
-
-## Growth mixture modeling
-We have identified 3 apparent clusters via GBTM. However, we may wish to obtain a model that betters explains the within-cluster heterogeneity (as seen in the cluster trajectories plot above). We apply a growth mixture model (GMM) using trajectories represented by a second-order polynomial.
-
-```{r}
-gmmMethod <- lcMethodLcmmGMM(fixed = Y ~ poly(Time, 2, raw = TRUE), mixture = fixed, idiag = TRUE)
-
-gmmMethod
-```
-We fit the GMM for 1 to 5 clusters.
-```{r}
-gmmMethods <- lcMethods(gmmMethod, nClusters = 1:5)
-
-gmmModels <- latrendBatch(gmmMethods, latrendData, verbose = FALSE)
-```
-
-```{r warning=FALSE, fig.cap = 'Three cluster metrics for each of the GMMs.'}
-plotMetric(gmmModels, c("logLik", "BIC", "WMAE"))
-```
-Similar to the GBTM analysis, the metrics clearly point to the 3-cluster solution.
-```{r}
-bestGmmModel <- subset(gmmModels, nClusters == 3, drop=TRUE)
-```
-
-```{r, fig.cap = 'Cluster trajectories of the selected GMM, including the assigned trajectories.'}
-plot(bestGmmModel)
-```
-```{r, fig.width = 5, fig.cap = 'Detrended QQ plot for the best GMM.'}
-qqPlot(bestGmmModel, detrend = TRUE)
-```
-As can be seen by the scale of the y-axis of the QQ plot, the deviations from the expected normal distributions are negligibly small.
-
-## Comparing models
-Both the GBTM and GMM analysis indicated the data was best represented using 3 clusters. We are interested in identifying the best representation for the data. After all, despite the matching number of clusters, there may be differences between the models in terms of trajectory assignments are shape of the cluster trajectories.
-
-Firstly, we compare the fit to the data by comparing the BIC, which indicates that the GMM model is marginally better than the GBTM model.
-```{r}
-BIC(bestGbtmModel, bestGmmModel)
-```
-
-Secondly, we compare the model fit errors, showing an identical error between models.
-```{r}
-metric(list(bestGbtmModel, bestGmmModel), 'WMAE')
-```
-Thirdly, we can compare the weighted minimum MAE between the cluster trajectories of the models, as a measure of agreement in cluster trajectory shapes.
-```{r}
-externalMetric(bestGbtmModel, bestGmmModel, 'WMMAE')
-```
-Lastly, we evaluate the agreement in trajectory assignments to the clusters using the adjusted Rand index (ARI). This intuitive index considers the co-assignments of trajectories, and corrects for agreements between the partitionings by random chance. A score of zero indicates a match no better than chance, whereas a score of 1 indicates a perfect agreement.
-
-```{r}
-externalMetric(bestGbtmModel, bestGmmModel, 'adjustedRand')
-```
-The ARI of 1.0 demonstrates that the cluster assignments of the models are identical.
 
 # Comparison to the reference
 Since we have established a preferred clustered representation of the data heterogeneity, we can now compare the resulting cluster assignments to the ground truth from which the `latrendData` data was generated.
@@ -241,6 +186,6 @@ getExternalMetricNames()
 
 Lastly, we compare the agreement in trajectory assignments via the adjusted Rand index.
 ```{r}
-externalMetric(bestGmmModel, refModel, "adjustedRand")
+externalMetric(bestLmkmModel, refModel, "adjustedRand")
 ```
-With a score of `externalMetric(bestGmmModel, refModel, "adjustedRand")`, we have a near-perfect match. This result is expected, as the dataset was generated using a growth mixture model.
+With a score of `externalMetric(bestLmkmModel, refModel, "adjustedRand")`, we have a near-perfect match. This result is expected, as the dataset was generated using a growth mixture model.
