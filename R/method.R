@@ -941,11 +941,13 @@ print.lcMethod = function(x, ..., eval = FALSE, width = 40, envir = NULL) {
 #' @return A new `lcMethod` object with the substituted arguments.
 #' @seealso [compose]
 #' @family lcMethod functions
-evaluate.lcMethod = function(object,
-                               classes = 'ANY',
-                               try = TRUE,
-                               exclude = character(),
-                               envir = NULL) {
+evaluate.lcMethod = function(
+    object,
+    classes = 'ANY',
+    try = TRUE,
+    exclude = character(),
+    envir = NULL
+) {
   rawObject = as.lcMethod(object)
   assert_that(is.character(classes))
 
@@ -972,7 +974,8 @@ evaluate.lcMethod = function(object,
   if ('ANY' %in% classes) {
     updateMask = evalMask
   } else {
-    updateMask = evalMask & vapply(evalValues, class, FUN.VALUE = '') %in% classes
+    updateMask = evalMask &
+      vapply(evalValues, function(x) class(x)[1], FUN.VALUE = '') %in% classes
   }
 
   newObject = rawObject
