@@ -47,9 +47,9 @@ data(latrendData)
 method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 
 if (require("caret")) {
-  model <- latrendCV(method, latrendData, folds = 5)
+  model <- latrendCV(method, latrendData, folds = 5, seed = 1)
 
-  model <- latrendCV(method, subset(latrendData, Time < .5), folds = 5, seed = 1)
+  model <- latrendCV(method, subset(latrendData, Time < .5), folds = 5)
 }
 }
 \seealso{

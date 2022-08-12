@@ -51,11 +51,12 @@ Methods and datasets are evaluated and validated prior to any fitting. This ensu
 \examples{
 data(latrendData)
 refMethod <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
-methods <- lcMethods(refMethod, nClusters = 1:3)
+methods <- lcMethods(refMethod, nClusters = 1:2)
 models <- latrendBatch(methods, data = latrendData)
 
 # different dataset per method
-models <- latrendBatch(lcMethods(refMethod, nClusters = 1:2),
+models <- latrendBatch(
+   methods,
    data = .(
      subset(latrendData, Time > .5),
      subset(latrendData, Time < .5)

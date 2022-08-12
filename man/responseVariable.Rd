@@ -28,7 +28,7 @@ If the \code{lcMethod} object specifies a \code{formula} argument, then the resp
 method <- lcMethodLMKM(Y ~ Time)
 responseVariable(method) # "Y"
 data(latrendData)
-method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+method <- lcMethodRandom("Y", id = "Id", time = "Time")
 model <- latrend(method, latrendData)
 responseVariable(model) # "Y"
 }

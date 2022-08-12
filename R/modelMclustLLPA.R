@@ -33,7 +33,8 @@ setMethod('clusterTrajectories', signature('lcModelMclustLLPA'), function(object
 setMethod('postprob', signature('lcModelMclustLLPA'), function(object, ...) {
   pp = object@model$z
   colnames(pp) = clusterNames(object)
-  return(pp)
+
+  pp
 })
 
 

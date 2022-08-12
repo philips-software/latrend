@@ -50,7 +50,9 @@ if (rlang::is_installed("lcmm")) {
     fixed = Y ~ Time,
     mixture = ~ Time,
     id = "Id",
-    time = "Time"
+    time = "Time",
+    idiag = TRUE,
+    nClusters = 2
   )
   gmmModel <- latrend(gmmMethod, data = latrendData)
   postprob(gmmModel)

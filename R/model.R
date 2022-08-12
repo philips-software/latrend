@@ -1383,7 +1383,9 @@ setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
 #'     fixed = Y ~ Time,
 #'     mixture = ~ Time,
 #'     id = "Id",
-#'     time = "Time"
+#'     time = "Time",
+#'     idiag = TRUE,
+#'     nClusters = 2
 #'   )
 #'   gmmModel <- latrend(gmmMethod, data = latrendData)
 #'   postprob(gmmModel)
@@ -1504,7 +1506,7 @@ residuals.lcModel = function(object, ..., clusters = trajectoryAssignments(objec
 #' @title Get the response variable
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' method <- lcMethodRandom("Y", id = "Id", time = "Time")
 #' model <- latrend(method, latrendData)
 #' responseVariable(model) # "Y"
 #' @family lcModel variables
@@ -1608,9 +1610,9 @@ setMethod('strip', signature('lcModel'), function(object, ..., classes = 'formul
 #' @aliases timeVariable,lcModel-method
 #' @examples
 #' data(latrendData)
-#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' method <- lcMethodRandom("Y", id = "Id", time = "Time")
 #' model <- latrend(method, latrendData)
-#' idVariable(model) # "Id"
+#' timeVariable(model) # "Time"
 #' @family lcModel variables
 setMethod('timeVariable', signature('lcModel'), function(object) object@time)
 

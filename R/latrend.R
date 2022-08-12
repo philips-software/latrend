@@ -306,11 +306,12 @@ latrendRep = function(
 #' @examples
 #' data(latrendData)
 #' refMethod <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
-#' methods <- lcMethods(refMethod, nClusters = 1:3)
+#' methods <- lcMethods(refMethod, nClusters = 1:2)
 #' models <- latrendBatch(methods, data = latrendData)
 #'
 #' # different dataset per method
-#' models <- latrendBatch(lcMethods(refMethod, nClusters = 1:2),
+#' models <- latrendBatch(
+#'    methods,
 #'    data = .(
 #'      subset(latrendData, Time > .5),
 #'      subset(latrendData, Time < .5)
@@ -645,9 +646,9 @@ latrendBoot = function(
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 #'
 #' if (require("caret")) {
-#'   model <- latrendCV(method, latrendData, folds = 5)
+#'   model <- latrendCV(method, latrendData, folds = 5, seed = 1)
 #'
-#'   model <- latrendCV(method, subset(latrendData, Time < .5), folds = 5, seed = 1)
+#'   model <- latrendCV(method, subset(latrendData, Time < .5), folds = 5)
 #' }
 #' @family longitudinal cluster fit functions
 #' @family validation methods
