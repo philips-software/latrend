@@ -40,7 +40,7 @@ APPA = function(object) {
 #' @param strategy The strategy for assigning trajectories to a specific cluster, see [trajectoryAssignments()].
 #' If `strategy = NULL`, the posterior probabilities are used as weights (analogous to a repeated evaluation of `strategy = which.weight`).
 #' @param scale Whether to express the confusion in probabilities (`scale = TRUE`), or in terms of the number of trajectories.
-#' @inheritDotParams trajectoryAssignments
+#' @param ... Additional arguments passed to [trajectoryAssignments()].
 #' @return A K-by-K confusion `matrix` with `K = nClusters(object)`.
 #' @seealso [postprob] [clusterProportions] [trajectoryAssignments] [APPA] [OCC]
 #' @examples

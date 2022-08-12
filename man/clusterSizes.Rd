@@ -9,11 +9,7 @@ clusterSizes(object, ...)
 \arguments{
 \item{object}{The \code{lcModel} object.}
 
-\item{...}{
-  Arguments passed on to \code{\link[=trajectoryAssignments]{trajectoryAssignments}}
-  \describe{
-    \item{\code{}}{}
-  }}
+\item{...}{Additional arguments passed to \code{\link[=trajectoryAssignments]{trajectoryAssignments()}}.}
 }
 \value{
 A named \verb{integer vector} of length \code{nClusters(object)} with the number of assigned trajectories per cluster.

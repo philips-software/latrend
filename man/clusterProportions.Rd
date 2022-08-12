@@ -10,11 +10,7 @@
 \arguments{
 \item{object}{The \code{lcModel} to obtain the proportions from.}
 
-\item{...}{
-  Arguments passed on to \code{\link[=postprob]{postprob}}
-  \describe{
-    \item{\code{}}{}
-  }}
+\item{...}{Additional arguments passed to \code{\link[=postprob]{postprob()}}.}
 }
 \value{
 A named \verb{numeric vector} of length \code{nClusters(object)} with the proportional size of each cluster.

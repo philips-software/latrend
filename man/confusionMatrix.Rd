@@ -14,11 +14,7 @@ If \code{strategy = NULL}, the posterior probabilities are used as weights (anal
 
 \item{scale}{Whether to express the confusion in probabilities (\code{scale = TRUE}), or in terms of the number of trajectories.}
 
-\item{...}{
-  Arguments passed on to \code{\link[=trajectoryAssignments]{trajectoryAssignments}}
-  \describe{
-    \item{\code{}}{}
-  }}
+\item{...}{Additional arguments passed to \code{\link[=trajectoryAssignments]{trajectoryAssignments()}}.}
 }
 \value{
 A K-by-K confusion \code{matrix} with \code{K = nClusters(object)}.

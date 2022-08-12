@@ -193,7 +193,7 @@ clusterNames = function(object, factor = FALSE) {
 #' @description Obtain the size of each cluster, where the size is determined by the number of assigned trajectories to each cluster.
 #' @details The cluster sizes are computed from the trajectory cluster membership as decided by the [trajectoryAssignments()] function.
 #' @param object The `lcModel` object.
-#' @inheritDotParams trajectoryAssignments
+#' @param ... Additional arguments passed to [trajectoryAssignments()].
 #' @seealso [clusterProportions] [trajectoryAssignments]
 #' @return A named `integer vector` of length `nClusters(object)` with the number of assigned trajectories per cluster.
 #' @examples
@@ -225,7 +225,7 @@ clusterSizes = function(object, ...) {
 #' })
 #' }
 #' @param object The `lcModel` to obtain the proportions from.
-#' @inheritDotParams postprob
+#' @param ... Additional arguments passed to [postprob()].
 #' @return A named `numeric vector` of length `nClusters(object)` with the proportional size of each cluster.
 #' @seealso [clusterSizes] [postprob]
 #' @examples
@@ -1326,7 +1326,7 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
 #' @export
 #' @rdname plotTrajectories
 #' @aliases plotTrajectories,lcModel-method
-#' @inheritDotParams trajectories
+#' @param ... Additional arguments passed to [trajectories()].
 #' @examples
 #' data(latrendData)
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
