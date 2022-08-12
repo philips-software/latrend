@@ -86,27 +86,33 @@
     
 
 <p>The <a href="latrendData.html">latrendData</a> dataset is included with the package and is used in all examples.
-The <code><a href="plotTrajectories.html">plotTrajectories()</a></code> function can be used to visualize any longitudinal dataset, given the <code>id</code> and <code>time</code> are specified.</p><div class="sourceCode"><pre><code><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>latrend.id <span class="op">=</span> <span class="st">"Id"</span>, latrend.time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span><span class="va">latrendData</span>, response <span class="op">=</span> <span class="st">"Y"</span><span class="op">)</span></code></pre></div>
+The <code><a href="plotTrajectories.html">plotTrajectories()</a></code> function can be used to visualize any longitudinal dataset, given the <code>id</code> and <code>time</code> are specified.</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>latrend.id <span class="op">=</span> <span class="st">"Id"</span>, latrend.time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span><span class="va">latrendData</span>, response <span class="op">=</span> <span class="st">"Y"</span><span class="op">)</span></span></code></pre></div>
 
-<p>Discovering longitudinal clusters using the package involves the specification of the longitudinal cluster method that should be used.</p><div class="sourceCode"><pre><code><span class="va">kmlMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span><span class="st">"Y"</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="va">kmlMethod</span></code></pre></div>
+<p>Discovering longitudinal clusters using the package involves the specification of the longitudinal cluster method that should be used.</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="va">kmlMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span><span class="st">"Y"</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">kmlMethod</span></span></code></pre></div>
 
-<p>The specified method is then estimated on the data using the generic estimation procedure function <code><a href="latrend.html">latrend()</a></code>:</p><div class="sourceCode"><pre><code><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">kmlMethod</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></code></pre></div>
+<p>The specified method is then estimated on the data using the generic estimation procedure function <code><a href="latrend.html">latrend()</a></code>:</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">kmlMethod</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></span></code></pre></div>
 
-<p>Analyze the fitted model</p><div class="sourceCode"><pre><code><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
-<span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">model</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WMAE"</span>, <span class="st">"BIC"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/qqPlot.html">qqPlot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
+<p>Analyze the fitted model</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">model</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WMAE"</span>, <span class="st">"BIC"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/qqPlot.html">qqPlot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
 
 <p>Create derivative method specifications for 1 to 5 clusters using the <code><a href="lcMethods.html">lcMethods()</a></code> function.
-A series of methods can be estimated using <code><a href="latrendBatch.html">latrendBatch()</a></code>.</p><div class="sourceCode"><pre><code><span class="va">kmlMethods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">kmlMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>
-<span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendBatch.html">latrendBatch</a></span><span class="op">(</span><span class="va">kmlMethods</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></code></pre></div>
+A series of methods can be estimated using <code><a href="latrendBatch.html">latrendBatch()</a></code>.</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="va">kmlMethods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">kmlMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendBatch.html">latrendBatch</a></span><span class="op">(</span><span class="va">kmlMethods</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></span></code></pre></div>
 
 <p>Determine the number of clusters through one or more internal cluser metrics.
-This can be done visually using the <code><a href="plotMetric.html">plotMetric()</a></code> function.</p><div class="sourceCode"><pre><code><span class="fu"><a href="../reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">models</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WMAE"</span>, <span class="st">"BIC"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+This can be done visually using the <code><a href="plotMetric.html">plotMetric()</a></code> function.</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="fu"><a href="../reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">models</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WMAE"</span>, <span class="st">"BIC"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 
     </div>
     <div id="vignettes">
@@ -160,7 +166,7 @@ This can be done visually using the <code><a href="plotMetric.html">plotMetric()
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

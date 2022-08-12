@@ -87,45 +87,62 @@ Requires Id column to be factor.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">has_lcMethod_args</span><span class="op">(</span><span class="va">object</span>, <span class="va">which</span><span class="op">)</span>
-
-<span class="fu">is_valid_postprob</span><span class="op">(</span><span class="va">pp</span>, model <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="fu">no_empty_trajectories</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">ids</span><span class="op">)</span>
-
-<span class="fu">is_data</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">time</span>, <span class="va">response</span><span class="op">)</span>
-
-<span class="fu">no_trajectories_duplicate_time</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">time</span><span class="op">)</span>
-
-<span class="fu">are_trajectories_length</span><span class="op">(</span><span class="va">data</span>, min <span class="op">=</span> <span class="fl">1</span>, <span class="va">id</span>, <span class="va">time</span><span class="op">)</span>
-
-<span class="fu">are_trajectories_equal_length</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">time</span><span class="op">)</span>
-
-<span class="fu">have_trajectories_noNA</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">response</span><span class="op">)</span>
-
-<span class="fu">no_trajectories_allNA</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">response</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">has_lcMethod_args</span><span class="op">(</span><span class="va">object</span>, <span class="va">which</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">is_valid_postprob</span><span class="op">(</span><span class="va">pp</span>, model <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">no_empty_trajectories</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">ids</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">is_data</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">time</span>, <span class="va">response</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">no_trajectories_duplicate_time</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">time</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">are_trajectories_length</span><span class="op">(</span><span class="va">data</span>, min <span class="op">=</span> <span class="fl">1</span>, <span class="va">id</span>, <span class="va">time</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">are_trajectories_equal_length</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">time</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">have_trajectories_noNA</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">response</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">no_trajectories_allNA</span><span class="op">(</span><span class="va">data</span>, <span class="va">id</span>, <span class="va">response</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>The object to test.</p></dd>
+
+
 <dt>which</dt>
 <dd><p>The argument names. Ellipsis (<code>...</code>) will be ignored.</p></dd>
+
+
 <dt>pp</dt>
 <dd><p>The posterior probability <code>matrix</code>.</p></dd>
+
+
 <dt>model</dt>
 <dd><p>The <code>lcModel</code> object. Optional.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>The id variable</p></dd>
+
+
 <dt>ids</dt>
 <dd><p>Optional <code>character vector</code> of trajectory identifiers that are expected to be present in the data.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>The time variable</p></dd>
+
+
 <dt>response</dt>
 <dd><p>The response column name. Optional.</p></dd>
+
+
 <dt>min</dt>
 <dd><p>The minimum required number.</p></dd>
+
 </dl></div>
 
   </div>
@@ -140,7 +157,7 @@ Requires Id column to be factor.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -104,33 +104,40 @@ Here, <code>N = nrow(newdata)</code> and <code>K = nClusters(object)</code>.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">transformPredict</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, <span class="va">newdata</span><span class="op">)</span>
-
-<span class="co"># S4 method for `NULL`,lcModel</span>
-<span class="fu">transformPredict</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, <span class="va">newdata</span><span class="op">)</span>
-
-<span class="co"># S4 method for vector,lcModel</span>
-<span class="fu">transformPredict</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, <span class="va">newdata</span><span class="op">)</span>
-
-<span class="co"># S4 method for matrix,lcModel</span>
-<span class="fu">transformPredict</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, <span class="va">newdata</span><span class="op">)</span>
-
-<span class="co"># S4 method for data.frame,lcModel</span>
-<span class="fu">transformPredict</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, <span class="va">newdata</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">transformPredict</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, <span class="va">newdata</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for `NULL`,lcModel</span></span>
+<span><span class="fu">transformPredict</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, <span class="va">newdata</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for vector,lcModel</span></span>
+<span><span class="fu">transformPredict</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, <span class="va">newdata</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for matrix,lcModel</span></span>
+<span><span class="fu">transformPredict</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, <span class="va">newdata</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for data.frame,lcModel</span></span>
+<span><span class="fu">transformPredict</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, <span class="va">newdata</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>pred</dt>
 <dd><p>The (per-cluster) predictions for <code>newdata</code>.</p></dd>
+
+
 <dt>model</dt>
 <dd><p>The <code>lcModel</code> for which the prediction was made.</p></dd>
+
+
 <dt>newdata</dt>
 <dd><p>A <code>data.frame</code> containing the input data to predict for.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.frame</code> with the predictions, or a list of cluster-specific prediction <code>data.frame</code>s.</p>
+    
+
+<p>A <code>data.frame</code> with the predictions, or a list of cluster-specific prediction <code>data.frame</code>s.</p>
     </div>
     <div id="example-implementation">
     <h2>Example implementation</h2>
@@ -138,14 +145,15 @@ Here, <code>N = nrow(newdata)</code> and <code>K = nClusters(object)</code>.</p>
 
 <p>In case we have a custom <code>lcModel</code> class based on an existing internal model representation with a <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> function,
 we can use <code>transformPredict()</code> to easily transform the internal model predictions to the right format.
-A common output is a <code>matrix</code> with the cluster-specific predictions.</p><div class="sourceCode"><pre><code><span class="va">predict.lcModelExample</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">newdata</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">predictionMatrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">object</span><span class="op">@</span><span class="va">model</span>, <span class="va">newdata</span><span class="op">)</span>
-  <span class="fu"><a href="../reference/transformPredict.html">transformPredict</a></span><span class="op">(</span>
-    pred <span class="op">=</span> <span class="va">predictionMatrix</span>,
-    model <span class="op">=</span> <span class="va">object</span>,
-    newdata <span class="op">=</span> <span class="va">newdata</span>
-  <span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+A common output is a <code>matrix</code> with the cluster-specific predictions.</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="va">predict.lcModelExample</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">newdata</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">predictionMatrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">object</span><span class="op">@</span><span class="va">model</span>, <span class="va">newdata</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/transformPredict.html">transformPredict</a></span><span class="op">(</span></span>
+<span>    pred <span class="op">=</span> <span class="va">predictionMatrix</span>,</span>
+<span>    model <span class="op">=</span> <span class="va">object</span>,</span>
+<span>    newdata <span class="op">=</span> <span class="va">newdata</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 
 <p>However, for ease of implementation it is generally advisable to implement <a href="predictForCluster.html">predictForCluster</a> instead of <a href="predict.lcModel.html">predict.lcModel</a>.</p>
 <p>For a complete and runnable example, see the custom models vignette accessible via <code>vignette("custom", package = "latrend")</code>.</p>
@@ -167,7 +175,7 @@ A common output is a <code>matrix</code> with the cluster-specific predictions.<
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

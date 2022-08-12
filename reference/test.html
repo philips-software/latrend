@@ -71,44 +71,63 @@ The comparison of expression values is done using <code><a href="https://rdrr.io
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">test</span><span class="op">(</span>
-  key <span class="op">=</span> <span class="st">"test"</span>,
-  <span class="va">x</span>,
-  y <span class="op">=</span> <span class="cn">TRUE</span>,
-  error <span class="op">=</span> <span class="cn">FALSE</span>,
-  warning <span class="op">=</span> <span class="cn">FALSE</span>,
-  runOnly <span class="op">=</span> <span class="cn">FALSE</span>,
-  text <span class="op">=</span> <span class="st">""</span>,
-  onFail <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fail"</span>, <span class="st">"warn"</span>, <span class="st">"ignore"</span>, <span class="st">"skip"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">test</span><span class="op">(</span></span>
+<span>  key <span class="op">=</span> <span class="st">"test"</span>,</span>
+<span>  <span class="va">x</span>,</span>
+<span>  y <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  error <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  warning <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  runOnly <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  text <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  onFail <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fail"</span>, <span class="st">"warn"</span>, <span class="st">"ignore"</span>, <span class="st">"skip"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>key</dt>
 <dd><p>Identifier for the test condition.</p></dd>
+
+
 <dt>x</dt>
 <dd><p>The expression to test.</p></dd>
+
+
 <dt>y</dt>
 <dd><p>The reference value or expression.</p></dd>
+
+
 <dt>error</dt>
 <dd><p>Whether to expect an error, or the pattern that the error message should match.</p></dd>
+
+
 <dt>warning</dt>
 <dd><p>Whether to expect a warning, or the pattern that the warning message should match.</p></dd>
+
+
 <dt>runOnly</dt>
 <dd><p>Whether to skip the comparison to <code>y</code>. If disabled, an error is raised when <code>y</code> is not <code>TRUE</code>.</p></dd>
+
+
 <dt>text</dt>
 <dd><p>Human-readable description of what this test condition is testing.</p></dd>
+
+
 <dt>onFail</dt>
 <dd><p>How to handle a failure of the test condition. By default, this is recorded as a test failure.
 If <code>onFail = "skip"</code>, the condition is not tested.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments passed to <code><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">base::all.equal()</a></code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Whether the test condition has passed successfully. In case of <code>onFail = "skip"</code>, <code>NA</code> is returned.</p>
+    
+
+<p>Whether the test condition has passed successfully. In case of <code>onFail = "skip"</code>, <code>NA</code> is returned.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -119,11 +138,11 @@ which made it practically impossible to identify the offending line in a sourced
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">test</span><span class="op">(</span><span class="st">'gt'</span>, <span class="fl">2</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">test</span><span class="op">(</span><span class="st">'eq'</span>, <span class="fl">1</span> <span class="op">+</span> <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">test</span><span class="op">(</span><span class="st">'lt'</span>, <span class="fl">2</span> <span class="op">&lt;</span> <span class="fl">1</span>, onFail <span class="op">=</span> <span class="st">"warn"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">test</span><span class="op">(</span><span class="st">'gt'</span>, <span class="fl">2</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">test</span><span class="op">(</span><span class="st">'eq'</span>, <span class="fl">1</span> <span class="op">+</span> <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">test</span><span class="op">(</span><span class="st">'lt'</span>, <span class="fl">2</span> <span class="op">&lt;</span> <span class="fl">1</span>, onFail <span class="op">=</span> <span class="st">"warn"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -138,7 +157,7 @@ which made it practically impossible to identify the offending line in a sourced
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

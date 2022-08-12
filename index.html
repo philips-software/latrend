@@ -112,36 +112,36 @@
 </h1>
 <p>The latest release of <em>latrend</em> can be installed by running:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">'philips-software/latrend'</span>, ref <span class="op">=</span> <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/github_refs.html" class="external-link">github_release</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">'philips-software/latrend'</span>, ref <span class="op">=</span> <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/github_refs.html" class="external-link">github_release</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Vignettes are included by running:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">'philips-software/latrend'</span>, ref <span class="op">=</span> <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/github_refs.html" class="external-link">github_release</a></span><span class="op">(</span><span class="op">)</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">'philips-software/latrend'</span>, ref <span class="op">=</span> <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/github_refs.html" class="external-link">github_release</a></span><span class="op">(</span><span class="op">)</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h1>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/philips-software/latrend" class="external-link">latrend</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/philips-software/latrend" class="external-link">latrend</a></span><span class="op">)</span></span></code></pre></div>
 <p>Load and view example data.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>latrend.id <span class="op">=</span> <span class="st">"Id"</span>, latrend.time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span>
-<span class="fu"><a href="reference/plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span><span class="va">latrendData</span>, response <span class="op">=</span> <span class="st">"Y"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>latrend.id <span class="op">=</span> <span class="st">"Id"</span>, latrend.time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span><span class="va">latrendData</span>, response <span class="op">=</span> <span class="st">"Y"</span><span class="op">)</span></span></code></pre></div>
 <p>Cluster the trajectories and plot the results.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">kmlMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span><span class="st">"Y"</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">kmlMethod</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">kmlMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/lcMethodKML.html">lcMethodKML</a></span><span class="op">(</span><span class="st">"Y"</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">kmlMethod</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
 <p>Identify solutions for 1 to 5 clusters.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">kmlMethods</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">kmlMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>
-<span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/latrendBatch.html">latrendBatch</a></span><span class="op">(</span><span class="va">kmlMethods</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">kmlMethods</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">kmlMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/latrendBatch.html">latrendBatch</a></span><span class="op">(</span><span class="va">kmlMethods</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></span></code></pre></div>
 <p>Determine the number of clusters through one or more internal cluser metrics.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/metric.html">metric</a></span><span class="op">(</span><span class="va">models</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WMAE"</span>, <span class="st">"BIC"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">models</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WMAE"</span>, <span class="st">"BIC"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/metric.html">metric</a></span><span class="op">(</span><span class="va">models</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WMAE"</span>, <span class="st">"BIC"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">models</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WMAE"</span>, <span class="st">"BIC"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="supported-packages">Supported packages<a class="anchor" aria-label="anchor" href="#supported-packages"></a>
@@ -218,7 +218,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

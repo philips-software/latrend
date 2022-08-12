@@ -81,9 +81,9 @@ The subset does not contain the Non-users and Early drop-out groups.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="va">PAP.adh</span>
-
-<span class="va">PAP.adh1y</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="va">PAP.adh</span></span>
+<span></span>
+<span><span class="va">PAP.adh1y</span></span></code></pre></div>
     </div>
 
     <div id="format">
@@ -126,20 +126,20 @@ While the data format will remain the same, the data content is subject to chang
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">PAP.adh</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span><span class="va">PAP.adh</span>, id <span class="op">=</span> <span class="st">"Patient"</span>, time <span class="op">=</span> <span class="st">"Biweek"</span>, response <span class="op">=</span> <span class="st">"UsageHours"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># plot according to cluster ground truth</span></span>
-<span class="r-in">  <span class="fu"><a href="plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="va">PAP.adh</span>,</span>
-<span class="r-in">    id <span class="op">=</span> <span class="st">"Patient"</span>,</span>
-<span class="r-in">    time <span class="op">=</span> <span class="st">"Biweek"</span>,</span>
-<span class="r-in">    response <span class="op">=</span> <span class="st">"UsageHours"</span>,</span>
-<span class="r-in">    cluster <span class="op">=</span> <span class="st">"Group"</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">PAP.adh</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span><span class="va">PAP.adh</span>, id <span class="op">=</span> <span class="st">"Patient"</span>, time <span class="op">=</span> <span class="st">"Biweek"</span>, response <span class="op">=</span> <span class="st">"UsageHours"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># plot according to cluster ground truth</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">PAP.adh</span>,</span></span>
+<span class="r-in"><span>    id <span class="op">=</span> <span class="st">"Patient"</span>,</span></span>
+<span class="r-in"><span>    time <span class="op">=</span> <span class="st">"Biweek"</span>,</span></span>
+<span class="r-in"><span>    response <span class="op">=</span> <span class="st">"UsageHours"</span>,</span></span>
+<span class="r-in"><span>    cluster <span class="op">=</span> <span class="st">"Group"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: ggplot2</span>
 <span class="r-plt img"><img src="PAP.adh-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
@@ -156,7 +156,7 @@ While the data format will remain the same, the data content is subject to chang
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

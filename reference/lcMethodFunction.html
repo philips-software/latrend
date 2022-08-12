@@ -69,30 +69,41 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">lcMethodFunction</span><span class="op">(</span>
-  <span class="va">response</span>,
-  <span class="va">fun</span>,
-  center <span class="op">=</span> <span class="va">meanNA</span>,
-  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,
-  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,
-  name <span class="op">=</span> <span class="st">"custom"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lcMethodFunction</span><span class="op">(</span></span>
+<span>  <span class="va">response</span>,</span>
+<span>  <span class="va">fun</span>,</span>
+<span>  center <span class="op">=</span> <span class="va">meanNA</span>,</span>
+<span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"custom"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>response</dt>
 <dd><p>The name of the response variable.</p></dd>
+
+
 <dt>fun</dt>
 <dd><p>The cluster <code>function</code> with signature <code>(method, data)</code> that returns a <code>lcModel</code> object.</p></dd>
+
+
 <dt>center</dt>
 <dd><p>Optional <code>function</code> for computing the longitudinal cluster centers, with signature <code>(x)</code>.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>The name of the time variable.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>The name of the trajectory identification variable.</p></dd>
+
+
 <dt>name</dt>
 <dd><p>The name of the method.</p></dd>
+
 </dl></div>
     <div id="see-also">
     <h2>See also</h2>
@@ -120,24 +131,24 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Stratification based on the mean response level</span></span>
-<span class="r-in"><span class="va">clusfun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">response</span>, <span class="va">id</span>, <span class="va">time</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, by <span class="op">=</span> <span class="va">Id</span><span class="op">]</span><span class="op">$</span><span class="va">V1</span></span>
-<span class="r-in">  <span class="fu"><a href="lcModelPartition.html">lcModelPartition</a></span><span class="op">(</span></span>
-<span class="r-in">    data <span class="op">=</span> <span class="va">data</span>,</span>
-<span class="r-in">    trajectoryAssignments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="va">clusters</span>,</span>
-<span class="r-in">      levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span class="r-in">      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="st">"High"</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">)</span>,</span>
-<span class="r-in">    response <span class="op">=</span> <span class="va">response</span>,</span>
-<span class="r-in">    time <span class="op">=</span> <span class="va">time</span>,</span>
-<span class="r-in">    id <span class="op">=</span> <span class="va">id</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodFunction</span><span class="op">(</span>response <span class="op">=</span> <span class="st">"Y"</span>, fun <span class="op">=</span> <span class="va">clusfun</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Stratification based on the mean response level</span></span></span>
+<span class="r-in"><span><span class="va">clusfun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">response</span>, <span class="va">id</span>, <span class="va">time</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, by <span class="op">=</span> <span class="va">Id</span><span class="op">]</span><span class="op">$</span><span class="va">V1</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="lcModelPartition.html">lcModelPartition</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    data <span class="op">=</span> <span class="va">data</span>,</span></span>
+<span class="r-in"><span>    trajectoryAssignments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="va">clusters</span>,</span></span>
+<span class="r-in"><span>      levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="st">"High"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    response <span class="op">=</span> <span class="va">response</span>,</span></span>
+<span class="r-in"><span>    time <span class="op">=</span> <span class="va">time</span>,</span></span>
+<span class="r-in"><span>    id <span class="op">=</span> <span class="va">id</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodFunction</span><span class="op">(</span>response <span class="op">=</span> <span class="st">"Y"</span>, fun <span class="op">=</span> <span class="va">clusfun</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -152,7 +163,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

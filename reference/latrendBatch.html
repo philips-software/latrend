@@ -69,46 +69,63 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">latrendBatch</span><span class="op">(</span>
-  <span class="va">methods</span>,
-  <span class="va">data</span>,
-  cartesian <span class="op">=</span> <span class="cn">TRUE</span>,
-  seed <span class="op">=</span> <span class="cn">NULL</span>,
-  parallel <span class="op">=</span> <span class="cn">FALSE</span>,
-  errorHandling <span class="op">=</span> <span class="st">"stop"</span>,
-  envir <span class="op">=</span> <span class="cn">NULL</span>,
-  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.verbose"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">latrendBatch</span><span class="op">(</span></span>
+<span>  <span class="va">methods</span>,</span>
+<span>  <span class="va">data</span>,</span>
+<span>  cartesian <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  errorHandling <span class="op">=</span> <span class="st">"stop"</span>,</span>
+<span>  envir <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.verbose"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>methods</dt>
 <dd><p>A <code>list</code> of <code>lcMethod</code> objects.</p></dd>
+
+
 <dt>data</dt>
 <dd><p>The dataset(s) to which to fit the respective <code>lcMethod</code> on.
 Either a <code>data.frame</code>, <code>matrix</code>, <code>list</code> or an expression evaluating to one of the supported types.
 Multiple datasets can be supplied by encapsulating the datasets using <code>data = .(df1, df2, ..., dfN)</code>.
 Doing this results in a more readable <code>call</code> associated with each fitted <code>lcModel</code> object.</p></dd>
+
+
 <dt>cartesian</dt>
 <dd><p>Whether to fit the provided methods on each of the datasets. If <code>cartesian=FALSE</code>, only a single dataset may be provided or a list of data matching the length of <code>methods</code>.</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>Sets the seed for generating the respective seed for each of the method fits. Seeds are only set for methods without a seed argument.</p></dd>
+
+
 <dt>parallel</dt>
 <dd><p>Whether to enable parallel evaluation. See <a href="latrend-parallel.html">latrend-parallel</a>. Method evaluation and dataset transformation is done on the calling thread.</p></dd>
+
+
 <dt>errorHandling</dt>
 <dd><p>Whether to <code>"stop"</code> on an error, or to <code>"remove'</code> evaluations that raised an error.</p></dd>
+
+
 <dt>envir</dt>
 <dd><p>The <code>environment</code> in which to evaluate the <code>lcMethod</code> arguments.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>The level of verbosity. Either an object of class <code>Verbose</code> (see <a href="https://henrikbengtsson.github.io/R.utils/reference/Verbose.html" class="external-link">R.utils::Verbose</a> for details),
 a <code>logical</code> indicating whether to show basic computation information,
 a <code>numeric</code> indicating the verbosity level (see Verbose),
 or one of <code>c('info', 'fine', 'finest')</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>lcModels</code> object.
+    
+
+<p>A <code>lcModels</code> object.
 In case of a model fit error under <code>errorHandling = pass</code>, a <code>list</code> is returned.</p>
     </div>
     <div id="details">
@@ -127,19 +144,19 @@ In case of a model fit error under <code>errorHandling = pass</code>, a <code>li
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">refMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">methods</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">refMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu">latrendBatch</span><span class="op">(</span><span class="va">methods</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># different dataset per method</span></span>
-<span class="r-in"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu">latrendBatch</span><span class="op">(</span><span class="fu"><a href="lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">refMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>,</span>
-<span class="r-in">   data <span class="op">=</span> <span class="fu">.</span><span class="op">(</span></span>
-<span class="r-in">     <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">latrendData</span>, <span class="va">Time</span> <span class="op">&gt;</span> <span class="fl">.5</span><span class="op">)</span>,</span>
-<span class="r-in">     <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">latrendData</span>, <span class="va">Time</span> <span class="op">&lt;</span> <span class="fl">.5</span><span class="op">)</span></span>
-<span class="r-in">   <span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">refMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">methods</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">refMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu">latrendBatch</span><span class="op">(</span><span class="va">methods</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># different dataset per method</span></span></span>
+<span class="r-in"><span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu">latrendBatch</span><span class="op">(</span><span class="fu"><a href="lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">refMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>   data <span class="op">=</span> <span class="fu">.</span><span class="op">(</span></span></span>
+<span class="r-in"><span>     <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">latrendData</span>, <span class="va">Time</span> <span class="op">&gt;</span> <span class="fl">.5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>     <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">latrendData</span>, <span class="va">Time</span> <span class="op">&lt;</span> <span class="fl">.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -154,7 +171,7 @@ In case of a model fit error under <code>errorHandling = pass</code>, a <code>li
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

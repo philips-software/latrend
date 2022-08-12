@@ -176,8 +176,8 @@ These steps, as part of the fitting procedure, are executed by <code><a href="la
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, nClusters <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">method</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, nClusters <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">method</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> lcMethodLMKM specifying "lm-kmeans"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  time:           "Time"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  id:             "Id"</span>
@@ -194,21 +194,21 @@ These steps, as part of the fitting procedure, are executed by <code><a href="la
 <span class="r-out co"><span class="r-pr">#&gt;</span>  nstart:         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  algorithm:      c("Hartigan-Wong", "Lloyd", "Forgy", "Ma</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  formula:        Y ~ Time</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/methods/new.html" class="external-link">new</a></span><span class="op">(</span><span class="st">"lcMethodLMKM"</span>, formula <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, nClusters <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># get argument names</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">method</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/methods/new.html" class="external-link">new</a></span><span class="op">(</span><span class="st">"lcMethodLMKM"</span>, formula <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, nClusters <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get argument names</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">method</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "time"        "id"          "nClusters"   "center"      "standardize"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [6] "method"      "model"       "y"           "qr"          "singular.ok"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [11] "contrasts"   "iter.max"    "nstart"      "algorithm"   "formula"    </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># evaluate argument</span></span>
-<span class="r-in"><span class="va">method</span><span class="op">$</span><span class="va">nClusters</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># evaluate argument</span></span></span>
+<span class="r-in"><span><span class="va">method</span><span class="op">$</span><span class="va">nClusters</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># create a copy with updated nClusters argument</span></span>
-<span class="r-in"><span class="va">method3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">method</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># create a copy with updated nClusters argument</span></span></span>
+<span class="r-in"><span><span class="va">method3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">method</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -223,7 +223,7 @@ These steps, as part of the fitting procedure, are executed by <code><a href="la
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

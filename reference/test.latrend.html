@@ -69,17 +69,17 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">test.latrend</span><span class="op">(</span>
-  class <span class="op">=</span> <span class="st">"lcMethodKML"</span>,
-  instantiator <span class="op">=</span> <span class="cn">NULL</span>,
-  data <span class="op">=</span> <span class="cn">NULL</span>,
-  args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
-  tests <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"method"</span>, <span class="st">"basic"</span>, <span class="st">"fitted"</span>, <span class="st">"predict"</span>, <span class="st">"cluster-single"</span>, <span class="st">"cluster-three"</span><span class="op">)</span>,
-  maxFails <span class="op">=</span> <span class="fl">5L</span>,
-  errorOnFail <span class="op">=</span> <span class="cn">FALSE</span>,
-  clusterRecovery <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"warn"</span>, <span class="st">"ignore"</span>, <span class="st">"fail"</span><span class="op">)</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">test.latrend</span><span class="op">(</span></span>
+<span>  class <span class="op">=</span> <span class="st">"lcMethodKML"</span>,</span>
+<span>  instantiator <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  tests <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"method"</span>, <span class="st">"basic"</span>, <span class="st">"fitted"</span>, <span class="st">"predict"</span>, <span class="st">"cluster-single"</span>, <span class="st">"cluster-three"</span><span class="op">)</span>,</span>
+<span>  maxFails <span class="op">=</span> <span class="fl">5L</span>,</span>
+<span>  errorOnFail <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  clusterRecovery <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"warn"</span>, <span class="st">"ignore"</span>, <span class="st">"fail"</span><span class="op">)</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -87,28 +87,45 @@
     <dl><dt>class</dt>
 <dd><p>The name of the <code>lcMethod</code> subclass to test.
 The class should inherit from <code>lcMethod</code>.</p></dd>
+
+
 <dt>instantiator</dt>
 <dd><p>A <code>function</code> with signature <code>(id, time, response, ...)</code>,
 returning an object inheriting from the <code>lcMethod</code> specified by the <code>class</code> argument.</p></dd>
+
+
 <dt>data</dt>
 <dd><p>An optional dataset comprising three highly distinct constant clusters that will be used for testing, represented by a <code>data.frame</code>.
 The <code>data.frame</code> must contain the columns <code>"Id", "Time", "Value", "Cluster"</code> of types <code>character</code>, <code>numeric</code>, <code>numeric</code>, and <code>character</code>, respectively.
 All trajectories should be of equal length and have observations at the same moments in time.
 Trajectory observations are assumed to be independent of time, i.e., all trajectories are constant.
 This enables tests to insert additional observations as needed by sampling from the available observations.</p></dd>
+
+
 <dt>args</dt>
 <dd><p>Other arguments passed to the instantiator function.</p></dd>
+
+
 <dt>tests</dt>
 <dd><p>A <code>character</code> vector indicating the type of tests to run, as defined in the <code>*.Rraw</code> files inside the <code>/test/</code> folder.</p></dd>
+
+
 <dt>maxFails</dt>
 <dd><p>The maximum number of allowed test condition failures before testing is ended prematurely.</p></dd>
+
+
 <dt>errorOnFail</dt>
 <dd><p>Whether to throw the test errors as an error. This is always enabled while running package tests.</p></dd>
+
+
 <dt>clusterRecovery</dt>
 <dd><p>Whether to test for correct recovery/identification of the original clusters in the test data.
 By default, a warning is outputted.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Whether the output testing results. This is always disabled while running package tests.</p></dd>
+
 </dl></div>
     <div id="note">
     <h2>Note</h2>
@@ -118,7 +135,7 @@ The default dataset used for testing is subject to change.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">test.latrend</span><span class="op">(</span><span class="st">"lcMethodRandom"</span>, clusterRecovery <span class="op">=</span> <span class="st">"skip"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">test.latrend</span><span class="op">(</span><span class="st">"lcMethodRandom"</span>, clusterRecovery <span class="op">=</span> <span class="st">"skip"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> === Testing lcMethod class "lcMethodRandom" ===</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> == Running tests from "method" ==</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Tests succeeded.</span>
@@ -149,7 +166,7 @@ The default dataset used for testing is subject to change.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

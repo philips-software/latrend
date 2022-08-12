@@ -100,44 +100,52 @@ Note that this function has no use outside of implementing <code>fitted.lcModel<
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">transformFitted</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, <span class="va">clusters</span><span class="op">)</span>
-
-<span class="co"># S4 method for `NULL`,lcModel</span>
-<span class="fu">transformFitted</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, clusters <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="co"># S4 method for matrix,lcModel</span>
-<span class="fu">transformFitted</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, clusters <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="co"># S4 method for list,lcModel</span>
-<span class="fu">transformFitted</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, clusters <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="co"># S4 method for data.frame,lcModel</span>
-<span class="fu">transformFitted</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, clusters <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">transformFitted</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, <span class="va">clusters</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for `NULL`,lcModel</span></span>
+<span><span class="fu">transformFitted</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, clusters <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for matrix,lcModel</span></span>
+<span><span class="fu">transformFitted</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, clusters <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for list,lcModel</span></span>
+<span><span class="fu">transformFitted</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, clusters <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for data.frame,lcModel</span></span>
+<span><span class="fu">transformFitted</span><span class="op">(</span><span class="va">pred</span>, <span class="va">model</span>, clusters <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>pred</dt>
 <dd><p>The cluster-specific predictions for each observation</p></dd>
+
+
 <dt>model</dt>
 <dd><p>The <code>lcModel</code> by which the prediction was made.</p></dd>
+
+
 <dt>clusters</dt>
 <dd><p>The trajectory cluster assignment per observation. Optional.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>If the <code>clusters</code> argument was specified, a <code>vector</code> of fitted values conditional on the given cluster assignment. Else, a <code>matrix</code> with the fitted values per cluster per column.</p>
+    
+
+<p>If the <code>clusters</code> argument was specified, a <code>vector</code> of fitted values conditional on the given cluster assignment. Else, a <code>matrix</code> with the fitted values per cluster per column.</p>
     </div>
     <div id="example-implementation">
     <h2>Example implementation</h2>
     
 
-<p>A typical implementation of <code><a href="fitted.lcModel.html">fitted.lcModel()</a></code> for your own <code>lcModel</code> class would have the following format:</p><div class="sourceCode"><pre><code><span class="va">fitted.lcModelExample</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span>,
- <span class="va">clusters</span> <span class="op">=</span> <span class="fu"><a href="../reference/trajectoryAssignments.html">trajectoryAssignments</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-  <span class="co"># computations of the fitted values per cluster here</span>
-  <span class="va">predictionMatrix</span> <span class="op">&lt;-</span> <span class="va">CODE_HERE</span>
-  <span class="fu"><a href="../reference/transformFitted.html">transformFitted</a></span><span class="op">(</span>pred <span class="op">=</span> <span class="va">predictionMatrix</span>, model <span class="op">=</span> <span class="va">object</span>, clusters <span class="op">=</span> <span class="va">clusters</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<p>A typical implementation of <code><a href="fitted.lcModel.html">fitted.lcModel()</a></code> for your own <code>lcModel</code> class would have the following format:</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="va">fitted.lcModelExample</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span>,</span>
+<span> <span class="va">clusters</span> <span class="op">=</span> <span class="fu"><a href="../reference/trajectoryAssignments.html">trajectoryAssignments</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># computations of the fitted values per cluster here</span></span>
+<span>  <span class="va">predictionMatrix</span> <span class="op">&lt;-</span> <span class="va">CODE_HERE</span></span>
+<span>  <span class="fu"><a href="../reference/transformFitted.html">transformFitted</a></span><span class="op">(</span>pred <span class="op">=</span> <span class="va">predictionMatrix</span>, model <span class="op">=</span> <span class="va">object</span>, clusters <span class="op">=</span> <span class="va">clusters</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 
 <p>For a complete and runnable example, see the custom models vignette accessible via <code>vignette("custom", package = "latrend")</code>.</p>
     </div>
@@ -154,7 +162,7 @@ Note that this function has no use outside of implementing <code>fitted.lcModel<
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

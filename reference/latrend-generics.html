@@ -73,116 +73,143 @@ functions with signatures of <code>lcMethod</code> or <code>lcModel</code>.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu"><a href="clusterProportions.html">clusterProportions</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="clusterTrajectories.html">clusterTrajectories</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="compose.html">compose</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">envir</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="converged.html">converged</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="externalMetric.html">externalMetric</a></span><span class="op">(</span>
-  <span class="va">object</span>,
-  <span class="va">object2</span>,
-  name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.externalMetric"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu"><a href="estimationTime.html">estimationTime</a></span><span class="op">(</span><span class="va">object</span>, unit <span class="op">=</span> <span class="st">"secs"</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="fit.html">fit</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="fittedTrajectories.html">fittedTrajectories</a></span><span class="op">(</span>
-  <span class="va">object</span>,
-  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  what <span class="op">=</span> <span class="st">"mu"</span>,
-  clusters <span class="op">=</span> <span class="fu"><a href="trajectoryAssignments.html">trajectoryAssignments</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu"><a href="getArgumentDefaults.html">getArgumentDefaults</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="getArgumentExclusions.html">getArgumentExclusions</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="getLabel.html">getLabel</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="getName.html">getName</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="getName.html">getShortName</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="idVariable.html">idVariable</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="metric.html">metric</a></span><span class="op">(</span><span class="va">object</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.metric"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WRSS"</span>, <span class="st">"APPA.mean"</span><span class="op">)</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="plotFittedTrajectories.html">plotFittedTrajectories</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="plotClusterTrajectories.html">plotClusterTrajectories</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="postFit.html">postFit</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">model</span>, <span class="va">envir</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="postprob.html">postprob</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="predictAssignments.html">predictAssignments</a></span><span class="op">(</span><span class="va">object</span>, newdata <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="predictForCluster.html">predictForCluster</a></span><span class="op">(</span><span class="va">object</span>, newdata <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">cluster</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="predictPostprob.html">predictPostprob</a></span><span class="op">(</span><span class="va">object</span>, newdata <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="prepareData.html">prepareData</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="preFit.html">preFit</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="qqPlot.html">qqPlot</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="responseVariable.html">responseVariable</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="strip.html">strip</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="timeVariable.html">timeVariable</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="trajectoryAssignments.html">trajectoryAssignments</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu"><a href="validate.html">validate</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S4 method for `NULL`</span>
-<span class="fu"><a href="getName.html">getName</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S4 method for `NULL`</span>
-<span class="fu"><a href="getName.html">getShortName</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu"><a href="clusterProportions.html">clusterProportions</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="clusterTrajectories.html">clusterTrajectories</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="compose.html">compose</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">envir</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="converged.html">converged</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="externalMetric.html">externalMetric</a></span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  <span class="va">object2</span>,</span>
+<span>  name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.externalMetric"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="estimationTime.html">estimationTime</a></span><span class="op">(</span><span class="va">object</span>, unit <span class="op">=</span> <span class="st">"secs"</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="fit.html">fit</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="fittedTrajectories.html">fittedTrajectories</a></span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  what <span class="op">=</span> <span class="st">"mu"</span>,</span>
+<span>  clusters <span class="op">=</span> <span class="fu"><a href="trajectoryAssignments.html">trajectoryAssignments</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="getArgumentDefaults.html">getArgumentDefaults</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="getArgumentExclusions.html">getArgumentExclusions</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="getLabel.html">getLabel</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="getName.html">getName</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="getName.html">getShortName</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="idVariable.html">idVariable</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="metric.html">metric</a></span><span class="op">(</span><span class="va">object</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.metric"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WRSS"</span>, <span class="st">"APPA.mean"</span><span class="op">)</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="plotFittedTrajectories.html">plotFittedTrajectories</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="plotClusterTrajectories.html">plotClusterTrajectories</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="postFit.html">postFit</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">model</span>, <span class="va">envir</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="postprob.html">postprob</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="predictAssignments.html">predictAssignments</a></span><span class="op">(</span><span class="va">object</span>, newdata <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="predictForCluster.html">predictForCluster</a></span><span class="op">(</span><span class="va">object</span>, newdata <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">cluster</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="predictPostprob.html">predictPostprob</a></span><span class="op">(</span><span class="va">object</span>, newdata <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="prepareData.html">prepareData</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="preFit.html">preFit</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="qqPlot.html">qqPlot</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="responseVariable.html">responseVariable</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="strip.html">strip</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="timeVariable.html">timeVariable</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="trajectoryAssignments.html">trajectoryAssignments</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="validate.html">validate</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for `NULL`</span></span>
+<span><span class="fu"><a href="getName.html">getName</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for `NULL`</span></span>
+<span><span class="fu"><a href="getName.html">getShortName</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>The object.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Arguments.</p></dd>
+
+
 <dt>method</dt>
 <dd><p>The method.</p></dd>
+
+
 <dt>envir</dt>
 <dd><p><code>environment</code>.</p></dd>
+
+
 <dt>object2</dt>
 <dd><p>The model to compare with.</p></dd>
+
+
 <dt>name</dt>
 <dd><p>Metric name.</p></dd>
+
+
 <dt>unit</dt>
 <dd><p>Time unit.</p></dd>
+
+
 <dt>data</dt>
 <dd><p><code>data.frame</code>.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p><a href="https://henrikbengtsson.github.io/R.utils/reference/Verbose.html" class="external-link">R.utils::Verbose</a>.</p></dd>
+
+
 <dt>at</dt>
 <dd><p>A vector of times at which to compute the cluster trajectories.</p></dd>
+
+
 <dt>what</dt>
 <dd><p>Parameter.</p></dd>
+
+
 <dt>newdata</dt>
 <dd><p><code>data.frame</code> of newdata.</p></dd>
+
+
 <dt>cluster</dt>
 <dd><p>Cluster name.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The stripped (i.e., updated) object.</p>
+    
+
+<p>The stripped (i.e., updated) object.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -203,7 +230,7 @@ and references, greatly reducing the serialized object size.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

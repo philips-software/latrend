@@ -73,34 +73,44 @@ The work is added to the provided <code>environment</code>, allowing the <code><
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S4 method for lcMethod</span>
-<span class="fu">preFit</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for lcMethod</span></span>
+<span><span class="fu">preFit</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>method</dt>
 <dd><p>An object inheriting from <code>lcMethod</code> with all its arguments having been evaluated and finalized.</p></dd>
+
+
 <dt>data</dt>
 <dd><p>A <code>data.frame</code> representing the transformed training data.</p></dd>
+
+
 <dt>envir</dt>
 <dd><p>The <code>environment</code> containing additional data variables returned by <code><a href="prepareData.html">prepareData()</a></code>.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>A <a href="https://henrikbengtsson.github.io/R.utils/reference/Verbose.html" class="external-link">R.utils::Verbose</a> object indicating the level of verbosity.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The updated <code>environment</code> that will be passed to <code><a href="fit.html">fit()</a></code>.</p>
+    
+
+<p>The updated <code>environment</code> that will be passed to <code><a href="fit.html">fit()</a></code>.</p>
     </div>
     <div id="implementation">
     <h2>Implementation</h2>
     
 
-<div class="sourceCode"><pre><code><span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"preFit"</span>, <span class="st">"lcMethodExample"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span><span class="op">)</span> <span class="op">{</span>
-  <span class="co"># update envir with additional computed work</span>
-  <span class="va">envir</span><span class="op">$</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">INTENSIVE_OPERATION</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">envir</span><span class="op">)</span>
-<span class="op">}</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode"><pre><code><span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"preFit"</span>, <span class="st">"lcMethodExample"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># update envir with additional computed work</span></span>
+<span>  <span class="va">envir</span><span class="op">$</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">INTENSIVE_OPERATION</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">envir</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 
     </div>
     <div id="fitting-procedure">
@@ -129,7 +139,7 @@ These steps, as part of the fitting procedure, are executed by <code><a href="la
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

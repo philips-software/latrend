@@ -71,63 +71,76 @@ The standardized data format is for method estimation by latrend, and for plotti
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">trajectories</span><span class="op">(</span>
-  <span class="va">object</span>,
-  id <span class="op">=</span> <span class="fu"><a href="idVariable.html">idVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  time <span class="op">=</span> <span class="fu"><a href="timeVariable.html">timeVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  response <span class="op">=</span> <span class="fu"><a href="responseVariable.html">responseVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S4 method for data.frame</span>
-<span class="fu">trajectories</span><span class="op">(</span>
-  <span class="va">object</span>,
-  id <span class="op">=</span> <span class="fu"><a href="idVariable.html">idVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  time <span class="op">=</span> <span class="fu"><a href="timeVariable.html">timeVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  response <span class="op">=</span> <span class="fu"><a href="responseVariable.html">responseVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S4 method for matrix</span>
-<span class="fu">trajectories</span><span class="op">(</span>
-  <span class="va">object</span>,
-  id <span class="op">=</span> <span class="fu"><a href="idVariable.html">idVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  time <span class="op">=</span> <span class="fu"><a href="timeVariable.html">timeVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  response <span class="op">=</span> <span class="fu"><a href="responseVariable.html">responseVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S4 method for call</span>
-<span class="fu">trajectories</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span>, <span class="va">envir</span><span class="op">)</span>
-
-<span class="co"># S4 method for lcModel</span>
-<span class="fu">trajectories</span><span class="op">(</span>
-  <span class="va">object</span>,
-  id <span class="op">=</span> <span class="fu"><a href="idVariable.html">idVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  time <span class="op">=</span> <span class="fu"><a href="timeVariable.html">timeVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  response <span class="op">=</span> <span class="fu"><a href="responseVariable.html">responseVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">trajectories</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="idVariable.html">idVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  time <span class="op">=</span> <span class="fu"><a href="timeVariable.html">timeVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  response <span class="op">=</span> <span class="fu"><a href="responseVariable.html">responseVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for data.frame</span></span>
+<span><span class="fu">trajectories</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="idVariable.html">idVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  time <span class="op">=</span> <span class="fu"><a href="timeVariable.html">timeVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  response <span class="op">=</span> <span class="fu"><a href="responseVariable.html">responseVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for matrix</span></span>
+<span><span class="fu">trajectories</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="idVariable.html">idVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  time <span class="op">=</span> <span class="fu"><a href="timeVariable.html">timeVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  response <span class="op">=</span> <span class="fu"><a href="responseVariable.html">responseVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for call</span></span>
+<span><span class="fu">trajectories</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span>, <span class="va">envir</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for lcModel</span></span>
+<span><span class="fu">trajectories</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="idVariable.html">idVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  time <span class="op">=</span> <span class="fu"><a href="timeVariable.html">timeVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  response <span class="op">=</span> <span class="fu"><a href="responseVariable.html">responseVariable</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>The data or model or extract the trajectories from.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>The identifier variable name.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>The time variable name.</p></dd>
+
+
 <dt>response</dt>
 <dd><p>The response variable name.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments.</p></dd>
+
+
 <dt>envir</dt>
 <dd><p>The <code>environment</code> used to evaluate the data object in (e.g., in case <code>object</code> is of type <code>call</code>).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.frame</code> with columns matching the <code>id</code>, <code>time</code>, and <code>response</code> name arguments.</p>
+    
+
+<p>A <code>data.frame</code> with columns matching the <code>id</code>, <code>time</code>, and <code>response</code> name arguments.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -150,7 +163,7 @@ The standardized data format is for method estimation by latrend, and for plotti
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

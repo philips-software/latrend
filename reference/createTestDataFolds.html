@@ -69,17 +69,22 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">createTestDataFolds</span><span class="op">(</span><span class="va">data</span>, <span class="va">trainDataList</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">createTestDataFolds</span><span class="op">(</span><span class="va">data</span>, <span class="va">trainDataList</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>A <code>data.frame</code> representing the complete dataset.</p></dd>
+
+
 <dt>trainDataList</dt>
 <dd><p>A <code>list</code> of <code>data.frame</code> representing each of the data training folds. These should be derived from <code>data</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Arguments passed to <a href="createTestDataFold.html">createTestDataFold</a>.</p></dd>
+
 </dl></div>
     <div id="see-also">
     <h2>See also</h2>
@@ -93,12 +98,12 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/topepo/caret/" class="external-link">"caret"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">trainDataList</span> <span class="op">&lt;-</span> <span class="fu"><a href="createTrainDataFolds.html">createTrainDataFolds</a></span><span class="op">(</span><span class="va">latrendData</span>, folds <span class="op">=</span> <span class="fl">10</span>, id <span class="op">=</span> <span class="st">"Id"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">testDataList</span> <span class="op">&lt;-</span> <span class="fu">createTestDataFolds</span><span class="op">(</span><span class="va">latrendData</span>, <span class="va">trainDataList</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/topepo/caret/" class="external-link">"caret"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">trainDataList</span> <span class="op">&lt;-</span> <span class="fu"><a href="createTrainDataFolds.html">createTrainDataFolds</a></span><span class="op">(</span><span class="va">latrendData</span>, folds <span class="op">=</span> <span class="fl">10</span>, id <span class="op">=</span> <span class="st">"Id"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">testDataList</span> <span class="op">&lt;-</span> <span class="fu">createTestDataFolds</span><span class="op">(</span><span class="va">latrendData</span>, <span class="va">trainDataList</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -113,7 +118,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

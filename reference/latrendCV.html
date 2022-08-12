@@ -71,43 +71,60 @@ Creates k random subsets ("folds") from the data, estimating a model for each of
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">latrendCV</span><span class="op">(</span>
-  <span class="va">method</span>,
-  <span class="va">data</span>,
-  folds <span class="op">=</span> <span class="fl">10</span>,
-  seed <span class="op">=</span> <span class="cn">NULL</span>,
-  parallel <span class="op">=</span> <span class="cn">FALSE</span>,
-  errorHandling <span class="op">=</span> <span class="st">"stop"</span>,
-  envir <span class="op">=</span> <span class="cn">NULL</span>,
-  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.verbose"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">latrendCV</span><span class="op">(</span></span>
+<span>  <span class="va">method</span>,</span>
+<span>  <span class="va">data</span>,</span>
+<span>  folds <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  errorHandling <span class="op">=</span> <span class="st">"stop"</span>,</span>
+<span>  envir <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.verbose"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>method</dt>
 <dd><p>An <code>lcMethod</code> object specifying the longitudinal cluster method to apply, or the name (as <code>character</code>) of an <code>lcMethod</code> subclass. See <a href="lcMethod-class.html">lcMethod</a> for details.</p></dd>
+
+
 <dt>data</dt>
 <dd><p>A <code>data.frame</code>.</p></dd>
+
+
 <dt>folds</dt>
 <dd><p>The number of folds. Ten folds by default.</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>The seed to use. Optional.</p></dd>
+
+
 <dt>parallel</dt>
 <dd><p>Whether to enable parallel evaluation. See <a href="latrend-parallel.html">latrend-parallel</a>. Method evaluation and dataset transformation is done on the calling thread.</p></dd>
+
+
 <dt>errorHandling</dt>
 <dd><p>Whether to <code>"stop"</code> on an error, or to <code>"remove'</code> evaluations that raised an error.</p></dd>
+
+
 <dt>envir</dt>
 <dd><p>The <code>environment</code> in which to evaluate the method arguments (by <code><a href="compose.html">compose()</a></code>). This environment is also used to evaluate the <code>data</code> argument if it is of type <code>call</code>.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>The level of verbosity. Either an object of class <code>Verbose</code> (see <a href="https://henrikbengtsson.github.io/R.utils/reference/Verbose.html" class="external-link">R.utils::Verbose</a> for details),
 a <code>logical</code> indicating whether to show basic computation information,
 a <code>numeric</code> indicating the verbosity level (see Verbose),
 or one of <code>c('info', 'fine', 'finest')</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>lcModels</code> object of containing the <code>folds</code> training models.</p>
+    
+
+<p>A <code>lcModels</code> object of containing the <code>folds</code> training models.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -126,14 +143,14 @@ or one of <code>c('info', 'fine', 'finest')</code>.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/topepo/caret/" class="external-link">"caret"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">latrendCV</span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span>, folds <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">latrendCV</span><span class="op">(</span><span class="va">method</span>, <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">latrendData</span>, <span class="va">Time</span> <span class="op">&lt;</span> <span class="fl">.5</span><span class="op">)</span>, folds <span class="op">=</span> <span class="fl">5</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/topepo/caret/" class="external-link">"caret"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">latrendCV</span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span>, folds <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">latrendCV</span><span class="op">(</span><span class="va">method</span>, <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">latrendData</span>, <span class="va">Time</span> <span class="op">&lt;</span> <span class="fl">.5</span><span class="op">)</span>, folds <span class="op">=</span> <span class="fl">5</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -148,7 +165,7 @@ or one of <code>c('info', 'fine', 'finest')</code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

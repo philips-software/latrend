@@ -69,31 +69,42 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">lcMethodFlexmix</span><span class="op">(</span>
-  <span class="va">formula</span>,
-  formula.mb <span class="op">=</span> <span class="op">~</span><span class="fl">1</span>,
-  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,
-  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,
-  nClusters <span class="op">=</span> <span class="fl">2</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lcMethodFlexmix</span><span class="op">(</span></span>
+<span>  <span class="va">formula</span>,</span>
+<span>  formula.mb <span class="op">=</span> <span class="op">~</span><span class="fl">1</span>,</span>
+<span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,</span>
+<span>  nClusters <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>formula</dt>
 <dd><p>A <code>formula</code> specifying the model.</p></dd>
+
+
 <dt>formula.mb</dt>
 <dd><p>A <code>formula</code> specifying the class membership model. By default, an intercept-only model is used.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>The name of the time variable.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>The name of the trajectory identifier variable.</p></dd>
+
+
 <dt>nClusters</dt>
 <dd><p>The number of clusters to estimate.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Arguments passed to <a href="https://rdrr.io/pkg/flexmix/man/flexmix.html" class="external-link">flexmix::flexmix</a>.
 The following arguments are ignored: data, concomitant, k.</p></dd>
+
 </dl></div>
     <div id="references">
     <h2>References</h2>
@@ -111,11 +122,11 @@ The following arguments are ignored: data, concomitant, k.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"flexmix"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodFlexmix</span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"flexmix"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodFlexmix</span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: flexmix</span>
 </code></pre></div>
     </div>
@@ -131,7 +142,7 @@ The following arguments are ignored: data, concomitant, k.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

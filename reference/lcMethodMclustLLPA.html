@@ -69,28 +69,37 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">lcMethodMclustLLPA</span><span class="op">(</span>
-  <span class="va">response</span>,
-  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,
-  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,
-  nClusters <span class="op">=</span> <span class="fl">2</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lcMethodMclustLLPA</span><span class="op">(</span></span>
+<span>  <span class="va">response</span>,</span>
+<span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,</span>
+<span>  nClusters <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>response</dt>
 <dd><p>The name of the response variable.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>The name of the time variable.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>The name of the trajectory identifier variable.</p></dd>
+
+
 <dt>nClusters</dt>
 <dd><p>The number of clusters to estimate.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Arguments passed to <a href="https://mclust-org.github.io/mclust/reference/Mclust.html" class="external-link">mclust::Mclust</a>.
 The following external arguments are ignored: data, G, verbose.</p></dd>
+
 </dl></div>
     <div id="references">
     <h2>References</h2>
@@ -124,11 +133,11 @@ The following external arguments are ignored: data, G, verbose.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://mclust-org.github.io/mclust/" class="external-link">"mclust"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodMclustLLPA</span><span class="op">(</span><span class="st">"Y"</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://mclust-org.github.io/mclust/" class="external-link">"mclust"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodMclustLLPA</span><span class="op">(</span><span class="st">"Y"</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mclust</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Package 'mclust' version 5.4.10</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Type 'citation("mclust")' for citing this R package in publications.</span>
@@ -146,7 +155,7 @@ The following external arguments are ignored: data, G, verbose.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

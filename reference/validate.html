@@ -82,38 +82,49 @@ This enables a method to verify, for example:</p><ul><li><p>whether the formula 
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S4 method for lcMethod</span>
-<span class="fu">validate</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, envir <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for lcMethod</span></span>
+<span><span class="fu">validate</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, envir <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>method</dt>
 <dd><p>An object inheriting from <code>lcMethod</code> with all its arguments having been evaluated and finalized.</p></dd>
+
+
 <dt>data</dt>
 <dd><p>A <code>data.frame</code> representing the transformed training data.</p></dd>
+
+
 <dt>envir</dt>
 <dd><p>The <code>environment</code> in which the <code>lcMethod</code> should be evaluated</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Not used.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Either <code>TRUE</code> if all validation checks passed,
+    
+
+<p>Either <code>TRUE</code> if all validation checks passed,
 or a <code>character</code> containing a description of the failed validation checks.</p>
     </div>
     <div id="implementation">
     <h2>Implementation</h2>
     
 
-<p>An example implementation checking for the existence of specific arguments and type:</p><div class="sourceCode"><pre><code><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">assertthat</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"validate"</span>, <span class="st">"lcMethodExample"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/assertthat/man/validate_that.html" class="external-link">validate_that</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://rdrr.io/r/utils/hasName.html" class="external-link">hasName</a></span><span class="op">(</span><span class="va">method</span>, <span class="st">"myArgument"</span><span class="op">)</span>,
-    <span class="fu"><a href="https://rdrr.io/r/utils/hasName.html" class="external-link">hasName</a></span><span class="op">(</span><span class="va">method</span>, <span class="st">"anotherArgument"</span><span class="op">)</span>,
-    <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">method</span><span class="op">$</span><span class="va">myArgument</span><span class="op">)</span>
-  <span class="op">)</span>
-<span class="op">}</span><span class="op">)</span></code></pre></div>
+<p>An example implementation checking for the existence of specific arguments and type:</p><div class="sourceCode"><pre><code><span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">assertthat</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"validate"</span>, <span class="st">"lcMethodExample"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/assertthat/man/validate_that.html" class="external-link">validate_that</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/hasName.html" class="external-link">hasName</a></span><span class="op">(</span><span class="va">method</span>, <span class="st">"myArgument"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/hasName.html" class="external-link">hasName</a></span><span class="op">(</span><span class="va">method</span>, <span class="st">"anotherArgument"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">method</span><span class="op">$</span><span class="va">myArgument</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 
     </div>
     <div id="fitting-procedure">
@@ -146,7 +157,7 @@ These steps, as part of the fitting procedure, are executed by <code><a href="la
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

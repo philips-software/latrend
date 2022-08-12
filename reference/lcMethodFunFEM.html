@@ -69,31 +69,42 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">lcMethodFunFEM</span><span class="op">(</span>
-  <span class="va">response</span>,
-  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,
-  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,
-  nClusters <span class="op">=</span> <span class="fl">2</span>,
-  basis <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">time</span><span class="op">)</span> <span class="fu">fda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/fda/man/create.bspline.basis.html" class="external-link">create.bspline.basis</a></span><span class="op">(</span><span class="va">time</span>, nbasis <span class="op">=</span> <span class="fl">10</span>, norder <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lcMethodFunFEM</span><span class="op">(</span></span>
+<span>  <span class="va">response</span>,</span>
+<span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,</span>
+<span>  nClusters <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  basis <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">time</span><span class="op">)</span> <span class="fu">fda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/fda/man/create.bspline.basis.html" class="external-link">create.bspline.basis</a></span><span class="op">(</span><span class="va">time</span>, nbasis <span class="op">=</span> <span class="fl">10</span>, norder <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>response</dt>
 <dd><p>The name of the response variable.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>The name of the time variable.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>The name of the trajectory identifier variable.</p></dd>
+
+
 <dt>nClusters</dt>
 <dd><p>The number of clusters to estimate.</p></dd>
+
+
 <dt>basis</dt>
 <dd><p>The basis function. By default, a 3rd-order B-spline with 10 breaks is used.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Arguments passed to <a href="https://rdrr.io/pkg/funFEM/man/funFEM.html" class="external-link">funFEM::funFEM</a>.
 The following external arguments are ignored: fd, K, disp, graph.</p></dd>
+
 </dl></div>
     <div id="references">
     <h2>References</h2>
@@ -127,18 +138,18 @@ R package version 1.1, <a href="https://CRAN.R-project.org/package=funFEM" class
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"funFEM"</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="http://www.functionaldata.org" class="external-link">"fda"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodFunFEM</span><span class="op">(</span><span class="st">"Y"</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodFunFEM</span><span class="op">(</span><span class="st">"Y"</span>,</span>
-<span class="r-in">   basis <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">time</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/pkg/fda/man/create.bspline.basis.html" class="external-link">create.bspline.basis</a></span><span class="op">(</span><span class="va">time</span>, nbasis <span class="op">=</span> <span class="fl">10</span>, norder <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
-<span class="r-in">   <span class="op">}</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"funFEM"</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="http://www.functionaldata.org" class="external-link">"fda"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodFunFEM</span><span class="op">(</span><span class="st">"Y"</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodFunFEM</span><span class="op">(</span><span class="st">"Y"</span>,</span></span>
+<span class="r-in"><span>   basis <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">time</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/fda/man/create.bspline.basis.html" class="external-link">create.bspline.basis</a></span><span class="op">(</span><span class="va">time</span>, nbasis <span class="op">=</span> <span class="fl">10</span>, norder <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="op">}</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: funFEM</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MASS</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: fda</span>
@@ -173,7 +184,7 @@ R package version 1.1, <a href="https://CRAN.R-project.org/package=funFEM" class
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

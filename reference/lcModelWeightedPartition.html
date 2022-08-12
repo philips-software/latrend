@@ -69,33 +69,46 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">lcModelWeightedPartition</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">response</span>,
-  <span class="va">weights</span>,
-  clusterNames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">weights</span><span class="op">)</span>,
-  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,
-  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,
-  name <span class="op">=</span> <span class="st">"wpart"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lcModelWeightedPartition</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">response</span>,</span>
+<span>  <span class="va">weights</span>,</span>
+<span>  clusterNames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">weights</span><span class="op">)</span>,</span>
+<span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"wpart"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>A <code>data.frame</code> representing the trajectory data.</p></dd>
+
+
 <dt>response</dt>
 <dd><p>The name of the response variable.</p></dd>
+
+
 <dt>weights</dt>
 <dd><p>A <code>numIds</code> x <code>numClusters</code> matrix of partition probabilities.</p></dd>
+
+
 <dt>clusterNames</dt>
 <dd><p>The names of the clusters, or a function with input <code>n</code> outputting a <code>character vector</code> of names.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>The name of the time variable.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>The name of the trajectory identification variable.</p></dd>
+
+
 <dt>name</dt>
 <dd><p>The name of the method.</p></dd>
+
 </dl></div>
 
   </div>
@@ -110,7 +123,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

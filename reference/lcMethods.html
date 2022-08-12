@@ -69,13 +69,15 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">lcMethods</span><span class="op">(</span><span class="va">method</span>, <span class="va">...</span>, envir <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lcMethods</span><span class="op">(</span><span class="va">method</span>, <span class="va">...</span>, envir <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>method</dt>
 <dd><p>The <code>lcMethod</code> to use as the template, which will be updated for each of the other arguments.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Any other arguments to update the <code>lcMethod</code> definition with. Values must be <code>scalar</code>, <code>vector</code>, <code>list</code>, or encapsulated in a <code>.()</code> call.
 Arguments wrapped in <code>.()</code> are passed as-is to the model call, ensuring a readable method.
@@ -83,26 +85,31 @@ Arguments comprising a single <code>symbol</code> (e.g. a variable name) are int
 Arguments of type <code>vector</code> or <code>list</code> are split across a series of method fit calls.
 Arguments of type <code>scalar</code> are constant across the method fits.
 If a <code>list</code> is intended to be passed as a constant argument, then specifying <code>arg=.(listObject)</code> results in it being treated as such.</p></dd>
+
+
 <dt>envir</dt>
 <dd><p>The <code>environment</code> in which to evaluate the method arguments.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>list</code> of <code>lcMethod</code> objects.</p>
+    
+
+<p>A <code>list</code> of <code>lcMethod</code> objects.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">baseMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">methods</span> <span class="op">&lt;-</span> <span class="fu">lcMethods</span><span class="op">(</span><span class="va">baseMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">nclus</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span></span>
-<span class="r-in"><span class="va">methods</span> <span class="op">&lt;-</span> <span class="fu">lcMethods</span><span class="op">(</span><span class="va">baseMethod</span>, nClusters <span class="op">=</span> <span class="va">nclus</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># list notation, useful for providing functions</span></span>
-<span class="r-in"><span class="va">methods</span> <span class="op">&lt;-</span> <span class="fu">lcMethods</span><span class="op">(</span><span class="va">baseMethod</span>, nClusters <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">methods</span><span class="op">)</span> <span class="co"># 3</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">baseMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">methods</span> <span class="op">&lt;-</span> <span class="fu">lcMethods</span><span class="op">(</span><span class="va">baseMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">nclus</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span></span></span>
+<span class="r-in"><span><span class="va">methods</span> <span class="op">&lt;-</span> <span class="fu">lcMethods</span><span class="op">(</span><span class="va">baseMethod</span>, nClusters <span class="op">=</span> <span class="va">nclus</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># list notation, useful for providing functions</span></span></span>
+<span class="r-in"><span><span class="va">methods</span> <span class="op">&lt;-</span> <span class="fu">lcMethods</span><span class="op">(</span><span class="va">baseMethod</span>, nClusters <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">methods</span><span class="op">)</span> <span class="co"># 3</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
 </code></pre></div>
     </div>
@@ -118,7 +125,7 @@ If a <code>list</code> is intended to be passed as a constant argument, then spe
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

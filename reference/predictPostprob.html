@@ -71,31 +71,39 @@ The default implementation returns a uniform probability matrix.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S4 method for lcModel</span>
-<span class="fu">predictPostprob</span><span class="op">(</span><span class="va">object</span>, newdata <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for lcModel</span></span>
+<span><span class="fu">predictPostprob</span><span class="op">(</span><span class="va">object</span>, newdata <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>The <code>lcModel</code> to predict the posterior probabilities with.</p></dd>
+
+
 <dt>newdata</dt>
 <dd><p>Optional data frame for which to compute the posterior probability. If omitted, the model training data is used.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A N-by-K <code>matrix</code> indicating the posterior probability per trajectory per measurement on each row, for each cluster (the columns).
+    
+
+<p>A N-by-K <code>matrix</code> indicating the posterior probability per trajectory per measurement on each row, for each cluster (the columns).
 Here, <code>N = nrow(newdata)</code> and <code>K = nClusters(object)</code>.</p>
     </div>
     <div id="implementation">
     <h2>Implementation</h2>
     
 
-<p>Classes extending <code>lcModel</code> should override this method to enable posterior probability predictions for new data.</p><div class="sourceCode"><pre><code><span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"predictPostprob"</span>, <span class="st">"lcModelExt"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">newdata</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-  <span class="co"># return observation-specific posterior probability matrix</span>
-<span class="op">}</span><span class="op">)</span></code></pre></div>
+<p>Classes extending <code>lcModel</code> should override this method to enable posterior probability predictions for new data.</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"predictPostprob"</span>, <span class="st">"lcModelExt"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">newdata</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># return observation-specific posterior probability matrix</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 
     </div>
     <div id="see-also">
@@ -133,7 +141,7 @@ Here, <code>N = nrow(newdata)</code> and <code>K = nClusters(object)</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

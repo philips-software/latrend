@@ -69,31 +69,42 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">lcMethodMixAK_GLMM</span><span class="op">(</span>
-  <span class="va">fixed</span>,
-  <span class="va">random</span>,
-  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,
-  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,
-  nClusters <span class="op">=</span> <span class="fl">2</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lcMethodMixAK_GLMM</span><span class="op">(</span></span>
+<span>  <span class="va">fixed</span>,</span>
+<span>  <span class="va">random</span>,</span>
+<span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,</span>
+<span>  nClusters <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>fixed</dt>
 <dd><p>A <code>formula</code> specifying the fixed effects of the model, including the response. Creates the <code>y</code> and <code>x</code> arguments for the call to mixAK::GLMM_MCMC.</p></dd>
+
+
 <dt>random</dt>
 <dd><p>A <code>formula</code> specifying the random effects of the model, including the random intercept. Creates the <code>z</code> and <code>random.intercept</code> arguments for the call to mixAK::GLMM_MCMC.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>The name of the time variable.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>The name of the trajectory identifier variable. This is used to generate the <code>id</code> vector argument for the call to mixAK::GLMM_MCMC.</p></dd>
+
+
 <dt>nClusters</dt>
 <dd><p>The number of clusters.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Arguments passed to mixAK::GLMM_MCMC.
 The following external arguments are ignored: y, x, z, random.intercept, silent.</p></dd>
+
 </dl></div>
     <div id="note">
     <h2>Note</h2>
@@ -133,14 +144,14 @@ The following external arguments are ignored: y, x, z, random.intercept, silent.
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># this example only runs when the mixAK package is installed</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">{</span></span>
-<span class="r-in"> <span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodMixAK_GLMM</span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="fl">1</span>, random <span class="op">=</span> <span class="op">~</span> <span class="va">Time</span>,</span>
-<span class="r-in">  id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"> <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># this example only runs when the mixAK package is installed</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span> <span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodMixAK_GLMM</span><span class="op">(</span>fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="fl">1</span>, random <span class="op">=</span> <span class="op">~</span> <span class="va">Time</span>,</span></span>
+<span class="r-in"><span>  id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Longitudinal cluster model using generalized linear mixed model with normal random effects mixture</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> lcMethodMixAK_GLMM specifying "generalized linear mixed model with normal random effects mixture"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  time:           "Time"</span>
@@ -159,13 +170,13 @@ The following external arguments are ignored: y, x, z, random.intercept, silent.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Cluster sizes (K=3):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           A           B           C </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  79 (32.4%) 121 (52.3%)   0 (15.3%) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  79 (23.2%)   1 (40.5%) 120 (36.3%) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of obs: 2000, strata (Id): 200</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Scaled residuals:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -3.2450 -0.6781 -0.1218  0.0000  0.7565  2.8969 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -1.8773 -0.8104 -0.3297  0.0000  1.0095  2.2684 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
@@ -181,7 +192,7 @@ The following external arguments are ignored: y, x, z, random.intercept, silent.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -73,31 +73,37 @@ The default implementation returns an updated object with all arguments having b
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S4 method for lcMethod</span>
-<span class="fu">compose</span><span class="op">(</span><span class="va">method</span>, envir <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for lcMethod</span></span>
+<span><span class="fu">compose</span><span class="op">(</span><span class="va">method</span>, envir <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>method</dt>
 <dd><p>The <code>lcMethod</code> object.</p></dd>
+
+
 <dt>envir</dt>
 <dd><p>The <code>environment</code> in which the <code>lcMethod</code> should be evaluated</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The evaluated and finalized <code>lcMethod</code> object.</p>
+    
+
+<p>The evaluated and finalized <code>lcMethod</code> object.</p>
     </div>
     <div id="implementation">
     <h2>Implementation</h2>
     
 
 <p>In general, there is no need to extend this method for a specific method, as all arguments are automatically evaluated by the <code>compose,lcMethod</code> method.</p>
-<p>However, in case there is a need to extend processing or to prevent evaluation of specific arguments (e.g., for handling errors), the method can be overridden for the specific <code>lcMethod</code> subclass.</p><div class="sourceCode"><pre><code><span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"compose"</span>, <span class="st">"lcMethodExample"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">envir</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">newMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/methods/NextMethod.html" class="external-link">callNextMethod</a></span><span class="op">(</span><span class="op">)</span>
-  <span class="co"># further processing</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">newMethod</span><span class="op">)</span>
-<span class="op">}</span><span class="op">)</span></code></pre></div>
+<p>However, in case there is a need to extend processing or to prevent evaluation of specific arguments (e.g., for handling errors), the method can be overridden for the specific <code>lcMethod</code> subclass.</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"compose"</span>, <span class="st">"lcMethodExample"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">envir</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">newMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/methods/NextMethod.html" class="external-link">callNextMethod</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="co"># further processing</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">newMethod</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 
     </div>
     <div id="fitting-procedure">
@@ -130,7 +136,7 @@ These steps, as part of the fitting procedure, are executed by <code><a href="la
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

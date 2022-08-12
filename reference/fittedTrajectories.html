@@ -69,34 +69,45 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S4 method for lcModel</span>
-<span class="fu">fittedTrajectories</span><span class="op">(</span>
-  <span class="va">object</span>,
-  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  what <span class="op">=</span> <span class="st">"mu"</span>,
-  clusters <span class="op">=</span> <span class="fu"><a href="trajectoryAssignments.html">trajectoryAssignments</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for lcModel</span></span>
+<span><span class="fu">fittedTrajectories</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  what <span class="op">=</span> <span class="st">"mu"</span>,</span>
+<span>  clusters <span class="op">=</span> <span class="fu"><a href="trajectoryAssignments.html">trajectoryAssignments</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>The model.</p></dd>
+
+
 <dt>at</dt>
 <dd><p>The time points at which to compute the id-specific trajectories.
 The default implementation merely filters the output of <code><a href="https://rdrr.io/r/stats/fitted.values.html" class="external-link">fitted()</a></code>,
 so fitted values can only be outputted for times at which the model was trained.</p></dd>
+
+
 <dt>what</dt>
 <dd><p>The distributional parameter to compute the response for.</p></dd>
+
+
 <dt>clusters</dt>
 <dd><p>The cluster assignments for the strata to base the trajectories on.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.frame</code> representing the fitted response per trajectory per moment in time for the respective cluster.</p>
+    
+
+<p>A <code>data.frame</code> representing the fitted response per trajectory per moment in time for the respective cluster.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -127,12 +138,12 @@ so fitted values can only be outputted for times at which the model was trained.
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Note: not a great example because the fitted trajectories</span></span>
-<span class="r-in"><span class="co"># are identical to the respective cluster trajectory</span></span>
-<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">fittedTrajectories</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Note: not a great example because the fitted trajectories</span></span></span>
+<span class="r-in"><span><span class="co"># are identical to the respective cluster trajectory</span></span></span>
+<span class="r-in"><span><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">fittedTrajectories</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Id      Time           Y Cluster</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    1:   1 0.0000000 -0.97975135       B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    2:   1 0.2222222 -0.63534769       B</span>
@@ -145,8 +156,8 @@ so fitted values can only be outputted for times at which the model was trained.
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1998: 200 1.5555556 -0.13662404       A</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1999: 200 1.7777778 -0.24801613       A</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2000: 200 2.0000000 -0.34779054       A</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">fittedTrajectories</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">fittedTrajectories</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       Id      Time           Y Cluster</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:   1 0.0000000 -0.97975135       B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:   1 0.2222222 -0.63534769       B</span>
@@ -173,7 +184,7 @@ so fitted values can only be outputted for times at which the model was trained.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

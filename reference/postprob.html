@@ -69,20 +69,25 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S4 method for lcModel</span>
-<span class="fu">postprob</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for lcModel</span></span>
+<span><span class="fu">postprob</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>The <code>lcModel</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A I-by-K <code>matrix</code> with <code>I = nIds(object)</code> and <code>K = nClusters(object)</code>.</p>
+    
+
+<p>A I-by-K <code>matrix</code> with <code>I = nIds(object)</code> and <code>K = nClusters(object)</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -92,9 +97,10 @@
     <h2>Implementation</h2>
     
 
-<p>Classes extending <code>lcModel</code> should override this method.</p><div class="sourceCode"><pre><code><span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"postprob"</span>, <span class="st">"lcModelExt"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-  <span class="co"># return trajectory-specific posterior probability matrix</span>
-<span class="op">}</span><span class="op">)</span></code></pre></div>
+<p>Classes extending <code>lcModel</code> should override this method.</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/methods/setMethod.html" class="external-link">setMethod</a></span><span class="op">(</span><span class="st">"postprob"</span>, <span class="st">"lcModelExt"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># return trajectory-specific posterior probability matrix</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 
     </div>
     <div id="troubleshooting">
@@ -131,635 +137,635 @@ It may have been overridden when attaching another package (e.g., lcmm). If you 
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">postprob</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">postprob</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        A B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [1,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [2,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [3,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [4,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [5,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [6,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [7,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [8,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [9,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [10,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [11,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [12,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [13,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [14,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [15,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [16,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [17,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [18,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [19,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [20,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [21,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [22,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [23,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [24,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [25,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [26,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [27,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [28,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [29,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [30,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [31,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [32,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [33,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [34,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [35,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [36,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [37,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [38,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [39,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [40,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [41,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [42,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [43,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [44,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [45,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [46,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [47,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [48,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [49,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [50,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [51,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [52,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [53,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [54,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [55,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [56,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [57,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [58,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [59,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [60,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [61,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [62,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [63,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [64,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [65,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [66,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [67,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [68,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [69,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [70,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [71,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [72,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [73,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [74,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [75,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [76,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [77,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [78,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [79,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [80,] 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [81,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [82,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [83,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [84,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [85,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [86,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [87,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [88,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [89,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [90,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [91,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [92,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [93,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [94,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [95,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [96,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [97,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [98,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [99,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [100,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [101,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [102,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [103,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [104,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [105,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [106,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [107,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [108,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [109,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [110,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [111,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [112,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [113,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [114,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [115,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [116,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [117,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [118,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [119,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [120,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [121,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [122,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [123,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [124,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [125,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [126,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [127,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [128,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [129,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [130,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [131,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [132,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [133,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [134,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [135,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [136,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [137,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [138,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [139,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [140,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [141,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [142,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [143,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [144,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [145,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [146,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [147,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [148,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [149,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [150,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [151,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [152,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [153,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [154,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [155,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [156,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [157,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [158,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [159,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [160,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [161,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [162,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [163,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [164,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [165,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [166,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [167,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [168,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [169,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [170,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [171,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [172,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [173,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [174,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [175,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [176,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [177,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [178,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [179,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [180,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [181,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [182,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [183,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [184,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [185,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [186,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [187,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [188,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [189,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [190,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [191,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [192,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [193,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [194,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [195,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [196,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [197,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [198,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [199,] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [200,] 0 1</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/is_installed.html" class="external-link">is_installed</a></span><span class="op">(</span><span class="st">"lcmm"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">gmmMethod</span> <span class="op">=</span> <span class="fu"><a href="lcMethodLcmmGMM.html">lcMethodLcmmGMM</a></span><span class="op">(</span></span>
-<span class="r-in">    fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>,</span>
-<span class="r-in">    mixture <span class="op">=</span> <span class="op">~</span> <span class="va">Time</span>,</span>
-<span class="r-in">    id <span class="op">=</span> <span class="st">"Id"</span>,</span>
-<span class="r-in">    time <span class="op">=</span> <span class="st">"Time"</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in">  <span class="va">gmmModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">gmmMethod</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu">postprob</span><span class="op">(</span><span class="va">gmmModel</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [2,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [3,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [4,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [5,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [6,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [7,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [8,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [9,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [10,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [11,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [12,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [13,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [14,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [15,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [16,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [17,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [18,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [19,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [20,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [21,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [22,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [23,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [24,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [25,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [26,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [27,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [28,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [29,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [30,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [31,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [32,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [33,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [34,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [35,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [36,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [37,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [38,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [39,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [40,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [41,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [42,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [43,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [44,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [45,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [46,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [47,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [48,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [49,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [50,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [51,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [52,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [53,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [54,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [55,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [56,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [57,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [58,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [59,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [60,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [61,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [62,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [63,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [64,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [65,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [66,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [67,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [68,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [69,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [70,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [71,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [72,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [73,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [74,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [75,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [76,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [77,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [78,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [79,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [80,] 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [81,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [82,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [83,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [84,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [85,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [86,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [87,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [88,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [89,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [90,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [91,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [92,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [93,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [94,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [95,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [96,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [97,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [98,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [99,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [100,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [101,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [102,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [103,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [104,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [105,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [106,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [107,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [108,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [109,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [110,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [111,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [112,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [113,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [114,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [115,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [116,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [117,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [118,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [119,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [120,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [121,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [122,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [123,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [124,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [125,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [126,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [127,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [128,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [129,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [130,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [131,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [132,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [133,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [134,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [135,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [136,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [137,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [138,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [139,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [140,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [141,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [142,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [143,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [144,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [145,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [146,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [147,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [148,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [149,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [150,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [151,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [152,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [153,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [154,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [155,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [156,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [157,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [158,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [159,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [160,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [161,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [162,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [163,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [164,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [165,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [166,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [167,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [168,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [169,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [170,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [171,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [172,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [173,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [174,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [175,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [176,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [177,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [178,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [179,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [180,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [181,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [182,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [183,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [184,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [185,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [186,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [187,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [188,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [189,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [190,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [191,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [192,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [193,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [194,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [195,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [196,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [197,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [198,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [199,] 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [200,] 1 0</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/is_installed.html" class="external-link">is_installed</a></span><span class="op">(</span><span class="st">"lcmm"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">gmmMethod</span> <span class="op">=</span> <span class="fu"><a href="lcMethodLcmmGMM.html">lcMethodLcmmGMM</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    fixed <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>,</span></span>
+<span class="r-in"><span>    mixture <span class="op">=</span> <span class="op">~</span> <span class="va">Time</span>,</span></span>
+<span class="r-in"><span>    id <span class="op">=</span> <span class="st">"Id"</span>,</span></span>
+<span class="r-in"><span>    time <span class="op">=</span> <span class="st">"Time"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">gmmModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">gmmMethod</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">postprob</span><span class="op">(</span><span class="va">gmmModel</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  0 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -2211.674 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 1.0001 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 1.0001 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef   SE.coef    Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.03295723  3.671255    13.47811</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.00000000  4.663262    21.74601</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  1.00000000 11.298389  -127.65358</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  1.00000000 31.748083 -1007.94077</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.03295723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  1.00000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  1 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -2211.661 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.01365446 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef   SE.coef    Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.03295781  3.672703    13.48875</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.00000137  5.416630    29.33988</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.99999000 11.298556  -127.65737</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.99999246 31.748115 -1007.94279</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.03295781</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.00000137</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.99999000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.99999246</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  2 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -2211.643 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.01733755 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef   SE.coef    Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.03295808  3.671208    13.47777</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.00000233  4.946477    24.46763</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.99998055 11.298637  -127.65919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.99998246 31.748227 -1007.94995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.03295808</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.00000233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.99998055</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.99998246</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  3 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1439.862 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.280072 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 771.7816 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef   SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.04031975  4.568936   20.87517</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.04576697  6.864072   47.11549</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.64986537 15.463936 -239.13331</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.60584696 26.426104  698.33896</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.04031975</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.04576697</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.64986537</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.60584696</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  4 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1439.841 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.02074656 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef   SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.04032027  4.569053   20.87625</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.04576783  6.864238   47.11776</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.64985797 15.464033 -239.13633</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.60583696 26.429943  698.54191</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.04032027</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.04576783</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.64985797</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.60583696</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  5 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1259.308 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.1423089 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 180.5326 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef    SE.coef     Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.05020431   5.429509     29.47957</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.06607079  10.206393    104.17045</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.47182147  16.189455   -262.09845</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.27402077 328.006561 107588.30435</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.05020431</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.06607079</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.47182147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.27402077</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  6 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1182.724 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 1.186942 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 76.58411 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef    SE.coef    Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.17261108   4.785824    22.90411</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.09024304   9.785319    95.75248</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.61021076  17.228002  -296.80404</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.29811228 269.571111 72668.58395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.17261108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.09024304</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.61021076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.29811228</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  7 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1182.721 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.00300208 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef    SE.coef    Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.17261028   4.785870    22.90455</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.09024312   9.785316    95.75240</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.61020076  17.228015  -296.80448</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.29811233 269.571036 72668.54354</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.17261028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.09024312</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.61020076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.29811233</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  8 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1182.718 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.00380941 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef    SE.coef    Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.17260961   4.785916    22.90499</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.09024344   9.785311    95.75231</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.61019076  17.228004  -296.80414</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.29811260 269.570458 72668.23197</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.17260961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.09024344</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.61019076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.29811260</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  9 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1070.899 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.05788247 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 111.819 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 735.0503 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1578944 0.03390969 0.00114987</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1032584 0.01088495 0.00011848</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.3706614 0.15798998 0.02496083</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3091681 0.00406641 0.00001654</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1578944</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1032584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.3706614</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3091681</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  10 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1070.895 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.00369269 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 734.1069 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1578937 0.03390330 0.00114943</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1032586 0.01088495 0.00011848</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.3706514 0.15788498 0.02492767</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3091682 0.00406640 0.00001654</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1578937</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1032586</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.3706514</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3091682</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  11 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1070.891 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.00379712 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 732.7804 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1578932 0.03389448 0.00114884</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1032587 0.01088496 0.00011848</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.3706414 0.15773736 0.02488108</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3091683 0.00406640 0.00001654</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1578932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1032587</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.3706414</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3091683</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  12 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1044.445 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.5764923 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 26.44575 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef    Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1270200   5.938905    35.27059</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1190798   9.395830    88.28163</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.3877042   6.559355   -43.02514</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3233399 222.402347 49462.80385</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1270200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1190798</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.3877042</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3233399</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  13 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1044.442 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.00348247 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef    Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1270206   5.938986    35.27155</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1190798   9.395828    88.28158</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.3876942   6.555280   -42.97169</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3233399 222.402234 49462.75351</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1270206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1190798</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.3876942</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3233399</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  14 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1044.438 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.00354728 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef    Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1270210   5.939060    35.27243</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1190798   9.395827    88.28156</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.3876842   6.551120   -42.91718</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3233400 222.402055 49462.67395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1270210</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1190798</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.3876842</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3233400</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  15 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1044.435 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.00359666 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef    Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1270214   5.939133    35.27331</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1190799   9.395822    88.28146</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.3876742   6.547073   -42.86417</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3233402 222.401858 49462.58657</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1270214</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1190799</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.3876742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3233402</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  16 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -990.0216 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.03537843 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 54.41312 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 12.63568 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1312689 0.01972446 0.00038905</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1205435 0.01145365 0.00013119</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.1996608 0.01309509 0.00017148</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3263760 0.00460804 0.00002123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1312689</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1205435</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.1996608</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3263760</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  17 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -973.447 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00032527 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 16.5746 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 5.923468 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1424467 0.01988305 0.00039534</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1250521 0.01190601 0.00014175</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.1966762 0.01313650 0.00017257</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3394560 0.00505861 0.00002559</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1424467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1250521</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.1966762</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3394560</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  18 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -961.3927 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00105038 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 12.05426 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 0.593486 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1651658 0.02005362 0.00040215</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1362990 0.01255911 0.00015773</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.1897438 0.01300009 0.00016900</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3584212 0.00577301 0.00003333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1651658</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1362990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.1897438</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3584212</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  19 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -960.1702 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00024153 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 1.222577 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 0.00468292 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1762450 0.02016492 0.00040662</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1435649 0.01282592 0.00016450</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.1871356 0.01299865 0.00016896</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3661144 0.00608560 0.00003703</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1762450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1435649</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.1871356</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3661144</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  20 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -960.1608 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 2.61e-06 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.00939256 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 5.3e-07 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1773901 0.02017775 0.00040714</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1444374 0.01285068 0.00016514</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.1869344 0.01300311 0.00016908</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3668221 0.00611506 0.00003739</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1773901</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1444374</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.1869344</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3668221</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  21 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -960.1608 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 1.06e-06 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1774069 0.02017785 0.00040715</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1444497 0.01285090 0.00016515</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.1869323 0.01300313 0.00016908</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3668285 0.00611533 0.00003740</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.1774069</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1444497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3  0.1869323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.3668285</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.46 seconds </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.47 seconds </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  0 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -959.2723 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 1.0001 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 1.0001 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef   SE.coef  Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.0000000   0.00000     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.1874958  32.56135  1060.242</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.1673180  32.52617  1057.952</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.1380242  86.33462 -7453.666</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.1508751  86.34873 -7456.103</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.1869323  76.50034  5852.302</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.3668285 163.79515 26828.850</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.1874958</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.1673180</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.1380242</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.1508751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.1869323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.3668285</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  1 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -957.172 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 6.145e-05 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 2.100332 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef     Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.0000005   2.873858     8.259062</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.1875478   5.743915    32.992561</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.1672656   3.956203    15.651543</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.1324900  82.608245 -6824.122064</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.1564099  82.612867 -6824.885748</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.1867822  76.106068  5792.133534</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.3664314 163.242233 26648.026657</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.0000005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.1875478</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.1672656</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.1324900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.1564099</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.1867822</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.3664314</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  2 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -939.807 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00087023 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 17.36502 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef    SE.coef     Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.00005488   2.596824     6.743496</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.18764726   5.950719    35.411057</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.16715930   5.249387    27.556063</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.11164707  54.870240 -3010.743218</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.17725207  54.475787 -2967.611335</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.18612558  74.101022  5490.961449</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.36545858 157.038030 24660.942894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.00005488</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.18764726</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.16715930</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.11164707</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.17725207</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.18612558</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.36545858</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  3 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -920.3918 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00046485 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 19.41517 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef    SE.coef    Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.00008149   3.371748   -11.36868</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.18638160  37.133125  1378.86898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.16848824  36.505867  1332.67832</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.09655969  20.983783  -440.31915</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.19251663  20.000820  -400.03278</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.18589413  73.030505  5333.45463</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.36457657 151.289634 22888.55342</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.00008149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.18638160</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.16848824</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.09655969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.19251663</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.18589413</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.36457657</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  4 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -870.4228 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00225473 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 49.96899 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef    SE.coef    Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.00013076   6.743496   -45.47474</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.18534977  39.147602  1532.53477</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.16962638  37.912634  1437.36785</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.06420283  53.303305  2841.24235</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.22723004  50.873768  2588.14026</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.18585681  71.701008  5141.03451</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.36396508 138.031449 19052.68093</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1 -0.00013076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.18534977</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.16962638</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.06420283</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.22723004</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.18585681</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.36396508</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  5 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -807.3687 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00288987 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 63.05413 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.0001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef    SE.coef     Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.00154924   2.308902     5.331028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.17307886   6.325157    40.007609</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.18296970   6.160603    37.953035</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.03017905   6.362331    40.479255</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.26391804   4.349280    18.916235</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.18744110   7.997235    63.955775</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.35673374 131.790811 17368.817851</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.00154924</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2 -0.17307886</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.18296970</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4  0.03017905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.26391804</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.18744110</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.35673374</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  6 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -234.0025 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.2354196 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 573.3662 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 88.25512 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.15233864 0.14201172 0.02016733</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.03617987 0.02992324 0.00089540</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.40084166 0.03903369 0.00152363</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.17597225 0.01136866 0.00012925</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.51667596 0.01643502 0.00027011</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.24031620 0.01862848 0.00034702</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.24608093 0.00589851 0.00003479</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.15233864</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.03617987</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.40084166</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.17597225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.51667596</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.24031620</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.24608093</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  7 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -116.8424 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.2750103 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 117.1601 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 14.02445 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.3350642 0.14341104 0.02056673</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.2213973 0.01957776 0.00038329</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.7824800 0.02390620 0.00057151</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2305114 0.00800543 0.00006409</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.7425480 0.00987910 0.00009760</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.1864792 0.00860017 0.00007396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.1769633 0.00238969 0.00000571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.3350642</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.2213973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.7824800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2305114</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.7425480</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.1864792</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.1769633</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  8 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -60.66954 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00715973 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 56.17281 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 1.323995 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.3942235 0.14417829 0.02078738</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1995742 0.02137132 0.00045673</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.7462780 0.02617159 0.00068495</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2256329 0.00888236 0.00007890</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.7082258 0.01088404 0.00011846</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.2036181 0.01062426 0.00011287</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.1963930 0.00305454 0.00000933</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.3942235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1995742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.7462780</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2256329</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.7082258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.2036181</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.1963930</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  9 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -55.73164 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0.00050486 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 4.937899 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 0.01668516 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.4052535 0.14433504 0.02083260</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1937467 0.02206570 0.00048689</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.7346090 0.02702485 0.00073034</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2240926 0.00926405 0.00008582</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.6980466 0.01134615 0.00012874</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.2096016 0.01144289 0.00013094</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.2048358 0.00338725 0.00001147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.4052535</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1937467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.7346090</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2240926</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.6980466</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.2096016</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.2048358</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  10 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -55.67275 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 4.07e-06 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 0.05888992 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 3.06e-06 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.4054646 0.14433800 0.02083346</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1932927 0.02213587 0.00049000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.7334642 0.02711079 0.00073499</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2239387 0.00931372 0.00008675</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.6970418 0.01140694 0.00013012</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.2101172 0.01152210 0.00013276</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.2059342 0.00343271 0.00001178</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.4054646</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1932927</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.7334642</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2239387</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.6970418</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.2101172</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.2059342</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  11 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -55.67274 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : function stability= 1.071e-05 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     : relative distance to maximum(RDM)= 0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef    SE.coef   Var.coef</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.4054651 0.14433818 0.02083351</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1932891 0.02213651 0.00049003</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.7334510 0.02711158 0.00073504</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2239371 0.00931442 0.00008676</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.6970299 0.01140779 0.00013014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.2101202 0.01152271 0.00013277</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.2059496 0.00343335 0.00001179</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  coef</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter1  0.4054651</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1932891</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.7334510</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter4 -0.2239371</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter5  0.6970299</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.2101202</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> parameter7  0.2059496</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.42 seconds </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.44 seconds </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                A            B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   2.547309e-17 1.000000e+00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   5.411522e-22 1.000000e+00</span>
@@ -975,7 +981,7 @@ It may have been overridden when attaching another package (e.g., lcmm). If you 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

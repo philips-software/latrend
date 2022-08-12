@@ -69,37 +69,52 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">lcMethodFeature</span><span class="op">(</span>
-  <span class="va">response</span>,
-  <span class="va">representationStep</span>,
-  <span class="va">clusterStep</span>,
-  standardize <span class="op">=</span> <span class="va">scale</span>,
-  center <span class="op">=</span> <span class="va">meanNA</span>,
-  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,
-  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lcMethodFeature</span><span class="op">(</span></span>
+<span>  <span class="va">response</span>,</span>
+<span>  <span class="va">representationStep</span>,</span>
+<span>  <span class="va">clusterStep</span>,</span>
+<span>  standardize <span class="op">=</span> <span class="va">scale</span>,</span>
+<span>  center <span class="op">=</span> <span class="va">meanNA</span>,</span>
+<span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>response</dt>
 <dd><p>The name of the response variable.</p></dd>
+
+
 <dt>representationStep</dt>
 <dd><p>A <code>function</code> with signature <code>function(method, data)</code> that computes the representation per strata, returned as a <code>matrix</code>.
 Alternatively, <code>representationStep</code> is a pre-computed representation <code>matrix</code>.</p></dd>
+
+
 <dt>clusterStep</dt>
 <dd><p>A <code>function</code> with signature <code>function(repdata)</code> that outputs a <code>lcModel</code>.</p></dd>
+
+
 <dt>standardize</dt>
 <dd><p>A <code>function</code> to standardize the output <code>matrix</code> of the representation step. By default, the output is shifted and rescaled to ensure zero mean and unit variance.</p></dd>
+
+
 <dt>center</dt>
 <dd><p>The <code>function</code> for computing the longitudinal cluster centers, used for representing the cluster trajectories.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>The name of the time variable.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>The name of the trajectory identification variable.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments.</p></dd>
+
 </dl></div>
     <div id="linear-regresion-amp-k-means-example">
     <h2>Linear regresion &amp; k-means example</h2>
@@ -124,15 +139,16 @@ repStep &lt;- function(method, data, verbose) {
 }
 </code></pre></div>
 
-<p>Cluster step:</p><div class="sourceCode"><pre><code><span class="va">clusStep</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">repMat</span>, <span class="va">envir</span>, <span class="va">verbose</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">km</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">kmeans</a></span><span class="op">(</span><span class="va">repMat</span>, centers <span class="op">=</span> <span class="va">method</span><span class="op">$</span><span class="va">nClusters</span><span class="op">)</span>
-
-  <span class="fu"><a href="../reference/lcModelPartition.html">lcModelPartition</a></span><span class="op">(</span>
-    response <span class="op">=</span> <span class="va">method</span><span class="op">$</span><span class="va">response</span>,
-    data <span class="op">=</span> <span class="va">data</span>,
-    trajectoryAssignments <span class="op">=</span> <span class="va">km</span><span class="op">$</span><span class="va">cluster</span>
-  <span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<p>Cluster step:</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="va">clusStep</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">repMat</span>, <span class="va">envir</span>, <span class="va">verbose</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">km</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">kmeans</a></span><span class="op">(</span><span class="va">repMat</span>, centers <span class="op">=</span> <span class="va">method</span><span class="op">$</span><span class="va">nClusters</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="../reference/lcModelPartition.html">lcModelPartition</a></span><span class="op">(</span></span>
+<span>    response <span class="op">=</span> <span class="va">method</span><span class="op">$</span><span class="va">response</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>    trajectoryAssignments <span class="op">=</span> <span class="va">km</span><span class="op">$</span><span class="va">cluster</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 
 <p>Now specify the method and fit the model:</p><div class="sourceCode"><pre><code>
 data(latrendData)
@@ -185,7 +201,7 @@ model &lt;- latrend(method, data = latrendData)
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

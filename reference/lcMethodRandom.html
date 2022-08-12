@@ -69,36 +69,51 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">lcMethodRandom</span><span class="op">(</span>
-  <span class="va">response</span>,
-  alpha <span class="op">=</span> <span class="fl">10</span>,
-  center <span class="op">=</span> <span class="va">meanNA</span>,
-  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,
-  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,
-  nClusters <span class="op">=</span> <span class="fl">2</span>,
-  name <span class="op">=</span> <span class="st">"random"</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lcMethodRandom</span><span class="op">(</span></span>
+<span>  <span class="va">response</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  center <span class="op">=</span> <span class="va">meanNA</span>,</span>
+<span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,</span>
+<span>  nClusters <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"random"</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>response</dt>
 <dd><p>The name of the response variable.</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>The Dirichlet parameters. Either <code>scalar</code> or of length <code>nClusters</code>. The higher alpha, the more uniform the clusters will be.</p></dd>
+
+
 <dt>center</dt>
 <dd><p>Optional <code>function</code> for computing the longitudinal cluster centers, with signature <code>(x)</code>.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>The name of the time variable.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>The name of the trajectory identification variable.</p></dd>
+
+
 <dt>nClusters</dt>
 <dd><p>The number of clusters.</p></dd>
+
+
 <dt>name</dt>
 <dd><p>The name of the method.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments, such as the seed.</p></dd>
+
 </dl></div>
     <div id="references">
     <h2>References</h2>
@@ -132,27 +147,27 @@ Technical Report UWEETR-2010-0006, Department of Electrical Engineering, Univers
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodRandom</span><span class="op">(</span>response <span class="op">=</span> <span class="st">"Y"</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># uniform clusters</span></span>
-<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodRandom</span><span class="op">(</span></span>
-<span class="r-in">  alpha <span class="op">=</span> <span class="fl">1e3</span>,</span>
-<span class="r-in">  nClusters <span class="op">=</span> <span class="fl">3</span>,</span>
-<span class="r-in">  response <span class="op">=</span> <span class="st">"Y"</span>,</span>
-<span class="r-in">  id <span class="op">=</span> <span class="st">"Id"</span>,</span>
-<span class="r-in">  time <span class="op">=</span> <span class="st">"Time"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># single large cluster</span></span>
-<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodRandom</span><span class="op">(</span></span>
-<span class="r-in">  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span class="r-in">  nClusters <span class="op">=</span> <span class="fl">4</span>,</span>
-<span class="r-in">  response <span class="op">=</span> <span class="st">"Y"</span>,</span>
-<span class="r-in">  id <span class="op">=</span> <span class="st">"Id"</span>,</span>
-<span class="r-in">  time <span class="op">=</span> <span class="st">"Time"</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodRandom</span><span class="op">(</span>response <span class="op">=</span> <span class="st">"Y"</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># uniform clusters</span></span></span>
+<span class="r-in"><span><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodRandom</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  alpha <span class="op">=</span> <span class="fl">1e3</span>,</span></span>
+<span class="r-in"><span>  nClusters <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>  response <span class="op">=</span> <span class="st">"Y"</span>,</span></span>
+<span class="r-in"><span>  id <span class="op">=</span> <span class="st">"Id"</span>,</span></span>
+<span class="r-in"><span>  time <span class="op">=</span> <span class="st">"Time"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># single large cluster</span></span></span>
+<span class="r-in"><span><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodRandom</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  nClusters <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>  response <span class="op">=</span> <span class="st">"Y"</span>,</span></span>
+<span class="r-in"><span>  id <span class="op">=</span> <span class="st">"Id"</span>,</span></span>
+<span class="r-in"><span>  time <span class="op">=</span> <span class="st">"Time"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -167,7 +182,7 @@ Technical Report UWEETR-2010-0006, Department of Electrical Engineering, Univers
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -69,31 +69,42 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">lcMethodMixTVEM</span><span class="op">(</span>
-  <span class="va">formula</span>,
-  formula.mb <span class="op">=</span> <span class="op">~</span><span class="fl">1</span>,
-  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,
-  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,
-  nClusters <span class="op">=</span> <span class="fl">2</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lcMethodMixTVEM</span><span class="op">(</span></span>
+<span>  <span class="va">formula</span>,</span>
+<span>  formula.mb <span class="op">=</span> <span class="op">~</span><span class="fl">1</span>,</span>
+<span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,</span>
+<span>  nClusters <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>formula</dt>
 <dd><p>A <code>formula</code> excluding the time component. Time-invariant covariates are detected automatically as these are a special case in MixTVEM.</p></dd>
+
+
 <dt>formula.mb</dt>
 <dd><p>A <code>formula</code> for cluster-membership prediction. Covariates must be time-invariant. Furthermore, the formula must contain an intercept.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>The name of the time variable.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>The name of the trajectory identifier variable.</p></dd>
+
+
 <dt>nClusters</dt>
 <dd><p>The number of clusters. This replaces the <code>numClasses</code> argument of the <code>TVEMMixNormal</code> function call.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Arguments passed to the <code>TVEMMixNormal()</code> function.
 The following optional arguments are ignored: doPlot, getSEs, numClasses.</p></dd>
+
 </dl></div>
     <div id="note">
     <h2>Note</h2>
@@ -110,21 +121,21 @@ ISSN 1939-1463.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="co"># this example only runs if you download and place MixTVEM.R in your wd</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">{</span></span>
-<span class="r-in">  <span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"MixTVEM.R"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">method</span> <span class="op">=</span> <span class="fu">lcMethodMixTVEM</span><span class="op">(</span></span>
-<span class="r-in">    <span class="va">Value</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,</span>
-<span class="r-in">    time <span class="op">=</span> <span class="st">'Assessment'</span>,</span>
-<span class="r-in">    id <span class="op">=</span> <span class="st">"Id"</span>,</span>
-<span class="r-in">    nClusters <span class="op">=</span> <span class="fl">3</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># this example only runs if you download and place MixTVEM.R in your wd</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"MixTVEM.R"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">method</span> <span class="op">=</span> <span class="fu">lcMethodMixTVEM</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">Value</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>    time <span class="op">=</span> <span class="st">'Assessment'</span>,</span></span>
+<span class="r-in"><span>    id <span class="op">=</span> <span class="st">"Id"</span>,</span></span>
+<span class="r-in"><span>    nClusters <span class="op">=</span> <span class="fl">3</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>cannot open file 'MixTVEM.R': No such file or directory</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in file(filename, "r", encoding = encoding) : </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   cannot open the connection</span>
-<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -139,7 +150,7 @@ ISSN 1939-1463.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

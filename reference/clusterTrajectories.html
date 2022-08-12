@@ -69,24 +69,33 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S4 method for lcModel</span>
-<span class="fu">clusterTrajectories</span><span class="op">(</span><span class="va">object</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>, what <span class="op">=</span> <span class="st">"mu"</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for lcModel</span></span>
+<span><span class="fu">clusterTrajectories</span><span class="op">(</span><span class="va">object</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>, what <span class="op">=</span> <span class="st">"mu"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>The <code>lcModel</code> object.</p></dd>
+
+
 <dt>at</dt>
 <dd><p>An optional vector of the times at which to compute the cluster trajectory predictions.</p></dd>
+
+
 <dt>what</dt>
 <dd><p>The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying <code>what = 'mb'</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.frame of the estimated values at the given times. The first column should be named "Cluster". The second column should be time, with the name matching the <code>timeVariable(object)</code>. The third column should be the expected value of the observations, named after the <code>responseVariable(object)</code>.</p>
+    
+
+<p>A data.frame of the estimated values at the given times. The first column should be named "Cluster". The second column should be time, with the name matching the <code>timeVariable(object)</code>. The third column should be the expected value of the observations, named after the <code>responseVariable(object)</code>.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -113,40 +122,40 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">clusterTrajectories</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">clusterTrajectories</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Cluster      Time           Y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        A 0.0000000 -0.97975135</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        A 0.2222222 -0.63534769</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        A 0.4444444 -0.38525328</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        A 0.6666667 -0.16233773</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        A 0.8888889  0.05903586</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        A 1.1111111  0.17918673</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7        A 1.3333333  0.31069966</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8        A 1.5555556  0.39004675</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9        A 1.7777778  0.42939022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10       A 2.0000000  0.43011898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11       B 0.0000000  0.09202386</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12       B 0.2222222  0.10921565</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13       B 0.4444444  0.11104821</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14       B 0.6666667  0.09712083</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15       B 0.8888889  0.06140180</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16       B 1.1111111  0.01318545</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17       B 1.3333333 -0.05804444</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18       B 1.5555556 -0.13662404</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19       B 1.7777778 -0.24801613</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20       B 2.0000000 -0.34779054</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">clusterTrajectories</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.5</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        A 0.0000000  0.09202386</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        A 0.2222222  0.10921565</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        A 0.4444444  0.11104821</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        A 0.6666667  0.09712083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        A 0.8888889  0.06140180</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        A 1.1111111  0.01318545</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        A 1.3333333 -0.05804444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8        A 1.5555556 -0.13662404</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9        A 1.7777778 -0.24801613</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       A 2.0000000 -0.34779054</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11       B 0.0000000 -0.97975135</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12       B 0.2222222 -0.63534769</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13       B 0.4444444 -0.38525328</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14       B 0.6666667 -0.16233773</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       B 0.8888889  0.05903586</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       B 1.1111111  0.17918673</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17       B 1.3333333  0.31069966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18       B 1.5555556  0.39004675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19       B 1.7777778  0.42939022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       B 2.0000000  0.43011898</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">clusterTrajectories</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.5</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Cluster Time           Y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       A  0.0 -0.97975135</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       A  0.5 -0.32952439</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       A  1.0  0.11911130</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       B  0.0  0.09202386</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       B  0.5  0.10756637</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       B  1.0  0.03729362</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       A  0.0  0.09202386</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       A  0.5  0.10756637</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       A  1.0  0.03729362</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       B  0.0 -0.97975135</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       B  0.5 -0.32952439</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       B  1.0  0.11911130</span>
 </code></pre></div>
     </div>
   </div>
@@ -161,7 +170,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

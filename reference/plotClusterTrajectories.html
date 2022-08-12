@@ -71,67 +71,94 @@ Plot the cluster trajectories of a lcModel"><!-- mathjax --><script src="https:/
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S4 method for data.frame</span>
-<span class="fu">plotClusterTrajectories</span><span class="op">(</span>
-  <span class="va">object</span>,
-  <span class="va">response</span>,
-  cluster <span class="op">=</span> <span class="st">"Cluster"</span>,
-  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,
-  center <span class="op">=</span> <span class="va">meanNA</span>,
-  trajectories <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="st">"sd"</span>, <span class="st">"se"</span>, <span class="st">"80pct"</span>, <span class="st">"90pct"</span>, <span class="st">"95pct"</span>, <span class="st">"range"</span><span class="op">)</span>,
-  facet <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isFALSE</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">trajectories</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,
-  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S4 method for lcModel</span>
-<span class="fu">plotClusterTrajectories</span><span class="op">(</span>
-  <span class="va">object</span>,
-  what <span class="op">=</span> <span class="st">"mu"</span>,
-  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  clusterLabels <span class="op">=</span> <span class="cn">NULL</span>,
-  trajectories <span class="op">=</span> <span class="cn">FALSE</span>,
-  facet <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isFALSE</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">trajectories</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,
-  trajAssignments <span class="op">=</span> <span class="fu"><a href="trajectoryAssignments.html">trajectoryAssignments</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for data.frame</span></span>
+<span><span class="fu">plotClusterTrajectories</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  <span class="va">response</span>,</span>
+<span>  cluster <span class="op">=</span> <span class="st">"Cluster"</span>,</span>
+<span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,</span>
+<span>  center <span class="op">=</span> <span class="va">meanNA</span>,</span>
+<span>  trajectories <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="st">"sd"</span>, <span class="st">"se"</span>, <span class="st">"80pct"</span>, <span class="st">"90pct"</span>, <span class="st">"95pct"</span>, <span class="st">"range"</span><span class="op">)</span>,</span>
+<span>  facet <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isFALSE</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">trajectories</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for lcModel</span></span>
+<span><span class="fu">plotClusterTrajectories</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  what <span class="op">=</span> <span class="st">"mu"</span>,</span>
+<span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  clusterLabels <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  trajectories <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  facet <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isFALSE</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">trajectories</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  trajAssignments <span class="op">=</span> <span class="fu"><a href="trajectoryAssignments.html">trajectoryAssignments</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>The (cluster) trajectory data.</p></dd>
+
+
 <dt>response</dt>
 <dd><p>The response variable name.</p></dd>
+
+
 <dt>cluster</dt>
 <dd><p>The cluster assignment column</p></dd>
+
+
 <dt>time</dt>
 <dd><p>The time variable name.</p></dd>
+
+
 <dt>center</dt>
 <dd><p>A function for aggregating multiple points at the same point in time</p></dd>
+
+
 <dt>trajectories</dt>
 <dd><p>Whether to additionally plot the original trajectories (<code>TRUE</code>),
 or to show the expected interval (standard deviation, standard error, range, or percentile range) of the observations at the respective moment in time.</p>
 <p>Note that visualizing the expected intervals is currently only supported for time-aligned trajectories, as the interval is computed at each unique moment in time.
 By default (<code>FALSE</code>), no information on the underlying trajectories is shown.</p></dd>
+
+
 <dt>facet</dt>
 <dd><p>Whether to facet by cluster. This is done by default when <code>trajectories</code> is enabled.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>Id column. Only needed when <code>trajectories = TRUE</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Arguments passed to <code><a href="clusterTrajectories.html">clusterTrajectories()</a></code>, or <code><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">ggplot2::geom_line()</a></code> for plotting the cluster trajectory lines.</p></dd>
+
+
 <dt>what</dt>
 <dd><p>The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying <code>what = 'mb'</code>.</p></dd>
+
+
 <dt>at</dt>
 <dd><p>An optional vector of the times at which to compute the cluster trajectory predictions.</p></dd>
+
+
 <dt>clusterLabels</dt>
 <dd><p>Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.</p></dd>
+
+
 <dt>trajAssignments</dt>
 <dd><p>The cluster assignments for the fitted trajectories. Only used when <code>trajectories = TRUE</code> and <code>facet = TRUE</code>. See <a href="trajectoryAssignments.html">trajectoryAssignments</a>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>ggplot</code> object.</p>
+    
+
+<p>A <code>ggplot</code> object.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -140,28 +167,28 @@ By default (<code>FALSE</code>), no information on the underlying trajectories i
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu">plotClusterTrajectories</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># show assigned trajectories</span></span>
-<span class="r-in">  <span class="fu">plotClusterTrajectories</span><span class="op">(</span><span class="va">model</span>, trajectories <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># show 95th percentile observation interval</span></span>
-<span class="r-in">  <span class="fu">plotClusterTrajectories</span><span class="op">(</span><span class="va">model</span>, trajectories <span class="op">=</span> <span class="st">"95pct"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># show observation standard deviation</span></span>
-<span class="r-in">  <span class="fu">plotClusterTrajectories</span><span class="op">(</span><span class="va">model</span>, trajectories <span class="op">=</span> <span class="st">"sd"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># show observation standard error</span></span>
-<span class="r-in">  <span class="fu">plotClusterTrajectories</span><span class="op">(</span><span class="va">model</span>, trajectories <span class="op">=</span> <span class="st">"se"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># show observation range</span></span>
-<span class="r-in">  <span class="fu">plotClusterTrajectories</span><span class="op">(</span><span class="va">model</span>, trajectories <span class="op">=</span> <span class="st">"range"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu">plotClusterTrajectories</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># show assigned trajectories</span></span></span>
+<span class="r-in"><span>  <span class="fu">plotClusterTrajectories</span><span class="op">(</span><span class="va">model</span>, trajectories <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># show 95th percentile observation interval</span></span></span>
+<span class="r-in"><span>  <span class="fu">plotClusterTrajectories</span><span class="op">(</span><span class="va">model</span>, trajectories <span class="op">=</span> <span class="st">"95pct"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># show observation standard deviation</span></span></span>
+<span class="r-in"><span>  <span class="fu">plotClusterTrajectories</span><span class="op">(</span><span class="va">model</span>, trajectories <span class="op">=</span> <span class="st">"sd"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># show observation standard error</span></span></span>
+<span class="r-in"><span>  <span class="fu">plotClusterTrajectories</span><span class="op">(</span><span class="va">model</span>, trajectories <span class="op">=</span> <span class="st">"se"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># show observation range</span></span></span>
+<span class="r-in"><span>  <span class="fu">plotClusterTrajectories</span><span class="op">(</span><span class="va">model</span>, trajectories <span class="op">=</span> <span class="st">"range"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-plt img"><img src="plotClusterTrajectories-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -177,7 +204,7 @@ By default (<code>FALSE</code>), no information on the underlying trajectories i
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

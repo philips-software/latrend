@@ -69,28 +69,37 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">lcMethodDtwclust</span><span class="op">(</span>
-  <span class="va">response</span>,
-  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,
-  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,
-  nClusters <span class="op">=</span> <span class="fl">2</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lcMethodDtwclust</span><span class="op">(</span></span>
+<span>  <span class="va">response</span>,</span>
+<span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,</span>
+<span>  nClusters <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>response</dt>
 <dd><p>The name of the response variable.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>The name of the time variable.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>The name of the trajectory identifier variable.</p></dd>
+
+
 <dt>nClusters</dt>
 <dd><p>Number of clusters.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Arguments passed to <a href="https://rdrr.io/pkg/dtwclust/man/tsclust.html" class="external-link">dtwclust::tsclust</a>.
 The following arguments are ignored: series, k, trace.</p></dd>
+
 </dl></div>
     <div id="references">
     <h2>References</h2>
@@ -126,12 +135,12 @@ The following arguments are ignored: series, k, trace.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/asardaes/dtwclust" class="external-link">"dtwclust"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodDtwclust</span><span class="op">(</span><span class="st">"Y"</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/asardaes/dtwclust" class="external-link">"dtwclust"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">method</span> <span class="op">&lt;-</span> <span class="fu">lcMethodDtwclust</span><span class="op">(</span><span class="st">"Y"</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span>, nClusters <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: dtwclust</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: proxy</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
@@ -151,10 +160,10 @@ The following arguments are ignored: series, k, trace.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	Precomputing distance matrix...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Iteration 1: Changes / Distsum = 200 / 554.6208</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Iteration 2: Changes / Distsum = 36 / 421.3026</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Iteration 3: Changes / Distsum =  4 / 405.215</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Iteration 4: Changes / Distsum =  0 / 405.215</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Iteration 1: Changes / Distsum = 200 / 488.6498</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Iteration 2: Changes / Distsum = 49 / 362.005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Iteration 3: Changes / Distsum = 6 / 346.5872</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Iteration 4: Changes / Distsum = 0 / 346.5872</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	Elapsed time is 0.198 seconds.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -172,7 +181,7 @@ The following arguments are ignored: series, k, trace.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

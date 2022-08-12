@@ -75,14 +75,17 @@ In order to make use of parallel execution, a parallel back-end must be register
     <h2>Windows</h2>
     
 
-<p>On Windows, the <a href="https://rdrr.io/r/parallel/parallel-package.html" class="external-link">parallel-package</a> can be used to define parallel socket workers.</p><div class="sourceCode"><pre><code><span class="va">nCores</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span>logical <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="va">nCores</span><span class="op">)</span></code></pre></div>
+<p>On Windows, the <a href="https://rdrr.io/r/parallel/parallel-package.html" class="external-link">parallel-package</a> can be used to define parallel socket workers.</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="va">nCores</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span>logical <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="va">nCores</span><span class="op">)</span></span></code></pre></div>
 
-<p>Then, register the cluster as the parallel back-end using the <code>doParallel</code> package:</p><div class="sourceCode"><pre><code><span class="fu">doParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></code></pre></div>
+<p>Then, register the cluster as the parallel back-end using the <code>doParallel</code> package:</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="fu">doParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span></code></pre></div>
 
 <p>If you defined your own <code>lcMethod</code> or <code>lcModel</code> extension classes, make sure to load them on the workers as well.
-This can be done, for example, using:</p><div class="sourceCode"><pre><code><span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/clusterApply.html" class="external-link">clusterEvalQ</a></span><span class="op">(</span><span class="va">cl</span>,
-  expr <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/methods/setClass.html" class="external-link">setClass</a></span><span class="op">(</span><span class="st">'lcMethodMyImpl'</span>, contains <span class="op">=</span> <span class="st">"lcMethod"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+This can be done, for example, using:</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/clusterApply.html" class="external-link">clusterEvalQ</a></span><span class="op">(</span><span class="va">cl</span>,</span>
+<span>  expr <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/methods/setClass.html" class="external-link">setClass</a></span><span class="op">(</span><span class="st">'lcMethodMyImpl'</span>, contains <span class="op">=</span> <span class="st">"lcMethod"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 
     </div>
     <div id="unix">
@@ -90,8 +93,9 @@ This can be done, for example, using:</p><div class="sourceCode"><pre><code><spa
     
 
 <p>On Unix systems, it is easier to setup parallelization as the R process is forked.
-In this example we use the <code>doMC</code> package:</p><div class="sourceCode"><pre><code><span class="va">nCores</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span>logical <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="fu">doMC</span><span class="fu">::</span><span class="fu">registerDoMC</span><span class="op">(</span><span class="va">nCores</span><span class="op">)</span></code></pre></div>
+In this example we use the <code>doMC</code> package:</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="va">nCores</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span>logical <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">doMC</span><span class="fu">::</span><span class="fu">registerDoMC</span><span class="op">(</span><span class="va">nCores</span><span class="op">)</span></span></code></pre></div>
 
     </div>
     <div id="see-also">
@@ -101,18 +105,17 @@ In this example we use the <code>doMC</code> package:</p><div class="sourceCode"
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># parallel latrendRep()</span></span>
-<span class="r-in"><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrendRep.html">latrendRep</a></span><span class="op">(</span><span class="va">method</span>, data <span class="op">=</span> <span class="va">latrendData</span>, .rep <span class="op">=</span> <span class="fl">5</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># parallel latrendBatch()</span></span>
-<span class="r-in"><span class="va">methods</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">method</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrendBatch.html">latrendBatch</a></span><span class="op">(</span><span class="va">methods</span>, data <span class="op">=</span> <span class="va">latrendData</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>executing %dopar% sequentially: no parallel backend registered</span>
-<span class="r-in"><span class="co"># }</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># parallel latrendRep()</span></span></span>
+<span class="r-in"><span><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, id <span class="op">=</span> <span class="st">"Id"</span>, time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrendRep.html">latrendRep</a></span><span class="op">(</span><span class="va">method</span>, data <span class="op">=</span> <span class="va">latrendData</span>, .rep <span class="op">=</span> <span class="fl">5</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># parallel latrendBatch()</span></span></span>
+<span class="r-in"><span><span class="va">methods</span> <span class="op">&lt;-</span> <span class="fu"><a href="lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">method</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrendBatch.html">latrendBatch</a></span><span class="op">(</span><span class="va">methods</span>, data <span class="op">=</span> <span class="va">latrendData</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -127,7 +130,7 @@ In this example we use the <code>doMC</code> package:</p><div class="sourceCode"
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
