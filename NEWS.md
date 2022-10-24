@@ -1,5 +1,8 @@
 **If you are viewing this file as part of a released version of the package, the latest news can be found [on GitHub](https://philips-software.github.io/latrend/news/).**
 
+# latrend v1.4.3
+* Removed usage of soon-to-be deprecated ggplot functions
+
 # latrend v1.4.2
 
 ## Bug fixes

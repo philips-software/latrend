@@ -1,7 +1,7 @@
 Package: latrend
 Type: Package
-Version: 1.4.2
-Date: 2022-08-11
+Version: 1.4.3
+Date: 2022-10-24
 Title: A Framework for Clustering Longitudinal Data
 Description: A framework for clustering longitudinal datasets in a standardized way. 
     The package provides an interface to existing R packages for clustering longitudinal univariate trajectories, facilitating reproducible and transparent analyses. 
