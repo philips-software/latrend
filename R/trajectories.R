@@ -172,7 +172,7 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
     setnames(ribbonData, c(cluster, time, 'ymin', 'ymax'))
 
     p = p + ggplot2::geom_ribbon(
-      mapping = ggplot2::aes_string(x = time, ymin = 'ymin', ymax = 'ymax'),
+      mapping = ggplot2::aes(x = !!as.name(time), ymin = ymin, ymax = ymax),
       data = ribbonData,
       alpha = .5
     ) + ggplot2::labs(
@@ -189,7 +189,7 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
 
   # add cluster trajectories to plot
   p = p + ggplot2::geom_line(
-    mapping = ggplot2::aes_string(x = time, y = response, color = cluster),
+    mapping = ggplot2::aes(x = !!as.name(time), y = !!as.name(response), color = !!as.name(cluster)),
     data = data,
     ...
   ) + ggplot2::labs(title = 'Cluster trajectories')
@@ -284,9 +284,14 @@ setMethod('plotTrajectories', signature('data.frame'),
   }
 
   if (!is.null(cluster) && !isTRUE(facet)) {
-    map = ggplot2::aes_string(x = time, y = response, group = id, color = cluster)
+    map = ggplot2::aes(
+      x = !!as.name(time),
+      y = !!as.name(response),
+      group = !!as.name(id),
+      color = !!as.name(cluster)
+    )
   } else {
-    map = ggplot2::aes_string(x = time, y = response, group = id)
+    map = ggplot2::aes(x = !!as.name(time), y = !!as.name(response), group = !!as.name(id))
   }
 
   p = ggplot2::ggplot() +
