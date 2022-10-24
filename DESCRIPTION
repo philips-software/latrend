@@ -22,7 +22,7 @@ Authors@R:
              family = "van den Heuvel",
              role = "ctb",
              email = "e.r.v.d.heuvel@tue.nl"),
-      person(given = "Copyright © 2022 Koninklijke Philips N.V.", role = "cph"))
+      person(given = "Koninklijke Philips N.V.", role = "cph"))
 URL: https://github.com/philips-software/latrend
 BugReports: https://github.com/philips-software/latrend/issues
 License: GPL (>= 2)
