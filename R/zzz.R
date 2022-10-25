@@ -184,6 +184,18 @@ NULL
   }
 }
 
+# temporary work-around for aes_string/aes replacement
+.as_lang = function(x) {
+  if (is.language(x)) {
+    x
+  } else if (is.character(x)) {
+    as.symbol(x)
+  } else {
+    stop('cannot cast to language')
+  }
+}
+
+
 globalVariables(
   c(
     '.', '..id', '..time', '..response',

@@ -189,7 +189,11 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
 
   # add cluster trajectories to plot
   p = p + ggplot2::geom_line(
-    mapping = ggplot2::aes(x = !!as.name(time), y = !!as.name(response), color = !!as.name(cluster)),
+    mapping = ggplot2::aes(
+      x = !!.as_lang(time),
+      y = !!.as_lang(response),
+      color = !!.as_lang(cluster)
+    ),
     data = data,
     ...
   ) + ggplot2::labs(title = 'Cluster trajectories')
@@ -285,13 +289,17 @@ setMethod('plotTrajectories', signature('data.frame'),
 
   if (!is.null(cluster) && !isTRUE(facet)) {
     map = ggplot2::aes(
-      x = !!as.name(time),
-      y = !!as.name(response),
-      group = !!as.name(id),
-      color = !!as.name(cluster)
+      x = !!.as_lang(time),
+      y = !!.as_lang(response),
+      group = !!.as_lang(id),
+      color = !!.as_lang(cluster)
     )
   } else {
-    map = ggplot2::aes(x = !!as.name(time), y = !!as.name(response), group = !!as.name(id))
+    map = ggplot2::aes(
+      x = !!.as_lang(time),
+      y = !!.as_lang(response),
+      group = !!.as_lang(id)
+    )
   }
 
   p = ggplot2::ggplot() +

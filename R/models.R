@@ -460,9 +460,9 @@ plotMetric = function(
   levels(dtgg$Metric) = name
 
   if (length(group) == 0L) {
-    map = ggplot2::aes(x = !!as.name(by), y = Value)
+    map = ggplot2::aes(x = !!.as_lang(by), y = Value)
   } else {
-    map = ggplot2::aes(x = !!as.name(by), y = Value, group = Group, color = Group)
+    map = ggplot2::aes(x = !!.as_lang(by), y = Value, group = Group, color = Group)
   }
 
   p = ggplot2::ggplot(data = dtgg, mapping = map)
