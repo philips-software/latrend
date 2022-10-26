@@ -1,5 +1,6 @@
 # v1.4.3
 * Removed usage of soon-to-be deprecated ggplot functions
+* Reduced runtime of example
 
 # v1.4.2
 * Fixed minor bug in `evaluate.lcMethod()`

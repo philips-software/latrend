@@ -20,7 +20,7 @@
 #' @note This is an experimental function that is subject to large changes in the future.
 #' The default dataset used for testing is subject to change.
 #' @examples
-#' test.latrend("lcMethodRandom", clusterRecovery = "skip")
+#' test.latrend("lcMethodRandom", tests = c("method", "basic"), clusterRecovery = "skip")
 test.latrend = function(
   class = 'lcMethodKML',
   instantiator = NULL,
