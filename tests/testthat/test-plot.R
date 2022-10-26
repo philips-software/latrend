@@ -8,6 +8,11 @@ test_that('plotTrajectories.data.frame', {
   expect_true(is.ggplot(p))
 })
 
+test_that('plotTrajectories.data.frame with expression', {
+  p = plotTrajectories(testLongData, response = quote(exp(Value)))
+  expect_true(is.ggplot(p))
+})
+
 test_that('plotTrajectories.data.frame without response', {
   expect_message({p = plotTrajectories(testLongData)}, regexp = 'Value')
   expect_true(is.ggplot(p))
