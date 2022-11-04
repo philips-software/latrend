@@ -17,6 +17,7 @@ test_that('integer assignments', {
   expect_valid_lcModel(model)
   expect_equivalent(trajectoryAssignments(model), trajectoryAssignments(refmodel))
   expect_equivalent(nClusters(model), nClusters(refmodel))
+  expect_true(converged(model))
 })
 
 
@@ -137,3 +138,32 @@ test_that('clusterTrajectories at subset of times', {
     )
   )
 })
+
+test_that('non-converged partition result', {
+  intAssignments = trajectoryAssignments(refmodel) %>% as.integer()
+
+  model = lcModelPartition(
+    testLongData,
+    response = 'Value',
+    trajectoryAssignments = intAssignments,
+    nClusters = nClusters(refmodel),
+    converged = FALSE
+  )
+
+  expect_false(converged(model))
+})
+
+test_that('numeric converged partition result', {
+  intAssignments = trajectoryAssignments(refmodel) %>% as.integer()
+
+  model = lcModelPartition(
+    testLongData,
+    response = 'Value',
+    trajectoryAssignments = intAssignments,
+    nClusters = nClusters(refmodel),
+    converged = 3
+  )
+
+  expect_equal(converged(model), 3)
+})
+

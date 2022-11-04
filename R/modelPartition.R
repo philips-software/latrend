@@ -4,7 +4,8 @@ setClass(
   representation(
     name = 'character',
     center = 'function',
-    trajectoryClusterIndices = 'integer'
+    trajectoryClusterIndices = 'integer',
+    converged = 'ANY'
   ),
   contains = 'lcApproxModel'
 )
@@ -50,6 +51,7 @@ lcModelPartition = function(
   name = 'part',
   center = meanNA,
   method = NULL,
+  converged = TRUE,
   model = NULL,
   envir = parent.frame()
 ) {
@@ -169,7 +171,8 @@ lcModelPartition = function(
     id = id,
     time = time,
     response = response,
-    estimationTime = 0
+    estimationTime = 0,
+    converged = converged
   )
 
   if (!is.null(method)) {
@@ -255,7 +258,11 @@ setMethod('clusterTrajectories', 'lcModelPartition',
 #. converged ####
 #' @rdname interface-custom
 setMethod('converged', 'lcModelPartition', function(object, ...) {
-  TRUE
+  if (methods::.hasSlot(object, 'converged')) {
+    object@converged
+  } else {
+    TRUE
+  }
 })
 
 

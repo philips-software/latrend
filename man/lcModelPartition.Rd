@@ -15,6 +15,7 @@ lcModelPartition(
   name = "part",
   center = meanNA,
   method = NULL,
+  converged = TRUE,
   model = NULL,
   envir = parent.frame()
 )
