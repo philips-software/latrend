@@ -14,6 +14,7 @@
 \alias{getShortName,lcMethodLMKM-method}
 \alias{prepareData,lcMethodLMKM-method}
 \alias{fit,lcMethodLMKM-method}
+\alias{validate,lcMethodLMKM-method}
 \alias{getArgumentDefaults,lcMethodGCKM-method}
 \alias{getArgumentExclusions,lcMethodGCKM-method}
 \alias{getName,lcMethodGCKM-method}
@@ -51,6 +52,8 @@
 \S4method{prepareData}{lcMethodLMKM}(method, data, verbose)
 
 \S4method{fit}{lcMethodLMKM}(method, data, envir, verbose, ...)
+
+\S4method{validate}{lcMethodLMKM}(method, data, envir = NULL, ...)
 
 \S4method{getArgumentDefaults}{lcMethodGCKM}(object)
 

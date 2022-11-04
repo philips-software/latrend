@@ -93,6 +93,8 @@ Collate:
     'make.R'
     'matrix.R'
     'method.R'
+    'meta-method.R'
+    'meta-method-converged.R'
     'methodMatrix.R'
     'methodAKMedoids.R'
     'methodCrimCV.R'
