@@ -275,6 +275,19 @@ setGeneric('getLabel', function(object, ...) {
   label
 })
 
+# getLcMethod ####
+#' @export
+#' @name latrend-generics
+setGeneric('getLcMethod', function(object, ...) {
+  method <- standardGeneric('getLcMethod')
+
+  assert_that(
+    is.lcMethod(method)
+  )
+
+  method
+})
+
 
 # getName ####
 #' @export
