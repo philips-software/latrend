@@ -733,7 +733,17 @@ setGeneric('trajectoryAssignments', function(object, ...) {
 setGeneric('validate', function(method, data, envir, ...) {
   validationResult <- standardGeneric('validate')
 
+  assert_that(
+    length(validationResult) == 1L,
+    msg = sprintf(
+      'implementation error in validate(%s): output should be length 1',
+      class(method)[1]
+    )
+  )
+
   if (!isTRUE(validationResult)) {
     stop(sprintf('%s validation failed: %s', class(method)[1], validationResult))
   }
+
+  validationResult
 })
