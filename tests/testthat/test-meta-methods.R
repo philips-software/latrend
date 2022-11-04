@@ -1,5 +1,36 @@
 method = lcMethodLMKM(Value ~ Assessment, id = 'Traj', time = 'Assessment', nClusters = 2)
 
+setClass('lcMethodConv', contains = 'lcMethod')
+
+lcMethodConv = function(
+  response = 'Value',
+  time = 'Assessment',
+  id = 'Traj',
+  nClusters = 1,
+  nAttempts = 1,
+  ...
+) {
+  mc = match.call.all()
+  mc$Class = 'lcMethodConv'
+  do.call(new, as.list(mc))
+}
+
+setMethod('preFit', 'lcMethodConv', function(method, data, envir, verbose) {
+  convAttempts <<- 0
+  callNextMethod()
+})
+
+setMethod('fit', 'lcMethodConv', function(method, data, envir, verbose) {
+  convAttempts <<- convAttempts + 1
+  lcModelPartition(
+    data = data,
+    response = method$response,
+    trajectoryAssignments = rep(1, uniqueN(data[[method$id]])),
+    converged = convAttempts >= method$nAttempts
+  )
+})
+
+
 test_that('specify converged', {
   metaMethod = lcMetaConverged(method)
   expect_s4_class(metaMethod, 'lcMetaConverged')
@@ -39,4 +70,38 @@ test_that('meta converged fit', {
   expect_no_warning({
     model = latrend(metaMethod, testLongData)
   })
+})
+
+test_that('meta converged fit until converged', {
+  metaMethod = lcMetaConverged(lcMethodConv(nAttempts = 2), maxRep = 3)
+
+  # workaround because testthat::expect_message() is failing to capture the output...
+  out = capture.output({
+    model = latrend(metaMethod, testLongData, verbose = TRUE)
+  }, type = 'message')
+  expect_match(paste0(out, collapse = '\n'), regexp = 'attempt 2')
+  expect_true(converged(model))
+})
+
+test_that('meta converged fit always fails', {
+  metaMethod = lcMetaConverged(lcMethodConv(nAttempts = 3), maxRep = 2)
+  expect_warning({
+    model = latrend(metaMethod, testLongData)
+  }, regexp = 'Failed to obtain converged')
+
+  expect_false(converged(model))
+})
+
+test_that('meta converged fit with seed on first attempt', {
+  metaMethod = lcMetaConverged(lcMethodConv(nAttempts = 1, seed = 13))
+  model = latrend(metaMethod, testLongData)
+
+  expect_equal(getLcMethod(model)$method$seed, 13)
+})
+
+test_that('meta converged fit different seed on second attempt', {
+  metaMethod = lcMetaConverged(lcMethodConv(nAttempts = 2, seed = 13))
+  model = latrend(metaMethod, testLongData)
+
+  expect_true(getLcMethod(model)$method$seed != 13)
 })

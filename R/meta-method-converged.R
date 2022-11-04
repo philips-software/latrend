@@ -25,6 +25,7 @@ lcMetaConverged = function(method, maxRep = Inf) {
 #' @rdname lcMetaMethod-interface
 setMethod('fit', 'lcMetaConverged', function(method, data, envir, verbose) {
   attempt = 1L
+
   repeat {
     enter(verbose, level = verboseLevels$fine, suffix = '')
     model = fit(getLcMethod(method), data = data, envir = envir, verbose = verbose)
@@ -44,6 +45,12 @@ setMethod('fit', 'lcMetaConverged', function(method, data, envir, verbose) {
       return (model)
     } else {
       attempt = attempt + 1L
+      seed = sample.int(.Machine$integer.max, 1L)
+      set.seed(seed)
+      if (has_lcMethod_args(getLcMethod(method), 'seed')) {
+        # update fit method with new seed
+        method@arguments$method = update(getLcMethod(method), seed = seed, .eval = TRUE)
+      }
 
       if (is.infinite(method$maxRep)) {
         cat(verbose, sprintf('Method failed to converge. Retrying... attempt %d', attempt))
@@ -52,4 +59,14 @@ setMethod('fit', 'lcMetaConverged', function(method, data, envir, verbose) {
       }
     }
   }
+})
+
+#' @rdname lcMetaMethod-interface
+setMethod('validate', 'lcMetaConverged', function(method, data, envir = NULL, ...) {
+  callNextMethod()
+
+  validate_that(
+    has_lcMethod_args(method, 'maxRep'),
+    is.count(method$maxRep)
+  )
 })

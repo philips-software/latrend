@@ -10,6 +10,7 @@
 \alias{postFit,lcMetaMethod-method}
 \alias{validate,lcMetaMethod-method}
 \alias{fit,lcMetaConverged-method}
+\alias{validate,lcMetaConverged-method}
 \title{lcMetaMethod methods}
 \usage{
 \S4method{compose}{lcMetaMethod}(method, envir = NULL)
@@ -29,6 +30,8 @@
 \S4method{validate}{lcMetaMethod}(method, data, envir = NULL, ...)
 
 \S4method{fit}{lcMetaConverged}(method, data, envir, verbose)
+
+\S4method{validate}{lcMetaConverged}(method, data, envir = NULL, ...)
 }
 \description{
 lcMetaMethod methods
