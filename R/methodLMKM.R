@@ -94,3 +94,12 @@ setMethod('fit', signature('lcMethodLMKM'), function(method, data, envir, verbos
     clusterNames = make.clusterNames(method$nClusters)
   )
 })
+
+#' @rdname interface-featureBased
+setMethod('validate', 'lcMethodLMKM', function(method, data, envir = NULL, ...) {
+  callNextMethod()
+
+  validate_that(
+    has_lcMethod_args(method, 'formula')
+  )
+})
