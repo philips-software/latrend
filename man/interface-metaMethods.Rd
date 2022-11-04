@@ -52,6 +52,21 @@
 
 \S4method{validate}{lcFitRep}(method, data, envir = NULL, ...)
 }
+\arguments{
+\item{method}{The \code{lcMethod} object.}
+
+\item{envir}{The \code{environment} in which the \code{lcMethod} should be evaluated}
+
+\item{object}{The \code{lcModel} object.}
+
+\item{...}{Not used.}
+
+\item{data}{A \code{data.frame} representing the transformed training data.}
+
+\item{verbose}{A \link[R.utils:Verbose]{R.utils::Verbose} object indicating the level of verbosity.}
+
+\item{model}{The \code{lcModel} object returned by \code{\link[=fit]{fit()}}.}
+}
 \description{
 Virtual class for internal use. Do not use.
 }

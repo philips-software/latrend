@@ -45,6 +45,8 @@ If unspecified, the names are determined from the \code{trajectoryAssignments} a
 
 \item{method}{Optional \code{lcMethod} object that was used for fitting this model to the data.}
 
+\item{converged}{Set the converged state.}
+
 \item{model}{An optional object to attach to the \code{lcModelPartition} object, representing the internal model that was used for obtaining the partition.}
 
 \item{envir}{The \code{environment} associated with the model. Used for evaluating the assigned \code{data} object by \link{model.data.lcModel}.}

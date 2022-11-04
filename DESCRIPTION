@@ -41,11 +41,11 @@ Imports:
     data.table (>= 1.12.0),
     magrittr,
     matrixStats,
-    rmarkdown (>= 1.18),
     rlang
 Suggests: 
     testthat (>= 3.0.0),
     roxygen2 (>= 7.1.0),
+    rmarkdown (>= 1.18),
     knitr (>= 1.24),
     rcmdcheck,
     pkgdown,

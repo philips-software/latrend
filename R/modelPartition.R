@@ -24,6 +24,7 @@ setClass(
 #' @param clusterNames The names of the clusters, or a function with input `n` outputting a `character vector` of names.
 #' If unspecified, the names are determined from the `trajectoryAssignments` argument.
 #' @param method Optional `lcMethod` object that was used for fitting this model to the data.
+#' @param converged Set the converged state.
 #' @param model An optional object to attach to the `lcModelPartition` object, representing the internal model that was used for obtaining the partition.
 #' @param envir The `environment` associated with the model. Used for evaluating the assigned `data` object by [model.data.lcModel].
 #' @examples

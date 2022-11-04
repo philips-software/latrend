@@ -578,6 +578,7 @@ setMethod('getLabel', signature('lcModel'), function(object, ...) {
 #' @export
 #' @name getLcMethod
 #' @rdname getLcMethod
+#' @aliases getLcMethod,lcModel-method
 #' @title Get the method specification of a lcModel
 #' @description Get the `lcMethod` specification object that was used for fitting the given `lcModel` object.
 #' @param object The `lcModel` object.

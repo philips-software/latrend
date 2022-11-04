@@ -3,6 +3,13 @@
 #' @export
 #' @name interface-metaMethods
 #' @rdname interface-metaMethods
+#' @inheritParams lcMethod-class
+#' @inheritParams getLcMethod
+#' @inheritParams compose
+#' @inheritParams preFit
+#' @inheritParams postFit
+#' @inheritParams prepareData
+#' @inheritParams validate
 #' @aliases lcMetaMethod-class
 #' @title lcMetaMethod abstract class
 #' @description Virtual class for internal use. Do not use.
