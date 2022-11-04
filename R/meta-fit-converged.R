@@ -1,13 +1,9 @@
-#' @include meta-method.R
+#' @include meta-fit.R
 
 #' @export
-#' @name lcFitMethods
 #' @rdname lcFitMethods
-#' @title Method fit modifiers
-#' @description A collection of special methods that adapt the fitting procedure of the underlying longitudinal cluster method.
-#' Supported fit methods:
-#' * `lcFitConverged`: Fit a method until a converged result is obtained.
 #' @examples
+#'
 #' data(latrendData)
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 2)
 #' metaMethod <- lcFitConverged(method, maxRep = 10)
@@ -50,9 +46,10 @@ setMethod('fit', 'lcFitConverged', function(method, data, envir, verbose) {
       return (model)
     } else {
       attempt = attempt + 1L
-      seed = sample.int(.Machine$integer.max, 1L)
-      set.seed(seed)
+
       if (has_lcMethod_args(getLcMethod(method), 'seed')) {
+        seed = sample.int(.Machine$integer.max, 1L)
+        set.seed(seed)
         # update fit method with new seed
         method@arguments$method = update(getLcMethod(method), seed = seed, .eval = TRUE)
       }
