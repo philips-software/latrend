@@ -1,29 +1,34 @@
 #' @include meta-method.R
 
 #' @export
-#' @rdname lcMetaMethods
+#' @name lcFitMethods
+#' @rdname lcFitMethods
+#' @title Method fit modifiers
+#' @description A collection of special methods that adapt the fitting procedure of the underlying longitudinal cluster method.
+#' Supported fit methods:
+#' * `lcFitConverged`: Fit a method until a converged result is obtained.
 #' @examples
 #' data(latrendData)
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 2)
-#' metaMethod <- lcMetaConverged(method, maxRep = 10)
+#' metaMethod <- lcFitConverged(method, maxRep = 10)
 #' metaMethod
 #' model <- latrend(metaMethod, latrendData)
-setClass('lcMetaConverged', contains = 'lcMetaMethod')
+setClass('lcFitConverged', contains = 'lcMetaMethod')
 
 #' @export
-#' @rdname lcMetaMethods
+#' @rdname lcFitMethods
 #' @param method The `lcMethod` to use for fitting.
 #' @param maxRep The maximum number of fit attempts
-lcMetaConverged = function(method, maxRep = Inf) {
+lcFitConverged = function(method, maxRep = Inf) {
   mc = match.call.all()
   mc$method = getCall(method)
-  mc$Class = 'lcMetaConverged'
+  mc$Class = 'lcFitConverged'
   do.call(new, as.list(mc))
 }
 
 
-#' @rdname lcMetaMethod-interface
-setMethod('fit', 'lcMetaConverged', function(method, data, envir, verbose) {
+#' @rdname interface-metaMethods
+setMethod('fit', 'lcFitConverged', function(method, data, envir, verbose) {
   attempt = 1L
 
   repeat {
@@ -61,8 +66,8 @@ setMethod('fit', 'lcMetaConverged', function(method, data, envir, verbose) {
   }
 })
 
-#' @rdname lcMetaMethod-interface
-setMethod('validate', 'lcMetaConverged', function(method, data, envir = NULL, ...) {
+#' @rdname interface-metaMethods
+setMethod('validate', 'lcFitConverged', function(method, data, envir = NULL, ...) {
   callNextMethod()
 
   validate_that(
