@@ -88,7 +88,7 @@ lcMethodLcmmGMM = function(
 }
 
 #' @rdname interface-lcmm
-setMethod('getArgumentDefaults', signature('lcMethodLcmmGMM'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodLcmmGMM', function(object) {
   c(
     formals(lcMethodLcmmGMM),
     formals(lcmm::hlme),
@@ -97,7 +97,7 @@ setMethod('getArgumentDefaults', signature('lcMethodLcmmGMM'), function(object) 
 })
 
 #' @rdname interface-lcmm
-setMethod('getArgumentExclusions', signature('lcMethodLcmmGMM'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethodLcmmGMM', function(object) {
   union(
     callNextMethod(),
     c('data', 'subject', 'returndata', 'ng', 'verbose', 'subset')
@@ -105,10 +105,10 @@ setMethod('getArgumentExclusions', signature('lcMethodLcmmGMM'), function(object
 })
 
 #' @rdname interface-lcmm
-setMethod('getName', signature('lcMethodLcmmGMM'), function(object) 'growth mixture model')
+setMethod('getName', 'lcMethodLcmmGMM', function(object) 'growth mixture model')
 
 #' @rdname interface-lcmm
-setMethod('getShortName', signature('lcMethodLcmmGMM'), function(object) 'gmm')
+setMethod('getShortName', 'lcMethodLcmmGMM', function(object) 'gmm')
 
 #' @rdname interface-lcmm
 setMethod('validate', 'lcMethodLcmmGMM', function(method, data, envir = NULL, ...) {
@@ -200,7 +200,7 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
 }
 
 #' @rdname interface-lcmm
-setMethod('preFit', signature('lcMethodLcmmGMM'), gmm_prepare)
+setMethod('preFit', 'lcMethodLcmmGMM', gmm_prepare)
 
 ##
 gmm_fit = function(method, data, envir, verbose, ...) {
@@ -223,7 +223,7 @@ gmm_fit = function(method, data, envir, verbose, ...) {
 }
 
 #' @rdname interface-lcmm
-setMethod('fit', signature('lcMethodLcmmGMM'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodLcmmGMM', function(method, data, envir, verbose, ...) {
   model = gmm_fit(method, data, envir, verbose, ...)
 
   new(
@@ -237,6 +237,6 @@ setMethod('fit', signature('lcMethodLcmmGMM'), function(method, data, envir, ver
 
 
 #' @rdname interface-lcmm
-setMethod('responseVariable', signature('lcMethodLcmmGMM'), function(object, ...) {
+setMethod('responseVariable', 'lcMethodLcmmGMM', function(object, ...) {
   getResponse(object$fixed)
 })

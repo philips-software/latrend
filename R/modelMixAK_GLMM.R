@@ -4,7 +4,7 @@ setClass('lcModelMixAK_GLMM', contains = 'lcModel')
 
 #. postprob ####
 #' @rdname interface-mixAK
-setMethod('postprob', signature('lcModelMixAK_GLMM'), function(object, ...) {
+setMethod('postprob', 'lcModelMixAK_GLMM', function(object, ...) {
   pp = .postprob_GLMM_MCMC(object@model)
   colnames(pp) = clusterNames(object)
   pp
@@ -18,7 +18,7 @@ setMethod('postprob', signature('lcModelMixAK_GLMM'), function(object, ...) {
 #. predictForCluster ####
 #' @rdname interface-mixAK
 #' @inheritParams predictForCluster
-setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, newdata, cluster, what = 'mu', ...) {
+setMethod('predictForCluster', 'lcModelMixAK_GLMM', function(object, newdata, cluster, what = 'mu', ...) {
   predictForCluster(object@model, cluster = cluster, newdata = newdata, what = what, ...)
 })
 
@@ -43,7 +43,7 @@ setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, 
 }
 
 #' @rdname interface-mixAK
-setMethod('predictForCluster', signature('lcModelMixAK_GLMM'), function(object, newdata, cluster, what = 'mu', ...) {
+setMethod('predictForCluster', 'lcModelMixAK_GLMM', function(object, newdata, cluster, what = 'mu', ...) {
   .predictForCluster_GLMM_MCMC(object@model,
                                method = getLcMethod(object),
                                k = match(cluster, clusterNames(object)),

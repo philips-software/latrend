@@ -32,7 +32,7 @@ lcMethodFlexmixGBTM = function(
 
 
 #' @rdname interface-flexmix
-setMethod('getArgumentDefaults', signature('lcMethodFlexmixGBTM'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodFlexmixGBTM', function(object) {
   c(
     formals(lcMethodFlexmixGBTM),
     formals(flexmix::flexmix),
@@ -42,7 +42,7 @@ setMethod('getArgumentDefaults', signature('lcMethodFlexmixGBTM'), function(obje
 })
 
 #' @rdname interface-flexmix
-setMethod('getArgumentExclusions', signature('lcMethodFlexmixGBTM'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethodFlexmixGBTM', function(object) {
   union(
     callNextMethod(),
     c('data', 'k')
@@ -50,13 +50,13 @@ setMethod('getArgumentExclusions', signature('lcMethodFlexmixGBTM'), function(ob
 })
 
 #' @rdname interface-flexmix
-setMethod('getName', signature('lcMethodFlexmixGBTM'), function(object) 'group-based trajectory model')
+setMethod('getName', 'lcMethodFlexmixGBTM', function(object) 'group-based trajectory model')
 
 #' @rdname interface-flexmix
-setMethod('getShortName', signature('lcMethodFlexmixGBTM'), function(object) 'gbtm')
+setMethod('getShortName', 'lcMethodFlexmixGBTM', function(object) 'gbtm')
 
 #' @rdname interface-flexmix
-setMethod('preFit', signature('lcMethodFlexmixGBTM'), function(method, data, envir, verbose) {
+setMethod('preFit', 'lcMethodFlexmixGBTM', function(method, data, envir, verbose) {
   e = callNextMethod()
   e$model = flexmix::FLXMRglm(family = method$family)
   return(e)

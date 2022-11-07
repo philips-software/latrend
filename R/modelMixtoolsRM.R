@@ -7,7 +7,7 @@ setClass('lcModelMixtoolsRM', contains = 'lcApproxModel')
 #' @inheritParams clusterTrajectories
 #' @param se Whether to compute the standard error of the prediction.
 #' @param ci The confidence interval to compute.
-setMethod('clusterTrajectories', signature('lcModelMixtoolsRM'), function(
+setMethod('clusterTrajectories', 'lcModelMixtoolsRM', function(
     object, at = time(object), what = 'mu', se = TRUE, ci = c(.025, .975), ...)
   {
   if (length(at) == 0) {
@@ -70,7 +70,7 @@ setMethod('clusterTrajectories', signature('lcModelMixtoolsRM'), function(
 
 
 #' @rdname interface-mixtools
-setMethod('postprob', signature('lcModelMixtoolsRM'), function(object, ...) {
+setMethod('postprob', 'lcModelMixtoolsRM', function(object, ...) {
   pp = object@model$posteriors
   colnames(pp) = clusterNames(object)
   return(pp)
@@ -88,6 +88,6 @@ logLik.lcModelMixtoolsRM = function(object, ...) {
 }
 
 #' @rdname interface-mixtools
-setMethod('converged', signature('lcModelMixtoolsRM'), function(object, ...) {
+setMethod('converged', 'lcModelMixtoolsRM', function(object, ...) {
   TRUE
 })

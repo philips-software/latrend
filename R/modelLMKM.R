@@ -51,7 +51,7 @@ logLik.lcModelLMKM = function(object, ...) {
 
 #. converged ####
 #' @rdname interface-featureBased
-setMethod('converged', signature('lcModelLMKM'), function(object, ...) {
+setMethod('converged', 'lcModelLMKM', function(object, ...) {
   if (length(object@converged) > 0) {
     object@converged
   }
@@ -63,7 +63,7 @@ setMethod('converged', signature('lcModelLMKM'), function(object, ...) {
 
 #. postprob ####
 #' @rdname interface-featureBased
-setMethod('postprob', signature('lcModelLMKM'), function(object, ...) {
+setMethod('postprob', 'lcModelLMKM', function(object, ...) {
   k = nrow(object@model$centers)
   postprobFromAssignments(object@model$cluster, k)
 })

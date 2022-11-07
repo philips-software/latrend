@@ -45,7 +45,7 @@ lcMethodMixAK_GLMM = function(
 }
 
 #' @rdname interface-mixAK
-setMethod('getArgumentDefaults', signature('lcMethodMixAK_GLMM'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodMixAK_GLMM', function(object) {
   c(
     formals(lcMethodMixAK_GLMM),
     formals(mixAK::GLMM_MCMC),
@@ -54,7 +54,7 @@ setMethod('getArgumentDefaults', signature('lcMethodMixAK_GLMM'), function(objec
 })
 
 #' @rdname interface-mixAK
-setMethod('getArgumentExclusions', signature('lcMethodMixAK_GLMM'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethodMixAK_GLMM', function(object) {
   union(
     callNextMethod(),
     c('y', 'x', 'z', 'random.intercept', 'silent')
@@ -63,18 +63,18 @@ setMethod('getArgumentExclusions', signature('lcMethodMixAK_GLMM'), function(obj
 
 #' @rdname interface-mixAK
 #' @inheritParams getName
-setMethod('getName', signature('lcMethodMixAK_GLMM'), function(object) 'generalized linear mixed model with normal random effects mixture')
+setMethod('getName', 'lcMethodMixAK_GLMM', function(object) 'generalized linear mixed model with normal random effects mixture')
 
 #' @rdname interface-mixAK
-setMethod('getShortName', signature('lcMethodMixAK_GLMM'), function(object) 'GLMMmix')
+setMethod('getShortName', 'lcMethodMixAK_GLMM', function(object) 'GLMMmix')
 
 #' @rdname interface-mixAK
-setMethod('responseVariable', signature('lcMethodMixAK_GLMM'), function(object) {
+setMethod('responseVariable', 'lcMethodMixAK_GLMM', function(object) {
   getResponse(object$fixed)
 })
 
 #' @rdname interface-mixAK
-setMethod('preFit', signature('lcMethodMixAK_GLMM'), function(method, data, envir, verbose, ...) {
+setMethod('preFit', 'lcMethodMixAK_GLMM', function(method, data, envir, verbose, ...) {
   e = new.env()
 
   # create fixed effects matrix
@@ -100,7 +100,7 @@ setMethod('preFit', signature('lcMethodMixAK_GLMM'), function(method, data, envi
 
 #' @rdname interface-mixAK
 #' @inheritParams fit
-setMethod('fit', signature('lcMethodMixAK_GLMM'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodMixAK_GLMM', function(method, data, envir, verbose, ...) {
   args = as.list(method, args = mixAK::GLMM_MCMC)
   args$y = data[[responseVariable(method)]]
   args$id = data[[idVariable(method)]]

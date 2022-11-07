@@ -75,7 +75,7 @@ lcMethodStratify = function(
 }
 
 #' @rdname interface-featureBased
-setMethod('getArgumentDefaults', signature('lcMethodStratify'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodStratify', function(object) {
   c(
     formals(lcMethodStratify),
     callNextMethod()
@@ -83,7 +83,7 @@ setMethod('getArgumentDefaults', signature('lcMethodStratify'), function(object)
 })
 
 #' @rdname interface-featureBased
-setMethod('getName', signature('lcMethodStratify'), function(object) {
+setMethod('getName', 'lcMethodStratify', function(object) {
   if (isArgDefined(object, 'name') && !is.null(object$name)) {
     return(object$name)
   }
@@ -99,10 +99,10 @@ setMethod('getName', signature('lcMethodStratify'), function(object) {
 })
 
 #' @rdname interface-featureBased
-setMethod('getShortName', signature('lcMethodStratify'), function(object) 'strat')
+setMethod('getShortName', 'lcMethodStratify', function(object) 'strat')
 
 #' @rdname interface-featureBased
-setMethod('compose', signature('lcMethodStratify'), function(method, envir = NULL, ...) {
+setMethod('compose', 'lcMethodStratify', function(method, envir = NULL, ...) {
   evaluate.lcMethod(
     method,
     try = FALSE,
@@ -113,7 +113,7 @@ setMethod('compose', signature('lcMethodStratify'), function(method, envir = NUL
 
 
 #' @rdname interface-featureBased
-setMethod('fit', signature('lcMethodStratify'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodStratify', function(method, data, envir, verbose, ...) {
   data = as.data.table(data)
   id = idVariable(method)
 

@@ -100,7 +100,7 @@ lcMethodFeature = function(
 }
 
 #' @rdname interface-featureBased
-setMethod('getArgumentDefaults', signature('lcMethodFeature'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodFeature', function(object) {
   c(
     formals(lcMethodFeature),
     callNextMethod()
@@ -109,20 +109,20 @@ setMethod('getArgumentDefaults', signature('lcMethodFeature'), function(object) 
 
 #' @rdname interface-featureBased
 #' @inheritParams getName
-setMethod('getName', signature('lcMethodFeature'), function(object) 'two-step clustering')
+setMethod('getName', 'lcMethodFeature', function(object) 'two-step clustering')
 
 #' @rdname interface-featureBased
-setMethod('getShortName', signature('lcMethodFeature'), function(object) 'twostep')
+setMethod('getShortName', 'lcMethodFeature', function(object) 'twostep')
 
 #' @rdname interface-featureBased
-setMethod('prepareData', signature('lcMethodFeature'), function(method, data, verbose, ...) {
+setMethod('prepareData', 'lcMethodFeature', function(method, data, verbose, ...) {
   assert_that(has_name(data, responseVariable(method)))
   callNextMethod()
 })
 
 #' @rdname interface-featureBased
 #' @inheritParams fit
-setMethod('fit', signature('lcMethodFeature'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodFeature', function(method, data, envir, verbose, ...) {
   nIds = uniqueN(data[[idVariable(method)]])
 
   ## Representation step #

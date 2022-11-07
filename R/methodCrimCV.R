@@ -50,7 +50,7 @@ lcMethodCrimCV = function(
 }
 
 #' @rdname interface-crimCV
-setMethod('getArgumentDefaults', signature('lcMethodCrimCV'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodCrimCV', function(object) {
   c(
     formals(lcMethodCrimCV),
     formals(crimCV::crimCV),
@@ -59,7 +59,7 @@ setMethod('getArgumentDefaults', signature('lcMethodCrimCV'), function(object) {
 })
 
 #' @rdname interface-crimCV
-setMethod('getArgumentExclusions', signature('lcMethodCrimCV'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethodCrimCV', function(object) {
   union(
     callNextMethod(),
     c('Dat', 'ng')
@@ -68,13 +68,13 @@ setMethod('getArgumentExclusions', signature('lcMethodCrimCV'), function(object)
 
 #' @rdname interface-crimCV
 #' @inheritParams getName
-setMethod('getName', signature('lcMethodCrimCV'), function(object) 'zero-inflated GBTM using crimcv')
+setMethod('getName', 'lcMethodCrimCV', function(object) 'zero-inflated GBTM using crimcv')
 
 #' @rdname interface-crimCV
-setMethod('getShortName', signature('lcMethodCrimCV'), function(object) 'crimcv')
+setMethod('getShortName', 'lcMethodCrimCV', function(object) 'crimcv')
 
 #' @rdname interface-crimCV
-setMethod('prepareData', signature('lcMethodCrimCV'), function(method, data, verbose, ...) {
+setMethod('prepareData', 'lcMethodCrimCV', function(method, data, verbose, ...) {
   times = sort(unique(data[[timeVariable(method)]]))
 
   refTimes = seq(first(times), last(times), length.out = length(times))
@@ -85,7 +85,7 @@ setMethod('prepareData', signature('lcMethodCrimCV'), function(method, data, ver
 
 #' @rdname interface-crimCV
 #' @inheritParams fit
-setMethod('fit', signature('lcMethodCrimCV'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodCrimCV', function(method, data, envir, verbose, ...) {
   time = timeVariable(method)
 
   args = as.list(method, args = crimCV::crimCV)

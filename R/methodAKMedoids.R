@@ -43,7 +43,7 @@ lcMethodAkmedoids = function(
 }
 
 #' @rdname interface-akmedoids
-setMethod('getArgumentDefaults', signature('lcMethodAkmedoids'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodAkmedoids', function(object) {
   c(
     formals(lcMethodAkmedoids),
     formals(akmedoids::akclustr),
@@ -52,7 +52,7 @@ setMethod('getArgumentDefaults', signature('lcMethodAkmedoids'), function(object
 })
 
 #' @rdname interface-akmedoids
-setMethod('getArgumentExclusions', signature('lcMethodAkmedoids'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethodAkmedoids', function(object) {
   union(
     callNextMethod(),
     c('traj', 'id_field', 'k')
@@ -60,14 +60,14 @@ setMethod('getArgumentExclusions', signature('lcMethodAkmedoids'), function(obje
 })
 
 #' @rdname interface-akmedoids
-setMethod('getName', signature('lcMethodAkmedoids'), function(object) 'anchored k-medoids')
+setMethod('getName', 'lcMethodAkmedoids', function(object) 'anchored k-medoids')
 
 #' @rdname interface-akmedoids
-setMethod('getShortName', signature('lcMethodAkmedoids'), function(object) 'akm')
+setMethod('getShortName', 'lcMethodAkmedoids', function(object) 'akm')
 
 #' @rdname interface-akmedoids
 #' @inheritParams fit
-setMethod('fit', signature('lcMethodAkmedoids'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodAkmedoids', function(method, data, envir, verbose, ...) {
   args = as.list(method, args = akmedoids::akclustr)
   args$traj = envir$dataMat
   args$k = method$nClusters

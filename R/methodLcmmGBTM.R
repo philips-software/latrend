@@ -67,7 +67,7 @@ lcMethodLcmmGBTM = function(
 }
 
 #' @rdname interface-lcmm
-setMethod('getArgumentDefaults', signature('lcMethodLcmmGBTM'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodLcmmGBTM', function(object) {
   c(
     formals(lcMethodLcmmGBTM),
     formals(lcmm::hlme),
@@ -76,7 +76,7 @@ setMethod('getArgumentDefaults', signature('lcMethodLcmmGBTM'), function(object)
 })
 
 #' @rdname interface-lcmm
-setMethod('getArgumentExclusions', signature('lcMethodLcmmGBTM'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethodLcmmGBTM', function(object) {
   union(
     callNextMethod(),
     c('data', 'subject', 'returndata', 'ng', 'verbose')
@@ -86,17 +86,17 @@ setMethod('getArgumentExclusions', signature('lcMethodLcmmGBTM'), function(objec
 
 #' @rdname interface-lcmm
 #' @inheritParams getName
-setMethod('getName', signature('lcMethodLcmmGBTM'), function(object) 'group-based trajectory modeling using lcmm')
+setMethod('getName', 'lcMethodLcmmGBTM', function(object) 'group-based trajectory modeling using lcmm')
 
 #' @rdname interface-lcmm
-setMethod('getShortName', signature('lcMethodLcmmGBTM'), function(object) 'gbtm')
+setMethod('getShortName', 'lcMethodLcmmGBTM', function(object) 'gbtm')
 
 #' @rdname interface-lcmm
-setMethod('preFit', signature('lcMethodLcmmGBTM'), gmm_prepare)
+setMethod('preFit', 'lcMethodLcmmGBTM', gmm_prepare)
 
 #' @rdname interface-lcmm
 #' @inheritParams fit
-setMethod('fit', signature('lcMethodLcmmGBTM'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodLcmmGBTM', function(method, data, envir, verbose, ...) {
   model = gmm_fit(method, data, envir, verbose, ...)
 
   new(
@@ -109,6 +109,6 @@ setMethod('fit', signature('lcMethodLcmmGBTM'), function(method, data, envir, ve
 })
 
 #' @rdname interface-lcmm
-setMethod('responseVariable', signature('lcMethodLcmmGBTM'), function(object, ...) {
+setMethod('responseVariable', 'lcMethodLcmmGBTM', function(object, ...) {
   getResponse(object$fixed)
 })

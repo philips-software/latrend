@@ -8,14 +8,14 @@ setClass('lcMatrixMethod', contains = 'lcMethod')
 
 #' @rdname lcMatrixMethod-class
 #' @inheritParams getName
-setMethod('getName', signature('lcMatrixMethod'), function(object, ...) 'repeated measures model')
+setMethod('getName', 'lcMatrixMethod', function(object, ...) 'repeated measures model')
 
 #' @rdname lcMatrixMethod-class
-setMethod('getShortName', signature('lcMatrixMethod'), function(object, ...) 'rm')
+setMethod('getShortName', 'lcMatrixMethod', function(object, ...) 'rm')
 
 #' @rdname lcMatrixMethod-class
 #' @inheritParams prepareData
-setMethod('prepareData', signature('lcMatrixMethod'), function(method, data, verbose, ...) {
+setMethod('prepareData', 'lcMatrixMethod', function(method, data, verbose, ...) {
   e = new.env()
 
   data = as.data.table(data)

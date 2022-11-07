@@ -63,7 +63,7 @@ setValidity('lcMethodFunction', function(object) {
 })
 
 #' @rdname interface-custom
-setMethod('getArgumentDefaults', signature('lcMethodFunction'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodFunction', function(object) {
   c(
     formals(lcMethodFunction),
     callNextMethod()
@@ -72,7 +72,7 @@ setMethod('getArgumentDefaults', signature('lcMethodFunction'), function(object)
 
 #' @rdname interface-custom
 #' @inheritParams getName
-setMethod('getName', signature('lcMethodFunction'), function(object) {
+setMethod('getName', 'lcMethodFunction', function(object) {
   if (isArgDefined(object, 'name') && !is.null(object$name)) {
     return (object$name)
   }
@@ -88,17 +88,17 @@ setMethod('getName', signature('lcMethodFunction'), function(object) {
 })
 
 #' @rdname interface-custom
-setMethod('getShortName', signature('lcMethodFunction'), function(object) 'custom')
+setMethod('getShortName', 'lcMethodFunction', function(object) 'custom')
 
 #' @rdname interface-custom
-setMethod('prepareData', signature('lcMethodFunction'), function(method, data, verbose) {
+setMethod('prepareData', 'lcMethodFunction', function(method, data, verbose) {
   assert_that(has_name(data, responseVariable(method)))
   callNextMethod()
 })
 
 #' @rdname interface-custom
 #' @inheritParams fit
-setMethod('fit', signature('lcMethodFunction'), function(method, data, envir, verbose) {
+setMethod('fit', 'lcMethodFunction', function(method, data, envir, verbose) {
   args = as.list(method)
   args$data = data
 

@@ -18,7 +18,7 @@ fitted.lcModelFlexmix = function(object, ..., clusters = trajectoryAssignments(o
 #. predictForCluster ####
 #' @rdname interface-flexmix
 #' @inheritParams predictForCluster
-setMethod('predictForCluster', signature('lcModelFlexmix'), function(
+setMethod('predictForCluster', 'lcModelFlexmix', function(
   object, newdata, cluster, what = 'mu', ...)
 {
   assert_that(what == 'mu', msg = 'only what="mu" is supported')
@@ -40,7 +40,7 @@ setMethod('predictForCluster', signature('lcModelFlexmix'), function(
 
 
 #' @rdname interface-flexmix
-setMethod('postprob', signature('lcModelFlexmix'), function(object, ...) {
+setMethod('postprob', 'lcModelFlexmix', function(object, ...) {
   pp = postProbFromObs(object@model@posterior$scaled, make.idRowIndices(object))
   colnames(pp) = clusterNames(object)
   return(pp)
@@ -68,6 +68,6 @@ coef.lcModelFlexmix = function(object, ...) {
 
 
 #' @rdname interface-flexmix
-setMethod('converged', signature('lcModelFlexmix'), function(object, ...) {
+setMethod('converged', 'lcModelFlexmix', function(object, ...) {
   object@model@converged
 })

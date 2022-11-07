@@ -29,7 +29,7 @@ lcMethodLMKM = function(
 }
 
 #' @rdname interface-featureBased
-setMethod('getArgumentDefaults', signature('lcMethodLMKM'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodLMKM', function(object) {
   c(
     formals(lcMethodLMKM),
     formals(lm),
@@ -39,7 +39,7 @@ setMethod('getArgumentDefaults', signature('lcMethodLMKM'), function(object) {
 })
 
 #' @rdname interface-featureBased
-setMethod('getArgumentExclusions', signature('lcMethodLMKM'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethodLMKM', function(object) {
   union(
     callNextMethod(),
     c('x', 'data', 'centers', 'trace')
@@ -47,13 +47,13 @@ setMethod('getArgumentExclusions', signature('lcMethodLMKM'), function(object) {
 })
 
 #' @rdname interface-featureBased
-setMethod('getName', signature('lcMethodLMKM'), function(object) 'lm-kmeans')
+setMethod('getName', 'lcMethodLMKM', function(object) 'lm-kmeans')
 
 #' @rdname interface-featureBased
-setMethod('getShortName', signature('lcMethodLMKM'), function(object) 'lmkm')
+setMethod('getShortName', 'lcMethodLMKM', function(object) 'lmkm')
 
 #' @rdname interface-featureBased
-setMethod('prepareData', signature('lcMethodLMKM'), function(method, data, verbose) {
+setMethod('prepareData', 'lcMethodLMKM', function(method, data, verbose) {
   cat(verbose, 'Representation step...')
   lmArgs = as.list(method, args = lm)
 
@@ -70,7 +70,7 @@ setMethod('prepareData', signature('lcMethodLMKM'), function(method, data, verbo
 })
 
 #' @rdname interface-featureBased
-setMethod('fit', signature('lcMethodLMKM'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodLMKM', function(method, data, envir, verbose, ...) {
   cat(verbose, 'Cluster step...')
   km = kmeans(
     envir$x,

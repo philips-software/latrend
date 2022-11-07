@@ -107,7 +107,7 @@ lcMethodMixTVEM = function(
 }
 
 #' @rdname interface-mixtvem
-setMethod('getArgumentDefaults', signature('lcMethodMixTVEM'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodMixTVEM', function(object) {
   c(
     formals(lcMethodMixTVEM),
     formals(TVEMMixNormal),
@@ -116,7 +116,7 @@ setMethod('getArgumentDefaults', signature('lcMethodMixTVEM'), function(object) 
 })
 
 #' @rdname interface-mixtvem
-setMethod('getArgumentExclusions', signature('lcMethodMixTVEM'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethodMixTVEM', function(object) {
   union(
     callNextMethod(),
     c('doPlot', 'getSEs', 'numClasses')
@@ -125,13 +125,13 @@ setMethod('getArgumentExclusions', signature('lcMethodMixTVEM'), function(object
 
 #' @rdname interface-mixtvem
 #' @inheritParams getName
-setMethod('getName', signature('lcMethodMixTVEM'), function(object) 'mixture of time-varying effect models')
+setMethod('getName', 'lcMethodMixTVEM', function(object) 'mixture of time-varying effect models')
 
 #' @rdname interface-mixtvem
-setMethod('getShortName', signature('lcMethodMixTVEM'), function(object) 'mixtvem')
+setMethod('getShortName', 'lcMethodMixTVEM', function(object) 'mixtvem')
 
 #' @rdname interface-mixtvem
-setMethod('preFit', signature('lcMethodMixTVEM'), function(method, data, envir, verbose, ...) {
+setMethod('preFit', 'lcMethodMixTVEM', function(method, data, envir, verbose, ...) {
   e = new.env()
   f.t = getSpecialFormula(method$formula, special = 'time')
   f.x = dropSpecial(method$formula, special = 'time')
@@ -159,7 +159,7 @@ setMethod('preFit', signature('lcMethodMixTVEM'), function(method, data, envir, 
 
 #' @rdname interface-mixtvem
 #' @inheritParams fit
-setMethod('fit', signature('lcMethodMixTVEM'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodMixTVEM', function(method, data, envir, verbose, ...) {
   args = c(as.list(envir), as.list(method))
   args$id = data[[idVariable(method)]]
   args$time = data[[timeVariable(method)]]

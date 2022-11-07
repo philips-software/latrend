@@ -44,14 +44,14 @@ predict.lcModelMixTVEM = function(object, ...,
 }
 
 #' @rdname interface-mixtvem
-setMethod('postprob', signature('lcModelMixTVEM'), function(object, ...) {
+setMethod('postprob', 'lcModelMixTVEM', function(object, ...) {
   pp = object@model$bestFit$postProbsBySub
   colnames(pp) = clusterNames(object)
   return(pp)
 })
 
 #' @rdname interface-mixtvem
-setMethod('converged', signature('lcModelMixTVEM'), function(object, ...) {
+setMethod('converged', 'lcModelMixTVEM', function(object, ...) {
   object@model$bestFit$converged
 })
 

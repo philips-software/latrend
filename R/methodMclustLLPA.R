@@ -49,7 +49,7 @@ lcMethodMclustLLPA = function(
 }
 
 #' @rdname interface-mclust
-setMethod('getArgumentDefaults', signature('lcMethodMclustLLPA'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodMclustLLPA', function(object) {
   .loadOptionalPackage('mclust')
   c(
     formals(lcMethodMclustLLPA),
@@ -59,7 +59,7 @@ setMethod('getArgumentDefaults', signature('lcMethodMclustLLPA'), function(objec
 })
 
 #' @rdname interface-mclust
-setMethod('getArgumentExclusions', signature('lcMethodMclustLLPA'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethodMclustLLPA', function(object) {
   union(
     callNextMethod(),
     c('data', 'G', 'verbose')
@@ -68,13 +68,13 @@ setMethod('getArgumentExclusions', signature('lcMethodMclustLLPA'), function(obj
 
 #' @rdname interface-mclust
 #' @inheritParams getName
-setMethod('getName', signature('lcMethodMclustLLPA'), function(object) 'longitudinal latent profile analysis')
+setMethod('getName', 'lcMethodMclustLLPA', function(object) 'longitudinal latent profile analysis')
 
 #' @rdname interface-mclust
-setMethod('getShortName', signature('lcMethodMclustLLPA'), function(object) 'llpa')
+setMethod('getShortName', 'lcMethodMclustLLPA', function(object) 'llpa')
 
 #' @rdname interface-mclust
-setMethod('prepareData', signature('lcMethodMclustLLPA'), function(method, data, verbose, ...) {
+setMethod('prepareData', 'lcMethodMclustLLPA', function(method, data, verbose, ...) {
   e = new.env()
 
   valueColumn = responseVariable(method)
@@ -90,13 +90,13 @@ setMethod('prepareData', signature('lcMethodMclustLLPA'), function(method, data,
 })
 
 #' @rdname interface-mclust
-setMethod('compose', signature('lcMethodMclustLLPA'), function(method, envir = NULL) {
+setMethod('compose', 'lcMethodMclustLLPA', function(method, envir = NULL) {
   evaluate.lcMethod(method, try = TRUE, envir = envir)
 })
 
 #' @rdname interface-mclust
 #' @inheritParams fit
-setMethod('fit', signature('lcMethodMclustLLPA'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodMclustLLPA', function(method, data, envir, verbose, ...) {
   args = as.list(method, args = mclust::Mclust)
   args$data = envir$data
   args$G = method$nClusters

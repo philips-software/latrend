@@ -42,7 +42,7 @@ fitted.lcModelLcmmGMM = function(object, ..., clusters = trajectoryAssignments(o
 #. predictForCluster ####
 #' @rdname interface-lcmm
 #' @inheritParams predictForCluster
-setMethod('predictForCluster', signature('lcModelLcmmGMM'),
+setMethod('predictForCluster', 'lcModelLcmmGMM',
   function(
     object,
     newdata,
@@ -119,7 +119,7 @@ nobs.lcModelLcmmGMM = function(object, ...) {
 
 
 #' @rdname interface-lcmm
-setMethod('postprob', signature('lcModelLcmmGMM'), function(object, ...) {
+setMethod('postprob', 'lcModelLcmmGMM', function(object, ...) {
   pp = object@model$pprob %>%
     as.matrix() %>%
     .[, c(-1, -2), drop = FALSE]
@@ -129,6 +129,6 @@ setMethod('postprob', signature('lcModelLcmmGMM'), function(object, ...) {
 
 
 #' @rdname interface-lcmm
-setMethod('converged', signature('lcModelLcmmGMM'), function(object, ...) {
+setMethod('converged', 'lcModelLcmmGMM', function(object, ...) {
   object@model$conv
 })

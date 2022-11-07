@@ -125,14 +125,14 @@ as.data.frame.lcModels = function(
 #' @export
 #' @rdname estimationTime
 #' @param object The list of `lcModel` objects.
-setMethod('estimationTime', signature('lcModels'), function(object, unit, ...) {
+setMethod('estimationTime', 'lcModels', function(object, unit, ...) {
   sum(vapply(object, estimationTime, unit = unit, ..., FUN.VALUE = 0), na.rm = TRUE)
 })
 
 
 #' @export
 #' @rdname estimationTime
-setMethod('estimationTime', signature('list'), function(object, unit, ...) {
+setMethod('estimationTime', 'list', function(object, unit, ...) {
   models = as.lcModels(object)
   estimationTime(models, unit = unit, ...)
 })
@@ -195,7 +195,7 @@ setMethod('estimationTime', signature('list'), function(object, unit, ...) {
 #' @aliases externalMetric,lcModels,missing-method
 #' @return For `externalMetric(lcModels)`: A distance matrix of class [dist] representing
 #' the pairwise comparisons.
-setMethod('externalMetric', signature('lcModels', 'missing'),
+setMethod('externalMetric', c('lcModels', 'missing'),
   function(object, object2, name = 'adjustedRand') {
     .externalMetricDist.lcModels(object, name = name)
 })
@@ -206,7 +206,7 @@ setMethod('externalMetric', signature('lcModels', 'missing'),
 #' @aliases externalMetric,lcModels,character-method
 #' @return For `externalMetric(lcModels, name)`: A distance matrix of class [dist] representing
 #' the pairwise comparisons.
-setMethod('externalMetric', signature('lcModels', 'character'),
+setMethod('externalMetric', c('lcModels', 'character'),
   function(object, object2 = 'adjustedRand') {
     .externalMetricDist.lcModels(object, name = object2)
 })
@@ -217,7 +217,7 @@ setMethod('externalMetric', signature('lcModels', 'character'),
 #' @aliases externalMetric,lcModels,lcModels-method
 #' @return For `externalMetric(lcModels, lcModel)`: A named `numeric` vector or `data.frame`
 #' containing the computed model metrics.
-setMethod('externalMetric', signature('lcModels', 'lcModel'), .externalMetric.lcModels)
+setMethod('externalMetric', c('lcModels', 'lcModel'), .externalMetric.lcModels)
 
 
 #' @export
@@ -226,7 +226,7 @@ setMethod('externalMetric', signature('lcModels', 'lcModel'), .externalMetric.lc
 #' @inheritParams metric
 #' @return For `externalMetric(list, lcModel)`: A named `numeric` vector or `data.frame`
 #' containing the computed model metrics.
-setMethod('externalMetric', signature('list', 'lcModel'),
+setMethod('externalMetric', c('list', 'lcModel'),
   function(object, object2, name, drop = TRUE) {
     models = as.lcModels(object)
     .externalMetric.lcModels(models, object2, name, drop = drop)
@@ -267,14 +267,14 @@ setMethod('externalMetric', signature('list', 'lcModel'),
 #' @param drop Whether to return a `numeric vector` instead of a `data.frame`
 #' in case of a single metric.
 #' @return For `metric(list)`: A `data.frame` with a metric per column.
-setMethod('metric', signature('list'), function(object, name, drop = TRUE) {
+setMethod('metric', 'list', function(object, name, drop = TRUE) {
   .metric.lcModels(as.lcModels(object), name, drop = drop)
 })
 
 #' @export
 #' @rdname metric
 #' @return For `metric(lcModels)`: A `data.frame` with a metric per column.
-setMethod('metric', signature('lcModels'), .metric.lcModels)
+setMethod('metric', 'lcModels', .metric.lcModels)
 
 #' @export
 #' @title Select the lcModel with the lowest metric value
@@ -357,7 +357,7 @@ max.lcModels = function(x, name, ...) {
 #' @param y Not used.
 #' @param ... Additional parameters passed to the `plot()` call for each `lcModel` object.
 #' @param gridArgs Named list of parameters passed to [gridExtra::arrangeGrob].
-setMethod('plot', signature('lcModels', 'ANY'), function(x, y, ..., subset, gridArgs = list()) {
+setMethod('plot', c('lcModels', 'ANY'), function(x, y, ..., subset, gridArgs = list()) {
   if (length(x) == 0) {
     warning('Cannot plot empty list of models')
     return(invisible(FALSE))
@@ -539,10 +539,12 @@ subset.lcModels = function(x, subset, drop = FALSE, ...) {
 #' @param summary Whether to print the complete summary per model. This may be slow for long lists!
 #' @param excludeShared Whether to exclude model arguments which are identical across all models.
 #' @family lcModel list functions
-print.lcModels = function(x,
-                          ...,
-                          summary = FALSE,
-                          excludeShared = !getOption('latrend.printSharedModelArgs')) {
+print.lcModels = function(
+  x,
+  ...,
+  summary = FALSE,
+  excludeShared = !getOption('latrend.printSharedModelArgs')
+) {
   if (isTRUE(summary)) {
     as.list(x) %>% print()
   } else {

@@ -17,7 +17,7 @@
 #' @aliases trajectoryAssignments,matrix-method
 #' @details In case `object` is a `matrix`: the posterior probability `matrix`, with the \eqn{k}th column containing the observation- or trajectory-specific probability for cluster \eqn{k}.
 #' @param clusterNames Optional `character vector` with the cluster names. If `clusterNames = NULL`, [make.clusterNames()] is used.
-setMethod('trajectoryAssignments', signature('matrix'), function(object, strategy = which.max, clusterNames = colnames(object), ...) {
+setMethod('trajectoryAssignments', 'matrix', function(object, strategy = which.max, clusterNames = colnames(object), ...) {
   assert_that(is_valid_postprob(object))
 
   nTraj = nrow(object)

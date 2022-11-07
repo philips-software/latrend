@@ -40,7 +40,7 @@ lcMethodFlexmix = function(
 }
 
 #' @rdname interface-flexmix
-setMethod('getArgumentDefaults', signature('lcMethodFlexmix'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodFlexmix', function(object) {
   c(
     formals(lcMethodFlexmix),
     formals(flexmix::flexmix),
@@ -49,7 +49,7 @@ setMethod('getArgumentDefaults', signature('lcMethodFlexmix'), function(object) 
 })
 
 #' @rdname interface-flexmix
-setMethod('getArgumentExclusions', signature('lcMethodFlexmix'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethodFlexmix', function(object) {
   union(
     callNextMethod(),
     c('data', 'concomitant', 'k')
@@ -57,13 +57,13 @@ setMethod('getArgumentExclusions', signature('lcMethodFlexmix'), function(object
 })
 
 #' @rdname interface-flexmix
-setMethod('getName', signature('lcMethodFlexmix'), function(object) 'flexmix')
+setMethod('getName', 'lcMethodFlexmix', function(object) 'flexmix')
 
 #' @rdname interface-flexmix
-setMethod('getShortName', signature('lcMethodFlexmix'), function(object) 'flx')
+setMethod('getShortName', 'lcMethodFlexmix', function(object) 'flx')
 
 #' @rdname interface-flexmix
-setMethod('preFit', signature('lcMethodFlexmix'), function(method, data, envir, verbose, ...) {
+setMethod('preFit', 'lcMethodFlexmix', function(method, data, envir, verbose, ...) {
   e = new.env()
 
   f = formula(method) %>% dropRE()
@@ -86,7 +86,7 @@ setMethod('preFit', signature('lcMethodFlexmix'), function(method, data, envir, 
 
 #' @rdname interface-flexmix
 #' @inheritParams fit
-setMethod('fit', signature('lcMethodFlexmix'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodFlexmix', function(method, data, envir, verbose, ...) {
   args = as.list(method, args = flexmix::flexmix)
   args$data = data
   args$formula = envir$formula

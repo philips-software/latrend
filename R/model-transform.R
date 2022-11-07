@@ -66,7 +66,7 @@ setGeneric('transformFitted', function(pred, model, clusters = NULL) {
 
 #' @rdname transformFitted
 #' @aliases transformFitted,NULL,lcModel-method
-setMethod('transformFitted', signature('NULL', 'lcModel'), function(pred, model, clusters) {
+setMethod('transformFitted', c('NULL', 'lcModel'), function(pred, model, clusters) {
   suppressWarnings({
     newpred = matrix(NA_real_, nrow = .ndobs(model), ncol = nClusters(model))
   })
@@ -77,7 +77,7 @@ setMethod('transformFitted', signature('NULL', 'lcModel'), function(pred, model,
 
 #' @rdname transformFitted
 #' @aliases transformFitted,matrix,lcModel-method
-setMethod('transformFitted', signature('matrix', 'lcModel'), function(pred, model, clusters) {
+setMethod('transformFitted', c('matrix', 'lcModel'), function(pred, model, clusters) {
   suppressWarnings({
     err = validate_that(
       is.numeric(pred),
@@ -108,7 +108,7 @@ setMethod('transformFitted', signature('matrix', 'lcModel'), function(pred, mode
 
 #' @rdname transformFitted
 #' @aliases transformFitted,list,lcModel-method
-setMethod('transformFitted', signature('list', 'lcModel'), function(pred, model, clusters) {
+setMethod('transformFitted', c('list', 'lcModel'), function(pred, model, clusters) {
   assert_that(
     length(pred) == nClusters(model),
     is_named(pred),
@@ -124,7 +124,7 @@ setMethod('transformFitted', signature('list', 'lcModel'), function(pred, model,
 #' @rdname transformFitted
 #' @importFrom utils unstack
 #' @aliases transformFitted,data.frame,lcModel-method
-setMethod('transformFitted', signature('data.frame', 'lcModel'), function(pred, model, clusters) {
+setMethod('transformFitted', c('data.frame', 'lcModel'), function(pred, model, clusters) {
   assert_that(
     has_name(pred, c('Fit', 'Cluster')),
     noNA(pred$Cluster),
@@ -246,7 +246,7 @@ setGeneric('transformPredict', function(pred, model, newdata) {
 
 #' @rdname transformPredict
 #' @aliases transformPredict,NULL,lcModel-method
-setMethod('transformPredict', signature('NULL', 'lcModel'), function(pred, model, newdata) {
+setMethod('transformPredict', c('NULL', 'lcModel'), function(pred, model, newdata) {
   assert_that(
     nrow(newdata) == 0,
     msg = sprintf(
@@ -267,7 +267,7 @@ setMethod('transformPredict', signature('NULL', 'lcModel'), function(pred, model
 
 #' @rdname transformPredict
 #' @aliases transformPredict,vector,lcModel-method
-setMethod('transformPredict', signature('vector', 'lcModel'), function(pred, model, newdata) {
+setMethod('transformPredict', c('vector', 'lcModel'), function(pred, model, newdata) {
   assert_that(
     length(pred) == nrow(newdata),
     msg = sprintf(
@@ -289,7 +289,7 @@ setMethod('transformPredict', signature('vector', 'lcModel'), function(pred, mod
 
 #' @rdname transformPredict
 #' @aliases transformPredict,matrix,lcModel-method
-setMethod('transformPredict', signature('matrix', 'lcModel'), function(pred, model, newdata) {
+setMethod('transformPredict', c('matrix', 'lcModel'), function(pred, model, newdata) {
   # format where multiple cluster-specific predictions are given per newdata entry (per row)
   assert_that(
     is.matrix(pred),
@@ -314,7 +314,7 @@ setMethod('transformPredict', signature('matrix', 'lcModel'), function(pred, mod
 
 #' @rdname transformPredict
 #' @aliases transformPredict,data.frame,lcModel-method
-setMethod('transformPredict', signature('data.frame', 'lcModel'), function(pred, model, newdata) {
+setMethod('transformPredict', c('data.frame', 'lcModel'), function(pred, model, newdata) {
   assert_that(
     has_name(pred, c('Fit', 'Cluster')),
     is_valid_cluster_name(pred$Cluster, model = model)

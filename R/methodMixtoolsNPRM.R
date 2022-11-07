@@ -36,7 +36,7 @@ lcMethodMixtoolsNPRM = function(
 }
 
 #' @rdname interface-mixtools
-setMethod('getArgumentDefaults', signature('lcMethodMixtoolsNPRM'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodMixtoolsNPRM', function(object) {
   c(
     formals(lcMethodMixtoolsNPRM),
     formals(mixtools::npEM),
@@ -45,7 +45,7 @@ setMethod('getArgumentDefaults', signature('lcMethodMixtoolsNPRM'), function(obj
 })
 
 #' @rdname interface-mixtools
-setMethod('getArgumentExclusions', signature('lcMethodMixtoolsNPRM'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethodMixtoolsNPRM', function(object) {
   union(
     callNextMethod(),
     c('data', 'x', 'mu0', 'verb')
@@ -53,13 +53,13 @@ setMethod('getArgumentExclusions', signature('lcMethodMixtoolsNPRM'), function(o
 })
 
 #' @rdname interface-mixtools
-setMethod('getName', signature('lcMethodMixtoolsNPRM'), function(object) 'non-parametric estimation for independent repeated measurements using mixtools')
+setMethod('getName', 'lcMethodMixtoolsNPRM', function(object) 'non-parametric estimation for independent repeated measurements using mixtools')
 
 #' @rdname interface-mixtools
-setMethod('getShortName', signature('lcMethodMixtoolsNPRM'), function(object) 'nprm')
+setMethod('getShortName', 'lcMethodMixtoolsNPRM', function(object) 'nprm')
 
 #' @rdname interface-mixtools
-setMethod('fit', signature('lcMethodMixtoolsNPRM'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodMixtoolsNPRM', function(method, data, envir, verbose, ...) {
   args = as.list(method, args = mixtools::npEM)
   args$x = envir$dataMat
   args$mu0 = method$nClusters

@@ -7,7 +7,7 @@ skip_if(parallel::detectCores(logical = FALSE) < 2)
 
 init_methodSleep = expression({
   setClass('lcMethodSleep', contains = 'lcMethodRandom')
-  setMethod('fit', signature('lcMethodSleep'), function(method, data, envir, verbose, ...) {
+  setMethod('fit', 'lcMethodSleep', function(method, data, envir, verbose, ...) {
     stopifnot(
       is.data.frame(data),
       nrow(data) > 0

@@ -5,7 +5,7 @@ setClass('lcModelMixtoolsGMM', contains = 'lcModel')
 #. clusterTrajectories ####
 #' @rdname interface-mixtools
 #' @inheritParams predictForCluster
-setMethod('predictForCluster', signature('lcModelMixtoolsGMM'), function(
+setMethod('predictForCluster', 'lcModelMixtoolsGMM', function(
   object, newdata, cluster, what = 'mu', ...)
 {
   assert_that(what == 'mu')
@@ -45,7 +45,7 @@ setMethod('predictForCluster', signature('lcModelMixtoolsGMM'), function(
 
 
 #' @rdname interface-mixtools
-setMethod('postprob', signature('lcModelMixtoolsGMM'), function(object, ...) {
+setMethod('postprob', 'lcModelMixtoolsGMM', function(object, ...) {
   pp = object@model$posterior.z
   colnames(pp) = clusterNames(object)
   return(pp)

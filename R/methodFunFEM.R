@@ -46,7 +46,7 @@ lcMethodFunFEM = function(
 }
 
 #' @rdname interface-funFEM
-setMethod('getArgumentDefaults', signature('lcMethodFunFEM'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodFunFEM', function(object) {
   c(
     formals(lcMethodFunFEM),
     formals(funFEM::funFEM),
@@ -55,7 +55,7 @@ setMethod('getArgumentDefaults', signature('lcMethodFunFEM'), function(object) {
 })
 
 #' @rdname interface-funFEM
-setMethod('getArgumentExclusions', signature('lcMethodFunFEM'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethodFunFEM', function(object) {
   union(
     callNextMethod(),
     c('fd', 'K', 'disp', 'graph')
@@ -63,13 +63,13 @@ setMethod('getArgumentExclusions', signature('lcMethodFunFEM'), function(object)
 })
 
 #' @rdname interface-funFEM
-setMethod('getName', signature('lcMethodFunFEM'), function(object) 'functional subspace clustering with FunFEM')
+setMethod('getName', 'lcMethodFunFEM', function(object) 'functional subspace clustering with FunFEM')
 
 #' @rdname interface-funFEM
-setMethod('getShortName', signature('lcMethodFunFEM'), function(object) 'funfem')
+setMethod('getShortName', 'lcMethodFunFEM', function(object) 'funfem')
 
 #' @rdname interface-funFEM
-setMethod('preFit', signature('lcMethodFunFEM'), function(method, data, envir, verbose, ...) {
+setMethod('preFit', 'lcMethodFunFEM', function(method, data, envir, verbose, ...) {
   requireNamespace('fda')
   requireNamespace('funFEM')
 
@@ -82,7 +82,7 @@ setMethod('preFit', signature('lcMethodFunFEM'), function(method, data, envir, v
 
 #' @rdname interface-funFEM
 #' @inheritParams fit
-setMethod('fit', signature('lcMethodFunFEM'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodFunFEM', function(method, data, envir, verbose, ...) {
   args = as.list(method, args = funFEM::funFEM)
   args$fd = envir$fd
   args$K = method$nClusters

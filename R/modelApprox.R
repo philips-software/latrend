@@ -25,7 +25,7 @@ fitted.lcApproxModel = function(object, ..., clusters = trajectoryAssignments(ob
 #' @rdname lcApproxModel-class
 #' @inheritParams predictForCluster
 #' @param approxFun Function to interpolate between measurement moments, \link[stats]{approx}() by default.
-setMethod('predictForCluster', signature('lcApproxModel'),
+setMethod('predictForCluster', 'lcApproxModel',
   function(object, newdata, cluster, what = 'mu', approxFun = approx, ...) {
   assert_that(is.function(approxFun))
 

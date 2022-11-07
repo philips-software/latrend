@@ -41,7 +41,7 @@ lcMethodDtwclust = function(
 }
 
 #' @rdname interface-dtwclust
-setMethod('getArgumentDefaults', signature('lcMethodDtwclust'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodDtwclust', function(object) {
   .loadOptionalPackage('dtwclust')
   c(
     formals(lcMethodDtwclust),
@@ -51,7 +51,7 @@ setMethod('getArgumentDefaults', signature('lcMethodDtwclust'), function(object)
 })
 
 #' @rdname interface-dtwclust
-setMethod('getArgumentExclusions', signature('lcMethodDtwclust'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethodDtwclust', function(object) {
   union(
     callNextMethod(),
     c('series', 'k', 'trace')
@@ -60,13 +60,13 @@ setMethod('getArgumentExclusions', signature('lcMethodDtwclust'), function(objec
 
 #' @rdname interface-dtwclust
 #' @inheritParams getName
-setMethod('getName', signature('lcMethodDtwclust'), function(object) paste0('time series clustering with ', object$distance, '-dissimilarity'))
+setMethod('getName', 'lcMethodDtwclust', function(object) paste0('time series clustering with ', object$distance, '-dissimilarity'))
 
 #' @rdname interface-dtwclust
-setMethod('getShortName', signature('lcMethodDtwclust'), function(object) paste0('diss-', object$distance))
+setMethod('getShortName', 'lcMethodDtwclust', function(object) paste0('diss-', object$distance))
 
 #' @rdname interface-dtwclust
-setMethod('preFit', signature('lcMethodDtwclust'), function(method, data, envir, verbose, ...) {
+setMethod('preFit', 'lcMethodDtwclust', function(method, data, envir, verbose, ...) {
   e = new.env()
   # convert data to list format
   e$seriesList = split(data, data[[idVariable(method)]]) %>%
@@ -76,7 +76,7 @@ setMethod('preFit', signature('lcMethodDtwclust'), function(method, data, envir,
 
 #' @rdname interface-dtwclust
 #' @inheritParams fit
-setMethod('fit', signature('lcMethodDtwclust'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodDtwclust', function(method, data, envir, verbose, ...) {
   args = as.list(method)
   args$series = envir$seriesList
   args$k = method$nClusters

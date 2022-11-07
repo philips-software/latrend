@@ -233,7 +233,7 @@ clusterSizes = function(object, ...) {
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 #' model <- latrend(method, latrendData, nClusters = 2)
 #' clusterProportions(model)
-setMethod('clusterProportions', signature('lcModel'), function(object, ...) {
+setMethod('clusterProportions', 'lcModel', function(object, ...) {
   pp = postprob(object, ...)
   assert_that(
     !is.null(pp),
@@ -303,7 +303,7 @@ coef.lcModel = function(object, ...) {
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 #' model <- latrend(method, latrendData, nClusters = 2)
 #' converged(model)
-setMethod('converged', signature('lcModel'), function(object, ...) {
+setMethod('converged', 'lcModel', function(object, ...) {
   NA
 })
 
@@ -370,7 +370,7 @@ df.residual.lcModel = function(object, ...) {
 #'   externalMetric(model2, model3, "adjustedRand")
 #' }
 #' @family metric functions
-setMethod('externalMetric', signature('lcModel', 'lcModel'), function(object, object2, name, ...) {
+setMethod('externalMetric', c('lcModel', 'lcModel'), function(object, object2, name, ...) {
   assert_that(length(name) > 0, msg = 'no external metric names provided')
   assert_that(is.character(name))
 
@@ -467,7 +467,7 @@ fitted.lcModel = function(object, ..., clusters = trajectoryAssignments(object))
 #'
 #' fittedTrajectories(model, at = time(model)[c(1, 2)])
 #' @family model-specific methods
-setMethod('fittedTrajectories', signature('lcModel'), function(object, at, what, clusters, ...) {
+setMethod('fittedTrajectories', 'lcModel', function(object, at, what, clusters, ...) {
   assert_that(
     is.null(clusters) || length(clusters) == nIds(object),
     is.numeric(at),
@@ -565,7 +565,7 @@ getCall.lcModel = function(x, ...) {
 #' @export
 #' @rdname getLabel
 #' @aliases getLabel,lcModel-method
-setMethod('getLabel', signature('lcModel'), function(object, ...) {
+setMethod('getLabel', 'lcModel', function(object, ...) {
   lbl = object@label
   if (length(lbl) > 0) {
     lbl
@@ -588,14 +588,14 @@ setMethod('getLabel', signature('lcModel'), function(object, ...) {
 #' method <- lcMethodRandom("Y", id = "Id", time = "Time")
 #' model <- latrend(method, latrendData)
 #' getLcMethod(model)
-setMethod('getLcMethod', signature('lcModel'), function(object) object@method)
+setMethod('getLcMethod', 'lcModel', function(object) object@method)
 
 
 # . getName ####
 #' @export
 #' @rdname getName
 #' @aliases getName,lcModel-method
-setMethod('getName', signature('lcModel'), function(object) {
+setMethod('getName', 'lcModel', function(object) {
   basename = getLcMethod(object) %>% getName()
   lbl = getLabel(object)
   if (length(lbl) > 0 && nchar(lbl) > 0) {
@@ -609,7 +609,7 @@ setMethod('getName', signature('lcModel'), function(object) {
 #' @export
 #' @rdname getName
 #' @aliases getShortName,lcModel-method
-setMethod('getShortName',  signature('lcModel'),
+setMethod('getShortName',  'lcModel',
   function(object) getShortName(getLcMethod(object))
 )
 
@@ -646,7 +646,7 @@ ids = function(object) {
 #' model <- latrend(method, latrendData)
 #' idVariable(model) # "Id"
 #' @family lcModel variables
-setMethod('idVariable', signature('lcModel'), function(object) object@id)
+setMethod('idVariable', 'lcModel', function(object) object@id)
 
 
 #' @export
@@ -671,7 +671,7 @@ is.lcModel = function(x) {
 #'   metric(model, c("WMAE", "Dunn"))
 #' }
 #' @family metric functions
-setMethod('metric', signature('lcModel'), function(object, name, ...) {
+setMethod('metric', 'lcModel', function(object, name, ...) {
   assert_that(length(name) > 0, msg = 'no metric names provided')
   assert_that(
     is.lcModel(object),
@@ -1076,7 +1076,7 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ..., useCluster 
 #'
 #' # all fitted values under cluster B
 #' predictForCluster(model, cluster = "B")
-setMethod('predictForCluster', signature('lcModel'),
+setMethod('predictForCluster', 'lcModel',
   function(object, newdata = NULL, cluster, ..., what = 'mu') {
   # check whether predict.lcModelType exists
   cls = class(object)
@@ -1116,7 +1116,7 @@ setMethod('predictForCluster', signature('lcModel'),
 #' })
 #' }
 #' @family model-specific methods
-setMethod('predictPostprob', signature('lcModel'), function(object, newdata = NULL, ...) {
+setMethod('predictPostprob', 'lcModel', function(object, newdata = NULL, ...) {
   if (is.null(newdata)) {
     N = nrow(model.data(object))
     pp = postprob(object, ...)
@@ -1157,7 +1157,7 @@ setMethod('predictPostprob', signature('lcModel'), function(object, newdata = NU
 #'   predictAssignments(model, newdata = data.frame(Id = 999, Y = 0, Time = 0))
 #' }
 #' }
-setMethod('predictAssignments', signature('lcModel'), function(
+setMethod('predictAssignments', 'lcModel', function(
   object,
   newdata = NULL,
   strategy = which.max,
@@ -1199,7 +1199,7 @@ setMethod('predictAssignments', signature('lcModel'), function(
 #' if (require("ggplot2")) {
 #'   plot(model)
 #' }
-setMethod('plot', signature('lcModel', 'ANY'), function(x, y, ...) {
+setMethod('plot', c('lcModel', 'ANY'), function(x, y, ...) {
   args = list(...)
 
   if (!has_name(args, 'trajectories')) {
@@ -1228,7 +1228,7 @@ setMethod('plot', signature('lcModel', 'ANY'), function(x, y, ...) {
 #' if (require("ggplot2")) {
 #'   plotFittedTrajectories(model)
 #' }
-setMethod('plotFittedTrajectories', signature('lcModel'), function(object, ...) {
+setMethod('plotFittedTrajectories', 'lcModel', function(object, ...) {
   data = fittedTrajectories(object, ...)
 
   plotTrajectories(
@@ -1277,7 +1277,7 @@ setMethod('plotFittedTrajectories', signature('lcModel'), function(object, ...) 
 #'   # show observation range
 #'   plotClusterTrajectories(model, trajectories = "range")
 #' }
-setMethod('plotClusterTrajectories', signature('lcModel'),
+setMethod('plotClusterTrajectories', 'lcModel',
   function(object,
     what = 'mu',
     at = time(object),
@@ -1335,7 +1335,7 @@ setMethod('plotClusterTrajectories', signature('lcModel'),
 #' if (require("ggplot2")) {
 #'   plotTrajectories(model)
 #' }
-setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
+setMethod('plotTrajectories', 'lcModel', function(object, ...) {
   data = trajectories(object, ...)
   plotTrajectories(
     data,
@@ -1390,7 +1390,7 @@ setMethod('plotTrajectories', signature('lcModel'), function(object, ...) {
 #'   gmmModel <- latrend(gmmMethod, data = latrendData)
 #'   postprob(gmmModel)
 #' }
-setMethod('postprob', signature('lcModel'), function(object, ...) {
+setMethod('postprob', 'lcModel', function(object, ...) {
   if (nIds(object) > 0) {
     warning(
       'postprob() not implemented for ',
@@ -1432,7 +1432,7 @@ setMethod('postprob', signature('lcModel'), function(object, ...) {
 #' if (require("ggplot2") && require("qqplotr")) {
 #'   qqPlot(model)
 #' }
-setMethod('qqPlot', signature('lcModel'), function(object, byCluster = FALSE, ...) {
+setMethod('qqPlot', 'lcModel', function(object, byCluster = FALSE, ...) {
   .loadOptionalPackage('ggplot2')
   assert_that(
     is.lcModel(object),
@@ -1510,7 +1510,7 @@ residuals.lcModel = function(object, ..., clusters = trajectoryAssignments(objec
 #' model <- latrend(method, latrendData)
 #' responseVariable(model) # "Y"
 #' @family lcModel variables
-setMethod('responseVariable', signature('lcModel'), function(object, ...) object@response)
+setMethod('responseVariable', 'lcModel', function(object, ...) object@response)
 
 # . estimationTime ####
 #' @export
@@ -1533,7 +1533,7 @@ setMethod('responseVariable', signature('lcModel'), function(object, ...) object
 #' estimationTime(model)
 #' estimationTime(model, unit = 'mins')
 #' estimationTime(model, unit = 'days')
-setMethod('estimationTime', signature('lcModel'), function(object, unit, ...) {
+setMethod('estimationTime', 'lcModel', function(object, unit, ...) {
   assert_that(is.lcModel(object))
   dtime = as.difftime(object@estimationTime, units = 'secs')
   as.numeric(dtime, units = unit)
@@ -1592,7 +1592,7 @@ sigma.lcModel = function(object, ...) {
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 #' model <- latrend(method, latrendData)
 #' newModel <- strip(model)
-setMethod('strip', signature('lcModel'), function(object, ..., classes = 'formula') {
+setMethod('strip', 'lcModel', function(object, ..., classes = 'formula') {
   newObject = object
 
   environment(newObject) = NULL
@@ -1614,7 +1614,7 @@ setMethod('strip', signature('lcModel'), function(object, ..., classes = 'formul
 #' model <- latrend(method, latrendData)
 #' timeVariable(model) # "Time"
 #' @family lcModel variables
-setMethod('timeVariable', signature('lcModel'), function(object) object@time)
+setMethod('timeVariable', 'lcModel', function(object) object@time)
 
 
 #' @export
@@ -1652,7 +1652,7 @@ time.lcModel = function(x, ...) {
 # . trajectories ####
 #' @rdname trajectories
 #' @aliases trajectories,lcModel-method
-setMethod('trajectories', signature('lcModel'), function(object, ...) {
+setMethod('trajectories', 'lcModel', function(object, ...) {
   data = model.data(object)
 
   assert_that(!is.null(data), msg = 'no associated training data for this model')
@@ -1690,7 +1690,7 @@ setMethod('trajectories', signature('lcModel'), function(object, ...) {
 #'
 #' # assign trajectories at random using weighted sampling
 #' trajectoryAssignments(model, strategy = which.weight)
-setMethod('trajectoryAssignments', signature('lcModel'), function(object, strategy = which.max, ...) {
+setMethod('trajectoryAssignments', 'lcModel', function(object, strategy = which.max, ...) {
   if (suppressWarnings(nIds(object)) == 0) {
     return(factor(levels = 1:nClusters(object), labels = clusterNames(object)))
   }

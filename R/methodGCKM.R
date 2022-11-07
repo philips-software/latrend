@@ -34,7 +34,7 @@ lcMethodGCKM = function(
 }
 
 #' @rdname interface-featureBased
-setMethod('getArgumentDefaults', signature('lcMethodGCKM'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodGCKM', function(object) {
   .loadOptionalPackage('lme4')
   c(
     formals(lcMethodGCKM),
@@ -45,7 +45,7 @@ setMethod('getArgumentDefaults', signature('lcMethodGCKM'), function(object) {
 })
 
 #' @rdname interface-featureBased
-setMethod('getArgumentExclusions', signature('lcMethodGCKM'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethodGCKM', function(object) {
   union(
     callNextMethod(),
     c('data', 'centers', 'trace')
@@ -53,14 +53,14 @@ setMethod('getArgumentExclusions', signature('lcMethodGCKM'), function(object) {
 })
 
 #' @rdname interface-featureBased
-setMethod('getName', signature('lcMethodGCKM'), function(object) 'two-step using LME and k-means')
+setMethod('getName', 'lcMethodGCKM', function(object) 'two-step using LME and k-means')
 
 #' @rdname interface-featureBased
-setMethod('getShortName', signature('lcMethodGCKM'), function(object) 'gckm')
+setMethod('getShortName', 'lcMethodGCKM', function(object) 'gckm')
 
 
 #' @rdname interface-featureBased
-setMethod('prepareData', signature('lcMethodGCKM'), function(method, data, verbose) {
+setMethod('prepareData', 'lcMethodGCKM', function(method, data, verbose) {
   cat(verbose, 'Representation step...')
   lmm = lme4::lmer(
     formula = method$formula,

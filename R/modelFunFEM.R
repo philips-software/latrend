@@ -19,7 +19,7 @@ fitted.lcModelFunFEM = function(object, ..., clusters = trajectoryAssignments(ob
 #. predictForCluster ####
 #' @rdname interface-funFEM
 #' @inheritParams predictForCluster
-setMethod('predictForCluster', signature('lcModelFunFEM'),
+setMethod('predictForCluster', 'lcModelFunFEM',
   function(object, newdata, cluster, what = 'mu', approxFun = approx, ...) {
   clusIdx = match(cluster, clusterNames(object))
   fdmeans = object@model$fd
@@ -31,7 +31,7 @@ setMethod('predictForCluster', signature('lcModelFunFEM'),
 
 
 #' @rdname interface-funFEM
-setMethod('postprob', signature('lcModelFunFEM'), function(object, ...) {
+setMethod('postprob', 'lcModelFunFEM', function(object, ...) {
   pp = object@model$P
   colnames(pp) = clusterNames(object)
   return(pp)
@@ -57,6 +57,6 @@ logLik.lcModelFunFEM = function(object, ...) {
 }
 
 #' @rdname interface-funFEM
-setMethod('converged', signature('lcModelFunFEM'), function(object, ...) {
+setMethod('converged', 'lcModelFunFEM', function(object, ...) {
   TRUE
 })

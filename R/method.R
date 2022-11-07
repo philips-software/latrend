@@ -178,7 +178,7 @@ setValidity('lcMethod', function(object) {
 #' @examples
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
 #' method$nClusters # 3
-setMethod('$', signature('lcMethod'), function(x, name) {
+setMethod('$', 'lcMethod', function(x, name) {
   x[[name]]
 })
 
@@ -200,7 +200,7 @@ setMethod('$', signature('lcMethod'), function(x, name) {
 #' m = lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = k)
 #' m[["nClusters", eval=FALSE]] # k
 #' @family lcMethod functions
-setMethod('[[', signature('lcMethod'), function(x, i, eval = TRUE, envir = NULL) {
+setMethod('[[', 'lcMethod', function(x, i, eval = TRUE, envir = NULL) {
   envir = .selectEnvironment(x, parent.frame(3), envir)
   if (is.character(i)) {
     assert_that(has_name(x, i), msg = sprintf('method does not have an argument named "%s"', i))
@@ -498,7 +498,7 @@ as.data.frame.lcMethod = function(x, ..., eval = TRUE, nullValue = NA, envir = N
 #' })
 #' }
 #' @seealso [evaluate.lcMethod]
-setMethod('compose', signature('lcMethod'), function(method, envir = NULL) {
+setMethod('compose', 'lcMethod', function(method, envir = NULL) {
   evaluate.lcMethod(method, try = FALSE, envir = envir)
 })
 
@@ -532,11 +532,11 @@ setMethod('compose', signature('lcMethod'), function(method, envir = NULL) {
 #' })
 #' }
 #' @inheritSection lcMethod-class Fitting procedure
-setMethod('fit', signature('lcMethod'), function(method, data, envir, verbose) {
+setMethod('fit', 'lcMethod', function(method, data, envir, verbose) {
   stop(
     sprintf('method cannot be estimated because the fit() function is not implemented for lcMethod of class %1$s.
    define the fit() method using:
-      \tsetMethod("fit", signature("%1$s"), function(method, data, verbose) {
+      \tsetMethod("fit", "%1$s", function(method, data, verbose) {
       \t\t<your code returning a lcModel-extended class here>
       \t})")', class(method)[1])
   )
@@ -614,7 +614,7 @@ getCall.lcMethod = function(x, ...) {
 #' This enables inheriting the default arguments from superclasses.
 #' @seealso [lcMethod] [getArgumentExclusions]
 #' @family lcMethod implementations
-setMethod('getArgumentDefaults', signature('lcMethod'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethod', function(object) {
   set_names(list(), character(0))
 })
 
@@ -644,7 +644,7 @@ setMethod('getArgumentDefaults', signature('lcMethod'), function(object) {
 #' }
 #' @seealso [lcMethod] [getArgumentExclusions]
 #' @family lcMethod implementations
-setMethod('getArgumentExclusions', signature('lcMethod'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethod', function(object) {
   c('verbose', 'envir', 'data')
 })
 
@@ -666,7 +666,7 @@ setMethod('getArgumentExclusions', signature('lcMethod'), function(object) {
 #' getLabel(method) # ""
 #'
 #' getLabel(update(method, label = "v2")) # "v2"
-setMethod('getLabel', signature('lcMethod'), function(object, ...) {
+setMethod('getLabel', 'lcMethod', function(object, ...) {
   if (hasName(object, 'label')) {
     object$label
   } else {
@@ -701,7 +701,7 @@ setMethod('getLabel', signature('lcMethod'), function(object, ...) {
 #' @examples
 #' method <- lcMethodLMKM(Y ~ Time)
 #' getName(method) # "lm-kmeans"
-setMethod('getName', signature('lcMethod'), function(object, ...) 'undefined')
+setMethod('getName', 'lcMethod', function(object, ...) 'undefined')
 
 #' @export
 #' @name latrend-generics
@@ -717,7 +717,7 @@ setMethod('getName', 'NULL', function(object, ...) 'null')
 #' @examples
 #' method <- lcMethodLMKM(Y ~ Time)
 #' getShortName(method) # "LMKM"
-setMethod('getShortName', signature('lcMethod'), function(object, ...) getName(object, ...))
+setMethod('getShortName', 'lcMethod', function(object, ...) getName(object, ...))
 
 #' @export
 #' @name latrend-generics
@@ -739,7 +739,7 @@ setMethod('getShortName', 'NULL', function(object, ...) 'nul')
 #' method <- lcMethodLMKM(Y ~ Time, id = "Traj")
 #' idVariable(method) # "Traj"
 #'
-setMethod('idVariable', signature('lcMethod'), function(object, ...) object$id)
+setMethod('idVariable', 'lcMethod', function(object, ...) object$id)
 
 #' @export
 #' @title Check whether the argument of a lcMethod has a defined value.
@@ -787,7 +787,7 @@ is.lcMethod = function(x) {
 #' @rdname names-lcMethod-method
 #' @aliases length,lcMethod-method
 #' @return The number of arguments, as `integer`.
-setMethod('length', signature('lcMethod'), function(x) {
+setMethod('length', 'lcMethod', function(x) {
   length(x@arguments)
 })
 
@@ -803,7 +803,7 @@ setMethod('length', signature('lcMethod'), function(x) {
 #' names(method)
 #' length(method)
 #' @family lcMethod functions
-setMethod('names', signature('lcMethod'), function(x) {
+setMethod('names', 'lcMethod', function(x) {
   argNames = names(x@arguments)
   if (is.null(argNames)) {
     character(0)
@@ -833,7 +833,7 @@ setMethod('names', signature('lcMethod'), function(x) {
 #' }
 #' @inheritSection lcMethod-class Fitting procedure
 #' @return The updated `environment` that will be passed to [fit()].
-setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose) {
+setMethod('preFit', 'lcMethod', function(method, data, envir, verbose) {
   envir
 })
 
@@ -872,7 +872,7 @@ setMethod('preFit', signature('lcMethod'), function(method, data, envir, verbose
 #' })
 #' }
 #' @inheritSection lcMethod-class Fitting procedure
-setMethod('prepareData', signature('lcMethod'), function(method, data, verbose) {
+setMethod('prepareData', 'lcMethod', function(method, data, verbose) {
   new.env(parent = emptyenv())
 })
 
@@ -911,7 +911,7 @@ setMethod('prepareData', signature('lcMethod'), function(method, data, verbose) 
 #' })
 #' }
 #' @inheritSection lcMethod-class Fitting procedure
-setMethod('postFit', signature('lcMethod'), function(method, data, model, envir, verbose) {
+setMethod('postFit', 'lcMethod', function(method, data, model, envir, verbose) {
   model
 })
 
@@ -1086,7 +1086,7 @@ update.lcMethod = function(object, ..., .eval = FALSE, .remove = character(), en
 #' @examples
 #' method <- lcMethodLMKM(Y ~ Time)
 #' responseVariable(method) # "Y"
-setMethod('responseVariable', signature('lcMethod'), function(object, ...) {
+setMethod('responseVariable', 'lcMethod', function(object, ...) {
   if (hasName(object, 'response')) {
     object$response
   } else if (hasName(object, 'formula')) {
@@ -1122,7 +1122,7 @@ setMethod('show', 'lcMethod', function(object) {
 #' @name strip
 #' @rdname strip
 #' @aliases strip,lcMethod-method
-setMethod('strip', signature('lcMethod'), function(object, ..., classes = 'formula') {
+setMethod('strip', 'lcMethod', function(object, ..., classes = 'formula') {
   newObject = object
 
   environment(newObject) = emptyenv()
@@ -1150,7 +1150,7 @@ setMethod('strip', signature('lcMethod'), function(object, ..., classes = 'formu
 #' @name strip
 #' @rdname strip
 #' @aliases strip,ANY-method
-setMethod('strip', signature('ANY'), function(object, ..., classes = 'formula') {
+setMethod('strip', 'ANY', function(object, ..., classes = 'formula') {
   if (is.list(object) || is(object, 'call')) { # is.call is TRUE for formulas
     replace(object, seq_along(object), lapply(object, strip))
   }
@@ -1174,7 +1174,7 @@ setMethod('strip', signature('ANY'), function(object, ..., classes = 'formula') 
 #' @examples
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 #' timeVariable(method) # "Time"
-setMethod('timeVariable', signature('lcMethod'), function(object, ...) object$time)
+setMethod('timeVariable', 'lcMethod', function(object, ...) object$time)
 
 
 #. validate ####
@@ -1215,7 +1215,7 @@ setMethod('timeVariable', signature('lcMethod'), function(object, ...) object$ti
 #' })
 #' }
 #' @seealso [assertthat::validate_that]
-setMethod('validate', signature('lcMethod'), function(method, data, envir = NULL, ...) {
+setMethod('validate', 'lcMethod', function(method, data, envir = NULL, ...) {
   id = idVariable(method)
   time = timeVariable(method)
   response = responseVariable(method)

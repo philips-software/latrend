@@ -41,7 +41,7 @@ lcMethodKML = function(
 }
 
 #' @rdname interface-kml
-setMethod('getArgumentDefaults', signature('lcMethodKML'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodKML', function(object) {
   c(
     formals(lcMethodKML),
     formals(kml::kml),
@@ -51,7 +51,7 @@ setMethod('getArgumentDefaults', signature('lcMethodKML'), function(object) {
 })
 
 #' @rdname interface-kml
-setMethod('getArgumentExclusions', signature('lcMethodKML'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethodKML', function(object) {
   union(
     callNextMethod(),
     c('object', 'nbClusters', 'parAlgo', 'toPlot', 'saveFreq')
@@ -59,14 +59,14 @@ setMethod('getArgumentExclusions', signature('lcMethodKML'), function(object) {
 })
 
 #' @rdname interface-kml
-setMethod('getName', signature('lcMethodKML'), function(object) 'longitudinal k-means (KML)')
+setMethod('getName', 'lcMethodKML', function(object) 'longitudinal k-means (KML)')
 
 #' @rdname interface-kml
-setMethod('getShortName', signature('lcMethodKML'), function(object) 'kml')
+setMethod('getShortName', 'lcMethodKML', function(object) 'kml')
 
 #' @rdname interface-kml
 #' @inheritParams preFit
-setMethod('preFit', signature('lcMethodKML'), function(method, data, envir, verbose, ...) {
+setMethod('preFit', 'lcMethodKML', function(method, data, envir, verbose, ...) {
   e = callNextMethod()
 
   # workaround for KmL only using the fast version when meanNA() of the longitudinalData package is specified
@@ -97,7 +97,7 @@ setMethod('preFit', signature('lcMethodKML'), function(method, data, envir, verb
 
 #' @rdname interface-kml
 #' @inheritParams fit
-setMethod('fit', signature('lcMethodKML'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodKML', function(method, data, envir, verbose, ...) {
   cld = envir$cld
 
   # Helper variables

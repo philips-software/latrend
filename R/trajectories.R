@@ -4,14 +4,14 @@
 # trajectories ####
 #' @rdname trajectories
 #' @aliases trajectories,data.frame-method
-setMethod('trajectories', signature('data.frame'), function(object, id, time, response, ...) {
+setMethod('trajectories', 'data.frame', function(object, id, time, response, ...) {
   object
 })
 
 
 #' @rdname trajectories
 #' @aliases trajectories,matrix-method
-setMethod('trajectories', signature('matrix'), function(object, id, time, response, ...) {
+setMethod('trajectories', 'matrix', function(object, id, time, response, ...) {
   data = tsframe(object, id = id, time = time, response = response)
   trajectories(data, id = id, time = time, response = response, ...)
 })
@@ -20,7 +20,7 @@ setMethod('trajectories', signature('matrix'), function(object, id, time, respon
 #' @rdname trajectories
 #' @aliases trajectories,call-method
 #' @param envir The `environment` used to evaluate the data object in (e.g., in case `object` is of type `call`).
-setMethod('trajectories', signature('call'), function(object, ..., envir) {
+setMethod('trajectories', 'call', function(object, ..., envir) {
   data = eval(object, envir = envir)
   trajectories(data, ..., envir = envir)
 })
@@ -46,7 +46,7 @@ setMethod('trajectories', signature('call'), function(object, ..., envir) {
 #' By default (`FALSE`), no information on the underlying trajectories is shown.
 #' @param facet Whether to facet by cluster. This is done by default when `trajectories` is enabled.
 #' @param id Id column. Only needed when `trajectories = TRUE`.
-setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
+setMethod('plotClusterTrajectories', 'data.frame', function(object,
   response,
   cluster = 'Cluster',
   time = getOption('latrend.time'),
@@ -243,7 +243,7 @@ setMethod('plotClusterTrajectories', signature('data.frame'), function(object,
 #'     cluster = assignments
 #'   )
 #' }
-setMethod('plotTrajectories', signature('data.frame'),
+setMethod('plotTrajectories', 'data.frame',
   function(
     object,
     response,
@@ -318,7 +318,7 @@ setMethod('plotTrajectories', signature('data.frame'),
 #' @export
 #' @rdname plotTrajectories
 #' @aliases plotTrajectories,ANY-method
-setMethod('plotTrajectories', signature('ANY'), function(object, ...) {
+setMethod('plotTrajectories', 'ANY', function(object, ...) {
   data = trajectories(object, ...)
   plotTrajectories(data, ...)
 })

@@ -5,7 +5,7 @@ setClass('lcModelCrimCV', contains = 'lcModel')
 #. predictForCluster ####
 #' @rdname interface-crimCV
 #' @inheritParams predictForCluster
-setMethod('predictForCluster', signature('lcModelCrimCV'), function(
+setMethod('predictForCluster', 'lcModelCrimCV', function(
   object, newdata, cluster, what = 'mu', ...)
 {
   assert_that(what %in% c('mu', 'nu', 'mean'))
@@ -50,7 +50,7 @@ setMethod('predictForCluster', signature('lcModelCrimCV'), function(
 
 #' @rdname interface-crimCV
 #' @keywords internal
-setMethod('postprob', signature('lcModelCrimCV'), function(object) {
+setMethod('postprob', 'lcModelCrimCV', function(object) {
   pp = object@model$gwt
   colnames(pp) = clusterNames(object)
   return(pp)
@@ -90,6 +90,6 @@ coef.lcModelCrimCV = function(object, ...) {
 
 
 #' @rdname interface-crimCV
-setMethod('converged', signature('lcModelCrimCV'), function(object) {
+setMethod('converged', 'lcModelCrimCV', function(object) {
   TRUE
 })

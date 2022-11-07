@@ -19,7 +19,7 @@ predFun = function(object, newdata, ...) {
 #   expect_error(predictForCluster(model, newdata=data.frame(Assessment=1), cluster = 'A'))
 # })
 
-setMethod('predictForCluster', signature('lcModelTest'), definition = predClusFun)
+setMethod('predictForCluster', 'lcModelTest', definition = predClusFun)
 
 test_that('default predict.lcModel', {
   dfpred = predict(model, newdata=data.frame(Assessment=1))
@@ -42,7 +42,7 @@ test_that('default predict.lcModel', {
 
 
 test_that('default fitted', {
-  # setMethod('predictForCluster', signature('lcModelTest'), predClusFun)
+  # setMethod('predictForCluster', 'lcModelTest', predClusFun)
 
   suppressWarnings({
     expect_is(fitted(model), 'numeric')

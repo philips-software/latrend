@@ -6,7 +6,7 @@ setClass('lcModelMclustLLPA', contains = 'lcApproxModel')
 #' @rdname interface-mclust
 #' @inheritParams clusterTrajectories
 #' @inheritParams predictForCluster
-setMethod('clusterTrajectories', signature('lcModelMclustLLPA'), function(object, at = time(object), ...) {
+setMethod('clusterTrajectories', 'lcModelMclustLLPA', function(object, at = time(object), ...) {
   if (length(at) == 0) {
     trajMat = object@model$parameters$mean
     assert_that(
@@ -30,7 +30,7 @@ setMethod('clusterTrajectories', signature('lcModelMclustLLPA'), function(object
 
 # . postprob ####
 #' @rdname interface-mclust
-setMethod('postprob', signature('lcModelMclustLLPA'), function(object, ...) {
+setMethod('postprob', 'lcModelMclustLLPA', function(object, ...) {
   pp = object@model$z
   colnames(pp) = clusterNames(object)
 
@@ -40,7 +40,7 @@ setMethod('postprob', signature('lcModelMclustLLPA'), function(object, ...) {
 
 #. predictPostprob ####
 #' @rdname interface-mclust
-setMethod('predictPostprob', signature('lcModelMclustLLPA'),
+setMethod('predictPostprob', 'lcModelMclustLLPA',
   function(object, newdata = NULL, ...) {
   if (is.null(newdata)) {
     callNextMethod()
@@ -52,6 +52,6 @@ setMethod('predictPostprob', signature('lcModelMclustLLPA'),
 
 # . converged ####
 #' @rdname interface-mclust
-setMethod('converged', signature('lcModelMclustLLPA'), function(object, ...) {
+setMethod('converged', 'lcModelMclustLLPA', function(object, ...) {
   TRUE
 })

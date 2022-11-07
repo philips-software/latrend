@@ -68,7 +68,7 @@ lcMethodRandom = function(
 }
 
 #' @rdname interface-custom
-setMethod('getArgumentDefaults', signature('lcMethodRandom'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodRandom', function(object) {
   c(
     formals(lcMethodRandom),
     callNextMethod()
@@ -76,13 +76,13 @@ setMethod('getArgumentDefaults', signature('lcMethodRandom'), function(object) {
 })
 
 #' @rdname interface-custom
-setMethod('getName', signature('lcMethodRandom'), function(object) 'random')
+setMethod('getName', 'lcMethodRandom', function(object) 'random')
 
 #' @rdname interface-custom
-setMethod('getShortName', signature('lcMethodRandom'), function(object) 'rand')
+setMethod('getShortName', 'lcMethodRandom', function(object) 'rand')
 
 #' @rdname interface-custom
-setMethod('fit', signature('lcMethodRandom'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodRandom', function(method, data, envir, verbose, ...) {
   nIds = uniqueN(data[[idVariable(method)]])
   assert_that(nIds > 0, msg = 'cannot fit to data with nIds = 0')
 

@@ -5,7 +5,7 @@ setClass('lcModelKML', contains = 'lcApproxModel')
 #. clusterTrajectories ####
 #' @rdname interface-kml
 #' @inheritParams clusterTrajectories
-setMethod('clusterTrajectories', signature('lcModelKML'), function(object, at = time(object), ...) {
+setMethod('clusterTrajectories', 'lcModelKML', function(object, at = time(object), ...) {
   if (length(at) == 0) {
     trajMat = computeKMLCenters(object)
 
@@ -24,7 +24,7 @@ setMethod('clusterTrajectories', signature('lcModelKML'), function(object, at = 
 
 #. converged ####
 #' @rdname interface-kml
-setMethod('converged', signature('lcModelKML'), function(object) {
+setMethod('converged', 'lcModelKML', function(object) {
   TRUE
 })
 
@@ -60,7 +60,7 @@ logLik.lcModelKML = function(object, ...) {
 
 #. postprob ####
 #' @rdname interface-kml
-setMethod('postprob', signature('lcModelKML'), function(object) {
+setMethod('postprob', 'lcModelKML', function(object) {
   if (nClusters(object) == 1) {
     pp = matrix(1, nrow = nIds(object), ncol = 1)
   } else {
@@ -99,7 +99,7 @@ setMethod('postprob', signature('lcModelKML'), function(object) {
 #. predictPostprob
 #' @rdname interface-kml
 #' @inheritParams predictPostprob
-setMethod('predictPostprob', signature('lcModelKML'), function(object, newdata, ...) {
+setMethod('predictPostprob', 'lcModelKML', function(object, newdata, ...) {
   assert_that(
     has_name(newdata, idVariable(object)),
     has_name(newdata, timeVariable(object)),

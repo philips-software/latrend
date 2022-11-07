@@ -43,7 +43,7 @@ lcMethodMixtoolsGMM = function(
 }
 
 #' @rdname interface-mixtools
-setMethod('getArgumentDefaults', signature('lcMethodMixtoolsGMM'), function(object) {
+setMethod('getArgumentDefaults', 'lcMethodMixtoolsGMM', function(object) {
   c(
     formals(lcMethodMixtoolsGMM),
     formals(mixtools::regmixEM.mixed),
@@ -52,7 +52,7 @@ setMethod('getArgumentDefaults', signature('lcMethodMixtoolsGMM'), function(obje
 })
 
 #' @rdname interface-mixtools
-setMethod('getArgumentExclusions', signature('lcMethodMixtoolsGMM'), function(object) {
+setMethod('getArgumentExclusions', 'lcMethodMixtoolsGMM', function(object) {
   union(
     callNextMethod(),
     c('data', 'y', 'x', 'w', 'k', 'addintercept.fixed', 'verb')
@@ -61,13 +61,13 @@ setMethod('getArgumentExclusions', signature('lcMethodMixtoolsGMM'), function(ob
 
 #' @rdname interface-mixtools
 #' @inheritParams getName
-setMethod('getName', signature('lcMethodMixtoolsGMM'), function(object) 'growth mixture modeling using mixtools')
+setMethod('getName', 'lcMethodMixtoolsGMM', function(object) 'growth mixture modeling using mixtools')
 
 #' @rdname interface-mixtools
-setMethod('getShortName', signature('lcMethodMixtoolsGMM'), function(object) 'gmm')
+setMethod('getShortName', 'lcMethodMixtoolsGMM', function(object) 'gmm')
 
 #' @rdname interface-mixtools
-setMethod('preFit', signature('lcMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
+setMethod('preFit', 'lcMethodMixtoolsGMM', function(method, data, envir, verbose, ...) {
   e = new.env()
 
   # Parse formula
@@ -102,7 +102,7 @@ setMethod('preFit', signature('lcMethodMixtoolsGMM'), function(method, data, env
 
 #' @rdname interface-mixtools
 #' @inheritParams fit
-setMethod('fit', signature('lcMethodMixtoolsGMM'), function(method, data, envir, verbose, ...) {
+setMethod('fit', 'lcMethodMixtoolsGMM', function(method, data, envir, verbose, ...) {
   args = as.list(method, args = mixtools::regmixEM.mixed)
   args$y = envir$y
   args$x = envir$x

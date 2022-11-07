@@ -5,25 +5,25 @@ model = testModel
 class(model) = 'lcModelErr'
 
 test_that('clusterProportions', {
-  setMethod('clusterProportions', signature('lcModelErr'), function(object, ...) NULL)
+  setMethod('clusterProportions', 'lcModelErr', function(object, ...) NULL)
 
   expect_error(clusterProportions(model), 'lcModelErr')
 })
 
 test_that('clusterTrajectories', {
-  setMethod('clusterTrajectories', signature('lcModelErr'), function(object, ...) NULL)
+  setMethod('clusterTrajectories', 'lcModelErr', function(object, ...) NULL)
 
   expect_error(clusterTrajectories(model), 'lcModelErr')
 })
 
 test_that('postprob', {
-  setMethod('postprob', signature('lcModelErr'), function(object, ...) NULL)
+  setMethod('postprob', 'lcModelErr', function(object, ...) NULL)
 
   expect_error(postprob(model), 'lcModelErr')
 })
 
 test_that('predictForCluster', {
-  setMethod('predictForCluster', signature('lcModelErr'), function(object, ...) NULL)
+  setMethod('predictForCluster', 'lcModelErr', function(object, ...) NULL)
 
   expect_error(predictForCluster(model, cluster = 'A'), 'lcModelErr')
 })
