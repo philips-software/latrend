@@ -2,8 +2,7 @@
 setClass('lcModelLMKM',
   representation(
     coefNames = 'character',
-    trajectoryCoefs = 'matrix',
-    converged = 'logical'
+    trajectoryCoefs = 'matrix'
   ),
   contains = 'lcModelPartition'
 )

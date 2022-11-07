@@ -6,6 +6,9 @@
 #' @importFrom Rdpack reprompt
 #' @importFrom foreach foreach %do% %dopar%
 #' @importFrom utils hasName capture.output combn getS3method modifyList head tail data
+# just present to get rid of the "Namespace in Imports field not imported from: 'rmarkdown'" note in R CMD check
+# the note is incorrect because putting rmarkdown in Suggets field results in vignettes failing to build
+#' @importFrom rmarkdown html_vignette
 #' @aliases latrend-package
 #' @rdname latrend-package
 #' @section Features:
