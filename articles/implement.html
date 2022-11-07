@@ -81,11 +81,12 @@
 
       
 
-      </header><script src="implement_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Implementing new methods</h1>
-                        <h4 data-toc-skip class="author">Niek Den Teuling</h4>
+                        <h4 data-toc-skip class="author">Niek Den
+Teuling</h4>
             
             <h4 data-toc-skip class="date">2021-01-16</h4>
       
@@ -100,7 +101,10 @@
 <div class="section level2">
 <h2 id="case-study-data">Case study data<a class="anchor" aria-label="anchor" href="#case-study-data"></a>
 </h2>
-<p>We will generate a dataset comprising two clusters with a different intercept and slope. Firstly, we configure the default id, time, and response variable, so that these do not need to be provided to the other function calls.</p>
+<p>We will generate a dataset comprising two clusters with a different
+intercept and slope. Firstly, we configure the default id, time, and
+response variable, so that these do not need to be provided to the other
+function calls.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/philips-software/latrend" class="external-link">latrend</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
@@ -109,7 +113,11 @@
 <span>  latrend.time <span class="op">=</span> <span class="st">"Time"</span>,</span>
 <span>  latrend.verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Next, we generate the dataset, with 40 trajectories for cluster A and 60 trajectories for cluster B. Cluster A involves trajectories with a downward slope, whereas cluster B has an upward slope. We define a fixed mean of 1, such that all the cluster trajectories are shifted, placing cluster A at intercept 2, and cluster B at intercept 1.</p>
+<p>Next, we generate the dataset, with 40 trajectories for cluster A and
+60 trajectories for cluster B. Cluster A involves trajectories with a
+downward slope, whereas cluster B has an upward slope. We define a fixed
+mean of 1, such that all the cluster trajectories are shifted, placing
+cluster A at intercept 2, and cluster B at intercept 1.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">casedata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateLongData.html">generateLongData</a></span><span class="op">(</span></span>
@@ -124,11 +132,15 @@
 <span>  noiseScales <span class="op">=</span> <span class="fl">.05</span></span>
 <span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>We plot the data to get a sense of different trajectories that have been generated. Visually, there is little group separation.</p>
+<p>We plot the data to get a sense of different trajectories that have
+been generated. Visually, there is little group separation.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span><span class="va">casedata</span>, response <span class="op">=</span> <span class="st">"Y"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="implement_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>Since we generated the data, we have the luxury of looking at reference cluster trajectories, as stored in the <code>Mu.cluster</code> column. Note that <code>Mu.fixed</code> must be added to obtain the correct values.</p>
+<p>Since we generated the data, we have the luxury of looking at
+reference cluster trajectories, as stored in the <code>Mu.cluster</code>
+column. Note that <code>Mu.fixed</code> must be added to obtain the
+correct values.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotClusterTrajectories.html">plotClusterTrajectories</a></span><span class="op">(</span><span class="va">casedata</span>, response <span class="op">=</span> <span class="st">"Y"</span>, cluster <span class="op">=</span> <span class="st">"Class"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="implement_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
@@ -136,13 +148,21 @@
 <div class="section level2">
 <h2 id="stratification">Stratification<a class="anchor" aria-label="anchor" href="#stratification"></a>
 </h2>
-<p>Rather than starting with clustering, in some case studies there may be prior knowledge on how to sensibly stratify the trajectories. Either by an observed independent variable (e.g., age or gender), or a certain aspect of the observed trajectory (e.g., the intercept, slope, variability).</p>
-<p>Let’s presume in this example that domain knowledge suggests that stratifying by the intercept may provide a sensible grouping of the trajectories. This approach is further supported by the density plot of the trajectory intercepts, which shows a bimodal distribution.</p>
+<p>Rather than starting with clustering, in some case studies there may
+be prior knowledge on how to sensibly stratify the trajectories. Either
+by an observed independent variable (e.g., age or gender), or a certain
+aspect of the observed trajectory (e.g., the intercept, slope,
+variability).</p>
+<p>Let’s presume in this example that domain knowledge suggests that
+stratifying by the intercept may provide a sensible grouping of the
+trajectories. This approach is further supported by the density plot of
+the trajectory intercepts, which shows a bimodal distribution.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">casedata</span><span class="op">[</span><span class="va">Time</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Mu</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"gray"</span>, adjust <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="implement_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
-<p>Based on the density plot, we will assign trajectories with an intercept above 1.6 to cluster A, and the remainder to cluster B.</p>
+<p>Based on the density plot, we will assign trajectories with an
+intercept above 1.6 to cluster A, and the remainder to cluster B.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodStratify.html">lcMethodStratify</a></span><span class="op">(</span>response <span class="op">=</span> <span class="st">"Y"</span>, <span class="va">Y</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">1.6</span><span class="op">)</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">casedata</span><span class="op">)</span></span></code></pre></div>
@@ -150,8 +170,14 @@
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/clusterProportions.html">clusterProportions</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   A   B </span></span>
 <span><span class="co">#&gt; 0.6 0.4</span></span></code></pre></div>
-<p>The approach we specified requires the first observation to be available, and is sensitive to noise. A more robust alternative would be to fit a linear model per trajectory, and to use the estimated intercept to stratify the trajectories on.</p>
-<p>We can specify this stratification model by defining a function which takes the data of separate trajectories as input. This function should return a single cluster assignment for the respective trajectory. By returning a factor, we can pre-specify the cluster names.</p>
+<p>The approach we specified requires the first observation to be
+available, and is sensitive to noise. A more robust alternative would be
+to fit a linear model per trajectory, and to use the estimated intercept
+to stratify the trajectories on.</p>
+<p>We can specify this stratification model by defining a function which
+takes the data of separate trajectories as input. This function should
+return a single cluster assignment for the respective trajectory. By
+returning a factor, we can pre-specify the cluster names.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">stratfun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">int</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, <span class="va">data</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
@@ -163,7 +189,10 @@
 <span><span class="fu"><a href="../reference/clusterProportions.html">clusterProportions</a></span><span class="op">(</span><span class="va">model2</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  Low High </span></span>
 <span><span class="co">#&gt;  0.6  0.4</span></span></code></pre></div>
-<p>In case the linear regression step is time-intensive, a more efficient approach is to save the pre-computed trajectory intercepts as a column in the original data. This column can then be referred to in the expression of the stratification model.</p>
+<p>In case the linear regression step is time-intensive, a more
+efficient approach is to save the pre-computed trajectory intercepts as
+a column in the original data. This column can then be referred to in
+the expression of the stratification model.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">casedata</span><span class="op">[</span>, <span class="va">Intercept</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, <span class="va">.SD</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, by <span class="op">=</span> <span class="va">Traj</span><span class="op">]</span></span>
 <span></span>
@@ -177,8 +206,13 @@
 <div class="section level2">
 <h2 id="two-step-clustering">Two-step clustering<a class="anchor" aria-label="anchor" href="#two-step-clustering"></a>
 </h2>
-<p>We can take the approach involving the estimation of a linear model per trajectory one step further. Instead of using a pre-defined threshold on the intercept, we use a cluster algorithm on both the intercept and slope to automatically find clusters.</p>
-<p>We first define the representation step, which estimates the model coefficients per trajectory, and outputs a <code>matrix</code> with the coefficients per trajectory per row.</p>
+<p>We can take the approach involving the estimation of a linear model
+per trajectory one step further. Instead of using a pre-defined
+threshold on the intercept, we use a cluster algorithm on both the
+intercept and slope to automatically find clusters.</p>
+<p>We first define the representation step, which estimates the model
+coefficients per trajectory, and outputs a <code>matrix</code> with the
+coefficients per trajectory per row.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">repStep</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">verbose</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
@@ -187,8 +221,13 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">coefmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">coefdata</span><span class="op">$</span><span class="va">Traj</span></span>
 <span>  <span class="va">coefmat</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>The cluster step takes the coefficient matrix as input. A cross-sectional cluster algorithm can then be applied to the matrix. In this example, we apply <span class="math inline">\(k\)</span>-means. The cluster step should output a <code>lcModel</code> object.</p>
-<p>The <code>lcModelPartition</code> function creates a <code>lcModel</code> object for a given vector of cluster assignments.</p>
+<p>The cluster step takes the coefficient matrix as input. A
+cross-sectional cluster algorithm can then be applied to the matrix. In
+this example, we apply <span class="math inline">\(k\)</span>-means. The
+cluster step should output a <code>lcModel</code> object.</p>
+<p>The <code>lcModelPartition</code> function creates a
+<code>lcModel</code> object for a given vector of cluster
+assignments.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">clusStep</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">repMat</span>, <span class="va">envir</span>, <span class="va">verbose</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">km</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">kmeans</a></span><span class="op">(</span><span class="va">repMat</span>, centers <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
@@ -202,7 +241,8 @@
 <span>    model <span class="op">=</span> <span class="va">km</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>We are now ready to create the <code>lcMethodFeature</code> method.</p>
+<p>We are now ready to create the <code>lcMethodFeature</code>
+method.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m.twostep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodFeature.html">lcMethodFeature</a></span><span class="op">(</span></span>
 <span>  response <span class="op">=</span> <span class="st">"Y"</span>, </span>
@@ -234,8 +274,14 @@
 <div class="section level3">
 <h3 id="general-approach">General approach<a class="anchor" aria-label="anchor" href="#general-approach"></a>
 </h3>
-<p>The two-step model defined above is hard-coded for a given formula and a fixed number of clusters. In an exploratory setting, it is convenient to define a parameterized method. Here, we change the two functions to take arguments through the <code>lcMethod</code> object in the <code>method</code> variable.</p>
-<p>Note that we can introduce new arguments which are not originally part of <code>lcMethodFeature</code> (e.g., <code>nClusters</code>) to enable the specification of the number of clusters in our method.</p>
+<p>The two-step model defined above is hard-coded for a given formula
+and a fixed number of clusters. In an exploratory setting, it is
+convenient to define a parameterized method. Here, we change the two
+functions to take arguments through the <code>lcMethod</code> object in
+the <code>method</code> variable.</p>
+<p>Note that we can introduce new arguments which are not originally
+part of <code>lcMethodFeature</code> (e.g., <code>nClusters</code>) to
+enable the specification of the number of clusters in our method.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">repStep.gen</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">verbose</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
@@ -258,14 +304,19 @@
 <span>    model <span class="op">=</span> <span class="va">km</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>We create a new <code>lcMethodFeature</code> instance with the more generic functions. Defining values for <code>formula</code> and <code>nClusters</code> here makes these arguments values act as default values in a call of <code>latrend</code>.</p>
+<p>We create a new <code>lcMethodFeature</code> instance with the more
+generic functions. Defining values for <code>formula</code> and
+<code>nClusters</code> here makes these arguments values act as default
+values in a call of <code>latrend</code>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m.twostepgen</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodFeature.html">lcMethodFeature</a></span><span class="op">(</span></span>
 <span>  response <span class="op">=</span> <span class="st">"Y"</span>,</span>
 <span>  representationStep <span class="op">=</span> <span class="va">repStep.gen</span>, </span>
 <span>  clusterStep <span class="op">=</span> <span class="va">clusStep.gen</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>However, because we omitted the specification of <code>formula</code> and <code>nClusters</code>, these need to be provided in the <code>latrend</code> call.</p>
+<p>However, because we omitted the specification of <code>formula</code>
+and <code>nClusters</code>, these need to be provided in the
+<code>latrend</code> call.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model.twostepgen</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">m.twostepgen</span>, formula <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span>, nClusters <span class="op">=</span> <span class="fl">2</span>, <span class="va">casedata</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model.twostepgen</span><span class="op">)</span></span>

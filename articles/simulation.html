@@ -81,11 +81,12 @@
 
       
 
-      </header><script src="simulation_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Conducting a simulation study</h1>
-                        <h4 data-toc-skip class="author">Niek Den Teuling</h4>
+                        <h4 data-toc-skip class="author">Niek Den
+Teuling</h4>
             
             <h4 data-toc-skip class="date">2021-09-29</h4>
       
@@ -99,7 +100,10 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>In this vignette we demonstrate how to conduct a simulation study with minimal coding. We show how to do a structural evaluation of methods for clustering longitudinal data, for different specifications, and across various (synthetic) data scenarios.</p>
+<p>In this vignette we demonstrate how to conduct a simulation study
+with minimal coding. We show how to do a structural evaluation of
+methods for clustering longitudinal data, for different specifications,
+and across various (synthetic) data scenarios.</p>
 <p>A typical workflow in a simulation study involves:</p>
 <ol style="list-style-type: decimal">
 <li><a href="#data-settings">Data settings</a></li>
@@ -107,8 +111,11 @@
 <li><a href="#evaluating-the-settings">Evaluating the settings</a></li>
 <li><a href="#analyzing-the-results">Analyzing the results</a></li>
 </ol>
-<p>There are many packages available in <code>R</code> which facilitate such a workflow. In this vignette, we use the <a href="https://cran.r-project.org/package=simTool" class="external-link">simTool</a> package.</p>
-<p>Due to the relatively large number of models fitted, we will disable all model outputs:</p>
+<p>There are many packages available in <code>R</code> which facilitate
+such a workflow. In this vignette, we use the <a href="https://cran.r-project.org/package=simTool" class="external-link">simTool</a>
+package.</p>
+<p>Due to the relatively large number of models fitted, we will disable
+all model outputs:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/philips-software/latrend" class="external-link">latrend</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>latrend.verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
@@ -116,9 +123,29 @@
 <div class="section level2">
 <h2 id="data-generation">Data generation<a class="anchor" aria-label="anchor" href="#data-generation"></a>
 </h2>
-<p>Using synthetic data allows us to investigate to performance of the methods under specific conditions of interest (e.g., sensitivity to noise, within-cluster variability, and cluster separation).</p>
-<p>For demonstration purposes, we define a trivial dataset comprising two distinct groups with group trajectories represented by a line (i.e., intercept and slope). A trajectory <span class="math inline">\(\textbf{y}_i\)</span> belonging to group <span class="math inline">\(k\)</span> is described by <span class="math inline">\(y_{ij} = \beta_{0k} + \beta_{1k} t_{j} + z_{0i} + e_{ij}\)</span>. Here, <span class="math inline">\(\beta_{0k}\)</span> and <span class="math inline">\(\beta_{1k}\)</span> are the intercept and slope for group <span class="math inline">\(k\)</span>, respectively. Furthermore, <span class="math inline">\(z_i\)</span> denotes the trajectory-specific random intercept, i.e., its deviation from the group trajectory. Lastly, <span class="math inline">\(e_{ij}\)</span> represents independent random noise with <span class="math inline">\(e_{ij} \sim N(0, \sigma^2)\)</span>.</p>
-<p>We can generate data according to this model using a utility function named <code><a href="../reference/generateLongData.html">generateLongData()</a></code> that is included in the package. This function generates datasets based on a mixture of linear mixed models. We create a wrapper around this function in order to adapt the function to our needs. Most importantly, we code the shape and coefficients of the group trajectories as fixed, setting <span class="math inline">\((\beta_{0A},\beta_{1A}) = (0, 0)\)</span> for group A (40%) and <span class="math inline">\((\beta_{0B},\beta_{1B}) = (1, -1)\)</span> for group B (60%). Other data settings (e.g., the magnitude of perturbation) are passed via <code>...</code>.</p>
+<p>Using synthetic data allows us to investigate to performance of the
+methods under specific conditions of interest (e.g., sensitivity to
+noise, within-cluster variability, and cluster separation).</p>
+<p>For demonstration purposes, we define a trivial dataset comprising
+two distinct groups with group trajectories represented by a line (i.e.,
+intercept and slope). A trajectory <span class="math inline">\(\textbf{y}_i\)</span> belonging to group <span class="math inline">\(k\)</span> is described by <span class="math inline">\(y_{ij} = \beta_{0k} + \beta_{1k} t_{j} + z_{0i} +
+e_{ij}\)</span>. Here, <span class="math inline">\(\beta_{0k}\)</span>
+and <span class="math inline">\(\beta_{1k}\)</span> are the intercept
+and slope for group <span class="math inline">\(k\)</span>,
+respectively. Furthermore, <span class="math inline">\(z_i\)</span>
+denotes the trajectory-specific random intercept, i.e., its deviation
+from the group trajectory. Lastly, <span class="math inline">\(e_{ij}\)</span> represents independent random
+noise with <span class="math inline">\(e_{ij} \sim N(0,
+\sigma^2)\)</span>.</p>
+<p>We can generate data according to this model using a utility function
+named <code><a href="../reference/generateLongData.html">generateLongData()</a></code> that is included in the package.
+This function generates datasets based on a mixture of linear mixed
+models. We create a wrapper around this function in order to adapt the
+function to our needs. Most importantly, we code the shape and
+coefficients of the group trajectories as fixed, setting <span class="math inline">\((\beta_{0A},\beta_{1A}) = (0, 0)\)</span> for
+group A (40%) and <span class="math inline">\((\beta_{0B},\beta_{1B}) =
+(1, -1)\)</span> for group B (60%). Other data settings (e.g., the
+magnitude of perturbation) are passed via <code>...</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dataGen</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">numTraj</span>, <span class="va">...</span>, <span class="va">data.seed</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">latrend</span><span class="fu">::</span><span class="fu"><a href="../reference/generateLongData.html">generateLongData</a></span><span class="op">(</span></span>
@@ -132,9 +159,17 @@
 <span>    <span class="va">...</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Because the <em>simTool</em> package does not appear to support overlapping names between data and method functions, we needed to rename the <code>seed</code> argument of our underlying data generating function.</p>
-<p>Note that the <code>generateLongData</code> is included in the <em>latrend</em> package primarily for demonstration purposes. For generating data in a more flexible way, consider using the <a href="https://cran.r-project.org/package=simstudy" class="external-link">simstudy</a> package.</p>
-<p>Now that we have defined a data generating function, we set the default trajectory id and time column names, so we do not have to specify this in any future calls.</p>
+<p>Because the <em>simTool</em> package does not appear to support
+overlapping names between data and method functions, we needed to rename
+the <code>seed</code> argument of our underlying data generating
+function.</p>
+<p>Note that the <code>generateLongData</code> is included in the
+<em>latrend</em> package primarily for demonstration purposes. For
+generating data in a more flexible way, consider using the <a href="https://cran.r-project.org/package=simstudy" class="external-link">simstudy</a>
+package.</p>
+<p>Now that we have defined a data generating function, we set the
+default trajectory id and time column names, so we do not have to
+specify this in any future calls.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>latrend.id <span class="op">=</span> <span class="st">"Traj"</span>, latrend.time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span></code></pre></div>
 <p>It’s a good idea to inspect the data we are generating.</p>
@@ -146,8 +181,16 @@
 <div class="section level2">
 <h2 id="data-settings">Data settings<a class="anchor" aria-label="anchor" href="#data-settings"></a>
 </h2>
-<p>We now specify the data settings of interest. In this example, we evaluate the methods on datasets with varying sample size (50 and 250 trajectories) and random intercept scale (small and large random intercept). Moreover, we evaluate methods repeatedly under these settings by specifying different values for <code>data.seed</code>, generating a slightly different dataset for each seed.</p>
-<p>As we intend to evaluate the methods on each combination of data settings, we need to generate a table of all permutations. This can be done using the <code><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid()</a></code> function, or using <code>expand_tibble()</code>.</p>
+<p>We now specify the data settings of interest. In this example, we
+evaluate the methods on datasets with varying sample size (50 and 250
+trajectories) and random intercept scale (small and large random
+intercept). Moreover, we evaluate methods repeatedly under these
+settings by specifying different values for <code>data.seed</code>,
+generating a slightly different dataset for each seed.</p>
+<p>As we intend to evaluate the methods on each combination of data
+settings, we need to generate a table of all permutations. This can be
+done using the <code><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid()</a></code> function, or using
+<code>expand_tibble()</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dataGrid</span> <span class="op">&lt;-</span> <span class="fu">simTool</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/simTool/man/expand_tibble.html" class="external-link">expand_tibble</a></span><span class="op">(</span></span>
 <span>  fun <span class="op">=</span> <span class="st">"dataGen"</span>,</span>
@@ -170,8 +213,17 @@
 <div class="section level2">
 <h2 id="method-settings">Method settings<a class="anchor" aria-label="anchor" href="#method-settings"></a>
 </h2>
-<p>Similarly to the data settings table, we specify a table of all permutations for the method settings. Typically this is done separately for each method, as their settings will usually differ. In this example we evaluate KmL and GCKM only on differing number of clusters so the method settings can be jointly generated. Repeated method evaluation is achieved through specifying several values for the <code>seed</code> argument.</p>
-<p>The method evaluation function (specified by the <code>proc</code> field) here is simply the <code><a href="../reference/latrend.html">latrend()</a></code> function, which will fit the specified method type to the generated data. ## Specfying the KmL method</p>
+<p>Similarly to the data settings table, we specify a table of all
+permutations for the method settings. Typically this is done separately
+for each method, as their settings will usually differ. In this example
+we evaluate KmL and GCKM only on differing number of clusters so the
+method settings can be jointly generated. Repeated method evaluation is
+achieved through specifying several values for the <code>seed</code>
+argument.</p>
+<p>The method evaluation function (specified by the <code>proc</code>
+field) here is simply the <code><a href="../reference/latrend.html">latrend()</a></code> function, which will
+fit the specified method type to the generated data. ## Specfying the
+KmL method</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">kmlMethodGrid</span> <span class="op">&lt;-</span> <span class="fu">simTool</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/simTool/man/expand_tibble.html" class="external-link">expand_tibble</a></span><span class="op">(</span></span>
 <span>  proc <span class="op">=</span> <span class="st">"latrend"</span>,</span>
@@ -190,8 +242,14 @@
 <div class="section level3">
 <h3 id="specifying-the-gckm-method">Specifying the GCKM method<a class="anchor" aria-label="anchor" href="#specifying-the-gckm-method"></a>
 </h3>
-<p>Parametric models such as GCKM are more unwieldy to specify in a simulation study due to the need to define the parametric shape through one or more formulas. Formulas are tedious to query or filter in a post-hoc simulation analysis<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
-<p>We can solve this by defining simple keywords representing the different parametric shapes of interest. We then specify a wrapper function for <code><a href="../reference/latrend.html">latrend()</a></code> that sets the correct <code>formula</code> argument depending on the keyword.</p>
+<p>Parametric models such as GCKM are more unwieldy to specify in a
+simulation study due to the need to define the parametric shape through
+one or more formulas. Formulas are tedious to query or filter in a
+post-hoc simulation analysis<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+<p>We can solve this by defining simple keywords representing the
+different parametric shapes of interest. We then specify a wrapper
+function for <code><a href="../reference/latrend.html">latrend()</a></code> that sets the correct
+<code>formula</code> argument depending on the keyword.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fitGCKM</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">type</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">form</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span><span class="va">type</span>,</span>
@@ -201,7 +259,9 @@
 <span>  </span>
 <span>  <span class="fu"><a href="../reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">...</span>, formula <span class="op">=</span> <span class="va">form</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>We can then specify our GCKM method settings in a similar way as we did for the KmL method, but with the <code>proc</code> argument set to the <code>fitGCKM</code> function we have just defined.</p>
+<p>We can then specify our GCKM method settings in a similar way as we
+did for the KmL method, but with the <code>proc</code> argument set to
+the <code>fitGCKM</code> function we have just defined.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gckmMethodGrid</span> <span class="op">&lt;-</span> <span class="fu">simTool</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/simTool/man/expand_tibble.html" class="external-link">expand_tibble</a></span><span class="op">(</span></span>
 <span>  proc <span class="op">=</span> <span class="st">"fitGCKM"</span>,</span>
@@ -210,7 +270,9 @@
 <span>  nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Finally, we combine our method-specific permutation grids into one large grid. By using the <code>bind_rows()</code> function, mismatches in the columns between the grids are handled properly.</p>
+<p>Finally, we combine our method-specific permutation grids into one
+large grid. By using the <code>bind_rows()</code> function, mismatches
+in the columns between the grids are handled properly.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">methodGrid</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">kmlMethodGrid</span>, <span class="va">gckmMethodGrid</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">methodGrid</span><span class="op">)</span></span>
@@ -228,8 +290,15 @@
 <div class="section level2">
 <h2 id="evaluating-the-settings">Evaluating the settings<a class="anchor" aria-label="anchor" href="#evaluating-the-settings"></a>
 </h2>
-<p>The <code>eval_tibbles()</code> function takes the data and method grids as inputs, and runs the method estimation as intended for each simulation setting. In practice, it is advisable to run evaluations in parallel as the number of simulation settings is likely much greater than in this trivial demonstration.</p>
-<p>Before we run the simulations, we first want to define a function for computing our model performance metrics. This function will be run by <code>eval_tibbles()</code> for every estimated model. The details on what we are computing here is explained further in the next section.</p>
+<p>The <code>eval_tibbles()</code> function takes the data and method
+grids as inputs, and runs the method estimation as intended for each
+simulation setting. In practice, it is advisable to run evaluations in
+parallel as the number of simulation settings is likely much greater
+than in this trivial demonstration.</p>
+<p>Before we run the simulations, we first want to define a function for
+computing our model performance metrics. This function will be run by
+<code>eval_tibbles()</code> for every estimated model. The details on
+what we are computing here is explained further in the next section.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">analyzeModel</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model.data.html">model.data</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
@@ -242,14 +311,16 @@
 <span>    ARI <span class="op">=</span> <span class="fu"><a href="../reference/externalMetric.html">externalMetric</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">refModel</span>, <span class="st">"adjustedRand"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>At last, we can run the simulations and post-hoc summary computations:</p>
+<p>At last, we can run the simulations and post-hoc summary
+computations:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">simTool</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/simTool/man/eval_tibbles.html" class="external-link">eval_tibbles</a></span><span class="op">(</span></span>
 <span>  data_grid <span class="op">=</span> <span class="va">dataGrid</span>, </span>
 <span>  proc_grid <span class="op">=</span> <span class="va">methodGrid</span>,</span>
 <span>  post_analyze <span class="op">=</span> <span class="va">analyzeModel</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>The <code>result</code> table contains a <code>results</code> column containing the fitted models.</p>
+<p>The <code>result</code> table contains a <code>results</code> column
+containing the fitted models.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 48 × 15</span></span></span>
@@ -271,22 +342,31 @@
 <span><span class="co">#&gt; Number of data generating functions: 8</span></span>
 <span><span class="co">#&gt; Number of analyzing procedures: 6</span></span>
 <span><span class="co">#&gt; Number of replications: 1</span></span>
-<span><span class="co">#&gt; Estimated replications per hour: 163</span></span>
-<span><span class="co">#&gt; Start of the simulation: 2022-10-27 09:02:36</span></span>
-<span><span class="co">#&gt; End of the simulation: 2022-10-27 09:02:58</span></span></code></pre></div>
+<span><span class="co">#&gt; Estimated replications per hour: 180</span></span>
+<span><span class="co">#&gt; Start of the simulation: 2022-11-07 16:18:59</span></span>
+<span><span class="co">#&gt; End of the simulation: 2022-11-07 16:19:19</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="analyzing-the-results">Analyzing the results<a class="anchor" aria-label="anchor" href="#analyzing-the-results"></a>
 </h2>
-<p>We can now analyze the computed results. We use the <a href="https://cran.r-project.org/package=data.table" class="external-link">data.table</a> package to handle the filtering and aggregation of the results table.</p>
+<p>We can now analyze the computed results. We use the <a href="https://cran.r-project.org/package=data.table" class="external-link">data.table</a>
+package to handle the filtering and aggregation of the results
+table.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
 <span><span class="va">resultsTable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">simulation</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="recovery-of-the-number-of-clusters">Recovery of the number of clusters<a class="anchor" aria-label="anchor" href="#recovery-of-the-number-of-clusters"></a>
 </h3>
-<p>Often, researchers are interested in estimating the number of clusters by means of minimizing a metric indicating either model fit, cluster separation, or another factor that helps to determine the preferred number of clusters. Evaluating how many times the correct number of clusters is obtained from a cluster metric can help to decide which metric to use, and which selection approach to take.</p>
-<p>In this example, we evaluate the use of the Bayesian information criterion (BIC). For each data scenario, we identify the cluster solution that minimizes the BIC.</p>
+<p>Often, researchers are interested in estimating the number of
+clusters by means of minimizing a metric indicating either model fit,
+cluster separation, or another factor that helps to determine the
+preferred number of clusters. Evaluating how many times the correct
+number of clusters is obtained from a cluster metric can help to decide
+which metric to use, and which selection approach to take.</p>
+<p>In this example, we evaluate the use of the Bayesian information
+criterion (BIC). For each data scenario, we identify the cluster
+solution that minimizes the BIC.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resultsTable</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>K <span class="op">=</span> <span class="va">nClusters</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.min</a></span><span class="op">(</span><span class="va">BIC</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">numTraj</span>, <span class="va">randomScales</span>, <span class="va">data.seed</span>, <span class="va">method</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;     numTraj randomScales data.seed       method K</span></span>
@@ -306,13 +386,26 @@
 <span><span class="co">#&gt; 14:     250          0.5         1  lcMethodKML 2</span></span>
 <span><span class="co">#&gt; 15:     250          0.5         2 lcMethodGCKM 2</span></span>
 <span><span class="co">#&gt; 16:     250          0.5         2  lcMethodKML 2</span></span></code></pre></div>
-<p>Column <em>K</em> of the table shows the selected number of clusters for each scenario. This shows that estimating the number of clusters by minimizing the BIC results in a consistent overestimation of the number of clusters in our datasets. As an alternative to minimizing the BIC, we could consider using the elbow method instead. However, in order to conclude whether that is a feasible approach to our data would require more simulations, across a greater number of cluster.</p>
+<p>Column <em>K</em> of the table shows the selected number of clusters
+for each scenario. This shows that estimating the number of clusters by
+minimizing the BIC results in a consistent overestimation of the number
+of clusters in our datasets. As an alternative to minimizing the BIC, we
+could consider using the elbow method instead. However, in order to
+conclude whether that is a feasible approach to our data would require
+more simulations, across a greater number of cluster.</p>
 </div>
 <div class="section level3">
 <h3 id="trajectory-assignment-agreement">Trajectory assignment agreement<a class="anchor" aria-label="anchor" href="#trajectory-assignment-agreement"></a>
 </h3>
-<p>Another aspect of interest might be the ability of the cluster model to identify the correct cluster assignment for each of the trajectories. An intuitive metric for assessing this is the adjusted Rand index (ARI). This metric measures the agreement between two partitionings, where a score of 1 indicate a perfect agreement, and a score of 0 indicates an agreement no better than by chance.</p>
-<p>We compute the average ARI per data scenario and method to identify in which scenarios the methods were able to recover the reference cluster assignments.</p>
+<p>Another aspect of interest might be the ability of the cluster model
+to identify the correct cluster assignment for each of the trajectories.
+An intuitive metric for assessing this is the adjusted Rand index (ARI).
+This metric measures the agreement between two partitionings, where a
+score of 1 indicate a perfect agreement, and a score of 0 indicates an
+agreement no better than by chance.</p>
+<p>We compute the average ARI per data scenario and method to identify
+in which scenarios the methods were able to recover the reference
+cluster assignments.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resultsTable</span><span class="op">[</span><span class="va">nClusters</span> <span class="op">&gt;</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span>ARI <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">ARI</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">nClusters</span>, <span class="va">numTraj</span>, <span class="va">randomScales</span>, <span class="va">method</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;    nClusters numTraj randomScales       method       ARI</span></span>
@@ -324,7 +417,10 @@
 <span><span class="co">#&gt; 6:         2     250          0.1  lcMethodKML 1.0000000</span></span>
 <span><span class="co">#&gt; 7:         2     250          0.5 lcMethodGCKM 0.4521689</span></span>
 <span><span class="co">#&gt; 8:         2     250          0.5  lcMethodKML 0.1323025</span></span></code></pre></div>
-<p>The trajectory assignment recovery is affected the most by the magnitude of the random scale (i.e., the amount of overlap between the clusters). Moreover, it is apparent that KmL performs much worse under high random scale than GCKM.</p>
+<p>The trajectory assignment recovery is affected the most by the
+magnitude of the random scale (i.e., the amount of overlap between the
+clusters). Moreover, it is apparent that KmL performs much worse under
+high random scale than GCKM.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resultsTable</span><span class="op">[</span><span class="va">nClusters</span> <span class="op">&gt;</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span>ARI <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">ARI</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">randomScales</span>, <span class="va">nClusters</span>, <span class="va">method</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;    randomScales nClusters       method       ARI</span></span>
@@ -336,8 +432,14 @@
 <div class="section level3">
 <h3 id="residual-error">Residual error<a class="anchor" aria-label="anchor" href="#residual-error"></a>
 </h3>
-<p>Another aspect of interest might be the residual error, i.e., how well our cluster model describes the data. Here, we gauge this by computing the mean absolute error, weighted by the posterior probabilities<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
-<p>Both methods achieve practically the same mean residual error. Another sign of the data comprising two clusters is that the MAE drops down significantly for the two-cluster solution, but hardly any improvement is gained for the three-cluster solution.</p>
+<p>Another aspect of interest might be the residual error, i.e., how
+well our cluster model describes the data. Here, we gauge this by
+computing the mean absolute error, weighted by the posterior
+probabilities<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
+<p>Both methods achieve practically the same mean residual error.
+Another sign of the data comprising two clusters is that the MAE drops
+down significantly for the two-cluster solution, but hardly any
+improvement is gained for the three-cluster solution.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resultsTable</span><span class="op">[</span><span class="va">randomScales</span> <span class="op">==</span> <span class="fl">.1</span>, <span class="fu">.</span><span class="op">(</span>WMAE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">WMAE</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">nClusters</span>, <span class="va">method</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;    nClusters       method      WMAE</span></span>
@@ -345,7 +447,8 @@
 <span><span class="co">#&gt; 2:         1  lcMethodKML 0.2627083</span></span>
 <span><span class="co">#&gt; 3:         2 lcMethodGCKM 0.1120481</span></span>
 <span><span class="co">#&gt; 4:         2  lcMethodKML 0.1119268</span></span></code></pre></div>
-<p>As one would expect, the residual error is strongly affected by the magnitude of the random scale.</p>
+<p>As one would expect, the residual error is strongly affected by the
+magnitude of the random scale.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resultsTable</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>WMAE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">WMAE</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">randomScales</span>, <span class="va">nClusters</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;    randomScales nClusters      WMAE</span></span>
@@ -355,11 +458,18 @@
 <span><span class="co">#&gt; 4:          0.5         2 0.3257807</span></span></code></pre></div>
 </div>
 </div>
-<div class="footnotes">
+<div class="footnotes footnotes-end-of-document">
 <hr>
 <ol>
-<li id="fn1"><p>Another reason to avoid defining formulas directly in the permutation grid is due to the way <code>data.frame</code> and tibbles handle columns containing <code>formula</code>, returning a <code>list</code> instead of the <code>formula</code> element when querying a single row. This results in an invalid method specification when <code>eval_tibbles()</code> calls the <code>proc</code> argument using this output.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>For KmL and GCKM, the WMAE is effectively the same as the MAE.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>Another reason to avoid defining formulas directly in
+the permutation grid is due to the way <code>data.frame</code> and
+tibbles handle columns containing <code>formula</code>, returning a
+<code>list</code> instead of the <code>formula</code> element when
+querying a single row. This results in an invalid method specification
+when <code>eval_tibbles()</code> calls the <code>proc</code> argument
+using this output.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>For KmL and GCKM, the WMAE is effectively the same as
+the MAE.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
   </div>

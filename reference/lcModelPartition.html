@@ -82,6 +82,7 @@ As such, this model has no predictive capabilities. The cluster trajectories are
 <span>  name <span class="op">=</span> <span class="st">"part"</span>,</span>
 <span>  center <span class="op">=</span> <span class="va">meanNA</span>,</span>
 <span>  method <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  converged <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  envir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -133,6 +134,10 @@ If unspecified, the names are determined from the <code>trajectoryAssignments</c
 <dd><p>Optional <code>lcMethod</code> object that was used for fitting this model to the data.</p></dd>
 
 
+<dt>converged</dt>
+<dd><p>Set the converged state.</p></dd>
+
+
 <dt>model</dt>
 <dd><p>An optional object to attach to the <code>lcModelPartition</code> object, representing the internal model that was used for obtaining the partition.</p></dd>
 
@@ -158,7 +163,7 @@ If unspecified, the names are determined from the <code>trajectoryAssignments</c
 <span class="r-in"><span>  <span class="fu"><a href="externalMetric.html">externalMetric</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">refModel</span>, <span class="st">"adjustedRand"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> adjustedRand </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0.4663297 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0.9669189 </span>
 </code></pre></div>
     </div>
   </div>

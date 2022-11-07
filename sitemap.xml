@@ -223,6 +223,9 @@
     <loc>/reference/interface-mclust.html</loc>
   </url>
   <url>
+    <loc>/reference/interface-metaMethods.html</loc>
+  </url>
+  <url>
     <loc>/reference/interface-mixAK.html</loc>
   </url>
   <url>
@@ -266,6 +269,9 @@
   </url>
   <url>
     <loc>/reference/lcApproxModel-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lcFitMethods.html</loc>
   </url>
   <url>
     <loc>/reference/lcMatrixMethod-class.html</loc>
