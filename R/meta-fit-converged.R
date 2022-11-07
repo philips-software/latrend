@@ -37,7 +37,8 @@ setMethod('fit', 'lcFitConverged', function(method, data, envir, verbose) {
     } else if (attempt >= method$maxRep) {
       warning(
         sprintf(
-          'Failed to obtain converged result for %s within %d attempts.\n\tReturning last model.',
+          'Failed to obtain converged result (got %s) for %s within %d attempts.\n\tReturning last model.',
+          converged(model),
           class(getLcMethod(method))[1],
           method$maxRep
         ),
@@ -55,9 +56,24 @@ setMethod('fit', 'lcFitConverged', function(method, data, envir, verbose) {
       }
 
       if (is.infinite(method$maxRep)) {
-        cat(verbose, sprintf('Method failed to converge. Retrying... attempt %d', attempt))
+        cat(
+          verbose,
+          sprintf(
+            'Method failed to converge (got %gs). Retrying... attempt %d',
+            converged(model),
+            attempt
+          )
+        )
       } else {
-        cat(verbose, sprintf('Method failed to converge. Retrying... attempt %d / %d', attempt, method$maxRep))
+        cat(
+          verbose,
+          sprintf(
+            'Method failed to converge (got %s). Retrying... attempt %d / %d',
+            converged(model),
+            attempt,
+            method$maxRep
+          )
+        )
       }
     }
   }
