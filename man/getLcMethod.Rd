@@ -2,9 +2,10 @@
 % Please edit documentation in R/model.R
 \name{getLcMethod}
 \alias{getLcMethod}
+\alias{getLcMethod,lcModel-method}
 \title{Get the method specification of a lcModel}
 \usage{
-getLcMethod(object)
+\S4method{getLcMethod}{lcModel}(object)
 }
 \arguments{
 \item{object}{The \code{lcModel} object.}

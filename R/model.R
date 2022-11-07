@@ -574,8 +574,11 @@ setMethod('getLabel', signature('lcModel'), function(object, ...) {
   }
 })
 
-
+# . getLcMethod ####
 #' @export
+#' @name getLcMethod
+#' @rdname getLcMethod
+#' @aliases getLcMethod,lcModel-method
 #' @title Get the method specification of a lcModel
 #' @description Get the `lcMethod` specification object that was used for fitting the given `lcModel` object.
 #' @param object The `lcModel` object.
@@ -585,10 +588,7 @@ setMethod('getLabel', signature('lcModel'), function(object, ...) {
 #' method <- lcMethodRandom("Y", id = "Id", time = "Time")
 #' model <- latrend(method, latrendData)
 #' getLcMethod(model)
-getLcMethod = function(object) {
-  assert_that(is.lcModel(object))
-  object@method
-}
+setMethod('getLcMethod', signature('lcModel'), function(object) object@method)
 
 
 # . getName ####

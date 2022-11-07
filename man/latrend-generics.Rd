@@ -39,6 +39,8 @@ getArgumentExclusions(object, ...)
 
 getLabel(object, ...)
 
+getLcMethod(object, ...)
+
 getName(object, ...)
 
 getShortName(object, ...)
