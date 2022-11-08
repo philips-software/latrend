@@ -1,5 +1,21 @@
 **If you are viewing this file as part of a released version of the package, the latest news can be found [on GitHub](https://philips-software.github.io/latrend/news/).**
 
+# latrend v1.5.0
+
+## New features
+* Implemented virtual class for meta methods (#61)
+* Implemented a meta method for repeatedly fitting a method and selecting the best fit (see `lcFitRep`, `lcFitRepMin`, `lcFitRepMax`) (#61)
+* Implemented a meta method for repeatedly fitting a method until convergence (see `lcFitConverged`) (#61)
+
+## Major changes
+* Made `getLcMethod()` generic
+
+## Other changes
+* Added check for formula argument to LMKM method
+* Added "converged" slot to lcModelPartition
+* Generic validate() checks for correct output length
+* Added workaround for erroneous R CMD check rmarkdown import note
+
 # latrend v1.4.3
 * Removed usage of soon-to-be deprecated ggplot functions
 

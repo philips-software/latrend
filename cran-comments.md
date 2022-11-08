@@ -1,3 +1,13 @@
+# v1.5.0
+* Implemented virtual class for meta methods (#61)
+* Implemented a meta method for repeatedly fitting a method and selecting the best fit (see `lcFitRep`, `lcFitRepMin`, `lcFitRepMax`) (#61)
+* Implemented a meta method for repeatedly fitting a method until convergence (see `lcFitConverged`) (#61)
+* Made `getLcMethod()` generic
+* Added check for formula argument to LMKM method
+* Added "converged" slot to lcModelPartition
+* Generic validate() checks for correct output length
+* Added workaround for erroneous R CMD check rmarkdown import note
+
 # v1.4.3
 * Removed usage of soon-to-be deprecated ggplot functions
 * Reduced runtime of example
