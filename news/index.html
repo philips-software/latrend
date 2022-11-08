@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">latrend</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.0</span>
       </span>
     </div>
 
@@ -63,6 +63,26 @@
       <small>Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.5.0" id="latrend-v150">latrend v1.5.0<a class="anchor" aria-label="anchor" href="#latrend-v150"></a></h2>
+<div class="section level3">
+<h3 id="new-features-1-5-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-5-0"></a></h3>
+<ul><li>Implemented virtual class for meta methods (<a href="https://github.com/philips-software/latrend/issues/61" class="external-link">#61</a>)</li>
+<li>Implemented a meta method for repeatedly fitting a method and selecting the best fit (see <code>lcFitRep</code>, <code>lcFitRepMin</code>, <code>lcFitRepMax</code>) (<a href="https://github.com/philips-software/latrend/issues/61" class="external-link">#61</a>)</li>
+<li>Implemented a meta method for repeatedly fitting a method until convergence (see <code>lcFitConverged</code>) (<a href="https://github.com/philips-software/latrend/issues/61" class="external-link">#61</a>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="major-changes-1-5-0">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-5-0"></a></h3>
+<ul><li>Made <code><a href="../reference/getLcMethod.html">getLcMethod()</a></code> generic</li>
+</ul></div>
+<div class="section level3">
+<h3 id="other-changes-1-5-0">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-1-5-0"></a></h3>
+<ul><li>Added check for formula argument to LMKM method</li>
+<li>Added “converged” slot to lcModelPartition</li>
+<li>Generic validate() checks for correct output length</li>
+<li>Added workaround for erroneous R CMD check rmarkdown import note</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4.3" id="latrend-v143">latrend v1.4.3<small>2022-10-26</small><a class="anchor" aria-label="anchor" href="#latrend-v143"></a></h2>
 <ul><li>Removed usage of soon-to-be deprecated ggplot functions</li>
