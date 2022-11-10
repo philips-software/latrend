@@ -2,7 +2,7 @@
 local({
 
   # the requested version of renv
-  version <- "0.16.0-16"
+  version <- "0.16.0-37"
 
   # the project directory
   project <- getwd()
@@ -94,8 +94,11 @@ local({
       return(repos)
   
     # if we're testing, re-use the test repositories
-    if (renv_bootstrap_tests_running())
-      return(getOption("renv.tests.repos"))
+    if (renv_bootstrap_tests_running()) {
+      repos <- getOption("renv.tests.repos")
+      if (!is.null(repos))
+        return(repos)
+    }
   
     # retrieve current repos
     repos <- getOption("repos")
@@ -659,8 +662,8 @@ local({
     if (version == loadedversion)
       return(TRUE)
   
-    # assume four-component versions are from GitHub; three-component
-    # versions are from CRAN
+    # assume four-component versions are from GitHub;
+    # three-component versions are from CRAN
     components <- strsplit(loadedversion, "[.-]")[[1]]
     remote <- if (length(components) == 4L)
       paste("rstudio/renv", loadedversion, sep = "@")
