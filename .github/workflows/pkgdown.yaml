@@ -20,7 +20,7 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -yq libglu1-mesa-dev libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev
+          sudo apt-get install -yq libglu1-mesa-dev libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev fftw3
 
       - uses: r-lib/actions/setup-r@v2
 
