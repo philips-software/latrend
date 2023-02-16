@@ -114,30 +114,17 @@ Furthermore, argument names may not start with a period (<code>"."</code>).</p>
 <p>Arguments cannot be directly modified, i.e., <code>lcMethod</code> objects are immutable.
 Modifying an argument involves creating an altered copy through the <a href="update.lcMethod.html">update.lcMethod</a> method.</p>
     </div>
-    <div id="fitting-procedure">
-    <h2>Fitting procedure</h2>
-    
-
-<p>Each <code>lcMethod</code> subclass defines a type of methods in terms of a series of steps for estimating the method.
-These steps, as part of the fitting procedure, are executed by <code><a href="latrend.html">latrend()</a></code> in the following order:</p><ol><li><p><code><a href="compose.html">compose()</a></code>: Evaluate and finalize the method argument values.</p></li>
-<li><p><code><a href="validate.html">validate()</a></code>: Check the validity of the method argument values in relation to the dataset.</p></li>
-<li><p><code><a href="prepareData.html">prepareData()</a></code>: Process the training data for fitting.</p></li>
-<li><p><code><a href="preFit.html">preFit()</a></code>: Prepare environment for estimation, independent of training data.</p></li>
-<li><p><code><a href="fit.html">fit()</a></code>: Estimate the specified method on the training data, outputting an object inheriting from <code>lcModel</code>.</p></li>
-<li><p><code><a href="postFit.html">postFit()</a></code>: Post-process the outputted <code>lcModel</code> object.</p></li>
-</ol><p>The result of the fitting procedure is an <a href="lcModel-class.html">lcModel</a> object that inherits from the <code>lcModel</code> class.</p>
-    </div>
     <div id="implementation">
     <h2>Implementation</h2>
     
 
 <p>The base class <code>lcMethod</code> provides the logic for storing, evaluating, and printing the method parameters.</p>
-<p>Subclasses of <code>lcMethod</code> differ only in the fitting procedure logic (see above).</p>
+<p>Subclasses of <code>lcMethod</code> differ only in the <a href="lcMethod-estimation.html">fitting procedure logic</a>.</p>
 <p>To implement your own <code>lcMethod</code> subclass, you'll want to implement at least the following functions:</p><ul><li><p><code><a href="fit.html">fit()</a></code>: The main function for estimating your method.</p></li>
 <li><p><code><a href="getName.html">getName()</a></code>: The name of your method.</p></li>
 <li><p><code><a href="getName.html">getShortName()</a></code>: The abbreviated name of your method.</p></li>
 <li><p><code><a href="getArgumentDefaults.html">getArgumentDefaults()</a></code>: Sensible default argument values to your method.</p></li>
-</ul><p>For more complex methods, the additional functions as part of the fitting procedure (see the <em>Fitting procedure</em> section above) will be of use.</p>
+</ul><p>For more complex methods, the additional functions as part of the <a href="lcMethod-estimation.html">fitting procedure</a> will be of use.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -223,7 +210,7 @@ These steps, as part of the fitting procedure, are executed by <code><a href="la
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

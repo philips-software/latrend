@@ -75,10 +75,6 @@
         </td>
         <td><p>Odds of correct classification (OCC)</p></td>
       </tr><tr><td>
-          <p><code><a href="OSA.adherence.html">OSA.adherence</a></code> </p>
-        </td>
-        <td><p>Biweekly Mean Treatment Adherence of OSA Patients over 1 Year</p></td>
-      </tr><tr><td>
           <p><code><a href="PAP.adh.html">PAP.adh</a></code> <code><a href="PAP.adh.html">PAP.adh1y</a></code> </p>
         </td>
         <td><p>Biweekly Mean Therapy Adherence of OSA Patients over 1 Year</p></td>
@@ -133,7 +129,7 @@
       </tr><tr><td>
           <p><code><a href="compose.html">compose(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
         </td>
-        <td><p>lcMethod fit process: compose an lcMethod object</p></td>
+        <td><p><code>lcMethod</code> estimation step: compose an lcMethod object</p></td>
       </tr><tr><td>
           <p><code><a href="confusionMatrix.html">confusionMatrix()</a></code> </p>
         </td>
@@ -185,7 +181,7 @@
       </tr><tr><td>
           <p><code><a href="fit.html">fit(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
         </td>
-        <td><p>lcMethod fit process: logic for fitting the method to the processed data</p></td>
+        <td><p><code>lcMethod</code> estimation step: logic for fitting the method to the processed data</p></td>
       </tr><tr><td>
           <p><code><a href="fitted.lcModel.html">fitted(<i>&lt;lcModel&gt;</i>)</a></code> </p>
         </td>
@@ -263,17 +259,37 @@
         </td>
         <td><p>lcMetaMethod abstract class</p></td>
       </tr><tr><td>
+          <p><code><a href="latrend-approaches.html">latrend-approaches</a></code> </p>
+        </td>
+        <td><p>High-level approaches to longitudinal clustering</p></td>
+      </tr><tr><td>
+          <p><code><a href="latrend-data.html">latrend-data</a></code> </p>
+        </td>
+        <td><p>Longitudinal dataset representation</p></td>
+      </tr><tr><td>
+          <p><code><a href="latrend-estimation.html">latrend-estimation</a></code> </p>
+        </td>
+        <td><p>Overview of <strong><code>lcMethod</code></strong> estimation functions</p></td>
+      </tr><tr><td>
+          <p><code><a href="latrend-methods.html">latrend-methods</a></code> </p>
+        </td>
+        <td><p>Supported methods for longitudinal clustering</p></td>
+      </tr><tr><td>
+          <p><code><a href="latrend-metrics.html">latrend-metrics</a></code> </p>
+        </td>
+        <td><p>Metrics</p></td>
+      </tr><tr><td>
           <p><code><a href="latrend-package.html">latrend-package</a></code> <code><a href="latrend-package.html">_PACKAGE</a></code> </p>
         </td>
         <td><p>latrend: A Framework for Clustering Longitudinal Data</p></td>
       </tr><tr><td>
           <p><code><a href="latrend-parallel.html">latrend-parallel</a></code> </p>
         </td>
-        <td><p>Parallel computing using latrend</p></td>
+        <td><p>Parallel computation using latrend</p></td>
       </tr><tr><td>
           <p><code><a href="latrend.html">latrend()</a></code> </p>
         </td>
-        <td><p>Cluster longitudinal data</p></td>
+        <td><p>Cluster longitudinal data using the specified method</p></td>
       </tr><tr><td>
           <p><code><a href="latrendBatch.html">latrendBatch()</a></code> </p>
         </td>
@@ -306,6 +322,10 @@
           <p><code><a href="lcMethod-class.html">lcMethod-class</a></code> <code><a href="lcMethod-class.html">lcMethod</a></code> </p>
         </td>
         <td><p>lcMethod class</p></td>
+      </tr><tr><td>
+          <p><code><a href="lcMethod-estimation.html">lcMethod-estimation</a></code> <code><a href="lcMethod-estimation.html">latrend-estimation</a></code> <code><a href="lcMethod-estimation.html">latrend-procedure</a></code> <code><a href="lcMethod-estimation.html">lcMethod-steps</a></code> </p>
+        </td>
+        <td><p>Longitudinal cluster method (<code>lcMethod</code>) estimation procedure</p></td>
       </tr><tr><td>
           <p><code><a href="lcMethodAkmedoids.html">lcMethodAkmedoids()</a></code> </p>
         </td>
@@ -393,7 +413,11 @@
       </tr><tr><td>
           <p><code><a href="lcModel-class.html">lcModel-class</a></code> </p>
         </td>
-        <td><p>lcModel class</p></td>
+        <td><p><code>lcModel</code> class</p></td>
+      </tr><tr><td>
+          <p><code><a href="lcModel.html">lcModel</a></code> </p>
+        </td>
+        <td><p>Longitudinal cluster result (<strong><code>lcModel</code></strong>)</p></td>
       </tr><tr><td>
           <p><code><a href="lcModelPartition.html">lcModelPartition()</a></code> </p>
         </td>
@@ -403,9 +427,13 @@
         </td>
         <td><p>Create a lcModel with pre-defined weighted partitioning</p></td>
       </tr><tr><td>
+          <p><code><a href="lcModels-class.html">lcModels-class</a></code> </p>
+        </td>
+        <td><p><code>lcModels</code>: a list of <code>lcModel</code> objects</p></td>
+      </tr><tr><td>
           <p><code><a href="lcModels.html">lcModels()</a></code> </p>
         </td>
-        <td><p>Construct a flat (named) list of lcModel objects</p></td>
+        <td><p>Construct a list of <code>lcModel</code> objects</p></td>
       </tr><tr><td>
           <p><code><a href="logLik.lcModel.html">logLik(<i>&lt;lcModel&gt;</i>)</a></code> </p>
         </td>
@@ -473,7 +501,7 @@
       </tr><tr><td>
           <p><code><a href="postFit.html">postFit(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
         </td>
-        <td><p>lcMethod fit process: logic for post-processing the fitted lcModel</p></td>
+        <td><p><code>lcMethod</code> estimation step: logic for post-processing the fitted lcModel</p></td>
       </tr><tr><td>
           <p><code><a href="postprob.html">postprob(<i>&lt;lcModel&gt;</i>)</a></code> </p>
         </td>
@@ -485,7 +513,7 @@
       </tr><tr><td>
           <p><code><a href="preFit.html">preFit(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
         </td>
-        <td><p>lcMethod fit process: method preparation logic</p></td>
+        <td><p><code>lcMethod</code> estimation step: method preparation logic</p></td>
       </tr><tr><td>
           <p><code><a href="predict.lcModel.html">predict(<i>&lt;lcModel&gt;</i>)</a></code> </p>
         </td>
@@ -505,7 +533,7 @@
       </tr><tr><td>
           <p><code><a href="prepareData.html">prepareData(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
         </td>
-        <td><p>lcMethod fit process: logic for preparing the training data</p></td>
+        <td><p><code>lcMethod</code> estimation step: logic for preparing the training data</p></td>
       </tr><tr><td>
           <p><code><a href="print.lcMethod.html">print(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
         </td>
@@ -589,7 +617,7 @@
       </tr><tr><td>
           <p><code><a href="validate.html">validate(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
         </td>
-        <td><p>lcMethod fit process: method argument validation logic</p></td>
+        <td><p><code>lcMethod</code> estimation step: method argument validation logic</p></td>
       </tr><tr><td>
           <p><code><a href="which.weight.html">which.weight()</a></code> </p>
         </td>
@@ -607,7 +635,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

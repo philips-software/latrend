@@ -40,9 +40,6 @@
     <loc>/reference/OCC.html</loc>
   </url>
   <url>
-    <loc>/reference/OSA.adherence.html</loc>
-  </url>
-  <url>
     <loc>/reference/PAP.adh.html</loc>
   </url>
   <url>
@@ -241,7 +238,22 @@
     <loc>/reference/isArgDefined.html</loc>
   </url>
   <url>
+    <loc>/reference/latrend-approaches.html</loc>
+  </url>
+  <url>
+    <loc>/reference/latrend-data.html</loc>
+  </url>
+  <url>
+    <loc>/reference/latrend-estimation.html</loc>
+  </url>
+  <url>
     <loc>/reference/latrend-generics.html</loc>
+  </url>
+  <url>
+    <loc>/reference/latrend-methods.html</loc>
+  </url>
+  <url>
+    <loc>/reference/latrend-metrics.html</loc>
   </url>
   <url>
     <loc>/reference/latrend-package.html</loc>
@@ -278,6 +290,9 @@
   </url>
   <url>
     <loc>/reference/lcMethod-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lcMethod-estimation.html</loc>
   </url>
   <url>
     <loc>/reference/lcMethodAkmedoids.html</loc>
@@ -352,10 +367,16 @@
     <loc>/reference/lcModel-make.html</loc>
   </url>
   <url>
+    <loc>/reference/lcModel.html</loc>
+  </url>
+  <url>
     <loc>/reference/lcModelPartition.html</loc>
   </url>
   <url>
     <loc>/reference/lcModelWeightedPartition.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lcModels-class.html</loc>
   </url>
   <url>
     <loc>/reference/lcModels.html</loc>
