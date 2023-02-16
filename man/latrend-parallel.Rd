@@ -2,7 +2,7 @@
 % Please edit documentation in R/zzz.R
 \name{latrend-parallel}
 \alias{latrend-parallel}
-\title{Parallel computing using latrend}
+\title{Parallel computation using latrend}
 \description{
 The model estimation functions support parallel computation through the use of the \link[foreach]{foreach} mechanism.
 In order to make use of parallel execution, a parallel back-end must be registered.

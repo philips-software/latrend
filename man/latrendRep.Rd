@@ -17,9 +17,10 @@ latrendRep(
 )
 }
 \arguments{
-\item{method}{An \code{lcMethod} object specifying the longitudinal cluster method to apply, or the name (as \code{character}) of an \code{lcMethod} subclass. See \linkS4class{lcMethod} for details.}
+\item{method}{An \link{lcMethod} object specifying the longitudinal cluster method to apply, or the name (as \code{character}) of the \code{lcMethod} subclass to instantiate.}
 
-\item{data}{The \code{data.frame} to which to apply the method. Inputs supported by \code{\link[=trajectories]{trajectories()}} can also be used.}
+\item{data}{The data of the trajectories to which to estimate the method for.
+Any inputs supported by \code{\link[=trajectories]{trajectories()}} can be used, including \code{data.frame} and \code{matrix}.}
 
 \item{.rep}{The number of repeated fits.}
 
@@ -31,7 +32,8 @@ latrendRep(
 
 \item{.parallel}{Whether to use parallel evaluation. See \link{latrend-parallel}.}
 
-\item{envir}{The \code{environment} in which to evaluate the method arguments (by \code{\link[=compose]{compose()}}). This environment is also used to evaluate the \code{data} argument if it is of type \code{call}.}
+\item{envir}{The \code{environment} in which to evaluate the method arguments via \code{\link[=compose]{compose()}}.
+If the \code{data} argument is of type \code{call} then this environment is also used to evaluate the \code{data} argument.}
 
 \item{verbose}{The level of verbosity. Either an object of class \code{Verbose} (see \link[R.utils:Verbose]{R.utils::Verbose} for details),
 a \code{logical} indicating whether to show basic computation information,

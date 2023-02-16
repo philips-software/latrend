@@ -61,4 +61,7 @@ if (require("ggplot2")) {
   )
 }
 }
+\seealso{
+\link{latrend-data}
+}
 \keyword{datasets}

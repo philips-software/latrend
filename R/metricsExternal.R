@@ -24,9 +24,7 @@
 #' @param object2 The other `lcModel` to compare with.
 #' @param name The name(s) of the external metric(s) to compute. If no names are given, the names specified in the `latrend.externalMetric` option (none by default) are used.
 #' @return A named `numeric` vector containing the computed model metrics.
-#' @details
-#' List of currently supported external metrics:
-#'
+#' @section Supported external metrics:
 #' | **Metric name** | **Description** | **Function / Reference** |
 #' | --- | :-------- | :--- |
 #' | `adjustedRand` | [Adjusted Rand index](https://en.wikipedia.org/wiki/Rand_index). Based on the Rand index, but adjusted for agreements occurring by chance. A score of 1 indicates a perfect agreement, whereas a score of 0 indicates an agreement no better than chance. | [mclustcomp::mclustcomp()], \insertCite{hubert1985comparing}{latrend} |

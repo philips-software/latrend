@@ -3,7 +3,7 @@
 \name{validate}
 \alias{validate}
 \alias{validate,lcMethod-method}
-\title{lcMethod fit process: method argument validation logic}
+\title{\code{lcMethod} estimation step: method argument validation logic}
 \usage{
 \S4method{validate}{lcMethod}(method, data, envir = NULL, ...)
 }
@@ -49,10 +49,9 @@ setMethod("validate", "lcMethodExample", function(method, data, envir = NULL, ..
 }
 }
 
-\section{Fitting procedure}{
+\section{Estimation procedure}{
 
-Each \code{lcMethod} subclass defines a type of methods in terms of a series of steps for estimating the method.
-These steps, as part of the fitting procedure, are executed by \code{\link[=latrend]{latrend()}} in the following order:
+The steps for estimating a \code{lcMethod} object are defined and executed as follows:
 \enumerate{
 \item \code{\link[=compose]{compose()}}: Evaluate and finalize the method argument values.
 \item \code{\link[=validate]{validate()}}: Check the validity of the method argument values in relation to the dataset.

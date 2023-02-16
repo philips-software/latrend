@@ -3,7 +3,7 @@
 \docType{class}
 \name{lcModel-class}
 \alias{lcModel-class}
-\title{lcModel class}
+\title{\code{lcModel} class}
 \arguments{
 \item{object}{The \code{lcModel} object.}
 
@@ -54,24 +54,40 @@ For predicting the posterior probability for unseen data, the \code{predictPostp
 }}
 
 \seealso{
-Other model-specific methods: 
+Other lcModel functions: 
+\code{\link{clusterNames}()},
+\code{\link{clusterProportions}()},
+\code{\link{clusterSizes}()},
 \code{\link{clusterTrajectories}()},
 \code{\link{coef.lcModel}()},
 \code{\link{converged}()},
 \code{\link{deviance.lcModel}()},
 \code{\link{df.residual.lcModel}()},
+\code{\link{estimationTime}()},
+\code{\link{externalMetric,lcModel,lcModel-method}},
 \code{\link{fitted.lcModel}()},
 \code{\link{fittedTrajectories}()},
-\code{\link{logLik.lcModel}()},
+\code{\link{getCall.lcModel}()},
+\code{\link{getLcMethod}()},
+\code{\link{ids}()},
+\code{\link{metric}()},
 \code{\link{model.frame.lcModel}()},
+\code{\link{nClusters}()},
+\code{\link{nIds}()},
 \code{\link{nobs.lcModel}()},
+\code{\link{plot-lcModel-method}},
+\code{\link{plotClusterTrajectories}()},
+\code{\link{plotFittedTrajectories}()},
 \code{\link{postprob}()},
 \code{\link{predict.lcModel}()},
 \code{\link{predictAssignments}()},
 \code{\link{predictForCluster}()},
 \code{\link{predictPostprob}()},
+\code{\link{qqPlot}()},
 \code{\link{residuals.lcModel}()},
 \code{\link{sigma.lcModel}()},
-\code{\link{time.lcModel}()}
+\code{\link{strip}()},
+\code{\link{time.lcModel}()},
+\code{\link{trajectoryAssignments}()}
 }
-\concept{model-specific methods}
+\concept{lcModel functions}

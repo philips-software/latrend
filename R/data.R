@@ -1,3 +1,22 @@
+#' @name latrend-data
+#' @title Longitudinal dataset representation
+#' @description The [latrend estimation functions][latrend-estimation] expect univariate longitudinal data that can be represented in a `data.frame` with one row per trajectory observation:
+#' * Trajectory identifier: `numeric`, `character`, or `factor`
+#' * Observation time: `numeric`
+#' * Observation value: `numeric`
+#'
+#' In principle, any type of longitudinal data structure is supported, given that it can be transformed to the required `data.frame` format using the generic [trajectories] function.
+#' Support can be added by implementing the [trajectories] function for the respective signature.
+#' This means that users can implement their own data adapters as needed.
+#'
+#' @section Included longitudinal datasets:
+#' The following datasets are included with the package:
+#' * [latrendData]
+#' * [PAP.adh]
+#' * [PAP.adh1y]
+NULL
+
+
 #' @title Artificial longitudinal dataset comprising three classes
 #' @description
 #' An artificial longitudinal dataset comprising 200 trajectories belonging to one of 3 classes.
@@ -10,8 +29,14 @@
 #'   \item{Y}{`numeric`: The observed value at the respective time `Time` for trajectory `Id`.}
 #'   \item{Class}{`factor`: The reference class.}
 #' }
+#'
+#' ```{r}
+#' data(latrendData)
+#' head(latrendData)
+#' ```
+#'
 #' @source This dataset was generated using [generateLongData].
-#' @seealso [generateLongData]
+#' @seealso [latrend-data] [generateLongData]
 #' @examples
 #' data(latrendData)
 #'
@@ -50,7 +75,7 @@
 #' with some adjustments made in order to improve cluster separation for demonstration purposes.
 #'
 #' \insertRef{aloia2008time}{latrend}
-#'
+#' @seealso [latrend-data]
 #' @examples
 #' data(PAP.adh)
 #'
@@ -73,10 +98,6 @@
 #' The subset does not contain the Non-users and Early drop-out groups.
 "PAP.adh1y"
 
-#' @title Biweekly Mean Treatment Adherence of OSA Patients over 1 Year
-#' @description Deprecated, renamed to [PAP.adh].
-"OSA.adherence"
-
 #' @export
 #' @title Generate longitudinal test data
 #' @param sizes Number of strata per cluster.
@@ -94,6 +115,7 @@
 #' @param rnoise Random sampler for generating noise at location 0 with the respective scale.
 #' @param shuffle Whether to randomly reorder the strata in which they appear in the data.frame.
 #' @param seed Optional seed to set for the PRNG. The set PRNG state persists after the function completes.
+#' @seealso [latrend-data]
 #' @examples
 #' longdata <- generateLongData(
 #'   sizes = c(40, 70), id = "Id",

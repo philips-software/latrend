@@ -1,26 +1,45 @@
+#' @name latrend-estimation
+#' @title Overview of **`lcMethod`** estimation functions
+#' @description This page presents an overview of the different functions that are available for estimating one or more [longitudinal cluster methods][lcMethod].
+#' All functions are prefixed by *"latrend"*.
+#' @section *latrend* estimation functions:
+#' * **[latrend()]**: estimate a [method][lcMethod] on a [longitudinal dataset][latrend-data], returning the resulting [model][lcModel].
+#' * **[latrendBatch()]**: estimate multiple [methods][lcMethod] on multiple [longitudinal datasets][latrend-data], returning a [list of models][lcModels-class].
+#' * **[latrendRep()]**: repeatedly estimate a [method][lcMethod] on a [longitudinal dataset][latrend-data], returning a [list of models][lcModels-class].
+#' * **[latrendBoot()]**: repeatedly estimate a [method][lcMethod] on bootstrapped [longitudinal dataset][latrend-data], returning a [list of models][lcModels-class].
+#' * **[latrendCV()]**: repeatedly estimate a [method][lcMethod] using cross-validation on a [longitudinal dataset][latrend-data], returning a [list of models][lcModels-class].
+#' @section Parallel estimation:
+#' The functions involving repeated estimation support parallel computation. [See here.][latrend-parallel]
+#' @seealso [latrend-package] [lcMethod-estimation]
+NULL
+
+
 #' @export
-#' @title Cluster longitudinal data
-#' @description Fit a longitudinal cluster method to the given training data, according to the specification provided by the `lcMethod` object.
+#' @title Cluster longitudinal data using the specified method
+#' @description [An overview of the latrend package and its capabilities can be found here][latrend-package].
 #'
-#' This function runs all steps as part of the [method fitting procedure][lcMethod-class].
-#' @param method An `lcMethod` object specifying the longitudinal cluster method to apply, or the name (as `character`) of an `lcMethod` subclass. See [lcMethod-class][lcMethod-class] for details.
-#' @param data The `data.frame` to which to apply the method. Inputs supported by [trajectories()] can also be used.
+#' The `latrend()` function fits a specified longitudinal cluster [method][lcMethod] to the given data comprising the trajectories.
+#'
+#' This function runs all steps of the standardized [method estimation procedure][lcMethod-estimation], as implemented by the given `lcMethod` object.
+#' The result of this procedure is the estimated [lcModel].
+#' @param method An [lcMethod] object specifying the longitudinal cluster method to apply, or the name (as `character`) of the `lcMethod` subclass to instantiate.
+#' @param data The data of the trajectories to which to estimate the method for.
+#' Any inputs supported by [trajectories()] can be used, including `data.frame` and `matrix`.
 #' @param ... Any other arguments to update the `lcMethod` definition with.
-#' @param envir The `environment` in which to evaluate the method arguments (by [compose()]). This environment is also used to evaluate the `data` argument if it is of type `call`.
+#' @param envir The `environment` in which to evaluate the method arguments via [compose()].
+#' If the `data` argument is of type `call` then this environment is also used to evaluate the `data` argument.
 #' @param verbose The level of verbosity. Either an object of class `Verbose` (see [R.utils::Verbose] for details),
 #' a `logical` indicating whether to show basic computation information,
 #' a `numeric` indicating the verbosity level (see [Verbose]),
 #' or one of `c('info', 'fine', 'finest')`.
-#' @details If a seed value is specified in the `lcMethod` object or arguments to `latrend`, this seed is set using `set.seed` prior to the cluster preparation step.
-#' @return A `lcModel` object representing the fitted model.
+#' @details If a seed value is specified in the `lcMethod` object or arguments to `latrend`, this seed is set using `set.seed` prior to the [preFit] step.
+#' @return A [lcModel] object representing the fitted solution.
 #' @examples
 #' data(latrendData)
-#' model <- latrend(lcMethodLMKM(Y ~ Time, id = "Id", time = "Time"), data = latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, data = latrendData)
 #'
 #' model <- latrend("lcMethodLMKM", formula = Y ~ Time, id = "Id", time = "Time", data = latrendData)
-#'
-#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
-#' model <- latrend(method, data = latrendData, nClusters = 3)
 #'
 #' model <- latrend(method, data = latrendData, nClusters = 3, seed = 1)
 #' @family longitudinal cluster fit functions

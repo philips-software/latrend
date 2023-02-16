@@ -12,13 +12,15 @@
 #' @aliases latrend-package
 #' @rdname latrend-package
 #' @section Features:
-#' * Unified cluster analysis, independent of the underlying algorithms used. Enabling users to compare the performance of various longitudinal cluster methods on the case study at hand.
-#' * Supports many different methods for longitudinal clustering out of the box (see the list of supported packages below).
-#' * The framework consists of extensible S4 methods based on an abstract model class, enabling rapid prototyping of new cluster methods or model specifications.
-#' * Standard plotting tools for model evaluation across methods (e.g., trajectories, cluster trajectories, model fit, metrics)
-#' * Support for many cluster metrics through the packages clusterCrit, mclustcomp, and igraph.
-#' * The structured and unified analysis approach enables simulation studies for comparing methods.
-#' * Standardized model validation for all methods through bootstrapping or k-fold cross-validation.
+#' * **Unified cluster analysis**, independent of the underlying algorithms used. Enabling users to compare the performance of various longitudinal cluster methods on the case study at hand.
+#' * Supports [many different methods][latrend-methods] for longitudinal clustering out of the box (see the list of supported packages below).
+#' * The framework consists of extensible S4 methods based on an abstract [model class][lcModel-class], enabling **rapid prototyping** of new cluster methods or model specifications.
+#' * Standard **plotting** tools for model evaluation across methods (e.g., [trajectories][trajectories], [cluster trajectories][clusterTrajectories], model fit, [metrics][latrend-metrics])
+#' * Support for many **[cluster metrics][latrend-metrics]** through the packages *clusterCrit*, *mclustcomp*, and *igraph*.
+#' * The structured and unified analysis approach enables simulation studies for **comparing methods**.
+#' * Standardized model validation for all methods through [bootstrapping][latrendBoot] or [k-fold cross-validation][latrendCV].
+#'
+#' The supported types of longitudinal datasets are described [here][latrend-data].
 #'
 #' @section Getting started:
 #' The [latrendData] dataset is included with the package and is used in all examples.
@@ -41,7 +43,7 @@
 #' model <- latrend(kmlMethod, data = latrendData)
 #' }
 #'
-#' Analyze the fitted model
+#' We can then investigate the fitted model using
 #' \preformatted{
 #' summary(model)
 #' plot(model)
@@ -69,6 +71,12 @@
 #' * See `vignette("validation", package = "latrend")` for examples on applying internal cluster validation.
 #' * See `vignette("implement", package = "latrend")` for examples on constructing your own cluster models.
 #' @section Useful pages:
+#' Data requirements and datasets:
+#' [latrend-data] [latrendData] [PAP.adh]
+#'
+#' High-level method recommendations and supported methods:
+#' [latrend-approaches] [latrend-methods]
+#'
 #' Method specification:
 #' [lcMethod-class][lcMethod-class]
 #' [lcMethods]
@@ -76,6 +84,7 @@
 #' Method estimation:
 #' [latrend] [latrendRep] [latrendBatch] [latrendBoot] [latrendCV]
 #' [latrend-parallel]
+#' [Steps performed during estimation][lcMethod-estimation]
 #'
 #' Model functions:
 #' [lcModel-class][lcModel-class]
@@ -91,7 +100,7 @@ NULL
 
 #' @name latrend-parallel
 #' @rdname latrend-parallel
-#' @title Parallel computing using latrend
+#' @title Parallel computation using latrend
 #' @description The model estimation functions support parallel computation through the use of the \link[foreach]{foreach} mechanism.
 #' In order to make use of parallel execution, a parallel back-end must be registered.
 #'

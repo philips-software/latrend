@@ -45,27 +45,11 @@ Arguments cannot be directly modified, i.e., \code{lcMethod} objects are immutab
 Modifying an argument involves creating an altered copy through the \link{update.lcMethod} method.
 }
 
-\section{Fitting procedure}{
-
-Each \code{lcMethod} subclass defines a type of methods in terms of a series of steps for estimating the method.
-These steps, as part of the fitting procedure, are executed by \code{\link[=latrend]{latrend()}} in the following order:
-\enumerate{
-\item \code{\link[=compose]{compose()}}: Evaluate and finalize the method argument values.
-\item \code{\link[=validate]{validate()}}: Check the validity of the method argument values in relation to the dataset.
-\item \code{\link[=prepareData]{prepareData()}}: Process the training data for fitting.
-\item \code{\link[=preFit]{preFit()}}: Prepare environment for estimation, independent of training data.
-\item \code{\link[=fit]{fit()}}: Estimate the specified method on the training data, outputting an object inheriting from \code{lcModel}.
-\item \code{\link[=postFit]{postFit()}}: Post-process the outputted \code{lcModel} object.
-}
-
-The result of the fitting procedure is an \linkS4class{lcModel} object that inherits from the \code{lcModel} class.
-}
-
 \section{Implementation}{
 
 The base class \code{lcMethod} provides the logic for storing, evaluating, and printing the method parameters.
 
-Subclasses of \code{lcMethod} differ only in the fitting procedure logic (see above).
+Subclasses of \code{lcMethod} differ only in the \link[=lcMethod-estimation]{fitting procedure logic}.
 
 To implement your own \code{lcMethod} subclass, you'll want to implement at least the following functions:
 \itemize{
@@ -75,7 +59,7 @@ To implement your own \code{lcMethod} subclass, you'll want to implement at leas
 \item \code{\link[=getArgumentDefaults]{getArgumentDefaults()}}: Sensible default argument values to your method.
 }
 
-For more complex methods, the additional functions as part of the fitting procedure (see the \emph{Fitting procedure} section above) will be of use.
+For more complex methods, the additional functions as part of the \link[=lcMethod-estimation]{fitting procedure} will be of use.
 }
 
 \examples{

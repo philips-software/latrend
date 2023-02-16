@@ -11,14 +11,16 @@ A framework for clustering longitudinal datasets in a standardized way. The pack
 \section{Features}{
 
 \itemize{
-\item Unified cluster analysis, independent of the underlying algorithms used. Enabling users to compare the performance of various longitudinal cluster methods on the case study at hand.
-\item Supports many different methods for longitudinal clustering out of the box (see the list of supported packages below).
-\item The framework consists of extensible S4 methods based on an abstract model class, enabling rapid prototyping of new cluster methods or model specifications.
-\item Standard plotting tools for model evaluation across methods (e.g., trajectories, cluster trajectories, model fit, metrics)
-\item Support for many cluster metrics through the packages clusterCrit, mclustcomp, and igraph.
-\item The structured and unified analysis approach enables simulation studies for comparing methods.
-\item Standardized model validation for all methods through bootstrapping or k-fold cross-validation.
+\item \strong{Unified cluster analysis}, independent of the underlying algorithms used. Enabling users to compare the performance of various longitudinal cluster methods on the case study at hand.
+\item Supports \link[=latrend-methods]{many different methods} for longitudinal clustering out of the box (see the list of supported packages below).
+\item The framework consists of extensible S4 methods based on an abstract \link[=lcModel-class]{model class}, enabling \strong{rapid prototyping} of new cluster methods or model specifications.
+\item Standard \strong{plotting} tools for model evaluation across methods (e.g., \link{trajectories}, \link[=clusterTrajectories]{cluster trajectories}, model fit, \link[=latrend-metrics]{metrics})
+\item Support for many \strong{\link[=latrend-metrics]{cluster metrics}} through the packages \emph{clusterCrit}, \emph{mclustcomp}, and \emph{igraph}.
+\item The structured and unified analysis approach enables simulation studies for \strong{comparing methods}.
+\item Standardized model validation for all methods through \link[=latrendBoot]{bootstrapping} or \link[=latrendCV]{k-fold cross-validation}.
 }
+
+The supported types of longitudinal datasets are described \link[=latrend-data]{here}.
 }
 
 \section{Getting started}{
@@ -43,7 +45,7 @@ The specified method is then estimated on the data using the generic estimation 
 model <- latrend(kmlMethod, data = latrendData)
 }
 
-Analyze the fitted model
+We can then investigate the fitted model using
 \preformatted{
 summary(model)
 plot(model)
@@ -78,6 +80,12 @@ Further step-by-step instructions on how to use the package are described in the
 
 \section{Useful pages}{
 
+Data requirements and datasets:
+\link{latrend-data} \link{latrendData} \link{PAP.adh}
+
+High-level method recommendations and supported methods:
+\link{latrend-approaches} \link{latrend-methods}
+
 Method specification:
 \linkS4class{lcMethod}
 \link{lcMethods}
@@ -85,6 +93,7 @@ Method specification:
 Method estimation:
 \link{latrend} \link{latrendRep} \link{latrendBatch} \link{latrendBoot} \link{latrendCV}
 \link{latrend-parallel}
+\link[=lcMethod-estimation]{Steps performed during estimation}
 
 Model functions:
 \linkS4class{lcModel}

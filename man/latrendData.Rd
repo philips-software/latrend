@@ -13,6 +13,17 @@ Each row represents the observed value of a trajectory at a specific moment in t
 \item{Y}{\code{numeric}: The observed value at the respective time \code{Time} for trajectory \code{Id}.}
 \item{Class}{\code{factor}: The reference class.}
 }
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data(latrendData)
+head(latrendData)
+#>   Id      Time           Y   Class
+#> 1  1 0.0000000 -1.08049205 Class 1
+#> 2  1 0.2222222 -0.68024151 Class 1
+#> 3  1 0.4444444 -0.65148373 Class 1
+#> 4  1 0.6666667 -0.39115398 Class 1
+#> 5  1 0.8888889 -0.19407876 Class 1
+#> 6  1 1.1111111 -0.02991783 Class 1
+}\if{html}{\out{</div>}}
 }
 \source{
 This dataset was generated using \link{generateLongData}.
@@ -35,6 +46,6 @@ if (require("ggplot2")) {
 }
 }
 \seealso{
-\link{generateLongData}
+\link{latrend-data} \link{generateLongData}
 }
 \keyword{datasets}

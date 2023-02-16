@@ -37,25 +37,5 @@ if (rlang::is_installed("lcmm")) {
 }
 \seealso{
 \link[stats:logLik]{stats::logLik} \link{metric}
-
-Other model-specific methods: 
-\code{\link{clusterTrajectories}()},
-\code{\link{coef.lcModel}()},
-\code{\link{converged}()},
-\code{\link{deviance.lcModel}()},
-\code{\link{df.residual.lcModel}()},
-\code{\link{fitted.lcModel}()},
-\code{\link{fittedTrajectories}()},
-\code{\link{lcModel-class}},
-\code{\link{model.frame.lcModel}()},
-\code{\link{nobs.lcModel}()},
-\code{\link{postprob}()},
-\code{\link{predict.lcModel}()},
-\code{\link{predictAssignments}()},
-\code{\link{predictForCluster}()},
-\code{\link{predictPostprob}()},
-\code{\link{residuals.lcModel}()},
-\code{\link{sigma.lcModel}()},
-\code{\link{time.lcModel}()}
 }
 \concept{model-specific methods}

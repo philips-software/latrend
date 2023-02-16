@@ -2,6 +2,7 @@
 
 #' @name lcFitMethods
 #' @rdname lcFitMethods
+#' @aliases lcMetaMethods
 #' @title Method fit modifiers
 #' @description A collection of special methods that adapt the fitting procedure of the underlying longitudinal cluster method.
 #' Supported fit methods:

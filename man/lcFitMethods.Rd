@@ -4,6 +4,7 @@
 \docType{class}
 \name{lcFitMethods}
 \alias{lcFitMethods}
+\alias{lcMetaMethods}
 \alias{lcFitConverged-class}
 \alias{lcFitConverged}
 \alias{lcFitRep-class}

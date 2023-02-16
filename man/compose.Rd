@@ -3,7 +3,7 @@
 \name{compose}
 \alias{compose}
 \alias{compose,lcMethod-method}
-\title{lcMethod fit process: compose an lcMethod object}
+\title{\code{lcMethod} estimation step: compose an lcMethod object}
 \usage{
 \S4method{compose}{lcMethod}(method, envir = NULL)
 }
@@ -36,10 +36,9 @@ setMethod("compose", "lcMethodExample", function(method, envir = NULL) {
 }
 }
 
-\section{Fitting procedure}{
+\section{Estimation procedure}{
 
-Each \code{lcMethod} subclass defines a type of methods in terms of a series of steps for estimating the method.
-These steps, as part of the fitting procedure, are executed by \code{\link[=latrend]{latrend()}} in the following order:
+The steps for estimating a \code{lcMethod} object are defined and executed as follows:
 \enumerate{
 \item \code{\link[=compose]{compose()}}: Evaluate and finalize the method argument values.
 \item \code{\link[=validate]{validate()}}: Check the validity of the method argument values in relation to the dataset.

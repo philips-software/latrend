@@ -2,6 +2,7 @@
 
 #' @name metric
 #' @rdname metric
+#' @aliases internalMetric
 #' @title Compute internal model metric(s)
 #' @description Compute one or more internal metrics for the given `lcModel` object.
 #'
@@ -18,9 +19,7 @@
 #' Call [getInternalMetricNames()] to retrieve the names of the defined internal metrics.
 #'
 #' See the _Details_ section below for a list of supported metrics.
-#' @details
-#' List of currently supported metrics:
-#'
+#' @section Supported internal metrics:
 #' | **Metric name** | **Description** | **Function / Reference** |
 #' | --- | :-------- | :--- |
 #' | `AIC` | [Akaike information criterion](https://en.wikipedia.org/wiki/Akaike_information_criterion). A goodness-of-fit estimator that adjusts for model complexity (i.e., the number of parameters). Only available for models that support the computation of the model log-likelihood through [logLik]. | [stats::AIC()], \insertCite{akaike1974new}{latrend} |

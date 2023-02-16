@@ -67,3 +67,6 @@ if (require("ggplot2")) {
   plotTrajectories(longdata, response = "Value", id = "Id", time = "Time")
 }
 }
+\seealso{
+\link{latrend-data}
+}

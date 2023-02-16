@@ -2,7 +2,7 @@
 % Please edit documentation in R/latrend.R
 \name{latrend}
 \alias{latrend}
-\title{Cluster longitudinal data}
+\title{Cluster longitudinal data using the specified method}
 \usage{
 latrend(
   method,
@@ -13,13 +13,15 @@ latrend(
 )
 }
 \arguments{
-\item{method}{An \code{lcMethod} object specifying the longitudinal cluster method to apply, or the name (as \code{character}) of an \code{lcMethod} subclass. See \linkS4class{lcMethod} for details.}
+\item{method}{An \link{lcMethod} object specifying the longitudinal cluster method to apply, or the name (as \code{character}) of the \code{lcMethod} subclass to instantiate.}
 
-\item{data}{The \code{data.frame} to which to apply the method. Inputs supported by \code{\link[=trajectories]{trajectories()}} can also be used.}
+\item{data}{The data of the trajectories to which to estimate the method for.
+Any inputs supported by \code{\link[=trajectories]{trajectories()}} can be used, including \code{data.frame} and \code{matrix}.}
 
 \item{...}{Any other arguments to update the \code{lcMethod} definition with.}
 
-\item{envir}{The \code{environment} in which to evaluate the method arguments (by \code{\link[=compose]{compose()}}). This environment is also used to evaluate the \code{data} argument if it is of type \code{call}.}
+\item{envir}{The \code{environment} in which to evaluate the method arguments via \code{\link[=compose]{compose()}}.
+If the \code{data} argument is of type \code{call} then this environment is also used to evaluate the \code{data} argument.}
 
 \item{verbose}{The level of verbosity. Either an object of class \code{Verbose} (see \link[R.utils:Verbose]{R.utils::Verbose} for details),
 a \code{logical} indicating whether to show basic computation information,
@@ -27,24 +29,25 @@ a \code{numeric} indicating the verbosity level (see \link{Verbose}),
 or one of \code{c('info', 'fine', 'finest')}.}
 }
 \value{
-A \code{lcModel} object representing the fitted model.
+A \link{lcModel} object representing the fitted solution.
 }
 \description{
-Fit a longitudinal cluster method to the given training data, according to the specification provided by the \code{lcMethod} object.
+\link[=latrend-package]{An overview of the latrend package and its capabilities can be found here}.
 
-This function runs all steps as part of the \link[=lcMethod-class]{method fitting procedure}.
+The \code{latrend()} function fits a specified longitudinal cluster \link[=lcMethod]{method} to the given data comprising the trajectories.
+
+This function runs all steps of the standardized \link[=lcMethod-estimation]{method estimation procedure}, as implemented by the given \code{lcMethod} object.
+The result of this procedure is the estimated \link{lcModel}.
 }
 \details{
-If a seed value is specified in the \code{lcMethod} object or arguments to \code{latrend}, this seed is set using \code{set.seed} prior to the cluster preparation step.
+If a seed value is specified in the \code{lcMethod} object or arguments to \code{latrend}, this seed is set using \code{set.seed} prior to the \link{preFit} step.
 }
 \examples{
 data(latrendData)
-model <- latrend(lcMethodLMKM(Y ~ Time, id = "Id", time = "Time"), data = latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, data = latrendData)
 
 model <- latrend("lcMethodLMKM", formula = Y ~ Time, id = "Id", time = "Time", data = latrendData)
-
-method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
-model <- latrend(method, data = latrendData, nClusters = 3)
 
 model <- latrend(method, data = latrendData, nClusters = 3, seed = 1)
 }

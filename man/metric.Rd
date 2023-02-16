@@ -3,6 +3,7 @@
 \name{metric}
 \alias{metric}
 \alias{metric,lcModel-method}
+\alias{internalMetric}
 \alias{metric,list-method}
 \alias{metric,lcModels-method}
 \title{Compute internal model metric(s)}
@@ -47,8 +48,8 @@ Call \code{\link[=getInternalMetricNames]{getInternalMetricNames()}} to retrieve
 
 See the \emph{Details} section below for a list of supported metrics.
 }
-\details{
-List of currently supported metrics:\tabular{lll}{
+\section{Supported internal metrics}{
+\tabular{lll}{
    \strong{Metric name} \tab \strong{Description} \tab \strong{Function / Reference} \cr
    \code{AIC} \tab \href{https://en.wikipedia.org/wiki/Akaike_information_criterion}{Akaike information criterion}. A goodness-of-fit estimator that adjusts for model complexity (i.e., the number of parameters). Only available for models that support the computation of the model log-likelihood through \link{logLik}. \tab \code{\link[stats:AIC]{stats::AIC()}}, \insertCite{akaike1974new}{latrend} \cr
    \code{APPA.mean} \tab Mean of the average posterior probability of assignment (APPA) across clusters. A measure of the precision of the trajectory classifications. A score of 1 indicates perfect classification. \tab \code{\link[=APPA]{APPA()}}, \insertCite{nagin2005group}{latrend} \cr
@@ -82,6 +83,7 @@ List of currently supported metrics:\tabular{lll}{
    \code{WRSS} \tab \code{RSS} weighted by cluster-assignment probability \tab  \cr
 }
 }
+
 \section{Implementation}{
 
 See the documentation of the \code{\link[=defineInternalMetric]{defineInternalMetric()}} function for details on how to define your own metrics.
@@ -111,5 +113,42 @@ Other metric functions:
 \code{\link{getExternalMetricNames}()},
 \code{\link{getInternalMetricDefinition}()},
 \code{\link{getInternalMetricNames}()}
+
+Other lcModel functions: 
+\code{\link{clusterNames}()},
+\code{\link{clusterProportions}()},
+\code{\link{clusterSizes}()},
+\code{\link{clusterTrajectories}()},
+\code{\link{coef.lcModel}()},
+\code{\link{converged}()},
+\code{\link{deviance.lcModel}()},
+\code{\link{df.residual.lcModel}()},
+\code{\link{estimationTime}()},
+\code{\link{externalMetric,lcModel,lcModel-method}},
+\code{\link{fitted.lcModel}()},
+\code{\link{fittedTrajectories}()},
+\code{\link{getCall.lcModel}()},
+\code{\link{getLcMethod}()},
+\code{\link{ids}()},
+\code{\link{lcModel-class}},
+\code{\link{model.frame.lcModel}()},
+\code{\link{nClusters}()},
+\code{\link{nIds}()},
+\code{\link{nobs.lcModel}()},
+\code{\link{plot-lcModel-method}},
+\code{\link{plotClusterTrajectories}()},
+\code{\link{plotFittedTrajectories}()},
+\code{\link{postprob}()},
+\code{\link{predict.lcModel}()},
+\code{\link{predictAssignments}()},
+\code{\link{predictForCluster}()},
+\code{\link{predictPostprob}()},
+\code{\link{qqPlot}()},
+\code{\link{residuals.lcModel}()},
+\code{\link{sigma.lcModel}()},
+\code{\link{strip}()},
+\code{\link{time.lcModel}()},
+\code{\link{trajectoryAssignments}()}
 }
+\concept{lcModel functions}
 \concept{metric functions}

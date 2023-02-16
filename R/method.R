@@ -1,3 +1,29 @@
+#' @name lcMethod-estimation
+#' @aliases latrend-estimation latrend-procedure lcMethod-steps
+#' @title Longitudinal cluster method (`lcMethod`) estimation procedure
+#' @description Each longitudinal cluster method represented by a [lcMethod class][lcMethod-class] implements a series of standardized steps that produce the estimated method as its output.
+#' These steps, as part of the estimation procedure, are executed by the [latrend()] function and other functions prefixed by *"latrend"* (e.g., [latrendRep()], [latrendBoot()], [latrendCV()]).
+#' @section Estimation procedure:
+#' The steps for estimating a `lcMethod` object are defined and executed as follows:
+#' \enumerate{
+#'   \item [compose()]: Evaluate and finalize the method argument values.
+#'   \item [validate()]: Check the validity of the method argument values in relation to the dataset.
+#'   \item [prepareData()]: Process the training data for fitting.
+#'   \item [preFit()]: Prepare environment for estimation, independent of training data.
+#'   \item [fit()]: Estimate the specified method on the training data, outputting an object inheriting from `lcModel`.
+#'   \item [postFit()]: Post-process the outputted `lcModel` object.
+#' }
+#'
+#' The result of the fitting procedure is an [lcModel-class] object that inherits from the `lcModel` class.
+#' @examples
+#' data(latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, data = latrendData)
+#' summary(model)
+#' @seealso [lcMethod-class] [latrend]
+NULL
+
+
 #' @export
 #' @name lcMethod-class
 #' @rdname lcMethod-class
@@ -23,24 +49,10 @@
 #' Arguments cannot be directly modified, i.e., `lcMethod` objects are immutable.
 #' Modifying an argument involves creating an altered copy through the [update.lcMethod] method.
 #'
-#' @section Fitting procedure:
-#' Each `lcMethod` subclass defines a type of methods in terms of a series of steps for estimating the method.
-#' These steps, as part of the fitting procedure, are executed by [latrend()] in the following order:
-#' \enumerate{
-#'   \item [compose()]: Evaluate and finalize the method argument values.
-#'   \item [validate()]: Check the validity of the method argument values in relation to the dataset.
-#'   \item [prepareData()]: Process the training data for fitting.
-#'   \item [preFit()]: Prepare environment for estimation, independent of training data.
-#'   \item [fit()]: Estimate the specified method on the training data, outputting an object inheriting from `lcModel`.
-#'   \item [postFit()]: Post-process the outputted `lcModel` object.
-#' }
-#'
-#' The result of the fitting procedure is an [lcModel-class] object that inherits from the `lcModel` class.
-#'
 #' @section Implementation:
 #' The base class `lcMethod` provides the logic for storing, evaluating, and printing the method parameters.
 #'
-#' Subclasses of `lcMethod` differ only in the fitting procedure logic (see above).
+#' Subclasses of `lcMethod` differ only in the [fitting procedure logic][lcMethod-estimation].
 #'
 #' To implement your own `lcMethod` subclass, you'll want to implement at least the following functions:
 #' \itemize{
@@ -50,7 +62,7 @@
 #'   \item [getArgumentDefaults()]: Sensible default argument values to your method.
 #' }
 #'
-#' For more complex methods, the additional functions as part of the fitting procedure (see the _Fitting procedure_ section above) will be of use.
+#' For more complex methods, the additional functions as part of the [fitting procedure][lcMethod-estimation] will be of use.
 #'
 #' @details Because the `lcMethod` arguments may be unevaluated, argument retrieval functions such as `[[` accept an `envir` argument.
 #' A default `environment` can be assigned or obtained from a `lcMethod` object using the `environment()` function.
@@ -476,7 +488,7 @@ as.data.frame.lcMethod = function(x, ..., eval = TRUE, nullValue = NA, envir = N
 #' @export
 #' @name compose
 #' @aliases compose,lcMethod-method
-#' @title lcMethod fit process: compose an lcMethod object
+#' @title `lcMethod` estimation step: compose an lcMethod object
 #' @description Note: this function should not be called directly, as it is part of the `lcMethod` fitting process. For fitting an `lcMethod` object to a dataset, see [latrend()].
 #'
 #' The `compose()` function of the `lcMethod` object evaluates and finalizes the `lcMethod` arguments.
@@ -485,7 +497,7 @@ as.data.frame.lcMethod = function(x, ..., eval = TRUE, nullValue = NA, envir = N
 #' @param method The `lcMethod` object.
 #' @param envir The `environment` in which the `lcMethod` should be evaluated
 #' @return The evaluated and finalized `lcMethod` object.
-#' @inheritSection lcMethod-class Fitting procedure
+#' @inheritSection lcMethod-estimation Estimation procedure
 #' @section Implementation:
 #' In general, there is no need to extend this method for a specific method, as all arguments are automatically evaluated by the `compose,lcMethod` method.
 #'
@@ -507,7 +519,7 @@ setMethod('compose', 'lcMethod', function(method, envir = NULL) {
 #' @export
 #' @name fit
 #' @aliases fit,lcMethod-method
-#' @title lcMethod fit process: logic for fitting the method to the processed data
+#' @title `lcMethod` estimation step: logic for fitting the method to the processed data
 #' @description Note: this function should not be called directly, as it is part of the `lcMethod` fitting process. For fitting an `lcMethod` object to a dataset, see [latrend()].
 #'
 #' The `fit()` function of the `lcMethod` object estimates the model with the evaluated method specification, processed training data, and prepared environment.
@@ -531,7 +543,7 @@ setMethod('compose', 'lcMethod', function(method, envir = NULL) {
 #'   )
 #' })
 #' }
-#' @inheritSection lcMethod-class Fitting procedure
+#' @inheritSection lcMethod-estimation Estimation procedure
 setMethod('fit', 'lcMethod', function(method, data, envir, verbose) {
   stop(
     sprintf('method cannot be estimated because the fit() function is not implemented for lcMethod of class %1$s.
@@ -816,7 +828,7 @@ setMethod('names', 'lcMethod', function(x) {
 # . preFit ####
 #' @name preFit
 #' @aliases preFit,lcMethod-method
-#' @title lcMethod fit process: method preparation logic
+#' @title `lcMethod` estimation step: method preparation logic
 #' @description Note: this function should not be called directly, as it is part of the `lcMethod` fitting process. For fitting an `lcMethod` object to a dataset, see [latrend()].
 #'
 #' The `preFit()` function of the `lcMethod` object performs preparatory work that is needed for fitting the method but should not be counted towards the method estimation time.
@@ -831,7 +843,7 @@ setMethod('names', 'lcMethod', function(x) {
 #'   return(envir)
 #' })
 #' }
-#' @inheritSection lcMethod-class Fitting procedure
+#' @inheritSection lcMethod-estimation Estimation procedure
 #' @return The updated `environment` that will be passed to [fit()].
 setMethod('preFit', 'lcMethod', function(method, data, envir, verbose) {
   envir
@@ -841,7 +853,7 @@ setMethod('preFit', 'lcMethod', function(method, data, envir, verbose) {
 # . prepareData ####
 #' @name prepareData
 #' @aliases prepareData,lcMethod-method
-#' @title lcMethod fit process: logic for preparing the training data
+#' @title `lcMethod` estimation step: logic for preparing the training data
 #' @description Note: this function should not be called directly, as it is part of the `lcMethod` fitting process. For fitting an `lcMethod` object to a dataset, see [latrend()].
 #'
 #' The `prepareData()` function of the `lcMethod` object processes the training data prior to fitting the method.
@@ -871,7 +883,7 @@ setMethod('preFit', 'lcMethod', function(method, data, envir, verbose) {
 #'   return(envir)
 #' })
 #' }
-#' @inheritSection lcMethod-class Fitting procedure
+#' @inheritSection lcMethod-estimation Estimation procedure
 setMethod('prepareData', 'lcMethod', function(method, data, verbose) {
   new.env(parent = emptyenv())
 })
@@ -880,7 +892,7 @@ setMethod('prepareData', 'lcMethod', function(method, data, verbose) {
 # . postFit ####
 #' @name postFit
 #' @aliases postFit,lcMethod-method
-#' @title lcMethod fit process: logic for post-processing the fitted lcModel
+#' @title `lcMethod` estimation step: logic for post-processing the fitted lcModel
 #' @description Note: this function should not be called directly, as it is part of the `lcMethod` fitting process. For fitting an `lcMethod` object to a dataset, see [latrend()].
 #'
 #' The `postFit()` function of the `lcMethod` object defines how the `lcModel` object returned by [fit()] should be post-processed.
@@ -910,7 +922,7 @@ setMethod('prepareData', 'lcMethod', function(method, data, verbose) {
 #'   return(model)
 #' })
 #' }
-#' @inheritSection lcMethod-class Fitting procedure
+#' @inheritSection lcMethod-estimation Estimation procedure
 setMethod('postFit', 'lcMethod', function(method, data, model, envir, verbose) {
   model
 })
@@ -1181,7 +1193,7 @@ setMethod('timeVariable', 'lcMethod', function(object, ...) object$time)
 #' @export
 #' @name validate
 #' @aliases validate,lcMethod-method
-#' @title lcMethod fit process: method argument validation logic
+#' @title `lcMethod` estimation step: method argument validation logic
 #' @description Note: this function should not be called directly, as it is part of the `lcMethod` fitting process. For fitting an `lcMethod` object to a dataset, see [latrend()].
 #'
 #' The `validate()` function of the `lcMethod` object validates the method with respect to the training data.
@@ -1200,7 +1212,7 @@ setMethod('timeVariable', 'lcMethod', function(object, ...) object$time)
 #' @param ... Not used.
 #' @return Either `TRUE` if all validation checks passed,
 #' or a `character` containing a description of the failed validation checks.
-#' @inheritSection lcMethod-class Fitting procedure
+#' @inheritSection lcMethod-estimation Estimation procedure
 #' @section Implementation:
 #' An example implementation checking for the existence of specific arguments and type:
 #' \preformatted{

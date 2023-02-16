@@ -2,17 +2,44 @@
 
 setOldClass('lcModels')
 
-#' @export
-#' @aliases lcModels-class
-#' @title Construct a flat (named) list of lcModel objects
-#' @description The `lcModels` `S3` class represents a `list` of `lcModel` objects.
-#' This makes it easier to work with a set of models in a more structured manner.
+#' @name lcModels-class
+#' @title `lcModels`: a list of `lcModel` objects
+#' @description The `lcModels` `S3` class represents a `list` of one or more `lcModel` objects.
+#' This makes it easier to work with a collection of models in a more structured manner.
 #'
-#' The `lcModels()` function takes the inputs and generates a named `lcModels` object containing a list of the input models. Duplicates are preserved.
+#' A list of models is outputted from the repeated estimation functions such as [latrendRep()], [latrendBatch()], and [others][latrend-estimation].
+#' You can construct a list of models using the [lcModels()] function.
+#'
+#' @section Functionality:
+#' * [Print][print.lcModels] an argument summary for each of the models.
+#' * [Convert][as.data.frame.lcModels] to a `data.frame` of method arguments.
+#' * [Subset][subset.lcModels] the list.
+#' * Compute an [internal metric][metric] or [external metric][externalMetric].
+#' * Obtain the best model according to [minimizing][min.lcModels] or [maximizing][max.lcModels] a [metric][latrend-metrics].
+#' * Obtain the summed [estimation time][estimationTime].
+#' * [Plot a metric][plotMetric] across a variable.
+#' * [Plot the cluster trajectories][plotClusterTrajectories].
+#' @examples
+#' data(latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' models <- latrendRep(method, data = latrendData, .rep = 5) # 5 repeated runs
+#'
+#' bestModel <- min(models, "MAE")
+#' @family lcModels functions
+NULL
+
+
+#' @export
+#' @name lcModels
+#' @title Construct a list of `lcModel` objects
+#' @inheritSection lcModels-class Functionality
+#' @description [A general overview of the lcModels class can be found here][lcModels-class].
+#'
+#' The `lcModels()` function creates a flat (named) list of `lcModel` objects. Duplicates are preserved.
 #' @param ... `lcModel`, `lcModels`, or a recursive `list` of `lcModel` objects. Arguments may be named.
 #' @return A `lcModels` object containing all specified `lcModel` objects.
 #' @examples
-#' data(latrendData)
+#'
 #' lmkmMethod <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 #' lmkmModel <- latrend(lmkmMethod, latrendData)
 #' rngMethod <- lcMethodRandom("Y", id = "Id", time = "Time")
@@ -21,7 +48,7 @@ setOldClass('lcModels')
 #' lcModels(lmkmModel, rngModel)
 #'
 #' lcModels(defaults = c(lmkmModel, rngModel))
-#' @family lcModel list functions
+#' @family lcModels functions
 lcModels = function(...) {
   list(...) %>%
     unlist() %>%
@@ -42,10 +69,11 @@ is.lcModels = function(x) {
 
 #' @export
 #' @title Convert a list of lcModels to a lcModels list
+#' @inheritSection lcModels-class Functionality
 #' @param x A `list` of `lcModel` objects, an `lcModels` object, or `NULL`.
 #' @return A `lcModels` object.
 #' @seealso lcModels
-#' @family lcModel list functions
+#' @family lcModels functions
 as.lcModels = function(x) {
   if (missing(x) || is.null(x)) {
     x = list()
@@ -79,6 +107,7 @@ as.list.lcModels = function(x, ...) {
 
 #' @export
 #' @title Generate a data.frame containing the argument values per method per row
+#' @inheritSection lcModels-class Functionality
 #' @inheritParams as.data.frame.lcMethod
 #' @param x `lcModels` or a list of `lcModel`
 #' @param excludeShared Whether to exclude columns which have the same value across all methods.
@@ -278,6 +307,7 @@ setMethod('metric', 'lcModels', .metric.lcModels)
 
 #' @export
 #' @title Select the lcModel with the lowest metric value
+#' @inheritSection lcModels-class Functionality
 #' @param x The `lcModels` object
 #' @param name The name of the internal metric.
 #' @param ... Additional arguments.
@@ -294,6 +324,7 @@ setMethod('metric', 'lcModels', .metric.lcModels)
 #'
 #' min(models, "WMAE")
 #' @seealso [max.lcModels] [externalMetric]
+#' @family lcModels functions
 min.lcModels = function(x, name, ...) {
   x = as.lcModels(x)
 
@@ -312,6 +343,7 @@ min.lcModels = function(x, name, ...) {
 
 #' @export
 #' @title Select the lcModel with the highest metric value
+#' @inheritSection lcModels-class Functionality
 #' @param x The `lcModels` object.
 #' @param ... Additional arguments.
 #' @param name The name of the internal metric.
@@ -330,6 +362,7 @@ min.lcModels = function(x, name, ...) {
 #'   max(models, "Dunn")
 #' }
 #' @seealso [min.lcModels] [externalMetric]
+#' @family lcModels functions
 max.lcModels = function(x, name, ...) {
   x = as.lcModels(x)
 
@@ -384,6 +417,7 @@ setMethod('plot', c('lcModels', 'ANY'), function(x, y, ..., subset, gridArgs = l
 
 #' @export
 #' @title Plot one or more internal metrics for all lcModels
+#' @inheritSection lcModels-class Functionality
 #' @param models A `lcModels` or list of `lcModel` objects to compute and plot the metrics of.
 #' @inheritParams metric
 #' @inheritParams subset.lcModels
@@ -407,6 +441,7 @@ setMethod('plot', c('lcModels', 'ANY'), function(x, y, ..., subset, gridArgs = l
 #' if (require("ggplot2") && require("clusterCrit")) {
 #'   plotMetric(models, c("WMAE", "Dunn"))
 #' }
+#' @family lcModels functions
 plotMetric = function(
   models,
   name,
@@ -491,6 +526,7 @@ plotMetric = function(
 
 #' @export
 #' @title Subsetting a lcModels list based on method arguments
+#' @inheritSection lcModels-class Functionality
 #' @param x The `lcModels` or list of `lcModel` to be subsetted.
 #' @param subset Logical expression based on the `lcModel` method arguments, indicating
 #' which `lcModel` objects to keep.
@@ -511,7 +547,7 @@ plotMetric = function(
 #' models <- lcModels(model1, model2, model3, rngModel)
 #'
 #' subset(models, nClusters > 1 & .method == 'lmkm')
-#' @family lcModel list functions
+#' @family lcModels functions
 subset.lcModels = function(x, subset, drop = FALSE, ...) {
   x = as.lcModels(x)
 
@@ -534,11 +570,12 @@ subset.lcModels = function(x, subset, drop = FALSE, ...) {
 
 #' @export
 #' @title Print lcModels list concisely
+#' @inheritSection lcModels-class Functionality
 #' @param x The `lcModels` object.
 #' @param ... Not used.
 #' @param summary Whether to print the complete summary per model. This may be slow for long lists!
 #' @param excludeShared Whether to exclude model arguments which are identical across all models.
-#' @family lcModel list functions
+#' @family lcModels functions
 print.lcModels = function(
   x,
   ...,
