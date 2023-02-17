@@ -18,7 +18,8 @@
 An \code{environment} with the prepared data variable(s) that will be passed to \code{\link[=preFit]{preFit()}}.
 }
 \description{
-Note: this function should not be called directly, as it is part of the \code{lcMethod} fitting process. For fitting an \code{lcMethod} object to a dataset, see \code{\link[=latrend]{latrend()}}.
+Note: this function should not be called directly, as it is part of the \code{lcMethod} \link[=lcMethod-estimation]{estimation procedure}.
+For fitting an \code{lcMethod} object to a dataset, use the \code{\link[=latrend]{latrend()}} function or \link[=latrend-estimation]{one of the other standard estimation functions}.
 
 The \code{prepareData()} function of the \code{lcMethod} object processes the training data prior to fitting the method.
 Example uses:

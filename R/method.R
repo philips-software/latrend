@@ -489,7 +489,8 @@ as.data.frame.lcMethod = function(x, ..., eval = TRUE, nullValue = NA, envir = N
 #' @name compose
 #' @aliases compose,lcMethod-method
 #' @title `lcMethod` estimation step: compose an lcMethod object
-#' @description Note: this function should not be called directly, as it is part of the `lcMethod` fitting process. For fitting an `lcMethod` object to a dataset, see [latrend()].
+#' @description Note: this function should not be called directly, as it is part of the `lcMethod` [estimation procedure][lcMethod-estimation].
+#' For fitting an `lcMethod` object to a dataset, use the [latrend()] function or [one of the other standard estimation functions][latrend-estimation].
 #'
 #' The `compose()` function of the `lcMethod` object evaluates and finalizes the `lcMethod` arguments.
 #'
@@ -520,7 +521,8 @@ setMethod('compose', 'lcMethod', function(method, envir = NULL) {
 #' @name fit
 #' @aliases fit,lcMethod-method
 #' @title `lcMethod` estimation step: logic for fitting the method to the processed data
-#' @description Note: this function should not be called directly, as it is part of the `lcMethod` fitting process. For fitting an `lcMethod` object to a dataset, see [latrend()].
+#' @description Note: this function should not be called directly, as it is part of the `lcMethod` [estimation procedure][lcMethod-estimation].
+#' For fitting an `lcMethod` object to a dataset, use the [latrend()] function or [one of the other standard estimation functions][latrend-estimation].
 #'
 #' The `fit()` function of the `lcMethod` object estimates the model with the evaluated method specification, processed training data, and prepared environment.
 #' @inheritParams preFit
@@ -829,7 +831,8 @@ setMethod('names', 'lcMethod', function(x) {
 #' @name preFit
 #' @aliases preFit,lcMethod-method
 #' @title `lcMethod` estimation step: method preparation logic
-#' @description Note: this function should not be called directly, as it is part of the `lcMethod` fitting process. For fitting an `lcMethod` object to a dataset, see [latrend()].
+#' @description Note: this function should not be called directly, as it is part of the `lcMethod` [estimation procedure][lcMethod-estimation].
+#' For fitting an `lcMethod` object to a dataset, use the [latrend()] function or [one of the other standard estimation functions][latrend-estimation].
 #'
 #' The `preFit()` function of the `lcMethod` object performs preparatory work that is needed for fitting the method but should not be counted towards the method estimation time.
 #' The work is added to the provided `environment`, allowing the [fit()] function to make use of the prepared work.
@@ -854,7 +857,8 @@ setMethod('preFit', 'lcMethod', function(method, data, envir, verbose) {
 #' @name prepareData
 #' @aliases prepareData,lcMethod-method
 #' @title `lcMethod` estimation step: logic for preparing the training data
-#' @description Note: this function should not be called directly, as it is part of the `lcMethod` fitting process. For fitting an `lcMethod` object to a dataset, see [latrend()].
+#' @description Note: this function should not be called directly, as it is part of the `lcMethod` [estimation procedure][lcMethod-estimation].
+#' For fitting an `lcMethod` object to a dataset, use the [latrend()] function or [one of the other standard estimation functions][latrend-estimation].
 #'
 #' The `prepareData()` function of the `lcMethod` object processes the training data prior to fitting the method.
 #' Example uses:
@@ -893,7 +897,8 @@ setMethod('prepareData', 'lcMethod', function(method, data, verbose) {
 #' @name postFit
 #' @aliases postFit,lcMethod-method
 #' @title `lcMethod` estimation step: logic for post-processing the fitted lcModel
-#' @description Note: this function should not be called directly, as it is part of the `lcMethod` fitting process. For fitting an `lcMethod` object to a dataset, see [latrend()].
+#' @description Note: this function should not be called directly, as it is part of the `lcMethod` [estimation procedure][lcMethod-estimation].
+#' For fitting an `lcMethod` object to a dataset, use the [latrend()] function or [one of the other standard estimation functions][latrend-estimation].
 #'
 #' The `postFit()` function of the `lcMethod` object defines how the `lcModel` object returned by [fit()] should be post-processed.
 #' This can be used, for example, to:
@@ -1194,7 +1199,8 @@ setMethod('timeVariable', 'lcMethod', function(object, ...) object$time)
 #' @name validate
 #' @aliases validate,lcMethod-method
 #' @title `lcMethod` estimation step: method argument validation logic
-#' @description Note: this function should not be called directly, as it is part of the `lcMethod` fitting process. For fitting an `lcMethod` object to a dataset, see [latrend()].
+#' @description Note: this function should not be called directly, as it is part of the `lcMethod` [estimation procedure][lcMethod-estimation].
+#' For fitting an `lcMethod` object to a dataset, use the [latrend()] function or [one of the other standard estimation functions][latrend-estimation].
 #'
 #' The `validate()` function of the `lcMethod` object validates the method with respect to the training data.
 #' This enables a method to verify, for example:

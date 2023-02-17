@@ -20,7 +20,8 @@
 The updated \code{environment} that will be passed to \code{\link[=fit]{fit()}}.
 }
 \description{
-Note: this function should not be called directly, as it is part of the \code{lcMethod} fitting process. For fitting an \code{lcMethod} object to a dataset, see \code{\link[=latrend]{latrend()}}.
+Note: this function should not be called directly, as it is part of the \code{lcMethod} \link[=lcMethod-estimation]{estimation procedure}.
+For fitting an \code{lcMethod} object to a dataset, use the \code{\link[=latrend]{latrend()}} function or \link[=latrend-estimation]{one of the other standard estimation functions}.
 
 The \code{preFit()} function of the \code{lcMethod} object performs preparatory work that is needed for fitting the method but should not be counted towards the method estimation time.
 The work is added to the provided \code{environment}, allowing the \code{\link[=fit]{fit()}} function to make use of the prepared work.

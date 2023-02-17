@@ -16,7 +16,8 @@
 The evaluated and finalized \code{lcMethod} object.
 }
 \description{
-Note: this function should not be called directly, as it is part of the \code{lcMethod} fitting process. For fitting an \code{lcMethod} object to a dataset, see \code{\link[=latrend]{latrend()}}.
+Note: this function should not be called directly, as it is part of the \code{lcMethod} \link[=lcMethod-estimation]{estimation procedure}.
+For fitting an \code{lcMethod} object to a dataset, use the \code{\link[=latrend]{latrend()}} function or \link[=latrend-estimation]{one of the other standard estimation functions}.
 
 The \code{compose()} function of the \code{lcMethod} object evaluates and finalizes the \code{lcMethod} arguments.
 
