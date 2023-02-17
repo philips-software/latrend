@@ -18,7 +18,14 @@ Recommended overview and comparison papers:
 }
 \section{Approaches}{
 
-Disclaimer: The table below has been adapted from a pre-print of \insertCite{denteuling2021clustering}{latrend}.
+Disclaimer: The table below has been adapted from a pre-print of \insertCite{denteuling2021clustering}{latrend}.\tabular{llll}{
+   \strong{Approach} \tab \strong{Strengths} \tab \strong{Limitations} \tab \strong{Methods} \cr
+   \strong{Cross-sectional clustering} \tab Suitable for large datasets — Many available algorithms — Non-parametric cluster trajectory representation \tab Requires time-aligned complete data — Sensitive to measurement noise \tab \link{lcMethodKML} \link{lcMethodMclustLLPA} \link{lcMethodMixtoolsNPRM} \cr
+   \strong{Distance-based clustering} \tab Suitable for medium-sized datasets — Many distance metrics — Distance matrix only needs to be computed once \tab Scales poorly with number of trajectories — No robust cluster trajectory representation — Some distance metrics require aligned observations \tab \link{lcMethodDtwclust} \cr
+   \strong{Feature-based clustering} \tab Suitable for large datasets — Configurable — Features only needs to be computed once — Compact trajectory representation \tab Generally requires intensive longitudinal data — Sensitive to outliers \tab \link{lcMethodFeature} \link{lcMethodAkmedoids} \link{lcMethodLMKM} \link{lcMethodGCKM} \cr
+   \strong{Model-based clustering} \tab Parametric cluster trajectory — Incorporate (domain) assumptions — Low sample size requirements \tab Computationally intensive — Scales poorly with number of clusters — Convergence challenges \tab \link{lcMethodLcmmGBTM} \link{lcMethodLcmmGMM} \link{lcMethodCrimCV} \link{lcMethodFlexmix} \link{lcMethodFlexmixGBTM} \link{lcMethodFunFEM} \link{lcMethodMixAK_GLMM} \link{lcMethodMixtoolsGMM} \link{lcMethodMixTVEM} \cr
+}
+
 
 It is strongly encouraged to \link[=latrend-metrics]{evaluate and compare} several candidate methods in order to identify the most suitable method.
 }

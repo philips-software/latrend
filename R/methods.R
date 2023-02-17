@@ -59,6 +59,12 @@ NULL
 #' @section Approaches:
 #' Disclaimer: The table below has been adapted from a pre-print of \insertCite{denteuling2021clustering}{latrend}.
 #'
+#' | **Approach** | **Strengths** | **Limitations** | **Methods** |
+#' | --- | :-------- | :--- | :--- |
+#' | **Cross-sectional clustering** | Suitable for large datasets — Many available algorithms — Non-parametric cluster trajectory representation | Requires time-aligned complete data — Sensitive to measurement noise | [lcMethodKML] [lcMethodMclustLLPA] [lcMethodMixtoolsNPRM] |
+#' | **Distance-based clustering** | Suitable for medium-sized datasets — Many distance metrics — Distance matrix only needs to be computed once | Scales poorly with number of trajectories — No robust cluster trajectory representation — Some distance metrics require aligned observations | [lcMethodDtwclust] |
+#' | **Feature-based clustering** | Suitable for large datasets — Configurable — Features only needs to be computed once — Compact trajectory representation | Generally requires intensive longitudinal data — Sensitive to outliers | [lcMethodFeature] [lcMethodAkmedoids] [lcMethodLMKM] [lcMethodGCKM] |
+#' | **Model-based clustering** | Parametric cluster trajectory — Incorporate (domain) assumptions — Low sample size requirements | Computationally intensive — Scales poorly with number of clusters — Convergence challenges | [lcMethodLcmmGBTM] [lcMethodLcmmGMM] [lcMethodCrimCV] [lcMethodFlexmix] [lcMethodFlexmixGBTM] [lcMethodFunFEM] [lcMethodMixAK_GLMM] [lcMethodMixtoolsGMM] [lcMethodMixTVEM] |
 #'
 #' It is strongly encouraged to [evaluate and compare][latrend-metrics] several candidate methods in order to identify the most suitable method.
 #' @references \insertAllCited{}
