@@ -59,12 +59,6 @@ NULL
 #' @section Approaches:
 #' Disclaimer: The table below has been adapted from a pre-print of \insertCite{denteuling2021clustering}{latrend}.
 #'
-#' | **Approach** | **Strengths** | **Limitations** | **Methods** |
-#' | --- | :-------- | :--- | :--- |
-#' | **Cross-sectional clustering** | \itemize{\item Suitable for large datasets \item Many available algorithms \item Non-parametric cluster trajectory representation} | \itemize{\item Requires time-aligned complete data \item Sensitive to measurement noise} | [lcMethodKML] [lcMethodMclustLLPA] [lcMethodMixtoolsNPRM] |
-#' | **Distance-based clustering** | \itemize{\item Suitable for medium-sized datasets \item Many possible distance metrics \item Distance matrix only needs to be computed once} | \itemize{\item Scales poorly with number of trajectories \item No robust cluster trajectory representation \item Some distance metrics require aligned observations} | [lcMethodDtwclust] |
-#' | **Feature-based clustering** | \itemize{\item Suitable for large datasets \item Configurable \item Features only needs to be computed once \item Compact trajectory representation} | \itemize{\item Generally requires intensive longitudinal data \item Sensitive to outliers} | [lcMethodFeature] [lcMethodAkmedoids] [lcMethodLMKM] [lcMethodGCKM] |
-#' | **Model-based clustering** | \itemize{\item Parametric cluster trajectory \item Incorporate (domain) assumptions \item Low sample size requirements} | \itemize{\item Computationally intensive \item Scales poorly with number of clusters \item Convergence challenges} | [lcMethodLcmmGBTM] [lcMethodLcmmGMM] [lcMethodCrimCV] [lcMethodFlexmix] [lcMethodFlexmixGBTM] [lcMethodFunFEM] [lcMethodMixAK_GLMM] [lcMethodMixtoolsGMM] [lcMethodMixTVEM] |
 #'
 #' It is strongly encouraged to [evaluate and compare][latrend-metrics] several candidate methods in order to identify the most suitable method.
 #' @references \insertAllCited{}

@@ -18,14 +18,7 @@ Recommended overview and comparison papers:
 }
 \section{Approaches}{
 
-Disclaimer: The table below has been adapted from a pre-print of \insertCite{denteuling2021clustering}{latrend}.\tabular{llll}{
-   \strong{Approach} \tab \strong{Strengths} \tab \strong{Limitations} \tab \strong{Methods} \cr
-   \strong{Cross-sectional clustering} \tab \itemize{\item Suitable for large datasets \item Many available algorithms \item Non-parametric cluster trajectory representation} \tab \itemize{\item Requires time-aligned complete data \item Sensitive to measurement noise} \tab \link{lcMethodKML} \link{lcMethodMclustLLPA} \link{lcMethodMixtoolsNPRM} \cr
-   \strong{Distance-based clustering} \tab \itemize{\item Suitable for medium-sized datasets \item Many possible distance metrics \item Distance matrix only needs to be computed once} \tab \itemize{\item Scales poorly with number of trajectories \item No robust cluster trajectory representation \item Some distance metrics require aligned observations} \tab \link{lcMethodDtwclust} \cr
-   \strong{Feature-based clustering} \tab \itemize{\item Suitable for large datasets \item Configurable \item Features only needs to be computed once \item Compact trajectory representation} \tab \itemize{\item Generally requires intensive longitudinal data \item Sensitive to outliers} \tab \link{lcMethodFeature} \link{lcMethodAkmedoids} \link{lcMethodLMKM} \link{lcMethodGCKM} \cr
-   \strong{Model-based clustering} \tab \itemize{\item Parametric cluster trajectory \item Incorporate (domain) assumptions \item Low sample size requirements} \tab \itemize{\item Computationally intensive \item Scales poorly with number of clusters \item Convergence challenges} \tab \link{lcMethodLcmmGBTM} \link{lcMethodLcmmGMM} \link{lcMethodCrimCV} \link{lcMethodFlexmix} \link{lcMethodFlexmixGBTM} \link{lcMethodFunFEM} \link{lcMethodMixAK_GLMM} \link{lcMethodMixtoolsGMM} \link{lcMethodMixTVEM} \cr
-}
-
+Disclaimer: The table below has been adapted from a pre-print of \insertCite{denteuling2021clustering}{latrend}.
 
 It is strongly encouraged to \link[=latrend-metrics]{evaluate and compare} several candidate methods in order to identify the most suitable method.
 }
