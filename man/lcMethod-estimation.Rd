@@ -2,7 +2,6 @@
 % Please edit documentation in R/method.R
 \name{lcMethod-estimation}
 \alias{lcMethod-estimation}
-\alias{latrend-estimation}
 \alias{latrend-procedure}
 \alias{lcMethod-steps}
 \title{Longitudinal cluster method (\code{lcMethod}) estimation procedure}

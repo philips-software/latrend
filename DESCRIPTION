@@ -79,7 +79,7 @@ Suggests:
     ggplot2,
     caret,
     tibble
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 RdMacros: Rdpack
 VignetteBuilder: knitr

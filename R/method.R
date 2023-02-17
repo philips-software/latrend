@@ -1,5 +1,5 @@
 #' @name lcMethod-estimation
-#' @aliases latrend-estimation latrend-procedure lcMethod-steps
+#' @aliases latrend-procedure lcMethod-steps
 #' @title Longitudinal cluster method (`lcMethod`) estimation procedure
 #' @description Each longitudinal cluster method represented by a [lcMethod class][lcMethod-class] implements a series of standardized steps that produce the estimated method as its output.
 #' These steps, as part of the estimation procedure, are executed by the [latrend()] function and other functions prefixed by *"latrend"* (e.g., [latrendRep()], [latrendBoot()], [latrendCV()]).
