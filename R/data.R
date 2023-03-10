@@ -50,10 +50,44 @@ NULL
 
 
 #' @name PAP.adh
-#' @title Biweekly Mean Therapy Adherence of OSA Patients over 1 Year
+#' @title Weekly Mean PAP Therapy Usage of OSA Patients in the First 3 Months
 #' @description
-#' A simulated longitudinal dataset comprising 500 patients with obstructive sleep apnea (OSA) during their
-#' first year on CPAP therapy.
+#' A simulated longitudinal dataset comprising 301 patients with obstructive sleep apnea (OSA) during their first 91 days (13 weeks) of PAP therapy.
+#' The longitudinal patterns were inspired by the adherence patterns reported by Yi et al. (2022), interpolated to weekly hours of usage.
+#' @format A `data.frame` comprising longitudinal data of 500 patients, each having 26 observations over a period of 1 year.
+#' Each row represents a patient observation interval (two weeks), with columns:
+#' \describe{
+#'   \item{Patient}{`integer`: The patient identifier, where each level represents a simulated patient.}
+#'   \item{Week}{`integer`: The week number, starting from 1.}
+#'   \item{UsageHours}{`numeric`: The mean hours of usage in the respective week.
+#'   Greater than or equal to zero, and typically around 4-6 hours.}
+#'   \item{Group}{`factor`: The reference group (i.e., adherence pattern) from which this patient was generated.}
+#' }
+#'
+#' \insertRef{yi2022identifying}{latrend}
+#' @seealso [latrend-data] [PAP.adh1y]
+#' @examples
+#' data(PAP.adh)
+#'
+#' if (require("ggplot2")) {
+#'   plotTrajectories(PAP.adh, id = "Patient", time = "Week", response = "UsageHours")
+#'
+#'   # plot according to cluster ground truth
+#'   plotTrajectories(
+#'     PAP.adh,
+#'     id = "Patient",
+#'     time = "Week",
+#'     response = "UsageHours",
+#'     cluster = "Group"
+#'   )
+#' }
+"PAP.adh"
+
+
+#' @name PAP.adh1y
+#' @title Biweekly Mean PAP Therapy Adherence of OSA Patients over 1 Year
+#' @description
+#' A simulated longitudinal dataset comprising 500 patients with obstructive sleep apnea (OSA) during their first year on CPAP therapy.
 #' The dataset contains the patient usage hours, averaged over 2-week periods.
 #'
 #' The daily usage data underlying the downsampled dataset was simulated based on 7 different adherence patterns.
@@ -77,25 +111,20 @@ NULL
 #' \insertRef{aloia2008time}{latrend}
 #' @seealso [latrend-data]
 #' @examples
-#' data(PAP.adh)
+#' data(PAP.adh1y)
 #'
 #' if (require("ggplot2")) {
-#'   plotTrajectories(PAP.adh, id = "Patient", time = "Biweek", response = "UsageHours")
+#'   plotTrajectories(PAP.adh1y, id = "Patient", time = "Biweek", response = "UsageHours")
 #'
 #'   # plot according to cluster ground truth
 #'   plotTrajectories(
-#'     PAP.adh,
+#'     PAP.adh1y,
 #'     id = "Patient",
 #'     time = "Biweek",
 #'     response = "UsageHours",
 #'     cluster = "Group"
 #'   )
 #' }
-"PAP.adh"
-
-#' @rdname PAP.adh
-#' @description The `PAP.adh1y` dataset is a subset of `PAP.adh`, comprising only patients who used therapy for at least 1 year.
-#' The subset does not contain the Non-users and Early drop-out groups.
 "PAP.adh1y"
 
 #' @export

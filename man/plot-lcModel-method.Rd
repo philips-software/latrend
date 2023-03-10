@@ -6,7 +6,7 @@
 \alias{plot,lcModel-method}
 \title{Plot a lcModel}
 \usage{
-\S4method{plot}{lcModel}(x, y, ...)
+\S4method{plot}{lcModel,ANY}(x, y, ...)
 }
 \arguments{
 \item{x}{The \code{lcModel} object.}

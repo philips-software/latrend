@@ -3,65 +3,44 @@
 \docType{data}
 \name{PAP.adh}
 \alias{PAP.adh}
-\alias{PAP.adh1y}
-\title{Biweekly Mean Therapy Adherence of OSA Patients over 1 Year}
+\title{Weekly Mean PAP Therapy Usage of OSA Patients in the First 3 Months}
 \format{
 A \code{data.frame} comprising longitudinal data of 500 patients, each having 26 observations over a period of 1 year.
 Each row represents a patient observation interval (two weeks), with columns:
 \describe{
-\item{Patient}{\code{factor}: The patient identifier, where each level represents a simulated patient.}
-\item{Biweek}{\code{integer}: Two-week interval index. Starts from 1.}
-\item{MaxDay}{\code{integer}: The last day used for the aggregation of the respective interval, \code{integer}}
+\item{Patient}{\code{integer}: The patient identifier, where each level represents a simulated patient.}
+\item{Week}{\code{integer}: The week number, starting from 1.}
 \item{UsageHours}{\code{numeric}: The mean hours of usage in the respective week.
 Greater than or equal to zero, and typically around 4-6 hours.}
 \item{Group}{\code{factor}: The reference group (i.e., adherence pattern) from which this patient was generated.}
 }
 
-An object of class \code{data.frame} with 9880 rows and 5 columns.
-}
-\source{
-This dataset was generated based on the cluster-specific descriptive statistics table provided in Aloia et al. (2008),
-with some adjustments made in order to improve cluster separation for demonstration purposes.
-
-\insertRef{aloia2008time}{latrend}
+\insertRef{yi2022identifying}{latrend}
 }
 \usage{
 PAP.adh
-
-PAP.adh1y
 }
 \description{
-A simulated longitudinal dataset comprising 500 patients with obstructive sleep apnea (OSA) during their
-first year on CPAP therapy.
-The dataset contains the patient usage hours, averaged over 2-week periods.
-
-The daily usage data underlying the downsampled dataset was simulated based on 7 different adherence patterns.
-The defined adherence patterns were inspired by the adherence patterns identified by Aloia et al. (2008), with slight adjustments
-
-The \code{PAP.adh1y} dataset is a subset of \code{PAP.adh}, comprising only patients who used therapy for at least 1 year.
-The subset does not contain the Non-users and Early drop-out groups.
-}
-\note{
-This dataset is only intended for demonstration purposes.
-While the data format will remain the same, the data content is subject to change in future versions.
+A simulated longitudinal dataset comprising 301 patients with obstructive sleep apnea (OSA) during their first 91 days (13 weeks) of PAP therapy.
+The longitudinal patterns were inspired by the adherence patterns reported by Yi et al. (2022), interpolated to weekly hours of usage.
 }
 \examples{
 data(PAP.adh)
 
 if (require("ggplot2")) {
-  plotTrajectories(PAP.adh, id = "Patient", time = "Biweek", response = "UsageHours")
+  plotTrajectories(PAP.adh, id = "Patient", time = "Week", response = "UsageHours")
 
   # plot according to cluster ground truth
   plotTrajectories(
     PAP.adh,
     id = "Patient",
-    time = "Biweek",
+    time = "Week",
     response = "UsageHours",
     cluster = "Group"
   )
 }
 }
 \seealso{
-\link{latrend-data}
+\link{latrend-data} \link{PAP.adh1y}
 }
 \keyword{datasets}
