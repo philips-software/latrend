@@ -955,15 +955,17 @@ print.lcMethod = function(x, ..., eval = FALSE, width = 40, envir = NULL) {
 #' @param classes Substitute only arguments with specific class types. By default, all types are substituted.
 #' @param try Whether to try to evaluate arguments and ignore errors (the default), or to fail on any argument evaluation error.
 #' @param exclude Arguments to exclude from evaluation.
+#' @param ... Not used.
 #' @return A new `lcMethod` object with the substituted arguments.
 #' @seealso [compose]
 #' @family lcMethod functions
 evaluate.lcMethod = function(
-    object,
-    classes = 'ANY',
-    try = TRUE,
-    exclude = character(),
-    envir = NULL
+  object,
+  classes = 'ANY',
+  try = TRUE,
+  exclude = character(),
+  envir = NULL,
+  ...
 ) {
   rawObject = as.lcMethod(object)
   assert_that(is.character(classes))

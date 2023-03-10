@@ -9,7 +9,8 @@
   classes = "ANY",
   try = TRUE,
   exclude = character(),
-  envir = NULL
+  envir = NULL,
+  ...
 )
 }
 \arguments{
@@ -22,6 +23,8 @@
 \item{exclude}{Arguments to exclude from evaluation.}
 
 \item{envir}{The \code{environment} in which to evaluate the arguments. If \code{NULL}, the environment associated with the object is used. If not available, the \code{parent.frame()} is used.}
+
+\item{...}{Not used.}
 }
 \value{
 A new \code{lcMethod} object with the substituted arguments.
