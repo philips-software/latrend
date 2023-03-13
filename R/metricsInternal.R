@@ -257,6 +257,7 @@ intMetricsEnv$APPA.min = function(m) {
 }
 
 intMetricsEnv$ASW = function(m) {
+  .loadOptionalPackage('clusterCrit')
   part = as.integer(trajectoryAssignments(m))
   tsmat = tsmatrix(
     data = model.data(m),
@@ -273,6 +274,7 @@ intMetricsEnv$ASW = function(m) {
 intMetricsEnv$BIC = BIC
 
 intMetricsEnv$CalinskiHarabasz = function(m) {
+  .loadOptionalPackage('clusterCrit')
   part = as.integer(trajectoryAssignments(m))
   tsmat = tsmatrix(
     data = model.data(m),
@@ -297,6 +299,7 @@ intMetricsEnv$converged = function(m) {
 }
 
 intMetricsEnv$DaviesBouldin = function(m) {
+  .loadOptionalPackage('clusterCrit')
   part = as.integer(trajectoryAssignments(m))
   tsmat = tsmatrix(
     data = model.data(m),
@@ -322,6 +325,8 @@ intMetricsEnv$deviance = deviance
 )
 
 intMetricsEnv$Dunn = function(m) {
+  .loadOptionalPackage('clusterCrit')
+
   if (nClusters(m) == 1L) {
     # not defined for K=1
     return (NA_real_)

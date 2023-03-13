@@ -2,6 +2,7 @@ context('metrics')
 skip_if_not_installed('mclust')
 skip_if_not_installed('psych')
 skip_if_not_installed('igraph')
+skip_if_not_installed('clusterCrit')
 rngReset()
 
 internalMetrics = getInternalMetricNames() %>%

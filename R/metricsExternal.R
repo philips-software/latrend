@@ -139,7 +139,9 @@ extMetricsEnv$F1 = function(m1, m2) {
 }
 
 extMetricsEnv$FolkesMallows = function(m1, m2) {
+  .loadOptionalPackage('clusterCrit')
   assert_that(has_same_ids(m1, m2))
+
   clusterCrit::extCriteria(
     trajectoryAssignments(m1) %>% as.integer,
     trajectoryAssignments(m2) %>% as.integer,
@@ -148,7 +150,9 @@ extMetricsEnv$FolkesMallows = function(m1, m2) {
 }
 
 extMetricsEnv$Hubert = function(m1, m2) {
+  .loadOptionalPackage('clusterCrit')
   assert_that(has_same_ids(m1, m2))
+
   clusterCrit::extCriteria(
     trajectoryAssignments(m1) %>% as.integer,
     trajectoryAssignments(m2) %>% as.integer,
@@ -157,7 +161,9 @@ extMetricsEnv$Hubert = function(m1, m2) {
 }
 
 extMetricsEnv$Jaccard = function(m1, m2) {
+  .loadOptionalPackage('clusterCrit')
   assert_that(has_same_ids(m1, m2))
+
   clusterCrit::extCriteria(
     trajectoryAssignments(m1) %>% as.integer,
     trajectoryAssignments(m2) %>% as.integer,
@@ -175,7 +181,9 @@ extMetricsEnv$jointEntropy = function(m1, m2) {
 }
 
 extMetricsEnv$Kulczynski = function(m1, m2) {
+  .loadOptionalPackage('clusterCrit')
   assert_that(has_same_ids(m1, m2))
+
   clusterCrit::extCriteria(
     trajectoryAssignments(m1) %>% as.integer,
     trajectoryAssignments(m2) %>% as.integer,
@@ -193,7 +201,9 @@ extMetricsEnv$MaximumMatch = function(m1, m2) {
 }
 
 extMetricsEnv$McNemar = function(m1, m2) {
+  .loadOptionalPackage('clusterCrit')
   assert_that(has_same_ids(m1, m2))
+
   clusterCrit::extCriteria(
     trajectoryAssignments(m1) %>% as.integer,
     trajectoryAssignments(m2) %>% as.integer,
@@ -270,7 +280,9 @@ extMetricsEnv$PD = function(m1, m2) {
 
 
 extMetricsEnv$Phi = function(m1, m2) {
+  .loadOptionalPackage('clusterCrit')
   assert_that(has_same_ids(m1, m2))
+
   clusterCrit::extCriteria(
     trajectoryAssignments(m1) %>% as.integer,
     trajectoryAssignments(m2) %>% as.integer,
@@ -279,7 +291,9 @@ extMetricsEnv$Phi = function(m1, m2) {
 }
 
 extMetricsEnv$precision = function(m1, m2) {
+  .loadOptionalPackage('clusterCrit')
   assert_that(has_same_ids(m1, m2))
+
   clusterCrit::extCriteria(
     trajectoryAssignments(m1) %>% as.integer,
     trajectoryAssignments(m2) %>% as.integer,
@@ -288,7 +302,9 @@ extMetricsEnv$precision = function(m1, m2) {
 }
 
 extMetricsEnv$Rand = function(m1, m2) {
+  .loadOptionalPackage('clusterCrit')
   assert_that(has_same_ids(m1, m2))
+
   clusterCrit::extCriteria(
     trajectoryAssignments(m1) %>% as.integer,
     trajectoryAssignments(m2) %>% as.integer,
@@ -297,7 +313,9 @@ extMetricsEnv$Rand = function(m1, m2) {
 }
 
 extMetricsEnv$recall = function(m1, m2) {
+  .loadOptionalPackage('clusterCrit')
   assert_that(has_same_ids(m1, m2))
+
   clusterCrit::extCriteria(
     trajectoryAssignments(m1) %>% as.integer,
     trajectoryAssignments(m2) %>% as.integer,
@@ -306,7 +324,9 @@ extMetricsEnv$recall = function(m1, m2) {
 }
 
 extMetricsEnv$RogersTanimoto = function(m1, m2) {
+  .loadOptionalPackage('clusterCrit')
   assert_that(has_same_ids(m1, m2))
+
   clusterCrit::extCriteria(
     trajectoryAssignments(m1) %>% as.integer,
     trajectoryAssignments(m2) %>% as.integer,
@@ -315,7 +335,9 @@ extMetricsEnv$RogersTanimoto = function(m1, m2) {
 }
 
 extMetricsEnv$RusselRao = function(m1, m2) {
+  .loadOptionalPackage('clusterCrit')
   assert_that(has_same_ids(m1, m2))
+
   clusterCrit::extCriteria(
     trajectoryAssignments(m1) %>% as.integer,
     trajectoryAssignments(m2) %>% as.integer,
@@ -350,7 +372,9 @@ extMetricsEnv$splitJoin.ref = function(m1, m2) {
 }
 
 extMetricsEnv$SokalSneath1 = function(m1, m2) {
+  .loadOptionalPackage('clusterCrit')
   assert_that(has_same_ids(m1, m2))
+
   clusterCrit::extCriteria(
     trajectoryAssignments(m1) %>% as.integer,
     trajectoryAssignments(m2) %>% as.integer,
@@ -359,7 +383,9 @@ extMetricsEnv$SokalSneath1 = function(m1, m2) {
 }
 
 extMetricsEnv$SokalSneath2 = function(m1, m2) {
+  .loadOptionalPackage('clusterCrit')
   assert_that(has_same_ids(m1, m2))
+
   clusterCrit::extCriteria(
     trajectoryAssignments(m1) %>% as.integer,
     trajectoryAssignments(m2) %>% as.integer,
