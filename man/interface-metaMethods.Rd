@@ -12,10 +12,12 @@
 \alias{idVariable,lcMetaMethod-method}
 \alias{preFit,lcMetaMethod-method}
 \alias{prepareData,lcMetaMethod-method}
+\alias{fit,lcMetaMethod-method}
 \alias{postFit,lcMetaMethod-method}
 \alias{responseVariable,lcMetaMethod-method}
 \alias{timeVariable,lcMetaMethod-method}
 \alias{validate,lcMetaMethod-method}
+\alias{update.lcMetaMethod}
 \alias{fit,lcFitConverged-method}
 \alias{validate,lcFitConverged-method}
 \alias{fit,lcFitRep-method}
@@ -36,6 +38,8 @@
 
 \S4method{prepareData}{lcMetaMethod}(method, data, verbose)
 
+\S4method{fit}{lcMetaMethod}(method, data, envir, verbose)
+
 \S4method{postFit}{lcMetaMethod}(method, data, model, envir, verbose)
 
 \S4method{responseVariable}{lcMetaMethod}(object, ...)
@@ -43,6 +47,8 @@
 \S4method{timeVariable}{lcMetaMethod}(object, ...)
 
 \S4method{validate}{lcMetaMethod}(method, data, envir = NULL, ...)
+
+\method{update}{lcMetaMethod}(object, ...)
 
 \S4method{fit}{lcFitConverged}(method, data, envir, verbose)
 

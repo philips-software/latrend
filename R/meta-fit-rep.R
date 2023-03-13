@@ -22,29 +22,38 @@ setClass('lcFitRep', contains = 'lcMetaMethod')
 #' @param maximize Whether to maximize the metric. Otherwise, it is minimized.
 lcFitRep = function(method, rep = 10, metric, maximize) {
   mc = match.call.all()
-  mc$method = getCall(method)
+  mc$method = NULL
   mc$Class = 'lcFitRep'
-  do.call(new, as.list(mc))
+
+  object = do.call(new, as.list(mc))
+  object@method = method
+  object
 }
 
 #' @export
 #' @rdname lcFitMethods
 lcFitRepMin = function(method, rep = 10, metric) {
   mc = match.call.all()
-  mc$method = getCall(method)
+  mc$method = NULL
   mc$maximize = FALSE
   mc$Class = 'lcFitRep'
-  do.call(new, as.list(mc))
+
+  object = do.call(new, as.list(mc))
+  object@method = method
+  object
 }
 
 #' @export
 #' @rdname lcFitMethods
 lcFitRepMax = function(method, rep = 10, metric) {
   mc = match.call.all()
-  mc$method = getCall(method)
+  mc$method = NULL
   mc$maximize = TRUE
   mc$Class = 'lcFitRep'
-  do.call(new, as.list(mc))
+
+  object = do.call(new, as.list(mc))
+  object@method = method
+  object
 }
 
 
@@ -76,7 +85,7 @@ setMethod('fit', 'lcFitRep', function(method, data, envir, verbose) {
       seed = sample.int(.Machine$integer.max, 1L)
       set.seed(seed)
       # update fit method with new seed
-      method@arguments$method = update(getLcMethod(method), seed = seed, .eval = TRUE)
+      method@method = update(getLcMethod(method), seed = seed, .eval = TRUE)
     }
   }
 

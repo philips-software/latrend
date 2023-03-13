@@ -17,9 +17,12 @@ setClass('lcFitConverged', contains = 'lcMetaMethod')
 #' @param maxRep The maximum number of fit attempts
 lcFitConverged = function(method, maxRep = Inf) {
   mc = match.call.all()
-  mc$method = getCall(method)
+  mc$method = NULL
   mc$Class = 'lcFitConverged'
-  do.call(new, as.list(mc))
+
+  object = do.call(new, as.list(mc))
+  object@method = method
+  object
 }
 
 
@@ -52,7 +55,7 @@ setMethod('fit', 'lcFitConverged', function(method, data, envir, verbose) {
         seed = sample.int(.Machine$integer.max, 1L)
         set.seed(seed)
         # update fit method with new seed
-        method@arguments$method = update(getLcMethod(method), seed = seed, .eval = TRUE)
+        method@method = update(getLcMethod(method), seed = seed, .eval = TRUE)
       }
 
       if (is.infinite(method$maxRep)) {

@@ -75,12 +75,30 @@ test_that('fit with seed on first attempt', {
   metaMethod = lcFitConverged(lcMethodConv(nAttempts = 1, seed = 13))
   model = latrend(metaMethod, testLongData)
 
-  expect_equal(getLcMethod(model)$method$seed, 13)
+  expect_equal(getLcMethod(model)$seed, 13)
+  expect_equal(
+    getCall(model),
+    call(
+      'latrend',
+      method = getCall(metaMethod),
+      data = quote(testLongData),
+      envir = NULL
+    )
+  )
 })
 
 test_that('fit different seed on second attempt', {
   metaMethod = lcFitConverged(lcMethodConv(nAttempts = 2, seed = 13))
   model = latrend(metaMethod, testLongData)
 
-  expect_true(getLcMethod(model)$method$seed != 13)
+  expect_true(getLcMethod(model)$seed != 13)
+  expect_equal(
+    getCall(model),
+    call(
+      'latrend',
+      method = getCall(metaMethod),
+      data = quote(testLongData),
+      envir = NULL
+    )
+  )
 })

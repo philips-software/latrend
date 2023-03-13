@@ -196,11 +196,23 @@ setGeneric('fit', function(method, data, envir, verbose, ...) {
     )
   )
 
-  model@method = method
-  model@id = idVariable(method)
-  model@time = timeVariable(method)
-  model@response = responseVariable(method)
-  model@label = getLabel(method)
+  newMethod = getLcMethod(model)
+  if (length(names(newMethod)) == 0L) {
+    newMethod = method
+  }
+  assert_that(
+    is.lcMethod(newMethod),
+    msg = sprintf(
+      '%1$s implementation error: fit(%1$s, ...) output model does not have an lcMethod object associated with it',
+      class(model)[1]
+    )
+  )
+
+  model@method = newMethod
+  model@id = idVariable(newMethod)
+  model@time = timeVariable(newMethod)
+  model@response = responseVariable(newMethod)
+  model@label = getLabel(newMethod)
   model@date = dateStart
   model@estimationTime = as.numeric(estimationTime, 'secs')
 

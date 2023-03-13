@@ -15,7 +15,8 @@
 #' @description Virtual class for internal use. Do not use.
 setClass(
   'lcMetaMethod',
-  contains = c('lcMethod', 'VIRTUAL')
+  contains = c('lcMethod', 'VIRTUAL'),
+  slots = c(method = 'lcMethod')
 )
 
 as.character.lcMetaMethod = function(x, ...) {
@@ -23,7 +24,21 @@ as.character.lcMetaMethod = function(x, ...) {
     sprintf('%s encapsulating:', class(x)[1]),
     paste0(' ', as.character(getLcMethod(x), ...)),
     ' with meta-method arguments:',
-    paste0('  ', tail(as.character.lcMethod(x), -2L))
+    paste0('  ', as.character.lcMethod(x))
+  )
+}
+
+#' @export
+getCall.lcMetaMethod = function(x, ...) {
+  do.call(
+    call,
+    c(
+      name = class(x)[1],
+      c(
+        method = quote(getCall(getLcMethod(x))),
+        eapply(x@arguments, enquote)
+      )
+    )
   )
 }
 
@@ -31,13 +46,19 @@ as.character.lcMetaMethod = function(x, ...) {
 #' @rdname interface-metaMethods
 setMethod('compose', 'lcMetaMethod', function(method, envir = NULL) {
   newMethod = method
-  newMethod@arguments$method = evaluate.lcMethod(getLcMethod(method), try = FALSE, envir = envir)
+  newMethod@method = evaluate.lcMethod(getLcMethod(method), try = FALSE, envir = envir)
   newMethod
 })
 
 #' @export
 #' @rdname interface-metaMethods
-setMethod('getLcMethod', 'lcMetaMethod', function(object, ...) object$method)
+setMethod('getLcMethod', 'lcMetaMethod', function(object, ...) {
+  assert_that(
+    is.lcMethod(object@method),
+    msg = 'meta-method implementation error: underlying method argument is not a lcMethod object'
+  )
+  object@method
+})
 
 #' @export
 #' @rdname interface-metaMethods
@@ -65,6 +86,12 @@ setMethod('prepareData', 'lcMetaMethod', function(method, data, verbose) {
 
 #' @export
 #' @rdname interface-metaMethods
+setMethod('fit', 'lcMetaMethod', function(method, data, envir, verbose) {
+  fit(getLcMethod(method), data = data, envir = envir, verbose = verbose)
+})
+
+#' @export
+#' @rdname interface-metaMethods
 setMethod('postFit', 'lcMetaMethod', function(method, data, model, envir, verbose) {
   postFit(getLcMethod(method), data = data, model = model, envir = envir, verbose = verbose)
 })
@@ -82,3 +109,14 @@ setMethod('timeVariable', 'lcMetaMethod', function(object, ...) timeVariable(get
 setMethod('validate', 'lcMetaMethod', function(method, data, envir = NULL, ...) {
   validate(getLcMethod(method), data = data, envir = envir, ...)
 })
+
+#' @export
+#' @rdname interface-metaMethods
+#' @inheritParams update.lcMethod
+update.lcMetaMethod = function(object, ...) {
+  assert_that(inherits(object, 'lcMetaMethod'))
+
+  object@method = update(getLcMethod(object), ...)
+
+  object
+}

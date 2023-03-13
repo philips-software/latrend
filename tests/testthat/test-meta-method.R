@@ -31,17 +31,20 @@ setMethod('fit', 'lcMethodConv', function(method, data, envir, verbose) {
 })
 
 
+# tests ####
 test_that('specify converged', {
   metaMethod = lcFitConverged(method)
   expect_s4_class(metaMethod, 'lcFitConverged')
   expect_true(has_lcMethod_args(metaMethod, 'maxRep'))
 })
 
+
 test_that('specify converged with maxRep', {
   metaMethod = lcFitConverged(method, maxRep = 13)
   expect_true(has_lcMethod_args(metaMethod, 'maxRep'))
   expect_equal(metaMethod$maxRep, 13)
 })
+
 
 test_that('meta method class', {
   metaMethod = lcFitConverged(method)
@@ -64,6 +67,7 @@ test_that('meta method class', {
   )
 })
 
+
 test_that('meta converged fit', {
   metaMethod = lcFitConverged(mRandom)
 
@@ -71,6 +75,7 @@ test_that('meta converged fit', {
     model = latrend(metaMethod, testLongData)
   })
 })
+
 
 test_that('meta converged fit until converged', {
   metaMethod = lcFitConverged(lcMethodConv(nAttempts = 2), maxRep = 3)
@@ -83,6 +88,7 @@ test_that('meta converged fit until converged', {
   expect_true(converged(model))
 })
 
+
 test_that('meta converged fit always fails', {
   metaMethod = lcFitConverged(lcMethodConv(nAttempts = 3), maxRep = 2)
   expect_warning({
@@ -92,16 +98,44 @@ test_that('meta converged fit always fails', {
   expect_false(converged(model))
 })
 
+
 test_that('meta converged fit with seed on first attempt', {
   metaMethod = lcFitConverged(lcMethodConv(nAttempts = 1, seed = 13))
   model = latrend(metaMethod, testLongData)
 
-  expect_equal(getLcMethod(model)$method$seed, 13)
+  expect_equal(getLcMethod(model)$seed, 13)
+  expect_equal(
+    getCall(model),
+    call(
+      'latrend',
+      method = call('lcFitConverged', method = getCall(getLcMethod(model)), maxRep = Inf),
+      data = quote(testLongData),
+      envir = NULL
+    )
+  )
 })
+
 
 test_that('meta converged fit different seed on second attempt', {
   metaMethod = lcFitConverged(lcMethodConv(nAttempts = 2, seed = 13))
   model = latrend(metaMethod, testLongData)
 
-  expect_true(getLcMethod(model)$method$seed != 13)
+  expect_true(getLcMethod(model)$seed != 13)
+  expect_equal(
+    getCall(model),
+    call(
+      'latrend',
+      method = getCall(metaMethod),
+      data = quote(testLongData),
+      envir = NULL
+    )
+  )
+})
+
+
+test_that('meta update passthrough', {
+  metaMethod = lcFitConverged(lcMethodLMKM(Value ~ Assessment, nClusters = 2), maxRep = 2)
+  model = latrend(metaMethod, data = testLongData, nClusters = 3)
+
+  expect_equal(nClusters(model), 3L)
 })

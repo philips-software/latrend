@@ -131,7 +131,11 @@ latrend = function(
     set.seed(method$seed)
   }
 
-  suppressFun = ifelse(as.logical(verbose), force, function(...) capture.output(suppressMessages(...)))
+  suppressFun = ifelse(
+    as.logical(verbose),
+    force,
+    function(...) capture.output(suppressMessages(...))
+  )
 
   suppressFun({
     # preFit
