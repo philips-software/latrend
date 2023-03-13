@@ -34,7 +34,9 @@ make.gmm = function(id, time, response, ..., init = 'default') {
 
 test_that('gmm', {
   expect_true({
-    test.latrend('lcMethodLcmmGMM', instantiator = make.gmm, tests = tests, data = lcmmData)
+    suppressWarnings({
+      test.latrend('lcMethodLcmmGMM', instantiator = make.gmm, tests = tests, data = lcmmData)
+    })
   })
 })
 
@@ -54,7 +56,9 @@ test_that('gmm with init=lme.random', {
 
 test_that('gmm with NA covariate', {
   expect_true({
-    test.latrend('lcMethodLcmmGMM', instantiator = make.gmm, tests = tests, data = lcmmData)
+    suppressWarnings({
+      test.latrend('lcMethodLcmmGMM', instantiator = make.gmm, tests = tests, data = lcmmData)
+    })
   })
 })
 
