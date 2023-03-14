@@ -109,11 +109,11 @@
 
 <dt>init</dt>
 <dd><p>Alternative for the <code>B</code> argument of <a href="https://rdrr.io/pkg/lcmm/man/hlme.html" class="external-link">lcmm::hlme</a>, for initializing the hlme fitting procedure.
-If <code>"lme.random"</code> (default): random initialization through a standard linear mixed model.
-Assigns a fitted standard linear mixed model enclosed in a call to random() to the <code>B</code> argument.
-If <code>"lme"</code>, fits a standard linear mixed model and passes this to the <code>B</code> argument.
-If <code>NULL</code> or <code>"default"</code>, the default <a href="https://rdrr.io/pkg/lcmm/man/hlme.html" class="external-link">lcmm::hlme</a> input for <code>B</code> is used.</p>
-<p>The argument is ignored if the <code>B</code> argument is specified, or <code>nClusters = 1</code>.</p></dd>
+Options:</p><ul><li><p><code>"lme.random"</code> (default): random initialization through a standard linear mixed model. Assigns a fitted standard linear mixed model enclosed in a call to random() to the <code>B</code> argument.</p></li>
+<li><p><code>"lme"</code>, fits a standard linear mixed model and passes this to the <code>B</code> argument.</p></li>
+<li><p><code>"gridsearch"</code>, a gridsearch is used with initialization from <code>"lme.random"</code>, following the approach used by <a href="https://rdrr.io/pkg/lcmm/man/gridsearch.html" class="external-link">lcmm::gridsearch</a>. To use this initalization, specify arguments <code>gridsearch.maxiter</code> (max number of iterations during search), <code>gridsearch.rep</code> (number of fits during search), and <code>gridsearch.parallel</code> (whether to enable <a href="latrend-parallel.html">parallel computation</a>).</p></li>
+<li><p><code>NULL</code> or <code>"default"</code>, the default <a href="https://rdrr.io/pkg/lcmm/man/hlme.html" class="external-link">lcmm::hlme</a> input for <code>B</code> is used.</p></li>
+</ul><p>The argument is ignored if the <code>B</code> argument is specified, or <code>nClusters = 1</code>.</p></dd>
 
 
 <dt>...</dt>
@@ -298,7 +298,7 @@ R package version: 1.8.1, <a href="https://cran.r-project.org/package=lcmm" clas
 <span class="r-out co"><span class="r-pr">#&gt;</span> parameter2  0.1444497</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> parameter3 -0.4117121</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.3 seconds </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.14 seconds </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ iteration  0 ------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Function value  -1060.942 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence criteria: parameters stability= 1.0001 </span>
@@ -439,7 +439,7 @@ R package version: 1.8.1, <a href="https://cran.r-project.org/package=lcmm" clas
 <span class="r-out co"><span class="r-pr">#&gt;</span> parameter6  0.1444497</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> parameter7 -0.3733210</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.49 seconds </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The program took 0.34 seconds </span>
 </code></pre></div>
     </div>
   </div>
