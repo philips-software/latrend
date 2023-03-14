@@ -32,10 +32,11 @@ setValidity('lcMethodLcmmGMM', function(object) {
 #' @param time The name of the time variable.
 #' @param id The name of the trajectory identifier variable. This replaces the `subject` argument of [lcmm::hlme].
 #' @param init Alternative for the `B` argument of [lcmm::hlme], for initializing the hlme fitting procedure.
-#' If `"lme.random"` (default): random initialization through a standard linear mixed model.
-#' Assigns a fitted standard linear mixed model enclosed in a call to random() to the `B` argument.
-#' If `"lme"`, fits a standard linear mixed model and passes this to the `B` argument.
-#' If `NULL` or `"default"`, the default [lcmm::hlme] input for `B` is used.
+#' Options:
+#' * `"lme.random"` (default): random initialization through a standard linear mixed model. Assigns a fitted standard linear mixed model enclosed in a call to random() to the `B` argument.
+#' * `"lme"`, fits a standard linear mixed model and passes this to the `B` argument.
+#' * `"gridsearch"`, a gridsearch is used with initialization from `"lme.random"`, following the approach used by [lcmm::gridsearch]. To use this initalization, specify arguments `gridsearch.maxiter` (max number of iterations during search), `gridsearch.rep` (number of fits during search), and `gridsearch.parallel` (whether to enable [parallel computation][latrend-parallel]).
+#' * `NULL` or `"default"`, the default [lcmm::hlme] input for `B` is used.
 #'
 #' The argument is ignored if the `B` argument is specified, or `nClusters = 1`.
 #'
@@ -51,19 +52,24 @@ setValidity('lcMethodLcmmGMM', function(object) {
 #'     mixture = ~ Time,
 #'     random = ~ 1,
 #'     id = "Id",
-#'     time = "Time", ,
+#'     time = "Time",
 #'     nClusters = 2
 #'   )
 #'   gmm <- latrend(method, data = latrendData)
 #'   summary(gmm)
 #'
+#'   # define method with gridsearch
 #'   method <- lcMethodLcmmGMM(
 #'     fixed = Y ~ Time,
 #'     mixture = ~ Time,
 #'     random = ~ Time,
 #'     id = "Id",
 #'     time = "Time",
-#'     nClusters = 3
+#'     nClusters = 3,
+#'     init = "gridsearch",
+#'     gridsearch.maxiter = 10,
+#'     gridsearch.rep = 50,
+#'     gridsearch.parallel = TRUE
 #'   )
 #' }
 #' @family lcMethod implementations
@@ -168,7 +174,7 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
   }
 
   if (hasName(method, 'init') && method$nClusters > 1) {
-    init = match.arg(method$init, c('default', 'lme', 'lme.random'))
+    init = match.arg(method$init, c('default', 'lme', 'lme.random', 'gridsearch'))
     if (init == 'default') {
       init = 'lme'
     }
@@ -191,6 +197,14 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
         args1$classmb = NULL
         prepEnv$lme = do.call(lcmm::hlme, args1)
         args$B = quote(random(lme))
+      },
+      gridsearch = {
+        cat(verbose, 'Fitting standard linear mixed model for gridsearch initialization...')
+        args1 = args
+        args1$ng = 1
+        args1$mixture = NULL
+        args1$classmb = NULL
+        prepEnv$lme = do.call(lcmm::hlme, args1)
       }
     )
   }
@@ -222,9 +236,68 @@ gmm_fit = function(method, data, envir, verbose, ...) {
   model
 }
 
+
+gmm_gridsearch = function(method, data, envir, verbose, ...) {
+  assert_that(
+    is.count(method$gridsearch.maxiter),
+    is.count(method$gridsearch.rep),
+    is.flag(method$gridsearch.parallel),
+    hasName(envir, 'lme'),
+    inherits(envir$lme, 'hlme')
+  )
+
+  args = envir$args
+  gridArgs = args
+  gridArgs$maxiter = method$gridsearch.maxiter
+  rep = method$gridsearch.rep
+  .latrend.lme = envir$lme
+  `%infix%` = ifelse(method$gridsearch.parallel, `%dopar%`, `%do%`)
+
+  # Conduct gridsearch
+  timing = .enterTimed(verbose, sprintf('Gridsearch with %d repetitions...', rep))
+  gridModels = foreach(k = seq_len(rep)) %infix% {
+    cat(
+      verbose,
+      sprintf('Gridsearch fit %d/%d (%g%%)', k, rep, round(k / rep * 100))
+    )
+    e = environment()
+    assign('minit', .latrend.lme, envir = e)
+    gridArgs$B = substitute(random(minit), env = e)
+    gridModel = do.call(lcmm::hlme, gridArgs)
+    gridModel
+  }
+  .exitTimed(timing)
+
+  # determine the best candidate solution
+  gridLogLiks = vapply(gridModels, function(x) x$loglik, FUN.VALUE = 0)
+  assert_that(
+    any(is.finite(gridLogLiks)),
+    msg = 'Failed to obtain a valid fit during gridsearch. Try more reps or higher maxiter?'
+  )
+  iBest = which.max(gridLogLiks)
+  args$B = gridModels[[iBest]]$best
+
+  # fit the final model
+  timing = .enterTimed(verbose, 'Final model optimization...')
+  model = do.call(lcmm::hlme, args)
+  .exitTimed(timing, msg = 'Done with final model optimization (%s)')
+
+  #
+  model$fixed = args$fixed
+  model$mixture = args$mixture
+  model$random = args$random
+  model$mb = envir$classmb
+  model
+}
+
+
 #' @rdname interface-lcmm
 setMethod('fit', 'lcMethodLcmmGMM', function(method, data, envir, verbose, ...) {
-  model = gmm_fit(method, data, envir, verbose, ...)
+  if (method$init == 'gridsearch') {
+    model = gmm_gridsearch(method, data, envir, verbose, ...)
+  } else {
+    model = gmm_fit(method, data, envir, verbose, ...)
+  }
 
   new(
     'lcModelLcmmGMM',

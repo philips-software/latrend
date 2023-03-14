@@ -29,10 +29,13 @@ lcMethodLcmmGBTM(
 \item{nClusters}{The number of clusters to fit. This replaces the \code{ng} argument of \link[lcmm:hlme]{lcmm::hlme}.}
 
 \item{init}{Alternative for the \code{B} argument of \link[lcmm:hlme]{lcmm::hlme}, for initializing the hlme fitting procedure.
-If \code{"lme.random"} (default): random initialization through a standard linear mixed model.
-Assigns a fitted standard linear mixed model enclosed in a call to random() to the \code{B} argument.
-If \code{"lme"}, fits a standard linear mixed model and passes this to the \code{B} argument.
-If \code{NULL} or \code{"default"}, the default \link[lcmm:hlme]{lcmm::hlme} input for \code{B} is used.
+Options:
+\itemize{
+\item \code{"lme.random"} (default): random initialization through a standard linear mixed model. Assigns a fitted standard linear mixed model enclosed in a call to random() to the \code{B} argument.
+\item \code{"lme"}, fits a standard linear mixed model and passes this to the \code{B} argument.
+\item \code{"gridsearch"}, a gridsearch is used with initialization from \code{"lme.random"}, following the approach used by \link[lcmm:gridsearch]{lcmm::gridsearch}. To use this initalization, specify arguments \code{gridsearch.maxiter} (max number of iterations during search), \code{gridsearch.rep} (number of fits during search), and \code{gridsearch.parallel} (whether to enable \link[=latrend-parallel]{parallel computation}).
+\item \code{NULL} or \code{"default"}, the default \link[lcmm:hlme]{lcmm::hlme} input for \code{B} is used.
+}
 
 The argument is ignored if the \code{B} argument is specified, or \code{nClusters = 1}.}
 
