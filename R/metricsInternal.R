@@ -258,8 +258,6 @@ intMetricsEnv$APPA.min = function(m) {
 }
 
 intMetricsEnv$ASW = function(m) {
-  .loadOptionalPackage('clusterCrit')
-
   if (nClusters(m) == 1L) {
     return (NA_real_)
   }
