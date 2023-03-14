@@ -25,6 +25,7 @@
 #' | `AIC` | [Akaike information criterion](https://en.wikipedia.org/wiki/Akaike_information_criterion). A goodness-of-fit estimator that adjusts for model complexity (i.e., the number of parameters). Only available for models that support the computation of the model log-likelihood through [logLik]. | [stats::AIC()], \insertCite{akaike1974new}{latrend} |
 #' | `APPA.mean` | Mean of the average posterior probability of assignment (APPA) across clusters. A measure of the precision of the trajectory classifications. A score of 1 indicates perfect classification. | [APPA()], \insertCite{nagin2005group}{latrend} |
 #' | `APPA.min` | Lowest APPA among the clusters | [APPA()], \insertCite{nagin2005group}{latrend} |
+#' | `ASW` | Average [silhouette](https://en.wikipedia.org/wiki/Silhouette_(clustering)) width based on the Euclidean distance | \insertCite{rousseeuw1987silhouettes}{latrend} |
 #' | `BIC` | [Bayesian information criterion](https://en.wikipedia.org/wiki/Bayesian_information_criterion). A goodness-of-fit estimator that corrects for the degrees of freedom (i.e., the number of parameters) and sample size. Only available for models that support the computation of the model log-likelihood through [logLik]. | [stats::BIC()], \insertCite{schwarz1978estimating}{latrend} |
 #' | `CAIC` | Consistent Akaike information criterion | \insertCite{bozdogan1987model}{latrend} |
 #' | `CLC` | Classification likelihood criterion | \insertCite{mclachlan2000finite}{latrend} |
@@ -258,6 +259,11 @@ intMetricsEnv$APPA.min = function(m) {
 
 intMetricsEnv$ASW = function(m) {
   .loadOptionalPackage('clusterCrit')
+
+  if (nClusters(m) <= 1L) {
+    return (NA_real_)
+  }
+
   part = as.integer(trajectoryAssignments(m))
   tsmat = tsmatrix(
     data = model.data(m),
@@ -267,7 +273,12 @@ intMetricsEnv$ASW = function(m) {
     fill = NA_real_
   )
 
-  clusterCrit::intCriteria(tsmat, part, crit = 'Silhouette')$silhouette
+  dis = stats::dist(tsmat, method = 'euclidean')
+  silStats = cluster::silhouette(part, dmatrix = as.matrix(dis))
+  silSum = summary(silStats)
+  asw = mean(silSum$clus.avg.widths)
+
+  asw
 }
 
 #' @importFrom stats BIC
@@ -345,8 +356,10 @@ intMetricsEnv$Dunn = function(m) {
 }
 
 intMetricsEnv$entropy = function(m) {
-  pp = postprob(m) %>% pmax(.Machine$double.xmin)
-  - sum(rowSums(pp * log(pp)))
+  pp = postprob(m) %>%
+    pmax(.Machine$double.xmin)
+
+  -1 * sum(rowSums(pp * log(pp)))
 }
 
 intMetricsEnv$estimationTime = estimationTime
@@ -357,7 +370,7 @@ intMetricsEnv$logLik = logLik
 intMetricsEnv$ICL.BIC = function(m) {
   ll = logLik(m)
   df = attr(ll, 'df')
-  - 2 * ll + log(nIds(m)) * df + 2 * intMetricsEnv$entropy(m)
+  -2 * ll + log(nIds(m)) * df + 2 * intMetricsEnv$entropy(m)
 }
 
 intMetricsEnv$MAE = function(m) {

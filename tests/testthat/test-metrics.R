@@ -48,6 +48,27 @@ test_that('MSE', {
   expect_equivalent(out, mean(residuals(testModel2, clusters = trajectoryAssignments(testModel2))^2))
 })
 
+test_that('ASW', {
+  out = metric(testModel2, 'ASW')
+
+  expect_gte(out, -1)
+  expect_lte(out, 1)
+
+  # compare result to clusterCrit
+  skip_if_not_installed('clusterCrit')
+  part = as.integer(trajectoryAssignments(testModel2))
+  tsmat = tsmatrix(
+    data = model.data(testModel2),
+    response = responseVariable(testModel2),
+    id = idVariable(testModel2),
+    time = timeVariable(testModel2),
+    fill = NA_real_
+  )
+  sil = clusterCrit::intCriteria(tsmat, part, crit = 'Silhouette')$silhouette
+
+  expect_equal(out, sil, tolerance = .01, check.attributes = FALSE)
+})
+
 test_that('WMAE', {
   wmae = metric(testModel2, 'WMAE')
   mae = metric(testModel2, 'MAE')

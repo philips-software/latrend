@@ -50,6 +50,7 @@ Suggests:
     rcmdcheck,
     pkgdown,
     devtools,
+    cluster,
     evaluate,
     lme4,
     covr,
