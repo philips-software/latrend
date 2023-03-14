@@ -25,7 +25,7 @@ Custom-defined metrics are accessible using the same by-name mechanism as the ot
    \code{CLC} \tab Classification likelihood criterion \tab \insertCite{mclachlan2000finite}{latrend} \cr
    \code{converged} \tab Whether the model converged during estimation \tab \code{\link[=converged]{converged()}} \cr
    \code{deviance} \tab The model \href{https://en.wikipedia.org/wiki/Deviance_(statistics)}{deviance} \tab \code{\link[stats:deviance]{stats::deviance()}} \cr
-   \code{Dunn} \tab The \href{https://en.wikipedia.org/wiki/Dunn_index}{Dunn index} \tab  \cr
+   \code{Dunn} \tab The \href{https://en.wikipedia.org/wiki/Dunn_index}{Dunn index} \tab \insertCite{dunn1974well}{latrend} \cr
    \code{entropy} \tab Entropy of the posterior probabilities \tab  \cr
    \code{estimationTime} \tab The time needed for fitting the model \tab \code{\link[=estimationTime]{estimationTime()}} \cr
    \code{ED} \tab \href{https://en.wikipedia.org/wiki/Euclidean_distance}{Euclidean distance} between the cluster trajectories and the assigned observed trajectories \tab  \cr

@@ -31,7 +31,7 @@
 #' | `CLC` | Classification likelihood criterion | \insertCite{mclachlan2000finite}{latrend} |
 #' | `converged` | Whether the model converged during estimation | [converged()] |
 #' | `deviance` | The model [deviance](https://en.wikipedia.org/wiki/Deviance_(statistics)) | [stats::deviance()] |
-#' | `Dunn` | The [Dunn index](https://en.wikipedia.org/wiki/Dunn_index) | |
+#' | `Dunn` | The [Dunn index](https://en.wikipedia.org/wiki/Dunn_index) | \insertCite{dunn1974well}{latrend} |
 #' | `entropy` | Entropy of the posterior probabilities | |
 #' | `estimationTime` | The time needed for fitting the model | [estimationTime()] |
 #' | `ED` | [Euclidean distance](https://en.wikipedia.org/wiki/Euclidean_distance) between the cluster trajectories and the assigned observed trajectories | |
@@ -260,7 +260,7 @@ intMetricsEnv$APPA.min = function(m) {
 intMetricsEnv$ASW = function(m) {
   .loadOptionalPackage('clusterCrit')
 
-  if (nClusters(m) <= 1L) {
+  if (nClusters(m) == 1L) {
     return (NA_real_)
   }
 
@@ -336,7 +336,7 @@ intMetricsEnv$deviance = deviance
 )
 
 intMetricsEnv$Dunn = function(m) {
-  .loadOptionalPackage('clusterCrit')
+  .loadOptionalPackage('clValid')
 
   if (nClusters(m) == 1L) {
     # not defined for K=1
@@ -352,7 +352,7 @@ intMetricsEnv$Dunn = function(m) {
     fill = NA_real_
   )
 
-  clusterCrit::intCriteria(tsmat, part, crit = 'Dunn')$dunn
+  clValid::dunn(clusters = part, Data = tsmat, method = 'euclidean')
 }
 
 intMetricsEnv$entropy = function(m) {

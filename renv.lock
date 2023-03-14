@@ -423,6 +423,17 @@
         "backports"
       ]
     },
+    "clValid": {
+      "Package": "clValid",
+      "Version": "0.7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b266ced2f4629c9bfb37552e1f211994",
+      "Requirements": [
+        "class",
+        "cluster"
+      ]
+    },
     "class": {
       "Package": "class",
       "Version": "7.3-21",

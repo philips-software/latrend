@@ -72,6 +72,7 @@ Suggests:
     clusterCrit,
     mclust,
     mclustcomp,
+    clValid,
     psych,
     qqplotr,
     doParallel,
