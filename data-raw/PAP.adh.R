@@ -27,7 +27,7 @@ cluster1Data = generateLongData(
   random = ~ 1,
   data = data.frame(Week = 1:13, Adherers = groupTrajMat[, 'Adherers']),
   clusterCoefs = cbind(c(0, 0, 1)),
-  clusterNames = 'Adherer',
+  clusterNames = 'Adherers',
   randomScales = cbind(62.7),
   noiseScales = 23,
   seed = 1L
@@ -44,7 +44,7 @@ cluster2Data = generateLongData(
   random = ~ 1,
   data = data.frame(Week = 1:13, Adherers = groupTrajMat[, 'Improvers']),
   clusterCoefs = cbind(c(0, 0, 1)),
-  clusterNames = 'Improver',
+  clusterNames = 'Improvers',
   randomScales = cbind(68.9),
   noiseScales = 43,
   seed = 2L
@@ -58,7 +58,7 @@ cluster3Data = generateLongData(
   random = ~ 1,
   data = data.frame(Week = 1:13, Adherers = groupTrajMat[, 'Non-adherers']),
   clusterCoefs = cbind(c(0, 0, 1)),
-  clusterNames = 'Non-adherer',
+  clusterNames = 'Non-adherers',
   randomScales = cbind(53.7),
   noiseScales = 34,
   seed = 3L
@@ -75,42 +75,8 @@ plotTrajectories(dataset, time = 'Week', id = 'Patient', cluster = 'Group', resp
 
 PAP.adh = subset(dataset, select = c('Patient', 'Week', 'UsageHours', 'Group')) %>%
   as.data.frame()
+
 head(PAP.adh)
 stopifnot(uniqueN(PAP.adh$Patient) == 301)
 
 usethis::use_data(PAP.adh, overwrite = TRUE)
-
-
-# parallel
-nCores <- parallel::detectCores(logical = FALSE)
-if (.Platform$OS.type == "windows") {
-  cl <- parallel::makeCluster(nCores)
-  doParallel::registerDoParallel(cl)
-} else {
-  doMC::registerDoMC(nCores)
-}
-
-# test gbtm
-options(latrend.id = "Patient", latrend.time = "Week")
-gbtmMethod <- lcMethodLcmmGBTM(
-  fixed = UsageHours ~ Week,
-  mixture = ~ Week,
-  maxiter = 20, #not recommended; used for speed
-  idiag = TRUE
-)
-gbtmMethods <- lcMethods(gbtmMethod, nClusters = 1:5)
-gbtmList <- latrendBatch(gbtmMethods, data = PAP.adh, parallel = TRUE)
-
-plotMetric(gbtmList, c("Dunn", "WMAE", "BIC", "estimationTime"))
-
-# test gmm
-gmmMethod <- lcMethodLcmmGMM(
-  fixed = UsageHours ~ Week,
-  mixture = ~ Week,
-  idiag = TRUE
-)
-gmmMethods <- lcMethods(gmmMethod, nClusters = 1:5)
-system.time({
-  gmmList <- latrendBatch(gmmMethods, data = PAP.adh, parallel = TRUE)
-})
-plotMetric(gmmList, c("Dunn", "WMAE", "BIC", "estimationTime"))
