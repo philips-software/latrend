@@ -350,7 +350,12 @@ intMetricsEnv$Dunn = function(m) {
     fill = NA_real_
   )
 
-  clValid::dunn(clusters = part, Data = tsmat, method = 'euclidean')
+  # outputs min/max infinity warning under presence of empty clusters
+  suppressWarnings({
+    di = clValid::dunn(clusters = part, Data = tsmat, method = 'euclidean')
+  })
+
+  di
 }
 
 intMetricsEnv$entropy = function(m) {
