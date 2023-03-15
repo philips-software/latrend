@@ -62,7 +62,7 @@ setValidity('lcMethodLcmmGMM', function(object) {
 #'   method <- lcMethodLcmmGMM(
 #'     fixed = Y ~ Time,
 #'     mixture = ~ Time,
-#'     random = ~ Time,
+#'     random = ~ 1,
 #'     id = "Id",
 #'     time = "Time",
 #'     nClusters = 3,
