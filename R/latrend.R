@@ -321,7 +321,8 @@ latrendRep = function(
 #' Doing this results in a more readable `call` associated with each fitted `lcModel` object.
 #' @param cartesian Whether to fit the provided methods on each of the datasets. If `cartesian=FALSE`, only a single dataset may be provided or a list of data matching the length of `methods`.
 #' @param parallel Whether to enable parallel evaluation. See \link{latrend-parallel}. Method evaluation and dataset transformation is done on the calling thread.
-#' @param seed Sets the seed for generating the respective seed for each of the method fits. Seeds are only set for methods without a seed argument.
+#' @param seed Sets the seed for generating a seed number for the methods.
+#' Seeds are only set for methods without a seed argument or `NULL` seed.
 #' @param errorHandling Whether to `"stop"` on an error, or to `"remove'` evaluations that raised an error.
 #' @param envir The `environment` in which to evaluate the `lcMethod` arguments.
 #' @return A `lcModels` object.
@@ -459,19 +460,30 @@ latrendBatch = function(
   Map(validate, allMethods, allModelData)
   exit(verbose, level = verboseLevels$finest)
 
-  # seeds
-  cat(verbose, sprintf('Generating method seeds for seed = %s.', as.character(seed)))
-  localRNG(seed = seed, {
-    allSeeds = sample.int(.Machine$integer.max, size = nModels, replace = FALSE)
-  })
-
-  # update methods that don't have a seed argument
-  seedMask = !vapply(allMethods, hasName, 'seed', FUN.VALUE = TRUE)
-  allMethods[seedMask] = Map(
-    function(method, seed) update(method, seed = seed, .eval = TRUE),
-    allMethods[seedMask],
-    allSeeds[seedMask]
+  # resolve method seeds
+  # a method's seed is considered set when a non-empty value is set.
+  seedMask = !vapply(
+    allMethods,
+    function(m) hasName(m, 'seed') && length(m$seed) > 0L,
+    FUN.VALUE = TRUE
   )
+
+  if (any(seedMask)) {
+    cat(verbose, sprintf('Generating seeds for %d methods that do not have a pre-set seed argument.', sum(seedMask)))
+    localRNG(seed = seed, {
+      allSeeds = sample.int(.Machine$integer.max, size = nModels, replace = FALSE)
+    })
+
+    # update methods that don't have a seed argument
+    allMethods[seedMask] = Map(
+      function(method, seed) update(method, seed = seed, .eval = TRUE),
+      allMethods[seedMask],
+      allSeeds[seedMask]
+    )
+  } else if (length(seed) > 0L) {
+    # all methods already have a seed
+    warning('latrendBatch() seed argument was set but all methods already have a pre-defined seed. No methods to seed.')
+  }
 
   # generate calls
   allCalls = vector('list', length(allMethods))
@@ -482,7 +494,7 @@ latrendBatch = function(
         'latrend',
         method = allMethods[[i]],
         data = quote(allDataOpts[[i]]),
-        seed = allSeeds[[i]],
+        # seed does not need to be set because its part of the method
         envir = quote(envir),
         verbose = quote(verbose)
       )
@@ -531,7 +543,7 @@ latrendBatch = function(
       verbose = verbose
     )
 
-    return(model)
+    model
   }
 
   .exitTimed(fitTiming)
@@ -549,17 +561,17 @@ latrendBatch = function(
       because %d method estimations produced an error',
       nError
     ))
-    return(models)
+    return (models)
   } else if (length(models) < nModels ) {
     # fewer models were obtained than expected
     nError = nModels - length(models)
     cat(verbose, sprintf('Done, but errors occurred in %d out of %d methods', nError, nModels))
     ruler(verbose)
-    return(as.lcModels(models))
+    return (as.lcModels(models))
   } else {
     # no errors
     ruler(verbose)
-    return(as.lcModels(models))
+    return (as.lcModels(models))
   }
 }
 

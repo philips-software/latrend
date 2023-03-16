@@ -25,7 +25,8 @@ Doing this results in a more readable \code{call} associated with each fitted \c
 
 \item{cartesian}{Whether to fit the provided methods on each of the datasets. If \code{cartesian=FALSE}, only a single dataset may be provided or a list of data matching the length of \code{methods}.}
 
-\item{seed}{Sets the seed for generating the respective seed for each of the method fits. Seeds are only set for methods without a seed argument.}
+\item{seed}{Sets the seed for generating a seed number for the methods.
+Seeds are only set for methods without a seed argument or \code{NULL} seed.}
 
 \item{parallel}{Whether to enable parallel evaluation. See \link{latrend-parallel}. Method evaluation and dataset transformation is done on the calling thread.}
 
