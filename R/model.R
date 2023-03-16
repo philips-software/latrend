@@ -896,10 +896,15 @@ nIds = function(object) {
   length(modelIds)
 }
 
+
+# . nClusters ####
 #' @export
+#' @name nClusters
+#' @aliases nClusters,lcModel-method
 #' @title Number of clusters
 #' @description Get the number of clusters estimated by the given `lcModel` object.
 #' @param object The `lcModel` object.
+#' @param ... Not used.
 #' @return An `integer` with the number of clusters identified by the `lcModel`.
 #' @seealso [nIds] [nobs]
 #' @examples
@@ -908,15 +913,14 @@ nIds = function(object) {
 #' model <- latrend(method, latrendData)
 #' nClusters(model) # 3
 #' @family lcModel functions
-nClusters = function(object) {
-  assert_that(is.lcModel(object))
+setMethod('nClusters', 'lcModel', function(object, ...) {
   nClus = length(object@clusterNames)
   assert_that(
     is.count(nClus),
     nClus > 0
   )
   nClus
-}
+})
 
 
 #' @export

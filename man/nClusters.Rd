@@ -2,12 +2,15 @@
 % Please edit documentation in R/model.R
 \name{nClusters}
 \alias{nClusters}
+\alias{nClusters,lcModel-method}
 \title{Number of clusters}
 \usage{
-nClusters(object)
+\S4method{nClusters}{lcModel}(object, ...)
 }
 \arguments{
 \item{object}{The \code{lcModel} object.}
+
+\item{...}{Not used.}
 }
 \value{
 An \code{integer} with the number of clusters identified by the \code{lcModel}.

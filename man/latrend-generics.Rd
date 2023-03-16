@@ -6,6 +6,8 @@
 \alias{getShortName,NULL-method}
 \title{Method- and model-specific generics defined by the latrend package}
 \usage{
+nClusters(object, ...)
+
 clusterProportions(object, ...)
 
 clusterTrajectories(object, ...)

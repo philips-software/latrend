@@ -16,6 +16,21 @@
 NULL
 
 
+# nClusters ####
+#' @export
+#' @name latrend-generics
+setGeneric('nClusters', function(object, ...) {
+  nClus <- standardGeneric('nClusters')
+
+  assert_that(
+    is.count(nClus),
+    nClus > 0
+  )
+
+  nClus
+})
+
+
 # clusterProportions ####
 #' @export
 #' @name latrend-generics
