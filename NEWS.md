@@ -1,6 +1,7 @@
 **If you are viewing this file as part of a released version of the package, the latest news can be found [on GitHub](https://philips-software.github.io/latrend/news/).**
 
 # latrend v1.5.1
+* Resolved CRAN errors and warnings
 * Alternative implementation of ASW and Dunn index due to removal of clusterCrit package from CRAN (#131, #132)
 * New PAP.adh dataset (#130)
 * Added support to lcmm methods for (parallel) gridsearch (#126)

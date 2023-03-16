@@ -1,5 +1,5 @@
 # v1.5.1
-* Resolved CRAN warnings and notes
+* Resolved CRAN errors and warnings
 * Alternative implementation of ASW and Dunn index due to removal of clusterCrit package from CRAN (#131, #132)
 * New PAP.adh dataset (#130)
 * Added support to lcmm methods for (parallel) gridsearch (#126)
