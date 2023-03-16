@@ -1,3 +1,11 @@
+# v1.5.1
+* Resolved CRAN warnings and notes
+* Alternative implementation of ASW and Dunn index due to removal of clusterCrit package from CRAN (#131, #132)
+* New PAP.adh dataset (#130)
+* Added support to lcmm methods for (parallel) gridsearch (#126)
+* More robust implementation of meta methods, allowing argument pass-through (#128)
+* Improved package documentation (#127)
+
 # v1.5.0
 * Implemented virtual class for meta methods (#61)
 * Implemented a meta method for repeatedly fitting a method and selecting the best fit (see `lcFitRep`, `lcFitRepMin`, `lcFitRepMax`) (#61)
