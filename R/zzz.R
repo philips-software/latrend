@@ -215,6 +215,7 @@ globalVariables(
     'AllNA',
     'Cluster', 'Class', 'cl',
     'i', 'i.N', 'iseed', 'Include', 'Id',
+    'k',
     'g', 'Group',
     'fun',
     'method', 'modelMethod', 'modelData', 'modelCall', 'Mu', 'Mu.cluster', 'Mu.class', 'Mu.fixed', 'Mu.random',
