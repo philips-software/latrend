@@ -1,0 +1,13 @@
+/.github/
+/data/
+/data-raw/
+/tests/
+/Meta/
+/man/
+/doc/
+/renv/
+*.bib
+*.tmp
+*.sav
+*.bak
+*.md
