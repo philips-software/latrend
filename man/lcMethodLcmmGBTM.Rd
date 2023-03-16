@@ -29,6 +29,7 @@ lcMethodLcmmGBTM(
 \item{nClusters}{The number of clusters to fit. This replaces the \code{ng} argument of \link[lcmm:hlme]{lcmm::hlme}.}
 
 \item{init}{Alternative for the \code{B} argument of \link[lcmm:hlme]{lcmm::hlme}, for initializing the hlme fitting procedure.
+This is only applicable for \code{nClusters > 1}.
 Options:
 \itemize{
 \item \code{"lme.random"} (default): random initialization through a standard linear mixed model. Assigns a fitted standard linear mixed model enclosed in a call to random() to the \code{B} argument.

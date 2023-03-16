@@ -32,6 +32,7 @@ setValidity('lcMethodLcmmGMM', function(object) {
 #' @param time The name of the time variable.
 #' @param id The name of the trajectory identifier variable. This replaces the `subject` argument of [lcmm::hlme].
 #' @param init Alternative for the `B` argument of [lcmm::hlme], for initializing the hlme fitting procedure.
+#' This is only applicable for `nClusters > 1`.
 #' Options:
 #' * `"lme.random"` (default): random initialization through a standard linear mixed model. Assigns a fitted standard linear mixed model enclosed in a call to random() to the `B` argument.
 #' * `"lme"`, fits a standard linear mixed model and passes this to the `B` argument.
@@ -293,7 +294,7 @@ gmm_gridsearch = function(method, data, envir, verbose, ...) {
 
 #' @rdname interface-lcmm
 setMethod('fit', 'lcMethodLcmmGMM', function(method, data, envir, verbose, ...) {
-  if (method$init == 'gridsearch') {
+  if (method$init == 'gridsearch' && method$nClusters > 1) {
     model = gmm_gridsearch(method, data, envir, verbose, ...)
   } else {
     model = gmm_fit(method, data, envir, verbose, ...)

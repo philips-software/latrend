@@ -34,6 +34,7 @@ make.gmm = function(id, time, response, ..., init = 'default') {
   do.call(lcMethodLcmmGMM, as.list(mc)[-1]) %>% evaluate()
 }
 
+
 test_that('gmm', {
   expect_true({
     suppressWarnings({
@@ -42,12 +43,14 @@ test_that('gmm', {
   })
 })
 
+
 test_that('gmm with init=lme', {
   skip_on_cran()
   method = make.gmm(id = 'Traj', time = 'Assessment', response = 'Value', init = 'lme')
   model = latrend(method, testLongData)
   expect_true(is.lcModel(model))
 })
+
 
 test_that('gmm with init=lme.random', {
   skip_on_cran()
@@ -56,12 +59,17 @@ test_that('gmm with init=lme.random', {
   expect_true(is.lcModel(model))
 })
 
+
 test_that('gmm with init=gridsearch', {
   skip_on_cran()
   method = make.gmm(id = 'Traj', time = 'Assessment', response = 'Value', init = 'gridsearch')
-  model = latrend(method, testLongData)
-  expect_true(is.lcModel(model))
+  model2 = latrend(method, testLongData, nClusters = 2)
+  expect_equal(nClusters(model2), 2)
+
+  model1 = latrend(method, testLongData, nClusters = 1)
+  expect_equal(nClusters(model1), 1)
 })
+
 
 test_that('gmm with NA covariate', {
   expect_true({
@@ -82,6 +90,7 @@ make.gbtm = function(id, time, response, ..., init = NULL) {
 
   do.call(lcMethodLcmmGBTM, as.list(mc)[-1]) %>% evaluate()
 }
+
 
 test_that('gbtm', {
   expect_true({
