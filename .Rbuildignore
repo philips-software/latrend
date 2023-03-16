@@ -1,5 +1,6 @@
 ^renv$
 ^renv\.lock$
+^.renvignore$
 ^.*\.bak$
 ^.*\.sav$
 ^.*\.tmp$

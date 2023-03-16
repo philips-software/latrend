@@ -233,7 +233,7 @@ latrendRep = function(
   exit(verbose, level = verboseLevels$finest)
 
   # seed
-  if (hasName(cmethod, 'seed')) {
+  if (hasName(cmethod, 'seed') && length(cmethod$seed) > 0L) {
     warning('The supplied lcMethod object defines a seed, which would result in repeated identical results. This seed will be ignored.
       Use the .seed argument of latrendRep() to generate different seeds for the repetitions in a reproducible way.')
   }
