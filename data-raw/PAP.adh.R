@@ -28,7 +28,7 @@ cluster1Data = generateLongData(
   data = data.frame(Week = 1:13, Adherers = groupTrajMat[, 'Adherers']),
   clusterCoefs = cbind(c(0, 0, 1)),
   clusterNames = 'Adherers',
-  randomScales = cbind(62.7),
+  randomScales = cbind(62.7) * .8,
   noiseScales = 23,
   seed = 1L
 )
@@ -45,7 +45,7 @@ cluster2Data = generateLongData(
   data = data.frame(Week = 1:13, Adherers = groupTrajMat[, 'Improvers']),
   clusterCoefs = cbind(c(0, 0, 1)),
   clusterNames = 'Improvers',
-  randomScales = cbind(68.9),
+  randomScales = cbind(68.9) * .8,
   noiseScales = 43,
   seed = 2L
 ) %>%
@@ -59,7 +59,7 @@ cluster3Data = generateLongData(
   data = data.frame(Week = 1:13, Adherers = groupTrajMat[, 'Non-adherers']),
   clusterCoefs = cbind(c(0, 0, 1)),
   clusterNames = 'Non-adherers',
-  randomScales = cbind(53.7),
+  randomScales = cbind(53.7) * .8,
   noiseScales = 34,
   seed = 3L
 ) %>%
