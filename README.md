@@ -43,6 +43,8 @@ head(latrendData)
 options(latrend.id = "Id", latrend.time = "Time")
 plotTrajectories(latrendData, response = "Y")
 ```
+![image](https://user-images.githubusercontent.com/8193083/226573946-70ceb35e-1f31-4c50-b707-2363909c264f.png)
+
 Cluster the trajectories and plot the results.
 ```R
 kmlMethod <- lcMethodKML("Y", nClusters = 3)
@@ -50,6 +52,8 @@ model <- latrend(kmlMethod, data = latrendData)
 summary(model)
 plot(model)
 ```
+![image](https://user-images.githubusercontent.com/8193083/226574139-e41a90f6-c713-4745-980f-b014a42d4aa8.png)
+
 
 Identify solutions for 1 to 5 clusters.
 ```R
@@ -60,8 +64,10 @@ models <- latrendBatch(kmlMethods, data = latrendData)
 Determine the number of clusters through one or more internal cluser metrics.
 ```R
 metric(models, c("WMAE", "BIC"))
-plotMetric(models, c("WMAE", "BIC"))
+plotMetric(models, c("Dunn", "ASW", "WMAE", "WRSS", "BIC", "estimationTime"))
 ```
+![image](https://user-images.githubusercontent.com/8193083/226574529-befeb9d3-3e3b-44b4-b58c-44295d528358.png)
+
 
 # Supported packages
 The `latrend` package provides interfaces to the relevant methods for longitudinal clustering for the following packages:
