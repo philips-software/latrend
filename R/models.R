@@ -133,7 +133,8 @@ as.data.frame.lcModels = function(
     dt = subset(dt, select = newColumns)
   }
 
-  dt[, `.method` := vapply(x, getShortName, FUN.VALUE = '')]
+  shortNames = vapply(x, getShortName, FUN.VALUE = '')
+  dt[, `.method` := shortNames]
   if (!has_name(dt, '.name')) {
     dt[, `.name` := character()]
   }
