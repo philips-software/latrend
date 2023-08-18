@@ -324,27 +324,27 @@ containing the fitted models.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 48 × 15</span></span></span>
-<span><span class="co">#&gt;    fun     numTraj randomSc…¹ data.…² repli…³ proc  method nClus…⁴  seed respo…⁵</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> dataGen      50        0.1       1       1 latr… lcMet…       1     1 Y      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> dataGen      50        0.1       1       1 latr… lcMet…       2     1 Y      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> dataGen      50        0.1       1       1 fitG… lcMet…       1     1 <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> dataGen      50        0.1       1       1 fitG… lcMet…       1     1 <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> dataGen      50        0.1       1       1 fitG… lcMet…       2     1 <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> dataGen      50        0.1       1       1 fitG… lcMet…       2     1 <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> dataGen     250        0.1       1       1 latr… lcMet…       1     1 Y      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> dataGen     250        0.1       1       1 latr… lcMet…       2     1 Y      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> dataGen     250        0.1       1       1 fitG… lcMet…       1     1 <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> dataGen     250        0.1       1       1 fitG… lcMet…       1     1 <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 38 more rows, 5 more variables: type &lt;chr&gt;, BIC &lt;dbl&gt;, APPA &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   WMAE &lt;dbl&gt;, ARI &lt;dbl&gt;, and abbreviated variable names ¹​randomScales,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   ²​data.seed, ³​replications, ⁴​nClusters, ⁵​response</span></span></span>
+<span><span class="co">#&gt;    fun     numTraj randomScales data.seed replications proc    method  nClusters</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> dataGen      50          0.1         1            1 latrend lcMeth…         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> dataGen      50          0.1         1            1 latrend lcMeth…         2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> dataGen      50          0.1         1            1 fitGCKM lcMeth…         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> dataGen      50          0.1         1            1 fitGCKM lcMeth…         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> dataGen      50          0.1         1            1 fitGCKM lcMeth…         2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> dataGen      50          0.1         1            1 fitGCKM lcMeth…         2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> dataGen     250          0.1         1            1 latrend lcMeth…         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> dataGen     250          0.1         1            1 latrend lcMeth…         2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> dataGen     250          0.1         1            1 fitGCKM lcMeth…         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> dataGen     250          0.1         1            1 fitGCKM lcMeth…         1</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 38 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 7 more variables: seed &lt;dbl&gt;, response &lt;chr&gt;, type &lt;chr&gt;, BIC &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   APPA &lt;dbl&gt;, WMAE &lt;dbl&gt;, ARI &lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; Number of data generating functions: 8</span></span>
 <span><span class="co">#&gt; Number of analyzing procedures: 6</span></span>
 <span><span class="co">#&gt; Number of replications: 1</span></span>
-<span><span class="co">#&gt; Estimated replications per hour: 218</span></span>
-<span><span class="co">#&gt; Start of the simulation: 2023-03-21 10:13:22</span></span>
-<span><span class="co">#&gt; End of the simulation: 2023-03-21 10:13:38</span></span></code></pre></div>
+<span><span class="co">#&gt; Estimated replications per hour: 209</span></span>
+<span><span class="co">#&gt; Start of the simulation: 2023-08-18 15:31:57.927957</span></span>
+<span><span class="co">#&gt; End of the simulation: 2023-08-18 15:32:15.081562</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="analyzing-the-results">Analyzing the results<a class="anchor" aria-label="anchor" href="#analyzing-the-results"></a>
