@@ -59,10 +59,10 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
 
       - name: Setup pandoc
-        uses: r-lib/actions/setup-pandoc@v1
+        uses: r-lib/actions/setup-pandoc@v2
 
       - name: Setup TinyTeX
-        uses: r-lib/actions/setup-tinytex@v1
+        uses: r-lib/actions/setup-tinytex@v2
 
       - name: Install makeindex
         run: tlmgr install makeindex
