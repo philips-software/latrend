@@ -29,6 +29,44 @@
       ],
       "Hash": "e9e53a559ef99e0c02bc2f9a944f0bee"
     },
+    "Formula": {
+      "Package": "Formula",
+      "Version": "1.2-5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "stats"
+      ],
+      "Hash": "7a29697b75e027767a53fde6c903eca7"
+    },
+    "Hmisc": {
+      "Package": "Hmisc",
+      "Version": "5.1-0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Formula",
+        "base64enc",
+        "cluster",
+        "colorspace",
+        "data.table",
+        "foreign",
+        "ggplot2",
+        "grid",
+        "gridExtra",
+        "gtable",
+        "htmlTable",
+        "htmltools",
+        "knitr",
+        "methods",
+        "nnet",
+        "rmarkdown",
+        "rpart",
+        "viridis"
+      ],
+      "Hash": "58bdffbf73db41c8bf9e4e2329f92429"
+    },
     "KernSmooth": {
       "Package": "KernSmooth",
       "Version": "2.23-22",
@@ -251,6 +289,24 @@
       ],
       "Hash": "0cf10dab0d023d5b46a5a14387556891"
     },
+    "akmedoids": {
+      "Package": "akmedoids",
+      "Version": "0.1.5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Hmisc",
+        "R",
+        "ggplot2",
+        "kml",
+        "longitudinalData",
+        "reshape2",
+        "signal",
+        "stats",
+        "utils"
+      ],
+      "Hash": "cca7c873eef6229e15048873917e91d4"
+    },
     "ash": {
       "Package": "ash",
       "Version": "1.0-15",
@@ -277,6 +333,16 @@
         "tools"
       ],
       "Hash": "50c838a310445e954bc13f26f26a6ecf"
+    },
+    "backports": {
+      "Package": "backports",
+      "Version": "1.4.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "c39fbec8a30d23e721980b8afb31984c"
     },
     "base64enc": {
       "Package": "base64enc",
@@ -431,6 +497,18 @@
         "withr"
       ],
       "Hash": "528692344d5a174552e3bf7acdfbaebd"
+    },
+    "checkmate": {
+      "Package": "checkmate",
+      "Version": "2.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "backports",
+        "utils"
+      ],
+      "Hash": "ca9c113196136f4a9ca9ce6079c2c99e"
     },
     "clValid": {
       "Package": "clValid",
@@ -965,6 +1043,19 @@
       ],
       "Hash": "618609b42c9406731ead03adf5379850"
     },
+    "foreign": {
+      "Package": "foreign",
+      "Version": "0.8-84",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "methods",
+        "stats",
+        "utils"
+      ],
+      "Hash": "467ec0ca895d4e61a22cfbac9bccddf8"
+    },
     "fs": {
       "Package": "fs",
       "Version": "1.6.3",
@@ -1169,6 +1260,23 @@
         "xfun"
       ],
       "Hash": "06230136b2d2b9ba5805e1963fa6e890"
+    },
+    "htmlTable": {
+      "Package": "htmlTable",
+      "Version": "2.4.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "checkmate",
+        "htmltools",
+        "htmlwidgets",
+        "knitr",
+        "magrittr",
+        "methods",
+        "rstudioapi",
+        "stringr"
+      ],
+      "Hash": "d5b485330dcfe241b50db157bf898e97"
     },
     "htmltools": {
       "Package": "htmltools",
@@ -2382,6 +2490,13 @@
       ],
       "Hash": "1de7ab598047a87bba48434ba35d497d"
     },
+    "rstudioapi": {
+      "Package": "rstudioapi",
+      "Version": "0.15.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "5564500e25cffad9e22244ced1379887"
+    },
     "sass": {
       "Package": "sass",
       "Version": "0.4.7",
@@ -2484,6 +2599,21 @@
         "shiny"
       ],
       "Hash": "802e4786b353a4bb27116957558548d5"
+    },
+    "signal": {
+      "Package": "signal",
+      "Version": "0.7-7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "MASS",
+        "R",
+        "grDevices",
+        "graphics",
+        "stats",
+        "utils"
+      ],
+      "Hash": "b8f2ef9022ac085add25ae093754e6b3"
     },
     "simTool": {
       "Package": "simTool",
@@ -2732,6 +2862,19 @@
         "rlang"
       ],
       "Hash": "d0ef2856b83dc33ea6e255caf6229ee2"
+    },
+    "viridis": {
+      "Package": "viridis",
+      "Version": "0.6.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "ggplot2",
+        "gridExtra",
+        "viridisLite"
+      ],
+      "Hash": "80cd127bc8c9d3d9f0904ead9a9102f1"
     },
     "viridisLite": {
       "Package": "viridisLite",
