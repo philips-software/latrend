@@ -338,6 +338,46 @@ assigned trajectories.
 </p>
 <img src="demo_files/figure-html/unnamed-chunk-13-1.png" alt="Cluster trajectories for KML model with 4 clusters, along with the assigned trajectories." width="672">
 </div>
+<p>The cluster assignment for each available subject is obtained
+using:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/trajectoryAssignments.html">trajectoryAssignments</a></span><span class="op">(</span><span class="va">kmlModel4</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   [1] D C D C D D C C C D C C D D C C D C C C C C C D C C D D D C C D C C D D D</span></span>
+<span><span class="co">#&gt;  [38] D C C D D C C D D C C D C C D C D C C D D C D C D C C D C D C C C C D C D</span></span>
+<span><span class="co">#&gt;  [75] D C D C C D A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A</span></span>
+<span><span class="co">#&gt; [112] A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A</span></span>
+<span><span class="co">#&gt; [149] A A B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B</span></span>
+<span><span class="co">#&gt; [186] B B B B B B B B B B B B B B B</span></span>
+<span><span class="co">#&gt; Levels: A B C D</span></span></code></pre></div>
+<p>We can use this to construct a table of the cluster per subject, and
+merge it into the original data for further analysis.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># make sure to change the Id column name for your respective id column name</span></span>
+<span><span class="va">subjectClusters</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Id <span class="op">=</span> <span class="fu"><a href="../reference/ids.html">ids</a></span><span class="op">(</span><span class="va">kmlModel4</span><span class="op">)</span>, Cluster <span class="op">=</span> <span class="fu"><a href="../reference/trajectoryAssignments.html">trajectoryAssignments</a></span><span class="op">(</span><span class="va">kmlModel4</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">subjectClusters</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Id Cluster</span></span>
+<span><span class="co">#&gt; 1  1       D</span></span>
+<span><span class="co">#&gt; 2  2       C</span></span>
+<span><span class="co">#&gt; 3  3       D</span></span>
+<span><span class="co">#&gt; 4  4       C</span></span>
+<span><span class="co">#&gt; 5  5       D</span></span>
+<span><span class="co">#&gt; 6  6       D</span></span>
+<span></span>
+<span><span class="va">posthocAnalysisData</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">latrendData</span>, <span class="va">subjectClusters</span>, by <span class="op">=</span> <span class="st">'Id'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">posthocAnalysisData</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Id      Time           Y   Class Cluster</span></span>
+<span><span class="co">#&gt; 1  1 0.0000000 -1.08049205 Class 1       D</span></span>
+<span><span class="co">#&gt; 2  1 0.2222222 -0.68024151 Class 1       D</span></span>
+<span><span class="co">#&gt; 3  1 0.4444444 -0.65148373 Class 1       D</span></span>
+<span><span class="co">#&gt; 4  1 0.6666667 -0.39115398 Class 1       D</span></span>
+<span><span class="co">#&gt; 5  1 0.8888889 -0.19407876 Class 1       D</span></span>
+<span><span class="co">#&gt; 6  1 1.1111111 -0.02991783 Class 1       D</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Cluster</span>, <span class="va">posthocAnalysisData</span>, <span class="va">mean</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Cluster           Y</span></span>
+<span><span class="co">#&gt; 1       A -0.01200153</span></span>
+<span><span class="co">#&gt; 2       B -0.05675290</span></span>
+<span><span class="co">#&gt; 3       C  0.15509611</span></span>
+<span><span class="co">#&gt; 4       D -0.28265770</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="model-adequacy">Model adequacy<a class="anchor" aria-label="anchor" href="#model-adequacy"></a>
@@ -345,7 +385,7 @@ assigned trajectories.
 <p>The list of currently supported internal model metrics can be
 obtained by calling the <code>getInternalMetricNames</code>
 function.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/getInternalMetricNames.html">getInternalMetricNames</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "AIC"              "APPA.mean"        "APPA.min"         "ASW"             </span></span>
 <span><span class="co">#&gt;  [5] "BIC"              "CAIC"             "CalinskiHarabasz" "CLC"             </span></span>
@@ -359,32 +399,32 @@ function.</p>
 <p>As an example, we will compute the APPA (a measure of cluster
 separation), and the WRSS and WMAE metrics (measures of model
 error).</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/metric.html">metric</a></span><span class="op">(</span><span class="va">kmlModel</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"APPA.mean"</span>, <span class="st">"WRSS"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   APPA.mean        WRSS        WMAE </span></span>
 <span><span class="co">#&gt;   0.9999979 152.7557738   0.2158131</span></span></code></pre></div>
 <p>The quantile-quantile (QQ) plot can be used to assess the model for
 structural deviations.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/qqPlot.html">qqPlot</a></span><span class="op">(</span><span class="va">kmlModel4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required namespace: qqplotr</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 QQ-plot of the selected KML model.
 </p>
-<img src="demo_files/figure-html/unnamed-chunk-16-1.png" alt="QQ-plot of the selected KML model." width="480">
+<img src="demo_files/figure-html/unnamed-chunk-18-1.png" alt="QQ-plot of the selected KML model." width="480">
 </div>
 <p>Overall, the unexplained errors closely follow a normal distribution.
 In situations where structural deviations from the expected distribution
 are apparent, it may be fruitful to investigate the QQ plot on a
 per-cluster basis.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/qqPlot.html">qqPlot</a></span><span class="op">(</span><span class="va">kmlModel4</span>, byCluster <span class="op">=</span> <span class="cn">TRUE</span>, detrend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 Cluster-specific detrended QQ-plot for the selected KML model.
 </p>
-<img src="demo_files/figure-html/unnamed-chunk-17-1.png" alt="Cluster-specific detrended QQ-plot for the selected KML model." width="672">
+<img src="demo_files/figure-html/unnamed-chunk-19-1.png" alt="Cluster-specific detrended QQ-plot for the selected KML model." width="672">
 </div>
 </div>
 </div>
@@ -395,7 +435,7 @@ Cluster-specific detrended QQ-plot for the selected KML model.
 for the cluster trajectories. We can use these insights to define a
 parametric representation of each of the trajectories and cluster them
 using k-means.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lmkmMethod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethodLMKM.html">lcMethodLMKM</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">Time</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lmkmMethod</span></span>
@@ -416,23 +456,23 @@ using k-means.</p>
 <span><span class="co">#&gt;  algorithm:      c("Hartigan-Wong", "Lloyd", "Forgy", "Ma</span></span>
 <span><span class="co">#&gt;  formula:        Y ~ Time</span></span></code></pre></div>
 <p>We fit LMKM for 1 to 4 clusters.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lmkmMethods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcMethods.html">lcMethods</a></span><span class="op">(</span><span class="va">lmkmMethod</span>, nClusters <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lmkmModels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/latrendBatch.html">latrendBatch</a></span><span class="op">(</span><span class="va">lmkmMethods</span>, data <span class="op">=</span> <span class="va">latrendData</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">lmkmModels</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"logLik"</span>, <span class="st">"BIC"</span>, <span class="st">"WMAE"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 Three cluster metrics for each of the GBTMs.
 </p>
-<img src="demo_files/figure-html/unnamed-chunk-20-1.png" alt="Three cluster metrics for each of the GBTMs." width="672">
+<img src="demo_files/figure-html/unnamed-chunk-22-1.png" alt="Three cluster metrics for each of the GBTMs." width="672">
 </div>
 <p>All metrics clearly point to the three-cluster solution.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bestLmkmModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">lmkmModels</span>, <span class="va">nClusters</span> <span class="op">==</span> <span class="fl">3</span>, drop<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bestLmkmModel</span><span class="op">)</span></span></code></pre></div>
-<p><img src="demo_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;"></p>
+<p><img src="demo_files/figure-html/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="comparison-to-the-reference">Comparison to the reference<a class="anchor" aria-label="anchor" href="#comparison-to-the-reference"></a>
@@ -444,20 +484,20 @@ generated.</p>
 <p>Using the reference assignments, we can also plot a non-parametric
 estimate of the cluster trajectories. Note how it looks similar to the
 cluster trajectories found by our model.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotClusterTrajectories.html">plotClusterTrajectories</a></span><span class="op">(</span><span class="va">latrendData</span>, response <span class="op">=</span> <span class="st">"Y"</span>, cluster <span class="op">=</span> <span class="st">"Class"</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 Non-parametric estimates of the cluster trajectories based on the
 reference assignments.
 </p>
-<img src="demo_files/figure-html/unnamed-chunk-22-1.png" alt="Non-parametric estimates of the cluster trajectories based on the reference assignments." width="480">
+<img src="demo_files/figure-html/unnamed-chunk-24-1.png" alt="Non-parametric estimates of the cluster trajectories based on the reference assignments." width="480">
 </div>
 <p>In order to compare the reference assignments to the trajectory
 assignments generated by our model, we can create a <code>lcModel</code>
 object based on the reference assignments using the
 <code>lcModelPartition</code> function.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">refTrajAssigns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">Class</span> <span class="op">~</span> <span class="va">Id</span>, data <span class="op">=</span> <span class="va">latrendData</span>, FUN <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="va"><a href="https://Rdatatable.gitlab.io/data.table/reference/last.html" class="external-link">first</a></span><span class="op">)</span></span>
 <span><span class="va">refModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lcModelPartition.html">lcModelPartition</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">latrendData</span>, response <span class="op">=</span> <span class="st">"Y"</span>, trajectoryAssignments <span class="op">=</span> <span class="va">refTrajAssigns</span><span class="op">$</span><span class="va">Class</span><span class="op">)</span></span>
 <span><span class="va">refModel</span></span>
@@ -474,19 +514,19 @@ object based on the reference assignments using the
 <span><span class="co">#&gt; Scaled residuals:</span></span>
 <span><span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span></span>
 <span><span class="co">#&gt; -3.67125 -0.55452 -0.04079  0.00000  0.58663  3.76931</span></span></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/kml/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">refModel</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
 <p class="caption">
 Cluster trajectories of the reference model.
 </p>
-<img src="demo_files/figure-html/unnamed-chunk-24-1.png" alt="Cluster trajectories of the reference model." width="672">
+<img src="demo_files/figure-html/unnamed-chunk-26-1.png" alt="Cluster trajectories of the reference model." width="672">
 </div>
 <p>By constructing a reference model, we can make use of the
 standardized way in which <code>lcModel</code> objects can be compared.
 A list of supported comparison metrics can be obtained via the
 <code>getExternalMetricNames</code> function.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/getExternalMetricNames.html">getExternalMetricNames</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "adjustedRand"   "CohensKappa"    "F"              "F1"            </span></span>
 <span><span class="co">#&gt;  [5] "FolkesMallows"  "Hubert"         "Jaccard"        "jointEntropy"  </span></span>
@@ -500,7 +540,7 @@ A list of supported comparison metrics can be obtained via the
 <span><span class="co">#&gt; [37] "WMMSE.ref"      "WMRSS"          "WMRSS.ref"</span></span></code></pre></div>
 <p>Lastly, we compare the agreement in trajectory assignments via the
 adjusted Rand index.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/externalMetric.html">externalMetric</a></span><span class="op">(</span><span class="va">bestLmkmModel</span>, <span class="va">refModel</span>, <span class="st">"adjustedRand"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; adjustedRand </span></span>
 <span><span class="co">#&gt;    0.9669189</span></span></code></pre></div>
