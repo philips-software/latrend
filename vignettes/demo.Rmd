@@ -116,6 +116,22 @@ We can get a better sense of the representation of the cluster trajectories when
 plot(kmlModel4)
 ```
 
+The cluster assignment for each available subject is obtained using:
+```{r}
+trajectoryAssignments(kmlModel4)
+```
+We can use this to construct a table of the cluster per subject, and merge it into the original data for further analysis.
+```{r}
+# make sure to change the Id column name for your respective id column name
+subjectClusters = data.frame(Id = ids(kmlModel4), Cluster = trajectoryAssignments(kmlModel4))
+head(subjectClusters)
+
+posthocAnalysisData = merge(latrendData, subjectClusters, by = 'Id')
+head(posthocAnalysisData)
+aggregate(Y ~ Cluster, posthocAnalysisData, mean)
+```
+
+
 ## Model adequacy
 The list of currently supported internal model metrics can be obtained by calling the `getInternalMetricNames` function.
 ```{r}
