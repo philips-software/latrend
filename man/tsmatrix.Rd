@@ -30,17 +30,20 @@ dcastRepeatedMeasures(
 
 \item{time}{The time column name.}
 
-\item{fill}{A \code{scalar} value. If \code{FALSE}, an error is thrown when time series observations are missing in the data frame.
+\item{fill}{A \code{scalar} value.
+If \code{FALSE}, an error is thrown when time series observations are missing in the data frame.
 Otherwise, the value used for representing missing observations.}
 }
 \value{
 A \code{matrix} with a trajectory per row.
 }
 \description{
-Converts a longitudinal \code{data.frame} comprising trajectories with an equal number of observations, measured at identical moments in time, to a \code{matrix}. Each row of the matrix represents a trajectory.
+Converts a longitudinal \code{data.frame} comprising trajectories with an equal number of observations,
+measured at identical moments in time, to a \code{matrix}. Each row of the matrix represents a trajectory.
 }
 \note{
-The \code{dcastRepeatedMeasures()} function is deprecated and will be removed in a future version. Please use \code{tsmatrix()} instead.
+The \code{dcastRepeatedMeasures()} function is deprecated and will be removed in a future version.
+Please use \code{tsmatrix()} instead.
 }
 \seealso{
 \link{tsframe}

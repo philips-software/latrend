@@ -15,9 +15,16 @@
 #' @export
 #' @name trajectoryAssignments
 #' @aliases trajectoryAssignments,matrix-method
-#' @details In case `object` is a `matrix`: the posterior probability `matrix`, with the \eqn{k}th column containing the observation- or trajectory-specific probability for cluster \eqn{k}.
-#' @param clusterNames Optional `character vector` with the cluster names. If `clusterNames = NULL`, [make.clusterNames()] is used.
-setMethod('trajectoryAssignments', 'matrix', function(object, strategy = which.max, clusterNames = colnames(object), ...) {
+#' @details In case `object` is a `matrix`: the posterior probability `matrix`,
+#' with the \eqn{k}th column containing the observation- or trajectory-specific probability for cluster \eqn{k}.
+#' @param clusterNames Optional `character vector` with the cluster names.
+#' If `clusterNames = NULL`, [make.clusterNames()] is used.
+setMethod('trajectoryAssignments', 'matrix', function(
+  object,
+  strategy = which.max,
+  clusterNames = colnames(object),
+  ...
+) {
   assert_that(is_valid_postprob(object))
 
   nTraj = nrow(object)
@@ -48,7 +55,8 @@ setMethod('trajectoryAssignments', 'matrix', function(object, strategy = which.m
 #' @param time The time column name.
 #' @param response The response column name.
 #' @param ids A `vector` specifying the id names. Should match the number of rows of `data`.
-#' @param times A `numeric` `vector` specifying the times of the measurements. Should match the number of columns of `data`.
+#' @param times A `numeric` `vector` specifying the times of the measurements.
+#' Should match the number of columns of `data`.
 #' @param as.data.table Whether to return the result as a `data.table`, or a `data.frame` otherwise.
 #' @return A `data.table` or `data.frame` containing the repeated measures.
 #' @seealso [tsmatrix]
@@ -97,7 +105,8 @@ tsframe = function(
     if (all(!is.finite(times))) {
       times = seq_along(times)
       warning(
-        'supplied "times" argument failed to parse to numeric values; falling back to times = seq_along(times) instead.'
+        'supplied "times" argument failed to parse to numeric values;
+        falling back to times = seq_along(times) instead.'
       )
     } else {
       stop('some time values are non-finite (possible failed to parse to numeric?)')
@@ -119,14 +128,17 @@ tsframe = function(
 }
 
 #' @rdname tsframe
-#' @note The `meltRepeatedMeasures()` function is deprecated and will be removed in a future version, please use `tsframe()` instead.
+#' @note The `meltRepeatedMeasures()` function is deprecated and will be removed in a future version,
+#' please use `tsframe()` instead.
 meltRepeatedMeasures = tsframe
 
 #' @export
 #' @title Convert a longitudinal data.frame to a matrix
-#' @description Converts a longitudinal `data.frame` comprising trajectories with an equal number of observations, measured at identical moments in time, to a `matrix`. Each row of the matrix represents a trajectory.
+#' @description Converts a longitudinal `data.frame` comprising trajectories with an equal number of observations,
+#' measured at identical moments in time, to a `matrix`. Each row of the matrix represents a trajectory.
 #' @inheritParams tsframe
-#' @param fill A `scalar` value. If `FALSE`, an error is thrown when time series observations are missing in the data frame.
+#' @param fill A `scalar` value.
+#' If `FALSE`, an error is thrown when time series observations are missing in the data frame.
 #' Otherwise, the value used for representing missing observations.
 #' @return A `matrix` with a trajectory per row.
 #' @seealso [tsframe]
@@ -180,5 +192,6 @@ tsmatrix = function(
 }
 
 #' @rdname tsmatrix
-#' @note The `dcastRepeatedMeasures()` function is deprecated and will be removed in a future version. Please use `tsmatrix()` instead.
+#' @note The `dcastRepeatedMeasures()` function is deprecated and will be removed in a future version.
+#' Please use `tsmatrix()` instead.
 dcastRepeatedMeasures = tsmatrix

@@ -36,7 +36,8 @@ meltRepeatedMeasures(
 
 \item{ids}{A \code{vector} specifying the id names. Should match the number of rows of \code{data}.}
 
-\item{times}{A \code{numeric} \code{vector} specifying the times of the measurements. Should match the number of columns of \code{data}.}
+\item{times}{A \code{numeric} \code{vector} specifying the times of the measurements.
+Should match the number of columns of \code{data}.}
 
 \item{as.data.table}{Whether to return the result as a \code{data.table}, or a \code{data.frame} otherwise.}
 }
@@ -47,7 +48,8 @@ A \code{data.table} or \code{data.frame} containing the repeated measures.
 Convert a multiple time series matrix to a data.frame
 }
 \note{
-The \code{meltRepeatedMeasures()} function is deprecated and will be removed in a future version, please use \code{tsframe()} instead.
+The \code{meltRepeatedMeasures()} function is deprecated and will be removed in a future version,
+please use \code{tsframe()} instead.
 }
 \seealso{
 \link{tsmatrix}

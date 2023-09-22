@@ -1,11 +1,13 @@
 #' @name latrend-data
 #' @title Longitudinal dataset representation
-#' @description The [latrend estimation functions][latrend-estimation] expect univariate longitudinal data that can be represented in a `data.frame` with one row per trajectory observation:
+#' @description The [latrend estimation functions][latrend-estimation] expect univariate
+#' longitudinal data that can be represented in a `data.frame` with one row per trajectory observation:
 #' * Trajectory identifier: `numeric`, `character`, or `factor`
 #' * Observation time: `numeric`
 #' * Observation value: `numeric`
 #'
-#' In principle, any type of longitudinal data structure is supported, given that it can be transformed to the required `data.frame` format using the generic [trajectories] function.
+#' In principle, any type of longitudinal data structure is supported,
+#' given that it can be transformed to the required `data.frame` format using the generic [trajectories] function.
 #' Support can be added by implementing the [trajectories] function for the respective signature.
 #' This means that users can implement their own data adapters as needed.
 #'
@@ -52,9 +54,12 @@ NULL
 #' @name PAP.adh
 #' @title Weekly Mean PAP Therapy Usage of OSA Patients in the First 3 Months
 #' @description
-#' A simulated longitudinal dataset comprising 301 patients with obstructive sleep apnea (OSA) during their first 91 days (13 weeks) of PAP therapy.
-#' The longitudinal patterns were inspired by the adherence patterns reported by Yi et al. (2022), interpolated to weekly hours of usage.
-#' @format A `data.frame` comprising longitudinal data of 500 patients, each having 26 observations over a period of 1 year.
+#' A simulated longitudinal dataset comprising 301 patients with obstructive sleep apnea (OSA)
+#' during their first 91 days (13 weeks) of PAP therapy.
+#' The longitudinal patterns were inspired by the adherence patterns reported by Yi et al. (2022),
+#' interpolated to weekly hours of usage.
+#' @format A `data.frame` comprising longitudinal data of 500 patients, each having 26 observations
+#' over a period of 1 year.
 #' Each row represents a patient observation interval (two weeks), with columns:
 #' \describe{
 #'   \item{Patient}{`integer`: The patient identifier, where each level represents a simulated patient.}
@@ -87,11 +92,13 @@ NULL
 #' @name PAP.adh1y
 #' @title Biweekly Mean PAP Therapy Adherence of OSA Patients over 1 Year
 #' @description
-#' A simulated longitudinal dataset comprising 500 patients with obstructive sleep apnea (OSA) during their first year on CPAP therapy.
+#' A simulated longitudinal dataset comprising 500 patients with obstructive sleep apnea (OSA)
+#' during their first year on CPAP therapy.
 #' The dataset contains the patient usage hours, averaged over 2-week periods.
 #'
 #' The daily usage data underlying the downsampled dataset was simulated based on 7 different adherence patterns.
-#' The defined adherence patterns were inspired by the adherence patterns identified by Aloia et al. (2008), with slight adjustments
+#' The defined adherence patterns were inspired by the adherence patterns identified by Aloia et al. (2008),
+#' with slight adjustments
 #' @format A `data.frame` comprising longitudinal data of 500 patients, each having 26 observations over a period of 1 year.
 #' Each row represents a patient observation interval (two weeks), with columns:
 #' \describe{
@@ -105,7 +112,8 @@ NULL
 #'
 #' @note This dataset is only intended for demonstration purposes.
 #' While the data format will remain the same, the data content is subject to change in future versions.
-#' @source This dataset was generated based on the cluster-specific descriptive statistics table provided in Aloia et al. (2008),
+#' @source This dataset was generated based on the cluster-specific descriptive statistics table
+#' provided in Aloia et al. (2008),
 #' with some adjustments made in order to improve cluster separation for demonstration purposes.
 #'
 #' \insertRef{aloia2008time}{latrend}
@@ -134,7 +142,8 @@ NULL
 #' @param random Random effects formula.
 #' @param cluster Cluster effects formula.
 #' @param id Name of the strata.
-#' @param data Data with covariates to use for generation. Stratified data may be specified by adding a grouping column.
+#' @param data Data with covariates to use for generation. Stratified data may be specified by
+#' adding a grouping column.
 #' @param clusterNames A `character` vector denoting the names of the generated clusters.
 #' @param fixedCoefs Coefficients matrix for the fixed effects.
 #' @param clusterCoefs Coefficients matrix for the cluster effects.
@@ -229,7 +238,10 @@ generateLongData = function(
   )
   assert_that(ncol(clusterCoefs) == nClus)
   Xc = model.matrix(cluster, alldata)
-  assert_that(ncol(Xc) == nrow(clusterCoefs), msg = 'Missing or too many coefficients specified for cluster effects.')
+  assert_that(
+    ncol(Xc) == nrow(clusterCoefs),
+    msg = 'Missing or too many coefficients specified for cluster effects.'
+  )
   alldata[, Mu.class := rowSums(Xc * t(clusterCoefs)[Class, ])]
 
   ## Random effects

@@ -34,7 +34,8 @@ plotTrajectories(object, ...)
 
 \item{id}{The identifier variable name.}
 
-\item{cluster}{Cluster variable name. If unspecified, trajectories are not grouped. Alternatively, cluster is a vector indicating cluster membership per id.}
+\item{cluster}{Cluster variable name. If unspecified, trajectories are not grouped.
+Alternatively, cluster is a vector indicating cluster membership per id.}
 
 \item{facet}{Whether to facet by cluster.}
 }

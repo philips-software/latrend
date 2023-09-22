@@ -17,7 +17,8 @@ Greater than or equal to zero, and typically around 4-6 hours.}
 }
 }
 \source{
-This dataset was generated based on the cluster-specific descriptive statistics table provided in Aloia et al. (2008),
+This dataset was generated based on the cluster-specific descriptive statistics table
+provided in Aloia et al. (2008),
 with some adjustments made in order to improve cluster separation for demonstration purposes.
 
 \insertRef{aloia2008time}{latrend}
@@ -26,11 +27,13 @@ with some adjustments made in order to improve cluster separation for demonstrat
 PAP.adh1y
 }
 \description{
-A simulated longitudinal dataset comprising 500 patients with obstructive sleep apnea (OSA) during their first year on CPAP therapy.
+A simulated longitudinal dataset comprising 500 patients with obstructive sleep apnea (OSA)
+during their first year on CPAP therapy.
 The dataset contains the patient usage hours, averaged over 2-week periods.
 
 The daily usage data underlying the downsampled dataset was simulated based on 7 different adherence patterns.
-The defined adherence patterns were inspired by the adherence patterns identified by Aloia et al. (2008), with slight adjustments
+The defined adherence patterns were inspired by the adherence patterns identified by Aloia et al. (2008),
+with slight adjustments
 }
 \note{
 This dataset is only intended for demonstration purposes.

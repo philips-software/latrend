@@ -41,9 +41,11 @@
 \item{center}{A function for aggregating multiple points at the same point in time}
 
 \item{trajectories}{Whether to additionally plot the original trajectories (\code{TRUE}),
-or to show the expected interval (standard deviation, standard error, range, or percentile range) of the observations at the respective moment in time.
+or to show the expected interval (standard deviation, standard error, range, or percentile range)
+of the observations at the respective moment in time.
 
-Note that visualizing the expected intervals is currently only supported for time-aligned trajectories, as the interval is computed at each unique moment in time.
+Note that visualizing the expected intervals is currently only supported for time-aligned trajectories,
+as the interval is computed at each unique moment in time.
 By default (\code{FALSE}), no information on the underlying trajectories is shown.}
 
 \item{facet}{Whether to facet by cluster. This is done by default when \code{trajectories} is enabled.}

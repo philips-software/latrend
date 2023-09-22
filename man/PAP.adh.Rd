@@ -5,7 +5,8 @@
 \alias{PAP.adh}
 \title{Weekly Mean PAP Therapy Usage of OSA Patients in the First 3 Months}
 \format{
-A \code{data.frame} comprising longitudinal data of 500 patients, each having 26 observations over a period of 1 year.
+A \code{data.frame} comprising longitudinal data of 500 patients, each having 26 observations
+over a period of 1 year.
 Each row represents a patient observation interval (two weeks), with columns:
 \describe{
 \item{Patient}{\code{integer}: The patient identifier, where each level represents a simulated patient.}
@@ -21,8 +22,10 @@ Greater than or equal to zero, and typically around 4-6 hours.}
 PAP.adh
 }
 \description{
-A simulated longitudinal dataset comprising 301 patients with obstructive sleep apnea (OSA) during their first 91 days (13 weeks) of PAP therapy.
-The longitudinal patterns were inspired by the adherence patterns reported by Yi et al. (2022), interpolated to weekly hours of usage.
+A simulated longitudinal dataset comprising 301 patients with obstructive sleep apnea (OSA)
+during their first 91 days (13 weeks) of PAP therapy.
+The longitudinal patterns were inspired by the adherence patterns reported by Yi et al. (2022),
+interpolated to weekly hours of usage.
 }
 \examples{
 data(PAP.adh)

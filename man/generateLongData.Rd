@@ -33,7 +33,8 @@ generateLongData(
 
 \item{id}{Name of the strata.}
 
-\item{data}{Data with covariates to use for generation. Stratified data may be specified by adding a grouping column.}
+\item{data}{Data with covariates to use for generation. Stratified data may be specified by
+adding a grouping column.}
 
 \item{fixedCoefs}{Coefficients matrix for the fixed effects.}
 

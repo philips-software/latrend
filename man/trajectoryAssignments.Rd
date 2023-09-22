@@ -20,7 +20,8 @@
 
 \item{strategy}{A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.}
 
-\item{clusterNames}{Optional \verb{character vector} with the cluster names. If \code{clusterNames = NULL}, \code{\link[=make.clusterNames]{make.clusterNames()}} is used.}
+\item{clusterNames}{Optional \verb{character vector} with the cluster names.
+If \code{clusterNames = NULL}, \code{\link[=make.clusterNames]{make.clusterNames()}} is used.}
 
 \item{...}{Any additional arguments passed to the strategy function.}
 }
@@ -35,7 +36,8 @@ In cases where identical probabilities are expected between clusters, it is pref
 Another strategy to consider is the function \code{\link[=which.weight]{which.weight()}}, which enables weighted sampling of cluster assignments based on the trajectory-specific probabilities.
 }
 \details{
-In case \code{object} is a \code{matrix}: the posterior probability \code{matrix}, with the \eqn{k}th column containing the observation- or trajectory-specific probability for cluster \eqn{k}.
+In case \code{object} is a \code{matrix}: the posterior probability \code{matrix},
+with the \eqn{k}th column containing the observation- or trajectory-specific probability for cluster \eqn{k}.
 }
 \examples{
 data(latrendData)

@@ -4,14 +4,16 @@
 \alias{latrend-data}
 \title{Longitudinal dataset representation}
 \description{
-The \link[=latrend-estimation]{latrend estimation functions} expect univariate longitudinal data that can be represented in a \code{data.frame} with one row per trajectory observation:
+The \link[=latrend-estimation]{latrend estimation functions} expect univariate
+longitudinal data that can be represented in a \code{data.frame} with one row per trajectory observation:
 \itemize{
 \item Trajectory identifier: \code{numeric}, \code{character}, or \code{factor}
 \item Observation time: \code{numeric}
 \item Observation value: \code{numeric}
 }
 
-In principle, any type of longitudinal data structure is supported, given that it can be transformed to the required \code{data.frame} format using the generic \link{trajectories} function.
+In principle, any type of longitudinal data structure is supported,
+given that it can be transformed to the required \code{data.frame} format using the generic \link{trajectories} function.
 Support can be added by implementing the \link{trajectories} function for the respective signature.
 This means that users can implement their own data adapters as needed.
 }
