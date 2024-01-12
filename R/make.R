@@ -130,6 +130,46 @@ make.clusterNames = function(n) {
 }
 
 
+#' @export
+#' @rdname lcModel-make
+#' @description `make.clusterSizeLabels` generates cluster labels for the given input
+#' @param clusterNames Names of the clusters
+#' @param sizes Sizes of the respective clusters; the number of ids
+#' @examples
+#' make.clusterSizeLabels(c('A', 'B'), c(10, 20))
+make.clusterSizeLabels = function(clusterNames, sizes) {
+  assert_that(
+    is.character(clusterNames),
+    length(clusterNames) > 0,
+    length(clusterNames) == length(sizes),
+    is.numeric(sizes),
+    all(vapply(sizes, is.number, FUN.VALUE = TRUE)),
+    all(sizes >= 0)
+  )
+
+  sprintf('%s (%d)', clusterNames, sizes)
+}
+
+
+#' @export
+#' @rdname lcModel-make
+#' @description `make.clusterPropLabels` generates cluster labels for the given input
+#' @examples
+#' make.clusterPropLabels(c('A', 'B'), c(10, 20))
+make.clusterPropLabels = function(clusterNames, sizes) {
+  make.clusterSizeLabels(clusterNames, sizes) # just to check the inputs
+
+  n = sum(sizes)
+  assert_that(n > 0, msg = 'cannot generate cluster labels: all clusters are empty')
+
+  sprintf(
+    '%s (%g%%)',
+    clusterNames,
+    round(sizes / n * 100)
+  )
+}
+
+
 #' @noRd
 #' @title Generate unique IDs vector from input
 #' @details Used by models to choose the ordering of trajectories in the ids() vector in a standardized manner.

@@ -5,6 +5,8 @@
 \alias{make.trajectoryAssignments}
 \alias{make.clusterIndices}
 \alias{make.clusterNames}
+\alias{make.clusterSizeLabels}
+\alias{make.clusterPropLabels}
 \title{Cluster-handling functions for lcModel implementations.}
 \usage{
 make.trajectoryAssignments(object, clusters)
@@ -12,6 +14,10 @@ make.trajectoryAssignments(object, clusters)
 make.clusterIndices(object, clusters)
 
 make.clusterNames(n)
+
+make.clusterSizeLabels(clusterNames, sizes)
+
+make.clusterPropLabels(clusterNames, sizes)
 }
 \arguments{
 \item{object}{The \code{lcModel} object.}
@@ -19,6 +25,10 @@ make.clusterNames(n)
 \item{clusters}{The unprocessed trajectory cluster assignment vector.}
 
 \item{n}{The number of clusters.}
+
+\item{clusterNames}{Names of the clusters}
+
+\item{sizes}{Sizes of the respective clusters; the number of ids}
 }
 \value{
 Factor cluster assignments.
@@ -31,8 +41,16 @@ A \code{character} vector length \code{n} with the cluster names.
 Ensures a proper cluster assignments factor vector
 
 Generates the requested number of cluster names. Uses the vector returned by \code{getOption("latrend.clusterNames")}, which returns the alphabet by default.
+
+\code{make.clusterSizeLabels} generates cluster labels for the given input
+
+\code{make.clusterPropLabels} generates cluster labels for the given input
 }
 \details{
 The \code{latrend.clusterNames} option may also return a function with signature \code{(n)}, returning a vector of names of the correct length.
+}
+\examples{
+make.clusterSizeLabels(c('A', 'B'), c(10, 20))
+make.clusterPropLabels(c('A', 'B'), c(10, 20))
 }
 \keyword{internal}
