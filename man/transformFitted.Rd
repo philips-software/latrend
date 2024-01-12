@@ -10,7 +10,7 @@
 \usage{
 transformFitted(pred, model, clusters)
 
-\S4method{transformFitted}{`NULL`,lcModel}(pred, model, clusters = NULL)
+\S4method{transformFitted}{NULL,lcModel}(pred, model, clusters = NULL)
 
 \S4method{transformFitted}{matrix,lcModel}(pred, model, clusters = NULL)
 

@@ -1,5 +1,4 @@
 #' @include method.R trajectories.R latrend.R
-#' @importFrom stats coef deviance df.residual getCall logLik model.frame model.matrix predict residuals sigma time update
 
 # Model ####
 #' @name lcModel
@@ -316,7 +315,7 @@ setMethod('clusterProportions', 'lcModel', function(object, ...) {
 })
 
 
-#' @export
+#' @exportS3Method stats::coef
 #' @importFrom stats coef
 #' @title Extract lcModel coefficients
 #' @description Extract the coefficients of the `lcModel` object, if defined.
@@ -377,7 +376,7 @@ setMethod('converged', 'lcModel', function(object, ...) {
 })
 
 
-#' @export
+#' @exportS3Method stats::deviance
 #' @importFrom stats deviance
 #' @title lcModel deviance
 #' @description Get the deviance of the fitted `lcModel` object.
@@ -399,7 +398,7 @@ deviance.lcModel = function(object, ...) {
 }
 
 
-#' @export
+#' @exportS3Method stats::df.residual
 #' @importFrom stats df.residual
 #' @title Extract the residual degrees of freedom from a lcModel
 #' @param object The `lcModel` object.
@@ -474,7 +473,7 @@ setMethod('externalMetric', c('lcModel', 'lcModel'), function(object, object2, n
 })
 
 
-#' @export
+#' @exportS3Method stats::fitted
 #' @importFrom stats fitted
 #' @title Extract lcModel fitted values
 #' @description Returns the cluster-specific fitted values for the given `lcModel` object.
@@ -579,7 +578,7 @@ setMethod('fittedTrajectories', 'lcModel', function(object, at, what, clusters, 
 })
 
 
-#' @export
+#' @exportS3Method stats::formula
 #' @importFrom stats formula
 #' @title Extract the formula of a lcModel
 #' @description Get the formula associated with the fitted `lcModel` object.
@@ -613,7 +612,7 @@ formula.lcModel = function(x, what = 'mu', ...) {
 }
 
 
-#' @export
+#' @exportS3Method stats::getCall
 #' @importFrom stats getCall
 #' @title Get the model call
 #' @description Extract the `call` that was used to fit the given `lcModel` object.
@@ -785,7 +784,7 @@ setMethod('metric', 'lcModel', function(object, name, ...) {
 })
 
 
-#' @export
+#' @exportS3Method stats::model.frame
 #' @importFrom stats model.frame
 #' @title Extract model training data
 #' @description See [stats::model.frame()] for more details.
@@ -923,8 +922,7 @@ setMethod('nClusters', 'lcModel', function(object, ...) {
 })
 
 
-#' @export
-#' @importFrom stats nobs
+#' @exportS3Method stats::nobs
 #' @title Number of observations used for the lcModel fit
 #' @description Extracts the number of observations that contributed information towards fitting the cluster trajectories of the respective `lcModel` object.
 #' Therefore, only non-missing response observations count towards the number of observations.
@@ -951,9 +949,8 @@ nobs.lcModel = function(object, ...) {
 }
 
 
-#' @export
+#' @exportS3Method stats::predict
 #' @rdname predict.lcModel
-#' @importFrom stats predict
 #' @title lcModel predictions
 #' @description Predicts the expected trajectory observations at the given time for each cluster.
 #' @section Implementation:
@@ -1553,8 +1550,7 @@ setMethod('qqPlot', 'lcModel', function(object, byCluster = FALSE, ...) {
 })
 
 
-#' @export
-#' @importFrom stats residuals
+#' @exportS3Method stats::residuals
 #' @title Extract lcModel residuals
 #' @description Extract the residuals for a fitted `lcModel` object.
 #' By default, residuals are computed under the most likely cluster assignment for each trajectory.
@@ -1631,8 +1627,7 @@ setMethod('show', 'lcModel', function(object) {
 })
 
 
-#' @export
-#' @importFrom stats sigma
+#' @exportS3Method stats::sigma
 #' @title Extract residual standard deviation from a lcModel
 #' @description Extracts or estimates the residual standard deviation. If [sigma()] is not defined for a model, it is estimated from the residual error vector.
 #' @param object The `lcModel` object.
@@ -1703,8 +1698,7 @@ setMethod('strip', 'lcModel', function(object, ..., classes = 'formula') {
 setMethod('timeVariable', 'lcModel', function(object) object@time)
 
 
-#' @export
-#' @importFrom stats time
+#' @exportS3Method stats::time
 #' @title Sampling times of a lcModel
 #' @description Extract the sampling times on which the `lcModel` was fitted.
 #' @param x The `lcModel` object.
@@ -1803,8 +1797,7 @@ setMethod('trajectoryAssignments', 'lcModel', function(object, strategy = which.
 })
 
 
-#' @export
-#' @importFrom stats update
+#' @exportS3Method stats::update
 #' @title Update a lcModel
 #' @description Fit a new model with modified arguments from the current model.
 #' @param object The `lcModel` object.

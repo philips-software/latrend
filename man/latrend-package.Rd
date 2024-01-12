@@ -3,7 +3,6 @@
 \docType{package}
 \name{latrend-package}
 \alias{latrend-package}
-\alias{_PACKAGE}
 \title{latrend: A Framework for Clustering Longitudinal Data}
 \description{
 A framework for clustering longitudinal datasets in a standardized way. The package provides an interface to existing R packages for clustering longitudinal univariate trajectories, facilitating reproducible and transparent analyses. Additionally, standard tools are provided to support cluster analyses, including repeated estimation, model validation, and model assessment. The interface enables users to compare results between methods, and to implement and evaluate new methods with ease. The 'akmedoids' package is available from \url{https://github.com/MAnalytics/akmedoids}.

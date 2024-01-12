@@ -287,6 +287,7 @@ as.lcMethod = function(x, ..., envir = parent.frame()) {
 }
 
 
+#' @exportS3Method base::as.character
 as.character.lcMethod = function(x, ..., eval = FALSE, width = 40, prefix = '', envir = NULL) {
   assert_that(
     is.lcMethod(x),
@@ -333,7 +334,7 @@ as.character.lcMethod = function(x, ..., eval = FALSE, width = 40, prefix = '', 
 }
 
 
-#' @export
+#' @exportS3Method base::as.list
 #' @title Extract the method arguments as a list
 #' @param x The `lcMethod` object.
 #' @param ... Additional arguments.
@@ -400,7 +401,7 @@ as.list.lcMethod = function(x, ..., args = names(x), eval = TRUE, expand = FALSE
 }
 
 
-#' @export
+#' @exportS3Method base::as.data.frame
 #' @title Convert lcMethod arguments to a list of atomic types
 #' @description Converts the arguments of a `lcMethod` to a named `list` of [atomic] types.
 #' @inheritParams as.list.lcMethod
@@ -557,7 +558,7 @@ setMethod('fit', 'lcMethod', function(method, data, envir, verbose) {
 })
 
 
-#' @export
+#' @exportS3Method stats::formula
 #' @title Extract formula
 #' @description Extracts the associated `formula` for the given distributional parameter.
 #' @inheritParams as.list.lcMethod
@@ -589,7 +590,7 @@ formula.lcMethod = function(x, what = 'mu', envir = NULL, ...) {
 
 
 
-#' @export
+#' @exportS3Method stats::getCall
 getCall.lcMethod = function(x, ...) {
   assert_that(is.lcMethod(x))
   do.call(call, c(class(x)[1], eapply(x@arguments, enquote)))
@@ -933,7 +934,7 @@ setMethod('postFit', 'lcMethod', function(method, data, model, envir, verbose) {
 })
 
 
-#' @export
+#' @exportS3Method base::print
 #' @title Print the arguments of an lcMethod object
 #' @param x The `lcMethod` object.
 #' @param eval Whether to print the evaluated argument values.
@@ -946,8 +947,8 @@ print.lcMethod = function(x, ..., eval = FALSE, width = 40, envir = NULL) {
 }
 
 
+#' @exportS3Method R.utils::evaluate
 #' @importFrom R.utils evaluate
-#' @export
 #' @title Substitute the call arguments for their evaluated values
 #' @description Substitutes the call arguments if they can be evaluated without error.
 #' @inheritParams as.list.lcMethod

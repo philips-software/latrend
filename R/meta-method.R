@@ -19,6 +19,8 @@ setClass(
   slots = c(method = 'lcMethod')
 )
 
+
+#' @exportS3Method base::as.character
 as.character.lcMetaMethod = function(x, ...) {
   c(
     sprintf('%s encapsulating:', class(x)[1]),
@@ -28,7 +30,8 @@ as.character.lcMetaMethod = function(x, ...) {
   )
 }
 
-#' @export
+
+#' @exportS3Method stats::getCall
 getCall.lcMetaMethod = function(x, ...) {
   do.call(
     call,
@@ -42,6 +45,7 @@ getCall.lcMetaMethod = function(x, ...) {
   )
 }
 
+
 #' @export
 #' @rdname interface-metaMethods
 setMethod('compose', 'lcMetaMethod', function(method, envir = NULL) {
@@ -49,6 +53,7 @@ setMethod('compose', 'lcMetaMethod', function(method, envir = NULL) {
   newMethod@method = evaluate.lcMethod(getLcMethod(method), try = FALSE, envir = envir)
   newMethod
 })
+
 
 #' @export
 #' @rdname interface-metaMethods
@@ -60,17 +65,25 @@ setMethod('getLcMethod', 'lcMetaMethod', function(object, ...) {
   object@method
 })
 
-#' @export
-#' @rdname interface-metaMethods
-setMethod('getName', 'lcMetaMethod', function(object, ...) getName(getLcMethod(object), ...))
 
 #' @export
 #' @rdname interface-metaMethods
-setMethod('getShortName', 'lcMetaMethod', function(object, ...) getShortName(getLcMethod(object), ...))
+setMethod('getName', 'lcMetaMethod',
+  function(object, ...) getName(getLcMethod(object), ...)
+)
+
+
+#' @export
+#' @rdname interface-metaMethods
+setMethod('getShortName', 'lcMetaMethod',
+  function(object, ...) getShortName(getLcMethod(object), ...)
+)
+
 
 #' @export
 #' @rdname interface-metaMethods
 setMethod('idVariable', 'lcMetaMethod', function(object, ...) idVariable(getLcMethod(object), ...))
+
 
 #' @export
 #' @rdname interface-metaMethods
@@ -78,11 +91,13 @@ setMethod('preFit', 'lcMetaMethod', function(method, data, envir, verbose) {
   preFit(getLcMethod(method), data = data, envir = envir, verbose = verbose)
 })
 
+
 #' @export
 #' @rdname interface-metaMethods
 setMethod('prepareData', 'lcMetaMethod', function(method, data, verbose) {
   prepareData(getLcMethod(method), data = data, verbose = verbose)
 })
+
 
 #' @export
 #' @rdname interface-metaMethods
@@ -90,19 +105,27 @@ setMethod('fit', 'lcMetaMethod', function(method, data, envir, verbose) {
   fit(getLcMethod(method), data = data, envir = envir, verbose = verbose)
 })
 
+
 #' @export
 #' @rdname interface-metaMethods
 setMethod('postFit', 'lcMetaMethod', function(method, data, model, envir, verbose) {
   postFit(getLcMethod(method), data = data, model = model, envir = envir, verbose = verbose)
 })
 
-#' @export
-#' @rdname interface-metaMethods
-setMethod('responseVariable', 'lcMetaMethod', function(object, ...) responseVariable(getLcMethod(object), ...))
 
 #' @export
 #' @rdname interface-metaMethods
-setMethod('timeVariable', 'lcMetaMethod', function(object, ...) timeVariable(getLcMethod(object), ...))
+setMethod('responseVariable', 'lcMetaMethod',
+  function(object, ...) responseVariable(getLcMethod(object), ...)
+)
+
+
+#' @export
+#' @rdname interface-metaMethods
+setMethod('timeVariable', 'lcMetaMethod',
+  function(object, ...) timeVariable(getLcMethod(object), ...)
+)
+
 
 #' @export
 #' @rdname interface-metaMethods
@@ -110,7 +133,8 @@ setMethod('validate', 'lcMetaMethod', function(method, data, envir = NULL, ...) 
   validate(getLcMethod(method), data = data, envir = envir, ...)
 })
 
-#' @export
+
+#' @exportS3Method stats::update
 #' @rdname interface-metaMethods
 #' @inheritParams update.lcMethod
 update.lcMetaMethod = function(object, ...) {

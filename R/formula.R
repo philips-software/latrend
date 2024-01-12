@@ -2,6 +2,7 @@ is.formula = function(x) {
   inherits(x, 'formula')
 }
 
+
 hasResponse = function(f) {
   if (is.formula(f)) {
     tt = terms(f)
@@ -10,6 +11,7 @@ hasResponse = function(f) {
   }
   attr(tt, 'response') != 0
 }
+
 
 hasIntercept = function(f) {
   if (is.formula(f)) {
@@ -20,9 +22,11 @@ hasIntercept = function(f) {
   attr(tt, 'intercept') != 0
 }
 
+
 hasSingleResponse = function(f) {
   hasResponse(f) && length(getResponse(f)) == 1
 }
+
 
 getResponse = function(f) {
   if (hasResponse(f)) {
@@ -33,10 +37,12 @@ getResponse = function(f) {
   }
 }
 
+
 getREterms = function(f) {
   .loadOptionalPackage('lme4')
   terms = lme4::findbars(f)
 }
+
 
 REtermAsFormula = function(term) {
   assert_that(is.call(term))
@@ -44,10 +50,12 @@ REtermAsFormula = function(term) {
   as.character(term)[2] %>% reformulate
 }
 
+
 getREGroupName = function(term) {
   assert_that(is.call(term))
   as.character(term)[3]
 }
+
 
 getCovariates = function(f) {
   if(is.null(f)) {
@@ -57,13 +65,16 @@ getCovariates = function(f) {
   }
 }
 
+
 hasCovariates = function(f) {
   length(getCovariates(f)) > 0
 }
 
+
 hasRE = function(f) {
   length(getREterms(f)) > 0
 }
+
 
 addInteraction = function(f, var) {
   assert_that(is.formula(f))
@@ -91,6 +102,8 @@ addInteraction = function(f, var) {
   }
 }
 
+
+#' @exportS3Method base::merge
 merge.formula = function(x, y, ...) {
   assert_that(is.formula(x))
   assert_that(is.formula(y))
@@ -115,6 +128,7 @@ merge.formula = function(x, y, ...) {
   }
 }
 
+
 dropResponse = function(f) {
   if (hasResponse(f)) {
     update(f, NULL ~ .)
@@ -123,6 +137,7 @@ dropResponse = function(f) {
   }
 }
 
+
 dropIntercept = function(f) {
   if (hasIntercept(f)) {
     update(f, ~ .+-1)
@@ -130,6 +145,7 @@ dropIntercept = function(f) {
     f
   }
 }
+
 
 #' @noRd
 #' @importFrom stats drop.terms
@@ -184,6 +200,7 @@ getSpecialTerms = function(f, special) {
     vapply(deparse, FUN.VALUE = '')
 }
 
+
 #' @noRd
 #' @title Get special terms as formula
 #' @details An intercept is added unless the formula contains a special removing it, e.g. time(0)
@@ -202,6 +219,7 @@ getSpecialFormula = function(f, special) {
     )
   }
 }
+
 
 dropSpecial = function(f, special) {
   assert_that(is.scalar(special))

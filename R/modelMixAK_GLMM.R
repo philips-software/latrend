@@ -18,9 +18,11 @@ setMethod('postprob', 'lcModelMixAK_GLMM', function(object, ...) {
 #. predictForCluster ####
 #' @rdname interface-mixAK
 #' @inheritParams predictForCluster
-setMethod('predictForCluster', 'lcModelMixAK_GLMM', function(object, newdata, cluster, what = 'mu', ...) {
-  predictForCluster(object@model, cluster = cluster, newdata = newdata, what = what, ...)
-})
+setMethod('predictForCluster', 'lcModelMixAK_GLMM',
+  function(object, newdata, cluster, what = 'mu', ...) {
+    predictForCluster(object@model, cluster = cluster, newdata = newdata, what = what, ...)
+  }
+)
 
 .predictForCluster_GLMM_MCMC = function(model, method, k, newdata, ...) {
   assert_that(
@@ -42,34 +44,45 @@ setMethod('predictForCluster', 'lcModelMixAK_GLMM', function(object, newdata, cl
   pred[, k]
 }
 
-#' @rdname interface-mixAK
-setMethod('predictForCluster', 'lcModelMixAK_GLMM', function(object, newdata, cluster, what = 'mu', ...) {
-  .predictForCluster_GLMM_MCMC(object@model,
-                               method = getLcMethod(object),
-                               k = match(cluster, clusterNames(object)),
-                               newdata = newdata,
-                               ...)
-})
 
-#' @export
+#' @rdname interface-mixAK
+setMethod('predictForCluster', 'lcModelMixAK_GLMM',
+  function(object, newdata, cluster, what = 'mu', ...) {
+    .predictForCluster_GLMM_MCMC(
+      object@model,
+      method = getLcMethod(object),
+      k = match(cluster, clusterNames(object)),
+      newdata = newdata,
+      ...
+    )
+  }
+)
+
+
+#' @exportS3Method stats::coef
 #' @rdname interface-mixAK
 #' @param stat The aggregate statistic to extract. The mean is used by default.
 coef.lcModelMixAK_GLMM = function(object, ..., stat = 'Mean') {
   coef(object@model, stat = stat)
 }
 
+
+#' @exportS3Method stats::coef
 coef.GLMM_MCMC = function(object, ..., stat = 'Mean') {
   c(object$summ.b.Mean[stat, ],
     object$summ.b.SDCorr[stat, ],
     sigma_eps = unname(object$summ.sigma_eps[stat]))
 }
 
-#' @export
+
+#' @exportS3Method stats::deviance
 #' @rdname interface-mixAK
 deviance.lcModelMixAK_GLMM = function(object, ...) {
   deviance(object@model)
 }
 
+
+#' @exportS3Method stats::deviance
 deviance.GLMM_MCMC = function(object, ...) {
   mean(object$Deviance)
 }

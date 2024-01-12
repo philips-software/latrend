@@ -10,7 +10,7 @@
 \usage{
 transformPredict(pred, model, newdata)
 
-\S4method{transformPredict}{`NULL`,lcModel}(pred, model, newdata)
+\S4method{transformPredict}{NULL,lcModel}(pred, model, newdata)
 
 \S4method{transformPredict}{vector,lcModel}(pred, model, newdata)
 

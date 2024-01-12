@@ -81,9 +81,9 @@ trajectoryAssignments(object, ...)
 
 validate(method, data, envir, ...)
 
-\S4method{getName}{`NULL`}(object, ...)
+\S4method{getName}{NULL}(object, ...)
 
-\S4method{getShortName}{`NULL`}(object, ...)
+\S4method{getShortName}{NULL}(object, ...)
 }
 \arguments{
 \item{object}{The object.}
