@@ -610,10 +610,10 @@
     },
     "clusterCrit": {
       "Package": "clusterCrit",
-      "Version": "1.2.8",
+      "Version": "1.3.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "844057883f804924aff76421f7c5cd75"
+      "Hash": "4c89d1bd51f9cc72665dca11aeea5bc1"
     },
     "clv": {
       "Package": "clv",

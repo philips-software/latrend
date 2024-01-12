@@ -7,7 +7,7 @@ Description: A framework for clustering longitudinal datasets in a standardized 
     The package provides an interface to existing R packages for clustering longitudinal univariate trajectories, facilitating reproducible and transparent analyses. 
     Additionally, standard tools are provided to support cluster analyses, including repeated estimation, model validation, and model assessment. 
     The interface enables users to compare results between methods, and to implement and evaluate new methods with ease.
-    The 'akmedoids' package is available from <https://github.com/MAnalytics/akmedoids>. The 'clusterCrit' package is available from the CRAN archive.
+    The 'akmedoids' package is available from <https://github.com/MAnalytics/akmedoids>.
 Maintainer: Niek Den Teuling <niek.den.teuling@philips.com>
 Authors@R: 
     c(person(given = "Niek",
@@ -81,7 +81,7 @@ Suggests:
     caret,
     tibble,
     akmedoids (>= 1.3.0),
-    clusterCrit (>= 1.2.8)
+    clusterCrit (>= 1.3.0)
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 RdMacros: Rdpack
