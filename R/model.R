@@ -1321,13 +1321,13 @@ setMethod('plotFittedTrajectories', 'lcModel', function(object, ...) {
 })
 
 #. plotClusterTrajectories ####
-# NOTE: Cannot include @inheritDotParams clusterTrajectories-method because the name is not supported by Roxygen
 #' @export
 #' @name plotClusterTrajectories
 #' @rdname plotClusterTrajectories
 #' @aliases plotClusterTrajectories,lcModel-method
 #' @title Plot the cluster trajectories of a lcModel
 #' @inheritParams clusterTrajectories
+#' @inheritDotParams clusterTrajectories
 #' @param clusterLabels Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.
 #' @param trajAssignments The cluster assignments for the fitted trajectories. Only used when `trajectories = TRUE` and `facet = TRUE`. See [trajectoryAssignments].
 #' @param ... Arguments passed to [clusterTrajectories()], or [ggplot2::geom_line()] for plotting the cluster trajectory lines.

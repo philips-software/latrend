@@ -52,7 +52,11 @@ By default (\code{FALSE}), no information on the underlying trajectories is show
 
 \item{id}{Id column. Only needed when \code{trajectories = TRUE}.}
 
-\item{...}{Arguments passed to \code{\link[=clusterTrajectories]{clusterTrajectories()}}, or \code{\link[ggplot2:geom_path]{ggplot2::geom_line()}} for plotting the cluster trajectory lines.}
+\item{...}{
+  Arguments passed on to \code{\link[=clusterTrajectories]{clusterTrajectories}}
+  \describe{
+    \item{\code{}}{}
+  }}
 
 \item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying \code{what = 'mb'}.}
 
