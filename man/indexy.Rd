@@ -3,12 +3,11 @@
 \name{[[,lcMethod-method}
 \alias{[[,lcMethod-method}
 \alias{$,lcMethod-method}
-\alias{[[,lcMethod,ANY,ANY-method}
 \title{Retrieve and evaluate a lcMethod argument by name}
 \usage{
 \S4method{$}{lcMethod}(x, name)
 
-\S4method{[[}{lcMethod,ANY,ANY}(x, i, eval = TRUE, envir = NULL)
+\S4method{[[}{lcMethod}(x, i, eval = TRUE, envir = NULL)
 }
 \arguments{
 \item{x}{The \code{lcMethod} object.}

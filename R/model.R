@@ -1346,6 +1346,9 @@ setMethod('plotFittedTrajectories', 'lcModel', function(object, ...) {
 #'   # change cluster order
 #'   plotClusterTrajectories(model, clusterOrder = c('B', 'C', 'A'))
 #'
+#'   # sort clusters by decreasing size
+#'   plotClusterTrajectories(model, clusterOrder = order(-clusterSizes(model)))
+#'
 #'   # show only specific clusters
 #'   plotClusterTrajectories(model, clusterOrder = c('B', 'C'))
 #'
