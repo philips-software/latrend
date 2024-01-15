@@ -913,12 +913,7 @@ nIds = function(object) {
 #' nClusters(model) # 3
 #' @family lcModel functions
 setMethod('nClusters', 'lcModel', function(object, ...) {
-  nClus = length(object@clusterNames)
-  assert_that(
-    is.count(nClus),
-    nClus > 0
-  )
-  nClus
+  length(object@clusterNames)
 })
 
 
