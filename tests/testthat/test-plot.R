@@ -102,3 +102,10 @@ test_that('plotClusterTrajectories.lcModel with labeler', {
   expect_true(is.ggplot(p3))
 })
 
+
+test_that('plotClusterTrajectories.lcModel with ordening', {
+  p3 = plotClusterTrajectories(testModel3, clusterOrder = clusterNames(testModel3)[1:2])
+  expect_true(is.ggplot(p3))
+})
+
+

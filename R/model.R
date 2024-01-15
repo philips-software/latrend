@@ -1325,6 +1325,9 @@ setMethod('plotFittedTrajectories', 'lcModel', function(object, ...) {
 #' @inheritDotParams clusterTrajectories
 #' @param clusterLabeler A `function(clusterNames, clusterSizes)` that generates plot labels for the clusters.
 #' By default the cluster name with the proportional size is shown, see [make.clusterPropLabels].
+#' @param clusterOrder Specify which clusters to plot and the order.
+#' Can be the cluster names or index.
+#' By default, all clusters are shown.
 #' @param trajAssignments The cluster assignments for the fitted trajectories. Only used when `trajectories = TRUE` and `facet = TRUE`. See [trajectoryAssignments].
 #' @param ... Arguments passed to [clusterTrajectories()], or [ggplot2::geom_line()] for plotting the cluster trajectory lines.
 #' @return A `ggplot` object.
@@ -1336,6 +1339,15 @@ setMethod('plotFittedTrajectories', 'lcModel', function(object, ...) {
 #'
 #' if (require("ggplot2")) {
 #'   plotClusterTrajectories(model)
+#'
+#'   # show cluster sizes in labels
+#'   plotClusterTrajectories(model, clusterLabeler = make.clusterSizeLabels)
+#'
+#'   # change cluster order
+#'   plotClusterTrajectories(model, clusterOrder = c('B', 'C', 'A'))
+#'
+#'   # show only specific clusters
+#'   plotClusterTrajectories(model, clusterOrder = c('B', 'C'))
 #'
 #'   # show assigned trajectories
 #'   plotClusterTrajectories(model, trajectories = TRUE)
@@ -1358,6 +1370,7 @@ setMethod('plotClusterTrajectories', 'lcModel',
     object,
     what = 'mu',
     at = time(object),
+    clusterOrder = character(),
     clusterLabeler = make.clusterPropLabels,
     trajectories = FALSE,
     facet = !isFALSE(as.logical(trajectories[1])),
@@ -1381,6 +1394,7 @@ setMethod('plotClusterTrajectories', 'lcModel',
 
   .plotClusterTrajs(
     clusdata,
+    clusterOrder = clusterOrder,
     clusterLabels = clusterLabels,
     response = responseVariable(object, what = what),
     time = timeVariable(object),

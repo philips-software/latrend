@@ -6,7 +6,7 @@
 \alias{plot,lcModels-method}
 \title{Grid plot for a list of models}
 \usage{
-\S4method{plot}{lcModels}(x, y, ..., subset, gridArgs = list())
+\S4method{plot}{lcModels,ANY}(x, y, ..., subset, gridArgs = list())
 }
 \arguments{
 \item{x}{The \code{lcModels} object.}

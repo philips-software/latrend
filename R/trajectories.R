@@ -52,6 +52,7 @@ setMethod('plotClusterTrajectories', 'data.frame', function(
   object,
   response,
   cluster = 'Cluster',
+  clusterOrder = character(),
   clusterLabeler = make.clusterPropLabels,
   time = getOption('latrend.time'),
   center = meanNA,
@@ -77,6 +78,7 @@ setMethod('plotClusterTrajectories', 'data.frame', function(
 
   .plotClusterTrajs(
     clusTrajData,
+    clusterOrder = clusterOrder,
     clusterLabels = clusterLabels,
     response = response,
     time = time,
@@ -92,6 +94,7 @@ setMethod('plotClusterTrajectories', 'data.frame', function(
 
 .plotClusterTrajs = function(
   data,
+  clusterOrder,
   clusterLabels,
   response,
   time,
@@ -114,11 +117,15 @@ setMethod('plotClusterTrajectories', 'data.frame', function(
     is.flag(facet)
   )
 
-  data = data.table(data)
+  clusterNames = as.character(unique(data[[cluster]]))
+  clusterOrderNames = make.orderedClusterNames(clusterNames, clusterOrder, subset = TRUE)
+  clusterIndices = match(clusterOrderNames, clusterNames)
+
+  data = data.table(data)[get(cluster) %in% clusterOrderNames]
   data[, c(cluster) := factor(
     get(cluster),
-    levels = levels(get(cluster)),
-    labels = clusterLabels
+    levels = clusterNames[clusterIndices],
+    labels = clusterLabels[clusterIndices]
   )]
 
   if (isTRUE(as.logical(trajectories))) {

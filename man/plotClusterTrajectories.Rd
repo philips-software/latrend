@@ -10,6 +10,7 @@
   object,
   response,
   cluster = "Cluster",
+  clusterOrder = character(),
   clusterLabeler = make.clusterPropLabels,
   time = getOption("latrend.time"),
   center = meanNA,
@@ -23,6 +24,7 @@
   object,
   what = "mu",
   at = time(object),
+  clusterOrder = character(),
   clusterLabeler = make.clusterPropLabels,
   trajectories = FALSE,
   facet = !isFALSE(as.logical(trajectories[1])),
@@ -36,6 +38,10 @@
 \item{response}{The response variable name.}
 
 \item{cluster}{The cluster assignment column}
+
+\item{clusterOrder}{Specify which clusters to plot and the order.
+Can be the cluster names or index.
+By default, all clusters are shown.}
 
 \item{clusterLabeler}{A \verb{function(clusterNames, clusterSizes)} that generates plot labels for the clusters.
 By default the cluster name with the proportional size is shown, see \link{make.clusterPropLabels}.}
@@ -83,6 +89,15 @@ model <- latrend(method, latrendData, nClusters = 3)
 
 if (require("ggplot2")) {
   plotClusterTrajectories(model)
+
+  # show cluster sizes in labels
+  plotClusterTrajectories(model, clusterLabeler = make.clusterSizeLabels)
+
+  # change cluster order
+  plotClusterTrajectories(model, clusterOrder = c('B', 'C', 'A'))
+
+  # show only specific clusters
+  plotClusterTrajectories(model, clusterOrder = c('B', 'C'))
 
   # show assigned trajectories
   plotClusterTrajectories(model, trajectories = TRUE)
