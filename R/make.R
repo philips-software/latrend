@@ -130,6 +130,45 @@ make.clusterNames = function(n) {
 }
 
 
+#' @noRd
+#' @param clusterNames Names of the clusters
+#' @param clusterOrder Vector indicating the selection and ordering of the clusters, by name or index
+#' @param subset Whether to allow for a subset selection
+#' @details
+#' If no ordering is specific (empty vector), then the original cluster names are returned
+#' @keywords internal
+make.orderedClusterNames = function(clusterNames, clusterOrder = character(), subset = TRUE) {
+  assert_that(
+    is.character(clusterNames),
+    is.character(clusterOrder) || is.numeric(clusterOrder),
+    is.flag(subset),
+    length(clusterNames) > 0,
+    all(nzchar(clusterNames)),
+    anyDuplicated(clusterOrder) == 0,
+    length(clusterOrder) <= length(clusterNames),
+    subset || length(clusterOrder) == length(clusterNames)
+  )
+
+  if (length(clusterOrder) == 0) {
+    return (clusterNames)
+  }
+
+  if (is.numeric(clusterOrder)) {
+    assert_that(
+      all(clusterOrder %in% seq(1, length(clusterNames))),
+      msg = 'clusterOrder argument has invalid indices'
+    )
+    clusterNames[clusterOrder]
+  }
+  else {
+    assert_that(
+      all(clusterOrder %in% clusterNames)
+    )
+    clusterOrder
+  }
+}
+
+
 #' @export
 #' @rdname lcModel-make
 #' @description `make.clusterSizeLabels` generates cluster labels for the given input

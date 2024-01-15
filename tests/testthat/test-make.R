@@ -66,3 +66,63 @@ test_that('make.clusterPropLabels', {
     c('B (60%)', 'E (0%)', 'A (40%)')
   )
 })
+
+
+test_that('make.orderedClusterNames', {
+  expect_equal(
+    make.orderedClusterNames('A', 1),
+    'A'
+  )
+
+  expect_equal(
+    make.orderedClusterNames('A', 'A'),
+    'A'
+  )
+
+  expect_equal(
+    make.orderedClusterNames(c('A', 'B'), 2),
+    'B'
+  )
+
+  expect_equal(
+    make.orderedClusterNames(c('A', 'B'), 'B'),
+    'B'
+  )
+
+  expect_equal(
+    make.orderedClusterNames(c('A', 'B'), 2:1),
+    c('B', 'A')
+  )
+
+  expect_equal(
+    make.orderedClusterNames(c('A', 'B'), c('B', 'A')),
+    c('B', 'A')
+  )
+
+  expect_equal(
+    make.orderedClusterNames(c('A', 'B', 'C'), c(1, 3)),
+    c('A', 'C')
+  )
+
+  expect_equal(
+    make.orderedClusterNames(c('A', 'B', 'C'), c('A', 'C')),
+    c('A', 'C')
+  )
+
+  expect_equal(
+    make.orderedClusterNames(c('A', 'B', 'C'), numeric()),
+    c('A', 'B', 'C')
+  )
+
+  expect_error({
+    make.orderedClusterNames(c('A', 'B', 'C'), c(0, 1))
+  })
+
+  expect_error({
+    make.orderedClusterNames(c('A', 'B', 'C'), c('A', 'D'))
+  })
+
+  expect_error({
+    make.orderedClusterNames(c('A', 'B', 'C'), c('A', 'A', 'B'))
+  })
+})
