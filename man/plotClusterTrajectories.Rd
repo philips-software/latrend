@@ -10,6 +10,7 @@
   object,
   response,
   cluster = "Cluster",
+  clusterLabeler = make.clusterPropLabels,
   time = getOption("latrend.time"),
   center = meanNA,
   trajectories = c(FALSE, "sd", "se", "80pct", "90pct", "95pct", "range"),
@@ -22,7 +23,7 @@
   object,
   what = "mu",
   at = time(object),
-  clusterLabels = NULL,
+  clusterLabeler = make.clusterPropLabels,
   trajectories = FALSE,
   facet = !isFALSE(as.logical(trajectories[1])),
   trajAssignments = trajectoryAssignments(object),
@@ -35,6 +36,9 @@
 \item{response}{The response variable name.}
 
 \item{cluster}{The cluster assignment column}
+
+\item{clusterLabeler}{A \verb{function(clusterNames, clusterSizes)} that generates plot labels for the clusters.
+By default the cluster name with the proportional size is shown, see \link{make.clusterPropLabels}.}
 
 \item{time}{The time variable name.}
 
@@ -61,8 +65,6 @@ By default (\code{FALSE}), no information on the underlying trajectories is show
 \item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying \code{what = 'mb'}.}
 
 \item{at}{An optional vector of the times at which to compute the cluster trajectory predictions.}
-
-\item{clusterLabels}{Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.}
 
 \item{trajAssignments}{The cluster assignments for the fitted trajectories. Only used when \code{trajectories = TRUE} and \code{facet = TRUE}. See \link{trajectoryAssignments}.}
 }

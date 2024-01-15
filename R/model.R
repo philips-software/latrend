@@ -1323,7 +1323,8 @@ setMethod('plotFittedTrajectories', 'lcModel', function(object, ...) {
 #' @title Plot the cluster trajectories of a lcModel
 #' @inheritParams clusterTrajectories
 #' @inheritDotParams clusterTrajectories
-#' @param clusterLabels Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.
+#' @param clusterLabeler A `function(clusterNames, clusterSizes)` that generates plot labels for the clusters.
+#' By default the cluster name with the proportional size is shown, see [make.clusterPropLabels].
 #' @param trajAssignments The cluster assignments for the fitted trajectories. Only used when `trajectories = TRUE` and `facet = TRUE`. See [trajectoryAssignments].
 #' @param ... Arguments passed to [clusterTrajectories()], or [ggplot2::geom_line()] for plotting the cluster trajectory lines.
 #' @return A `ggplot` object.
@@ -1353,26 +1354,20 @@ setMethod('plotFittedTrajectories', 'lcModel', function(object, ...) {
 #' }
 #' @family lcModel functions
 setMethod('plotClusterTrajectories', 'lcModel',
-  function(object,
+  function(
+    object,
     what = 'mu',
     at = time(object),
-    clusterLabels = NULL,
+    clusterLabeler = make.clusterPropLabels,
     trajectories = FALSE,
     facet = !isFALSE(as.logical(trajectories[1])),
     trajAssignments = trajectoryAssignments(object),
     ...
-  ) {
-  if (is.null(clusterLabels)) {
-    clusterLabels = sprintf(
-      '%s (%g%%)',
-      clusterNames(object),
-      round(clusterProportions(object) * 100)
-    )
-  }
+) {
+  clusterLabels = clusterLabeler(clusterNames(object), clusterSizes(object))
   assert_that(length(clusterLabels) == nClusters(object))
 
   clusdata = clusterTrajectories(object, at = at, what = what, ...) %>% as.data.table()
-  clusdata[, Cluster := factor(Cluster, levels = levels(Cluster), labels = clusterLabels)]
 
   rawdata = model.data(object) %>% as.data.table()
   if (nrow(rawdata) > 0 && !is.null(trajAssignments)) {
@@ -1386,6 +1381,7 @@ setMethod('plotClusterTrajectories', 'lcModel',
 
   .plotClusterTrajs(
     clusdata,
+    clusterLabels = clusterLabels,
     response = responseVariable(object, what = what),
     time = timeVariable(object),
     id = idVariable(object),

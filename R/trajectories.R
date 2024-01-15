@@ -48,9 +48,11 @@ setMethod('trajectories', 'call', function(object, ..., envir) {
 #' By default (`FALSE`), no information on the underlying trajectories is shown.
 #' @param facet Whether to facet by cluster. This is done by default when `trajectories` is enabled.
 #' @param id Id column. Only needed when `trajectories = TRUE`.
-setMethod('plotClusterTrajectories', 'data.frame', function(object,
+setMethod('plotClusterTrajectories', 'data.frame', function(
+  object,
   response,
   cluster = 'Cluster',
+  clusterLabeler = make.clusterPropLabels,
   time = getOption('latrend.time'),
   center = meanNA,
   trajectories = c(FALSE, 'sd', 'se', '80pct', '90pct', '95pct', 'range'),
@@ -68,8 +70,14 @@ setMethod('plotClusterTrajectories', 'data.frame', function(object,
     .[, .(Value = center(get(response))), keyby = c(cluster, time)] %>%
     setnames('Value', response)
 
+  clusterNames = as.character(unique(clusTrajData[[cluster]]))
+  clusterSizes = clusTrajData[, uniqueN(id), by = c(cluster)]$V1
+  clusterLabels = clusterLabeler(clusterNames, clusterSizes)
+
+
   .plotClusterTrajs(
     clusTrajData,
+    clusterLabels = clusterLabels,
     response = response,
     time = time,
     cluster = cluster,
@@ -84,6 +92,7 @@ setMethod('plotClusterTrajectories', 'data.frame', function(object,
 
 .plotClusterTrajs = function(
   data,
+  clusterLabels,
   response,
   time,
   cluster = 'Cluster',
@@ -104,6 +113,13 @@ setMethod('plotClusterTrajectories', 'data.frame', function(object,
     length(trajectories) == 1,
     is.flag(facet)
   )
+
+  data = data.table(data)
+  data[, c(cluster) := factor(
+    get(cluster),
+    levels = levels(get(cluster)),
+    labels = clusterLabels
+  )]
 
   if (isTRUE(as.logical(trajectories))) {
     # show trajectories
