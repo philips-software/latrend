@@ -231,6 +231,9 @@ By default (<code>FALSE</code>), no information on the underlying trajectories i
 <span class="r-in"><span>  <span class="co"># change cluster order</span></span></span>
 <span class="r-in"><span>  <span class="fu">plotClusterTrajectories</span><span class="op">(</span><span class="va">model</span>, clusterOrder <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'B'</span>, <span class="st">'C'</span>, <span class="st">'A'</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># sort clusters by decreasing size</span></span></span>
+<span class="r-in"><span>  <span class="fu">plotClusterTrajectories</span><span class="op">(</span><span class="va">model</span>, clusterOrder <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="clusterSizes.html">clusterSizes</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># show only specific clusters</span></span></span>
 <span class="r-in"><span>  <span class="fu">plotClusterTrajectories</span><span class="op">(</span><span class="va">model</span>, clusterOrder <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'B'</span>, <span class="st">'C'</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
