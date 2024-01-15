@@ -76,6 +76,7 @@ Plot the cluster trajectories of a lcModel"><!-- mathjax --><script src="https:/
 <span>  <span class="va">object</span>,</span>
 <span>  <span class="va">response</span>,</span>
 <span>  cluster <span class="op">=</span> <span class="st">"Cluster"</span>,</span>
+<span>  clusterLabeler <span class="op">=</span> <span class="va">make.clusterPropLabels</span>,</span>
 <span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,</span>
 <span>  center <span class="op">=</span> <span class="va">meanNA</span>,</span>
 <span>  trajectories <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="st">"sd"</span>, <span class="st">"se"</span>, <span class="st">"80pct"</span>, <span class="st">"90pct"</span>, <span class="st">"95pct"</span>, <span class="st">"range"</span><span class="op">)</span>,</span>
@@ -89,7 +90,7 @@ Plot the cluster trajectories of a lcModel"><!-- mathjax --><script src="https:/
 <span>  <span class="va">object</span>,</span>
 <span>  what <span class="op">=</span> <span class="st">"mu"</span>,</span>
 <span>  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
-<span>  clusterLabels <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  clusterLabeler <span class="op">=</span> <span class="va">make.clusterPropLabels</span>,</span>
 <span>  trajectories <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  facet <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isFALSE</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">trajectories</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  trajAssignments <span class="op">=</span> <span class="fu"><a href="trajectoryAssignments.html">trajectoryAssignments</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
@@ -109,6 +110,11 @@ Plot the cluster trajectories of a lcModel"><!-- mathjax --><script src="https:/
 
 <dt>cluster</dt>
 <dd><p>The cluster assignment column</p></dd>
+
+
+<dt>clusterLabeler</dt>
+<dd><p>A <code>function(clusterNames, clusterSizes)</code> that generates plot labels for the clusters.
+By default the cluster name with the proportional size is shown, see <a href="lcModel-make.html">make.clusterPropLabels</a>.</p></dd>
 
 
 <dt>time</dt>
@@ -137,7 +143,11 @@ By default (<code>FALSE</code>), no information on the underlying trajectories i
 
 
 <dt>...</dt>
-<dd><p>Arguments passed to <code><a href="clusterTrajectories.html">clusterTrajectories()</a></code>, or <code><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">ggplot2::geom_line()</a></code> for plotting the cluster trajectory lines.</p></dd>
+<dd><p>Arguments passed on to <code><a href="clusterTrajectories.html">clusterTrajectories</a></code></p><dl><dt><code></code></dt>
+<dd></dd>
+
+  
+</dl></dd>
 
 
 <dt>what</dt>
@@ -146,10 +156,6 @@ By default (<code>FALSE</code>), no information on the underlying trajectories i
 
 <dt>at</dt>
 <dd><p>An optional vector of the times at which to compute the cluster trajectory predictions.</p></dd>
-
-
-<dt>clusterLabels</dt>
-<dd><p>Cluster display names. By default it's the cluster name with its proportion enclosed in parentheses.</p></dd>
 
 
 <dt>trajAssignments</dt>
