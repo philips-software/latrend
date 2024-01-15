@@ -38,7 +38,7 @@ coef.lcModelMixAK_GLMMlist = function(object, ...) {
 
 
 #' @exportS3Method stats::deviance
-deviance.lcModelMixAK_GLMMlist = function(object) {
+deviance.lcModelMixAK_GLMMlist = function(object, ...) {
   models = getGLMM_MCMCs(object)
   Reduce('+', lapply(models, deviance)) / length(models)
 }
