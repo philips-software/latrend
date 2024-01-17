@@ -32,3 +32,16 @@ test_that('method citation', {
     .suggestCiteMethod(method)
   })
 })
+
+
+test_that('model citation on show', {
+  skip_if_not_installed('kml')
+  model = latrend(lcMethodTestKML(), testLongData)
+
+  .clearCited()
+  expect_message({
+    capture.output({
+      show(model)
+    })
+  }, 'lcModelKML')
+})

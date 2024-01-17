@@ -22,7 +22,7 @@ tmpCiteEnv = new.env(parent = emptyenv())
     sprintf(
       'Attribution notice: %1$s makes use of external R package(s):
   - Run `getCitation(model)` to view how to cite the external package(s) when reporting results.
-  - To disable this notice, run `options(%2$s = TRUE)`.',
+  - To disable this notice, set `options(%2$s = TRUE)`.',
       class(x),
       citeName
     )
@@ -30,6 +30,7 @@ tmpCiteEnv = new.env(parent = emptyenv())
 
   assign(citeName, value = TRUE, envir = tmpCiteEnv)
 }
+
 
 .clearCited = function() {
   tmpCiteEnv = new.env(parent = emptyenv())

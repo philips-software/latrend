@@ -1639,6 +1639,7 @@ setMethod('estimationTime', 'lcModel', function(object, unit, ...) {
 # . show ####
 setMethod('show', 'lcModel', function(object) {
   show(summary(object))
+  .suggestCiteMethod(object)
 })
 
 
