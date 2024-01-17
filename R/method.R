@@ -633,6 +633,19 @@ setMethod('getArgumentDefaults', 'lcMethod', function(object) {
   set_names(list(), character(0))
 })
 
+
+#. getCitation ####
+#' @name getCitation
+#' @rdname getCitation
+#' @title Get citation info
+#' @description Get a citation object indicating how to cite the underlying R packages used for estimating or representing the given method or model.
+#' @param object The object
+#' @return A [citation] object
+setMethod('getCitation', 'lcMethod', function(object, ...) {
+  utils::citation(package = 'base')[0]
+})
+
+
 #. getArgumentExclusions ####
 #' @export
 #' @name getArgumentExclusions

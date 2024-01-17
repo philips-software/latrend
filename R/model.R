@@ -644,6 +644,13 @@ setMethod('getLabel', 'lcModel', function(object, ...) {
   }
 })
 
+
+# . getCitation ####
+#' @export
+#' @rdname getCitation
+setMethod('getCitation', 'lcModel', function(object, ...) getCitation(getLcMethod(object)))
+
+
 # . getLcMethod ####
 #' @export
 #' @name getLcMethod

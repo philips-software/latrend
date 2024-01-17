@@ -58,6 +58,13 @@ setMethod('getArgumentExclusions', 'lcMethodKML', function(object) {
   )
 })
 
+
+#' @rdname interface-kml
+setMethod('getCitation', 'lcMethodKML', function(object, ...) {
+  citation('kml')
+})
+
+
 #' @rdname interface-kml
 setMethod('getName', 'lcMethodKML', function(object) 'longitudinal k-means (KML)')
 

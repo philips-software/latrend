@@ -288,6 +288,25 @@ setGeneric('getArgumentExclusions', function(object, ...) {
   out
 })
 
+
+# getCitation ####
+#' @export
+#' @name latrend-generics
+setGeneric('getCitation', function(object, ...) {
+  out <- standardGeneric('getCitation')
+
+  assert_that(
+    inherits(out, 'citation'),
+    msg = sprintf(
+      'Implementation error for %1$s: getCitation(%1$s) must return an object of class "citation"',
+      class(object)[1]
+    )
+  )
+
+  out
+})
+
+
 # getLabel ####
 #' @export
 #' @name latrend-generics

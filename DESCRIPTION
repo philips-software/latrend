@@ -88,6 +88,7 @@ RdMacros: Rdpack
 VignetteBuilder: knitr
 Collate: 
     'assert.R'
+    'citation.R'
     'compute.R'
     'data.R'
     'formula.R'

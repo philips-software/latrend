@@ -5,6 +5,7 @@
 \alias{interface-kml}
 \alias{getArgumentDefaults,lcMethodKML-method}
 \alias{getArgumentExclusions,lcMethodKML-method}
+\alias{getCitation,lcMethodKML-method}
 \alias{getName,lcMethodKML-method}
 \alias{getShortName,lcMethodKML-method}
 \alias{preFit,lcMethodKML-method}
@@ -20,6 +21,8 @@
 \S4method{getArgumentDefaults}{lcMethodKML}(object)
 
 \S4method{getArgumentExclusions}{lcMethodKML}(object)
+
+\S4method{getCitation}{lcMethodKML}(object, ...)
 
 \S4method{getName}{lcMethodKML}(object)
 
@@ -42,6 +45,8 @@
 \arguments{
 \item{object}{The \code{lcModel} object.}
 
+\item{...}{Additional arguments.}
+
 \item{method}{An object inheriting from \code{lcMethod} with all its arguments having been evaluated and finalized.}
 
 \item{data}{A \code{data.frame} representing the transformed training data.}
@@ -49,8 +54,6 @@
 \item{envir}{The \code{environment} containing additional data variables returned by \code{\link[=prepareData]{prepareData()}}.}
 
 \item{verbose}{A \link[R.utils:Verbose]{R.utils::Verbose} object indicating the level of verbosity.}
-
-\item{...}{Additional arguments.}
 
 \item{at}{An optional vector of the times at which to compute the cluster trajectory predictions.}
 

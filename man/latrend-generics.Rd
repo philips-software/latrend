@@ -39,6 +39,8 @@ getArgumentDefaults(object, ...)
 
 getArgumentExclusions(object, ...)
 
+getCitation(object, ...)
+
 getLabel(object, ...)
 
 getLcMethod(object, ...)
