@@ -53,6 +53,11 @@ setMethod('getArgumentExclusions', 'lcMethodMixtoolsNPRM', function(object) {
 })
 
 #' @rdname interface-mixtools
+setMethod('getCitation', 'lcMethodMixtoolsNPRM', function(object, ...) {
+  citation('mixtools')
+})
+
+#' @rdname interface-mixtools
 setMethod('getName', 'lcMethodMixtoolsNPRM', function(object) 'non-parametric estimation for independent repeated measurements using mixtools')
 
 #' @rdname interface-mixtools

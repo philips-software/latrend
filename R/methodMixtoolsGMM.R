@@ -60,6 +60,11 @@ setMethod('getArgumentExclusions', 'lcMethodMixtoolsGMM', function(object) {
 })
 
 #' @rdname interface-mixtools
+setMethod('getCitation', 'lcMethodMixtoolsGMM', function(object, ...) {
+  citation('mixtools')
+})
+
+#' @rdname interface-mixtools
 #' @inheritParams getName
 setMethod('getName', 'lcMethodMixtoolsGMM', function(object) 'growth mixture modeling using mixtools')
 

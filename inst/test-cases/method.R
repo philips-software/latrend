@@ -13,6 +13,7 @@ test('getArgumentDefaults', is.list(getArgumentDefaults(mTest)))
 test('getArgumentExclusions', is.character(getArgumentExclusions(mTest)))
 test('getCall', is.call(getCall(mTest)))
 test('getCall.fun', as.character(getCall(mTest)[[1]]) == class(mTest)[1])
+test('getCitation', inherits(getCitation(mTest), 'citation'))
 
 mTest3 = make.lcMethod(id = 'ID', time = 'TIME', response = 'Y', nClusters = 3L)
 test('idVariable.3', idVariable(mTest3), 'ID')

@@ -59,6 +59,11 @@ setMethod('getArgumentExclusions', 'lcMethodDtwclust', function(object) {
 })
 
 #' @rdname interface-dtwclust
+setMethod('getCitation', 'lcMethodDtwclust', function(object, ...) {
+  citation('dtwclust')
+})
+
+#' @rdname interface-dtwclust
 #' @inheritParams getName
 setMethod('getName', 'lcMethodDtwclust', function(object) paste0('time series clustering with ', object$distance, '-dissimilarity'))
 

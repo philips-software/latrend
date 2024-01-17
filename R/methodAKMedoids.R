@@ -60,6 +60,11 @@ setMethod('getArgumentExclusions', 'lcMethodAkmedoids', function(object) {
 })
 
 #' @rdname interface-akmedoids
+setMethod('getCitation', 'lcMethodAkmedoids', function(object, ...) {
+  citation('akmedoids')
+})
+
+#' @rdname interface-akmedoids
 setMethod('getName', 'lcMethodAkmedoids', function(object) 'anchored k-medoids')
 
 #' @rdname interface-akmedoids

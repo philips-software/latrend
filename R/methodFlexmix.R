@@ -57,6 +57,11 @@ setMethod('getArgumentExclusions', 'lcMethodFlexmix', function(object) {
 })
 
 #' @rdname interface-flexmix
+setMethod('getCitation', 'lcMethodFlexmix', function(object, ...) {
+  citation('flexmix')
+})
+
+#' @rdname interface-flexmix
 setMethod('getName', 'lcMethodFlexmix', function(object) 'flexmix')
 
 #' @rdname interface-flexmix

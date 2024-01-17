@@ -62,6 +62,11 @@ setMethod('getArgumentExclusions', 'lcMethodMixAK_GLMM', function(object) {
 })
 
 #' @rdname interface-mixAK
+setMethod('getCitation', 'lcMethodMixAK_GLMM', function(object, ...) {
+  citation('mixAK')
+})
+
+#' @rdname interface-mixAK
 #' @inheritParams getName
 setMethod('getName', 'lcMethodMixAK_GLMM', function(object) 'generalized linear mixed model with normal random effects mixture')
 

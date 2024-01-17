@@ -112,6 +112,11 @@ setMethod('getArgumentExclusions', 'lcMethodLcmmGMM', function(object) {
 })
 
 #' @rdname interface-lcmm
+setMethod('getCitation', 'lcMethodLcmmGMM', function(object, ...) {
+  citation('lcmm')
+})
+
+#' @rdname interface-lcmm
 setMethod('getName', 'lcMethodLcmmGMM', function(object) 'growth mixture model')
 
 #' @rdname interface-lcmm

@@ -67,6 +67,11 @@ setMethod('getArgumentExclusions', 'lcMethodMclustLLPA', function(object) {
 })
 
 #' @rdname interface-mclust
+setMethod('getCitation', 'lcMethodMclustLLPA', function(object, ...) {
+  citation('mclust')
+})
+
+#' @rdname interface-mclust
 #' @inheritParams getName
 setMethod('getName', 'lcMethodMclustLLPA', function(object) 'longitudinal latent profile analysis')
 

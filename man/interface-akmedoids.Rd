@@ -4,6 +4,7 @@
 \alias{interface-akmedoids}
 \alias{getArgumentDefaults,lcMethodAkmedoids-method}
 \alias{getArgumentExclusions,lcMethodAkmedoids-method}
+\alias{getCitation,lcMethodAkmedoids-method}
 \alias{getName,lcMethodAkmedoids-method}
 \alias{getShortName,lcMethodAkmedoids-method}
 \alias{fit,lcMethodAkmedoids-method}
@@ -12,6 +13,8 @@
 \S4method{getArgumentDefaults}{lcMethodAkmedoids}(object)
 
 \S4method{getArgumentExclusions}{lcMethodAkmedoids}(object)
+
+\S4method{getCitation}{lcMethodAkmedoids}(object, ...)
 
 \S4method{getName}{lcMethodAkmedoids}(object)
 

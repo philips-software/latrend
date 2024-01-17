@@ -67,6 +67,11 @@ setMethod('getArgumentExclusions', 'lcMethodCrimCV', function(object) {
 })
 
 #' @rdname interface-crimCV
+setMethod('getCitation', 'lcMethodCrimCV', function(object, ...) {
+  citation('crimCV')
+})
+
+#' @rdname interface-crimCV
 #' @inheritParams getName
 setMethod('getName', 'lcMethodCrimCV', function(object) 'zero-inflated GBTM using crimcv')
 

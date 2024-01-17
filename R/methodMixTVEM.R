@@ -124,6 +124,26 @@ setMethod('getArgumentExclusions', 'lcMethodMixTVEM', function(object) {
 })
 
 #' @rdname interface-mixtvem
+setMethod('getCitation', 'lcMethodMixTVEM', function(object, ...) {
+  bib = utils::bibentry(
+    bibtype = 'Article',
+    key = 'dziak2015modeling',
+    title = 'Modeling intensive longitudinal data with mixtures of nonparametric trajectories and time-varying effects',
+    author = 'John J. Dziak and Runze Li and Xianming Tan and Saul Shiffman and Mariya P. Shiyko',
+    year = 2015,
+    doi = '10.1037/met0000048',
+    journal = 'Psychological Methods',
+    pages = '444--469',
+    number = 4,
+    volume = 20,
+    publisher = 'American Psychological Association ({APA})'
+  )
+  class(bib) = c('citation', 'bibentry')
+
+  bib
+})
+
+#' @rdname interface-mixtvem
 #' @inheritParams getName
 setMethod('getName', 'lcMethodMixTVEM', function(object) 'mixture of time-varying effect models')
 

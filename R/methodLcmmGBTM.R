@@ -83,6 +83,10 @@ setMethod('getArgumentExclusions', 'lcMethodLcmmGBTM', function(object) {
   )
 })
 
+#' @rdname interface-lcmm
+setMethod('getCitation', 'lcMethodLcmmGBTM', function(object, ...) {
+  citation('lcmm')
+})
 
 #' @rdname interface-lcmm
 #' @inheritParams getName

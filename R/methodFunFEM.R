@@ -63,6 +63,11 @@ setMethod('getArgumentExclusions', 'lcMethodFunFEM', function(object) {
 })
 
 #' @rdname interface-funFEM
+setMethod('getCitation', 'lcMethodFunFEM', function(object, ...) {
+  citation('funFEM')
+})
+
+#' @rdname interface-funFEM
 setMethod('getName', 'lcMethodFunFEM', function(object) 'functional subspace clustering with FunFEM')
 
 #' @rdname interface-funFEM
