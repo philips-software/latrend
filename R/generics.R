@@ -292,6 +292,7 @@ setGeneric('getArgumentExclusions', function(object, ...) {
 # getCitation ####
 #' @export
 #' @name latrend-generics
+#' @importFrom utils citation
 setGeneric('getCitation', function(object, ...) {
   out <- standardGeneric('getCitation')
 

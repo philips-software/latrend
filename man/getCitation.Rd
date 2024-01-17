@@ -2,6 +2,7 @@
 % Please edit documentation in R/method.R, R/model.R
 \name{getCitation}
 \alias{getCitation}
+\alias{getCitation,lcMethod-method}
 \alias{getCitation,lcModel-method}
 \title{Get citation info}
 \usage{
@@ -11,6 +12,8 @@
 }
 \arguments{
 \item{object}{The object}
+
+\item{...}{Additional arguments}
 }
 \value{
 A \link{citation} object
