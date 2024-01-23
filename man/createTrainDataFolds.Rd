@@ -39,8 +39,8 @@ if (require("caret")) {
 }
 \seealso{
 Other validation methods: 
-\code{\link{createTestDataFolds}()},
 \code{\link{createTestDataFold}()},
+\code{\link{createTestDataFolds}()},
 \code{\link{latrendBoot}()},
 \code{\link{latrendCV}()},
 \code{\link{lcModel-data-filters}}

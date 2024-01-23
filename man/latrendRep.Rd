@@ -58,9 +58,9 @@ models <- latrendRep(method, data = latrendData, .seed = 1, .rep = 3)
 }
 \seealso{
 Other longitudinal cluster fit functions: 
+\code{\link{latrend}()},
 \code{\link{latrendBatch}()},
 \code{\link{latrendBoot}()},
-\code{\link{latrendCV}()},
-\code{\link{latrend}()}
+\code{\link{latrendCV}()}
 }
 \concept{longitudinal cluster fit functions}

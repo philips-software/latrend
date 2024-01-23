@@ -50,8 +50,8 @@ min(models, "WMAE")
 
 Other lcModels functions: 
 \code{\link{as.lcModels}()},
-\code{\link{lcModels-class}},
 \code{\link{lcModels}},
+\code{\link{lcModels-class}},
 \code{\link{max.lcModels}()},
 \code{\link{plotMetric}()},
 \code{\link{print.lcModels}()},

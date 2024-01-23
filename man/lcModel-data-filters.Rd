@@ -32,22 +32,22 @@ The data filters are applied by \link{latrend} prior to model estimation. These 
 }
 \seealso{
 Other validation methods: 
-\code{\link{createTestDataFolds}()},
 \code{\link{createTestDataFold}()},
+\code{\link{createTestDataFolds}()},
 \code{\link{createTrainDataFolds}()},
 \code{\link{latrendBoot}()},
 \code{\link{latrendCV}()}
 
 Other validation methods: 
-\code{\link{createTestDataFolds}()},
 \code{\link{createTestDataFold}()},
+\code{\link{createTestDataFolds}()},
 \code{\link{createTrainDataFolds}()},
 \code{\link{latrendBoot}()},
 \code{\link{latrendCV}()}
 
 Other validation methods: 
-\code{\link{createTestDataFolds}()},
 \code{\link{createTestDataFold}()},
+\code{\link{createTestDataFolds}()},
 \code{\link{createTrainDataFolds}()},
 \code{\link{latrendBoot}()},
 \code{\link{latrendCV}()}

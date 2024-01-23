@@ -40,8 +40,8 @@ Print lcModels list concisely
 \seealso{
 Other lcModels functions: 
 \code{\link{as.lcModels}()},
-\code{\link{lcModels-class}},
 \code{\link{lcModels}},
+\code{\link{lcModels-class}},
 \code{\link{max.lcModels}()},
 \code{\link{min.lcModels}()},
 \code{\link{plotMetric}()},

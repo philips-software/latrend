@@ -53,14 +53,14 @@ sd(bootMAE)
 }
 \seealso{
 Other longitudinal cluster fit functions: 
+\code{\link{latrend}()},
 \code{\link{latrendBatch}()},
 \code{\link{latrendCV}()},
-\code{\link{latrendRep}()},
-\code{\link{latrend}()}
+\code{\link{latrendRep}()}
 
 Other validation methods: 
-\code{\link{createTestDataFolds}()},
 \code{\link{createTestDataFold}()},
+\code{\link{createTestDataFolds}()},
 \code{\link{createTrainDataFolds}()},
 \code{\link{latrendCV}()},
 \code{\link{lcModel-data-filters}}

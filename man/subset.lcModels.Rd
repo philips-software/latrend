@@ -54,8 +54,8 @@ subset(models, nClusters > 1 & .method == 'lmkm')
 \seealso{
 Other lcModels functions: 
 \code{\link{as.lcModels}()},
-\code{\link{lcModels-class}},
 \code{\link{lcModels}},
+\code{\link{lcModels-class}},
 \code{\link{max.lcModels}()},
 \code{\link{min.lcModels}()},
 \code{\link{plotMetric}()},

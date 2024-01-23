@@ -69,9 +69,9 @@ models <- latrendBatch(
 lcMethods
 
 Other longitudinal cluster fit functions: 
+\code{\link{latrend}()},
 \code{\link{latrendBoot}()},
 \code{\link{latrendCV}()},
-\code{\link{latrendRep}()},
-\code{\link{latrend}()}
+\code{\link{latrendRep}()}
 }
 \concept{longitudinal cluster fit functions}
