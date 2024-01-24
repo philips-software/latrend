@@ -27,7 +27,7 @@ lcMethodAkmedoids(
 
 \item{crit}{Criterion to apply for internal model selection. Not applicable.}
 
-\item{...}{Arguments passed to \link[akmedoids:akclustr]{akmedoids::akclustr}.
+\item{...}{Arguments passed to \code{akmedoids::akclustr}.
 The following external arguments are ignored: traj, id_field, k}
 }
 \description{

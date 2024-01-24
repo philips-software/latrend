@@ -1,10 +1,9 @@
-#' @include method.R
-#' @include methodMatrix.R
+#' @include method.R methodMatrix.R
 
 #' @name interface-akmedoids
 #' @rdname interface-akmedoids
 #' @title akmedoids interface
-#' @seealso [lcMethodAkmedoids] \link[akmedoids]{akclustr}
+#' @seealso [lcMethodAkmedoids] `akmedoids::akclustr`
 #' @keywords internal
 NULL
 
@@ -17,7 +16,7 @@ setClass('lcMethodAkmedoids', contains = 'lcMatrixMethod')
 #' @inheritParams lcMethodKML
 #' @param clusterCenter A function for computing the cluster center representation.
 #' @param crit Criterion to apply for internal model selection. Not applicable.
-#' @param ... Arguments passed to [akmedoids::akclustr].
+#' @param ... Arguments passed to `akmedoids::akclustr`.
 #' The following external arguments are ignored: traj, id_field, k
 #' @examples
 #' data(latrendData)
