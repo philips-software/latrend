@@ -26,13 +26,17 @@ plotTrajectories(object, ...)
 \arguments{
 \item{object}{The data or model or extract the trajectories from.}
 
-\item{...}{Additional arguments passed to \code{\link[=trajectories]{trajectories()}}.}
+\item{...}{
+  Arguments passed on to \code{\link[=trajectories]{trajectories}}
+  \describe{
+    \item{\code{}}{}
+  }}
 
 \item{response}{Response variable \code{character} name or a \code{call}.}
 
-\item{time}{The time variable name.}
+\item{time}{The time variable name, see \link{timeVariable}.}
 
-\item{id}{The identifier variable name.}
+\item{id}{The identifier variable name, see \link{idVariable}.}
 
 \item{cluster}{Cluster variable name. If unspecified, trajectories are not grouped.
 Alternatively, cluster is a vector indicating cluster membership per id.}
@@ -82,5 +86,9 @@ if (require("ggplot2")) {
 }
 }
 \seealso{
+\link{trajectories}
+
 \link{trajectories} \link{plotFittedTrajectories} \link{plotClusterTrajectories}
+
+\link{trajectories}
 }

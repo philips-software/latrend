@@ -36,7 +36,7 @@ Other lcModel functions:
 \code{\link{deviance.lcModel}()},
 \code{\link{df.residual.lcModel}()},
 \code{\link{estimationTime}()},
-\code{\link{externalMetric,lcModel,lcModel-method}},
+\code{\link{externalMetric}()},
 \code{\link{fitted.lcModel}()},
 \code{\link{fittedTrajectories}()},
 \code{\link{getCall.lcModel}()},

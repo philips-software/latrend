@@ -171,14 +171,10 @@ setValidity('lcModel', function(object) {
 # . clusterTrajectories ####
 #' @export
 #' @name clusterTrajectories
-#' @rdname clusterTrajectories
 #' @aliases clusterTrajectories,lcModel-method
-#' @title Extract the cluster trajectories
-#' @description Extracts a data frame of all cluster trajectories.
 #' @inheritParams predict.lcModel
 #' @inheritParams predictForCluster
-#' @param at An optional vector of the times at which to compute the cluster trajectory predictions.
-#' @return A data.frame of the estimated values at the given times. The first column should be named "Cluster". The second column should be time, with the name matching the `timeVariable(object)`. The third column should be the expected value of the observations, named after the `responseVariable(object)`.
+#' @param ... For `lcModel` objects: Arguments passed to [predict.lcModel].
 #' @examples
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 #' model <- latrend(method, latrendData)
@@ -280,19 +276,16 @@ clusterSizes = function(object, ...) {
 #' @export
 #' @name clusterProportions
 #' @aliases clusterProportions,lcModel-method
-#' @title Proportional size of each cluster
-#' @description Obtain the proportional size per cluster, with sizes between 0 and 1.
+#' @param ... For `lcModel` objects: Additional arguments passed to [postprob()].
+#' @section lcModel:
 #' By default, the cluster proportions are determined from the cluster-averaged posterior probabilities of the fitted data (as computed by the [postprob()] function).
-#' @section Implementation:
+#'
 #' Classes extending `lcModel` can override this method to return, for example, the exact estimated mixture proportions based on the model coefficients.
 #' \preformatted{
 #' setMethod("clusterProportions", "lcModelExt", function(object, ...) {
 #'   # return cluster proportion vector
 #' })
 #' }
-#' @param object The `lcModel` to obtain the proportions from.
-#' @param ... Additional arguments passed to [postprob()].
-#' @return A named `numeric vector` of length `nClusters(object)` with the proportional size of each cluster.
 #' @seealso [clusterSizes] [postprob]
 #' @examples
 #' data(latrendData)
@@ -352,12 +345,7 @@ coef.lcModel = function(object, ...) {
 #' @export
 #' @name converged
 #' @aliases converged,lcModel-method
-#' @title Check model convergence
-#' @description Check convergence of the fitted `lcModel` object.
-#' The default implementation returns `NA`.
-#' @param object The `lcModel` to check for convergence.
-#' @param ... Additional arguments.
-#' @return Either `logical` indicating convergence, or a `numeric` status code.
+#' @return The default `lcModel` implementation returns `NA`.
 #' @section Implementation:
 #' Classes extending `lcModel` can override this method to return a convergence status or code.
 #' \preformatted{
@@ -425,7 +413,7 @@ df.residual.lcModel = function(object, ...) {
 
 #. externalMetric ####
 #' @export
-#' @rdname externalMetric
+#' @name externalMetric
 #' @aliases externalMetric,lcModel,lcModel-method
 #' @return For `externalMetric(lcModel, lcModel)`: A `numeric` vector of the computed metrics.
 #' @examples
@@ -514,18 +502,15 @@ fitted.lcModel = function(object, ..., clusters = trajectoryAssignments(object))
 # . fittedTrajectories ####
 #' @export
 #' @name fittedTrajectories
-#' @rdname fittedTrajectories
 #' @aliases fittedTrajectories,lcModel-method
-#' @title Extract the fitted trajectories for all strata
 #' @param object The model.
 #' @param at The time points at which to compute the id-specific trajectories.
-#' The default implementation merely filters the output of `fitted()`,
-#' so fitted values can only be outputted for times at which the model was trained.
+#' The default implementation merely filters the output, i.e., fitted values can only be outputted for times at which the model was trained.
 #' @param what The distributional parameter to compute the response for.
 #' @param clusters The cluster assignments for the strata to base the trajectories on.
-#' @param ... Additional arguments.
-#' @return A `data.frame` representing the fitted response per trajectory per moment in time for the respective cluster.
-#' @details The default implementation uses the output of `fitted()` of the respective model.
+#' @param ... For `lcModel`: Additional arguments passed to [fitted.lcModel].
+#' @return For `lcModel`: A `data.frame` with columns id, time, response, and "Cluster".
+#' @details The default `lcModel` implementation uses the output of `fitted()` of the respective model.
 #' @examples
 #' data(latrendData)
 #' # Note: not a great example because the fitted trajectories
@@ -536,7 +521,13 @@ fitted.lcModel = function(object, ..., clusters = trajectoryAssignments(object))
 #'
 #' fittedTrajectories(model, at = time(model)[c(1, 2)])
 #' @family lcModel functions
-setMethod('fittedTrajectories', 'lcModel', function(object, at, what, clusters, ...) {
+setMethod('fittedTrajectories', 'lcModel', function(
+    object,
+    at = time(object),
+    what = 'mu',
+    clusters = trajectoryAssignments(object),
+    ...
+  ) {
   assert_that(
     is.null(clusters) || length(clusters) == nIds(object),
     is.numeric(at),
@@ -655,12 +646,7 @@ setMethod('getCitation', 'lcModel', function(object, ...) getCitation(getLcMetho
 # . getLcMethod ####
 #' @export
 #' @name getLcMethod
-#' @rdname getLcMethod
 #' @aliases getLcMethod,lcModel-method
-#' @title Get the method specification of a lcModel
-#' @description Get the `lcMethod` specification object that was used for fitting the given `lcModel` object.
-#' @param object The `lcModel` object.
-#' @return An `lcMethod` object.
 #' @examples
 #' method <- lcMethodRandom("Y", id = "Id", time = "Time")
 #' model <- latrend(method, latrendData)
@@ -674,6 +660,8 @@ setMethod('getLcMethod', 'lcModel', function(object) object@method)
 #' @export
 #' @rdname getName
 #' @aliases getName,lcModel-method
+#' @details
+#' For `lcModel`: The name is determined by its associated `lcMethod` name and label, unless specified otherwise.
 setMethod('getName', 'lcModel', function(object) {
   basename = getLcMethod(object) %>% getName()
   lbl = getLabel(object)
@@ -684,13 +672,12 @@ setMethod('getName', 'lcModel', function(object) {
   }
 })
 
+
 # . getShortName ####
 #' @export
 #' @rdname getName
 #' @aliases getShortName,lcModel-method
-setMethod('getShortName',  'lcModel',
-  function(object) getShortName(getLcMethod(object))
-)
+setMethod('getShortName',  'lcModel', function(object) getShortName(getLcMethod(object)))
 
 
 # . ids ####
@@ -725,7 +712,6 @@ ids = function(object) {
 #' method <- lcMethodRandom("Y", id = "Id", time = "Time")
 #' model <- latrend(method, latrendData)
 #' idVariable(model) # "Id"
-#' @family lcModel variables
 setMethod('idVariable', 'lcModel', function(object) object@id)
 
 
@@ -908,17 +894,12 @@ nIds = function(object) {
 #' @export
 #' @name nClusters
 #' @aliases nClusters,lcModel-method
-#' @title Number of clusters
-#' @description Get the number of clusters estimated by the given `lcModel` object.
-#' @param object The `lcModel` object.
-#' @param ... Not used.
-#' @return An `integer` with the number of clusters identified by the `lcModel`.
-#' @seealso [nIds] [nobs]
 #' @examples
 #' data(latrendData)
 #' method <- lcMethodRandom("Y", id = "Id", time = "Time", nClusters = 3)
 #' model <- latrend(method, latrendData)
 #' nClusters(model) # 3
+#' @seealso [nIds] [nobs]
 #' @family lcModel functions
 setMethod('nClusters', 'lcModel', function(object, ...) {
   length(object@clusterNames)
@@ -1118,20 +1099,14 @@ predict.lcModel = function(object, newdata = NULL, what = 'mu', ..., useCluster 
 
 # . predictForCluster ####
 #' @export
-#' @name predictForCluster
 #' @rdname predictForCluster
 #' @aliases predictForCluster,lcModel-method
-#' @title lcModel prediction conditional on a cluster
-#' @description Predicts the expected trajectory observations at the given time under the assumption that the trajectory belongs to the specified cluster.
-#'
-#' The same result can be obtained by calling [`predict()`][predict.lcModel()] with the `newdata` `data.frame` having a `"Cluster"` assignment column.
+#' @description
+#' For `lcModel` objects, the same result can be obtained by calling [`predict()`][predict.lcModel()] with the `newdata` `data.frame` having a `"Cluster"` assignment column.
 #' The main purpose of this function is to make it easier to implement the prediction computations for custom `lcModel` classes.
-#'
-#' @details The default `predictForCluster()` method makes use of [predict.lcModel()], and vice versa. For this to work, any extending `lcModel` classes, e.g., `lcModelExample`, should implement either `predictForCluster(lcModelExample)` or `predict.lcModelExample()`. When implementing new models, it is advisable to implement `predictForCluster` as the cluster-specific computation generally results in shorter and simpler code.
+#' @details The default `predictForCluster(lcModel)` method makes use of [predict.lcModel()], and vice versa. For this to work, any extending `lcModel` classes, e.g., `lcModelExample`, should implement either `predictForCluster(lcModelExample)` or `predict.lcModelExample()`. When implementing new models, it is advisable to implement `predictForCluster` as the cluster-specific computation generally results in shorter and simpler code.
 #' @inheritParams predict.lcModel
-#' @param cluster The cluster name (as `character`) to predict for.
-#' @param ... Additional arguments.
-#' @return A `vector` with the predictions per `newdata` observation, or a `data.frame` with the predictions and newdata alongside.
+#' @inheritDotParams predict.lcModel
 #' @section Implementation:
 #' Classes extending `lcModel` should override this method, unless [predict.lcModel()] is preferred.
 #' \preformatted{
@@ -1161,11 +1136,18 @@ setMethod('predictForCluster', 'lcModel',
   # check whether predict.lcModelType exists
   cls = class(object)
   classes = extends(class(object)) %>% setdiff('lcModel')
-  methodsAvailable = vapply(classes, function(x) !is.null(getS3method('predict', x, optional = TRUE)), FUN.VALUE = FALSE)
+  methodsAvailable = vapply(
+    classes,
+    function(x) !is.null(getS3method('predict', x, optional = TRUE)),
+    FUN.VALUE = FALSE
+  )
 
   assert_that(
     any(methodsAvailable),
-    msg = sprintf('Cannot compute cluster-specific predictions for model of class %1$s because neither predict.%1$s nor predictForCluster(%1$s) are implemented for this model', cls)
+    msg = sprintf(
+      'Cannot compute cluster-specific predictions for model of class %1$s because neither predict.%1$s nor predictForCluster(%1$s) are implemented for this model',
+      cls
+    )
   )
 
   newdata = cbind(newdata, Cluster = cluster)
@@ -1177,17 +1159,10 @@ setMethod('predictForCluster', 'lcModel',
 
 # . predictPostprob ####
 #' @export
-#' @name predictPostprob
 #' @rdname predictPostprob
 #' @aliases predictPostprob,lcModel-method
-#' @title lcModel posterior probability prediction
-#' @description Returns the observation-specific posterior probabilities for the given data.
-#' The default implementation returns a uniform probability matrix.
-#' @param object The `lcModel` to predict the posterior probabilities with.
-#' @param newdata Optional data frame for which to compute the posterior probability. If omitted, the model training data is used.
-#' @param ... Additional arguments.
-#' @return A N-by-K `matrix` indicating the posterior probability per trajectory per measurement on each row, for each cluster (the columns).
-#' Here, `N = nrow(newdata)` and `K = nClusters(object)`.
+#' @description For `lcModel`: The default implementation returns a uniform probability matrix.
+#' @inheritDotParams postprob
 #' @section Implementation:
 #' Classes extending `lcModel` should override this method to enable posterior probability predictions for new data.
 #' \preformatted{
@@ -1195,6 +1170,7 @@ setMethod('predictForCluster', 'lcModel',
 #'   # return observation-specific posterior probability matrix
 #' })
 #' }
+#' @seealso [postprob]
 #' @family lcModel functions
 setMethod('predictPostprob', 'lcModel', function(object, newdata = NULL, ...) {
   if (is.null(newdata)) {
@@ -1217,16 +1193,12 @@ setMethod('predictPostprob', 'lcModel', function(object, newdata = NULL, ...) {
 
 #. predictAssignments ####
 #' @export
-#' @name predictAssignments
 #' @rdname predictAssignments
 #' @aliases predictAssignments,lcModel-method
-#' @title Predict the cluster assignments for new trajectories
-#' @description Computes the posterior probability based on the provided (observed) data.
 #' @inheritParams predict.lcModel
 #' @param strategy A function returning the cluster index based on the given `vector` of membership probabilities.
 #' By default (`strategy = which.max`), trajectories are assigned to the most likely cluster.
 #' @details The default implementation uses [predictPostprob] to determine the cluster membership.
-#' @return A `factor` of length `nrow(newdata)` that indicates the assigned cluster per trajectory per observation.
 #' @seealso [predictPostprob] [predict.lcModel]
 #' @family lcModel functions
 #' @examples
@@ -1293,14 +1265,12 @@ setMethod('plot', c('lcModel', 'ANY'), function(x, y, ...) {
 
 #. plotFittedTrajectories ####
 #' @export
-#' @name plotFittedTrajectories
 #' @rdname plotFittedTrajectories
 #' @aliases plotFittedTrajectories,lcModel-method
-#' @title Plot fitted trajectories of a lcModel
-#' @param object The `lcModel` object.
-#' @param ... Arguments passed to [fittedTrajectories()].
-#' @inheritDotParams trajectories
-#' @seealso [fittedTrajectories] [plotClusterTrajectories] [plotTrajectories] [plot]
+#' @param ... Arguments passed to [fittedTrajectories()] and [plotTrajectories].
+#' @inheritDotParams plotTrajectories
+#' @return A `ggplot` object.
+#' @seealso [plotClusterTrajectories] [plotTrajectories] [plot]
 #' @examples
 #' data(latrendData)
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
@@ -1325,21 +1295,18 @@ setMethod('plotFittedTrajectories', 'lcModel', function(object, ...) {
 
 #. plotClusterTrajectories ####
 #' @export
-#' @name plotClusterTrajectories
 #' @rdname plotClusterTrajectories
 #' @aliases plotClusterTrajectories,lcModel-method
-#' @title Plot the cluster trajectories of a lcModel
-#' @inheritParams clusterTrajectories
-#' @inheritDotParams clusterTrajectories
 #' @param clusterLabeler A `function(clusterNames, clusterSizes)` that generates plot labels for the clusters.
 #' By default the cluster name with the proportional size is shown, see [make.clusterPropLabels].
 #' @param clusterOrder Specify which clusters to plot and the order.
 #' Can be the cluster names or index.
 #' By default, all clusters are shown.
 #' @param trajAssignments The cluster assignments for the fitted trajectories. Only used when `trajectories = TRUE` and `facet = TRUE`. See [trajectoryAssignments].
+#' @inheritDotParams clusterTrajectories
 #' @param ... Arguments passed to [clusterTrajectories()], or [ggplot2::geom_line()] for plotting the cluster trajectory lines.
 #' @return A `ggplot` object.
-#' @seealso [clusterTrajectories] [plotFittedTrajectories] [plotTrajectories] [plot]
+#' @seealso [plotTrajectories] [plot]
 #' @examples
 #' data(latrendData)
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
@@ -1422,7 +1389,7 @@ setMethod('plotClusterTrajectories', 'lcModel',
 #' @export
 #' @rdname plotTrajectories
 #' @aliases plotTrajectories,lcModel-method
-#' @param ... Additional arguments passed to [trajectories()].
+#' @inheritDotParams trajectories
 #' @examples
 #' data(latrendData)
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
@@ -1431,6 +1398,7 @@ setMethod('plotClusterTrajectories', 'lcModel',
 #' if (require("ggplot2")) {
 #'   plotTrajectories(model)
 #' }
+#' @seealso [trajectories]
 setMethod('plotTrajectories', 'lcModel', function(object, ...) {
   data = trajectories(object, ...)
   plotTrajectories(
@@ -1445,15 +1413,9 @@ setMethod('plotTrajectories', 'lcModel', function(object, ...) {
 
 #. postprob ####
 #' @export
-#' @name postprob
 #' @rdname postprob
 #' @aliases postprob,lcModel-method
-#' @title Posterior probability per fitted trajectory
-#' @description Get the posterior probability matrix with element \eqn{(i,j)} indicating the probability of trajectory \eqn{i} belonging to cluster \eqn{j}.
 #' @details This method should be extended by `lcModel` implementations. The default implementation returns uniform probabilities for all observations.
-#' @param object The `lcModel`.
-#' @param ... Additional arguments.
-#' @return A I-by-K `matrix` with `I = nIds(object)` and `K = nClusters(object)`.
 #' @section Implementation:
 #' Classes extending `lcModel` should override this method.
 #' \preformatted{
@@ -1510,12 +1472,10 @@ setMethod('postprob', 'lcModel', function(object, ...) {
 
 # . QQ plot ####
 #' @export
-#' @name qqPlot
 #' @rdname qqPlot
 #' @aliases qqPlot,lcModel-method
 #' @title Quantile-quantile plot
 #' @description Plot the quantile-quantile (Q-Q) plot for the fitted `lcModel` object. This function is based on the \pkg{qqplotr} package.
-#' @param object The `lcModel` object.
 #' @param byCluster Whether to plot the Q-Q line per cluster
 #' @param ... Additional arguments passed to [qqplotr::geom_qq_band()], [qqplotr::stat_qq_line()], and [qqplotr::stat_qq_point()].
 #' @return A `ggplot` object.
@@ -1531,6 +1491,7 @@ setMethod('postprob', 'lcModel', function(object, ...) {
 #' @family lcModel functions
 setMethod('qqPlot', 'lcModel', function(object, byCluster = FALSE, ...) {
   .loadOptionalPackage('ggplot2')
+
   assert_that(
     is.lcModel(object),
     is.flag(byCluster)
@@ -1594,33 +1555,24 @@ residuals.lcModel = function(object, ..., clusters = trajectoryAssignments(objec
   }
 }
 
+
 #. responseVariable ####
 #' @export
-#' @name responseVariable
 #' @rdname responseVariable
 #' @aliases responseVariable,lcModel-method
-#' @title Get the response variable
 #' @examples
 #' data(latrendData)
 #' method <- lcMethodRandom("Y", id = "Id", time = "Time")
 #' model <- latrend(method, latrendData)
 #' responseVariable(model) # "Y"
-#' @family lcModel variables
 setMethod('responseVariable', 'lcModel', function(object, ...) object@response)
+
 
 # . estimationTime ####
 #' @export
 #' @name estimationTime
-#' @rdname estimationTime
 #' @aliases estimationTime,lcModel-method
-#' @title Get the model estimation time
-#' @description Get the estimation time of the model, determined by the time taken for the associated [fit()] function to finish.
-#' @param object The `lcModel` object.
-#' @param unit The time unit in which the estimation time should be outputted.
-#' By default, estimation time is in seconds.
-#' For accepted units, see [base::difftime].
-#' @param ... Additional arguments.
-#' @return A `numeric` representing the model estimation time, in the specified unit.
+#' @description For `lcModel`: Get the estimation time of the model, determined by the time taken for the associated [fit()] function to finish.
 #' @examples
 #' data(latrendData)
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
@@ -1631,9 +1583,7 @@ setMethod('responseVariable', 'lcModel', function(object, ...) object@response)
 #' estimationTime(model, unit = 'days')
 #' @family lcModel functions
 setMethod('estimationTime', 'lcModel', function(object, unit, ...) {
-  assert_that(is.lcModel(object))
-  dtime = as.difftime(object@estimationTime, units = 'secs')
-  as.numeric(dtime, units = unit)
+  as.difftime(object@estimationTime, units = 'secs')
 })
 
 
@@ -1666,15 +1616,9 @@ sigma.lcModel = function(object, ...) {
 
 #. strip ####
 #' @export
-#' @name strip
 #' @rdname strip
 #' @aliases strip,lcModel-method
-#' @title Reduce the lcModel memory footprint for serialization
-#' @description Strip a lcModel of non-essential variables and environments in order to reduce the model size for serialization.
-#' @param object The `lcModel` object.
 #' @param classes The object classes for which to remove their assigned environment. By default, only environments from `formula` are removed.
-#' @param ... Additional arguments.
-#' @return An `lcModel` object of the same type as the `object` argument.
 #' @section Implementation:
 #' Classes extending `lcModel` can override this method to remove additional non-essentials.
 #' \preformatted{
@@ -1703,7 +1647,6 @@ setMethod('strip', 'lcModel', function(object, ..., classes = 'formula') {
 
 #. timeVariable ####
 #' @export
-#' @name timeVariable
 #' @rdname timeVariable
 #' @aliases timeVariable,lcModel-method
 #' @examples
@@ -1711,7 +1654,6 @@ setMethod('strip', 'lcModel', function(object, ..., classes = 'formula') {
 #' method <- lcMethodRandom("Y", id = "Id", time = "Time")
 #' model <- latrend(method, latrendData)
 #' timeVariable(model) # "Time"
-#' @family lcModel variables
 setMethod('timeVariable', 'lcModel', function(object) object@time)
 
 
@@ -1766,18 +1708,16 @@ setMethod('trajectories', 'lcModel', function(object, ...) {
 
 #. trajectoryAssignments ####
 #' @export
-#' @name trajectoryAssignments
+#' @rdname trajectoryAssignments
 #' @aliases trajectoryAssignments,lcModel-method
-#' @title Get the cluster membership of each trajectory
-#' @description Classify the fitted trajectories based on the posterior probabilities computed by [postprob()], according to a given classification strategy.
+#' @description
+#' For `lcModel`: Classify the fitted trajectories based on the posterior probabilities computed by [postprob()], according to a given classification strategy.
 #'
 #' By default, trajectories are assigned based on the highest posterior probability using [which.max()].
 #' In cases where identical probabilities are expected between clusters, it is preferable to use \link[nnet]{which.is.max} instead, as this function breaks ties at random.
 #' Another strategy to consider is the function [which.weight()], which enables weighted sampling of cluster assignments based on the trajectory-specific probabilities.
-#' @param object The object to obtain the cluster assignments from.
 #' @param strategy A function returning the cluster index based on the given vector of membership probabilities. By default, ids are assigned to the cluster with the highest probability.
 #' @param ... Any additional arguments passed to the strategy function.
-#' @return A `factor` indicating the cluster membership for each trajectory.
 #' @seealso [postprob] [clusterSizes] [predictAssignments]
 #' @examples
 #' data(latrendData)

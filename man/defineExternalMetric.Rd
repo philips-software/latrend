@@ -23,7 +23,7 @@ Define an external metric for lcModels
 \seealso{
 Other metric functions: 
 \code{\link{defineInternalMetric}()},
-\code{\link{externalMetric,lcModel,lcModel-method}},
+\code{\link{externalMetric}()},
 \code{\link{getExternalMetricDefinition}()},
 \code{\link{getExternalMetricNames}()},
 \code{\link{getInternalMetricDefinition}()},

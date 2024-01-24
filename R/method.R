@@ -600,12 +600,9 @@ getCall.lcMethod = function(x, ...) {
 #' @export
 #' @name getArgumentDefaults
 #' @aliases getArgumentDefaults,lcMethod-method
-#' @title Default argument values for lcMethod subclass
 #' @description Returns the default arguments associated with the respective `lcMethod` subclass.
 #' These arguments are automatically included into the `lcMethod` object during initialization.
 #'
-#' @param object The `lcMethod` object.
-#' @return A named `list` of argument values.
 #' @section Implementation:
 #' Although implementing this method is optional, it prevents users from
 #' having to specify all arguments every time they want to create a method specification.
@@ -627,7 +624,7 @@ getCall.lcMethod = function(x, ...) {
 #'
 #' It is recommended to add `callNextMethod()` to the end of the list.
 #' This enables inheriting the default arguments from superclasses.
-#' @seealso [lcMethod] [getArgumentExclusions]
+#' @seealso [lcMethod]
 #' @family lcMethod implementations
 setMethod('getArgumentDefaults', 'lcMethod', function(object) {
   set_names(list(), character(0))
@@ -636,13 +633,7 @@ setMethod('getArgumentDefaults', 'lcMethod', function(object) {
 
 #. getCitation ####
 #' @name getCitation
-#' @rdname getCitation
 #' @aliases getCitation,lcMethod-method
-#' @title Get citation info
-#' @description Get a citation object indicating how to cite the underlying R packages used for estimating or representing the given method or model.
-#' @param object The object
-#' @param ... Additional arguments
-#' @return A [citation] object
 setMethod('getCitation', 'lcMethod', function(object, ...) {
   utils::citation(package = 'base')[0]
 })
@@ -652,11 +643,6 @@ setMethod('getCitation', 'lcMethod', function(object, ...) {
 #' @export
 #' @name getArgumentExclusions
 #' @aliases getArgumentExclusions,lcMethod-method
-#' @title Arguments to be excluded for lcMethod subclass
-#' @description Returns the names of arguments that should be excluded during instantiation of the `lcMethod`.
-#'
-#' @param object The `lcMethod` object.
-#' @return A `character` vector of argument names.
 #' @section Implementation:
 #' This function only needs to be implemented if you want to avoid users from specifying
 #' redundant arguments or arguments that are set automatically or conditionally on other arguments.
@@ -681,15 +667,10 @@ setMethod('getArgumentExclusions', 'lcMethod', function(object) {
 #. getLabel ####
 #' @export
 #' @name getLabel
-#' @rdname getLabel
 #' @aliases getLabel,lcMethod-method
-#' @title Extract the method label.
 #' @description Extracts the assigned label from the given `lcMethod` or `lcModel` object.
 #' By default, the label is determined from the `"label"` argument of the `lcMethod` object.
 #' The label of an `lcModel` object is set upon estimation by [latrend()] to the label of its associated `lcMethod` object.
-#' @param object The `lcMethod` or `lcModel` object.
-#' @param ... Additional arguments.
-#' @return The extracted label, as `character`.
 #' @seealso [getName] [getShortName]
 #' @examples
 #' method <- lcMethodLMKM(Y ~ Time, time = "Time")
@@ -707,15 +688,8 @@ setMethod('getLabel', 'lcMethod', function(object, ...) {
 
 #. getName ####
 #' @export
-#' @name getName
 #' @rdname getName
 #' @aliases getName,lcMethod-method
-#' @title Get the (short) name of the lcMethod or Model
-#' @description Extract the full or shortened name of the given `lcMethod` or `lcModel` object.
-#' The name of the fitted `lcModel` is determined by its associated `lcMethod` name and label, unless specified otherwise.
-#' @param object The `lcMethod` or `lcModel` object.
-#' @param ... Additional arguments.
-#' @return A `character` name.
 #' @section Implementation:
 #' When implementing your own `lcMethod` subclass, override these methods to provide full and abbreviated names.
 #' \preformatted{
@@ -727,49 +701,44 @@ setMethod('getLabel', 'lcMethod', function(object, ...) {
 #' Similar methods can be implemented for your `lcModel` subclass,
 #' however in practice this is not needed as the names are determined by default from the `lcMethod` object that was used to fit the `lcModel` object.
 #'
-#' @seealso [getLabel]
 #' @examples
 #' method <- lcMethodLMKM(Y ~ Time)
 #' getName(method) # "lm-kmeans"
 setMethod('getName', 'lcMethod', function(object, ...) 'undefined')
 
+
 #' @export
-#' @name latrend-generics
+#' @rdname getName
 #' @aliases getName,NULL-method
 setMethod('getName', 'NULL', function(object, ...) 'null')
 
+
 #. getShortName ####
 #' @export
-#' @name getShortName
 #' @rdname getName
 #' @aliases getShortName,lcMethod-method
-#' @title Extract the short object name
 #' @examples
 #' method <- lcMethodLMKM(Y ~ Time)
 #' getShortName(method) # "LMKM"
 setMethod('getShortName', 'lcMethod', function(object, ...) getName(object, ...))
 
+
 #' @export
-#' @name latrend-generics
+#' @rdname getName
 #' @aliases getShortName,NULL-method
 setMethod('getShortName', 'NULL', function(object, ...) 'nul')
 
 
 #. idVariable ####
 #' @export
-#' @name idVariable
 #' @rdname idVariable
 #' @aliases idVariable,lcMethod-method
-#' @title Extract the trajectory identifier variable
-#' @description Extracts the trajectory identifier variable (i.e., column name) from the given `object`.
-#' @param object The object to extract the variable from.
-#' @param ... Not used.
-#' @return The trajectory identifier name, as `character`.
 #' @examples
 #' method <- lcMethodLMKM(Y ~ Time, id = "Traj")
 #' idVariable(method) # "Traj"
 #'
 setMethod('idVariable', 'lcMethod', function(object, ...) object$id)
+
 
 #' @export
 #' @title Check whether the argument of a lcMethod has a defined value.
@@ -1109,14 +1078,8 @@ update.lcMethod = function(object, ..., .eval = FALSE, .remove = character(), en
 
 #. responseVariable ####
 #' @export
-#' @name responseVariable
 #' @rdname responseVariable
 #' @aliases responseVariable,lcMethod-method
-#' @title Extract the response variable
-#' @description Extracts the response variable from the given `object`.
-#' @param object The object to extract the response variable from.
-#' @param ... Additional arguments.
-#' @return The response variable name as a `character`.
 #' @details If the `lcMethod` object specifies a `formula` argument, then the response is extracted from the response term of the formula.
 #' @examples
 #' method <- lcMethodLMKM(Y ~ Time)
@@ -1154,7 +1117,6 @@ setMethod('show', 'lcMethod', function(object) {
 
 # . strip ####
 #' @export
-#' @name strip
 #' @rdname strip
 #' @aliases strip,lcMethod-method
 setMethod('strip', 'lcMethod', function(object, ..., classes = 'formula') {
@@ -1198,13 +1160,8 @@ setMethod('strip', 'ANY', function(object, ..., classes = 'formula') {
 
 #. timeVariable ####
 #' @export
-#' @name timeVariable
 #' @rdname timeVariable
 #' @aliases timeVariable,lcMethod-method
-#' @title Extract the time variable
-#' @description Extracts the time variable (i.e., column name) from the given `object`.
-#' @param object The object to extract the variable from.
-#' @param ... Additional arguments.
 #' @return The time variable name, as `character`.
 #' @examples
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")

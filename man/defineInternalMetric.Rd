@@ -31,7 +31,7 @@ defineInternalMetric("MAE", fun = mae)
 \seealso{
 Other metric functions: 
 \code{\link{defineExternalMetric}()},
-\code{\link{externalMetric,lcModel,lcModel-method}},
+\code{\link{externalMetric}()},
 \code{\link{getExternalMetricDefinition}()},
 \code{\link{getExternalMetricNames}()},
 \code{\link{getInternalMetricDefinition}()},

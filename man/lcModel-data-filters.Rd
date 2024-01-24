@@ -16,7 +16,7 @@ testFold(data, fold, id, folds, seed)
 \arguments{
 \item{data}{The \code{data.frame} representing the model dataset.}
 
-\item{id}{The identifier variable name.}
+\item{id}{The identifier variable name, see \link{idVariable}.}
 
 \item{seed}{Optional seed for ensuring reproducibility.}
 

@@ -154,7 +154,6 @@ as.data.frame.lcModels = function(
 # . estimationTime ####
 #' @export
 #' @rdname estimationTime
-#' @param object The list of `lcModel` objects.
 setMethod('estimationTime', 'lcModels', function(object, unit, ...) {
   sum(vapply(object, estimationTime, unit = unit, ..., FUN.VALUE = 0), na.rm = TRUE)
 })
@@ -221,7 +220,7 @@ setMethod('estimationTime', 'list', function(object, unit, ...) {
 # . externalMetric ####
 #' @export
 #' @importFrom stats as.dist
-#' @rdname externalMetric
+#' @name externalMetric
 #' @aliases externalMetric,lcModels,missing-method
 #' @return For `externalMetric(lcModels)`: A distance matrix of class [dist] representing
 #' the pairwise comparisons.
@@ -232,7 +231,7 @@ setMethod('externalMetric', c('lcModels', 'missing'),
 
 #' @export
 #' @importFrom stats as.dist
-#' @rdname externalMetric
+#' @name externalMetric
 #' @aliases externalMetric,lcModels,character-method
 #' @return For `externalMetric(lcModels, name)`: A distance matrix of class [dist] representing
 #' the pairwise comparisons.
@@ -243,7 +242,7 @@ setMethod('externalMetric', c('lcModels', 'character'),
 
 
 #' @export
-#' @rdname externalMetric
+#' @name externalMetric
 #' @aliases externalMetric,lcModels,lcModels-method
 #' @return For `externalMetric(lcModels, lcModel)`: A named `numeric` vector or `data.frame`
 #' containing the computed model metrics.
@@ -251,7 +250,7 @@ setMethod('externalMetric', c('lcModels', 'lcModel'), .externalMetric.lcModels)
 
 
 #' @export
-#' @rdname externalMetric
+#' @name externalMetric
 #' @aliases externalMetric,list,lcModel-method
 #' @inheritParams metric
 #' @return For `externalMetric(list, lcModel)`: A named `numeric` vector or `data.frame`

@@ -1,13 +1,7 @@
 #' @include model.R metricsInternal.R
 
 #' @name externalMetric
-#' @rdname externalMetric
-#' @title Compute external model metric(s)
-#' @description Compute one or more external metrics for two or more `lcModel` objects.
-#'
-#' Note that there are many external metrics available, and there exists no external metric that works best in all scenarios.
-#' It is recommended to carefully consider which metric is most appropriate for your use case.
-#'
+#' @description
 #' Many of the external metrics depend on implementations in other packages:
 #' \itemize{
 #'   \item clusterCrit  \insertCite{desgraupes2018clustercrit}{latrend}
@@ -21,9 +15,6 @@
 #' Call [getInternalMetricNames()] to retrieve the names of the defined internal metrics.
 #' Call [getExternalMetricNames()] to retrieve the names of the defined internal metrics.
 #' @inheritParams metric
-#' @param object2 The other `lcModel` to compare with.
-#' @param name The name(s) of the external metric(s) to compute. If no names are given, the names specified in the `latrend.externalMetric` option (none by default) are used.
-#' @return A named `numeric` vector containing the computed model metrics.
 #' @section Supported external metrics:
 #' | **Metric name** | **Description** | **Function / Reference** |
 #' | --- | :-------- | :--- |

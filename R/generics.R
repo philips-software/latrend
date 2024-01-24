@@ -18,13 +18,19 @@ NULL
 
 # nClusters ####
 #' @export
-#' @name latrend-generics
+#' @name nClusters
+#' @title Number of clusters
+#' @description Get the number of clusters estimated by the given object.
+#' @param object The object
+#' @param ... Not used.
+#' @return The number of clusters: a scalar `numeric` non-zero count.
 setGeneric('nClusters', function(object, ...) {
   nClus <- standardGeneric('nClusters')
 
   assert_that(
     is.count(nClus),
-    nClus > 0
+    nClus > 0,
+    msg = 'invalid output for nClusters(): expecting a scalar non-zero count'
   )
 
   nClus
@@ -33,7 +39,13 @@ setGeneric('nClusters', function(object, ...) {
 
 # clusterProportions ####
 #' @export
-#' @name latrend-generics
+#' @name clusterProportions
+#' @title Proportional size of each cluster
+#' @description Obtain the proportional size per cluster, between 0 and 1.
+#' @param object The model.
+#' @param ... Not used.
+#' @return A `named numeric vector` of length `nClusters(object)` with the proportional size of each cluster.
+#' @seealso [nClusters] [clusterNames]
 setGeneric('clusterProportions', function(object, ...) {
   props <- standardGeneric('clusterProportions')
 
@@ -63,8 +75,17 @@ setGeneric('clusterProportions', function(object, ...) {
 
 # clusterTrajectories ####
 #' @export
-#' @name latrend-generics
-#' @param at A vector of times at which to compute the cluster trajectories.
+#' @name clusterTrajectories
+#' @title Extract cluster trajectories
+#' @description Extracts a `data.frame` of the cluster trajectories associated with the given object.
+#' @param object The model.
+#' @param at A `numeric vector` of the times at which to compute the cluster trajectories.
+#' @param ... Not used.
+#' @return A `data.frame` of the estimated values at the specified times.
+#' The first column should be named "Cluster".
+#' The second column should be time, with the name matching the `timeVariable(object)`.
+#' The third column should be the expected value of the observations, named after the `responseVariable(object)`.
+#' @seealso [plotClusterTrajectories]
 setGeneric('clusterTrajectories', function(object, ...) {
   # this mechanism is needed because defining "at" as an argument in the
   # generic function overrides any default value set in a subclass
@@ -146,9 +167,15 @@ setGeneric('compose', def = function(method, envir, ...) {
   newmethod
 })
 
+
 # converged ####
 #' @export
-#' @name latrend-generics
+#' @name converged
+#' @title Check model convergence
+#' @description Check whether the fitted object converged.
+#' @param object The model.
+#' @param ... Not used.
+#' @return Either `logical` indicating convergence, or a `numeric` status code.
 setGeneric('converged', function(object, ...) {
   state <- standardGeneric('converged')
 
@@ -164,10 +191,19 @@ setGeneric('converged', function(object, ...) {
   state
 })
 
+
 # externalMetric ####
 #' @export
-#' @name latrend-generics
-#' @param object2 The model to compare with.
+#' @name externalMetric
+#' @title Compute external model metric(s)
+#' @description Compute one or more external metrics for two or more objects.
+#'
+#' Note that there are many external metrics available, and there exists no external metric that works best in all scenarios.
+#' It is recommended to carefully consider which metric is most appropriate for your use case.
+#' @param object The object to compare to the second object
+#' @param object2 The second object
+#' @param name The name(s) of the external metric(s) to compute. If no names are given, the names specified in the `latrend.externalMetric` option (none by default) are used.
+#' @usage NULL
 setGeneric('externalMetric', function(
   object,
   object2,
@@ -180,10 +216,24 @@ setGeneric('externalMetric', function(
 
 # estimationTime ####
 #' @export
-#' @name latrend-generics
-#' @param unit Time unit.
+#' @name estimationTime
+#' @title Estimation time
+#' @description
+#' Get the elapsed time for estimating the given model.
+#' @param object The model.
+#' @param unit The time unit in which the estimation time should be outputted.
+#' By default, estimation time is in seconds.
+#' For accepted units, see [base::difftime].
+#' @param ... Not used.
+#' @return A non-negative `scalar numeric` representing the estimation time in the specified unit..
 setGeneric('estimationTime', function(object, unit = 'secs', ...) {
-  duration <- standardGeneric('estimationTime')
+  dtime <- standardGeneric('estimationTime')
+
+  if (is(dtime, 'difftime')) {
+    duration = as.numeric(dtime, units = unit)
+  } else {
+    duration = dtime
+  }
 
   assert_that(
     is.scalar(duration),
@@ -237,23 +287,50 @@ setGeneric('fit', function(method, data, envir, verbose, ...) {
 
 # fittedTrajectories ####
 #' @export
-#' @name latrend-generics
-setGeneric('fittedTrajectories', function(
-  object,
-  at = time(object),
-  what = 'mu',
-  clusters = trajectoryAssignments(object),
-  ...) {
+#' @name fittedTrajectories
+#' @title Extract the fitted trajectories
+#' @param ... Not used.
+#' @return A `data.frame` representing the fitted response per trajectory per moment in time for the respective cluster.
+#' @seealso [plotFittedTrajectories]
+setGeneric('fittedTrajectories', function(object, ...) {
+  fitTrajs <- standardGeneric('fittedTrajectories')
 
-  assert_that(is_at(at))
+  if (inherits(object, 'lcModel')) {
+    valid = validate_that(
+      is.data.frame(fitTrajs),
+      names(fitTrajs)[1] == idVariable(object),
+      names(fitTrajs)[2] == timeVariable(object),
+      names(fitTrajs)[3] == responseVariable(object),
+      names(fitTrajs)[4] == 'Cluster'
+    )
+  } else {
+    valid = validate_that(
+      is.data.frame(fitTrajs)
+    )
+  }
 
-  standardGeneric('fittedTrajectories')
+  if (!isTRUE(valid)) {
+    stop(
+      sprintf(
+        '%1$s implemention error: output of fittedTrajectories(%1$s, ...) is not valid: %2$s',
+        class(object)[1],
+        valid
+      )
+    )
+  }
+
+  as.data.frame(fitTrajs)
 })
 
 
 # getArgumentDefaults ####
 #' @export
-#' @name latrend-generics
+#' @name getArgumentDefaults
+#' @title Default argument values for the given method specification
+#' @param object The method specification object.
+#' @param ... Not used.
+#' @return A `named list` of argument values.
+#' @seealso [getArgumentExclusions]
 setGeneric('getArgumentDefaults', function(object, ...) {
   out <- standardGeneric('getArgumentDefaults')
 
@@ -271,7 +348,13 @@ setGeneric('getArgumentDefaults', function(object, ...) {
 
 # getArgumentExclusions ####
 #' @export
-#' @name latrend-generics
+#' @name getArgumentExclusions
+#' @title Arguments to be excluded from the specification
+#' @description Returns the names of arguments that should be excluded during instantiation of the specification.
+#' @param object The object.
+#' @param ... Not used.
+#' @return A `character vector` of argument names.
+#' @seealso [getArgumentDefaults]
 setGeneric('getArgumentExclusions', function(object, ...) {
   out <- standardGeneric('getArgumentExclusions')
 
@@ -291,8 +374,14 @@ setGeneric('getArgumentExclusions', function(object, ...) {
 
 # getCitation ####
 #' @export
-#' @name latrend-generics
 #' @importFrom utils citation
+#' @name getCitation
+#' @title Get citation info
+#' @description Get a citation object indicating how to cite the underlying R packages used for estimating or representing the given method or model.
+#' @param object The object
+#' @param ... Not used.
+#' @return A [utils::citation] object.
+#' @seealso [utils::citation]
 setGeneric('getCitation', function(object, ...) {
   out <- standardGeneric('getCitation')
 
@@ -310,7 +399,13 @@ setGeneric('getCitation', function(object, ...) {
 
 # getLabel ####
 #' @export
-#' @name latrend-generics
+#' @name getLabel
+#' @title Object label
+#' @description Get the object label, if any.
+#' @param object The object.
+#' @param ... Not used.
+#' @return A `scalar character`. The empty string is returned if there is no label.
+#' @seealso [getName]
 setGeneric('getLabel', function(object, ...) {
   label <- standardGeneric('getLabel')
 
@@ -322,9 +417,15 @@ setGeneric('getLabel', function(object, ...) {
   label
 })
 
+
 # getLcMethod ####
 #' @export
-#' @name latrend-generics
+#' @name getLcMethod
+#' @title Get the method specification
+#' @description Get the `lcMethod` specification that was used for fitting the given object.
+#' @param object The model.
+#' @param ... Not used.
+#' @return An `lcMethod` object.
 setGeneric('getLcMethod', function(object, ...) {
   method <- standardGeneric('getLcMethod')
 
@@ -338,7 +439,13 @@ setGeneric('getLcMethod', function(object, ...) {
 
 # getName ####
 #' @export
-#' @name latrend-generics
+#' @name getName
+#' @title Object name
+#' @description Get the name associated with the given object.
+#' @param object The object.
+#' @param ... Not used.
+#' @return A nonempty string, as `character`.
+#' @seealso [getShortName] [getLabel]
 setGeneric('getName', function(object, ...) {
   name <- standardGeneric('getName')
 
@@ -354,7 +461,8 @@ setGeneric('getName', function(object, ...) {
 
 # getShortName ####
 #' @export
-#' @name latrend-generics
+#' @rdname getName
+#' @description `getShortName()`: Extracts the short object name
 setGeneric('getShortName', function(object, ...) {
   name <- standardGeneric('getShortName')
 
@@ -370,7 +478,13 @@ setGeneric('getShortName', function(object, ...) {
 
 # idVariable ####
 #' @export
-#' @name latrend-generics
+#' @name idVariable
+#' @title Extract the trajectory identifier variable
+#' @description Extracts the trajectory identifier variable (i.e., column name) from the given `object`.
+#' @param object The object.
+#' @param ... Not used.
+#' @return A nonempty string, as `character`.
+#' @family variables
 setGeneric('idVariable', function(object, ...) {
   id <- standardGeneric('idVariable')
 
@@ -386,7 +500,7 @@ setGeneric('idVariable', function(object, ...) {
 
 # metric ####
 #' @export
-#' @name latrend-generics
+#' @name metric
 setGeneric('metric', function(
   object,
   name = getOption('latrend.metric', c('WRSS', 'APPA.mean')),
@@ -396,7 +510,12 @@ setGeneric('metric', function(
 
 # plotFittedTrajectories ####
 #' @export
-#' @name latrend-generics
+#' @name plotFittedTrajectories
+#' @title Plot the fitted trajectories
+#' @description Plot the fitted trajectories as represented by the given model
+#' @inheritParams fittedTrajectories
+#' @inheritDotParams fittedTrajectories
+#' @seealso [fittedTrajectories]
 setGeneric('plotFittedTrajectories',
   function(object, ...) standardGeneric('plotFittedTrajectories')
 )
@@ -404,7 +523,11 @@ setGeneric('plotFittedTrajectories',
 
 # plotClusterTrajectories ####
 #' @export
-#' @name latrend-generics
+#' @name plotClusterTrajectories
+#' @title Plot cluster trajectories
+#' @description Plot the cluster trajectories associated with the given model.
+#' @inheritParams clusterTrajectories
+#' @seealso [clusterTrajectories]
 setGeneric('plotClusterTrajectories',
   function(object, ...) standardGeneric('plotClusterTrajectories')
 )
@@ -412,9 +535,10 @@ setGeneric('plotClusterTrajectories',
 
 # plotTrajectories ####
 #' @export
-#' @rdname plotTrajectories
+#' @name plotTrajectories
 #' @title Plot the data trajectories
 #' @description Plots the output of [trajectories] for the given object.
+#' @seealso [trajectories]
 setGeneric('plotTrajectories', function(object, ...) standardGeneric('plotTrajectories'))
 
 
@@ -439,7 +563,12 @@ setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
 
 # postprob ####
 #' @export
-#' @name latrend-generics
+#' @name postprob
+#' @title Posterior probability per fitted trajectory
+#' @description Get the posterior probability matrix with element \eqn{(i,j)} indicating the probability of trajectory \eqn{i} belonging to cluster \eqn{j}.
+#' @param object The model.
+#' @param ... Not used.
+#' @return An I-by-K `numeric matrix` with `I = nIds(object)` and `K = nClusters(object)`.
 setGeneric('postprob', function(object, ...) {
   pp <- standardGeneric('postprob')
 
@@ -493,7 +622,11 @@ setGeneric('postprob', function(object, ...) {
 
 # predictAssignments ####
 #' @export
-#' @name latrend-generics
+#' @name predictAssignments
+#' @title Predict the cluster assignments for new trajectories
+#' @description Predict the most likely cluster membership for each trajectory in the given data.
+#' @inheritParams predictForCluster
+#' @return A `factor` of length `nrow(newdata)` that indicates the assigned cluster per trajectory per observation.
 setGeneric('predictAssignments', function(object, newdata = NULL, ...) {
   assert_that(is_newdata(newdata))
 
@@ -509,7 +642,14 @@ setGeneric('predictAssignments', function(object, newdata = NULL, ...) {
 
 # predictForCluster ####
 #' @export
-#' @name latrend-generics
+#' @name predictForCluster
+#' @title Predict trajectories conditional on cluster membership
+#' @description Predicts the expected trajectory observations at the given time under the assumption that the trajectory belongs to the specified cluster.
+#' @param object The model.
+#' @param newdata A `data.frame` of trajectory data for which to compute trajectory assignments.
+#' @param cluster The cluster name (as `character`) to predict for.
+#' @param ... Not used.
+#' @return A `vector` with the predictions per `newdata` observation, or a `data.frame` with the predictions and newdata alongside.
 setGeneric('predictForCluster', function(object, newdata = NULL, cluster, ...) {
   assert_that(
     is_newdata(newdata),
@@ -587,7 +727,13 @@ setGeneric('predictForCluster', function(object, newdata = NULL, cluster, ...) {
 
 # predictPostprob ####
 #' @export
-#' @name latrend-generics
+#' @name predictPostprob
+#' @title Posterior probability for new data
+#' @description Returns the observation-specific posterior probabilities for the given data.
+#' @param newdata Optional `data.frame` for which to compute the posterior probability. If omitted, the model training data is used.
+#' @inheritParams predictForCluster
+#' @return A N-by-K `matrix` indicating the posterior probability per trajectory per measurement on each row, for each cluster (the columns).
+#' Here, `N = nrow(newdata)` and `K = nClusters(object)`.
 setGeneric('predictPostprob', function(object, newdata = NULL, ...) {
   assert_that(is_newdata(newdata))
 
@@ -633,6 +779,7 @@ setGeneric('prepareData', function(method, data, verbose, ...) {
 # preFit ####
 #' @export
 #' @name latrend-generics
+#' @aliases preFit-method
 setGeneric('preFit', function(method, data, envir, verbose, ...) {
   modelEnv <- standardGeneric('preFit')
   assert_that(
@@ -649,14 +796,23 @@ setGeneric('preFit', function(method, data, envir, verbose, ...) {
 
 # qqPlot ####
 #' @export
-#' @name latrend-generics
+#' @name qqPlot
 #' @title Quantile-quantile plot
+#' @description Quantile-quantile (Q-Q) plot for the residuals of the given model.
+#' @param object The model.
+#' @param ... Not used.
 setGeneric('qqPlot', function(object, ...) standardGeneric('qqPlot'))
 
 
 # responseVariable ####
 #' @export
-#' @name latrend-generics
+#' @name responseVariable
+#' @title Extract response variable
+#' @description Extracts the response variable from the given `object`.
+#' @inheritParams idVariable
+#' @description Get the response variable, i.e., the dependent variable.
+#' @inherit idVariable return
+#' @family variables
 setGeneric('responseVariable', function(object, ...) {
   response <- standardGeneric('responseVariable')
 
@@ -672,8 +828,11 @@ setGeneric('responseVariable', function(object, ...) {
 
 # strip ####
 #' @export
-#' @name latrend-generics
+#' @name strip
+#' @title Reduce the memory footprint of an object for serialization
 #' @description Reduce the (serialized) memory footprint of an object.
+#' @param object The model.
+#' @param ... Not used.
 #' @details Serializing references to environments results in the serialization of the object
 #' together with any associated environments and references. This method removes those environments
 #' and references, greatly reducing the serialized object size.
@@ -683,7 +842,12 @@ setGeneric('strip', function(object, ...) standardGeneric('strip'))
 
 # timeVariable ####
 #' @export
-#' @name latrend-generics
+#' @name timeVariable
+#' @title Extract the time variable
+#' @description Extracts the time variable (i.e., column name) from the given `object`.
+#' @inheritParams idVariable
+#' @inherit idVariable return
+#' @family variables
 setGeneric('timeVariable', function(object, ...) {
   time <- standardGeneric('timeVariable')
 
@@ -700,16 +864,15 @@ setGeneric('timeVariable', function(object, ...) {
 # trajectories ####
 #' @export
 #' @name trajectories
-#' @rdname trajectories
 #' @title Extract the trajectories
 #' @description Transform or extract the trajectories from the given object to a standardized format.
 #'
 #' The standardized data format is for method estimation by [latrend], and for plotting functions.
 #' @param object The data or model or extract the trajectories from.
-#' @param id The identifier variable name.
-#' @param time The time variable name.
-#' @param response The response variable name.
-#' @param ... Additional arguments.
+#' @param id The identifier variable name, see [idVariable].
+#' @param time The time variable name, see [timeVariable].
+#' @param response The response variable name, see [responseVariable].
+#' @param ... Not used.
 #' @return A `data.frame` with columns matching the `id`, `time`, and `response` name arguments.
 #' @details The generic function removes unused factor levels in the Id column, and any trajectories which are only comprised of NAs in the response.
 #' @seealso [plotTrajectories] [latrend]
@@ -762,9 +925,15 @@ setGeneric('trajectories', function(
 
 # trajectoryAssignments ####
 #' @export
-#' @name latrend-generics
+#' @name trajectoryAssignments
+#' @title Get the cluster membership of each trajectory
+#' @description Get the cluster membership of each trajectory associated with the given model.
+#' @param object The model.
+#' @param ... Not used.
+#' @return A `factor vector` indicating the cluster membership for each trajectory.
 setGeneric('trajectoryAssignments', function(object, ...) {
   clusters <- standardGeneric('trajectoryAssignments')
+
   assert_that(
     is.factor(clusters),
     !is.lcModel(object) || all(levels(clusters) == clusterNames(object))

@@ -45,13 +45,13 @@ trajectories(
 \arguments{
 \item{object}{The data or model or extract the trajectories from.}
 
-\item{id}{The identifier variable name.}
+\item{id}{The identifier variable name, see \link{idVariable}.}
 
-\item{time}{The time variable name.}
+\item{time}{The time variable name, see \link{timeVariable}.}
 
-\item{response}{The response variable name.}
+\item{response}{The response variable name, see \link{responseVariable}.}
 
-\item{...}{Additional arguments.}
+\item{...}{Not used.}
 
 \item{envir}{The \code{environment} used to evaluate the data object in (e.g., in case \code{object} is of type \code{call}).}
 }

@@ -19,7 +19,7 @@ Get the internal metric definition
 Other metric functions: 
 \code{\link{defineExternalMetric}()},
 \code{\link{defineInternalMetric}()},
-\code{\link{externalMetric,lcModel,lcModel-method}},
+\code{\link{externalMetric}()},
 \code{\link{getExternalMetricDefinition}()},
 \code{\link{getExternalMetricNames}()},
 \code{\link{getInternalMetricNames}()},

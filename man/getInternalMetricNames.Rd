@@ -13,7 +13,7 @@ Get the names of the available internal metrics
 Other metric functions: 
 \code{\link{defineExternalMetric}()},
 \code{\link{defineInternalMetric}()},
-\code{\link{externalMetric,lcModel,lcModel-method}},
+\code{\link{externalMetric}()},
 \code{\link{getExternalMetricDefinition}()},
 \code{\link{getExternalMetricNames}()},
 \code{\link{getInternalMetricDefinition}()},

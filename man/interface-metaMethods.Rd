@@ -63,7 +63,7 @@
 
 \item{envir}{The \code{environment} in which the \code{lcMethod} should be evaluated}
 
-\item{object}{The \code{lcModel} object.}
+\item{object}{The model.}
 
 \item{...}{Not used.}
 

@@ -43,9 +43,9 @@
 \S4method{predictPostprob}{lcModelKML}(object, newdata = NULL, ...)
 }
 \arguments{
-\item{object}{The \code{lcModel} object.}
+\item{object}{The model.}
 
-\item{...}{Additional arguments.}
+\item{...}{For \code{lcModel} objects: Arguments passed to \link{predict.lcModel}.}
 
 \item{method}{An object inheriting from \code{lcMethod} with all its arguments having been evaluated and finalized.}
 
@@ -55,9 +55,9 @@
 
 \item{verbose}{A \link[R.utils:Verbose]{R.utils::Verbose} object indicating the level of verbosity.}
 
-\item{at}{An optional vector of the times at which to compute the cluster trajectory predictions.}
+\item{at}{A \verb{numeric vector} of the times at which to compute the cluster trajectories.}
 
-\item{newdata}{Optional data frame for which to compute the posterior probability. If omitted, the model training data is used.}
+\item{newdata}{Optional \code{data.frame} for which to compute the posterior probability. If omitted, the model training data is used.}
 }
 \description{
 kml interface
