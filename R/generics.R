@@ -782,16 +782,6 @@ setGeneric('preFit', function(method, data, envir, verbose, ...) {
 })
 
 
-# qqPlot ####
-#' @export
-#' @name qqPlot
-#' @title Quantile-quantile plot
-#' @description Quantile-quantile (Q-Q) plot for the residuals of the given model.
-#' @param object The model.
-#' @param ... Not used.
-setGeneric('qqPlot', function(object, ...) standardGeneric('qqPlot'))
-
-
 # responseVariable ####
 #' @export
 #' @name responseVariable

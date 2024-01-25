@@ -1472,12 +1472,11 @@ setMethod('postprob', 'lcModel', function(object, ...) {
 
 # . QQ plot ####
 #' @export
-#' @rdname qqPlot
-#' @aliases qqPlot,lcModel-method
+#' @name qqPlot
 #' @title Quantile-quantile plot
 #' @description Plot the quantile-quantile (Q-Q) plot for the fitted `lcModel` object. This function is based on the \pkg{qqplotr} package.
 #' @param byCluster Whether to plot the Q-Q line per cluster
-#' @param ... Additional arguments passed to [qqplotr::geom_qq_band()], [qqplotr::stat_qq_line()], and [qqplotr::stat_qq_point()].
+#' @param ... Additional arguments passed to [residuals.lcModel], [qqplotr::geom_qq_band()], [qqplotr::stat_qq_line()], and [qqplotr::stat_qq_point()].
 #' @return A `ggplot` object.
 #' @seealso [residuals.lcModel] [metric] [plotClusterTrajectories]
 #' @examples
@@ -1489,7 +1488,7 @@ setMethod('postprob', 'lcModel', function(object, ...) {
 #'   qqPlot(model)
 #' }
 #' @family lcModel functions
-setMethod('qqPlot', 'lcModel', function(object, byCluster = FALSE, ...) {
+qqPlot = function(object, byCluster = FALSE, ...) {
   .loadOptionalPackage('ggplot2')
 
   assert_that(
@@ -1524,7 +1523,7 @@ setMethod('qqPlot', 'lcModel', function(object, byCluster = FALSE, ...) {
   }
 
   p
-})
+}
 
 
 #' @exportS3Method stats::residuals
