@@ -62,7 +62,7 @@ The fit() function of the lcMethod object estimates the model with the evaluated
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1><code>lcMethod</code> estimation step: logic for fitting the method to the processed data</h1>
-    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/R/method.R" class="external-link"><code>R/method.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/R/generics.R" class="external-link"><code>R/generics.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/HEAD/R/method.R" class="external-link"><code>R/method.R</code></a></small>
     <div class="hidden name"><code>fit.Rd</code></div>
     </div>
 
@@ -73,7 +73,9 @@ For fitting an <code>lcMethod</code> object to a dataset, use the <code><a href=
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for lcMethod</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fit</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for lcMethod</span></span>
 <span><span class="fu">fit</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -94,12 +96,16 @@ For fitting an <code>lcMethod</code> object to a dataset, use the <code><a href=
 <dt>verbose</dt>
 <dd><p>A <a href="https://henrikbengtsson.github.io/R.utils/reference/Verbose.html" class="external-link">R.utils::Verbose</a> object indicating the level of verbosity.</p></dd>
 
+
+<dt>...</dt>
+<dd><p>Not used.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>The fitted object inheriting from <code>lcModel</code>.</p>
+<p>The fitted object, inheriting from <code>lcModel</code>.</p>
     </div>
     <div id="implementation">
     <h2>Implementation</h2>

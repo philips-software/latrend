@@ -63,7 +63,7 @@ The default implementation returns an updated object with all arguments having b
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1><code>lcMethod</code> estimation step: compose an lcMethod object</h1>
-    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/R/method.R" class="external-link"><code>R/method.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/R/generics.R" class="external-link"><code>R/generics.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/HEAD/R/method.R" class="external-link"><code>R/method.R</code></a></small>
     <div class="hidden name"><code>compose.Rd</code></div>
     </div>
 
@@ -75,7 +75,9 @@ For fitting an <code>lcMethod</code> object to a dataset, use the <code><a href=
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for lcMethod</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">compose</span><span class="op">(</span><span class="va">method</span>, <span class="va">envir</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for lcMethod</span></span>
 <span><span class="fu">compose</span><span class="op">(</span><span class="va">method</span>, envir <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -87,6 +89,10 @@ For fitting an <code>lcMethod</code> object to a dataset, use the <code><a href=
 
 <dt>envir</dt>
 <dd><p>The <code>environment</code> in which the <code>lcMethod</code> should be evaluated</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Not used.</p></dd>
 
 </dl></div>
     <div id="value">

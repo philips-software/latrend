@@ -69,7 +69,7 @@ By default, the validate() function checks whether the id, time, and response va
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1><code>lcMethod</code> estimation step: method argument validation logic</h1>
-    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/R/method.R" class="external-link"><code>R/method.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/R/generics.R" class="external-link"><code>R/generics.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/HEAD/R/method.R" class="external-link"><code>R/method.R</code></a></small>
     <div class="hidden name"><code>validate.Rd</code></div>
     </div>
 
@@ -84,7 +84,9 @@ This enables a method to verify, for example:</p><ul><li><p>whether the formula 
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for lcMethod</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for lcMethod</span></span>
 <span><span class="fu">validate</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, envir <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -111,7 +113,7 @@ This enables a method to verify, for example:</p><ul><li><p>whether the formula 
     
 
 <p>Either <code>TRUE</code> if all validation checks passed,
-or a <code>character</code> containing a description of the failed validation checks.</p>
+or a <code>scalar character</code> containing a description of the failed validation checks.</p>
     </div>
     <div id="implementation">
     <h2>Implementation</h2>

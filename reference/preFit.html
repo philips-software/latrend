@@ -63,7 +63,7 @@ The work is added to the provided environment, allowing the fit() function to ma
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1><code>lcMethod</code> estimation step: method preparation logic</h1>
-    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/R/method.R" class="external-link"><code>R/method.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/R/generics.R" class="external-link"><code>R/generics.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/HEAD/R/method.R" class="external-link"><code>R/method.R</code></a></small>
     <div class="hidden name"><code>preFit.Rd</code></div>
     </div>
 
@@ -75,7 +75,9 @@ The work is added to the provided <code>environment</code>, allowing the <code><
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for lcMethod</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">preFit</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for lcMethod</span></span>
 <span><span class="fu">preFit</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -95,6 +97,10 @@ The work is added to the provided <code>environment</code>, allowing the <code><
 
 <dt>verbose</dt>
 <dd><p>A <a href="https://henrikbengtsson.github.io/R.utils/reference/Verbose.html" class="external-link">R.utils::Verbose</a> object indicating the level of verbosity.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Not used.</p></dd>
 
 </dl></div>
     <div id="value">

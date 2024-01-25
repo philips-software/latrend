@@ -60,7 +60,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Extract the time variable</h1>
-    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/R/method.R" class="external-link"><code>R/method.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/HEAD/R/model.R" class="external-link"><code>R/model.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/R/generics.R" class="external-link"><code>R/generics.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/HEAD/R/method.R" class="external-link"><code>R/method.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/HEAD/R/model.R" class="external-link"><code>R/model.R</code></a></small>
     <div class="hidden name"><code>timeVariable.Rd</code></div>
     </div>
 
@@ -69,7 +69,9 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for lcMethod</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">timeVariable</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for lcMethod</span></span>
 <span><span class="fu">timeVariable</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for lcModel</span></span>
@@ -79,11 +81,11 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
-<dd><p>The object to extract the variable from.</p></dd>
+<dd><p>The object.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>Additional arguments.</p></dd>
+<dd><p>Not used.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -94,7 +96,7 @@
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p>Other lcModel variables: 
+    <div class="dont-index"><p>Other variables: 
 <code><a href="idVariable.html">idVariable</a>()</code>,
 <code><a href="responseVariable.html">responseVariable</a>()</code></p></div>
     </div>

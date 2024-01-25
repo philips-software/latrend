@@ -115,7 +115,7 @@
         </td>
         <td><p>Get the cluster names</p></td>
       </tr><tr><td>
-          <p><code><a href="clusterProportions.html">clusterProportions(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="clusterProportions.html">clusterProportions()</a></code> </p>
         </td>
         <td><p>Proportional size of each cluster</p></td>
       </tr><tr><td>
@@ -123,15 +123,15 @@
         </td>
         <td><p>Number of trajectories per cluster</p></td>
       </tr><tr><td>
-          <p><code><a href="clusterTrajectories.html">clusterTrajectories(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="clusterTrajectories.html">clusterTrajectories()</a></code> </p>
         </td>
-        <td><p>Extract the cluster trajectories</p></td>
+        <td><p>Extract cluster trajectories</p></td>
       </tr><tr><td>
           <p><code><a href="coef.lcModel.html">coef(<i>&lt;lcModel&gt;</i>)</a></code> </p>
         </td>
         <td><p>Extract lcModel coefficients</p></td>
       </tr><tr><td>
-          <p><code><a href="compose.html">compose(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
+          <p><code><a href="compose.html">compose()</a></code> </p>
         </td>
         <td><p><code>lcMethod</code> estimation step: compose an lcMethod object</p></td>
       </tr><tr><td>
@@ -139,7 +139,7 @@
         </td>
         <td><p>Compute the posterior confusion matrix</p></td>
       </tr><tr><td>
-          <p><code><a href="converged.html">converged(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="converged.html">converged()</a></code> </p>
         </td>
         <td><p>Check model convergence</p></td>
       </tr><tr><td>
@@ -171,9 +171,9 @@
         </td>
         <td><p>Extract the residual degrees of freedom from a lcModel</p></td>
       </tr><tr><td>
-          <p><code><a href="estimationTime.html">estimationTime(<i>&lt;lcModel&gt;</i>)</a></code> <code><a href="estimationTime.html">estimationTime(<i>&lt;lcModels&gt;</i>)</a></code> <code><a href="estimationTime.html">estimationTime(<i>&lt;list&gt;</i>)</a></code> </p>
+          <p><code><a href="estimationTime.html">estimationTime()</a></code> </p>
         </td>
-        <td><p>Get the model estimation time</p></td>
+        <td><p>Estimation time</p></td>
       </tr><tr><td>
           <p><code><a href="evaluate.lcMethod.html">evaluate(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
         </td>
@@ -183,7 +183,7 @@
         </td>
         <td><p>Compute external model metric(s)</p></td>
       </tr><tr><td>
-          <p><code><a href="fit.html">fit(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
+          <p><code><a href="fit.html">fit()</a></code> </p>
         </td>
         <td><p><code>lcMethod</code> estimation step: logic for fitting the method to the processed data</p></td>
       </tr><tr><td>
@@ -191,9 +191,9 @@
         </td>
         <td><p>Extract lcModel fitted values</p></td>
       </tr><tr><td>
-          <p><code><a href="fittedTrajectories.html">fittedTrajectories(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="fittedTrajectories.html">fittedTrajectories()</a></code> </p>
         </td>
-        <td><p>Extract the fitted trajectories for all strata</p></td>
+        <td><p>Extract the fitted trajectories</p></td>
       </tr><tr><td>
           <p><code><a href="formula.lcMethod.html">formula(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
         </td>
@@ -207,15 +207,15 @@
         </td>
         <td><p>Generate longitudinal test data</p></td>
       </tr><tr><td>
-          <p><code><a href="getArgumentDefaults.html">getArgumentDefaults(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
+          <p><code><a href="getArgumentDefaults.html">getArgumentDefaults()</a></code> </p>
         </td>
-        <td><p>Default argument values for lcMethod subclass</p></td>
+        <td><p>Default argument values for the given method specification</p></td>
       </tr><tr><td>
-          <p><code><a href="getArgumentExclusions.html">getArgumentExclusions(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
+          <p><code><a href="getArgumentExclusions.html">getArgumentExclusions()</a></code> </p>
         </td>
-        <td><p>Arguments to be excluded for lcMethod subclass</p></td>
+        <td><p>Arguments to be excluded from the specification</p></td>
       </tr><tr><td>
-          <p><code><a href="getCitation.html">getCitation(<i>&lt;lcMethod&gt;</i>)</a></code> <code><a href="getCitation.html">getCitation(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="getCitation.html">getCitation()</a></code> </p>
         </td>
         <td><p>Get citation info</p></td>
       </tr><tr><td>
@@ -235,19 +235,19 @@
         </td>
         <td><p>Get the names of the available internal metrics</p></td>
       </tr><tr><td>
-          <p><code><a href="getLabel.html">getLabel(<i>&lt;lcMethod&gt;</i>)</a></code> <code><a href="getLabel.html">getLabel(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="getLabel.html">getLabel()</a></code> </p>
         </td>
-        <td><p>Extract the method label.</p></td>
+        <td><p>Object label</p></td>
       </tr><tr><td>
-          <p><code><a href="getLcMethod.html">getLcMethod(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="getLcMethod.html">getLcMethod()</a></code> </p>
         </td>
-        <td><p>Get the method specification of a lcModel</p></td>
+        <td><p>Get the method specification</p></td>
       </tr><tr><td>
-          <p><code><a href="getName.html">getName(<i>&lt;lcMethod&gt;</i>)</a></code> <code><a href="getName.html">getShortName(<i>&lt;lcMethod&gt;</i>)</a></code> <code><a href="getName.html">getName(<i>&lt;lcModel&gt;</i>)</a></code> <code><a href="getName.html">getShortName(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="getName.html">getName()</a></code> <code><a href="getName.html">getShortName()</a></code> </p>
         </td>
-        <td><p>Get the (short) name of the lcMethod or Model</p></td>
+        <td><p>Object name</p></td>
       </tr><tr><td>
-          <p><code><a href="idVariable.html">idVariable(<i>&lt;lcMethod&gt;</i>)</a></code> <code><a href="idVariable.html">idVariable(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="idVariable.html">idVariable()</a></code> </p>
         </td>
         <td><p>Extract the trajectory identifier variable</p></td>
       </tr><tr><td>
@@ -278,6 +278,10 @@
           <p><code><a href="latrend-estimation.html">latrend-estimation</a></code> </p>
         </td>
         <td><p>Overview of <strong><code>lcMethod</code></strong> estimation functions</p></td>
+      </tr><tr><td>
+          <p><code><a href="latrend-generics.html">latrend-generics</a></code> </p>
+        </td>
+        <td><p>Generics used by latrend for different classes</p></td>
       </tr><tr><td>
           <p><code><a href="latrend-methods.html">latrend-methods</a></code> </p>
         </td>
@@ -451,7 +455,7 @@
         </td>
         <td><p>Select the lcModel with the highest metric value</p></td>
       </tr><tr><td>
-          <p><code><a href="metric.html">metric(<i>&lt;lcModel&gt;</i>)</a></code> <code><a href="metric.html">metric(<i>&lt;list&gt;</i>)</a></code> <code><a href="metric.html">metric(<i>&lt;lcModels&gt;</i>)</a></code> </p>
+          <p><code><a href="metric.html">metric()</a></code> </p>
         </td>
         <td><p>Compute internal model metric(s)</p></td>
       </tr><tr><td>
@@ -467,7 +471,7 @@
         </td>
         <td><p>Extract model training data</p></td>
       </tr><tr><td>
-          <p><code><a href="nClusters.html">nClusters(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="nClusters.html">nClusters()</a></code> </p>
         </td>
         <td><p>Number of clusters</p></td>
       </tr><tr><td>
@@ -491,13 +495,13 @@
         </td>
         <td><p>Grid plot for a list of models</p></td>
       </tr><tr><td>
-          <p><code><a href="plotClusterTrajectories.html">plotClusterTrajectories(<i>&lt;data.frame&gt;</i>)</a></code> <code><a href="plotClusterTrajectories.html">plotClusterTrajectories(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="plotClusterTrajectories.html">plotClusterTrajectories()</a></code> </p>
         </td>
         <td><p>Plot cluster trajectories</p></td>
       </tr><tr><td>
-          <p><code><a href="plotFittedTrajectories.html">plotFittedTrajectories(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="plotFittedTrajectories.html">plotFittedTrajectories()</a></code> </p>
         </td>
-        <td><p>Plot fitted trajectories of a lcModel</p></td>
+        <td><p>Plot the fitted trajectories</p></td>
       </tr><tr><td>
           <p><code><a href="plotMetric.html">plotMetric()</a></code> </p>
         </td>
@@ -507,11 +511,11 @@
         </td>
         <td><p>Plot the data trajectories</p></td>
       </tr><tr><td>
-          <p><code><a href="postFit.html">postFit(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
+          <p><code><a href="postFit.html">postFit()</a></code> </p>
         </td>
         <td><p><code>lcMethod</code> estimation step: logic for post-processing the fitted lcModel</p></td>
       </tr><tr><td>
-          <p><code><a href="postprob.html">postprob(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="postprob.html">postprob()</a></code> </p>
         </td>
         <td><p>Posterior probability per fitted trajectory</p></td>
       </tr><tr><td>
@@ -519,7 +523,7 @@
         </td>
         <td><p>Create a posterior probability matrix from a vector of cluster assignments.</p></td>
       </tr><tr><td>
-          <p><code><a href="preFit.html">preFit(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
+          <p><code><a href="preFit.html">preFit()</a></code> </p>
         </td>
         <td><p><code>lcMethod</code> estimation step: method preparation logic</p></td>
       </tr><tr><td>
@@ -527,19 +531,19 @@
         </td>
         <td><p>lcModel predictions</p></td>
       </tr><tr><td>
-          <p><code><a href="predictAssignments.html">predictAssignments(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="predictAssignments.html">predictAssignments()</a></code> </p>
         </td>
         <td><p>Predict the cluster assignments for new trajectories</p></td>
       </tr><tr><td>
-          <p><code><a href="predictForCluster.html">predictForCluster(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="predictForCluster.html">predictForCluster()</a></code> </p>
         </td>
-        <td><p>lcModel prediction conditional on a cluster</p></td>
+        <td><p>Predict trajectories conditional on cluster membership</p></td>
       </tr><tr><td>
-          <p><code><a href="predictPostprob.html">predictPostprob(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="predictPostprob.html">predictPostprob()</a></code> </p>
         </td>
-        <td><p>lcModel posterior probability prediction</p></td>
+        <td><p>Posterior probability for new data</p></td>
       </tr><tr><td>
-          <p><code><a href="prepareData.html">prepareData(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
+          <p><code><a href="prepareData.html">prepareData()</a></code> </p>
         </td>
         <td><p><code>lcMethod</code> estimation step: logic for preparing the training data</p></td>
       </tr><tr><td>
@@ -551,7 +555,7 @@
         </td>
         <td><p>Print lcModels list concisely</p></td>
       </tr><tr><td>
-          <p><code><a href="qqPlot.html">qqPlot(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="qqPlot.html">qqPlot()</a></code> </p>
         </td>
         <td><p>Quantile-quantile plot</p></td>
       </tr><tr><td>
@@ -559,17 +563,17 @@
         </td>
         <td><p>Extract lcModel residuals</p></td>
       </tr><tr><td>
-          <p><code><a href="responseVariable.html">responseVariable(<i>&lt;lcMethod&gt;</i>)</a></code> <code><a href="responseVariable.html">responseVariable(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="responseVariable.html">responseVariable()</a></code> </p>
         </td>
-        <td><p>Extract the response variable</p></td>
+        <td><p>Extract response variable</p></td>
       </tr><tr><td>
           <p><code><a href="sigma.lcModel.html">sigma(<i>&lt;lcModel&gt;</i>)</a></code> </p>
         </td>
         <td><p>Extract residual standard deviation from a lcModel</p></td>
       </tr><tr><td>
-          <p><code><a href="strip.html">strip(<i>&lt;lcMethod&gt;</i>)</a></code> <code><a href="strip.html">strip(<i>&lt;ANY&gt;</i>)</a></code> <code><a href="strip.html">strip(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="strip.html">strip()</a></code> </p>
         </td>
-        <td><p>Reduce the lcModel memory footprint for serialization</p></td>
+        <td><p>Reduce the memory footprint of an object for serialization</p></td>
       </tr><tr><td>
           <p><code><a href="subset.lcModels.html">subset(<i>&lt;lcModels&gt;</i>)</a></code> </p>
         </td>
@@ -587,7 +591,7 @@
         </td>
         <td><p>Sampling times of a lcModel</p></td>
       </tr><tr><td>
-          <p><code><a href="timeVariable.html">timeVariable(<i>&lt;lcMethod&gt;</i>)</a></code> <code><a href="timeVariable.html">timeVariable(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="timeVariable.html">timeVariable()</a></code> </p>
         </td>
         <td><p>Extract the time variable</p></td>
       </tr><tr><td>
@@ -595,7 +599,7 @@
         </td>
         <td><p>Extract the trajectories</p></td>
       </tr><tr><td>
-          <p><code><a href="trajectoryAssignments.html">trajectoryAssignments(<i>&lt;matrix&gt;</i>)</a></code> <code><a href="trajectoryAssignments.html">trajectoryAssignments(<i>&lt;lcModel&gt;</i>)</a></code> </p>
+          <p><code><a href="trajectoryAssignments.html">trajectoryAssignments()</a></code> </p>
         </td>
         <td><p>Get the cluster membership of each trajectory</p></td>
       </tr><tr><td>
@@ -623,7 +627,7 @@
         </td>
         <td><p>Update a lcModel</p></td>
       </tr><tr><td>
-          <p><code><a href="validate.html">validate(<i>&lt;lcMethod&gt;</i>)</a></code> </p>
+          <p><code><a href="validate.html">validate()</a></code> </p>
         </td>
         <td><p><code>lcMethod</code> estimation step: method argument validation logic</p></td>
       </tr><tr><td>

@@ -69,7 +69,7 @@ By default, this method does not do anything."><!-- mathjax --><script src="http
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1><code>lcMethod</code> estimation step: logic for preparing the training data</h1>
-    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/R/method.R" class="external-link"><code>R/method.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/R/generics.R" class="external-link"><code>R/generics.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/HEAD/R/method.R" class="external-link"><code>R/method.R</code></a></small>
     <div class="hidden name"><code>prepareData.Rd</code></div>
     </div>
 
@@ -86,7 +86,9 @@ Example uses:</p><ul><li><p>Transforming the data to another format, e.g., a mat
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for lcMethod</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">prepareData</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for lcMethod</span></span>
 <span><span class="fu">prepareData</span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">verbose</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -103,10 +105,17 @@ Example uses:</p><ul><li><p>Transforming the data to another format, e.g., a mat
 <dt>verbose</dt>
 <dd><p>A <a href="https://henrikbengtsson.github.io/R.utils/reference/Verbose.html" class="external-link">R.utils::Verbose</a> object indicating the level of verbosity.</p></dd>
 
+
+<dt>...</dt>
+<dd><p>Not used.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
+
+<p>An <code>environment</code>.</p>
+
 
 <p>An <code>environment</code> with the prepared data variable(s) that will be passed to <code><a href="preFit.html">preFit()</a></code>.</p>
     </div>
