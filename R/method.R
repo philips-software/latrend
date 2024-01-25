@@ -26,7 +26,6 @@ NULL
 
 #' @export
 #' @name lcMethod-class
-#' @rdname lcMethod-class
 #' @aliases lcMethod
 #' @title lcMethod class
 #' @description `lcMethod` objects represent the specification of a method for longitudinal clustering.
@@ -597,7 +596,7 @@ getCall.lcMethod = function(x, ...) {
 
 #. getArgumentDefaults ####
 #' @export
-#' @name getArgumentDefaults
+#' @rdname getArgumentDefaults
 #' @aliases getArgumentDefaults,lcMethod-method
 #' @description Returns the default arguments associated with the respective `lcMethod` subclass.
 #' These arguments are automatically included into the `lcMethod` object during initialization.
@@ -631,7 +630,7 @@ setMethod('getArgumentDefaults', 'lcMethod', function(object) {
 
 
 #. getCitation ####
-#' @name getCitation
+#' @rdname getCitation
 #' @aliases getCitation,lcMethod-method
 setMethod('getCitation', 'lcMethod', function(object, ...) {
   utils::citation(package = 'base')[0]
@@ -640,7 +639,7 @@ setMethod('getCitation', 'lcMethod', function(object, ...) {
 
 #. getArgumentExclusions ####
 #' @export
-#' @name getArgumentExclusions
+#' @rdname getArgumentExclusions
 #' @aliases getArgumentExclusions,lcMethod-method
 #' @section Implementation:
 #' This function only needs to be implemented if you want to avoid users from specifying
@@ -665,7 +664,7 @@ setMethod('getArgumentExclusions', 'lcMethod', function(object) {
 
 #. getLabel ####
 #' @export
-#' @name getLabel
+#' @rdname getLabel
 #' @aliases getLabel,lcMethod-method
 #' @description Extracts the assigned label from the given `lcMethod` or `lcModel` object.
 #' By default, the label is determined from the `"label"` argument of the `lcMethod` object.
@@ -773,6 +772,7 @@ isArgDefined = function(object, name, envir = environment(object)) {
 #' @rdname is
 #' @title Check if object is of Class
 #' @param x The object to check the class of.
+#' @return `scalar logical`
 #' @keywords internal
 is.lcMethod = function(x) {
   isS4(x) && inherits(x, 'lcMethod')
@@ -784,7 +784,7 @@ is.lcMethod = function(x) {
 #' @name names,lcMethod-method
 #' @rdname names-lcMethod-method
 #' @aliases length,lcMethod-method
-#' @return The number of arguments, as `integer`.
+#' @return The number of arguments, as `scalar integer`.
 setMethod('length', 'lcMethod', function(x) {
   length(x@arguments)
 })
@@ -838,7 +838,7 @@ setMethod('preFit', 'lcMethod', function(method, data, envir, verbose) {
 
 
 # . prepareData ####
-#' @name prepareData
+#' @rdname prepareData
 #' @aliases prepareData,lcMethod-method
 #' @title `lcMethod` estimation step: logic for preparing the training data
 #' @description Note: this function should not be called directly, as it is part of the `lcMethod` [estimation procedure][lcMethod-estimation].
@@ -1143,7 +1143,6 @@ setMethod('strip', 'lcMethod', function(object, ..., classes = 'formula') {
 
 
 #' @export
-#' @name strip
 #' @rdname strip
 #' @aliases strip,ANY-method
 setMethod('strip', 'ANY', function(object, ..., classes = 'formula') {

@@ -170,7 +170,7 @@ setValidity('lcModel', function(object) {
 
 # . clusterTrajectories ####
 #' @export
-#' @name clusterTrajectories
+#' @rdname clusterTrajectories
 #' @aliases clusterTrajectories,lcModel-method
 #' @inheritParams predict.lcModel
 #' @inheritParams predictForCluster
@@ -274,7 +274,7 @@ clusterSizes = function(object, ...) {
 
 #. clusterProportions ####
 #' @export
-#' @name clusterProportions
+#' @rdname clusterProportions
 #' @aliases clusterProportions,lcModel-method
 #' @param ... For `lcModel` objects: Additional arguments passed to [postprob()].
 #' @section lcModel:
@@ -343,7 +343,7 @@ coef.lcModel = function(object, ...) {
 
 # . converged ####
 #' @export
-#' @name converged
+#' @rdname converged
 #' @aliases converged,lcModel-method
 #' @return The default `lcModel` implementation returns `NA`.
 #' @section Implementation:
@@ -413,7 +413,7 @@ df.residual.lcModel = function(object, ...) {
 
 #. externalMetric ####
 #' @export
-#' @name externalMetric
+#' @rdname externalMetric
 #' @aliases externalMetric,lcModel,lcModel-method
 #' @return For `externalMetric(lcModel, lcModel)`: A `numeric` vector of the computed metrics.
 #' @examples
@@ -501,7 +501,7 @@ fitted.lcModel = function(object, ..., clusters = trajectoryAssignments(object))
 
 # . fittedTrajectories ####
 #' @export
-#' @name fittedTrajectories
+#' @rdname fittedTrajectories
 #' @aliases fittedTrajectories,lcModel-method
 #' @param object The model.
 #' @param at The time points at which to compute the id-specific trajectories.
@@ -645,7 +645,7 @@ setMethod('getCitation', 'lcModel', function(object, ...) getCitation(getLcMetho
 
 # . getLcMethod ####
 #' @export
-#' @name getLcMethod
+#' @rdname getLcMethod
 #' @aliases getLcMethod,lcModel-method
 #' @examples
 #' method <- lcMethodRandom("Y", id = "Id", time = "Time")
@@ -705,7 +705,6 @@ ids = function(object) {
 
 #. idVariable ####
 #' @export
-#' @name idVariable
 #' @rdname idVariable
 #' @aliases idVariable,lcModel-method
 #' @examples
@@ -724,7 +723,6 @@ is.lcModel = function(x) {
 
 #. metric ####
 #' @export
-#' @name metric
 #' @rdname metric
 #' @aliases metric,lcModel-method
 #' @examples
@@ -892,7 +890,7 @@ nIds = function(object) {
 
 # . nClusters ####
 #' @export
-#' @name nClusters
+#' @rdname nClusters
 #' @aliases nClusters,lcModel-method
 #' @examples
 #' data(latrendData)
@@ -1569,7 +1567,7 @@ setMethod('responseVariable', 'lcModel', function(object, ...) object@response)
 
 # . estimationTime ####
 #' @export
-#' @name estimationTime
+#' @rdname estimationTime
 #' @aliases estimationTime,lcModel-method
 #' @description For `lcModel`: Get the estimation time of the model, determined by the time taken for the associated [fit()] function to finish.
 #' @examples

@@ -16,6 +16,9 @@ is.lcModels(x)
 \arguments{
 \item{x}{The object to check the class of.}
 }
+\value{
+\verb{scalar logical}
+}
 \description{
 Check if object is of Class
 }

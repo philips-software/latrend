@@ -13,7 +13,7 @@
 \item{x}{The \code{lcMethod} object.}
 }
 \value{
-The number of arguments, as \code{integer}.
+The number of arguments, as \verb{scalar integer}.
 
 A \verb{character vector} of argument names.
 }
