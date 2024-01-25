@@ -6,6 +6,7 @@
 \alias{externalMetric,lcModel,lcModel-method}
 \alias{externalMetric,lcModels,missing-method}
 \alias{externalMetric,lcModels,character-method}
+\alias{externalMetric,lcModels,lcModel-method}
 \alias{externalMetric,lcModels,lcModels-method}
 \alias{externalMetric,list,lcModel-method}
 \title{Compute external model metric(s)}

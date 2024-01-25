@@ -45,7 +45,7 @@
 \arguments{
 \item{object}{The model.}
 
-\item{...}{For \code{lcModel} objects: Arguments passed to \link{predict.lcModel}.}
+\item{...}{Not used.}
 
 \item{method}{An object inheriting from \code{lcMethod} with all its arguments having been evaluated and finalized.}
 

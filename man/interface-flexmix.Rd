@@ -62,7 +62,7 @@
 \arguments{
 \item{object}{The \code{lcModel} object.}
 
-\item{...}{Additional arguments.}
+\item{...}{Not used.}
 
 \item{method}{An object inheriting from \code{lcMethod} with all its arguments having been evaluated and finalized.}
 

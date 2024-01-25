@@ -23,6 +23,8 @@
 \S4method{fit}{lcMethodAkmedoids}(method, data, envir, verbose, ...)
 }
 \arguments{
+\item{...}{Not used.}
+
 \item{method}{An object inheriting from \code{lcMethod} with all its arguments having been evaluated and finalized.}
 
 \item{data}{A \code{data.frame} representing the transformed training data.}

@@ -1,21 +1,3 @@
-#' @name latrend-generics
-#' @title Method- and model-specific generics defined by the latrend package
-#' @description List of S4 generic methods which have no general use other than supporting
-#' functions with signatures of `lcMethod` or `lcModel`.
-#' @param object The object.
-#' @param method The method.
-#' @param data `data.frame`.
-#' @param newdata `data.frame` of newdata.
-#' @param name Metric name.
-#' @param envir `environment`.
-#' @param what Parameter.
-#' @param cluster Cluster name.
-#' @param verbose [R.utils::Verbose].
-#' @param ... Arguments.
-#' @keywords internal
-NULL
-
-
 # nClusters ####
 #' @export
 #' @name nClusters
@@ -127,8 +109,9 @@ setGeneric('clusterTrajectories', function(object, ...) {
 
 # compose ####
 #' @export
-#' @name latrend-generics
-setGeneric('compose', def = function(method, envir, ...) {
+#' @name compose
+#' @param ... Not used.
+setGeneric('compose', function(method, envir, ...) {
   newmethod <- standardGeneric('compose')
 
   assert_that(
@@ -246,7 +229,9 @@ setGeneric('estimationTime', function(object, unit = 'secs', ...) {
 
 # fit ####
 #' @export
-#' @name latrend-generics
+#' @name fit
+#' @param ... Not used.
+#' @return The fitted object, inheriting from `lcModel`.
 setGeneric('fit', function(method, data, envir, verbose, ...) {
   dateStart = Sys.time()
   start = .tic()
@@ -544,7 +529,8 @@ setGeneric('plotTrajectories', function(object, ...) standardGeneric('plotTrajec
 
 # postFit ####
 #' @export
-#' @name latrend-generics
+#' @name postFit
+#' @param ... Not used.
 setGeneric('postFit', function(method, data, model, envir, verbose, ...) {
   model <- standardGeneric('postFit')
 
@@ -761,7 +747,9 @@ setGeneric('predictPostprob', function(object, newdata = NULL, ...) {
 
 # prepareData ####
 #' @export
-#' @name latrend-generics
+#' @name prepareData
+#' @param ... Not used.
+#' @return An `environment`.
 setGeneric('prepareData', function(method, data, verbose, ...) {
   envir <- standardGeneric('prepareData')
   assert_that(
@@ -778,8 +766,8 @@ setGeneric('prepareData', function(method, data, verbose, ...) {
 
 # preFit ####
 #' @export
-#' @name latrend-generics
-#' @aliases preFit-method
+#' @name preFit
+#' @param ... Not used.
 setGeneric('preFit', function(method, data, envir, verbose, ...) {
   modelEnv <- standardGeneric('preFit')
   assert_that(
@@ -945,7 +933,10 @@ setGeneric('trajectoryAssignments', function(object, ...) {
 
 # validate ####
 #' @export
-#' @name latrend-generics
+#' @name validate
+#' @param ... Not used.
+#' @return Either `TRUE` if all validation checks passed,
+#' or a `scalar character` containing a description of the failed validation checks.
 setGeneric('validate', function(method, data, envir, ...) {
   validationResult <- standardGeneric('validate')
 
