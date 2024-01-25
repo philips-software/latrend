@@ -212,7 +212,7 @@ globalVariables(
   c(
     '.', '..id', '..time', '..response',
     '.Component', '.Fill', '.name', '.group', '.method', '.ROW_INDEX', '.Mean', '.Block',
-    'AllNA',
+    'akclustr', 'AllNA',
     'Cluster', 'Class', 'cl',
     'i', 'i.N', 'iseed', 'Include', 'Id',
     'k',

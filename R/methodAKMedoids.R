@@ -1,7 +1,6 @@
 #' @include method.R methodMatrix.R
 
 #' @name interface-akmedoids
-#' @rdname interface-akmedoids
 #' @title akmedoids interface
 #' @seealso [lcMethodAkmedoids] `akmedoids::akclustr`
 #' @keywords internal
@@ -20,7 +19,7 @@ setClass('lcMethodAkmedoids', contains = 'lcMatrixMethod')
 #' The following external arguments are ignored: traj, id_field, k
 #' @examples
 #' data(latrendData)
-#' if (require("akmedoids")) {
+#' if (rlang::is_installed("akmedoids")) {
 #'   method <- lcMethodAkmedoids(response = "Y", time = "Time", id = "Id", nClusters = 3)
 #'   model <- latrend(method, data = latrendData)
 #' }
@@ -36,6 +35,7 @@ lcMethodAkmedoids = function(
   crit = 'Calinski_Harabasz', # Default silhouette width results in: Error in smooth.spline(x, y) : 'tol' must be strictly positive and finite
   ...
 ) {
+  .loadOptionalPackage('akmedoids')
   mc = match.call.all()
   mc$Class = 'lcMethodAkmedoids'
   do.call(new, as.list(mc))
@@ -45,7 +45,7 @@ lcMethodAkmedoids = function(
 setMethod('getArgumentDefaults', 'lcMethodAkmedoids', function(object) {
   c(
     formals(lcMethodAkmedoids),
-    formals(akmedoids::akclustr),
+    formals(akclustr),
     callNextMethod()
   )
 })
@@ -72,14 +72,14 @@ setMethod('getShortName', 'lcMethodAkmedoids', function(object) 'akm')
 #' @rdname interface-akmedoids
 #' @inheritParams fit
 setMethod('fit', 'lcMethodAkmedoids', function(method, data, envir, verbose, ...) {
-  args = as.list(method, args = akmedoids::akclustr)
+  args = as.list(method, args = akclustr)
   args$traj = envir$dataMat
   args$k = method$nClusters
   args$id_field = FALSE
 
   assert_that(method$nClusters %between% c(3, 20), msg = 'akmedoids only supports nClusters = 3, ..., 20')
 
-  model = do.call(akmedoids::akclustr, args)
+  model = do.call(akclustr, args)
 
   clusNames = make.clusterNames(method$nClusters)
 
