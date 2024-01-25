@@ -4,9 +4,11 @@
 \alias{qqPlot}
 \title{Quantile-quantile plot}
 \usage{
-qqPlot(object, byCluster = FALSE, ...)
+qqPlot(model, byCluster = FALSE, ...)
 }
 \arguments{
+\item{model}{\code{lcModel}}
+
 \item{byCluster}{Whether to plot the Q-Q line per cluster}
 
 \item{...}{Additional arguments passed to \link{residuals.lcModel}, \code{\link[qqplotr:stat_qq_band]{qqplotr::geom_qq_band()}}, \code{\link[qqplotr:stat_qq_line]{qqplotr::stat_qq_line()}}, and \code{\link[qqplotr:stat_qq_point]{qqplotr::stat_qq_point()}}.}

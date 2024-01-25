@@ -1468,11 +1468,11 @@ setMethod('postprob', 'lcModel', function(object, ...) {
 })
 
 
-# . QQ plot ####
 #' @export
 #' @name qqPlot
 #' @title Quantile-quantile plot
 #' @description Plot the quantile-quantile (Q-Q) plot for the fitted `lcModel` object. This function is based on the \pkg{qqplotr} package.
+#' @param model `lcModel`
 #' @param byCluster Whether to plot the Q-Q line per cluster
 #' @param ... Additional arguments passed to [residuals.lcModel], [qqplotr::geom_qq_band()], [qqplotr::stat_qq_line()], and [qqplotr::stat_qq_point()].
 #' @return A `ggplot` object.
@@ -1486,23 +1486,23 @@ setMethod('postprob', 'lcModel', function(object, ...) {
 #'   qqPlot(model)
 #' }
 #' @family lcModel functions
-qqPlot = function(object, byCluster = FALSE, ...) {
+qqPlot = function(model, byCluster = FALSE, ...) {
   .loadOptionalPackage('ggplot2')
+  .loadOptionalPackage('qqplotr')
 
   assert_that(
-    is.lcModel(object),
+    is.lcModel(model),
     is.flag(byCluster)
   )
 
-  res = residuals(object, ...)
-  mdata = model.data(object)
+  res = residuals(model, ...)
+  mdata = model.data(model)
   assert_that(!is.null(mdata), msg = 'no model data available')
 
-  idIndexColumn = factor(mdata[[idVariable(object)]], levels = ids(object)) %>%
+  idIndexColumn = factor(mdata[[idVariable(model)]], levels = ids(model)) %>%
     as.integer()
-  rowClusters = trajectoryAssignments(object)[idIndexColumn]
+  rowClusters = trajectoryAssignments(model)[idIndexColumn]
 
-  requireNamespace('qqplotr')
   p = ggplot2::ggplot(
       data = data.frame(Cluster = rowClusters, res = res),
       mapping = ggplot2::aes(sample = res)
