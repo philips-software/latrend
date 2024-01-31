@@ -24,7 +24,7 @@ Authors@R:
              role = "ctb",
              email = "e.r.v.d.heuvel@tue.nl"),
       person(given = "Koninklijke Philips N.V.", role = "cph"))
-URL: https://github.com/philips-software/latrend
+URL: https://github.com/philips-software/latrend, https://philips-software.github.io/latrend/
 BugReports: https://github.com/philips-software/latrend/issues
 License: GPL (>= 2)
 Encoding: UTF-8
