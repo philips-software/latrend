@@ -342,9 +342,9 @@ containing the fitted models.</p>
 <span><span class="co">#&gt; Number of data generating functions: 8</span></span>
 <span><span class="co">#&gt; Number of analyzing procedures: 6</span></span>
 <span><span class="co">#&gt; Number of replications: 1</span></span>
-<span><span class="co">#&gt; Estimated replications per hour: 330</span></span>
-<span><span class="co">#&gt; Start of the simulation: 2024-01-25 10:27:31.375941</span></span>
-<span><span class="co">#&gt; End of the simulation: 2024-01-25 10:27:42.255088</span></span></code></pre></div>
+<span><span class="co">#&gt; Estimated replications per hour: 328</span></span>
+<span><span class="co">#&gt; Start of the simulation: 2024-02-01 10:26:54.482824</span></span>
+<span><span class="co">#&gt; End of the simulation: 2024-02-01 10:27:05.432124</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="analyzing-the-results">Analyzing the results<a class="anchor" aria-label="anchor" href="#analyzing-the-results"></a>
@@ -369,23 +369,25 @@ criterion (BIC). For each data scenario, we identify the cluster
 solution that minimizes the BIC.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resultsTable</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>K <span class="op">=</span> <span class="va">nClusters</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.min</a></span><span class="op">(</span><span class="va">BIC</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">numTraj</span>, <span class="va">randomScales</span>, <span class="va">data.seed</span>, <span class="va">method</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="co">#&gt;     numTraj randomScales data.seed       method K</span></span>
-<span><span class="co">#&gt;  1:      50          0.1         1 lcMethodGCKM 2</span></span>
-<span><span class="co">#&gt;  2:      50          0.1         1  lcMethodKML 2</span></span>
-<span><span class="co">#&gt;  3:      50          0.1         2 lcMethodGCKM 2</span></span>
-<span><span class="co">#&gt;  4:      50          0.1         2  lcMethodKML 2</span></span>
-<span><span class="co">#&gt;  5:      50          0.5         1 lcMethodGCKM 2</span></span>
-<span><span class="co">#&gt;  6:      50          0.5         1  lcMethodKML 2</span></span>
-<span><span class="co">#&gt;  7:      50          0.5         2 lcMethodGCKM 2</span></span>
-<span><span class="co">#&gt;  8:      50          0.5         2  lcMethodKML 2</span></span>
-<span><span class="co">#&gt;  9:     250          0.1         1 lcMethodGCKM 2</span></span>
-<span><span class="co">#&gt; 10:     250          0.1         1  lcMethodKML 2</span></span>
-<span><span class="co">#&gt; 11:     250          0.1         2 lcMethodGCKM 2</span></span>
-<span><span class="co">#&gt; 12:     250          0.1         2  lcMethodKML 2</span></span>
-<span><span class="co">#&gt; 13:     250          0.5         1 lcMethodGCKM 2</span></span>
-<span><span class="co">#&gt; 14:     250          0.5         1  lcMethodKML 2</span></span>
-<span><span class="co">#&gt; 15:     250          0.5         2 lcMethodGCKM 2</span></span>
-<span><span class="co">#&gt; 16:     250          0.5         2  lcMethodKML 2</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;numTraj, randomScales, data.seed, method&gt;</span></span>
+<span><span class="co">#&gt;     numTraj randomScales data.seed       method     K</span></span>
+<span><span class="co">#&gt;       &lt;num&gt;        &lt;num&gt;     &lt;int&gt;       &lt;char&gt; &lt;int&gt;</span></span>
+<span><span class="co">#&gt;  1:      50          0.1         1 lcMethodGCKM     2</span></span>
+<span><span class="co">#&gt;  2:      50          0.1         1  lcMethodKML     2</span></span>
+<span><span class="co">#&gt;  3:      50          0.1         2 lcMethodGCKM     2</span></span>
+<span><span class="co">#&gt;  4:      50          0.1         2  lcMethodKML     2</span></span>
+<span><span class="co">#&gt;  5:      50          0.5         1 lcMethodGCKM     2</span></span>
+<span><span class="co">#&gt;  6:      50          0.5         1  lcMethodKML     2</span></span>
+<span><span class="co">#&gt;  7:      50          0.5         2 lcMethodGCKM     2</span></span>
+<span><span class="co">#&gt;  8:      50          0.5         2  lcMethodKML     2</span></span>
+<span><span class="co">#&gt;  9:     250          0.1         1 lcMethodGCKM     2</span></span>
+<span><span class="co">#&gt; 10:     250          0.1         1  lcMethodKML     2</span></span>
+<span><span class="co">#&gt; 11:     250          0.1         2 lcMethodGCKM     2</span></span>
+<span><span class="co">#&gt; 12:     250          0.1         2  lcMethodKML     2</span></span>
+<span><span class="co">#&gt; 13:     250          0.5         1 lcMethodGCKM     2</span></span>
+<span><span class="co">#&gt; 14:     250          0.5         1  lcMethodKML     2</span></span>
+<span><span class="co">#&gt; 15:     250          0.5         2 lcMethodGCKM     2</span></span>
+<span><span class="co">#&gt; 16:     250          0.5         2  lcMethodKML     2</span></span></code></pre></div>
 <p>Column <em>K</em> of the table shows the selected number of clusters
 for each scenario. This shows that estimating the number of clusters by
 minimizing the BIC results in a consistent overestimation of the number
@@ -408,7 +410,9 @@ in which scenarios the methods were able to recover the reference
 cluster assignments.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resultsTable</span><span class="op">[</span><span class="va">nClusters</span> <span class="op">&gt;</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span>ARI <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">ARI</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">nClusters</span>, <span class="va">numTraj</span>, <span class="va">randomScales</span>, <span class="va">method</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; Key: &lt;nClusters, numTraj, randomScales, method&gt;</span></span>
 <span><span class="co">#&gt;    nClusters numTraj randomScales       method       ARI</span></span>
+<span><span class="co">#&gt;        &lt;int&gt;   &lt;num&gt;        &lt;num&gt;       &lt;char&gt;     &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:         2      50          0.1 lcMethodGCKM 1.0000000</span></span>
 <span><span class="co">#&gt; 2:         2      50          0.1  lcMethodKML 1.0000000</span></span>
 <span><span class="co">#&gt; 3:         2      50          0.5 lcMethodGCKM 0.4740203</span></span>
@@ -423,7 +427,9 @@ clusters). Moreover, it is apparent that KmL performs much worse under
 high random scale than GCKM.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resultsTable</span><span class="op">[</span><span class="va">nClusters</span> <span class="op">&gt;</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span>ARI <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">ARI</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">randomScales</span>, <span class="va">nClusters</span>, <span class="va">method</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; Key: &lt;randomScales, nClusters, method&gt;</span></span>
 <span><span class="co">#&gt;    randomScales nClusters       method       ARI</span></span>
+<span><span class="co">#&gt;           &lt;num&gt;     &lt;int&gt;       &lt;char&gt;     &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:          0.1         2 lcMethodGCKM 0.9940411</span></span>
 <span><span class="co">#&gt; 2:          0.1         2  lcMethodKML 1.0000000</span></span>
 <span><span class="co">#&gt; 3:          0.5         2 lcMethodGCKM 0.4630946</span></span>
@@ -442,7 +448,9 @@ down significantly for the two-cluster solution, but hardly any
 improvement is gained for the three-cluster solution.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resultsTable</span><span class="op">[</span><span class="va">randomScales</span> <span class="op">==</span> <span class="fl">.1</span>, <span class="fu">.</span><span class="op">(</span>WMAE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">WMAE</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">nClusters</span>, <span class="va">method</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; Key: &lt;nClusters, method&gt;</span></span>
 <span><span class="co">#&gt;    nClusters       method      WMAE</span></span>
+<span><span class="co">#&gt;        &lt;int&gt;       &lt;char&gt;     &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:         1 lcMethodGCKM 0.2627083</span></span>
 <span><span class="co">#&gt; 2:         1  lcMethodKML 0.2627083</span></span>
 <span><span class="co">#&gt; 3:         2 lcMethodGCKM 0.1120481</span></span>
@@ -451,7 +459,9 @@ improvement is gained for the three-cluster solution.</p>
 magnitude of the random scale.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resultsTable</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>WMAE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">WMAE</span><span class="op">)</span><span class="op">)</span>, keyby <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">randomScales</span>, <span class="va">nClusters</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; Key: &lt;randomScales, nClusters&gt;</span></span>
 <span><span class="co">#&gt;    randomScales nClusters      WMAE</span></span>
+<span><span class="co">#&gt;           &lt;num&gt;     &lt;int&gt;     &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:          0.1         1 0.2627083</span></span>
 <span><span class="co">#&gt; 2:          0.1         2 0.1120077</span></span>
 <span><span class="co">#&gt; 3:          0.5         1 0.4563443</span></span>
