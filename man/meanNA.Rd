@@ -7,7 +7,7 @@
 meanNA(x, ...)
 }
 \arguments{
-\item{x}{an \R object.  Currently there are methods for
+\item{x}{An \R object.  Currently there are methods for
     numeric/logical vectors and \link[base:Dates]{date},
     \link[base]{date-time} and \link[base]{time interval} objects.  Complex vectors
     are allowed for \code{trim = 0}, only.}

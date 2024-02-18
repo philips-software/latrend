@@ -105,6 +105,7 @@ Model functions:
 Useful links:
 \itemize{
   \item \url{https://github.com/philips-software/latrend}
+  \item \url{https://philips-software.github.io/latrend/}
   \item Report bugs at \url{https://github.com/philips-software/latrend/issues}
 }
 

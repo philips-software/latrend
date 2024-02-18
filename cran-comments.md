@@ -1,3 +1,8 @@
+# v1.6.0
+* Resolved CRAN problems (#147)
+* Re-added clusterCrit as dependency (#145)
+* Ordering and labeling of cluster trajectories in plot (#144, #142)
+
 # v1.5.1
 * Resolved CRAN errors and warnings
 * Alternative implementation of ASW and Dunn index due to removal of clusterCrit package from CRAN (#131, #132)
