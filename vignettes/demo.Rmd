@@ -1,7 +1,6 @@
 ---
 title: "Demonstration of latrend package"
 author: "Niek Den Teuling"
-date: "2021-01-05"
 output: 
   rmarkdown::html_vignette:
     toc: true

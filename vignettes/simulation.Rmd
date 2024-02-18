@@ -1,7 +1,6 @@
 ---
 title: "Conducting a simulation study"
 author: "Niek Den Teuling"
-date: "2021-09-29"
 output: 
   rmarkdown::html_vignette:
     toc: true

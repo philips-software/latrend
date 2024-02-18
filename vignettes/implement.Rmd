@@ -1,7 +1,6 @@
 ---
 title: "Implementing new methods"
 author: "Niek Den Teuling"
-date: "2021-01-16"
 output: 
   rmarkdown::html_vignette:
     toc: true
