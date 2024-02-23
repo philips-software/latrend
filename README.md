@@ -8,6 +8,8 @@
 <!-- badges: end -->
 The `latrend` package provides a framework for clustering longitudinal datasets in a standardized way. The name is short for _latent-class trend (analysis)_, referring to the discovery of hidden trends in the data. The package provides interfaces to various R packages for conducting this type of analysis.
 
+The package is described in detail in the pre-print available at https://arxiv.org/abs/2402.14621
+
 # Features
 * **Unified cluster analysis**, independent of the underlying algorithms used. Enabling users to compare the performance of various longitudinal cluster methods on the case study at hand.
 * Supports many different methods for longitudinal clustering out of the box (see the list of supported packages below).
