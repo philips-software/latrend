@@ -19,7 +19,7 @@ The package is described in detail in the pre-print available at https://arxiv.o
 * The structured and unified analysis approach enables **simulation studies** for comparing methods.
 * Standardized **model validation** for all methods through bootstrapping or k-fold cross-validation.
 
-See the [news page](https://github.com/philips-software/latrend/blob/master/NEWS.md) for the latest updates.
+See the [release notes page](https://github.com/philips-software/latrend/blob/master/cran-comments.md) for the latest updates.
 
 # Installation
 The latest release of _latrend_ can be installed from CRAN by running:
