@@ -890,7 +890,7 @@ setGeneric('trajectories', function(
     keepIds = as.data.table(data)[, .(AllNA = all(is.na(get(..response)))), by = c(id)] %>%
       .[AllNA == FALSE, get(..id)]
 
-    data = as.data.table(data)[get(id) %in% keepIds]
+    data = as.data.table(data)[get(..id) %in% keepIds]
 
     if (is.factor(data)) {
       data[[id]] = droplevels(data[[id]], exclude = NULL)

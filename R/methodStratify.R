@@ -219,7 +219,7 @@ setMethod('fit', 'lcMethodStratify', function(method, data, envir, verbose, ...)
   # determine output order
   ids = make.ids(data[[id]])
 
-  out[match(ids, get(id)), Cluster]
+  out[match(ids, .id), Cluster, env = list(.id = id)]
 }
 
 

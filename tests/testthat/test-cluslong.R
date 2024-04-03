@@ -222,3 +222,13 @@ test_that('trajectory length warning', {
   expect_warning(latrend(mTest, data = testLongData), regexp = 'warnTrajectoryLength')
   options(latrend.warnTrajectoryLength = 0)
 })
+
+
+test_that('"time" column', {
+  timeData = copy(testLongData)
+  setnames(timeData, 'Assessment', 'time')
+  method = lcMethodTestKML(time = 'time')
+  model = latrend(method, data = timeData)
+  expect_is(model, 'lcModel')
+})
+

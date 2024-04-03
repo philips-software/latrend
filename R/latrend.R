@@ -923,7 +923,9 @@ testFold = function(data, fold, id, folds, seed) {
     all(ids %in% data[[id]])
   )
 
-  newdata = data[data[[id]] %in% ids, ]
+  rowIds = data[[id]]
+
+  newdata = data[rowIds %in% ids, ]
   if (is.factor(data[[id]])) {
     newdata[[id]] = droplevels(newdata[[id]])
   }

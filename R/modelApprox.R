@@ -13,10 +13,8 @@ setClass('lcApproxModel', contains = 'lcModel')
 #' @rdname lcApproxModel-class
 #' @inheritParams fitted.lcModel
 fitted.lcApproxModel = function(object, ..., clusters = trajectoryAssignments(object)) {
-  newdata = subset(
-    model.data(object),
-    select = c(idVariable(object), timeVariable(object), responseVariable(object))
-  )
+  columns = c(idVariable(object), timeVariable(object), responseVariable(object))
+  newdata = subset(model.data(object), select = columns)
   pred = predict(object, newdata = newdata, useCluster = FALSE)
   transformFitted(pred, model = object, clusters = clusters)
 }
@@ -40,7 +38,7 @@ setMethod('predictForCluster', 'lcApproxModel',
 
   # check if we need to do any interpolation
   if (all(newtimes %in% clusTimes)) {
-    pred = clusTrajs[match(newtimes, get(time)), get(resp)]
+    pred = clusTrajs[match(newtimes, .time), .resp, env = list(.time = time, .resp = resp)]
     return(pred)
   }
 
@@ -55,8 +53,9 @@ setMethod('predictForCluster', 'lcApproxModel',
   }
 
   dtpred = clusTrajs[,
-    lapply(.SD, function(y) approxFun(x = get(time), y = y, xout = newtimes)$y),
-    keyby = Cluster, .SDcols = -c(time)
+    lapply(.SD, function(y) approxFun(x = .time, y = y, xout = newtimes)$y),
+    keyby = Cluster, .SDcols = -c(time),
+    env = list(.time = time)
   ]
 
   dtpred[[resp]]

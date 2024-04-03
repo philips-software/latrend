@@ -23,3 +23,14 @@ testLongData = generateLongData(
   .[, Cluster := Class] %>%
   .[, Traj := factor(Traj)] %>%
   .[]
+
+# set up capture functions to test for wrong column name handling
+response = function(...) stop('response column mishandling')
+cluster = function(...) stop('cluster column mishandling')
+id = function(...) stop('id column mishandling')
+
+Time = function(...) stop('Time name evaluation')
+Value = function(...) stop('Value name evaluation')
+Assessment = function(...) stop('Assessment name evaluation')
+Cluster = function(...) stop('Cluster name evaluation')
+Traj = function(...) stop('Traj name evaluation')

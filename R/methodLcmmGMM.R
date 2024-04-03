@@ -146,7 +146,7 @@ gmm_prepare = function(method, data, envir, verbose, ...) {
   # Check & process data
   id = idVariable(method)
   trainData = as.data.table(data) %>%
-    .[, c(id) := factor(get(id)) %>% as.integer()]
+    .[, c(id) := factor(get(..id)) %>% as.integer()]
 
   # Create argument list
   args = as.list(method, args = lcmm::hlme)

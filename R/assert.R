@@ -361,7 +361,7 @@ are_trajectories_length = function(data, min = 1, id, time) {
   )
 
   data = as.data.table(data)
-  all(data[, uniqueN(get(time)), by = c(id)]$V1 >= min)
+  all(data[, uniqueN(get(..time)), by = c(id)]$V1 >= min)
 }
 
 assertthat::on_failure(are_trajectories_length) = function(call, env) {
@@ -370,7 +370,7 @@ assertthat::on_failure(are_trajectories_length) = function(call, env) {
   time = eval(call$time, env)
   min = eval(call$min, env)
 
-  dtTraj = data[, .(Moments = uniqueN(get(time))), by = c(id)] %>%
+  dtTraj = data[, .(Moments = uniqueN(get(..time))), by = c(id)] %>%
     .[Moments < min]
 
   sprintf(
@@ -391,7 +391,12 @@ are_trajectories_equal_length = function(data, id, time) {
   data = as.data.table(data)
   nTimes = uniqueN(data[[time]])
 
-  all(data[, .N == nTimes && uniqueN(get(time)) == nTimes, by = c(id)]$V1)
+  all(
+    data[,
+      .N == nTimes && uniqueN(get(..time)) == nTimes,
+      by = c(id)
+    ]$V1
+  )
 }
 
 assertthat::on_failure(are_trajectories_equal_length) = function(call, env) {
@@ -401,7 +406,7 @@ assertthat::on_failure(are_trajectories_equal_length) = function(call, env) {
 
   nTimes = uniqueN(data[[time]])
   # check for trajectories with multiple observations at the same moment in time
-  dtMult = data[, .(HasMult = anyDuplicated(get(time))), by = c(id)] %>%
+  dtMult = data[, .(HasMult = anyDuplicated(get(..time))), by = c(id)] %>%
     .[HasMult == TRUE]
 
   if (any(dtMult$HasMult)) {
@@ -437,7 +442,7 @@ assertthat::on_failure(have_trajectories_noNA) = function(call, env) {
   id = eval(call$id, env)
   response = eval(call$response, env)
 
-  dtMissing = data[, .(NaCount = sum(is.na(get(response)))), by = c(id)] %>%
+  dtMissing = data[, .(NaCount = sum(is.na(get(..response)))), by = c(id)] %>%
     .[NaCount > 0]
 
   sprintf(

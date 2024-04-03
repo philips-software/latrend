@@ -223,8 +223,9 @@ setMethod('clusterTrajectories', 'lcModelPartition',
 
   # compute cluster trajectories at all moments in time
   clusTrajs = data[,
-    .(Value = center(get(response))),
-    keyby = .(Cluster = rowClusters, Time = get(time))
+    .(Value = center(get(..response))),
+    keyby = .(Cluster = rowClusters, Time = .time),
+    env = list(.time = time)
   ]
 
   if (uniqueN(trajClusters) < nClusters(object)) {

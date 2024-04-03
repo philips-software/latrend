@@ -68,7 +68,7 @@ setMethod('plotClusterTrajectories', 'data.frame', function(
   )
 
   clusTrajData = as.data.table(object) %>%
-    .[, .(Value = center(get(response))), keyby = c(cluster, time)] %>%
+    .[, .(Value = center(get(..response))), keyby = c(cluster, time)] %>%
     setnames('Value', response)
 
   clusterNames = as.character(unique(clusTrajData[[cluster]]))

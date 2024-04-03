@@ -1696,8 +1696,9 @@ setMethod('trajectories', 'lcModel', function(object, ...) {
   id = idVariable(object)
   time = timeVariable(object)
   res = responseVariable(object)
+  columns = c(id, time, res) # needed because of strange dynamic evaluation by data.table
 
-  trajdata = subset(data, select = c(id, time, res))
+  trajdata = subset(data, select = columns)
 
   trajectories(trajdata, id = id, time = time, response = res, ...)
 })
