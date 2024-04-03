@@ -22,7 +22,7 @@ lcMethodTestLcmmGBTM = function(..., init = NULL, seed = 1) {
 
 # lme4 ####
 lcMethodTestGCKM = function(...) {
-  lcMethodGCKM(formula = Value ~ (1 | Traj), ...)
+  lcMethodGCKM(formula = Value ~ (1 | id), ...)
 }
 
 
@@ -36,7 +36,7 @@ lcMethodTestStratify = function(...) {
 }
 
 lcMethodTestLMKM = function(...) {
-  lcMethodLMKM(formula = Value ~ Assessment, ..., seed = 1)
+  lcMethodLMKM(formula = Value ~ time, ..., seed = 1)
 }
 
 

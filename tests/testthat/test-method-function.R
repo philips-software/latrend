@@ -3,8 +3,8 @@ rngReset()
 test_that('default', {
   clusfun = function(data, ...) {
     clusters = as.data.table(data) %>%
-      {.[, mean(Value) > 0, by = Traj]$V1} %>%
-      factor(levels = c(F,T), labels = c('Low', 'High'))
+      {.[, mean(Value) > 0, by = id]$V1} %>%
+      factor(levels = c(F, T), labels = c('Low', 'High'))
 
     lcModelPartition(data = data, response = 'Value', trajectoryAssignments = clusters)
   }

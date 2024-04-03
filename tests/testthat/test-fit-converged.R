@@ -1,11 +1,11 @@
-method = lcMethodLMKM(Value ~ Assessment, id = 'Traj', time = 'Assessment', nClusters = 2)
+method = lcMethodLMKM(Value ~ time, id = 'id', time = 'time', nClusters = 2)
 
 setClass('lcMethodConv', contains = 'lcMethod')
 
 lcMethodConv = function(
   response = 'Value',
-  time = 'Assessment',
-  id = 'Traj',
+  time = 'time',
+  id = 'id',
   nClusters = 1,
   nAttempts = 1,
   ...

@@ -113,7 +113,7 @@ test_that('no_trajectories_duplicate_time', {
   )
 
   expect_true(
-    no_trajectories_duplicate_time(testLongData, id = 'Traj', time = 'Assessment')
+    no_trajectories_duplicate_time(testLongData, id = 'id', time = 'time')
   )
 
   expect_false(
@@ -131,7 +131,7 @@ test_that('no_empty_trajectories', {
   )
 
   expect_true(
-    no_empty_trajectories(testLongData, id = 'Traj')
+    no_empty_trajectories(testLongData, id = 'id')
   )
 
   expect_true(
@@ -152,50 +152,50 @@ test_that('no_empty_trajectories', {
 
 test_that('have_trajectories_noNA', {
   expect_true(
-    have_trajectories_noNA(testLongData, id = 'Traj', response = 'Value')
+    have_trajectories_noNA(testLongData, id = 'id', response = 'Value')
   )
 
   expect_false(
-    have_trajectories_noNA(copy(testLongData)[2, Value := NA], id = 'Traj', response = 'Value')
+    have_trajectories_noNA(copy(testLongData)[2, Value := NA], id = 'id', response = 'Value')
   )
 
   expect_true(
-    have_trajectories_noNA(copy(testLongData)[3, Value := Inf], id = 'Traj', response = 'Value')
+    have_trajectories_noNA(copy(testLongData)[3, Value := Inf], id = 'id', response = 'Value')
   )
 })
 
 test_that('are_trajectories_length', {
   expect_true(
-    are_trajectories_length(testLongData, id = 'Traj', time = 'Assessment', min = 1L)
+    are_trajectories_length(testLongData, id = 'id', time = 'time', min = 1L)
   )
 
   expect_true(
-    are_trajectories_length(testLongData, id = 'Traj', time = 'Assessment', min = uniqueN(testLongData$Assessment))
+    are_trajectories_length(testLongData, id = 'id', time = 'time', min = uniqueN(testLongData$time))
   )
 
   expect_false(
-    are_trajectories_length(testLongData, id = 'Traj', time = 'Assessment', min = uniqueN(testLongData$Assessment) + 1L)
+    are_trajectories_length(testLongData, id = 'id', time = 'time', min = uniqueN(testLongData$time) + 1L)
   )
 })
 
 test_that('are_trajectories_equal_length', {
   expect_true(
-    are_trajectories_equal_length(testLongData, id = 'Traj', time = 'Assessment')
+    are_trajectories_equal_length(testLongData, id = 'id', time = 'time')
   )
 
   expect_false(
-    are_trajectories_equal_length(testLongData[2:.N], id = 'Traj', time = 'Assessment')
+    are_trajectories_equal_length(testLongData[2:.N], id = 'id', time = 'time')
   )
 })
 
 test_that('no_trajectories_allNA', {
   expect_true(
-    no_trajectories_allNA(testLongData, id = 'Traj', response = 'Value')
+    no_trajectories_allNA(testLongData, id = 'id', response = 'Value')
   )
 
   naData = copy(testLongData) %>%
-    .[Traj == unique(Traj)[2], Value := NA]
+    .[id == unique(id)[2], Value := NA]
   expect_false(
-    no_trajectories_allNA(naData, id = 'Traj', response = 'Value')
+    no_trajectories_allNA(naData, id = 'id', response = 'Value')
   )
 })

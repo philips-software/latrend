@@ -46,7 +46,7 @@ test_that('gmm', {
 
 test_that('gmm with init=lme', {
   skip_on_cran()
-  method = make.gmm(id = 'Traj', time = 'Assessment', response = 'Value', init = 'lme')
+  method = make.gmm(id = 'id', time = 'time', response = 'Value', init = 'lme')
   model = latrend(method, testLongData)
   expect_true(is.lcModel(model))
 })
@@ -54,7 +54,7 @@ test_that('gmm with init=lme', {
 
 test_that('gmm with init=lme.random', {
   skip_on_cran()
-  method = make.gmm(id = 'Traj', time = 'Assessment', response = 'Value', init = 'lme.random')
+  method = make.gmm(id = 'id', time = 'time', response = 'Value', init = 'lme.random')
   model = latrend(method, testLongData)
   expect_true(is.lcModel(model))
 })
@@ -62,7 +62,7 @@ test_that('gmm with init=lme.random', {
 
 test_that('gmm with init=gridsearch', {
   skip_on_cran()
-  method = make.gmm(id = 'Traj', time = 'Assessment', response = 'Value', init = 'gridsearch')
+  method = make.gmm(id = 'id', time = 'time', response = 'Value', init = 'gridsearch')
   model2 = latrend(method, testLongData, nClusters = 2)
   expect_equal(nClusters(model2), 2)
 

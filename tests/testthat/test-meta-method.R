@@ -1,11 +1,11 @@
-method = lcMethodLMKM(Value ~ Assessment, id = 'Traj', time = 'Assessment', nClusters = 2)
+method = lcMethodLMKM(Value ~ time, id = 'id', time = 'time', nClusters = 2)
 
 setClass('lcMethodConv', contains = 'lcMethod')
 
 lcMethodConv = function(
   response = 'Value',
-  time = 'Assessment',
-  id = 'Traj',
+  time = 'time',
+  id = 'id',
   nClusters = 1,
   nAttempts = 1,
   ...
@@ -134,7 +134,7 @@ test_that('meta converged fit different seed on second attempt', {
 
 
 test_that('meta update passthrough', {
-  metaMethod = lcFitConverged(lcMethodLMKM(Value ~ Assessment, nClusters = 2), maxRep = 2)
+  metaMethod = lcFitConverged(lcMethodLMKM(Value ~ time, nClusters = 2), maxRep = 2)
   model = latrend(metaMethod, data = testLongData, nClusters = 3)
 
   expect_equal(nClusters(model), 3L)
