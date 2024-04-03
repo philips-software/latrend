@@ -227,7 +227,7 @@ test_that('trajectory length warning', {
 test_that('"time" column', {
   timeData = copy(testLongData)
   setnames(timeData, 'time', 'time')
-  method = lcMethodTestKML(time = 'time')
+  method = lcMethodTestLMKM(time = 'time')
   model = latrend(method, data = timeData)
   expect_is(model, 'lcModel')
 })
