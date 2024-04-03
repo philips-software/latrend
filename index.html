@@ -130,8 +130,8 @@
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">latrendData</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>latrend.id <span class="op">=</span> <span class="st">"Id"</span>, latrend.time <span class="op">=</span> <span class="st">"Time"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span><span class="va">latrendData</span>, response <span class="op">=</span> <span class="st">"Y"</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="https://user-images.githubusercontent.com/8193083/226573946-70ceb35e-1f31-4c50-b707-2363909c264f.png" alt=""><p class="caption">image</p>
+<div class="float">
+<img src="https://user-images.githubusercontent.com/8193083/226573946-70ceb35e-1f31-4c50-b707-2363909c264f.png" alt="image"><div class="figcaption">image</div>
 </div>
 <p>Cluster the trajectories and plot the results.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -139,8 +139,8 @@
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/latrend.html">latrend</a></span><span class="op">(</span><span class="va">kmlMethod</span>, data <span class="op">=</span> <span class="va">latrendData</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="https://user-images.githubusercontent.com/8193083/226574139-e41a90f6-c713-4745-980f-b014a42d4aa8.png" alt=""><p class="caption">image</p>
+<div class="float">
+<img src="https://user-images.githubusercontent.com/8193083/226574139-e41a90f6-c713-4745-980f-b014a42d4aa8.png" alt="image"><div class="figcaption">image</div>
 </div>
 <p>Identify solutions for 1 to 5 clusters.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -150,8 +150,8 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/metric.html">metric</a></span><span class="op">(</span><span class="va">models</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WMAE"</span>, <span class="st">"BIC"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/plotMetric.html">plotMetric</a></span><span class="op">(</span><span class="va">models</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Dunn"</span>, <span class="st">"ASW"</span>, <span class="st">"WMAE"</span>, <span class="st">"WRSS"</span>, <span class="st">"BIC"</span>, <span class="st">"estimationTime"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="https://user-images.githubusercontent.com/8193083/226574529-befeb9d3-3e3b-44b4-b58c-44295d528358.png" alt=""><p class="caption">image</p>
+<div class="float">
+<img src="https://user-images.githubusercontent.com/8193083/226574529-befeb9d3-3e3b-44b4-b58c-44295d528358.png" alt="image"><div class="figcaption">image</div>
 </div>
 </div>
 <div class="section level1">
