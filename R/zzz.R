@@ -210,7 +210,7 @@ NULL
 
 globalVariables(
   c(
-    '.', '..id', '..time', '..response',
+    '.', '.id', '.time', '.resp', '..id', '..time', '..response',
     '.Component', '.Fill', '.name', '.group', '.method', '.ROW_INDEX', '.Mean', '.Block',
     'akclustr', 'AllNA',
     'Cluster', 'Class', 'cl',
