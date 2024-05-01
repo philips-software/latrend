@@ -30,7 +30,6 @@ plotClusterTrajectories(object, ...)
   clusterLabeler = make.clusterPropLabels,
   trajectories = FALSE,
   facet = !isFALSE(as.logical(trajectories[1])),
-  trajAssignments = trajectoryAssignments(object),
   ...
 )
 }
@@ -73,8 +72,6 @@ By default (\code{FALSE}), no information on the underlying trajectories is show
 \item{what}{The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying \code{what = 'mb'}.}
 
 \item{at}{A \verb{numeric vector} of the times at which to compute the cluster trajectories.}
-
-\item{trajAssignments}{The cluster assignments for the fitted trajectories. Only used when \code{trajectories = TRUE} and \code{facet = TRUE}. See \link{trajectoryAssignments}.}
 }
 \value{
 A \code{ggplot} object.

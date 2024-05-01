@@ -1235,7 +1235,8 @@ setMethod('predictAssignments', 'lcModel', function(
 #' @name plot-lcModel-method
 #' @aliases plot,lcModel,ANY-method plot,lcModel-method
 #' @title Plot a lcModel
-#' @description Plot a `lcModel` object. By default, this plots the cluster trajectories of the model, along with the training data.
+#' @description Plot a `lcModel` object.
+#' By default, this plots the cluster trajectories of the model, along with the trajectories used for estimation.
 #' @param x The `lcModel` object.
 #' @param y Not used.
 #' @inheritDotParams plotClusterTrajectories
@@ -1300,9 +1301,8 @@ setMethod('plotFittedTrajectories', 'lcModel', function(object, ...) {
 #' @param clusterOrder Specify which clusters to plot and the order.
 #' Can be the cluster names or index.
 #' By default, all clusters are shown.
-#' @param trajAssignments The cluster assignments for the fitted trajectories. Only used when `trajectories = TRUE` and `facet = TRUE`. See [trajectoryAssignments].
 #' @inheritDotParams clusterTrajectories
-#' @param ... Arguments passed to [clusterTrajectories()], or [ggplot2::geom_line()] for plotting the cluster trajectory lines.
+#' @param ... Arguments passed to [clusterTrajectories()], [trajectories()], and [ggplot2::geom_line()] for plotting the cluster trajectory lines.
 #' @return A `ggplot` object.
 #' @seealso [plotTrajectories] [plot]
 #' @examples
@@ -1350,26 +1350,16 @@ setMethod('plotClusterTrajectories', 'lcModel',
     clusterLabeler = make.clusterPropLabels,
     trajectories = FALSE,
     facet = !isFALSE(as.logical(trajectories[1])),
-    trajAssignments = trajectoryAssignments(object),
     ...
 ) {
   clusterLabels = clusterLabeler(clusterNames(object), clusterSizes(object))
   assert_that(length(clusterLabels) == nClusters(object))
 
-  clusdata = clusterTrajectories(object, at = at, what = what, ...) %>% as.data.table()
-
-  rawdata = model.data(object) %>% as.data.table()
-  if (nrow(rawdata) > 0 && !is.null(trajAssignments)) {
-    assert_that(
-      length(trajAssignments) == nIds(object),
-      all(trajAssignments %in% clusterNames(object))
-    )
-    trajAssignments = factor(trajAssignments, levels = clusterNames(object), labels = clusterLabels)
-    rawdata[, Cluster := trajAssignments[make.idRowIndices(object)]]
-  }
+  clusData = clusterTrajectories(object, at = at, what = what, ...)
+  trajData = trajectories(object, ...)
 
   .plotClusterTrajs(
-    clusdata,
+    clusData,
     clusterOrder = clusterOrder,
     clusterLabels = clusterLabels,
     response = responseVariable(object, what = what),
@@ -1377,7 +1367,7 @@ setMethod('plotClusterTrajectories', 'lcModel',
     id = idVariable(object),
     trajectories = trajectories[1],
     facet = facet,
-    rawdata = rawdata,
+    trajData = trajData,
     ...
   )
 })
@@ -1398,12 +1388,13 @@ setMethod('plotClusterTrajectories', 'lcModel',
 #' }
 #' @seealso [trajectories]
 setMethod('plotTrajectories', 'lcModel', function(object, ...) {
-  data = trajectories(object, ...)
+  data = trajectories(object, cluster = 'Cluster', ...)
   plotTrajectories(
     data,
     id = idVariable(object),
     time = timeVariable(object),
     response = responseVariable(object),
+    cluster = 'Cluster',
     ...
   )
 })

@@ -91,7 +91,7 @@ setMethod('plotClusterTrajectories', 'data.frame', function(
     trajectories = trajectories[1],
     facet = facet,
     id = id,
-    rawdata = object,
+    trajData = object,
     ...
   )
 })
@@ -107,7 +107,7 @@ setMethod('plotClusterTrajectories', 'data.frame', function(
   trajectories = FALSE,
   facet = FALSE,
   id,
-  rawdata = NULL,
+  trajData = NULL,
   ...
 ) {
   .loadOptionalPackage('ggplot2')
@@ -117,8 +117,8 @@ setMethod('plotClusterTrajectories', 'data.frame', function(
     has_name(data, response),
     has_name(data, time),
     has_name(data, cluster),
+    is.scalar(trajectories),
     is.flag(trajectories) || is.character(trajectories),
-    length(trajectories) == 1,
     is.flag(facet)
   )
 
@@ -126,42 +126,46 @@ setMethod('plotClusterTrajectories', 'data.frame', function(
   clusterOrderNames = make.orderedClusterNames(clusterNames, clusterOrder, subset = TRUE)
   clusterIndices = match(clusterOrderNames, clusterNames)
 
-  data = data.table(data)[get(cluster) %in% clusterOrderNames]
-  data[, c(cluster) := factor(
-    get(cluster),
-    levels = clusterNames[clusterIndices],
-    labels = clusterLabels[clusterIndices]
-  )]
+  data = data.table(data)[get(cluster) %in% clusterOrderNames] %>%
+    .[, c(cluster) := factor(
+      get(cluster),
+      levels = clusterNames[clusterIndices],
+      labels = clusterLabels[clusterIndices]
+    )]
+
+  if (!is.null(trajData)) {
+    trajData = data.table(trajData)[get(cluster) %in% clusterOrderNames] %>%
+      .[, c(cluster) := factor(
+        get(cluster),
+        levels = clusterNames[clusterIndices],
+        labels = clusterLabels[clusterIndices]
+      )]
+  }
+
 
   if (isTRUE(as.logical(trajectories))) {
     # show trajectories
     assert_that(
-      is.data.frame(rawdata),
-      nrow(rawdata) > 0,
+      is.data.frame(trajData),
+      nrow(trajData) > 0,
       !missing(id)
     )
 
     p = plotTrajectories(
-      rawdata,
+      trajData,
       response = response,
       time = time,
       id = id,
-      facet = facet,
+      facet = FALSE,
       cluster = cluster,
       ...
     )
   } else if (isFALSE(as.logical(trajectories))) {
     # don't show trajectories
     p = ggplot2::ggplot()
-    if (facet) {
-      p = p + ggplot2::facet_wrap(cluster)
-    }
   } else {
     # ribbon plot
     p = ggplot2::ggplot()
-    if (facet) {
-      p = p + ggplot2::facet_wrap(cluster)
-    }
 
     if (grepl('^[0-9]{1,2}pct$', trajectories)) {
       # percentile range
@@ -197,12 +201,20 @@ setMethod('plotClusterTrajectories', 'data.frame', function(
     }
 
     # compute ribbon
-    ribbonData = as.data.table(rawdata)[, as.list(ribbonFun(get(response))), keyby = c(cluster, time)]
-    assert_that(ncol(ribbonData) == 4, msg = 'ribbon stat implementation error\nplease report.')
+    ribbonData = as.data.table(trajData)[, as.list(ribbonFun(get(response))), keyby = c(cluster, time)]
+    assert_that(
+      ncol(ribbonData) == 4,
+      msg = 'ribbon stat implementation error\nplease report.'
+    )
     setnames(ribbonData, c(cluster, time, 'ymin', 'ymax'))
 
     p = p + ggplot2::geom_ribbon(
-      mapping = ggplot2::aes(x = !!as.name(time), ymin = ymin, ymax = ymax),
+      mapping = ggplot2::aes(
+        x = !!as.name(time),
+        ymin = ymin,
+        ymax = ymax,
+        fill = !!.as_lang(cluster)
+      ),
       data = ribbonData,
       alpha = .5
     ) + ggplot2::labs(
@@ -214,21 +226,50 @@ setMethod('plotClusterTrajectories', 'data.frame', function(
   }
 
   if (facet) {
-    p = p + ggplot2::guides(color = 'none')
+    # black cluster trajectories
+    p = p +
+      ggplot2::guides(color = 'none') +
+      ggplot2::geom_line(
+        mapping = ggplot2::aes(
+          x = !!.as_lang(time),
+          y = !!.as_lang(response),
+          group = !!.as_lang(cluster)
+        ),
+        data = data,
+        ...
+      )
+  } else {
+    # non-faceted plot
+    if (trajectories) {
+      # color used for trajectories, use shapes to mark cluster trajectories
+      p = p + ggplot2::geom_line(
+        mapping = ggplot2::aes(
+          x = !!.as_lang(time),
+          y = !!.as_lang(response),
+          group = !!.as_lang(cluster)
+        ),
+        data = data,
+        ...
+      )
+    } else {
+      # colored cluster trajectories
+      p = p + ggplot2::geom_line(
+        mapping = ggplot2::aes(
+          x = !!.as_lang(time),
+          y = !!.as_lang(response),
+          color = !!.as_lang(cluster)
+        ),
+        data = data,
+        ...
+      )
+    }
   }
 
-  # add cluster trajectories to plot
-  p = p + ggplot2::geom_line(
-    mapping = ggplot2::aes(
-      x = !!.as_lang(time),
-      y = !!.as_lang(response),
-      color = !!.as_lang(cluster)
-    ),
-    data = data,
-    ...
-  ) + ggplot2::labs(title = 'Cluster trajectories')
+  if (facet) {
+    p = p + ggplot2::facet_wrap(cluster)
+  }
 
-  p
+  p + ggplot2::labs(title = 'Cluster trajectories')
 }
 
 

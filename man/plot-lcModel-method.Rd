@@ -23,7 +23,8 @@
 A \code{ggplot} object.
 }
 \description{
-Plot a \code{lcModel} object. By default, this plots the cluster trajectories of the model, along with the training data.
+Plot a \code{lcModel} object.
+By default, this plots the cluster trajectories of the model, along with the trajectories used for estimation.
 }
 \examples{
 data(latrendData)
