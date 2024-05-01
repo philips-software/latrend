@@ -3,8 +3,13 @@
 
 # trajectories ####
 #' @rdname trajectories
+#' @param cluster Experimental feature for data.frame input: a vector of cluster membership per id
 #' @aliases trajectories,data.frame-method
 setMethod('trajectories', 'data.frame', function(object, id, time, response, cluster, ...) {
+  if (length(cluster) > 1 && length(cluster) == uniqueN(object[[id]])) {
+    object$Cluster = cluster[rleidv(object[[id]])]
+  }
+
   object
 })
 
@@ -234,8 +239,9 @@ setMethod('plotClusterTrajectories', 'data.frame', function(
 #' @aliases plotTrajectories,data.frame-method
 #' @inheritParams trajectories
 #' @param response Response variable `character` name or a `call`.
-#' @param cluster Cluster variable name. If unspecified, trajectories are not grouped.
-#' Alternatively, cluster is a vector indicating cluster membership per id.
+#' @param cluster Whether to plot trajectories grouped by cluster (determined by the "Cluster" column).
+#' Alternatively, the name of the cluster column indicating trajectory cluster membership.
+#' If unspecified, trajectories are grouped if the object contains a "Cluster" column.
 #' @param facet Whether to facet by cluster.
 #' @seealso [trajectories] [plotFittedTrajectories] [plotClusterTrajectories]
 #' @examples
@@ -258,24 +264,14 @@ setMethod('plotClusterTrajectories', 'data.frame', function(
 #'     time = "Time",
 #'     cluster = "Class"
 #'   )
-#'
-#'   # compute cluster membership based on the mean being below 0
-#'   assignments <- aggregate(Y ~ Id, latrendData, mean)$Y < 0
-#'   plotTrajectories(
-#'     latrendData,
-#'     response = "Y",
-#'     id = "Id",
-#'     time = "Time",
-#'     cluster = assignments
-#'   )
 #' }
 setMethod('plotTrajectories', 'data.frame',
   function(
     object,
     response,
+    cluster,
     time = getOption('latrend.time'),
     id = getOption('latrend.id'),
-    cluster = NULL,
     facet = TRUE,
     ...
   ) {
@@ -286,35 +282,34 @@ setMethod('plotTrajectories', 'data.frame',
     has_name(object, id)
   )
 
-  if (missing(response)) {
-    # determine response variable
-    numMask = vapply(object, is.numeric, FUN.VALUE = TRUE)
-    dfNum = subset(object, select = setdiff(names(object)[numMask], c(id, time)))
+  if (missing(cluster)) {
+    cluster = has_name(object, 'Cluster')
+  }
 
-    counts = vapply(dfNum, uniqueN, FUN.VALUE = 0L)
-    response = names(dfNum)[which.max(counts)]
-    message(
-      sprintf(
-        'Automatically selected "%s" as the response variable.
-        To override this, specify the "response" argument.',
-        response
-      )
+  if (isTRUE(cluster)) {
+    assert_that(
+      has_name(object, 'Cluster'),
+      msg = 'cluster = TRUE but object has no "Cluster" column'
     )
+    cluster = 'Cluster'
+  }
+
+  if (missing(response)) {
+    response = .guessResponseVariable(object, id = id, time = time, cluster = cluster)
   }
 
   assert_that(
     !is.character(response) || has_name(object, response),
-    length(cluster) != 1 || (is.character(cluster) && has_name(object, cluster)),
+    is.scalar(cluster),
+    isFALSE(cluster) || is.character(cluster),
     is.flag(facet)
   )
 
-  if (length(cluster) > 1) {
-    assert_that(length(cluster) == uniqueN(object[[id]]))
-    object$Cluster = cluster[rleidv(object[[id]])]
-    cluster = 'Cluster'
+  if (is.character(cluster)) {
+    assert_that(has_name(object, cluster))
   }
 
-  if (!is.null(cluster) && !isTRUE(facet)) {
+  if (!isFALSE(cluster) && !isTRUE(facet)) {
     map = ggplot2::aes(
       x = !!.as_lang(time),
       y = !!.as_lang(response),
@@ -334,7 +329,7 @@ setMethod('plotTrajectories', 'data.frame',
     ggplot2::geom_line(mapping = map, data = object) +
     ggplot2::labs(title = 'Trajectories')
 
-  if (!is.null(cluster) && isTRUE(facet)) {
+  if (!isFALSE(cluster) && isTRUE(facet)) {
     p = p + ggplot2::facet_wrap(cluster)
   }
 

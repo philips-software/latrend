@@ -47,3 +47,21 @@ test_that('PAP.adh1y content', {
     expect_equal(max(Biweek), 26)
   })
 })
+
+
+test_that('guessResponseVariable', {
+  expect_equal(
+    .guessResponseVariable(PAP.adh, id = 'Patient', time = 'Week', cluster = 'Group'),
+    'UsageHours'
+  )
+
+  expect_equal(
+    .guessResponseVariable(PAP.adh, id = 'Patient', time = 'Week'),
+    'UsageHours'
+  )
+
+  expect_equal(
+    .guessResponseVariable(PAP.adh),
+    'UsageHours'
+  )
+})

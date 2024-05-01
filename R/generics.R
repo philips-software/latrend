@@ -523,6 +523,7 @@ setGeneric('plotClusterTrajectories',
 #' @name plotTrajectories
 #' @title Plot the data trajectories
 #' @description Plots the output of [trajectories] for the given object.
+#' @param ... Additional arguments.
 #' @seealso [trajectories]
 setGeneric('plotTrajectories', function(object, ...) standardGeneric('plotTrajectories'))
 

@@ -12,9 +12,9 @@ plotTrajectories(object, ...)
 \S4method{plotTrajectories}{data.frame}(
   object,
   response,
+  cluster,
   time = getOption("latrend.time"),
   id = getOption("latrend.id"),
-  cluster = NULL,
   facet = TRUE,
   ...
 )
@@ -34,12 +34,13 @@ plotTrajectories(object, ...)
 
 \item{response}{Response variable \code{character} name or a \code{call}.}
 
+\item{cluster}{Whether to plot trajectories grouped by cluster (determined by the "Cluster" column).
+Alternatively, the name of the cluster column indicating trajectory cluster membership.
+If unspecified, trajectories are grouped if the object contains a "Cluster" column.}
+
 \item{time}{The time variable name, see \link{timeVariable}.}
 
 \item{id}{The identifier variable name, see \link{idVariable}.}
-
-\item{cluster}{Cluster variable name. If unspecified, trajectories are not grouped.
-Alternatively, cluster is a vector indicating cluster membership per id.}
 
 \item{facet}{Whether to facet by cluster.}
 }
@@ -65,16 +66,6 @@ if (require("ggplot2")) {
     id = "Id",
     time = "Time",
     cluster = "Class"
-  )
-
-  # compute cluster membership based on the mean being below 0
-  assignments <- aggregate(Y ~ Id, latrendData, mean)$Y < 0
-  plotTrajectories(
-    latrendData,
-    response = "Y",
-    id = "Id",
-    time = "Time",
-    cluster = assignments
   )
 }
 data(latrendData)

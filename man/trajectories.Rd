@@ -55,7 +55,7 @@ trajectories(
 
 \item{response}{The response variable name, see \link{responseVariable}.}
 
-\item{cluster}{The cluster column name, if available.}
+\item{cluster}{Experimental feature for data.frame input: a vector of cluster membership per id}
 
 \item{...}{Arguments passed to \link{trajectoryAssignments} for generating the Cluster column.}
 
