@@ -72,9 +72,9 @@
 <span><span class="fu">plotTrajectories</span><span class="op">(</span></span>
 <span>  <span class="va">object</span>,</span>
 <span>  <span class="va">response</span>,</span>
+<span>  <span class="va">cluster</span>,</span>
 <span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.time"</span><span class="op">)</span>,</span>
 <span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.id"</span><span class="op">)</span>,</span>
-<span>  cluster <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  facet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
@@ -104,17 +104,18 @@
 <dd><p>Response variable <code>character</code> name or a <code>call</code>.</p></dd>
 
 
+<dt>cluster</dt>
+<dd><p>Whether to plot trajectories grouped by cluster (determined by the "Cluster" column).
+Alternatively, the name of the cluster column indicating trajectory cluster membership.
+If unspecified, trajectories are grouped if the object contains a "Cluster" column.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>The time variable name, see <a href="timeVariable.html">timeVariable</a>.</p></dd>
 
 
 <dt>id</dt>
 <dd><p>The identifier variable name, see <a href="idVariable.html">idVariable</a>.</p></dd>
-
-
-<dt>cluster</dt>
-<dd><p>Cluster variable name. If unspecified, trajectories are not grouped.
-Alternatively, cluster is a vector indicating cluster membership per id.</p></dd>
 
 
 <dt>facet</dt>
@@ -148,16 +149,6 @@ Alternatively, cluster is a vector indicating cluster membership per id.</p></dd
 <span class="r-in"><span>    id <span class="op">=</span> <span class="st">"Id"</span>,</span></span>
 <span class="r-in"><span>    time <span class="op">=</span> <span class="st">"Time"</span>,</span></span>
 <span class="r-in"><span>    cluster <span class="op">=</span> <span class="st">"Class"</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co"># compute cluster membership based on the mean being below 0</span></span></span>
-<span class="r-in"><span>  <span class="va">assignments</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Id</span>, <span class="va">latrendData</span>, <span class="va">mean</span><span class="op">)</span><span class="op">$</span><span class="va">Y</span> <span class="op">&lt;</span> <span class="fl">0</span></span></span>
-<span class="r-in"><span>  <span class="fu">plotTrajectories</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="va">latrendData</span>,</span></span>
-<span class="r-in"><span>    response <span class="op">=</span> <span class="st">"Y"</span>,</span></span>
-<span class="r-in"><span>    id <span class="op">=</span> <span class="st">"Id"</span>,</span></span>
-<span class="r-in"><span>    time <span class="op">=</span> <span class="st">"Time"</span>,</span></span>
-<span class="r-in"><span>    cluster <span class="op">=</span> <span class="va">assignments</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-plt img"><img src="plotTrajectories-1.png" alt="" width="700" height="433"></span>

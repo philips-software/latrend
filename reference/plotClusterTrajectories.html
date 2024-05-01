@@ -92,7 +92,6 @@
 <span>  clusterLabeler <span class="op">=</span> <span class="va">make.clusterPropLabels</span>,</span>
 <span>  trajectories <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  facet <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isFALSE</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">trajectories</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  trajAssignments <span class="op">=</span> <span class="fu"><a href="trajectoryAssignments.html">trajectoryAssignments</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -161,10 +160,6 @@ By default (<code>FALSE</code>), no information on the underlying trajectories i
 
 <dt>at</dt>
 <dd><p>A <code>numeric vector</code> of the times at which to compute the cluster trajectories.</p></dd>
-
-
-<dt>trajAssignments</dt>
-<dd><p>The cluster assignments for the fitted trajectories. Only used when <code>trajectories = TRUE</code> and <code>facet = TRUE</code>. See <a href="trajectoryAssignments.html">trajectoryAssignments</a>.</p></dd>
 
 </dl></div>
     <div id="value">
