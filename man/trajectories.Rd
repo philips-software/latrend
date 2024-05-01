@@ -6,13 +6,14 @@
 \alias{trajectories,matrix-method}
 \alias{trajectories,call-method}
 \alias{trajectories,lcModel-method}
-\title{Extract the trajectories}
+\title{Get the trajectories}
 \usage{
 trajectories(
   object,
   id = idVariable(object),
   time = timeVariable(object),
   response = responseVariable(object),
+  cluster = "Cluster",
   ...
 )
 
@@ -21,6 +22,7 @@ trajectories(
   id = idVariable(object),
   time = timeVariable(object),
   response = responseVariable(object),
+  cluster = "Cluster",
   ...
 )
 
@@ -29,6 +31,7 @@ trajectories(
   id = idVariable(object),
   time = timeVariable(object),
   response = responseVariable(object),
+  cluster = "Cluster",
   ...
 )
 
@@ -39,6 +42,7 @@ trajectories(
   id = idVariable(object),
   time = timeVariable(object),
   response = responseVariable(object),
+  cluster = "Cluster",
   ...
 )
 }
@@ -51,20 +55,33 @@ trajectories(
 
 \item{response}{The response variable name, see \link{responseVariable}.}
 
-\item{...}{Not used.}
+\item{cluster}{The cluster column name, if available.}
+
+\item{...}{Arguments passed to \link{trajectoryAssignments} for generating the Cluster column.}
 
 \item{envir}{The \code{environment} used to evaluate the data object in (e.g., in case \code{object} is of type \code{call}).}
 }
 \value{
-A \code{data.frame} with columns matching the \code{id}, \code{time}, and \code{response} name arguments.
+A \code{data.frame} with columns matching the \code{id}, \code{time}, \code{response} and \code{cluster} name arguments.
 }
 \description{
 Transform or extract the trajectories from the given object to a standardized format.
 
-The standardized data format is for method estimation by \link{latrend}, and for plotting functions.
+Trajectories are ordered by Id and observation time.
+
+For estimated models; get the trajectories used for estimation, along with the cluster membership.
+This data can be used for plotting or post-hoc analysis.
 }
 \details{
+The standardized data format is for method estimation by \link{latrend}, and for plotting functions.
+
 The generic function removes unused factor levels in the Id column, and any trajectories which are only comprised of NAs in the response.
+}
+\examples{
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+trajectories(model)
 }
 \seealso{
 \link{plotTrajectories} \link{latrend}

@@ -3,6 +3,22 @@ rngReset()
 
 model = testModel
 
+test_that('trajectories', {
+  ref = model.data(model) %>%
+    subset(select = c('id', 'time', 'Value', 'Cluster')) %>%
+    as.data.table(key = 'id') %>%
+    setnames('Cluster', 'cluster')
+
+  pred = trajectories(model, cluster = 'cluster') %>%
+    as.data.table()
+
+  expect_equal(
+    as.data.frame(ref),
+    as.data.frame(pred)
+  )
+})
+
+
 test_that('clusterTrajectories', {
   times = time(model)
   pred = clusterTrajectories(model)

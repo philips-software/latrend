@@ -1687,8 +1687,17 @@ time.lcModel = function(x, ...) {
 
 # . trajectories ####
 #' @rdname trajectories
+#' @description
+#' For estimated models; get the trajectories used for estimation, along with the cluster membership.
+#' This data can be used for plotting or post-hoc analysis.
 #' @aliases trajectories,lcModel-method
-setMethod('trajectories', 'lcModel', function(object, ...) {
+#' @param ... Arguments passed to [trajectoryAssignments] for generating the Cluster column.
+#' @examples
+#' data(latrendData)
+#' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+#' model <- latrend(method, latrendData)
+#' trajectories(model)
+setMethod('trajectories', 'lcModel', function(object, cluster, ...) {
   data = model.data(object)
 
   assert_that(!is.null(data), msg = 'no associated training data for this model')
@@ -1697,10 +1706,17 @@ setMethod('trajectories', 'lcModel', function(object, ...) {
   time = timeVariable(object)
   res = responseVariable(object)
   columns = c(id, time, res) # needed because of strange dynamic evaluation by data.table
+  trajData = subset(data, select = columns)
 
-  trajdata = subset(data, select = columns)
+  clusData = data.table(
+    Id = ids(object),
+    Cluster = trajectoryAssignments(object, ...)
+  )
+  setnames(clusData, c('Id', 'Cluster'), c(id, cluster))
 
-  trajectories(trajdata, id = id, time = time, response = res, ...)
+  outData = merge(trajData, clusData, all.x = TRUE)
+
+  trajectories(outData, id = id, time = time, response = res, ...)
 })
 
 

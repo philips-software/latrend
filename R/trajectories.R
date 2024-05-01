@@ -4,7 +4,7 @@
 # trajectories ####
 #' @rdname trajectories
 #' @aliases trajectories,data.frame-method
-setMethod('trajectories', 'data.frame', function(object, id, time, response, ...) {
+setMethod('trajectories', 'data.frame', function(object, id, time, response, cluster, ...) {
   object
 })
 

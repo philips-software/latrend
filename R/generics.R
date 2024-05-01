@@ -842,16 +842,19 @@ setGeneric('timeVariable', function(object, ...) {
 # trajectories ####
 #' @export
 #' @name trajectories
-#' @title Extract the trajectories
+#' @title Get the trajectories
 #' @description Transform or extract the trajectories from the given object to a standardized format.
 #'
+#' Trajectories are ordered by Id and observation time.
+#' @details
 #' The standardized data format is for method estimation by [latrend], and for plotting functions.
 #' @param object The data or model or extract the trajectories from.
 #' @param id The identifier variable name, see [idVariable].
 #' @param time The time variable name, see [timeVariable].
 #' @param response The response variable name, see [responseVariable].
-#' @param ... Not used.
-#' @return A `data.frame` with columns matching the `id`, `time`, and `response` name arguments.
+#' @param cluster The cluster column name, if available.
+#' @param ... Additional arguments.
+#' @return A `data.frame` with columns matching the `id`, `time`, `response` and `cluster` name arguments.
 #' @details The generic function removes unused factor levels in the Id column, and any trajectories which are only comprised of NAs in the response.
 #' @seealso [plotTrajectories] [latrend]
 setGeneric('trajectories', function(
@@ -859,6 +862,7 @@ setGeneric('trajectories', function(
     id = idVariable(object),
     time = timeVariable(object),
     response = responseVariable(object),
+    cluster = 'Cluster',
     ...
 ) {
   data <- standardGeneric('trajectories')
@@ -897,7 +901,15 @@ setGeneric('trajectories', function(
     }
   }
 
-  as.data.frame(data)
+  if (length(cluster) > 0 && has_name(data, cluster)) {
+    assert_that(
+      noNA(data[[cluster]])
+    )
+  }
+
+  # ensure ordered by id and time
+  sortedData = as.data.table(data, key = c(id, time))
+  as.data.frame(sortedData)
 })
 
 
