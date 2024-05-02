@@ -1302,7 +1302,7 @@ setMethod('plotFittedTrajectories', 'lcModel', function(object, ...) {
 #' Can be the cluster names or index.
 #' By default, all clusters are shown.
 #' @inheritDotParams clusterTrajectories
-#' @param ... Arguments passed to [clusterTrajectories()], [trajectories()], and [ggplot2::geom_line()] for plotting the cluster trajectory lines.
+#' @param ... Arguments passed to [clusterTrajectories()], and [ggplot2::geom_line()] for plotting the cluster trajectory lines.
 #' @return A `ggplot` object.
 #' @seealso [plotTrajectories] [plot]
 #' @examples
@@ -1356,7 +1356,7 @@ setMethod('plotClusterTrajectories', 'lcModel',
   assert_that(length(clusterLabels) == nClusters(object))
 
   clusData = clusterTrajectories(object, at = at, what = what, ...)
-  trajData = trajectories(object, ...)
+  trajData = trajectories(object)
 
   .plotClusterTrajs(
     clusData,

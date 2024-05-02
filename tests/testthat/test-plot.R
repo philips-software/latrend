@@ -109,3 +109,20 @@ test_that('plotClusterTrajectories.lcModel with ordening', {
 })
 
 
+test_that('plot.lcModel', {
+  p1 = plot(testModel1)
+  expect_true(is.ggplot(p1))
+
+  p3 = plot(testModel3)
+  expect_true(is.ggplot(p3))
+})
+
+
+test_that('plot.lcModel with options', {
+  p1 = plot(testModel1, size = 1)
+  expect_true(is.ggplot(p1))
+
+  p3 = plot(testModel3, alpha = 1)
+  expect_true(is.ggplot(p3))
+})
+
