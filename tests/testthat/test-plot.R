@@ -119,7 +119,7 @@ test_that('plot.lcModel', {
 
 
 test_that('plot.lcModel with options', {
-  p1 = plot(testModel1, size = 1)
+  p1 = plot(testModel1, linewidth = 1)
   expect_true(is.ggplot(p1))
 
   p3 = plot(testModel3, alpha = 1)
