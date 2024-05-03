@@ -86,8 +86,11 @@ jobs:
           sudo /usr/X11/bin/xvfb :1 -screen 1 1024x768x24 -ac &
 
       - uses: r-lib/actions/setup-r-dependencies@v2
+
+      - uses: actions/cache@v1
         with:
-          cache-version: 4
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('DESCRIPTION') }}
 
       - uses: r-lib/actions/check-r-package@v2
         with:

@@ -29,8 +29,6 @@ jobs:
         run: sudo apt-get install -yq libglu1-mesa-dev libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev libfftw3-dev
 
       - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          cache-version: 4
 
       - name: Test coverage
         shell: Rscript {0}
