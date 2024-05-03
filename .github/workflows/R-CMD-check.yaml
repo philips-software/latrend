@@ -85,9 +85,9 @@ jobs:
           brew install --cask xquartz
           sudo /usr/X11/bin/xvfb :1 -screen 1 1024x768x24 -ac &
 
-      - uses: r-lib/actions/setup-renv@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          cache-version: 3
+          cache-version: 4
 
       - uses: r-lib/actions/check-r-package@v2
         with:
