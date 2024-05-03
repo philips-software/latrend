@@ -152,5 +152,6 @@ Collate:
     'random.R'
     'test.R'
     'timing.R'
+    'variables.R'
     'verbose.R'
     'zzz.R'
