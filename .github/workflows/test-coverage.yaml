@@ -29,7 +29,17 @@ jobs:
         run: sudo apt-get install -yq libglu1-mesa-dev libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev libfftw3-dev
 
       - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::covr
+          needs: coverage
 
       - name: Test coverage
         shell: Rscript {0}
-        run: covr::codecov()
+        run: |
+          token <- Sys.getenv("CODECOV_TOKEN", "")
+          covr::codecov(
+            quiet = FALSE,
+            clean = FALSE,
+            install_path = file.path(normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"), "package"),
+            token = if (token != "") token
+          )
