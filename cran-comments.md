@@ -1,3 +1,9 @@
+# latrend [v1.6.1](https://github.com/philips-software/latrend/milestone/11)
+
+- trajectories(lcModel) outputs cluster membership (#153)
+- Improved visuals of trajectory plots (#152)
+- Fixed dynamic variable handling (#151)
+
 # latrend [v1.6.0](https://github.com/philips-software/latrend/milestone/10)
 
 -   Resolved CRAN problems (#147)
