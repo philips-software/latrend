@@ -14,11 +14,7 @@ predictPostprob(object, newdata = NULL, ...)
 
 \item{newdata}{Optional \code{data.frame} for which to compute the posterior probability. If omitted, the model training data is used.}
 
-\item{...}{
-  Arguments passed on to \code{\link[=postprob]{postprob}}
-  \describe{
-    \item{\code{}}{}
-  }}
+\item{...}{Additional arguments passed to \link{postprob}.}
 }
 \value{
 A N-by-K \code{matrix} indicating the posterior probability per trajectory per measurement on each row, for each cluster (the columns).

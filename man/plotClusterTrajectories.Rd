@@ -36,11 +36,7 @@ plotClusterTrajectories(object, ...)
 \arguments{
 \item{object}{The (cluster) trajectory data.}
 
-\item{...}{
-  Arguments passed on to \code{\link[=clusterTrajectories]{clusterTrajectories}}
-  \describe{
-    \item{\code{}}{}
-  }}
+\item{...}{Additional arguments passed to \link{clusterTrajectories}.}
 
 \item{response}{The response variable name, see \link{responseVariable}.}
 

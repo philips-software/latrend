@@ -1160,7 +1160,6 @@ setMethod('predictForCluster', 'lcModel',
 #' @rdname predictPostprob
 #' @aliases predictPostprob,lcModel-method
 #' @description For `lcModel`: The default implementation returns a uniform probability matrix.
-#' @inheritDotParams postprob
 #' @section Implementation:
 #' Classes extending `lcModel` should override this method to enable posterior probability predictions for new data.
 #' \preformatted{
@@ -1267,7 +1266,6 @@ setMethod('plot', c('lcModel', 'ANY'), function(x, y, ...) {
 #' @rdname plotFittedTrajectories
 #' @aliases plotFittedTrajectories,lcModel-method
 #' @param ... Arguments passed to [fittedTrajectories()] and [plotTrajectories].
-#' @inheritDotParams plotTrajectories
 #' @return A `ggplot` object.
 #' @seealso [plotClusterTrajectories] [plotTrajectories] [plot]
 #' @examples
@@ -1301,8 +1299,6 @@ setMethod('plotFittedTrajectories', 'lcModel', function(object, ...) {
 #' @param clusterOrder Specify which clusters to plot and the order.
 #' Can be the cluster names or index.
 #' By default, all clusters are shown.
-#' @inheritDotParams clusterTrajectories
-#' @param ... Arguments passed to [clusterTrajectories()], and [ggplot2::geom_line()] for plotting the cluster trajectory lines.
 #' @return A `ggplot` object.
 #' @seealso [plotTrajectories] [plot]
 #' @examples
@@ -1377,7 +1373,6 @@ setMethod('plotClusterTrajectories', 'lcModel',
 #' @export
 #' @rdname plotTrajectories
 #' @aliases plotTrajectories,lcModel-method
-#' @inheritDotParams trajectories
 #' @examples
 #' data(latrendData)
 #' method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")

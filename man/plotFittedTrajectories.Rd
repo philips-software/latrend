@@ -12,11 +12,7 @@ plotFittedTrajectories(object, ...)
 \arguments{
 \item{object}{The model.}
 
-\item{...}{
-  Arguments passed on to \code{\link[=fittedTrajectories]{fittedTrajectories}}, \code{\link[=plotTrajectories]{plotTrajectories}}
-  \describe{
-    \item{\code{}}{}
-  }}
+\item{...}{Arguments passed to \code{\link[=fittedTrajectories]{fittedTrajectories()}} and \link{plotTrajectories}.}
 }
 \value{
 A \code{ggplot} object.

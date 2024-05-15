@@ -499,7 +499,7 @@ setGeneric('metric', function(
 #' @title Plot the fitted trajectories
 #' @description Plot the fitted trajectories as represented by the given model
 #' @inheritParams fittedTrajectories
-#' @inheritDotParams fittedTrajectories
+#' @param ... Additional arguments passed to [fittedTrajectories].
 #' @seealso [fittedTrajectories]
 setGeneric('plotFittedTrajectories',
   function(object, ...) standardGeneric('plotFittedTrajectories')
@@ -512,6 +512,7 @@ setGeneric('plotFittedTrajectories',
 #' @title Plot cluster trajectories
 #' @description Plot the cluster trajectories associated with the given model.
 #' @inheritParams clusterTrajectories
+#' @param ... Additional arguments passed to [clusterTrajectories].
 #' @seealso [clusterTrajectories]
 setGeneric('plotClusterTrajectories',
   function(object, ...) standardGeneric('plotClusterTrajectories')
@@ -523,7 +524,7 @@ setGeneric('plotClusterTrajectories',
 #' @name plotTrajectories
 #' @title Plot the data trajectories
 #' @description Plots the output of [trajectories] for the given object.
-#' @param ... Additional arguments.
+#' @param ... Additional arguments passed to [trajectories].
 #' @seealso [trajectories]
 setGeneric('plotTrajectories', function(object, ...) standardGeneric('plotTrajectories'))
 
@@ -718,6 +719,7 @@ setGeneric('predictForCluster', function(object, newdata = NULL, cluster, ...) {
 #' @title Posterior probability for new data
 #' @description Returns the observation-specific posterior probabilities for the given data.
 #' @param newdata Optional `data.frame` for which to compute the posterior probability. If omitted, the model training data is used.
+#' @param ... Additional arguments passed to [postprob].
 #' @inheritParams predictForCluster
 #' @return A N-by-K `matrix` indicating the posterior probability per trajectory per measurement on each row, for each cluster (the columns).
 #' Here, `N = nrow(newdata)` and `K = nClusters(object)`.

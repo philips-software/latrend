@@ -26,11 +26,7 @@ plotTrajectories(object, ...)
 \arguments{
 \item{object}{The data or model or extract the trajectories from.}
 
-\item{...}{
-  Arguments passed on to \code{\link[=trajectories]{trajectories}}
-  \describe{
-    \item{\code{}}{}
-  }}
+\item{...}{Additional arguments passed to \link{trajectories}.}
 
 \item{response}{Response variable \code{character} name or a \code{call}.}
 
