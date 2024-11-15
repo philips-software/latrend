@@ -1,549 +1,185 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/articles/demo.html</loc>
-  </url>
-  <url>
-    <loc>/articles/implement.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/simulation.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/APPA.html</loc>
-  </url>
-  <url>
-    <loc>/reference/OCC.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PAP.adh.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PAP.adh1y.html</loc>
-  </url>
-  <url>
-    <loc>/reference/as.data.frame.lcMethod.html</loc>
-  </url>
-  <url>
-    <loc>/reference/as.data.frame.lcMethods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/as.data.frame.lcModels.html</loc>
-  </url>
-  <url>
-    <loc>/reference/as.lcMethods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/as.lcModels.html</loc>
-  </url>
-  <url>
-    <loc>/reference/as.list.lcMethod.html</loc>
-  </url>
-  <url>
-    <loc>/reference/assert.html</loc>
-  </url>
-  <url>
-    <loc>/reference/clusterNames-set.html</loc>
-  </url>
-  <url>
-    <loc>/reference/clusterNames.html</loc>
-  </url>
-  <url>
-    <loc>/reference/clusterProportions.html</loc>
-  </url>
-  <url>
-    <loc>/reference/clusterSizes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/clusterTrajectories.html</loc>
-  </url>
-  <url>
-    <loc>/reference/coef.lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/compose.html</loc>
-  </url>
-  <url>
-    <loc>/reference/confusionMatrix.html</loc>
-  </url>
-  <url>
-    <loc>/reference/converged.html</loc>
-  </url>
-  <url>
-    <loc>/reference/createTestDataFold.html</loc>
-  </url>
-  <url>
-    <loc>/reference/createTestDataFolds.html</loc>
-  </url>
-  <url>
-    <loc>/reference/createTrainDataFolds.html</loc>
-  </url>
-  <url>
-    <loc>/reference/defineExternalMetric.html</loc>
-  </url>
-  <url>
-    <loc>/reference/defineInternalMetric.html</loc>
-  </url>
-  <url>
-    <loc>/reference/deviance.lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/df.residual.lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dot-defineInternalDistanceMetrics.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dot-guessResponseVariable.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dot-trajSubset.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimationTime.html</loc>
-  </url>
-  <url>
-    <loc>/reference/evaluate.lcMethod.html</loc>
-  </url>
-  <url>
-    <loc>/reference/externalMetric.html</loc>
-  </url>
-  <url>
-    <loc>/reference/fit.html</loc>
-  </url>
-  <url>
-    <loc>/reference/fitted.lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/fittedTrajectories.html</loc>
-  </url>
-  <url>
-    <loc>/reference/formula.lcMethod.html</loc>
-  </url>
-  <url>
-    <loc>/reference/formula.lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/generateLongData.html</loc>
-  </url>
-  <url>
-    <loc>/reference/getArgumentDefaults.html</loc>
-  </url>
-  <url>
-    <loc>/reference/getArgumentExclusions.html</loc>
-  </url>
-  <url>
-    <loc>/reference/getCall.lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/getCitation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/getExternalMetricDefinition.html</loc>
-  </url>
-  <url>
-    <loc>/reference/getExternalMetricNames.html</loc>
-  </url>
-  <url>
-    <loc>/reference/getInternalMetricDefinition.html</loc>
-  </url>
-  <url>
-    <loc>/reference/getInternalMetricNames.html</loc>
-  </url>
-  <url>
-    <loc>/reference/getLabel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/getLcMethod.html</loc>
-  </url>
-  <url>
-    <loc>/reference/getName.html</loc>
-  </url>
-  <url>
-    <loc>/reference/idVariable.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ids.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/indexy.html</loc>
-  </url>
-  <url>
-    <loc>/reference/initialize-lcMethod-method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/interface-akmedoids.html</loc>
-  </url>
-  <url>
-    <loc>/reference/interface-crimCV.html</loc>
-  </url>
-  <url>
-    <loc>/reference/interface-custom.html</loc>
-  </url>
-  <url>
-    <loc>/reference/interface-dtwclust.html</loc>
-  </url>
-  <url>
-    <loc>/reference/interface-featureBased.html</loc>
-  </url>
-  <url>
-    <loc>/reference/interface-flexmix.html</loc>
-  </url>
-  <url>
-    <loc>/reference/interface-funFEM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/interface-kml.html</loc>
-  </url>
-  <url>
-    <loc>/reference/interface-lcmm.html</loc>
-  </url>
-  <url>
-    <loc>/reference/interface-mclust.html</loc>
-  </url>
-  <url>
-    <loc>/reference/interface-metaMethods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/interface-mixAK.html</loc>
-  </url>
-  <url>
-    <loc>/reference/interface-mixtools.html</loc>
-  </url>
-  <url>
-    <loc>/reference/interface-mixtvem.html</loc>
-  </url>
-  <url>
-    <loc>/reference/is.html</loc>
-  </url>
-  <url>
-    <loc>/reference/isArgDefined.html</loc>
-  </url>
-  <url>
-    <loc>/reference/latrend-approaches.html</loc>
-  </url>
-  <url>
-    <loc>/reference/latrend-data.html</loc>
-  </url>
-  <url>
-    <loc>/reference/latrend-estimation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/latrend-generics.html</loc>
-  </url>
-  <url>
-    <loc>/reference/latrend-methods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/latrend-metrics.html</loc>
-  </url>
-  <url>
-    <loc>/reference/latrend-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/latrend-parallel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/latrend.html</loc>
-  </url>
-  <url>
-    <loc>/reference/latrendBatch.html</loc>
-  </url>
-  <url>
-    <loc>/reference/latrendBoot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/latrendCV.html</loc>
-  </url>
-  <url>
-    <loc>/reference/latrendData.html</loc>
-  </url>
-  <url>
-    <loc>/reference/latrendRep.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcApproxModel-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcFitMethods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMatrixMethod-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethod-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethod-estimation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodAkmedoids.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodCrimCV.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodDtwclust.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodFeature.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodFlexmix.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodFlexmixGBTM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodFunFEM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodFunction.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodGCKM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodKML.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodLMKM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodLcmmGBTM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodLcmmGMM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodMclustLLPA.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodMixAK_GLMM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodMixTVEM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodMixtoolsGMM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodMixtoolsNPRM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodRandom.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethodStratify.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcMethods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcModel-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcModel-data-filters.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcModel-make.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcModelPartition.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcModelWeightedPartition.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcModels-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lcModels.html</loc>
-  </url>
-  <url>
-    <loc>/reference/logLik.lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/match.call.all.html</loc>
-  </url>
-  <url>
-    <loc>/reference/max.lcModels.html</loc>
-  </url>
-  <url>
-    <loc>/reference/meanNA.html</loc>
-  </url>
-  <url>
-    <loc>/reference/metric.html</loc>
-  </url>
-  <url>
-    <loc>/reference/min.lcModels.html</loc>
-  </url>
-  <url>
-    <loc>/reference/model.data.html</loc>
-  </url>
-  <url>
-    <loc>/reference/model.data.lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/model.frame.lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nClusters.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nIds.html</loc>
-  </url>
-  <url>
-    <loc>/reference/names-lcMethod-method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nobs.lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot-lcModel-method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot-lcModels-method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plotClusterTrajectories.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plotFittedTrajectories.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plotMetric.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plotTrajectories.html</loc>
-  </url>
-  <url>
-    <loc>/reference/postFit.html</loc>
-  </url>
-  <url>
-    <loc>/reference/postProbFromObs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/postprob.html</loc>
-  </url>
-  <url>
-    <loc>/reference/postprobFromAssignments.html</loc>
-  </url>
-  <url>
-    <loc>/reference/preFit.html</loc>
-  </url>
-  <url>
-    <loc>/reference/predict.lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/predictAssignments.html</loc>
-  </url>
-  <url>
-    <loc>/reference/predictForCluster.html</loc>
-  </url>
-  <url>
-    <loc>/reference/predictPostprob.html</loc>
-  </url>
-  <url>
-    <loc>/reference/prepareData.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.lcMethod.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.lcModels.html</loc>
-  </url>
-  <url>
-    <loc>/reference/qqPlot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/residuals.lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/responseVariable.html</loc>
-  </url>
-  <url>
-    <loc>/reference/sigma.lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/strip.html</loc>
-  </url>
-  <url>
-    <loc>/reference/subset.lcModels.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/test.html</loc>
-  </url>
-  <url>
-    <loc>/reference/test.latrend.html</loc>
-  </url>
-  <url>
-    <loc>/reference/time.lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/timeVariable.html</loc>
-  </url>
-  <url>
-    <loc>/reference/trajectories.html</loc>
-  </url>
-  <url>
-    <loc>/reference/trajectoryAssignments.html</loc>
-  </url>
-  <url>
-    <loc>/reference/transformFitted.html</loc>
-  </url>
-  <url>
-    <loc>/reference/transformPredict.html</loc>
-  </url>
-  <url>
-    <loc>/reference/tsframe.html</loc>
-  </url>
-  <url>
-    <loc>/reference/tsmatrix.html</loc>
-  </url>
-  <url>
-    <loc>/reference/update.lcMethod.html</loc>
-  </url>
-  <url>
-    <loc>/reference/update.lcModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/validate.html</loc>
-  </url>
-  <url>
-    <loc>/reference/weighted.meanNA.html</loc>
-  </url>
-  <url>
-    <loc>/reference/which.weight.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>/CONTRIBUTING.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/articles/demo.html</loc></url>
+<url><loc>/articles/implement.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/simulation.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/APPA.html</loc></url>
+<url><loc>/reference/OCC.html</loc></url>
+<url><loc>/reference/PAP.adh.html</loc></url>
+<url><loc>/reference/PAP.adh1y.html</loc></url>
+<url><loc>/reference/as.data.frame.lcMethod.html</loc></url>
+<url><loc>/reference/as.data.frame.lcMethods.html</loc></url>
+<url><loc>/reference/as.data.frame.lcModels.html</loc></url>
+<url><loc>/reference/as.lcMethods.html</loc></url>
+<url><loc>/reference/as.lcModels.html</loc></url>
+<url><loc>/reference/as.list.lcMethod.html</loc></url>
+<url><loc>/reference/assert.html</loc></url>
+<url><loc>/reference/clusterNames-set.html</loc></url>
+<url><loc>/reference/clusterNames.html</loc></url>
+<url><loc>/reference/clusterProportions.html</loc></url>
+<url><loc>/reference/clusterSizes.html</loc></url>
+<url><loc>/reference/clusterTrajectories.html</loc></url>
+<url><loc>/reference/coef.lcModel.html</loc></url>
+<url><loc>/reference/compose.html</loc></url>
+<url><loc>/reference/confusionMatrix.html</loc></url>
+<url><loc>/reference/converged.html</loc></url>
+<url><loc>/reference/createTestDataFold.html</loc></url>
+<url><loc>/reference/createTestDataFolds.html</loc></url>
+<url><loc>/reference/createTrainDataFolds.html</loc></url>
+<url><loc>/reference/defineExternalMetric.html</loc></url>
+<url><loc>/reference/defineInternalMetric.html</loc></url>
+<url><loc>/reference/deviance.lcModel.html</loc></url>
+<url><loc>/reference/df.residual.lcModel.html</loc></url>
+<url><loc>/reference/dot-defineInternalDistanceMetrics.html</loc></url>
+<url><loc>/reference/dot-guessResponseVariable.html</loc></url>
+<url><loc>/reference/dot-trajSubset.html</loc></url>
+<url><loc>/reference/estimationTime.html</loc></url>
+<url><loc>/reference/evaluate.lcMethod.html</loc></url>
+<url><loc>/reference/externalMetric.html</loc></url>
+<url><loc>/reference/fit.html</loc></url>
+<url><loc>/reference/fitted.lcModel.html</loc></url>
+<url><loc>/reference/fittedTrajectories.html</loc></url>
+<url><loc>/reference/formula.lcMethod.html</loc></url>
+<url><loc>/reference/formula.lcModel.html</loc></url>
+<url><loc>/reference/generateLongData.html</loc></url>
+<url><loc>/reference/getArgumentDefaults.html</loc></url>
+<url><loc>/reference/getArgumentExclusions.html</loc></url>
+<url><loc>/reference/getCall.lcModel.html</loc></url>
+<url><loc>/reference/getCitation.html</loc></url>
+<url><loc>/reference/getExternalMetricDefinition.html</loc></url>
+<url><loc>/reference/getExternalMetricNames.html</loc></url>
+<url><loc>/reference/getInternalMetricDefinition.html</loc></url>
+<url><loc>/reference/getInternalMetricNames.html</loc></url>
+<url><loc>/reference/getLabel.html</loc></url>
+<url><loc>/reference/getLcMethod.html</loc></url>
+<url><loc>/reference/getName.html</loc></url>
+<url><loc>/reference/idVariable.html</loc></url>
+<url><loc>/reference/ids.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/indexy.html</loc></url>
+<url><loc>/reference/initialize-lcMethod-method.html</loc></url>
+<url><loc>/reference/interface-akmedoids.html</loc></url>
+<url><loc>/reference/interface-crimCV.html</loc></url>
+<url><loc>/reference/interface-custom.html</loc></url>
+<url><loc>/reference/interface-dtwclust.html</loc></url>
+<url><loc>/reference/interface-featureBased.html</loc></url>
+<url><loc>/reference/interface-flexmix.html</loc></url>
+<url><loc>/reference/interface-funFEM.html</loc></url>
+<url><loc>/reference/interface-kml.html</loc></url>
+<url><loc>/reference/interface-lcmm.html</loc></url>
+<url><loc>/reference/interface-mclust.html</loc></url>
+<url><loc>/reference/interface-metaMethods.html</loc></url>
+<url><loc>/reference/interface-mixAK.html</loc></url>
+<url><loc>/reference/interface-mixtools.html</loc></url>
+<url><loc>/reference/interface-mixtvem.html</loc></url>
+<url><loc>/reference/is.html</loc></url>
+<url><loc>/reference/isArgDefined.html</loc></url>
+<url><loc>/reference/latrend-approaches.html</loc></url>
+<url><loc>/reference/latrend-data.html</loc></url>
+<url><loc>/reference/latrend-estimation.html</loc></url>
+<url><loc>/reference/latrend-generics.html</loc></url>
+<url><loc>/reference/latrend-methods.html</loc></url>
+<url><loc>/reference/latrend-metrics.html</loc></url>
+<url><loc>/reference/latrend-package.html</loc></url>
+<url><loc>/reference/latrend-parallel.html</loc></url>
+<url><loc>/reference/latrend.html</loc></url>
+<url><loc>/reference/latrendBatch.html</loc></url>
+<url><loc>/reference/latrendBoot.html</loc></url>
+<url><loc>/reference/latrendCV.html</loc></url>
+<url><loc>/reference/latrendData.html</loc></url>
+<url><loc>/reference/latrendRep.html</loc></url>
+<url><loc>/reference/lcApproxModel-class.html</loc></url>
+<url><loc>/reference/lcFitMethods.html</loc></url>
+<url><loc>/reference/lcMatrixMethod-class.html</loc></url>
+<url><loc>/reference/lcMethod-class.html</loc></url>
+<url><loc>/reference/lcMethod-estimation.html</loc></url>
+<url><loc>/reference/lcMethodAkmedoids.html</loc></url>
+<url><loc>/reference/lcMethodCrimCV.html</loc></url>
+<url><loc>/reference/lcMethodDtwclust.html</loc></url>
+<url><loc>/reference/lcMethodFeature.html</loc></url>
+<url><loc>/reference/lcMethodFlexmix.html</loc></url>
+<url><loc>/reference/lcMethodFlexmixGBTM.html</loc></url>
+<url><loc>/reference/lcMethodFunFEM.html</loc></url>
+<url><loc>/reference/lcMethodFunction.html</loc></url>
+<url><loc>/reference/lcMethodGCKM.html</loc></url>
+<url><loc>/reference/lcMethodKML.html</loc></url>
+<url><loc>/reference/lcMethodLMKM.html</loc></url>
+<url><loc>/reference/lcMethodLcmmGBTM.html</loc></url>
+<url><loc>/reference/lcMethodLcmmGMM.html</loc></url>
+<url><loc>/reference/lcMethodMclustLLPA.html</loc></url>
+<url><loc>/reference/lcMethodMixAK_GLMM.html</loc></url>
+<url><loc>/reference/lcMethodMixTVEM.html</loc></url>
+<url><loc>/reference/lcMethodMixtoolsGMM.html</loc></url>
+<url><loc>/reference/lcMethodMixtoolsNPRM.html</loc></url>
+<url><loc>/reference/lcMethodRandom.html</loc></url>
+<url><loc>/reference/lcMethodStratify.html</loc></url>
+<url><loc>/reference/lcMethods.html</loc></url>
+<url><loc>/reference/lcModel-class.html</loc></url>
+<url><loc>/reference/lcModel-data-filters.html</loc></url>
+<url><loc>/reference/lcModel-make.html</loc></url>
+<url><loc>/reference/lcModel.html</loc></url>
+<url><loc>/reference/lcModelPartition.html</loc></url>
+<url><loc>/reference/lcModelWeightedPartition.html</loc></url>
+<url><loc>/reference/lcModels-class.html</loc></url>
+<url><loc>/reference/lcModels.html</loc></url>
+<url><loc>/reference/logLik.lcModel.html</loc></url>
+<url><loc>/reference/match.call.all.html</loc></url>
+<url><loc>/reference/max.lcModels.html</loc></url>
+<url><loc>/reference/meanNA.html</loc></url>
+<url><loc>/reference/metric.html</loc></url>
+<url><loc>/reference/min.lcModels.html</loc></url>
+<url><loc>/reference/model.data.html</loc></url>
+<url><loc>/reference/model.data.lcModel.html</loc></url>
+<url><loc>/reference/model.frame.lcModel.html</loc></url>
+<url><loc>/reference/nClusters.html</loc></url>
+<url><loc>/reference/nIds.html</loc></url>
+<url><loc>/reference/names-lcMethod-method.html</loc></url>
+<url><loc>/reference/nobs.lcModel.html</loc></url>
+<url><loc>/reference/plot-lcModel-method.html</loc></url>
+<url><loc>/reference/plot-lcModels-method.html</loc></url>
+<url><loc>/reference/plotClusterTrajectories.html</loc></url>
+<url><loc>/reference/plotFittedTrajectories.html</loc></url>
+<url><loc>/reference/plotMetric.html</loc></url>
+<url><loc>/reference/plotTrajectories.html</loc></url>
+<url><loc>/reference/postFit.html</loc></url>
+<url><loc>/reference/postProbFromObs.html</loc></url>
+<url><loc>/reference/postprob.html</loc></url>
+<url><loc>/reference/postprobFromAssignments.html</loc></url>
+<url><loc>/reference/preFit.html</loc></url>
+<url><loc>/reference/predict.lcModel.html</loc></url>
+<url><loc>/reference/predictAssignments.html</loc></url>
+<url><loc>/reference/predictForCluster.html</loc></url>
+<url><loc>/reference/predictPostprob.html</loc></url>
+<url><loc>/reference/prepareData.html</loc></url>
+<url><loc>/reference/print.lcMethod.html</loc></url>
+<url><loc>/reference/print.lcModels.html</loc></url>
+<url><loc>/reference/qqPlot.html</loc></url>
+<url><loc>/reference/residuals.lcModel.html</loc></url>
+<url><loc>/reference/responseVariable.html</loc></url>
+<url><loc>/reference/sigma.lcModel.html</loc></url>
+<url><loc>/reference/strip.html</loc></url>
+<url><loc>/reference/subset.lcModels.html</loc></url>
+<url><loc>/reference/summary.lcModel.html</loc></url>
+<url><loc>/reference/test.html</loc></url>
+<url><loc>/reference/test.latrend.html</loc></url>
+<url><loc>/reference/time.lcModel.html</loc></url>
+<url><loc>/reference/timeVariable.html</loc></url>
+<url><loc>/reference/trajectories.html</loc></url>
+<url><loc>/reference/trajectoryAssignments.html</loc></url>
+<url><loc>/reference/transformFitted.html</loc></url>
+<url><loc>/reference/transformPredict.html</loc></url>
+<url><loc>/reference/tsframe.html</loc></url>
+<url><loc>/reference/tsmatrix.html</loc></url>
+<url><loc>/reference/update.lcMethod.html</loc></url>
+<url><loc>/reference/update.lcModel.html</loc></url>
+<url><loc>/reference/validate.html</loc></url>
+<url><loc>/reference/weighted.meanNA.html</loc></url>
+<url><loc>/reference/which.weight.html</loc></url>
 </urlset>
+

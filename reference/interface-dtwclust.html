@@ -3,7 +3,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -28,7 +28,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -44,20 +44,20 @@
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/philips-software/latrend/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>dtwclust interface</h1>
-    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/R/methodDtwclust.R" class="external-link"><code>R/methodDtwclust.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/HEAD/R/modelDtwclust.R" class="external-link"><code>R/modelDtwclust.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/master/R/methodDtwclust.R" class="external-link"><code>R/methodDtwclust.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/master/R/modelDtwclust.R" class="external-link"><code>R/modelDtwclust.R</code></a></small>
     <div class="hidden name"><code>interface-dtwclust.Rd</code></div>
     </div>
 
@@ -66,72 +66,74 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for lcMethodDtwclust</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for class 'lcMethodDtwclust'</span></span>
 <span><span class="fu"><a href="getArgumentDefaults.html">getArgumentDefaults</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for lcMethodDtwclust</span></span>
+<span><span class="co"># S4 method for class 'lcMethodDtwclust'</span></span>
 <span><span class="fu"><a href="getArgumentExclusions.html">getArgumentExclusions</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for lcMethodDtwclust</span></span>
+<span><span class="co"># S4 method for class 'lcMethodDtwclust'</span></span>
 <span><span class="fu"><a href="getCitation.html">getCitation</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for lcMethodDtwclust</span></span>
+<span><span class="co"># S4 method for class 'lcMethodDtwclust'</span></span>
 <span><span class="fu"><a href="getName.html">getName</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for lcMethodDtwclust</span></span>
+<span><span class="co"># S4 method for class 'lcMethodDtwclust'</span></span>
 <span><span class="fu"><a href="getName.html">getShortName</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for lcMethodDtwclust</span></span>
+<span><span class="co"># S4 method for class 'lcMethodDtwclust'</span></span>
 <span><span class="fu"><a href="preFit.html">preFit</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for lcMethodDtwclust</span></span>
+<span><span class="co"># S4 method for class 'lcMethodDtwclust'</span></span>
 <span><span class="fu"><a href="fit.html">fit</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">data</span>, <span class="va">envir</span>, <span class="va">verbose</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for lcModelDtwclust</span></span>
+<span><span class="co"># S4 method for class 'lcModelDtwclust'</span></span>
 <span><span class="fu"><a href="converged.html">converged</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for lcModelDtwclust</span></span>
+<span><span class="co"># S4 method for class 'lcModelDtwclust'</span></span>
 <span><span class="fu"><a href="postprob.html">postprob</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for lcModelDtwclust</span></span>
+<span><span class="co"># S4 method for class 'lcModelDtwclust'</span></span>
 <span><span class="fu"><a href="predictForCluster.html">predictForCluster</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">newdata</span>, <span class="va">cluster</span>, what <span class="op">=</span> <span class="st">"mu"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>object</dt>
+
+
+<dl><dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
 <dd><p>The object.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Not used.</p></dd>
 
 
-<dt>method</dt>
+<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>An object inheriting from <code>lcMethod</code> with all its arguments having been evaluated and finalized.</p></dd>
 
 
-<dt>data</dt>
+<dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>A <code>data.frame</code> representing the transformed training data.</p></dd>
 
 
-<dt>envir</dt>
+<dt id="arg-envir">envir<a class="anchor" aria-label="anchor" href="#arg-envir"></a></dt>
 <dd><p>The <code>environment</code> containing variables generated by <code><a href="prepareData.html">prepareData()</a></code> and <code><a href="preFit.html">preFit()</a></code>.</p></dd>
 
 
-<dt>verbose</dt>
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>A <a href="https://henrikbengtsson.github.io/R.utils/reference/Verbose.html" class="external-link">R.utils::Verbose</a> object indicating the level of verbosity.</p></dd>
 
 
-<dt>newdata</dt>
+<dt id="arg-newdata">newdata<a class="anchor" aria-label="anchor" href="#arg-newdata"></a></dt>
 <dd><p>A <code>data.frame</code> of trajectory data for which to compute trajectory assignments.</p></dd>
 
 
-<dt>cluster</dt>
+<dt id="arg-cluster">cluster<a class="anchor" aria-label="anchor" href="#arg-cluster"></a></dt>
 <dd><p>The cluster name (as <code>character</code>) to predict for.</p></dd>
 
 
-<dt>what</dt>
+<dt id="arg-what">what<a class="anchor" aria-label="anchor" href="#arg-what"></a></dt>
 <dd><p>The distributional parameter to predict. By default, the mean response 'mu' is predicted. The cluster membership predictions can be obtained by specifying <code>what = 'mb'</code>.</p></dd>
 
 </dl></div>
@@ -152,15 +154,15 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

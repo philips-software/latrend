@@ -4,7 +4,7 @@ For lcModel: Get the estimation time of the model, determined by the time taken 
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -29,7 +29,7 @@ For lcModel: Get the estimation time of the model, determined by the time taken 
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -45,20 +45,20 @@ For lcModel: Get the estimation time of the model, determined by the time taken 
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/philips-software/latrend/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Estimation time</h1>
-    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/R/generics.R" class="external-link"><code>R/generics.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/HEAD/R/model.R" class="external-link"><code>R/model.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/HEAD/R/models.R" class="external-link"><code>R/models.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/master/R/generics.R" class="external-link"><code>R/generics.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/master/R/model.R" class="external-link"><code>R/model.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/master/R/models.R" class="external-link"><code>R/models.R</code></a></small>
     <div class="hidden name"><code>estimationTime.Rd</code></div>
     </div>
 
@@ -70,41 +70,41 @@ For lcModel: Get the estimation time of the model, determined by the time taken 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estimationTime</span><span class="op">(</span><span class="va">object</span>, unit <span class="op">=</span> <span class="st">"secs"</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for lcModel</span></span>
+<span><span class="co"># S4 method for class 'lcModel'</span></span>
 <span><span class="fu">estimationTime</span><span class="op">(</span><span class="va">object</span>, unit <span class="op">=</span> <span class="st">"secs"</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for lcModels</span></span>
+<span><span class="co"># S4 method for class 'lcModels'</span></span>
 <span><span class="fu">estimationTime</span><span class="op">(</span><span class="va">object</span>, unit <span class="op">=</span> <span class="st">"secs"</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for list</span></span>
+<span><span class="co"># S4 method for class 'list'</span></span>
 <span><span class="fu">estimationTime</span><span class="op">(</span><span class="va">object</span>, unit <span class="op">=</span> <span class="st">"secs"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>object</dt>
+
+
+<dl><dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
 <dd><p>The model.</p></dd>
 
 
-<dt>unit</dt>
+<dt id="arg-unit">unit<a class="anchor" aria-label="anchor" href="#arg-unit"></a></dt>
 <dd><p>The time unit in which the estimation time should be outputted.
 By default, estimation time is in seconds.
 For accepted units, see <a href="https://rdrr.io/r/base/difftime.html" class="external-link">base::difftime</a>.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Not used.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>A non-negative <code>scalar numeric</code> representing the estimation time in the specified unit..</p>
+    <p>A non-negative <code>scalar numeric</code> representing the estimation time in the specified unit..</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p>Other lcModel functions: 
+    <div class="dont-index"><p>Other lcModel functions:
 <code><a href="clusterNames.html">clusterNames</a>()</code>,
 <code><a href="clusterProportions.html">clusterProportions</a>()</code>,
 <code><a href="clusterSizes.html">clusterSizes</a>()</code>,
@@ -148,11 +148,11 @@ For accepted units, see <a href="https://rdrr.io/r/base/difftime.html" class="ex
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="latrend.html">latrend</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">latrendData</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">estimationTime</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.008</span>
 <span class="r-in"><span><span class="fu">estimationTime</span><span class="op">(</span><span class="va">model</span>, unit <span class="op">=</span> <span class="st">'mins'</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0001666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0001333333</span>
 <span class="r-in"><span><span class="fu">estimationTime</span><span class="op">(</span><span class="va">model</span>, unit <span class="op">=</span> <span class="st">'days'</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.157407e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 9.259259e-08</span>
 </code></pre></div>
     </div>
   </div>
@@ -167,15 +167,15 @@ For accepted units, see <a href="https://rdrr.io/r/base/difftime.html" class="ex
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

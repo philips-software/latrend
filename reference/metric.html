@@ -3,12 +3,9 @@
 Note that there are many metrics available, and there exists no metric that works best in all scenarios.
 It is recommended to carefully consider which metric is most appropriate for your use case.
 Recommended overview papers:
-Arbelaitz et al. (2013)
- provide an extensive overview validity indices for cluster algorithms.
-van der Nest et al. (2020)
- provide an overview of metrics for mixture models (GBTM, GMM); primarily likelihood-based or posterior probability-based metrics.
-Henson et al. (2007)
- provide an overview of likelihood-based metrics for mixture models.
+arbelaitz2013extensive;textuallatrend provide an extensive overview validity indices for cluster algorithms.
+vandernest2020overview;textuallatrend provide an overview of metrics for mixture models (GBTM, GMM); primarily likelihood-based or posterior probability-based metrics.
+henson2007detecting;textuallatrend provide an overview of likelihood-based metrics for mixture models.
 
 
 Call getInternalMetricNames() to retrieve the names of the defined internal metrics.
@@ -16,7 +13,7 @@ See the Details section below for a list of supported metrics."><!-- mathjax -->
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -41,7 +38,7 @@ See the Details section below for a list of supported metrics."><!-- mathjax -->
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -57,20 +54,20 @@ See the Details section below for a list of supported metrics."><!-- mathjax -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/philips-software/latrend/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Compute internal model metric(s)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/HEAD/R/generics.R" class="external-link"><code>R/generics.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/HEAD/R/model.R" class="external-link"><code>R/model.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/HEAD/R/metricsInternal.R" class="external-link"><code>R/metricsInternal.R</code></a>, and 1 more</small>
+    <small class="dont-index">Source: <a href="https://github.com/philips-software/latrend/blob/master/R/generics.R" class="external-link"><code>R/generics.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/master/R/model.R" class="external-link"><code>R/model.R</code></a>, <a href="https://github.com/philips-software/latrend/blob/master/R/metricsInternal.R" class="external-link"><code>R/metricsInternal.R</code></a>, and 1 more</small>
     <div class="hidden name"><code>metric.Rd</code></div>
     </div>
 
@@ -78,12 +75,9 @@ See the Details section below for a list of supported metrics."><!-- mathjax -->
     <p>Compute one or more internal metrics for the given <code>lcModel</code> object.</p>
 <p>Note that there are many metrics available, and there exists no metric that works best in all scenarios.
 It is recommended to carefully consider which metric is most appropriate for your use case.</p>
-<p>Recommended overview papers:</p><ul><li><p>Arbelaitz et al. (2013)
- provide an extensive overview validity indices for cluster algorithms.</p></li>
-<li><p>van der Nest et al. (2020)
- provide an overview of metrics for mixture models (GBTM, GMM); primarily likelihood-based or posterior probability-based metrics.</p></li>
-<li><p>Henson et al. (2007)
- provide an overview of likelihood-based metrics for mixture models.</p></li>
+<p>Recommended overview papers:</p><ul><li><p>arbelaitz2013extensive;textuallatrend provide an extensive overview validity indices for cluster algorithms.</p></li>
+<li><p>vandernest2020overview;textuallatrend provide an overview of metrics for mixture models (GBTM, GMM); primarily likelihood-based or posterior probability-based metrics.</p></li>
+<li><p>henson2007detecting;textuallatrend provide an overview of likelihood-based metrics for mixture models.</p></li>
 </ul><p>Call <code><a href="getInternalMetricNames.html">getInternalMetricNames()</a></code> to retrieve the names of the defined internal metrics.</p>
 <p>See the <em>Details</em> section below for a list of supported metrics.</p>
     </div>
@@ -91,122 +85,61 @@ It is recommended to carefully consider which metric is most appropriate for you
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">metric</span><span class="op">(</span><span class="va">object</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.metric"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WRSS"</span>, <span class="st">"APPA.mean"</span><span class="op">)</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for lcModel</span></span>
+<span><span class="co"># S4 method for class 'lcModel'</span></span>
 <span><span class="fu">metric</span><span class="op">(</span><span class="va">object</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"latrend.metric"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WRSS"</span>, <span class="st">"APPA.mean"</span><span class="op">)</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for list</span></span>
+<span><span class="co"># S4 method for class 'list'</span></span>
 <span><span class="fu">metric</span><span class="op">(</span><span class="va">object</span>, <span class="va">name</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for lcModels</span></span>
+<span><span class="co"># S4 method for class 'lcModels'</span></span>
 <span><span class="fu">metric</span><span class="op">(</span><span class="va">object</span>, <span class="va">name</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>object</dt>
+
+
+<dl><dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
 <dd><p>The <code>lcModel</code>, <code>lcModels</code>, or <code>list</code> of <code>lcModel</code> objects to compute the metrics for.</p></dd>
 
 
-<dt>name</dt>
+<dt id="arg-name">name<a class="anchor" aria-label="anchor" href="#arg-name"></a></dt>
 <dd><p>The name(s) of the metric(s) to compute. If no names are given, the names specified in the <code>latrend.metric</code> option (WRSS, APPA, AIC, BIC) are used.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments.</p></dd>
 
 
-<dt>drop</dt>
+<dt id="arg-drop">drop<a class="anchor" aria-label="anchor" href="#arg-drop"></a></dt>
 <dd><p>Whether to return a <code>numeric vector</code> instead of a <code>data.frame</code>
 in case of a single metric.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>For <code>metric(lcModel)</code>: A named <code>numeric</code> vector with the computed model metrics.</p>
-
-
+    <p>For <code>metric(lcModel)</code>: A named <code>numeric</code> vector with the computed model metrics.</p>
 <p>For <code>metric(list)</code>: A <code>data.frame</code> with a metric per column.</p>
-
-
 <p>For <code>metric(lcModels)</code>: A <code>data.frame</code> with a metric per column.</p>
     </div>
     <div id="supported-internal-metrics">
     <h2>Supported internal metrics</h2>
-    
-<table class="table table"><tr><td><strong>Metric name</strong></td><td><strong>Description</strong></td><td><strong>Function / Reference</strong></td></tr><tr><td><code>AIC</code></td><td><a href="https://en.wikipedia.org/wiki/Akaike_information_criterion" class="external-link">Akaike information criterion</a>. A goodness-of-fit estimator that adjusts for model complexity (i.e., the number of parameters). Only available for models that support the computation of the model log-likelihood through <a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik</a>.</td><td><code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">stats::AIC()</a></code>, (Akaike 1974)</td></tr><tr><td><code>APPA.mean</code></td><td>Mean of the average posterior probability of assignment (APPA) across clusters. A measure of the precision of the trajectory classifications. A score of 1 indicates perfect classification.</td><td><code><a href="APPA.html">APPA()</a></code>, (Nagin 2005)</td></tr><tr><td><code>APPA.min</code></td><td>Lowest APPA among the clusters</td><td><code><a href="APPA.html">APPA()</a></code>, (Nagin 2005)</td></tr><tr><td><code>ASW</code></td><td>Average <a href="https://en.wikipedia.org/wiki/Silhouette_(clustering)" class="external-link">silhouette</a> width based on the Euclidean distance</td><td>(Rousseeuw 1987)</td></tr><tr><td><code>BIC</code></td><td><a href="https://en.wikipedia.org/wiki/Bayesian_information_criterion" class="external-link">Bayesian information criterion</a>. A goodness-of-fit estimator that corrects for the degrees of freedom (i.e., the number of parameters) and sample size. Only available for models that support the computation of the model log-likelihood through <a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik</a>.</td><td><code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">stats::BIC()</a></code>, (Schwarz 1978)</td></tr><tr><td><code>CAIC</code></td><td>Consistent Akaike information criterion</td><td>(Bozdogan 1987)</td></tr><tr><td><code>CLC</code></td><td>Classification likelihood criterion</td><td>(McLachlan and Peel 2000)</td></tr><tr><td><code>converged</code></td><td>Whether the model converged during estimation</td><td><code><a href="converged.html">converged()</a></code></td></tr><tr><td><code>deviance</code></td><td>The model <a href="https://en.wikipedia.org/wiki/Deviance_(statistics)" class="external-link">deviance</a></td><td><code><a href="https://rdrr.io/r/stats/deviance.html" class="external-link">stats::deviance()</a></code></td></tr><tr><td><code>Dunn</code></td><td>The <a href="https://en.wikipedia.org/wiki/Dunn_index" class="external-link">Dunn index</a></td><td>(Dunn 1974)</td></tr><tr><td><code>entropy</code></td><td>Entropy of the posterior probabilities</td><td></td></tr><tr><td><code>estimationTime</code></td><td>The time needed for fitting the model</td><td><code><a href="estimationTime.html">estimationTime()</a></code></td></tr><tr><td><code>ED</code></td><td><a href="https://en.wikipedia.org/wiki/Euclidean_distance" class="external-link">Euclidean distance</a> between the cluster trajectories and the assigned observed trajectories</td><td></td></tr><tr><td><code>ED.fit</code></td><td>Euclidean distance between the cluster trajectories and the assigned fitted trajectories</td><td></td></tr><tr><td><code>ICL.BIC</code></td><td>Integrated classification likelihood (ICL) approximated using the BIC</td><td>(Biernacki et al. 2000)</td></tr><tr><td><code>logLik</code></td><td>Model log-<a href="https://en.wikipedia.org/wiki/Likelihood_function" class="external-link">likelihood</a></td><td><code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">stats::logLik()</a></code></td></tr><tr><td><code>MAE</code></td><td><a href="https://en.wikipedia.org/wiki/Mean_absolute_error" class="external-link">Mean absolute error</a> of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories</td><td></td></tr><tr><td><code>Mahalanobis</code></td><td><a href="https://en.wikipedia.org/wiki/Mahalanobis_distance" class="external-link">Mahalanobis distance</a> between the cluster trajectories and the assigned observed trajectories</td><td>(Mahalanobis 1936)</td></tr><tr><td><code>MSE</code></td><td><a href="https://en.wikipedia.org/wiki/Mean_squared_error" class="external-link">Mean squared error</a> of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories</td><td></td></tr><tr><td><code>relativeEntropy</code>, <code>RE</code></td><td>A measure of the precision of the trajectory classification. A value of 1 indicates perfect classification, whereas a value of 0 indicates a non-informative uniform classification. It is the normalized version of <code>entropy</code>, scaled between [0, 1].</td><td>(Ramaswamy et al. 1993)
-, (Muthén 2004)</td></tr><tr><td><code>RMSE</code></td><td><a href="https://en.wikipedia.org/wiki/Root-mean-square_deviation" class="external-link">Root mean squared error</a> of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories</td><td></td></tr><tr><td><code>RSS</code></td><td><a href="https://en.wikipedia.org/wiki/Residual_sum_of_squares" class="external-link">Residual sum of squares</a> under most likely cluster allocation</td><td></td></tr><tr><td><code>scaledEntropy</code></td><td>See <code>relativeEntropy</code></td><td></td></tr><tr><td><code>sigma</code></td><td>The residual standard deviation</td><td><code><a href="https://rdrr.io/r/stats/sigma.html" class="external-link">stats::sigma()</a></code></td></tr><tr><td><code>ssBIC</code></td><td>Sample-size adjusted BIC</td><td>(Sclove 1987)</td></tr><tr><td><code>SED</code></td><td>Standardized Euclidean distance between the cluster trajectories and the assigned observed trajectories</td><td></td></tr><tr><td><code>SED.fit</code></td><td>The cluster-weighted standardized Euclidean distance between the cluster trajectories and the assigned fitted trajectories</td><td></td></tr><tr><td><code>WMAE</code></td><td><code>MAE</code> weighted by cluster-assignment probability</td><td></td></tr><tr><td><code>WMSE</code></td><td><code>MSE</code> weighted by cluster-assignment probability</td><td></td></tr><tr><td><code>WRMSE</code></td><td><code>RMSE</code> weighted by cluster-assignment probability</td><td></td></tr><tr><td><code>WRSS</code></td><td><code>RSS</code> weighted by cluster-assignment probability</td><td></td></tr></table></div>
+
+<table class="table table"><tr><td><strong>Metric name</strong></td><td><strong>Description</strong></td><td><strong>Function / Reference</strong></td></tr><tr><td><code>AIC</code></td><td><a href="https://en.wikipedia.org/wiki/Akaike_information_criterion" class="external-link">Akaike information criterion</a>. A goodness-of-fit estimator that adjusts for model complexity (i.e., the number of parameters). Only available for models that support the computation of the model log-likelihood through <a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik</a>.</td><td><code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">stats::AIC()</a></code>, akaike1974newlatrend</td></tr><tr><td><code>APPA.mean</code></td><td>Mean of the average posterior probability of assignment (APPA) across clusters. A measure of the precision of the trajectory classifications. A score of 1 indicates perfect classification.</td><td><code><a href="APPA.html">APPA()</a></code>, nagin2005grouplatrend</td></tr><tr><td><code>APPA.min</code></td><td>Lowest APPA among the clusters</td><td><code><a href="APPA.html">APPA()</a></code>, nagin2005grouplatrend</td></tr><tr><td><code>ASW</code></td><td>Average <a href="https://en.wikipedia.org/wiki/Silhouette_(clustering)" class="external-link">silhouette</a> width based on the Euclidean distance</td><td>rousseeuw1987silhouetteslatrend</td></tr><tr><td><code>BIC</code></td><td><a href="https://en.wikipedia.org/wiki/Bayesian_information_criterion" class="external-link">Bayesian information criterion</a>. A goodness-of-fit estimator that corrects for the degrees of freedom (i.e., the number of parameters) and sample size. Only available for models that support the computation of the model log-likelihood through <a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik</a>.</td><td><code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">stats::BIC()</a></code>, schwarz1978estimatinglatrend</td></tr><tr><td><code>CAIC</code></td><td>Consistent Akaike information criterion</td><td>bozdogan1987modellatrend</td></tr><tr><td><code>CLC</code></td><td>Classification likelihood criterion</td><td>mclachlan2000finitelatrend</td></tr><tr><td><code>converged</code></td><td>Whether the model converged during estimation</td><td><code><a href="converged.html">converged()</a></code></td></tr><tr><td><code>deviance</code></td><td>The model <a href="https://en.wikipedia.org/wiki/Deviance_(statistics)" class="external-link">deviance</a></td><td><code><a href="https://rdrr.io/r/stats/deviance.html" class="external-link">stats::deviance()</a></code></td></tr><tr><td><code>Dunn</code></td><td>The <a href="https://en.wikipedia.org/wiki/Dunn_index" class="external-link">Dunn index</a></td><td>dunn1974welllatrend</td></tr><tr><td><code>entropy</code></td><td>Entropy of the posterior probabilities</td><td></td></tr><tr><td><code>estimationTime</code></td><td>The time needed for fitting the model</td><td><code><a href="estimationTime.html">estimationTime()</a></code></td></tr><tr><td><code>ED</code></td><td><a href="https://en.wikipedia.org/wiki/Euclidean_distance" class="external-link">Euclidean distance</a> between the cluster trajectories and the assigned observed trajectories</td><td></td></tr><tr><td><code>ED.fit</code></td><td>Euclidean distance between the cluster trajectories and the assigned fitted trajectories</td><td></td></tr><tr><td><code>ICL.BIC</code></td><td>Integrated classification likelihood (ICL) approximated using the BIC</td><td>biernacki2000assessinglatrend</td></tr><tr><td><code>logLik</code></td><td>Model log-<a href="https://en.wikipedia.org/wiki/Likelihood_function" class="external-link">likelihood</a></td><td><code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">stats::logLik()</a></code></td></tr><tr><td><code>MAE</code></td><td><a href="https://en.wikipedia.org/wiki/Mean_absolute_error" class="external-link">Mean absolute error</a> of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories</td><td></td></tr><tr><td><code>Mahalanobis</code></td><td><a href="https://en.wikipedia.org/wiki/Mahalanobis_distance" class="external-link">Mahalanobis distance</a> between the cluster trajectories and the assigned observed trajectories</td><td>mahalanobis1936generalizedlatrend</td></tr><tr><td><code>MSE</code></td><td><a href="https://en.wikipedia.org/wiki/Mean_squared_error" class="external-link">Mean squared error</a> of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories</td><td></td></tr><tr><td><code>relativeEntropy</code>, <code>RE</code></td><td>A measure of the precision of the trajectory classification. A value of 1 indicates perfect classification, whereas a value of 0 indicates a non-informative uniform classification. It is the normalized version of <code>entropy</code>, scaled between [0, 1].</td><td>ramaswamy1993empiricallatrend, muthen2004latentlatrend</td></tr><tr><td><code>RMSE</code></td><td><a href="https://en.wikipedia.org/wiki/Root-mean-square_deviation" class="external-link">Root mean squared error</a> of the fitted trajectories (assigned to the most likely respective cluster) to the observed trajectories</td><td></td></tr><tr><td><code>RSS</code></td><td><a href="https://en.wikipedia.org/wiki/Residual_sum_of_squares" class="external-link">Residual sum of squares</a> under most likely cluster allocation</td><td></td></tr><tr><td><code>scaledEntropy</code></td><td>See <code>relativeEntropy</code></td><td></td></tr><tr><td><code>sigma</code></td><td>The residual standard deviation</td><td><code><a href="https://rdrr.io/r/stats/sigma.html" class="external-link">stats::sigma()</a></code></td></tr><tr><td><code>ssBIC</code></td><td>Sample-size adjusted BIC</td><td>sclove1987applicationlatrend</td></tr><tr><td><code>SED</code></td><td>Standardized Euclidean distance between the cluster trajectories and the assigned observed trajectories</td><td></td></tr><tr><td><code>SED.fit</code></td><td>The cluster-weighted standardized Euclidean distance between the cluster trajectories and the assigned fitted trajectories</td><td></td></tr><tr><td><code>WMAE</code></td><td><code>MAE</code> weighted by cluster-assignment probability</td><td></td></tr><tr><td><code>WMSE</code></td><td><code>MSE</code> weighted by cluster-assignment probability</td><td></td></tr><tr><td><code>WRMSE</code></td><td><code>RMSE</code> weighted by cluster-assignment probability</td><td></td></tr><tr><td><code>WRSS</code></td><td><code>RSS</code> weighted by cluster-assignment probability</td><td></td></tr></table></div>
     <div id="implementation">
     <h2>Implementation</h2>
-    
+
 
 <p>See the documentation of the <code><a href="defineInternalMetric.html">defineInternalMetric()</a></code> function for details on how to define your own metrics.</p>
     </div>
     <div id="references">
     <h2>References</h2>
-    <p>Akaike H (1974).
-“A new look at the statistical model identification.”
-<em>IEEE Transactions on Automatic Control</em>, <b>19</b>(6), 716-723.
-<a href="https://doi.org/10.1109/TAC.1974.1100705" class="external-link">doi:10.1109/TAC.1974.1100705</a>
-.<br><br> Arbelaitz O, Gurrutxaga I, Muguerza J, Pérez JM, Perona I (2013).
-“An extensive comparative study of cluster validity indices.”
-<em>Pattern recognition</em>, <b>46</b>(1), 243--256.
-ISSN 0031-3203, <a href="https://doi.org/10.1016/j.patcog.2012.07.021" class="external-link">doi:10.1016/j.patcog.2012.07.021</a>
-.<br><br> Biernacki C, Celeux G, Govaert G (2000).
-“Assessing a mixture model for clustering with the integrated completed likelihood.”
-<em>IEEE Transactions on Pattern Analysis and Machine Intelligence</em>, <b>22</b>(7), 719-725.
-<a href="https://doi.org/10.1109/34.865189" class="external-link">doi:10.1109/34.865189</a>
-.<br><br> Bozdogan H (1987).
-“Model Selection and Akaike's Information Criterion (AIC): The General Theory and Its Analytical Extensions.”
-<em>Psychometrika</em>, <b>52</b>, 345--370.
-<a href="https://doi.org/10.1007/BF02294361" class="external-link">doi:10.1007/BF02294361</a>
-.<br><br> Dunn JC (1974).
-“Well-Separated Clusters and Optimal Fuzzy Partitions.”
-<em>Journal of Cybernetics</em>, <b>4</b>(1), 95-104.
-<a href="https://doi.org/10.1080/01969727408546059" class="external-link">doi:10.1080/01969727408546059</a>
-.<br><br> Henson JM, Reise SP, Kim KH (2007).
-“Detecting Mixtures From Structural Model Differences Using Latent Variable Mixture Modeling: A Comparison of Relative Model Fit Statistics.”
-<em>Structural Equation Modeling: A Multidisciplinary Journal</em>, <b>14</b>(2), 202--226.
-<a href="https://doi.org/10.1080/10705510709336744" class="external-link">doi:10.1080/10705510709336744</a>
-.<br><br> Mahalanobis PC (1936).
-“On the generalized distance in statistics.”
-<em>Proceedings of the National Institute of Sciences (Calcutta)</em>, <b>2</b>(1), 49--55.<br><br> McLachlan G, Peel D (2000).
-<em>Finite Mixture Models</em>.
-John Wiley &amp; Sons, Inc.
-ISBN 9780471006268.<br><br> Muthén B (2004).
-“Latent variable analysis: Growth mixture modeling and related techniques for longitudinal data.”
-In <em>The SAGE Handbook of Quantitative Methodology for the Social Sciences</em>, 346--369.
-SAGE Publications, Inc.
-<a href="https://doi.org/10.4135/9781412986311.n19" class="external-link">doi:10.4135/9781412986311.n19</a>
-.<br><br> Nagin DS (2005).
-<em>Group-based modeling of development</em>.
-Harvard University Press.
-ISBN 9780674041318, <a href="https://doi.org/10.4159/9780674041318" class="external-link">doi:10.4159/9780674041318</a>
-.<br><br> Ramaswamy V, Desarbo W, Reibstein D, Robinson W (1993).
-“An Empirical Pooling Approach for Estimating Marketing Mix Elasticities with PIMS Data.”
-<em>Marketing Science</em>, <b>12</b>(1), 103-124.
-<a href="https://doi.org/10.1287/mksc.12.1.103" class="external-link">doi:10.1287/mksc.12.1.103</a>
-.<br><br> Rousseeuw PJ (1987).
-“Silhouettes: A graphical aid to the interpretation and validation of cluster analysis.”
-<em>Journal of Computational and Applied Mathematics</em>, <b>20</b>, 53-65.
-ISSN 0377-0427, <a href="https://doi.org/10.1016/0377-0427%2887%2990125-7" class="external-link">doi:10.1016/0377-0427(87)90125-7</a>
-.<br><br> Schwarz G (1978).
-“Estimating the Dimension of a Model.”
-<em>The Annals of Statistics</em>, <b>6</b>(2), 461 -- 464.<br><br> Sclove SL (1987).
-“Application of model-selection criteria to some problems in multivariate analysis.”
-<em>Psychometrika</em>, <b>52</b>(3), 333--343.
-<a href="https://doi.org/10.1007/BF02294360" class="external-link">doi:10.1007/BF02294360</a>
-.<br><br> van der Nest G, Lima Passos V, Candel MJ, van Breukelen GJ (2020).
-“An overview of mixture modelling for latent evolutions in longitudinal data: Modelling approaches, fit statistics and software.”
-<em>Advances in Life Course Research</em>, <b>43</b>, 100323.
-ISSN 1040-2608, <a href="https://doi.org/10.1016/j.alcr.2019.100323" class="external-link">doi:10.1016/j.alcr.2019.100323</a>
-.</p>
+    <p></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p><a href="externalMetric.html">externalMetric</a> <a href="min.lcModels.html">min.lcModels</a> <a href="max.lcModels.html">max.lcModels</a></p>
-<p>Other metric functions: 
+<p>Other metric functions:
 <code><a href="defineExternalMetric.html">defineExternalMetric</a>()</code>,
 <code><a href="defineInternalMetric.html">defineInternalMetric</a>()</code>,
 <code><a href="externalMetric.html">externalMetric</a>()</code>,
@@ -214,7 +147,7 @@ ISSN 1040-2608, <a href="https://doi.org/10.1016/j.alcr.2019.100323" class="exte
 <code><a href="getExternalMetricNames.html">getExternalMetricNames</a>()</code>,
 <code><a href="getInternalMetricDefinition.html">getInternalMetricDefinition</a>()</code>,
 <code><a href="getInternalMetricNames.html">getInternalMetricNames</a>()</code></p>
-<p>Other lcModel functions: 
+<p>Other lcModel functions:
 <code><a href="clusterNames.html">clusterNames</a>()</code>,
 <code><a href="clusterProportions.html">clusterProportions</a>()</code>,
 <code><a href="clusterSizes.html">clusterSizes</a>()</code>,
@@ -279,15 +212,15 @@ ISSN 1040-2608, <a href="https://doi.org/10.1016/j.alcr.2019.100323" class="exte
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 
