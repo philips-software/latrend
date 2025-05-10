@@ -871,7 +871,7 @@ setGeneric('trajectories', function(
   data <- standardGeneric('trajectories')
 
   assert_that(
-    is_data(data)
+    is_data(data, id = id, time = time, response = response)
   )
 
   if (!no_empty_trajectories(data, id = id)) {
@@ -897,7 +897,8 @@ setGeneric('trajectories', function(
     keepIds = as.data.table(data)[, .(AllNA = all(is.na(get(..response)))), by = c(id)] %>%
       .[AllNA == FALSE, get(..id)]
 
-    data = as.data.table(data)[get(..id) %in% keepIds]
+    # NOTE: don't use data.table get(..id) here as it is unreliable
+    data = data[data[[id]] %in% keepIds, ] %>% as.data.table()
 
     if (is.factor(data)) {
       data[[id]] = droplevels(data[[id]], exclude = NULL)
