@@ -87,7 +87,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
 
-      - uses: actions/cache@v1
+      - uses: actions/cache@v4
         with:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('DESCRIPTION') }}
