@@ -158,7 +158,7 @@ expect_valid_lcModel = function(object) {
     expect_is('data.frame', label='trajectories')
 
   if (requireNamespace('ggplot2', quietly = TRUE)) {
-    expect_true(is.ggplot(plot(object)))
+    expect_true(is_ggplot(plot(object)))
   }
 
   # Misc
